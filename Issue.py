@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.42 2003/10/15 16:23:10 ajung Exp $
+$Id: Issue.py,v 1.43 2003/10/16 13:52:53 ajung Exp $
 """
 
 import sys, os
@@ -93,11 +93,24 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self._transcript.addComment('Issue created')
 
     def Schema(self):
-        """ return our schema (through acquisition....uuuuuh """
+        """ Return our schema (through acquisition....uuuuuh. We override
+            the Archetypes implementation because the schema for issue is 
+            maintained as attribute of the parent collector instance.
+        """
+        
+        # Schema seems to be called during the construction phase
+        # when there is not acquisition context. So we return the
+        # schema itself.
+
+        if not hasattr(self, 'aq_parent'): return self.schema
+
+        # Otherwise get the schema from the parent collector through
+        # acquisition and assign it to a volatile attribute for performance
+        # reasons
 
         schema = getattr(self, '_v_schema', None)
         if schema is None:
-            self._v_schema = self.schema_getWholeSchema()
+            self._v_schema = self.aq_parent.schema_getWholeSchema()
         return self._v_schema
 
     def manage_afterAdd(self, item, container):
@@ -164,6 +177,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.notifyModified() # notify DublinCore
         notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
+
+    security.declareProtected(CMFCorePermissions.View, 'lastAction')
+    def lastAction(self):
+        """ return the latest action done """
+        return self._last_action
 
     ######################################################################
     # Archetypes callbacks 
