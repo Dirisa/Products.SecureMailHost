@@ -12,6 +12,9 @@
     <div metal:fill-slot="main">
       <h1 tal:content="string: ${here/title_or_id} (${here/status})" />
 
+      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="?mode=full">Full view</a>
+      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="?mode=simple">Simple view</a>
+
       <div class="group" tal:repeat="fieldset python: ('issuedata',)">
         <span class="legend" tal:content="fieldset" />
         <metal:block tal:repeat="fieldname python: ('title', 'description', 'solution')" >
@@ -27,26 +30,32 @@
         <span class="label" i18n:translate="assigned_to">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
       </div>
 
-      <div class="group">
+      <div class="group" tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <span class="legend" i18n:translate="progress">Progress</span>
         <metal:block tal:repeat="field python: here.schema_getSchema('progress').fields()">
           <span metal:use-macro="here/issue_macros/macros/field_shortview" />
         </metal:block> 
       </div>
 
-      <!-- should be refactored as a macro !? -->
-      <div class="group">
+      <div class="group" tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <span class="legend" i18n:translate="contact">Contact</span>
         <metal:block  tal:repeat="field python: here.schema_getSchema('contact').fields()">
           <span metal:use-macro="here/issue_macros/macros/field_shortview" />
         </metal:block>
       </div>
 
-      <div metal:use-macro="here/issue_macros/macros/issue_uploads" /> 
-      <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
+      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+        <div metal:use-macro="here/issue_macros/macros/issue_uploads" /> 
+      </metal:block>
+
+      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+        <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
+      </metal:block>
+
       <div class="group"><span class="legend" i18n:translate="transcript">Transcript</span>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </div>
+
       <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
 
     </div>
