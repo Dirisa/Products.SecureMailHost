@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.4 $"[11:-2]
+__version__ = "$Revision: 1.5 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
@@ -97,7 +97,7 @@ def setupHelpcenter_workflow(wf):
                        actbox_name="""Mark obsolete""",
                        actbox_url="""%(content_url)s/content_hide_form""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Review portal content'},
+                       props={'guard_expr': 'python: user.has_permission("Review portal content", here) or user.has_role("Owner", here)' },
                        )
 
     tdef = wf.transitions['submit']

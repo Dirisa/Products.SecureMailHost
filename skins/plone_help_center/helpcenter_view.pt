@@ -74,6 +74,11 @@
                         <option value="faq"><span i18n:translate="phc_faq">FAQs</span></option>
                         <option value="howto"><span i18n:translate="phc_howto">How-tos</span></option>
                         <option value="tutorial"><span i18n:translate="phc_tutorial">Tutorials</span></option>
+                        <option value="link"><span i18n:translate="phc_links">Links</span></option>
+                        <option value="error"><span i18n:translate="phc_errorreference">Error references</span></option>
+                        <option value="glossary"><span i18n:translate="phc_definition">Glossary definitions</span></option>
+                        <option value="manual"><span i18n:translate="phc_referencemanual">Reference manuals</span></option>
+                        <option value="video"><span i18n:translate="phc_video">Instructional videos</span></option>
                     </select>
                 </fieldset>
             </form>

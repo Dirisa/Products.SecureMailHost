@@ -318,6 +318,41 @@ msgid "phc_tutorial"
 msgstr "Tutorials"
 
 #: ./helpcenter_view.pt
+#. <span i18n:translate="phc_links">
+#.  Links
+#. </span>
+msgid "phc_links"
+msgstr "Links"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_errorreference">
+#.  Error references
+#. </span>
+msgid "phc_errorreference"
+msgstr "Error references"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_definition">
+#.  Glossary definitions
+#. </span>
+msgid "phc_definition"
+msgstr "Glossary definitions"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_referencemanual">
+#.  Reference manuals
+#. </span>
+msgid "phc_referencemanual"
+msgstr "Reference manuals"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_videos">
+#.  Instructional videos
+#. </span>
+msgid "phc_videos"
+msgstr "Instructional videos"
+
+#: ./helpcenter_view.pt
 #. <label class="hiddenStructure" for="searchGadget" i18n:translate="text_search">
 #.  Search
 #. </label>
