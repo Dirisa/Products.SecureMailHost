@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.8 2004/03/18 18:54:48 ajung Exp $
+$Id: PCNGSchema.py,v 1.9 2004/03/20 13:15:10 ajung Exp $
 """
 
 from types import FileType
 
-from Globals import InitializeClass
+from Globals import InitializeClass, Persistent
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 from ZPublisher.HTTPRequest import FileUpload
@@ -108,7 +108,7 @@ class PCNGSchemata:
 InitializeClass(PCNGSchemata)
 
 
-class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
+class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
     """ The Schema """
 
     __implement__ = (ILayerRuntime, ILayerContainer)
@@ -480,6 +480,13 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
             self._fields[name] = field
         else:
             raise ValueError('wrong field: %s' % field)
+
+
+
+InitializeClass(PCNGSchemaNonPersistent)
+
+class PCNGSchema(Persistent, PCNGSchemaNonPersistent):
+    pass
 
 InitializeClass(PCNGSchema)
 
