@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.34 2004/03/05 05:54:32 ajung Exp $
+$Id: collector_schema.py,v 1.35 2004/03/05 09:22:25 ajung Exp $
 """
 
 
@@ -120,7 +120,7 @@ schema = Schema((
                 ),
     StringField('collector_email',
                 searchable=0,
-                default=plonecollectorng@somedomain.com',
+                default='plonecollectorng@somedomain.com',
                 widget=StringWidget(label='E-Mail address (FROM: + REPLY-TO: header)',
                                     label_msgid='label_email_address',
                                     i18n_domain='plonecollectorng'),
