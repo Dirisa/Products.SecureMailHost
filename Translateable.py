@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.36 2004/07/01 13:20:30 ajung Exp $
+$Id: Translateable.py,v 1.37 2004/07/04 09:27:53 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -51,7 +51,7 @@ class Translateable:
     def Translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
         """ utranslate() wrapper """
         
-        pts = self.getTranslationService()
+        pts = getTranslationService()
 
         # Workaround for mega-kaputt context.REQUEST which turns out to be
         # not a REQUEST-like object but some unknown acquisition shit.
@@ -86,7 +86,7 @@ class Translateable:
     security.declarePublic('getLanguages')
     def getLanguages(self):
         """ return the languages """
-        pts = self.getTranslationService()
+        pts = getTranslationService()
         return pts.getLanguages(i18n_domain)
 
     def _interpolate(self, text, mapping):
