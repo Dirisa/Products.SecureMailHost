@@ -43,11 +43,8 @@
             <thead>
 
                 <tr>
-                    
-                    <th>&nbsp;<tal:number i18n:translate="listingheader_number"
-                    >#</tal:number>&nbsp;</th>
 
-                    <th>&nbsp;<tal:title i18n:translate="listingheader_title"
+                    <th style="width: 50%">&nbsp;<tal:title i18n:translate="listingheader_title"
                     >Title</tal:title>&nbsp;</th>
                     
                     <th>&nbsp;<tal:title i18n:translate="listingheader_title"
@@ -70,11 +67,10 @@
                                 item_typeinfo item/getTypeInfo"
                     tal:attributes="class python:test(oddrow, 'even', 'odd')" >
 
-                    <td tal:content="item/id"></td>
-
                     <td>
                         <a href="#" tal:attributes="href item/getURL; title item/Description;">
-                            <img alt="" tal:attributes="src string:${portal_url}/improvementproposal_icon.gif"
+                            <img 
+                                 alt="" tal:attributes="src string:${portal_url}/improvementproposal_icon.gif"
                             />&nbsp;<span tal:replace="item/Title">Title</span>
                         </a>
                     </td>

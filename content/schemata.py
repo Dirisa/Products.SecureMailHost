@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.2 2005/03/05 04:38:26 optilude Exp $
+$Id: schemata.py,v 1.3 2005/03/05 08:08:26 limi Exp $
 """
 
 from Products.Archetypes.public import *
@@ -573,9 +573,10 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
     ImageField(
         name='logo',
         required=0,
+        original_size=(300,150),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
-            description="Add a logo for the project (or company) by clicking the 'Browse' button.",
+            description="Add a logo for the project (or company) by clicking the 'Browse' button. Max 300x150 pixels (will be resized if bigger).",
             description_msgid="help_package_logo",
             label= "Logo",
             label_msgid="label_package_logo",
@@ -586,9 +587,10 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
     ImageField(
         name='screenshot',
         required=0,
+        original_size=(800,600),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
-            description="Add a screenshot by clicking the 'Browse' button.",
+            description="Add a screenshot by clicking the 'Browse' button. Max 800x600 (will be resized if bigger).",
             description_msgid="help_package_screenshot",
             label= "Screenshot",
             label_msgid="label_package_screenshot",
@@ -597,8 +599,6 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         ),
 
     ))
-
-
 
 ###############
 # ReleaseFolder
@@ -815,6 +815,7 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
     ImageField(
         name='screenshot',
         required=0,
+        original_size=(800,600),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
             label='Screenshot',
@@ -823,7 +824,7 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
                           'button. Add a screenshot that highlights the '
                           'features in this specific release. If you '
                           'don\'t add a file, it will default to the '
-                          'screenshot for the project.',
+                          'screenshot for the project. Max 800x600 pixels.',
             description_msgid='help_release_screenshot',
             i18n_domain='archpackage',
         ),
@@ -1086,7 +1087,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
 
     LinesField('availablePlatforms',
         default=[
-            'All platforms', 
+            'all platforms', 
             'Linux', 
             'Mac OS X', 
             'Windows',

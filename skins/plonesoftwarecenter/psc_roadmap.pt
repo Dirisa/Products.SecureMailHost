@@ -24,7 +24,9 @@
         Document actions (print, sendto etc)
     </div>
 
-    <div class="portlet" style="margin-left: 0.5em; width: 40%; float: right; clear: right;">
+    <div class="portlet" 
+         style="margin-left: 0.5em; width: 40%; float: right; clear: right;"
+         tal:condition="here/getUpcomingReleases">
         <h6>Upcoming Releases</h6>
         <div class="portletBody">
             <div class="portletContent odd">
@@ -68,6 +70,9 @@
     <div class="discreet">
     Expected release date: <span tal:replace="release/getExpectedReleaseDate" />
     </div>
+
+    <p><strong>Features included in this release:</strong></p>
+
     <dl>
     <tal:feature condition="release/getRelatedFeatures"
                  repeat="feature release/getRelatedFeatures">
@@ -75,14 +80,21 @@
         <a href=""
            tal:content="feature/Title"
            tal:attributes="href feature/absolute_url">Feature title</a>
-           (#<span tal:replace="feature/id" />)
         </dt>
         <dd tal:content="feature/Description">Feature Description</dd>
     </tal:feature>
     </dl>
     </tal:release>
 
+    <p class="discreet"
+       tal:condition="not: plips">
+    There are no improvement proposals added for any versions. Use the add
+    menu to add proposals and/or feature specifications to be used in the
+    roadmap.
+    </p>
+
 </div>
+
 
 
 </body>

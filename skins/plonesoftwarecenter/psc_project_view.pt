@@ -39,7 +39,8 @@
         to the general public.
         </p>        
 
-        <h2 i18n:translate="heading_latest_release">
+        <h2 tal:condition="latestrelease"
+            i18n:translate="heading_latest_release">
         <a href="#" tal:attributes="href latestrelease/absolute_url">
         Latest release: 
            <span tal:replace="latestrelease/Title">Ploneboard 1.0</span></a>
@@ -53,7 +54,7 @@
             <p class="discreet" tal:condition="is_editable">
                 <a i18n:translate=""
                    tal:attributes="href string:$here_url/releases">
-                  Go to the release folder to add a release.
+                  Go to the release folder to add or publish a release.
                 </a>
             </p>
 
@@ -112,12 +113,12 @@
                 </dl>
 
                 <p style="float: right;">
-                    <img tal:replace="structure here/hour_icon.gif" />
-                    <a i18n:translate="label_previous_releases"
-                       tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show older releases&#8230;</a>
+                    <img tal:replace="structure here/product_icon.gif" />
+                    <a i18n:translate="label_show_all_releases"
+                       tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show all releases&#8230;</a>
 
                     <img tal:replace="structure here/improvementproposal_icon.gif" />
-                    <a i18n:translate="label_previous_releases"
+                    <a i18n:translate="label_show_upcoming_releases"
                        tal:attributes="href python:here.getRoadmapFolder().absolute_url()">Show upcoming releases&#8230;</a>
                 </p>
 
