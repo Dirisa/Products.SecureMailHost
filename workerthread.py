@@ -1,7 +1,49 @@
 """Worker thread to run code async in a loop
 """
-
 import threading
+
+
+class ReadWriteLock:
+    """A lock object that allows many simultaneous "read-locks", but
+    only one "write-lock".
+    
+    http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66426
+    """
+    
+    def __init__(self):
+        self.__read_ready = threading.Condition(threading.Lock())
+        self.__readers = 0
+
+    def acquire_read(self):
+        """Acquire a read-lock. Blocks only if some thread has
+        acquired write-lock."""
+        self.__read_ready.acquire()
+        try:
+            self.__readers += 1
+        finally:
+            self.__read_ready.release()
+
+    def release_read(self):
+        """Release a read-lock."""
+        self.__read_ready.acquire()
+        try:
+            self.__readers -= 1
+            if not self.__readers:
+                self.__read_ready.notifyAll()
+        finally:
+            self.__read_ready.release()
+
+    def acquire_write(self):
+        """Acquire a write lock. Blocks until there are no
+        acquired read- or write-locks."""
+        self.__read_ready.acquire()
+        while self.__readers > 0:
+            self.__read_ready.wait()
+
+    def release_write(self):
+        """Release a write-lock."""
+        self.__read_ready.release()
+
 
 class WorkerThread(threading.Thread):
     """Common Worker Thread
@@ -25,35 +67,46 @@ class WorkerThread(threading.Thread):
     
     def __init__(self, name='WorkerThread', wait=10.0, target=None, *args, **kwargs):
         threading.Thread.__init__(self, name=name)
-        self._event = threading.Event() # event handler to time the loop
-        self._running = False           # thread is stop until calling start
-        self._wait = float(wait)
+        self.setDaemon(True)
+        self.__event = threading.Event() # event handler to time the loop
+        self.__running = False           # running status
+        self.__wait = float(wait)        # sleep time
+
         assert(target is None or callable(target))
-        self._target = target
-        self._args = args
-        self._kwargs = kwargs
+        self.__target = target
+        self.__args = args
+        self.__kwargs = kwargs
         
     def start(self):
         """Start the thread
         """
-        self._running = True
-        self._event.clear() # enable event timer
+        self.__event.clear() # enable event timer
+        self.__running = True
         threading.Thread.start(self)
         
     def run(self):
         """Infinitive loop
         """
-        while True:
-            if not self._running:
-                return
-            self.main()
-            self._event.wait(self._wait)
+        try:
+            while self.__running:
+                self.main()
+                self.__event.wait(self.__wait)
+        except SystemExit:
+            self.stop()
+        except TypeError, msg:
+            # XXX hack to prevent an ugly message
+            # Remove it after upgrading to Python 2.4
+            # http://marc.free.net.ph/message/20040517.043622.15770319.html
+            if str(msg) == "'NoneType' object is not callable":
+                pass
+            else:
+                raise
 
     def main(self):
         """Worker method
         """
-        if self._target:
-            self._target(*self._args, **self._kwargs)
+        if self.__target:
+            self.__target(*self.__args, **self.__kwargs)
         else:
             print 'Does nothing'
 
@@ -62,11 +115,26 @@ class WorkerThread(threading.Thread):
         
         Required for unit tests
         """
-        if not self._running:
-            self._running = False
-            self._event.set()
+        self.__running = False
+        self.__event.set()
+
+    def kick(self):
+        """Kicks the thread to do it's work
+        
+        This will force to run the main loop by shortly disabling the event
+        timer unless it is already running.
+        """
+        # copy old state
+        oldState = bool(self.__running)
+        self.__runing = True
+        self.__event.set()
+        # RUN Forest run!
+        self.__event.clear() # reenable event timer
+        self.__running = oldState
+
 
 def initialize():
     worker = WorkerThread(name='Worker', wait=10.0)
-    worker.setDaemon(True)
     worker.start()
+
+__all__ = ('WorkerThread', 'ReadWritLock', 'initialize', )

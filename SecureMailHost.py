@@ -16,7 +16,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.9 2004/05/18 22:20:18 tiran Exp $
+$Id: SecureMailHost.py,v 1.10 2004/05/22 12:31:25 tiran Exp $
 """
 
 from config import BAD_HEADERS
@@ -34,13 +34,16 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, \
                                       use_mailhost_services
 from DateTime import DateTime
+from zLOG import LOG, WARNING
+
+## from asyncmailer import mailQueue, initializeMailThread
+## initializeMailThread()
 
 from Products.MailHost.MailHost import MailHostError, MailBase
 class SMTPError(Exception):
     pass
 
 from Products.SecureMailHost.mail import Mail
-from Products.SecureMailHost.mailqueue import mailQueue
 
 EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
@@ -118,14 +121,32 @@ class SecureMailBase(MailBase):
                      encode=None, REQUEST=None):
         """render a mail template, then send it...
         """
-        raise MailHostError, 'sendTemplate is disabled'
+        #raise MailHostError, 'sendTemplate is disabled'
+        if not hasattr(self,'_v_sendtemplate'):
+            LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
+                'The usage of sendTemplate() in %s is deprecated. '
+                'Use secureSend instead!' % self.absulute_url(0))
+            self._v_sendtemplate = 1
+
+        return MailBase.sendTemplate(trueself, self, messageTemplate,
+                                     statusTemplate=statusTemplate, mto=mto,
+                                     mfrom=mfrom,  encode=encode,
+                                     REQUEST=REQUEST)
 
     security.declareProtected( use_mailhost_services, 'send' )
     def send(self, messageText, mto=None, mfrom=None, subject=None, 
              encode=None):
         """Send email
         """
-        raise MailHostError, 'send is disabled'
+        #raise MailHostError, 'send is disabled'
+        if not hasattr(self,'_v_send'):
+            LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
+                'The usage of send() in %s is deprecated. '
+                'Use secureSend instead!' % self.absulute_url(0))
+            self._v_send = 1
+
+        return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
+                             subject=subjet, encode=encode)
 
     def secureSend(self, message, mto, mfrom, subject='[No Subject]',
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
@@ -201,7 +222,6 @@ class SecureMailBase(MailBase):
             msg[key] = val
         return msg
 
-    security.declarePrivate( '_send' )
     def __SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
@@ -214,9 +234,11 @@ class SecureMailBase(MailBase):
         else:
             mail.send()
 
-    def __ASYNC_send( self, mfrom, mto, messageText, debug=False):
+    def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
+        from asyncmailer import mailQueue, initializeMailThread
+        initializeMailThread()
         mail = Mail(mfrom, mto, messageText,
                     smtp_host=self.smtp_host, smtp_port=self.smtp_port,
                     userid=self._smtp_userid, password=self._smtp_pass
@@ -226,7 +248,8 @@ class SecureMailBase(MailBase):
         else:
             mailQueue.queue(mail)
 
-    _send = __ASYNC_send
+    #_send = __A_SYNC_send
+    _send = __SYNC_send
 
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):

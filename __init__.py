@@ -16,9 +16,7 @@ $Id:
 """
 
 import SecureMailHost
-import asyncmailer
 import mail
-import mailqueue
 
 def initialize(context):
     context.registerClass(
@@ -28,5 +26,3 @@ def initialize(context):
                       SecureMailHost.manage_addMailHost),
         icon='www/MailHost_icon.gif',
     )
-    # start threading
-    asyncmailer.initialize(context)

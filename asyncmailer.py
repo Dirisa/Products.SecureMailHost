@@ -14,23 +14,11 @@ class MailerThread(WorkerThread):
     """Mailer thread
     """
     
-    def run(self):
-        """Infinitive loop
-        """
-        # XXX
-        # Wrapped because of some strange problems with threading and zope
-        # After SIGTERM or SIGINT the thread can terminated without throwing
-        # a nasty error message
-        try:
-            WorkerThread.run(self)
-        except:
-            pass
-    
     def main(self):
         """Worker method
         """
         global mailQueue
-        LOG('SecureMailHost', INFO, 'threading')
+        #LOG('SecureMailHost', INFO, 'threading')
 
         for id in mailQueue.list():
             mail = mailQueue.get(id)
@@ -59,10 +47,14 @@ class MailerThread(WorkerThread):
         LOG('SecureMailHost', INFO, 'Stopping mailer thread')
         WorkerThread.stop(self)
 
-mailThread = MailerThread(name='asyncmail', wait=WAIT_TIME)
-mailThread.setDaemon(True)
+mailThread = None
 
 # start thread
-def initialize(context):
-    LOG('SecureMailHost', INFO, 'Starting mailer thread')
-    mailThread.start()
+def initializeMailThread():
+    global mailThread
+    if not mailThread:
+        LOG('SecureMailHost', INFO, 'Starting mailer thread')
+        mailThread = MailerThread(name='asyncmail', wait=WAIT_TIME)
+        mailThread.start()
+
+__all__ = ('mailThread', 'mailQueue', 'initializeMailThread', )
