@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.59 2003/11/02 09:15:34 ajung Exp $
+$Id: Issue.py,v 1.60 2003/11/02 12:01:20 ajung Exp $
 """
 
 import sys, os
@@ -160,6 +160,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             wf = getToolByName(self, 'portal_workflow')
             wf.notifyCreated(self)
                                                 
+    def manage_beforeDelete(self, item, container):
+        """ Hook for pre-deletion actions """
+        self.unindexObject()
+
     ######################################################################
     # Followups
     ######################################################################
@@ -386,6 +390,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'unindexObject')
+    def unindexObject(self):
+        catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
+        for c in catalogs: c.unindexObject(self)
+                
     def SearchableText(self):
         """ return all indexable texts """
 
