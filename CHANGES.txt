@@ -1,5 +1,18 @@
 0.6.0 (unstable)
 
+alpha6
+  - added addFile() method to support non-web file addition 
+    (this logic was mostly taken from HTMLFormUploadFile(), which
+     now calls addFile() to do its job)
+
+  - added 'diagnostics' tab, with following associated changes:
+  
+    * added getFilteredOutContents()
+  
+    * getFilteredOutFSItems() now returns 4 lists instead of 3
+      (illegalFilesList + illegalFoldersList vs illegalItemsList)
+  
+
 alpha5
   - major spring cleaning!
      
