@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.9 2003/10/13 19:09:05 ajung Exp $
+$Id: notifications.py,v 1.10 2003/10/14 15:20:32 ajung Exp $
 """
 
 import sys
@@ -15,7 +15,7 @@ from email.MIMEImage import MIMEImage
 from email.Header import Header
 import email.Utils 
 
-from zLOG import LOG, ERROR
+from zLOG import LOG, ERROR, TRACE
 from Products.CMFCore.utils import getToolByName
 
 import util, notification_policies
@@ -52,6 +52,7 @@ def send_notifications(recipients, issue):
 
     collector = issue._getCollector()
     dest_emails = [ v['email'] for v in recipients.values() if util.isValidEmailAddress(v.get('email','')) ]
+    if not dest_emails: return  # No recipients???
 
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
@@ -68,6 +69,7 @@ def send_notifications(recipients, issue):
     mh = getattr(collector, 'MailHost') 
     
     try:
+        LOG('plongcollector', TRACE, 'recipients: %s' % dest_emails)
         mh._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
         LOG('PloneCollectorNG', ERROR, 'MailHost.send() failed', error=sys.exc_info())
