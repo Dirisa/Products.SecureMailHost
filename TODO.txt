@@ -151,6 +151,12 @@ Versions:
   Alllows Plone 1.0 people,for example, to see only stuff pertaining
   to them. (limi)
 
+- Add a way to set the "current" version of the release - this way, we
+  can automatically display a portalMessage box on content that says:
+  "This content is only relevant to Plone 1.0. The current version is
+   Plone 2.0. Make sure you are using the correct version before
+   following the instructions given here."
+
 - Also need a way to set the default view help-center-wide 
   (Example, let's say we just want to show Plone 2.0 elements 
    in the listings) (limi)
