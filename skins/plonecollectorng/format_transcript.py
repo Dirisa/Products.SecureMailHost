@@ -36,7 +36,10 @@ for group in groups:
         elif ev.type == 'reference':
             nl('Reference: %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
         elif ev.type == 'upload':
-            nl('Upload: %s (%s)' % (ev.fileid, ev.comment))
+            s = 'Upload: %s/%s ' % (context.absolute_url(), ev.fileid)
+            if ev.comment:
+                s+= ' (%s)' % ev.comment
+            nl(s)
         else: 
             nl(str(ev))
 
