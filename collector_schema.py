@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.45 2004/05/07 15:53:26 ajung Exp $
+$Id: collector_schema.py,v 1.46 2004/05/09 18:43:42 ajung Exp $
 """
 
 
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import DisplayList, BaseSchema
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
@@ -58,7 +58,7 @@ VOC_PORTLET_USAGE = DisplayList((
 ))
 
 
-schema = Schema((
+schema = BaseSchema + Schema((
 
     StringField('id',
                 required=1,

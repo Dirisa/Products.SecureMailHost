@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.175 2004/05/09 16:25:41 ajung Exp $
+$Id: Collector.py,v 1.176 2004/05/09 18:43:42 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -556,6 +556,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ check the attributes of the collector instance against the
             current schema and update attributes accordingly.
         """
+        from Globals import PersistentMapping
+    
+        if not hasattr(self, '_md'):
+            self._md = PersistentMapping()
 
         for field in self.Schema().fields():
 
