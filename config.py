@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.12 2003/12/12 10:02:27 ajung Exp $
+$Id: config.py,v 1.13 2003/12/23 07:58:24 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -22,10 +22,10 @@ CollectorCatalog = 'pcng_catalog'
 i18n_domain = 'plonecollectorng'
 
 # Permissions
-ManageCollector = 'Manage PloneCollectorNG'
-EditCollectorIssue = 'Edit PloneCollectorNG issue'
-AddCollectorIssue = 'Add PloneCollectorNG issue'
-AddCollectorIssueFollowup = 'Add PloneCollectorNG issue followup'
+ManageCollector = 'PloneCollectorNG: Manage PloneCollectorNG'
+EditCollectorIssue = 'PloneCollectorNG: Edit PloneCollectorNG issue'
+AddCollectorIssue = 'PloneCollectorNG: Add PloneCollectorNG issue'
+AddCollectorIssueFollowup = 'PloneCollectorNG: Add PloneCollectorNG issue followup'
 
 # create new permissions and pre-assign roles 
 setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin'))
