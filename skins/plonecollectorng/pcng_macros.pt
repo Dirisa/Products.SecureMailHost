@@ -21,16 +21,17 @@
           </span>
 
           <span tal:condition="python: event.getType()=='incrementalchange'">
-           <b><span tal:content="python: event.getValue('field')" /></b> removed: <span tal:content="python: event.getValue('removed')" />, 
-                    added: <span tal:content="python: event.getValue('added')" />              
+           <b><span tal:content="python: event.getValue('field')" /></b> <span i18n:translate="removed">removed</span>: <span tal:content="python: event.getValue('removed')" />, 
+                    <span i18n:translate="added">added</span>: <span tal:content="python: event.getValue('added')" />              
           </span>
 
-          <span tal:condition="python: event.getType()=='reference'"> Issue reference:
+          <span tal:condition="python: event.getType()=='reference'"> 
+            <span i18n:translate="issue_reference">Issue reference</span>:
             <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
                tal:content="python: '%s/%s: %s' % (event.getValue('tracker'), event.getValue('ticketnum'), event.getValue('comment'))" />
           </span>
 
-          <span tal:condition="python: event.getType()=='upload'"> Uploaded file:
+          <span tal:condition="python: event.getType()=='upload'"><span i18n:translate="uploaded_file">Uploaded file</span>:
             <a tal:attributes="href python: event.getValue('fileid')"
                tal:content="python: event.getValue('fileid')" />
             <span tal:condition="python: event.getValue('comment')" tal:content="python: '(%s)' % event.getValue('comment')" />
@@ -68,16 +69,17 @@
                        "<span tal:content="python: event.getValue('new')" />"              
             </span>
             <span tal:condition="python: event.getType()=='incrementalchange'">
-              <b><span tal:content="python: event.getValue('field')" /></b> removed: <span tal:content="python: event.getValue('removed')" />, 
-                       added: <span tal:content="python: event.getValue('added')" />              
+              <b><span tal:content="python: event.getValue('field')" /></b> <span i18n:translate="removed">removed</span>: <span tal:content="python: event.getValue('removed')" />, 
+                       <span i18n:translate="added">added</span>: <span tal:content="python: event.getValue('added')" />              
             </span>
 
-            <span tal:condition="python: event.getType()=='reference'"> Issue reference:
+            <span tal:condition="python: event.getType()=='reference'"> 
+              <span i18n:translate="issue_reference">Issue reference</span>:
               <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
                  tal:content="python: '%s/%s: %s' % (event.getValue('tracker'), event.getValue('ticketnum'), event.getValue('comment'))" />
             </span>
 
-            <span tal:condition="python: event.getType()=='upload'"> Uploaded file:
+            <span tal:condition="python: event.getType()=='upload'"> <span i18n:translate="uploaded_file">Uploaded file</span>:
               <a tal:attributes="href python: event.getValue('fileid')"
                  tal:content="python: event.getValue('fileid')" />
               <span tal:condition="python: event.getValue('comment')" tal:content="python: '(%s)' % event.getValue('comment')" />
@@ -108,20 +110,20 @@
           </a>
         </h2>
         <div class="pcng_issueview_metadata">
-         <b>Status:</b> <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
-         <b>Topic:</b> <span tal:replace="issue/topic" /> -
-         <b>Importance:</b> <span tal:replace="issue/importance" /> -
-         <b>Assigned:</b> <span tal:replace="python: ', '.join(issue.assigned_to)" />
+         <b i18n:translate="status">Status:</b> <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
+         <b i18n:translate="topic">Topic:</b> <span tal:replace="issue/topic" /> -
+         <b i18n:translate="importance">Importance:</b> <span tal:replace="issue/importance" /> -
+         <b i18n:translate="assigned">Assigned:</b> <span tal:replace="python: ', '.join(issue.assigned_to)" />
         </div>
         <div class="pcng_issueview_description" 
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-        Submitted by <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
+        <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
         </div>
       </metal:block>
     </div>
-    <div tal:condition="not: results">No hits</div>
+    <div tal:condition="not: results" i18n:translate="no_hits">No hits</div>
   </span>
 </div>    
 
