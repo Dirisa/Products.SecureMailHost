@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.72 2003/11/16 12:29:23 ajung Exp $
+$Id: Collector.py,v 1.73 2003/11/18 12:50:35 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -253,6 +253,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         # AddCollectorIssue
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
         self.manage_permission(AddCollectorIssue, roles=target_roles+add_roles, acquire=0)
+        self.manage_permission(AddPortalContent, roles=target_roles+add_roles, acquire=0)
 
         # AddCollectorIssueFollowup 
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
