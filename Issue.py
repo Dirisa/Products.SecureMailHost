@@ -5,8 +5,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.11 2003/09/10 04:32:00 ajung Exp $
+$Id: Issue.py,v 1.12 2003/09/10 13:46:52 ajung Exp $
 """
+
 import sys
 
 from AccessControl import  ClassSecurityInfo
@@ -77,6 +78,10 @@ class PloneIssueNG(BaseFolder, WatchList):
             self.Schema()[name].storage.set(name, self, member.getProperty('fullname'))
             name = 'contact_email'
             self.Schema()[name].storage.set(name, self, member.getProperty('email'))
+        else:
+            name = 'contact_name'
+            self.Schema()[name].storage.set(name, self, util.getUserName())
+        
 
                                                 
     ######################################################################
@@ -203,7 +208,7 @@ class PloneIssueNG(BaseFolder, WatchList):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
         """
-        print 'prevalidate'
+
         te = TranscriptEntry()
         for name in REQUEST.form.keys():
             new = REQUEST.get(name, None)
@@ -223,17 +228,39 @@ class PloneIssueNG(BaseFolder, WatchList):
         """ redirect to parent """
         return self.aq_parent.add_issue(RESPONSE=RESPONSE)
 
+    ######################################################################
+    # Catalog stuff
+    ######################################################################
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
     def reindexObject(self):
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
+    def SearchableText(self):
+        """ return all indexable texts """
+
+        l = []
+        for attr in ('title' ,'description' ,'solution' ,'topic' ,'subtopic',
+                     'classification' ,'importance' ,'status' ,'version_info',
+                     'contact_name' ,'contact_city' ,'contact_fax',
+                     'contact_phone' ,'contact_address' ,'contact_email'):
+
+            v = getattr(self, attr, None)
+            if v:
+                if callable(v): v = v()
+                l.append( str(v) )
+
+        l.append(self._transcript.asXML()) # ATT: this should go better
+        return ' '.join(l)
+
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'updateSchema')
     def updateSchema(self, schema):
         """ update the schema """
         self.schema = schema
 
+    def __len__(self):
+        return len(self._transcript)
 
 
 registerType(PloneIssueNG)
