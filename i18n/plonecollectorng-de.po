@@ -368,6 +368,12 @@ msgstr "Fortschritt"
 msgid "Classification"
 msgstr "Klassifizierung"
 
+msgid "classification"
+msgstr "Klassifizierung"
+
+msgid "Creator"
+msgstr "Erzeuger"
+
 msgid "Title"
 msgstr "Titel"
 
