@@ -63,6 +63,7 @@ if debug: return printed
 # Save result in session
 try:
     lst = [ (b.getURL(), b.getId, b.Title) for b in results]
+    lst.sort(lambda x,y: cmp(int(x[1]), int(y[1])))
     R.SESSION['pcng_searchresults'] = lst
 except:
     pass
