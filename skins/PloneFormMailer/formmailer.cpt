@@ -86,8 +86,9 @@
                 
                         </div>
 
-                        <div tal:condition="field/hidden"
-                             tal:define="input python:field.render(REQUEST=request)"
+                        <div tal:condition="field/hidden" 
+                             tal:define="initvalue python:test(field.id in ['email', 'fullname'],member.getProperty(field.id, ''),''); 
+                                         input python:field.render(REQUEST=request, value=initvalue )"
                              tal:replace="structure input">
                         </div>
                         
