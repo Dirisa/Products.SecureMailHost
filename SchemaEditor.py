@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.58 2004/05/30 14:36:06 ajung Exp $
+$Id: SchemaEditor.py,v 1.59 2004/06/10 11:31:38 ajung Exp $
 """
 
 import copy, re
@@ -25,7 +25,7 @@ from config import ManageCollector
 UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
 
-id_regex = re.compile('[a-zA-Z0-9][a-zA-Z0-9_]*[a-zA-Z0-9]')
+id_regex = re.compile('^[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$')
 
 def remove_unallowed_chars(s):
     allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/ ().,:;#+*=&%$§!'
@@ -90,7 +90,6 @@ class SchemaEditor:
         if name in self._ms.getSchemataNames():
             raise ValueError(self.Translate('atse_exists', 
                              'Schemata "$schemata" already exists', schemata=name))
-
         if not id_regex.match(name):
             raise ValueError(self.Translate('atse_invalid_id_for_schemata', 
                              '"$schemata" is an invalid ID for a schemata', schemata=name))

@@ -174,8 +174,9 @@
         <form action="atse_update" method="post">
           <input type="hidden" name="fielddata.schemata:record:string"    
                tal:attributes="value fieldset" />
+            <input type="hidden" name="add_field" value="dummy"> 
             <input type="text" name="name" value=""> 
-            <input type="image" src="add_icon.gif" name="add_field" value="Add">
+            <input type="image" src="add_icon.gif" value="Add">
         </form>
       </div>
     </div>
