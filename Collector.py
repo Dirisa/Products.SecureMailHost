@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.93 2003/12/14 12:13:47 ajung Exp $
+$Id: Collector.py,v 1.94 2003/12/14 16:13:16 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -135,7 +135,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
-        util.redirect(RESPONSE, 'pcng_maintainance', 
+        util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('catalog_recreated', 'Catalog recreated'))
 
     def pre_validate(self, REQUEST, errors):
@@ -366,7 +366,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ reindex all issues """
 
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
-        util.redirect(RESPONSE, 'pcng_maintainance', 
+        util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('issues_reindexed', 'Issues reindexed'))
 
     security.declareProtected(View, 'getNumberIssues')
@@ -379,7 +379,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def resetNumberIssues(self, RESPONSE=None):
         """ reset number of issues """
         self._num_issues = 0
-        util.redirect(RESPONSE, 'pcng_maintainance', 
+        util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('number_issues_reseted', 'Issue number reseted to 0'))
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
@@ -411,7 +411,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             except:
                 field.storage.set(field.getName(), self, field.default)
 
-        util.redirect(RESPONSE, 'pcng_maintainance',
+        util.redirect(RESPONSE, 'pcng_maintenance',
                           self.translate('collector_schema_updated', 'Collector schema updated'))
 
     security.declareProtected(ManageCollector, 'register_issue_uids')
@@ -427,7 +427,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if issue.UID() is None:
                 RC.registerObject(issue)
       
-        util.redirect(RESPONSE, 'pcng_maintainance',
+        util.redirect(RESPONSE, 'pcng_maintenance',
                           self.translate('uids_recreated', 'UIDs recreated'))
 
     security.declareProtected(View, 'asPDF')
