@@ -42,7 +42,7 @@ class IMail(Interface):
         sender queue when the mail cannot be send.
         """
 
-    def getErrors(f):
+    def getErrors():
         """Get the state of the error counter
         """
 
@@ -67,7 +67,7 @@ class IMail(Interface):
         """Return message as string including header
         """
     
-    def info(self):
+    def info():
         """Return status informations about the mail
         
         The status information includes From, To, Subject, message size and the

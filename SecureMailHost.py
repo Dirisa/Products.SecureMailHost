@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.19.2.2 2004/09/16 19:56:05 tiran Exp $
+$Id: SecureMailHost.py,v 1.19.2.3 2004/09/18 13:18:31 tiran Exp $
 """
 
 try:
@@ -261,7 +261,6 @@ class SecureMailBase(MailBase):
     def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        import pdb; pdb.set_trace()
         if not isinstance(messageText, email.MIMEText.MIMEText):
             message = email.message_from_string(messageText)
         else:

@@ -69,7 +69,7 @@ class MailQueue(DictMixin):
             if mail.getId() is None:
                 id = self.mkMailId()
                 mail.setId(id)
-        del id
+                del id
 
         try:
             self._lock.acquire()
@@ -121,7 +121,7 @@ class MailQueue(DictMixin):
             id = mail_or_id.getId()
         else:
             raise TypeError, 'Invalid type: %s' % type(mail_or_id)
-        assert id is StringType
+        assert type(id) is StringType
         try:
             self._lock.acquire()
             self._remove(id)
@@ -175,7 +175,7 @@ class MailQueue(DictMixin):
         """
         try:
             self._lock.acquire()
-            return id not in self._queue.keys()
+            return id in self._queue.keys()
         finally:
             self._lock.release()
 
@@ -294,8 +294,9 @@ class TransactionalMailQueue(MailQueue):
         MailQueue.__init__(self)
         self._queue = {}
         self._transaction_voted = False
+        self._transaction_aborted = False
         
-        # register self as
+        # register self as DataManager in the current transaction
         get_transaction().register(self)
 
     def _add(self, id, mail):
@@ -340,16 +341,20 @@ class TransactionalMailQueue(MailQueue):
     def tpc_abort(self, transaction):
         """Abort a transaction.
         """
-        pass
+        # useful for unit testing
+        self._transaction_aborted = True
 
     def tpc_finish(self, transaction):
         """Indicate confirmation that the transaction is done.
         """
         # transaction was successfully finished
         # moving mails from transaction queue to persistent queue
+        if self._transaction_aborted:
+            return
         if self._transaction_voted:
             global mailQueue
             mailQueue._fastQueue(self.values())
+            self._queue = {}
 
     def tpc_vote(self, transaction):
         """Verify that a data manager can commit the transaction
@@ -366,6 +371,7 @@ class TransactionalMailQueue(MailQueue):
         """Abort changes to an object
         """
         # XXX clean queue just to be sure
+        self._transaction_aborted = True
         self._queue = {}
 
     def sortKey(self):

@@ -21,6 +21,7 @@ except NameError:
 
 from config import X_MAILER
 
+from copy import deepcopy
 import os, sys
 import smtplib
 import email.Message
@@ -53,6 +54,8 @@ class Mail:
         self.mto = mto
         # message must be email.Message.Message based
         assert(isinstance(message, email.Message.Message))
+        # make a copy since we are going to change some data
+        message = deepcopy(message)
         # Add some important headers
         if not message.has_key('Date'):
             message['Date'] = DateTime().rfc822()
