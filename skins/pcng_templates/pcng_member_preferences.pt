@@ -108,7 +108,7 @@
           <label i18n:translate="default_issue_view" >Default issue view</label>
           <div class="row">
             <select name="pcng_default_view">
-              <option tal:repeat="item python: (('full', 'Full view'), ('fullimages', 'Full view with images'))"
+              <option tal:repeat="item python: (('simple', 'Without images'), ('full', 'With images'))"
                       tal:content="python: item[1]"
                       i18n:translate=""
                       tal:attributes="value python: item[0];
