@@ -73,7 +73,7 @@
           </div>
 
           <div class="portlet">
-            <h5 i18n:translate="maintainance">Maintainance</h5>
+            <h5 i18n:translate="maintenance">Maintenance</h5>
             <div class="portletBody">
               <div>
                 <a href="update_schema_for_issues?return_to=pcng_schema_editor" i18n:translate="update_schema_for_all_issues">Update schema for all issues</a>

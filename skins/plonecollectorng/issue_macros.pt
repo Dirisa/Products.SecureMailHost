@@ -30,6 +30,7 @@
 <!-- Issue related macros -->
 
 <div metal:define-macro="issue_references" i18n:domain="plonecollectorng">
+  <a name="references"> </a>
   <fieldset tal:define="references here/getForwardReferences;
                         breferences here/getBackReferences" >
 
@@ -75,6 +76,7 @@
 
 
 <fieldset metal:define-macro="issue_uploads" i18n:domain="plonecollectorng">
+  <a name="uploads"></a>
   <legend i18n:translate="uploads">Uploads</legend>
     <ul>
         <li tal:repeat="item here/objectValues">

@@ -233,6 +233,7 @@
   </div>
 
   <div style="float: left">
+  <br>
   <form action="pcng_view" method="GET" name="search_form" tal:condition="advanced">
     <div style="float: left">
 
@@ -247,7 +248,7 @@
               <select multiple size="5" 
                       tal:attributes="name python: '%s:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
                 <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
-                  <option tal:attributes="value entry;
+                  <option i18n:translate="" tal:attributes="value entry;
                                           selected python: request.get(item[0],'')==entry" 
                          tal:content="entry" />
                 </tal:loop>

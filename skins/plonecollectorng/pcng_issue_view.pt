@@ -63,10 +63,11 @@
         </div>
       </fieldset>
 
-      <fieldset>
+      <fieldset tal:define="fieldset python: 'issuedata'">
         <legend><a class="schemata_legend"  
-                   tal:attributes="href string:pcng_base_edit?fieldset=issuedata"  
-                   i18n:translate="issuedata">issuedata</a></legend>
+                   tal:attributes="href string:pcng_base_edit?fieldset=${fieldset}"  
+                   i18n:translate=""
+                   tal:content="fieldset" /></legend>
 
         <div style="float: left; width: 30%; vertical-align: top">
           <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
@@ -109,7 +110,9 @@
 
       <metal:block tal:omit-tag="" tal:define="uploads here/objectValues" >
         <fieldset tal:condition="uploads">
-          <legend i18n:translate="uploads">Uploads</legend>
+          <a href="pcng_issue_references#uploads">
+            <legend i18n:translate="uploads">Uploads</legend>
+          </a>
           <div>
             <metal:block tal:repeat="item uploads">
               <a tal:attributes="href item/absolute_url">
@@ -123,7 +126,9 @@
 
       <metal:block tal:omit-tag="" tal:define="references here/getForwardReferences">
         <fieldset tal:condition="references">
-          <legend i18n:translate="references">References</legend>
+          <a href="pcng_issue_references#references">
+            <legend i18n:translate="references">References</legend>
+          </a>
           <div>
             <metal:block tal:repeat="ref references">
               <a tal:define="target ref/getTargetObject"
