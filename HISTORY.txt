@@ -4,6 +4,10 @@ History of significant changes for PloneHelpCenter:
 
 PloneHelpCenter 0.2
 
+    - Added Help Center portlet, this will aggregate published entries
+      from all the available Help Centers, and display links to the published 
+      help centers.
+
     - Added Glossary types, updated Help Center view [limi]
 
     - Added Link types [Joel]

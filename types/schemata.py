@@ -55,9 +55,10 @@ SectionsSchema = Schema((
                required=1,
                vocabulary='getSectionsVocab', # we acquire this from HelpCenter
                enforceVocabulary=1,
+               index=':schema',
                widget=MultiSelectionWidget(
-                   label='Sections',
-                   description='Section(s) that this item should appear in.',),
+                        label='Sections',
+                        description='Section(s) that this item should appear in.',),
                ),
     ))
 

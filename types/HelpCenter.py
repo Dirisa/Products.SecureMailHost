@@ -67,7 +67,7 @@ class HelpCenter(BaseFolder):
 
         self.invokeFactory('HelpCenterErrorReferenceFolder','error')
         self['error'].setTitle('Error Reference')
-        self['error'].setDescription('Reference reference section.')
+        self['error'].setDescription('Error reference section.')
 
         self.invokeFactory('HelpCenterLinkFolder','link')
         self['link'].setTitle('Links')
