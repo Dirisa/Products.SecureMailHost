@@ -27,7 +27,7 @@
            tal:omit-tag="">
 
       <h1 i18n:translate="heading_edit_item">
-      Edit
+        <span i18n:translate="edit">Edit</span>
           <span i18n:name="itemtype">
               <span i18n:translate=""
                     tal:content="here/archetype_name"
@@ -36,6 +36,7 @@
       </h1>
 
      <div tal:condition="fieldsets">
+        <span i18n:translate="fieldsets">Fieldsets</span>: 
        <tal:block repeat="set fieldsets">
          <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
            <b>[<span tal:content="set" />]</b>
