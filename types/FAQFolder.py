@@ -36,7 +36,7 @@ class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     
     security = ClassSecurityInfo()
     
-        typeDescription= 'A FAQ Section can hold frequently asked questions with answers.'
+    typeDescription= 'A FAQ Section can hold frequently asked questions with answers.'
     typeDescMsgId  = 'description_edit_faqfolder'
 
     actions = (

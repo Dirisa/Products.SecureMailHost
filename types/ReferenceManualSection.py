@@ -1,4 +1,4 @@
-sfrom Products.Archetypes.public import *
+from Products.Archetypes.public import *
 from Products.PloneHelpCenter.config import *
 from Products.CMFCore import CMFCorePermissions
 from schemata import ReferenceManualSectionSchema
