@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.217 2004/10/02 10:12:09 ajung Exp $
+$Id: Collector.py,v 1.218 2004/10/08 16:11:59 ajung Exp $
 """
 
-import base64, time, random, md5, os
+import base64, time, random, md5, os, urllib
 
 from DateTime import DateTime
 from BTrees.OOBTree import OOBTree
@@ -833,6 +833,11 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             return DateTime(datestr)
         except:
             raise ValueError('Unsupported date format: %s' % datestr)
+
+    security.declareProtected(View, 'quote')
+    def quote(self, s):
+        """ urlquote wrapper """
+        return urllib.quote(s)
 
     ######################################################################
     # Slots handling
