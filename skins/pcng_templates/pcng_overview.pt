@@ -13,7 +13,7 @@
     <div metal:fill-slot="main" >
       <tal:if tal:condition="here/pcng_motd|nothing"> 
         <div id="motd">
-          <span tal:replace="here/pcng_motd" />
+          <span tal:replace="structure here/pcng_motd" />
         </div>
       </tal:if>
       <h1 i18n:translate="collector_overview">Collector overview</h1>
