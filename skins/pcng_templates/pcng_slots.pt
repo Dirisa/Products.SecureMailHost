@@ -96,7 +96,7 @@
 <div metal:define-macro="pcng_collector_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_collector_portlet">
     <h5 i18n:translate="collector_actions">Collector actions</h5>
-    <div class="portletBody"
+    <div class="portletBody"  id="pcng_portlet_collector"
          tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
       <ul>
         <tal:loop tal:repeat="a actions/pcng_collector|nothing">
@@ -115,7 +115,7 @@
 <div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_issue_portlet">
     <h5 i18n:translate="issue_actions">Issue actions</h5>
-    <div class="portletBody"
+    <div class="portletBody" id="pcng_portlet_issue"
          tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
       <ul>
         <tal:loop tal:repeat="a actions/pcng_issue|nothing">
@@ -139,7 +139,7 @@
         <img src="edit.gif" title="Create new references" i18n:attributes="title"/>
       </a>
     </h5>
-    <div class="portletBody">
+    <div class="portletBody" id="pcng_portlet_references">
       <ul>
         <li tal:repeat="ref references">
           <a tal:define="target ref/getTargetObject"
@@ -162,7 +162,7 @@
         <img src="edit.gif" title="Upload file" i18n:attributes="title"/>
       </a>
     </h5>
-    <div class="portletBody">
+    <div class="portletBody" id="pcng_portlet_uploads">
       <ul>
         <li tal:repeat="item uploads">
           <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">

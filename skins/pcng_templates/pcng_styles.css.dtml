@@ -155,4 +155,11 @@ div #pcng_uploads_edit{
     padding: 2em;
 }
 
+#pcng_portlet_issue a,
+#pcng_portlet_collector a,
+#pcng_portlet_uploads a,
+#pcng_portlet_references a {
+    text-decoration: none;
+}
+
 /* </dtml-with> */
