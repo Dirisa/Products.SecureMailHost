@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.8 2003/12/08 13:43:26 ajung Exp $
+$Id: Base.py,v 1.9 2003/12/13 11:32:10 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -36,7 +36,6 @@ class ParentManagedSchema:
 
     def Schemata(self):
         """ return dict of Schematas """
-
         d = {}
         schema = self.Schema()
         for name in schema.getSchemataNames():
@@ -45,7 +44,6 @@ class ParentManagedSchema:
                 s.addField(f)
             d[name] = s
         return d
-
 
     def Schema(self):
         """ Return our schema (through acquisition....uuuuuh). We override
@@ -92,6 +90,5 @@ class ParentManagedSchema:
                     field.storage.set(field.getName(), self, field.default)
                         
         return self._v_schema
-
 
 InitializeClass(ParentManagedSchema)
