@@ -35,6 +35,8 @@ GENERAL:
 
 - **DONE** All content types should be Discussable 
 
+- i18n support
+
 - Maybe create an "ErrorReference" content object? I got an error like: checkSelected() got an unexpected keyword argument 'contenttypes' - which was a known bug with PCNG. Would be nice to have a location to collect common ones, and have them searchable - and a place to refer newbies to when they figure something out. :)
 
 
