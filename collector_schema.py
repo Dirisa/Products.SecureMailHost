@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.8 2003/09/19 10:31:44 ajung Exp $
+$Id: collector_schema.py,v 1.9 2003/09/28 14:06:25 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -80,6 +80,13 @@ schema = OrderedSchema((
                 vocabulary=VOC_PARTICIPATION_MODE,
                 widget=SelectionWidget(format='select', 
                                        label='Participation mode'),
+                default='staff',
+                schemata='collectordata',
+                ),
+    StringField('view_mode',
+                vocabulary=VOC_PARTICIPATION_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='View mode'),
                 default='staff',
                 schemata='collectordata',
                 ),
