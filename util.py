@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.13 2003/10/14 15:12:20 ajung Exp $
+$Id: util.py,v 1.14 2003/10/20 11:42:26 ajung Exp $
 """
 
 import urllib
@@ -48,7 +48,7 @@ def adjustLocalRoles(obj, userids, role):
     for u in userids:
         if u not in already:
             changed = 1
-            add_local_role(obj, u, role)
+            addLocalRole(obj, u, role)
     return changed
 
 
