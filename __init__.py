@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.10 2003/11/21 07:49:49 ajung Exp $
+$Id: __init__.py,v 1.11 2003/11/24 14:16:16 ajung Exp $
 """
 
 import os, sys
@@ -24,6 +24,14 @@ if not d in sys.path:
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
+import warnings
+warnings.warn('\n\n'
+'********************************************************\n'
+'Reminder: PloneCollectorNG requires Archetypes 1.0.1. \n'
+'Any other version is not supported yet!!!!\n'
+'(This warning appears also with AT 1.0.1 installed)\n'
+'********************************************************\n\n')
+
 def initialize(context):
     ##Import Types here to register them
     import Collector
@@ -40,5 +48,6 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
+
 
 
