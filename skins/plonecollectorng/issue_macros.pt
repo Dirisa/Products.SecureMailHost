@@ -59,6 +59,10 @@
               <span tal:replace="python: '(%s, %s)' % (here.toPortalTime(item.created(),long_format=1), item.Creator())" />
               <a i18n:translate="issue_artifacts_table_info_link"
                  tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+
+              <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
+                 i18n:translate="issue_artifacts_table_info_link"
+                 tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
             </span>
              <span tal:replace="item/description"> DESCRIPTION</span>
           </div>
