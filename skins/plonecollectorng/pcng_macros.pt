@@ -16,7 +16,7 @@
           </pre>
 
           <span tal:condition="python: event.getType()=='change'">
-           <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" -> 
+           <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" <b>-></b> 
                     "<span tal:content="python: event.getValue('new')" />"              
           </span>
 
@@ -65,7 +65,7 @@
             <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')" /> 
 
             <span tal:condition="python: event.getType()=='change'">
-              <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" -> 
+              <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" <b>-></b> 
                        "<span tal:content="python: event.getValue('new')" />"              
             </span>
             <span tal:condition="python: event.getType()=='incrementalchange'">
