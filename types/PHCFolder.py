@@ -23,12 +23,18 @@ class PHCFolder:
     security = ClassSecurityInfo()
 
     def getVersionsVocab(self):
-        """Get versions vocabulary"""
-        return self.getVersions_vocab()
-
+        """Get version vocabulary"""
+        if hasattr(self,'getVersionsv_vocab'):
+            return self.getVersions_vocab()
+        else:
+            return list()
+        
     def getSectionsVocab(self):
         """Get sections vocabulary"""
-        return self.getSections_vocab()
+        if hasattr(self,'getSections_vocab'):
+            return self.getSections_vocab()
+        else:
+            return list()
         
     def Versions(self):
         """method to display the versions in a nicer way
