@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.98 2003/12/25 12:19:59 ajung Exp $
+$Id: Collector.py,v 1.99 2003/12/28 18:28:30 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -355,6 +355,16 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     ######################################################################
     # Searchform editor
     ######################################################################
+
+    security.declareProtected(View, 'getIndexes')
+    def getIndexes(self):
+        """ return a sequence of tuples (indexId, indexType)"""
+        
+        return [ (id, idx.meta_type) 
+                 for id, idx in getToolByName(self, CollectorCatalog)._catalog.indexes.items()
+                 if not id in ('progress_deadline', 'created', 'numberFollowups', 'getId',
+                               'SearchableText')
+               ]
 
     security.declareProtected(ManageCollector, 'update_searchform')
     def update_searchform(self, REQUEST, RESPONSE):
