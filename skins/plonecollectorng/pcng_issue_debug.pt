@@ -29,7 +29,11 @@
       </ul>
 
       <h3>Email</h3>
-      <pre tal:content="python: here.format_transcript().encode('utf8')" />
+      <tal:loop tal:repeat="lang here/getLanguages">
+        <a tal:attributes="href string:pcng_issue_debug?language=${lang}" 
+           tal:content="lang" />
+      </tal:loop>
+      <pre tal:content="python: here.format_transcript(request.get('language', 'en')).encode('utf8')" />
       
     </div>
   </body>
