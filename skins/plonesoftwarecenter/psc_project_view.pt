@@ -42,7 +42,8 @@
 
         <div style="float:right; margin: 1em 0 1em 1em; border: 1px solid black;"
              tal:condition="here/getLogo | nothing">
-            <a tal:attributes="href string:${latestrelease/absolute_url}/screenshot/image_view_fullscreen">
+            <a tal:omit-tag="not: here/getLogoURL"
+               tal:attributes="href here/getLogoURL">
                 <img tal:replace="structure here/getLogo" />
             </a>
         </div>
@@ -172,7 +173,7 @@
 
         <h2>Project Description</h2>
 
-        <fieldset style="float: right; margin-left: 0.5em;">
+        <fieldset style="float: right; margin-left: 0.5em; margin-top: 0;">
             <legend>Additional resources</legend>
 
             <ul style="list-style-type: none; list-style-image: none; margin-left: 0;">

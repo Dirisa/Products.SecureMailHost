@@ -32,6 +32,14 @@
           Up to Product page
         </a>
 
+        <div style="float:right; margin: 1em 0 1em 1em; border: 1px solid black;"
+             tal:condition="here/getLogo | nothing">
+            <a tal:omit-tag="not: here/getLogoURL"
+               tal:attributes="href here/getLogoURL">
+                <img tal:replace="structure here/getLogo" />
+            </a>
+        </div>
+
         <div class="documentDescription"
           tal:content="here/Description">
           description
@@ -44,6 +52,8 @@
         'state' drop-down when work on the release is completed and downloadable
         files have been added. There is no approval required to make a release.
         </p>
+
+        <div class="visualClear"></div>
 
         <h2 i18n:translate="heading_available_downloads">
           Available downloads

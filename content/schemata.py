@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.15 2005/03/12 07:11:01 limi Exp $
+$Id: schemata.py,v 1.16 2005/03/12 07:41:09 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -580,13 +580,27 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
     ImageField(
         name='logo',
         required=0,
-        original_size=(300,150),
+        original_size=(150,75),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
             label="Logo",
             label_msgid="label_package_logo",
-            description="Add a logo for the project (or company) by clicking the 'Browse' button. Max 300x150 pixels (will be resized if bigger).",
+            description="Add a logo for the project (or organization/company) by clicking the 'Browse' button. Max 150x75 pixels (will be resized if bigger).",
             description_msgid="help_package_logo",
+            i18n_domain="plonesoftwarecenter",
+        ),
+    ),
+
+    StringField(
+        name='logoURL',
+        searchable=1,
+        required=0,
+        validators=('isURL',),
+        widget=StringWidget(
+            label="Logo link",
+            label_msgid="label_package_logo_link",
+            description="The URL the logo should link to, if applicable.",
+            description_msgid="help_package_logo_link",
             i18n_domain="plonesoftwarecenter",
         ),
     ),

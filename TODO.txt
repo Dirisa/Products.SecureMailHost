@@ -5,12 +5,14 @@ Developer claiming item/comments is in [brackets].
 =========================
 Pre-deployment count-down
 =========================
+
+- Important: Portlet is broken, please fix.
+  Module Python expression "', '.join(obj.getCategoryTitles)", line 1, in 
+  <expression> TypeError: sequence expected, Missing found
   
 - by-category.pt needs a little UI love, esp. for the list presented when
     no category is entered.
   
-- Company logo isn't shown at the moment on project_view.
-
 - PSCProject has a currentVersions field to list supported versions (for PHC
     support). We could use this to show a portalMessage on unsupported
     releases if we want coupling between documentation-supported releases
