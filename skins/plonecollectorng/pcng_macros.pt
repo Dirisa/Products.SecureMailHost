@@ -20,7 +20,7 @@
       <span i18n:translate="" tal:content="string:${action}" />
       (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
     </div>
-    <div class="issue_view_navigation" tal:define="mode request/mode|nothing">
+    <div class="issue_view_navigation" tal:define="mode request/mode|string:simple">
       <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
         <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
         <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
