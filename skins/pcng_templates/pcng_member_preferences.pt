@@ -105,24 +105,10 @@
         </div>
 
         <div class="field">
-          <label i18n:translate="default_searchform" >Default search form</label>
-          <div class="row">
-            <select name="pcng_default_searchform">
-              <option tal:repeat="item python: (('simple', 'Simple search form'), ('advanced', 'Advanced search form'))"
-                      tal:content="python: item[1]"
-                      i18n:translate=""
-                      tal:attributes="value python: item[0];
-                                      selected python: member.getProperty('pcng_default_searchform') == item[0]"
-              />
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
           <label i18n:translate="default_issue_view" >Default issue view</label>
           <div class="row">
             <select name="pcng_default_view">
-              <option tal:repeat="item python: (('simple', 'Simple view'), ('full', 'Full view'), ('fullimages', 'Full view with images'))"
+              <option tal:repeat="item python: (('full', 'Full view'), ('fullimages', 'Full view with images'))"
                       tal:content="python: item[1]"
                       i18n:translate=""
                       tal:attributes="value python: item[0];
