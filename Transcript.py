@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.9 2003/09/11 11:04:58 ajung Exp $
+$Id: Transcript.py,v 1.10 2003/09/19 09:54:59 ajung Exp $
 """
 
 import time 
@@ -115,7 +115,7 @@ class Transcript(Persistent, Implicit):
         last_ts = 0; last_user = None
         result = list()
         for event in self.getEvents(reverse=0):
-            if event.getUser() != last_user or event.getTimestamp() - last_ts > 60:
+            if event.getUser() != last_user or event.getTimestamp() - last_ts > 60  or event.getType() == 'comment':
                 # new event
                 result.append([])
             result[-1].append(event)
