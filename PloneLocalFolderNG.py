@@ -404,7 +404,7 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST = %s" % self.REQUEST)
 
         if REQUEST==None:
-            self.REQUEST.RESPONSE.redirect( self.REQUEST['URL1'] + '/plfng_view' )
+            self.REQUEST.RESPONSE.redirect( self.REQUEST['URL1'] )
             #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST[URL1] = %s" % self.REQUEST['URL1'])
             return []
 
@@ -608,7 +608,7 @@ class PloneLocalFolderNG(BaseContent):
 
                #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
                #  that os.path.join might produce
-               RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view')).replace('\\','/'))
+               RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir)).replace('\\','/'))
 
 
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
