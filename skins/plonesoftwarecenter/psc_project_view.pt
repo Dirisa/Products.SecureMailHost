@@ -118,8 +118,16 @@
                     <!-- Should be a dedicated template that only lists releases,
                          using the folder_listing macro, but will just use this
                          for now. Should also only be visible if releases > 1. -->
+                        <img tal:replace="structure here/hour_icon.gif" />
                         <a i18n:translate="label_previous_releases"
-                           tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show all releases&#8230;</a>
+                           tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show older releases&#8230;</a>
+                    </dt>
+
+                    <dt>
+                        <img tal:replace="structure here/improvementproposal_icon.gif" />
+                        <a i18n:translate="label_previous_releases"
+                           tal:attributes="href python:here.getRoadmapFolder().absolute_url()">Show upcoming releases&#8230;</a>
+
                     </dt>
 
                 </dl>

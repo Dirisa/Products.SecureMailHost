@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: PSCProject.py,v 1.2 2005/03/01 21:39:01 limi Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -117,6 +117,15 @@ class PSCProject(OrderedBaseFolder):
 
         return self.contentValues('PSCReleaseFolder')[0]
 
+    def getRoadmapFolder(self):
+        """Get the roadmap folder.
+
+        We only should have one, so only deal with case of single
+        folder. This is created when we're created, so we should always
+        have one.
+        """
+
+        return self.contentValues('PSCImprovementProposalFolder')[0]
         
     def getLatestRelease(self):
         release_folder = self.getReleaseFolder()
