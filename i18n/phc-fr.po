@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PloneHelpCenter 0.3 (Unreleased)\n"
-"POT-Creation-Date: 2005-1-12 11:59+0000\n"
-"PO-Revision-Date: 2005-1-12 15:51+0000\n"
+"POT-Creation-Date: 2004-11-24 11:59+0000\n"
+"PO-Revision-Date: 2005-1-13 11:00+0000\n"
 "Last-Translator: Gael Pasgrimaud <gawel@web-alternative.com\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Language-Code: fr\n"
 "Language-Name: Français\n"
 "Preferred-Encodings: latin1 utf-8\n"
-"Domain: plonehelpcenter\n"
 "X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch fr-fr\n"
+"Domain: plonehelpcenter\n"
 
 #: ./errorreference_attachments.pt
 #. <a href="" i18n:attributes="title" tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$item_id" title="Move item down">
@@ -746,7 +746,7 @@ msgid "phc_video_title"
 msgstr "Vidéos"
 
 msgid "phc_video_description"
-msgstr "Vidéos instructives."
+msgstr "Vidéo pédagogique."
 
 msgid "phc_errorreference_title"
 msgstr "Références d'Erreurs"
@@ -764,7 +764,7 @@ msgid "phc_glossary_title"
 msgstr "Glossaire de Définitions"
 
 msgid "phc_glossary_description"
-msgstr "Glossary de définitions."
+msgstr "Glossaire de définitions."
 
 # MSB end mofification
 

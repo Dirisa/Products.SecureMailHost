@@ -1,0 +1,151 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneHelpCenter 0.3 (Unreleased)\n"
+"POT-Creation-Date: 2004-11-24 11:59+0000\n"
+"PO-Revision-Date: 2005-1-13 11:00+0000\n"
+"Last-Translator: Gael Pasgrimaud <gawel@web-alternative.com\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: fr\n"
+"Language-Name: Français\n"
+"Preferred-Encodings: latin1 utf-8\n"
+"X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch fr-fr\n"
+"Domain: plone\n"
+
+msgid "description_edit_faq"
+msgstr "Vous pouvez ajouter une Question Fréquente (de préférence avec la réponse), elle seras relue et approuvéé par notre équipe de documentation."
+
+msgid "description_edit_faqfolder"
+msgstr "Ceci est un dossier qui contient des Questions Fréquentes, et qui vous permet de les afficher dans des sections individuelles."
+
+msgid "FAQ Section"
+msgstr "Section FAQ"
+
+msgid "HelpCenterFAQFolder"
+msgstr "Dossier FAQ"
+
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "HelpCenterFAQ"
+msgstr "CentreDocumentation FAQ"
+
+
+msgid "Help Center"
+msgstr "Centre de Documentation"
+
+msgid "HelpCenter"
+msgstr "Centre de Documentation"
+
+msgid "How-to Section"
+msgstr "Section How-to"
+
+msgid "HelpCenterHowToFolder"
+msgstr "Dossier How To du Centre de Documentation"
+
+msgid "description_edit_phc"
+msgstr "Ceci est un dossier qui contient les contenu du PHC"
+
+msgid "PHCFolder"
+msgstr "Dossier Plone Help Center"
+
+msgid "How-to Section"
+msgstr "Section How-to"
+
+msgid "HelpCenterHowToFolder"
+msgstr "Dossier How To du Centre de Documentation"
+
+msgid "How-to"
+msgstr "How-to"
+
+msgid "HelpCenterHowTo"
+msgstr "Centre de Documentation How-To"
+
+msgid "Tutorial Section"
+msgstr "Section Tutoriel"
+
+msgid "HelpCenterTutorialFolder"
+msgstr "Dossier Tutoriel du Centre de Documentation"
+
+msgid "Tutorial Page"
+msgstr "Page de Tutoriel"
+
+msgid "HelpCenterTutorialPage"
+msgstr "Page de Tutoriel du Centre de Documentation"
+
+msgid "Tutorial"
+msgstr "Tutoriel"
+
+msgid "HelpCenterTutorial"
+msgstr "Centre de Documentation Tutoriel"
+
+msgid "description_edit_tutorial"
+msgstr "Un Tutoriel peut contenir des Pages de Tutoriel, des Images et des Fichiers. L'ordre d'indexage est le même que celui du dossier, utilisez les commandes habituelle déplacer vers le haut/bas pour réorganiser le contenu."
+
+msgid "Error Reference Section"
+msgstr "Section Référence d'Erreur"
+
+msgid "HelpCenterErrorReferenceFolder"
+msgstr "Dossier Référence d'Erreur du Centre de Documentation"
+
+msgid "Error Reference"
+msgstr "Référence d'Erreur"
+
+msgid "HelpCenterErrorReference"
+msgstr "Référence d'Erreur du Centre de Documentation"
+
+msgid "HelpCenterLinkFolder"
+msgstr "Dossier Lien du Centre de Documentation"
+
+msgid "description_edit_linkfolder"
+msgstr "Ceci est un dossier qui contient des Liens et qui vous permet de les afficher dans des sections individuelles."
+
+msgid "description_edit_link"
+msgstr "Les Liens du Centre de Documentation sont des liens vers d'autres documentations, etc."
+
+msgid "HelpCenterLink"
+msgstr "Lien du Centre de Documentation"
+
+msgid "Link Section"
+msgstr "Section Lien"
+
+msgid "description_edit_glossary"
+msgstr "Ceci est un dossier qui contient des Définitions et qui les liste dans une sotre de dictionaire avec des liens de type ancre."
+
+msgid "HelpCenterGlossary"
+msgstr "Glossaire du Centre de Documentation"
+
+msgid "Glossary"
+msgstr "Glossaire"
+
+msgid "description_edit_definition"
+msgstr "Vous pouvez ajouter une Définition au Glossaire. Elle seras relue et approuvéé par notre équipe de documentation."
+
+msgid "HelpCenterDefinition"
+msgstr "Définition du Centre de Documentation"
+
+msgid "Definition"
+msgstr "Définition"
+
+msgid "Video Section"
+msgstr "Section Vidéo"
+
+msgid "HelpCenterInstructionalVideoFolder"
+msgstr "Vidéos pédagogique du Centre de Documentation"
+
+msgid "Video"
+msgstr "Vidéo"
+
+msgid "HelpCenterInstructionalVideo"
+msgstr "Vidéos pédagogique du Centre de Documentation"
+
+msgid "Video Section"
+msgstr "Section Vidéo"
+
