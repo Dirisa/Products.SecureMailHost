@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.160 2004/04/25 12:33:42 ajung Exp $
+$Id: Issue.py,v 1.161 2004/04/25 12:47:38 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -632,7 +632,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         pu = self.getPortlet_usage() 
         if not hasattr(self, '_v_left_slots') or getattr(self, '_v_porlet_usage', '') != pu:
             if pu == 'keep': 
-                self._v_left_slots = list(self.aq_parent.left_slots)
+                self._v_left_slots = list(self.aq_parent.aq_parent.left_slots)
             else:
                 self._v_left_slots = []
             self._v_portlet_usage = pu

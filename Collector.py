@@ -5,13 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.167 2004/04/24 16:14:19 ajung Exp $
+$Id: Collector.py,v 1.168 2004/04/25 12:47:37 ajung Exp $
 """
 
 import base64, time, random, md5, os
 
 from Globals import InitializeClass
 from Acquisition import aq_base
+from ComputedAttribute import ComputedAttribute
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
@@ -47,27 +48,32 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         'id': 'pcng_browse',
         'name': 'Browse',
         'action': 'pcng_view',
-        'permissions': (View,)
+        'permissions': (View,),
+        'category' : 'pcng_collector',
         },
         {'id': 'pcng_configuration',
         'name': 'Configuration',
         'action': 'pcng_configuration',
-        'permissions': (ManageCollector,)
+        'permissions': (ManageCollector,),
+        'category' : 'pcng_collector',
         },
         {'id': 'pcng_addissue',
         'name': 'Add issue',
         'action': 'redirect_create_object',
-        'permissions': (AddCollectorIssue,)
+        'permissions': (AddCollectorIssue,),
+        'category' : 'pcng_collector',
         },
         {'id': 'pcng_history',
         'name': 'History',
         'action': 'pcng_history',
-        'permissions': (ManageCollector,)
+        'permissions': (ManageCollector,),
+        'category' : 'pcng_collector',
         },
         {'id': 'pcng_reports',
         'name': 'Reports',
         'action': 'pcng_reports',
-        'permissions': (ManageCollector,)
+        'permissions': (ManageCollector,),
+        'category' : 'pcng_collector',
         },
         )
 
@@ -188,49 +194,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     self._transcript.addChange(name, old, new)
-
-        # Look&Feel slots handling
-        if REQUEST.has_key('slots_mode'):
-
-            def del_slot(o, slot):
-                try: delattr(o, slot)
-                except: pass
-
-            orig_left = self.aq_parent.left_slots
-            orig_right = self.aq_parent.right_slots
-            pcng_slot = 'here/pcng_slots/macros/navigation'
-
-            mode = REQUEST['slots_mode'] 
-            nav_slot = REQUEST['navigation_slot']
-
-            if nav_slot == 'no':
-
-                if mode == 'plone':
-                    del_slot(self, 'left_slots')
-                    del_slot(self, 'right_slots')
-                elif mode == 'left':
-                    del_slot(self, 'left_slots')
-                    self.right_slots = []
-                elif mode == 'right':
-                    self.left_slots = []
-                    del_slot(self, 'right_slots')
-                else:
-                    self.left_slots = self.right_slots = []
-
-            else:
-                
-                if mode == 'plone':           
-                    slots = list(orig_left)
-                    slots.append(pcng_slot)
-                    self.left_slots =  slots
-                    del_slot(self, 'right_slots')
-                elif mode == 'left':
-                    self.left_slots = [pcng_slot]
-                    self.right_slots = []
-                elif mode == 'right':
-                    self.left_slots = []
-                    self.right_slots = [pcng_slot]
-                    
 
     ######################################################################
     # Transcript
@@ -841,6 +804,22 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         except:
             raise ValueError('Unsupported date format: %s' % datestr)       
 
+    ######################################################################
+    # Slots handling
+    ######################################################################
+
+    def left_slots(self):
+        pu = self.getPortlet_usage() 
+        if not hasattr(self, '_v_left_slots') or getattr(self, '_v_portlet_usage','') != pu:
+            if pu == 'keep': 
+                self._v_left_slots = list(self.aq_parent.left_slots)
+            else:
+                self._v_left_slots = []                                                   
+            self._v_portlet_usage = pu
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_collector_portlet')
+            self._v_left_slots = tuple(self._v_left_slots)
+        return self._v_left_slots
+    left_slots = ComputedAttribute(left_slots, 1)
 
 registerType(PloneCollectorNG)
 
