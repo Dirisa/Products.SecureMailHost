@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.14 2004/04/14 17:10:25 ajung Exp $
+$Id: smtp2pcng.py,v 1.15 2004/04/17 09:52:10 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
@@ -32,12 +32,8 @@ for d in (SPOOL_PENDING, SPOOL_DONE, SPOOL_ERROR):
     if not os.path.exists(d):
         os.makedirs(d)
 
-# Configuration
-config = ConfigParser()
-config.read([CFG_FILE, os.path.expanduser('~/%s' % CFG_FILE)])
-
 # Logger stuff
-LOG = logging.getLogger('myapp')
+LOG = logging.getLogger('pcng')
 hdlr = logging.FileHandler('smtp2pcng.log')
 hdlr1 = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(process)s %(message)s')
@@ -46,6 +42,24 @@ hdlr1.setFormatter(formatter)
 LOG.addHandler(hdlr)
 LOG.addHandler(hdlr1)
 LOG.setLevel(logging.DEBUG)
+
+# Configuration
+CFG_LOCATIONS = (os.getcwd(), os.path.expanduser('~'))
+config = ConfigParser()                               
+files = []
+for loc in CFG_LOCATIONS:
+    cfg_name = os.path.join(loc, CFG_FILE)
+    if not os.path.exists(cfg_name):
+        LOG.warn('No configuration file %s found' % cfg_name)
+    else:
+        LOG.info('Reading configuration file %s ' % cfg_name)
+        files.append(cfg_name)
+
+if not files:
+    LOG.warn('No suitables configuration files found')
+else:
+    config.read(files)
+
 
 class Result:
 
@@ -62,7 +76,7 @@ class Result:
         IO = StringIO()
         IO.write('<?xml version="1.0" encoding="utf-8"?>\n')
         IO.write('<issue>\n')
-        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body'):
+        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body', 'key'):
             IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a))
 
         for a in self.getAttachments():
@@ -115,6 +129,11 @@ def parse_mail(options):
         ct = part.get_content_type() 
         encoding = part.get_charset() or 'iso-8859-15'
 
+        cd = part['content-disposition'] or ''
+        if cd.find('pcng.key') > -1:
+            R.key = part.get_payload()
+            continue
+
         if part.has_key("From"):
             R.sendername, R.senderaddress = email.Utils.parseaddr(part.get("From"))
             R.reply_to = R.senderaddress
@@ -142,6 +161,7 @@ def submit_request(R, options):
                "Accept": "text/plain",
               }
     if options.username and options.password:
+        print options.username, options.password
         headers['Authorization'] = 'Basic ' + base64.encodestring('%s:%s' % (options.username, options.password))[:-1]
 
     f = urlparse.urlparse(options.url)
