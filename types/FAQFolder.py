@@ -12,18 +12,23 @@ from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
     TextField('description',
-                widget=TextAreaWidget(description_msgid="desc_folder",
-                                      description="Description of the FAQ Container.",
-                                      label_msgid="label_folder",
-                                      label="Description",
-                                      i18n_domain = "plonehelpcenter",
-                                      rows=6)),
+                widget=TextAreaWidget(
+    description="Description of the FAQ Container.",
+    description_msgid="desc_folder",
+    label_msgid="label_folder",
+    label="Description",
+    i18n_domain = "plonehelpcenter",
+    rows=6)
+              ),
+    
     LinesField('sections',
-                default=['General'],
-                widget=LinesWidget(description="Define the available sections a FAQ can be assigned to.",
-                                            label="Sections",
-                                            i18n_domain = "plonehelpcenter",
-                                            rows=6)),
+               default=['General'],
+               widget=LinesWidget(
+    label="Sections",
+    description="Define the available sections a FAQ can be assigned to.",
+    i18n_domain="plonehelpcenter",
+    rows=6)
+               ),
     ))
  
 

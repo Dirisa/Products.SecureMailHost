@@ -61,14 +61,14 @@
             </tal:section>
  
             <ul tal:condition="not: full">
-                <li tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]">
+                <li tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Subject()]">
                 <a href="" tal:content="faq/Title"
                     tal:attributes="href faq/absolute_url">FAQ Question</a>
                 </li>
             </ul>
             <div tal:condition="full" 
                  tal:define="values python: here.objectValues()"
-                 tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]">
+                 tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Subject()]">
                                          <tal:comment replace="nothing">The above invocation should really be a method on the class - def getFaqItemsBySection(section)</tal:comment>
                 <metal:faq metal:use-macro="here/faq_view/macros/faq" />
  
