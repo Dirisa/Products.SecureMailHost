@@ -259,9 +259,9 @@ class PloneLocalFolderNG(BaseContent):
         return self._getFSFullPath(PLFNGRelativePath='')
 
     security.declareProtected('View', 'getFileMetadata')
-    def getFileMetadata(self, section="GENERAL", option="comment"):
+    def getFileMetadata(self, section="GENERAL", option="comment", rel_dir=''):
         """ get file metadata"""
-        destpath = self._getFSFullPath(PLFNGRelativePath='')
+        destpath = self._getFSFullPath(PLFNGRelativePath=rel_dir)
         #zLOG.LOG('PLFNG', zLOG.INFO , "getFileMetadata() :: \
         #destpath = %s" % destpath)
         metadataText = getMetadataElement(destpath, section, option)
@@ -346,36 +346,58 @@ class PloneLocalFolderNG(BaseContent):
             '/plfng_editMetadata?portal_status_message=' + msg)
 
     security.declareProtected(ModifyPortalContent, 'updateMD5Metadatum')
-    def updateMD5Metadatum(self, PLFNGrelativePath='', mode='testonly'):
+    def updateMD5Metadatum(self,PLFNGrelativePath='',mode='',output='redir'):
         """ update (or test) the MD5 metadatum for the file """
         # INPUT:
-        # if PLFNGrelativePath is provided, it will be used by _getFSFullPath()
-        # to determine which target file this method will operate on.
-        # Otherwise, _getFSFullPath() will use the '_e' field of self.REQUEST
-        # to determine the target file.
+        #   PLFNGrelativePath-
+        #     if PLFNGrelativePath is provided, it will be used by 
+        #     _getFSFullPath() to determine which target file this method will
+        #     operate on. Otherwise, _getFSFullPath() will use the '_e' field 
+        #     of self.REQUEST  to determine the target file.
+        #   mode-
+        #     'testonly' -> the MD5 metadatum for the file will only be tested
+        #     'MD5only' -> only the current MD5 for the file will be generated
+        #     'update' ->  the MD5 metadatum for the file will be updated
+        #   output-
+        #     'redir' -> the textual result of this method is provided through
+        #                portal_status_message via plfng_editMetadata redirect
+        #     otherwise, this method will return an integer result value
+        #
         # OUTPUT:
-        # if self.REQUEST exists, the result of the method is provided through
-        # portal_status_message output via redirect to plfng_editMetadata.
-        # Otherwise, this method returns one of the following values:
-        #   if existing metadata valid :: return -1
+        #  --------------------------------------------------------------------
+        #     existing 
+        #  metadata valid?	  mode?    output?         output behavior
+        #  --------------------------------------------------------------------
+        #        yes       'testonly' 'redir'  redirect: 'MD5 valid'
+        #        no        'testonly' 'redir'  redirect: 'MD5 invalid warning'
+        #        yes       'testonly'   ''                 -1
+        #        no        'testonly'   ''                  0
+        #        yes        'update'    ''                 -1
+        #        no         'update'    ''                  1 *
+        #        yes        'update'  'redir'  redirect: 'MD5 valid, no update'
+        #        no         'update'  'redir'  redirect: 'MD5 metadata updated'
+        #        yes       'MD5only'  'redir'  redirect: 'file MD5 is <md5>'
+        #        no        'MD5only'  'redir'  redirect: 'file MD5 is <md5>'
+        #        yes       'MD5only'    ''               <md5>
+        #        no        'MD5only'    ''               <md5>
+        #  --------------------------------------------------------------------
         #
-        #   if existing metadata invalid AND metadata updated :: return 1
-        #
-        #   if existing metadata invalid AND metadata NOT updated :: return 0
-        #   (note: this result will be returned either when mode=='testonly'
-        #          or when setMetadata() failed for whatever reason)
+        #    * return value will be 1 only if setMetadata() succeeds; otherwise 
+        #      the return value will be 0
 
         result = 0
         section = 'DIAGNOSTICS'
         option = 'md5'
 
-        #zLOG.LOG('PLFNG', zLOG.INFO , "updateMD5Metadatum() :: \
-        #REQUEST=%s rel_dir=%s mode=%s" % (REQUEST, rel_dir, mode))
-
         targetFile = self._getFSFullPath(PLFNGRelativePath=PLFNGrelativePath)
+        
+        #msg = "updateMD5Metadatum() :: rel_dir=%s mode=%s output=%s target=%s"\
+        #       % (PLFNGrelativePath, mode, output, targetFile)
+        #zLOG.LOG('PLFNG', zLOG.INFO , msg)
 
         if not os.path.isfile(targetFile):
-            raise ValueError('not a file: %s' % PLFNGrelativePath)
+            #raise ValueError('not a file: %s' % PLFNGrelativePath)
+            return None
 
         metadataMD5 = getMetadataElement(targetFile, section, option)
         start_time = DateTime()
@@ -385,23 +407,29 @@ class PloneLocalFolderNG(BaseContent):
 
         if metadataMD5 == fileMD5:
             result = -1
-            if mode == 'testonly':
+            if mode == '' or mode=='testonly':
                 msg = 'MD5 metadata is valid. (MD5 computation took '+ \
                       str(elapsed_time)[:6] + ' seconds).'
-            else:
+            elif mode == 'MD5only':
+                result = fileMD5
+                msg='current file MD5 is: ' + fileMD5
+            elif mode =='update':
                 msg = 'no need to update MD5 metadata (it is valid).'
         else:
-            if mode == 'testonly':
+            if mode == '' or mode == 'testonly':
                 result = 0
                 msg='WARNING: MD5 metadata does NOT match current file MD5 !!!'
-            else:
+            elif mode == 'MD5only':
+                result = fileMD5
+                msg='current file MD5 is: ' + fileMD5
+            elif mode =='update':
                 result = setMetadata(targetFile, section, option, fileMD5)
                 if result == 1:
                      msg = 'MD5 metadata updated.'
                 else:
                      msg = 'ERROR: MD5 metadata could not be updated !!!'
 
-        if self.REQUEST:
+        if output == 'redir':
            self.REQUEST.RESPONSE.redirect(self.REQUEST['URL1']+\
            '/plfng_editMetadata?portal_status_message=' + msg)
         else:
@@ -720,52 +748,18 @@ class PloneLocalFolderNG(BaseContent):
 
                proxyObjectsList.append(P)
 
-           for f in filteredFileList:
+           for file in filteredFileList:
 
-               FSfullPathFileName = os.path.join(destpath, f)
-               FSfullPathFolderName = os.path.dirname(FSfullPathFileName)
-               P = FileProxy(id=f,
-                             filepath=FSfullPathFileName,
-                             fullname=FSfullPathFileName,
-                             properties=None)
-               mi = self.mimetypes_registry.classify(data=None,
-                                                     filename=f.lower())
+               destpath = self._getFSFullPath(PLFNGRelativePath='')
+               trimmedFSBasePath = self._getFSBasePath()
+               rel_dir = destpath.replace(trimmedFSBasePath, '')
+               if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
 
-               P.setIconPath(mi.icon_path)
-               P.setAbsoluteURL(self.absolute_url() + relURL + f)
-               P.setMimeType(mi.normalized())
+               _proxy = self._createProxy(file,
+                                          rel_dir=rel_dir,
+                                          destination=destpath)
 
-               if os.path.exists(FSfullPathFileName + '.metadata'):
-                   try:
-                     P.setComment(getMetadataElement(FSfullPathFileName,
-                                                     section="GENERAL",
-                                                     option="comment"))
-                   except:
-                     P.setComment('')
-                   try:
-                     P.setTitle(getMetadataElement(FSfullPathFileName,
-                                                   section="GENERAL",
-                                                   option="title"))
-                   except:
-                     P.setTitle('')
-                   try:
-                     P.setLanguage(getMetadataElement(FSfullPathFolderName,
-                                                      section="GENERAL",
-                                                      option="language"))
-                   except:
-                     # LinguaPlone TechnicalPreview 900 uses 'neutral'
-                     # as neutral language code
-                     P.setLanguage('neutral')
-
-                   DIAGNOSTICS_MD = getMetadataElements(FSfullPathFileName, 'DIAGNOSTICS') or {}
-                   proxy.setChecksum(GENERAL_MD.get('md5',''))
-
-               else:
-                   P.setComment('')
-                   P.setTitle('')
-                   P.setLanguage('neutral')
-
-               proxyObjectsList.append(P)
+               proxyObjectsList.append(_proxy)
 
            return proxyObjectsList
 
