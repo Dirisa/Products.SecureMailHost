@@ -1,0 +1,228 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plonecollectorng">
+
+<body>
+
+<!-- The news box -->
+
+<div metal:define-macro="navigation" i18n:domain="plonecollectorng">
+
+    <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'">
+      <div metal:use-macro="here/pcng_slots/macros/issue_metadata" />
+    </tal:if>
+
+    <tal:if tal:condition="python: here.meta_type=='PloneCollectorNG'">
+      <div metal:use-macro="here/pcng_slots/macros/collector_metadata" />
+    </tal:if>
+
+    <div metal:use-macro="here/pcng_slots/macros/searchresults" />
+</div>
+
+<!-- searchresults -->
+<div metal:define-macro="pcng_searchresults" i18n:domain="plonecollectorng">
+
+  <div class="portlet" id="pcng-collector-metadata"
+       tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
+    <h5 i18n:translate="last_search_results">Results from last search</h5>
+    <div class="portletBody"
+         tal:define="my_id here/getId;
+                     results python: request.SESSION.get('pcng_searchresults', []);
+                     issue_ids python: [i[1] for i in results]">
+   
+      <div tal:condition="python: here.meta_type=='PloneIssueNG' and here.pcng_issue_temporary()" >
+        <tal:if tal:condition="python: here.getId() in issue_ids" > 
+            <tal:def tal:define=" issue_index python: issue_ids.index(here.getId())">
+            <div class="left">
+              <a tal:condition="python: issue_index > 0"
+                 tal:attributes="href python: results[issue_index-1][0]"><img src="arrowLeft.gif" title="Previous" i18n:attributes="title"></a>
+            </div>
+
+            <div class="right">
+              <a tal:condition="python: issue_index < len(results)-1 "
+                 tal:attributes="href python: results[issue_index+1][0]"><img src="arrowRight.gif" title="Next" i18n:attributes="title"></a>
+            </div>
+            <div style="clear: both"> </div>
+            </tal:def>
+        </tal:if>
+      </div>
+
+      <ul tal:define="num_results python: len(results);
+                      results python: test(num_results > 20, results[:20], results)">
+        <li tal:repeat="item results">
+          <a tal:attributes="href python: item[0]">
+            <span tal:attributes="id python: test(item[1]==my_id, 'selected', '')"
+                  tal:content="python: item[1]" />
+          </a>
+          - <span tal:replace="python: here.shorten_string(item[2], maxlength=40)" />
+        </li>        
+        <li tal:condition="python: num_results > 20">...</li>        
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Collector metadata -->
+<div metal:define-macro="collector_metadata" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng-collector-metadata">
+    <h5 i18n:translate="collector_metadata">Collector data</h5>
+    <div class="portletBody">
+      <ul>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Issue metadata -->
+<div metal:define-macro="issue_metadata" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng-issue-metadata">
+    <h5 i18n:translate="issue_metadata">Issue data</h5>
+    <div class="portletBody">
+      <ul>
+        <li>
+            <span i18n:translate="creator">Creator</span>:
+            <span tal:replace="here/Creator" />
+        </li>
+        <li>
+            <span i18n:translate="created">Created</span>:
+            <span tal:replace="python: here.toLocalizedTime(here.created())" />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Collector actions portlet -->
+<div metal:define-macro="pcng_collector_portlet" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng_collector_portlet">
+    <h5 i18n:translate="collector_actions">Collector actions</h5>
+    <div class="portletBody"  id="pcng_portlet_collector"
+         tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
+        <div class="pcng_action" tal:repeat="a actions/pcng_collector|nothing">
+            <a tal:attributes="href a/url">
+              <span class="pcng_action"
+                    i18n:translate="" 
+                    tal:attributes="id a/id"
+                    tal:content="a/name" />
+            </a>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Collector search portlet -->
+<div metal:define-macro="pcng_search_portlet" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng_search_portlet">
+    <h5 i18n:translate="Search">Search</h5>
+    <div class="portletBody"  id="pcng_search-portlet">
+
+      <div>
+        <span id="pcng_navigation" i18n:translate="Navigation">Navigation:</span>
+        <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
+          <span i18n:translate="show_issue_number">Show issue #</span> 
+          <input type="text" name="issuenumber" size="5" /> &nbsp;
+        </form>
+      </div>
+
+      <br/>
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+        <span id="pcng_saved_searches" i18n:translate="saved_searches">Saved searches</span>:
+        <form method="post" action="pcng_do_search">
+          <!-- saved searches are stored as a list of string 'RELATIVE_URL::query_id::QUERY_STRING' -->
+          <select name="query"
+                  tal:define="url python: test(here.meta_type=='PloneIssueNG', here.aq_parent.absolute_url(1), here.absolute_url(1))">
+            <tal:loop tal:repeat="saved_search python: [s for s in member.getProperty('pcng_saved_searches', ()) if s.startswith(url)]" >
+              <option tal:content="python: saved_search.split('::', 2)[1]" 
+                      tal:attributes="value python: saved_search.split('::', 2)[2]"
+                  />
+
+            </tal:loop>
+          </select>
+          <input type="submit" value="Search" i18n:attributes="value" class="standalone"/>
+        </form>    
+      </div>
+
+      <br/>
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+        <span id="pcng_quicklinks" i18n:translate="quicklinks">Quicklinks:</span>
+        <div>
+          <a tal:attributes="href string:pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> 
+        </div>
+        <div>
+          <a tal:attributes="href string:pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Issue actions porlet -->
+<div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng_issue_portlet">
+    <h5 i18n:translate="issue_actions">Issue actions</h5>
+    <div class="portletBody" id="pcng_portlet_issue"
+         tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
+      <div class="pcng_action" loop tal:repeat="a actions/pcng_issue|nothing">
+        <a tal:attributes="href a/url">
+          <span i18n:translate="" 
+                tal:attributes="id a/id"
+                tal:content="a/name" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div metal:define-macro="pcng_issue_references" i18n:domain="plonecollectorng"
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+  <div class="portlet" tal:define="references here/getForwardReferences">
+    <h5>
+      <span i18n:translate="references">References</span>
+      <a tal:condition="canFollowup" href="pcng_issue_references">
+        <img src="edit.gif" title="Create new references" i18n:attributes="title"/>
+      </a>
+    </h5>
+    <div class="portletBody" id="pcng_portlet_references">
+      <ul>
+        <li tal:repeat="ref references">
+          <a tal:define="target ref/getTargetObject"
+             tal:attributes="href target/absolute_url;
+                             title ref/comment;" 
+             tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+        </li>
+      </ul>
+      <span tal:condition="not: references" i18n:translate="no_references">No references</span>
+    </div>
+  </div>
+</div>
+
+
+<div metal:define-macro="pcng_issue_uploads" i18n:domain="plonecollectorng"
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+  <div class="portlet" tal:define="uploads here/objectValues">
+    <h5>
+      <span i18n:translate="Uploads">Uploads</span>
+      <a tal:condition="canFollowup" href="pcng_issue_uploads">
+        <img src="edit.gif" title="Upload file" i18n:attributes="title"/>
+      </a>
+    </h5>
+    <div class="portletBody" id="pcng_portlet_uploads">
+      <ul>
+        <li tal:repeat="item uploads">
+          <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
+          <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
+          <a tal:attributes="href item/absolute_url">
+            <span  tal:content="item/getId" 
+                   tal:attributes="title python: '(%s, %s): %s' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator(), item.title_or_id())" />
+          </a>
+        </li>
+      </ul>
+      <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

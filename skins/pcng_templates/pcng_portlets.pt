@@ -1,0 +1,12 @@
+<metal:div metal:define-macro="pcng_issue_portlets">
+    <div metal:use-macro="here/pcng_slots/macros/pcng_issue_portlet" />
+    <div metal:use-macro="here/pcng_slots/macros/pcng_issue_uploads" />
+    <div metal:use-macro="here/pcng_slots/macros/pcng_issue_references" />
+    <div metal:use-macro="here/pcng_slots/macros/pcng_searchresults" />
+    <div metal:use-macro="here/pcng_slots/macros/pcng_search_portlet" />
+</metal:div>
+
+<metal:div metal:define-macro="pcng_collector_portlets">
+    <div metal:use-macro="here/pcng_slots/macros/pcng_collector_portlet" />
+    <div metal:use-macro="here/pcng_slots/macros/pcng_search_uploads" />
+</metal:div>
