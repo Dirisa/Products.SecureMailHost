@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.55 2004/03/20 13:14:42 ajung Exp $
+$Id: SchemaEditor.py,v 1.56 2004/05/22 10:18:32 ajung Exp $
 """
 
 import copy, re
@@ -26,6 +26,15 @@ UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'impor
 
 
 id_regex = re.compile('[a-zA-Z0-9][a-zA-Z0-9_]*[a-zA-Z0-9]')
+
+def remove_unallowed_chars(s):
+    allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/ ().,:;#+*=&%$§!'
+    l = []
+    for c in s:
+        if c in allowed:
+            l.append(c)
+    return ''.join(l)
+
 
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
@@ -235,6 +244,8 @@ class SchemaEditor:
                         k = v = line
                     else:
                         k,v = line.split('|', 1)
+
+                    k = remove_unallowed_chars(k)
                     l.append( (k,v))
 
                 D['vocabulary'] = DisplayList(l)
