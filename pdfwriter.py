@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.37 2004/03/08 20:03:02 ajung Exp $
+$Id: pdfwriter.py,v 1.38 2004/03/24 09:05:32 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
 from types import UnicodeType, StringType
-from textwrap import fill
+from textwrap import fill, wrap
 from zLOG import WARNING, LOG
    
 try:
@@ -51,8 +51,11 @@ def utf8(text):
     assert isinstance(text, UnicodeType)
     return text.encode('utf-8')
 
-def dowrap(text, limit=100):
-    return fill(text, limit)
+def dowrap(text, limit=80):
+    l = []
+    for line in text.split('\n'):
+        l.extend(wrap(line, limit))
+    return '\n'.join(l)
 
 def break_longlines(text, limit=80):
 
@@ -154,8 +157,8 @@ def pdfwriter(collector, ids):
         header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 70))
 
         header(translate('label_description', 'Description', as_unicode=1))
-        definition(html_quote(getFieldValue(issue, 'description')), PreStyle)
-
+        description = issue.Schema()['description'].get(issue)
+        pre(dowrap(toUnicode(description)))
         if issue.solution:
             header(translate('label_solution', 'Solution', as_unicode=1))
             definition(html_quote(getFieldValue(issue, 'solution')), PreStyle)
