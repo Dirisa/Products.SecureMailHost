@@ -25,8 +25,8 @@
     </tr>
 
     <tal:loop tal:repeat="topic here/pcng_get_topics">
-      <tr class="odd" tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')"
-                      tal:define="topic_users python: topic_user.get(topic, [])">
+      <tr tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')"
+          tal:define="topic_users python: topic_user.get(topic, [])">
   
         <td valign="top"> 
           <span tal:content="topic" />
