@@ -102,8 +102,10 @@
   <a name="uploads"></a>
   <legend i18n:translate="uploads">Uploads</legend>
     <ul>
-        <li tal:repeat="item here/objectValues">
-            <span tal:define="icon item/getIcon|item/icon|nothing">
+      <li tal:repeat="item here/objectValues">
+        <div tal:define="icon item/getIcon|item/icon|nothing">
+
+          <div class="left">
 
               <span tal:condition="icon">
                 <img src="" alt="" border="0"
@@ -116,14 +118,18 @@
               </a>
 
               <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
-              <a i18n:translate="issue_artifacts_table_info_link"
-                 tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+          </div>xxx
+          <div class="right">
+          <a i18n:translate="issue_artifacts_table_info_link"
+             tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
 
-              <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
-                 i18n:translate="issue_artifacts_table_deletion_link"
-                 tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
-            </span>
-            <pre tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
+          <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
+             i18n:translate="issue_artifacts_table_deletion_link"
+             tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
+          </div>
+        <div class="clear"> </div>
+        </div>
+        <pre tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
 
 
       </li> <!-- End row -->

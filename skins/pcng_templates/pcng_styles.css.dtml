@@ -5,6 +5,12 @@ span#label {
     font-weight: bold;
 }
 
+div#pcng_submission_guideline {
+    background: #cccccc;
+    padding: 0.2em;
+    margin-bottom: 2em;
+}
+
 div#pcng_headline {
     margin-bottom: 1em;
     font-size: 120%;
@@ -212,4 +218,6 @@ div.pcng_action {
 .portlet #pcng_quicklinks, .portlet #pcng_saved_searches,.portlet #pcng_navigation {
     font-weight: bold;
 }
+
+
 /* </dtml-with> */
