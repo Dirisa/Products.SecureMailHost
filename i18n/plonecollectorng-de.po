@@ -486,7 +486,7 @@ msgid "issues_reindexed"
 msgstr "Tickets wurden reindexiert"
 
 msgid "invalid_action" 
-msgstr "Ungültige Aktion"
+msgstr "Ungültige Aktion: $action"
 
 msgid "followup_submitted" 
 msgstr "Followup eingestellt"
