@@ -273,6 +273,10 @@ function show_tickets() {
         <span i18n:translate="action">Action</span>
         (<span i18n:translate="workflow_action_current_state">Current state</span>:
          <span i18n:translate="" tal:content="here/status" />)</th>
+      <th>&nbsp;</th>
+      <th>
+        <span i18n:translate="followup_phrases"> Followup phrases</span>
+      </th>
     </tr>
 
     <tr> 
@@ -307,6 +311,18 @@ function show_tickets() {
                                      CHECKED python: request.get('state','') == action"/>
           <span i18n:translate="" tal:content="python: here.pcng_format_status(action)" />
         </tal:loop>
+      </td>
+
+      <td width="100"> </td>
+
+      <td valign="top">
+        <select name="phrases">
+           <option tal:repeat="phrase python: here.getPhrases()"
+                   tal:content="phrase"
+                   tal:attributes="value phrase"/>
+        </select>
+        <br/>
+        <input class="context" type="button" onclick="followup_phrase()" value="Use this phrase" i18n:attributes="value" />
       </td>
     </tr>
   </table>

@@ -18,11 +18,22 @@
   <tal:if tal:condition="request/timestamp|nothing">
    <tal:def tal:define="global quoted_followup python: here.pcng_text_followup(request['timestamp'])" />
   </tal:if>
+
+
+  <script language="javascript">
+    function followup_phrase() {
+        var idx = document.followupform.phrases.selectedIndex;
+        if (idx == -1) return;
+        var text = document.followupform.phrases.options[idx].value;
+        text = text.replace('<br>', '\n');
+        document.followupform.comment.value = text;
+    }
+  </script>
     
   <div id="pcng_issue_followup"
        tal:define="assignees here/assigned_to;
                    show_actions python: 1">
-    <form method="post" action="issue_followup">
+    <form method="post" action="issue_followup" name="followupform">
 
       <div class="row">
         <div class="label" i18n:translate="comment">Comment</div>

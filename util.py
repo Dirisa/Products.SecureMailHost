@@ -5,10 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.20 2004/09/21 13:50:49 ajung Exp $
+$Id: util.py,v 1.21 2004/09/22 21:02:43 ajung Exp $
 """
 
-import urllib
+import os, urllib
+from Products.Archetypes.public import DisplayList
+
+package_home = os.path.dirname(__file__)
+
 
 def getUserName():
     """ return user name """
@@ -165,4 +169,19 @@ def decrypt(text, key):
     
     obj = AES.new(key, AES.MODE_ECB)
     return obj.decrypt(text)
-    
+   
+
+def readLinesFromDisk(fname):
+    fname = os.path.join(package_home, 'data', fname)
+    if not os.path.exists(fname):
+        raise IOError, 'File not found: %s' % fname
+    lines = open(fname).readlines()
+    lines = [l.strip() for l in lines]
+    lines = filter(None, lines)
+    return lines
+
+
+def DisplayListFromFile(fname):
+    lines = readLinesFromDisk(fname)
+    return DisplayList(zip(lines, lines)) 
+

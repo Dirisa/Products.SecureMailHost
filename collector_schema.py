@@ -5,17 +5,18 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.61 2004/09/12 07:42:06 ajung Exp $
+$Id: collector_schema.py,v 1.62 2004/09/22 21:02:42 ajung Exp $
 """
 
 
 from Products.Archetypes.public import DisplayList, BaseSchema, Schema
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField, LinesField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget, MultiSelectionWidget
-from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
+from Products.Archetypes.public import RichWidget, IdWidget, StringWidget, LinesWidget
 
 from notification_policies import VOC_NOTIFICATION_POLICIES
 from workflows import VOC_WORKFLOWS
+from util import readLinesFromDisk
 
 VOC_NOTIFICATION_LANGUAGES = DisplayList((
   ('en', 'English'),
@@ -317,5 +318,15 @@ schema = BaseSchema + Schema((
                                      i18n_domain='plonecollectorng'),
                 default=200000,
                 schemata='Permissions',
+                ),
+
+
+    LinesField('phrases',
+                widget=LinesWidget(size=10,
+                                   label='Followup phrases',
+                                   label_msgid='label_followup_phrases',
+                                   i18n_domain='plonecollectorng'),
+                default=readLinesFromDisk('phrases.txt'),
+                schemata='phrases'
                 ),
     ))
