@@ -1,3 +1,6 @@
+<span metal:define-macro="field_shortview">
+ <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="python: getattr(here, field.accessor)()" /> &nbsp;
+</span>
 
 <!-- Issue related macros -->
 
@@ -203,3 +206,5 @@ function show_tickets() {
   </div>
 
 </div>
+
+
