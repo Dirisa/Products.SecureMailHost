@@ -38,8 +38,6 @@ for group in groups:
             if ev.comment:
                 s+= ' (%s)' % ev.comment
             nl(s)
-        else: 
-            raise TypeError('Unhandled event: %s' % repr(ev))
 
     n+=1; nl()
 
