@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.51 2004/05/20 15:05:37 ajung Exp $
+$Id: collector_schema.py,v 1.52 2004/05/22 11:16:03 ajung Exp $
 """
 
 
@@ -226,7 +226,7 @@ schema = BaseSchema + Schema((
                                        label='Portlet usage',
                                        label_msgid='label_portlet_usage',
                                        i18n_domain='plonecollectorng'),
-                default='keep',
+                default='plone-left',
                 schemata='Look and Feel'
                 ),
     StringField('participation_mode',
