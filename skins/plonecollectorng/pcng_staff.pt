@@ -56,18 +56,23 @@
                 </td>
               </tr>
             </span>
+            <tr tal:condition="not: users">
+              <td colspan="6">
+                <span i18n:translate="no_users_found">No users found</span>
+              </td>
+            </tr>
           </span>
         </span>
-       <tr> <td colspan="6"><hr></td></tr>
+
        <tr>
-         <td colspan="6" i18n:translate="help_staff">
+         <th colspan="6" i18n:translate="help_staff">
          <b>Collector administors</b> are responsible for the configuration and the
          maintainance of a collector
          <br><b>Supporters</b> work on issues. Usually issues are assigned to a supporter
          in order to resolve the issue.
-         <br><b>Reporter</b> file new issues and have only limited rights on an issue
+         <br><b>Reporters</b> file new issues and have only limited rights on an issue
          after the issue has been filed.
-         </td>
+         </th>
        </tr>
       </table>
 
