@@ -168,7 +168,7 @@
   <metal:block tal:define="advanced python: request.has_key('advanced_search') or member.getProperty('pcng_default_searchform') == 'advanced'">
 
   <a href="pcng_view?advanced_search=1"
-     tal:condition="not: advanced">Advanced search</a>
+     tal:condition="not: advanced"><span i18n:translate="advanced_search">Advanced search</span></a>
 
   <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
     <span i18n:translate="jump_to_ticket">Jump to issue number </span> 

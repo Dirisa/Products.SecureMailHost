@@ -311,7 +311,7 @@ msgid "Notifications"
 msgstr "Benachrichtigungen"
 
 msgid "jump_to_ticket"
-msgstr "Spring zu Ticket"
+msgstr "Springe zu Ticket"
 
 msgid " Jump "
 msgstr "Springe"
@@ -681,3 +681,9 @@ msgstr "Topic"
 
 msgid "vocabulary"
 msgstr "Vokabular (Benutzen Sie Key|Value für Key-Value Paare oder 'method:METHODENNAME')"
+
+msgid "no_issues_found"
+msgstr "Keine Tickets gefunden"
+
+msgid "advanced_search"
+msgstr "Expertensuche"
