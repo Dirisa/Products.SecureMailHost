@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.180 2004/05/31 13:53:33 ajung Exp $
+$Id: Issue.py,v 1.181 2004/05/31 17:17:58 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -330,10 +330,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getForwardReferences(self):
         """ AT forward references """
         if self.haveATReferences():
-            from Products.Archetypes.config import REFERENCE_CATALOG
-            tool = getToolByName(self, REFERENCE_CATALOG)
-            refs = tool.getReferences(self, None)
-            return refs
+            return self.getRefs()
         else:
             return ()
         
@@ -341,12 +338,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getBackReferences(self):
         """ AT forward references """
         if self.haveATReferences():
-            from Products.Archetypes.config import REFERENCE_CATALOG
-            tool = getToolByName(self, REFERENCE_CATALOG)
-            sID, sobj = tool._uidFor(self)
-            brains = tool._queryFor(tid=sID, relationship=None)
-            refs = tool._resolveBrains(brains)
-            return refs
+            return self.getBRefs()
         else:
             return ()
         
