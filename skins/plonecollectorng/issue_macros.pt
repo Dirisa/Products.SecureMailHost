@@ -235,7 +235,8 @@ function show_tickets() {
 <tal:macro metal:define-macro="followup_table" i18n:domain="plonecollectorng">
 
   <table tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter');
-                     topics python: here.get_topics_user().keys()" >
+                     topics python: here.get_topics_user().keys();
+                     gruf_groups here/get_gruf_groups" >
     <tr>
       <th>
         <span tal:condition="allow_assign" i18n:translate="assign_to_user"> Assign to users</span>
@@ -243,7 +244,7 @@ function show_tickets() {
       <th tal:condition="topics" width="20">
         &nbsp;
       </th>
-      <th tal:condition="topics">
+      <th tal:condition="python: topics or gruf_groups">
         <span tal:condition="allow_assign" i18n:translate="assign_to_group"> Assign to group</span>
       </th>
       <th>&nbsp;</th>
@@ -267,9 +268,10 @@ function show_tickets() {
       <td tal:condition="topics" width="20">
         &nbsp;
       </td>
-      <td valign="top" tal:condition="topics">
+      <td valign="top" tal:condition="python: topics or gruf_groups">
         <select tal:condition="allow_assign" name="assignees_group:list" size="7" multiple>
-          <option tal:repeat="topic topics" tal:content="topic" tal:attributes="value topic" />
+          <option tal:repeat="topic topics" tal:content="string:$topic (TG)" tal:attributes="value topic" />
+          <option tal:repeat="group gruf_groups" tal:content="string:$group (GRUF)" tal:attributes="value group" />
         </select>
       </td>
       <td width="100"> </td>

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.120 2004/02/22 19:08:04 ajung Exp $
+$Id: Collector.py,v 1.121 2004/02/23 16:26:18 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -219,7 +219,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                     running = 0
                 folder = folder.aq_parent
 
+        groups = self.pcng_get_groups()  # get group IDs from GRUF
         for name in util.remove_dupes(names):
+            if name.replace('group_', '') in groups: continue  # no group names !!!
             member = membership_tool.getMemberById(name)
             d = { 'username':name, 'roles':[], 'fullname':'', 'email':''}
 
@@ -403,7 +405,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             self._topic_user[k] = getattr(d, k)
 
     security.declareProtected(View, 'get_topics_user')    
-    def get_topics_user(self, ):
+    def get_topics_user(self):
         """Return the topic-user mapping """
         if not hasattr(self, '_topic_user'):
             self._topic_user = OOBTree()
@@ -412,6 +414,18 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for k,v in self._topic_user.items():
             d[k] = v
         return d
+
+    ######################################################################
+    # GroupUserFolder
+    ######################################################################
+
+    security.declareProtected(View, 'get_gruf_groups')    
+    def get_gruf_groups(self):  
+        """ return list of GRUF group IDs """
+
+        GT = getToolByName(self, 'portal_groups', None)
+        if GT is None: return ()
+        return GT.listGroupIds()
 
     ######################################################################
     # Maintainance
