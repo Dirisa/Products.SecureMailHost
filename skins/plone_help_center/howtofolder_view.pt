@@ -47,9 +47,9 @@
      
                 <ul class="faqMarker"
                     tal:condition="not: full">
-                    <li tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.getSections()]">
-                    <a href="" tal:content="faq/Title"
-                        tal:attributes="href faq/absolute_url">FAQ Question</a>
+                    <li tal:repeat="howto python: [o for o in objects if o.portal_type=='HelpCenterHowTo' and section in o.getSections()]">
+                    <a href="" tal:content="howto/Title"
+                        tal:attributes="href howto/absolute_url">FAQ Question</a>
                     </li>
                 </ul>
             </div>
