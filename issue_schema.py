@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.16 2003/09/28 14:06:02 ajung Exp $
+$Id: issue_schema.py,v 1.17 2003/10/03 09:08:01 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -74,6 +74,7 @@ schema = OrderedSchema((
                                        i18n_domain='plonecollectorng'),
                 ),
     StringField('importance',
+                default='medium',
                 required=1,
                 searchable=1,
                 schemata='issuedata',
