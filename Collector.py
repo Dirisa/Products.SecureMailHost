@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.106 2004/01/16 20:51:59 ajung Exp $
+$Id: Collector.py,v 1.107 2004/01/20 13:54:37 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -564,7 +564,7 @@ class PloneCollectorNGCatalog(CatalogTool):
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
     for a in fti['actions']:
-        if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
+        if a['id'] in ('view', 'syndication','references','metadata', 'edit', 'localroles'):
             a['visible'] = 0
     fti['filter_content_types'] = 1
     fti['allowed_content_types'] = ['PloneIssueNG']

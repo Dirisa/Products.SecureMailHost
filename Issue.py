@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.116 2004/01/20 12:43:43 ajung Exp $
+$Id: Issue.py,v 1.117 2004/01/20 13:54:37 ajung Exp $
 """
 
 import sys, os, time
@@ -546,7 +546,7 @@ registerType(PloneIssueNG)
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
     for a in fti['actions']:
-        if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
+        if a['id'] in ('view', 'syndication','references','metadata', 'edit', 'localroles'):
             a['visible'] = 0
 
     fti['global_allow'] = 0
