@@ -85,7 +85,14 @@ schema = BaseSchema +  Schema((
                 widget=StringWidget(label='filetypes for catalog action to skip',
                                     description='this comma-separated list of (partial) mimetype phrases is used by the catalog action to determine which files NOT to catalog',)
                 ),
-                
+    BooleanField ('display_fullpath',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default=1,
+                widget=BooleanWidget(
+                        label='Display the full portal path for PLFNG contents pages?',
+                        description='This field controls whether or not the displayed title contains the full portal path or not.',
+                        ),
+                ),
     ))
 
 
@@ -674,6 +681,11 @@ class PloneLocalFolderNG(BaseContent):
     def catalogingEnabled(self): 
         """ return cataloging_enabled value """
         return self.cataloging_enabled 
+    
+    security.declareProtected('View', 'diplayFullPortalPath')
+    def diplayFullPortalPath(self): 
+        """ return the display_fullpath value """
+        return self.display_fullpath
         
     def catalogContents(self,rel_dir=None, catalog='portal_catalog'):
         
