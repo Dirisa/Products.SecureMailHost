@@ -22,7 +22,9 @@
         <li tal:define="schema here/Schema;
                         schemata_names  schema/getSchemataNames; 
                         schemata_names python: [s for s in schemata_names if s not in ('default', 'metadata')]">
-          <span i18n:translate="configuration_of">Configuration of</span>: 
+<!--
+          <span i18n:translate="configuration_of">Configuration of</span>:
+--> 
           <tal:loop repeat="set schemata_names">
             <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
                <span i18n:translate="" tal:content="set" /></a>
