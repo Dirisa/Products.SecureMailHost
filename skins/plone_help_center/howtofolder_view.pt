@@ -11,7 +11,8 @@
   </head>
 
   <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
@@ -35,8 +36,9 @@
             <dt>
                 <img tal:replace="structure here/howto_icon.gif" />
                 <a href="" tal:content="howto/Title"
+                   tal:define="review_state python:getInfoFor(howto, 'review_state', None)"
                    tal:attributes="href howto/absolute_url;
-                                   class string:state-${howto/review_state}">HowTo</a>
+                                   class string:state-$review_state">HowTo</a>
             </dt>
             
             <dd tal:content="howto/Description">Description</dd>
