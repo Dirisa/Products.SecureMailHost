@@ -169,3 +169,34 @@ function show_tickets() {
   </div> <!-- End group -->
 </div>  <!-- End macro: add_references_table -->
 
+
+<div metal:define-macro="watchlist">
+
+  <div class="group" tal:condition="python: here.wl_getMode()=='anyone' or 
+                                            (here.wl_getMode()=='authenticated' and member.getUserName() != 'Anonymous User') "
+       tal:define="email python: member.getProperty('email')">
+
+    <span class="legend">Watchlist</span>
+
+
+    <metal:block tal:condition="email">
+      <div tal:condition="not: python: here.wl_isWatcher(email)">
+        <a tal:attributes="href string:${here/absolute_url}/wl_addWatcher?email=${email}">Subscribe</a>
+      </div>      
+      <div tal:condition="python: here.wl_isWatcher(email)">
+        <a tal:attributes="href string:${here/absolute_url}/wl_removeWatcher?email=${email}">Unsubscribe</a>
+      </div>      
+    </metal:block>
+
+
+    <metal:block tal:condition="not: email">
+      <form tal:attributes="action string:${here/absolute_url}/wl_addWatcher">
+        E-Mail address:        
+        <input type="text" size="30" name="email" >
+        <input type="submit" value=" Subscribe to this issue ">
+      </form>
+    </metal:block>
+
+  </div>
+
+</div>
