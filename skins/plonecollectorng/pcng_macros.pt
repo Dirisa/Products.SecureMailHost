@@ -27,7 +27,7 @@
 
           <span tal:condition="python: event.getType()=='reference'"> Issue reference:
             <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
-               tal:content="python: event.getValue('comment')" />
+               tal:content="python: '%s/%s: %s' % (event.getValue('tracker'), event.getValue('ticketnum'), event.getValue('comment'))" />
           </span>
 
           <span tal:condition="python: event.getType()=='upload'"> Uploaded file:
@@ -73,7 +73,7 @@
 
             <span tal:condition="python: event.getType()=='reference'"> Issue reference:
               <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
-                 tal:content="python: event.getValue('comment')" />
+                 tal:content="python: '%s/%s: %s' % (event.getValue('tracker'), event.getValue('ticketnum'), event.getValue('comment'))" />
             </span>
 
             <span tal:condition="python: event.getType()=='upload'"> Uploaded file:
