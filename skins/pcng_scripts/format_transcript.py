@@ -4,7 +4,6 @@
 # The return format is UNICODE !
 
 import DateTime
-from textwrap import wrap
 
 # Wrapper for translate()
 def TR(id, default):
