@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.27 2003/11/05 17:30:35 ajung Exp $
+$Id: SchemaEditor.py,v 1.28 2003/11/11 07:45:28 ajung Exp $
 """
 
 import operator
@@ -91,7 +91,9 @@ class SchemaEditor:
     security.declareProtected(ManageCollector, 'schema_del_field')
     def schema_del_field(self, fieldset, name, RESPONSE=None):
         """ remove a field from a fieldset """
+        
         del self._schemas[fieldset][name]
+        self._schemas._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
                       self.translate('schema_field_deleted', 'Field deleted'), fieldset=fieldset)
 
