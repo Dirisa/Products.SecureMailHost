@@ -31,12 +31,14 @@
 
         <table border="0" width="100%">
           <tr>
-            <td align="left" valign="top" width="25%">
+            <td align="left" valign="top" width="30%">
 
               <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
                 <metal:block tal:condition="python: field.getName() not in ('title', 'description', 'solution')">
-                <span metal:use-macro="here/issue_macros/macros/field_shortview" /><br>
-              </metal:block>
+                  <div>
+                    <span tal:omit-tag="" metal:use-macro="here/issue_macros/macros/field_shortview" />
+                  </div>
+                </metal:block>
               </metal:block>
 
               <span class="schemata_label" i18n:translate="status">Status: </span><span class="field" tal:content="python: here.pcng_format_status(here.status())" />

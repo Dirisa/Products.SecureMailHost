@@ -1,17 +1,17 @@
-<span metal:define-macro="field_shortview">
+<metal:block metal:define-macro="field_shortview">
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-     <span tal:condition="not: field/vocabulary|nothing" tal:content="value"/>
+     <span tal:omit-tag="" tal:condition="not: field/vocabulary|nothing" tal:replace="value"/>
      <metal:block tal:condition="field/vocabulary|nothing" 
                   tal:define="vocab python: field.Vocabulary(here);
                               display python: here.displayValue(vocab, value)">
-        <span tal:content="structure display" />
+        <span tal:replace="structure display" />
 
      </metal:block>  
     </metal:block>
   </metal:block>
-</span>
+</metal:block>
 
 <fieldset metal:define-macro="view_schemata">
   <legend> <a class="schemata_legend"   
@@ -26,9 +26,8 @@
 <!-- Issue related macros -->
 
 <div metal:define-macro="issue_references">
-  <fieldset
-       tal:define="references here/getRefs;
-                   breferences here/getBRefs">
+  <fieldset tal:define="references here/getRefs;
+                        breferences here/getBRefs">
     <legend i18n:translate="legend_references">References</legend>
 
       <ul>
