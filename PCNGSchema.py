@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.12 2004/06/03 04:03:18 ajung Exp $
+$Id: PCNGSchema.py,v 1.13 2004/06/14 15:48:42 ajung Exp $
 """
 
 from types import FileType
@@ -364,8 +364,11 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
             # Call any field level validation
             if error == 0 and value:
                 try:
-                    res = field.validate(value, instance=instance,
-                                         field=field, REQUEST=REQUEST)
+                    try: # up to AT 1.3b2
+                        res = field.validate(value, instance=instance, field=field, REQUEST=REQUEST)
+                    except: # AT 1.3b2+
+                        res = field.validate(value, instance=instance, REQUEST=REQUEST)
+
                     if res:
                         errors[name] = res
                         error = 1
