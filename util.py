@@ -55,7 +55,8 @@ def getMetadataElement(filename,section,option):
          return metadataFileParser.get(section,option)
       except:
          return None
-         #raise 'Metadata Not Found', 'Could not retrieve metadata %s:%s for the file %s.' % (section,option,filename)
+         #raise 'Metadata Not Found', 'Could not retrieve metadata %s:%s for \
+         #the file %s.' % (section,option,filename)
    else:
       return None
 # --------------------------------------------------------------------
@@ -93,7 +94,7 @@ def getZipInfo(filename):
    
    # here is the code to mimic 'unzip -Zt' output
    # result = "%d files, %d bytes uncompressed, %d bytes compressed: %.1f%%"
-   #         % (len(z.filelist), uncompressedSize, compressedSize, compressionRatio)
+   #    % (len(z.filelist), uncompressedSize, compressedSize, compressionRatio)
    
    # this is the code from PLFNG 0.5 that used an external system
    # call to the UnZip v5.50 utility.  Here is its output format: 
@@ -113,8 +114,14 @@ def setZipInfoMetadata(filename):
    if zipfile.is_zipfile(filename): 
       num_files, unpacked_size = getZipInfo(filename)
   
-      setMetadata(filename, section="ARCHIVEINFO", option="num_files", value=num_files)
-      setMetadata(filename, section="ARCHIVEINFO", option="unpacked_size", value=unpacked_size)
+      setMetadata(filename,
+                  section="ARCHIVEINFO",
+                  option="num_files",
+                  value=num_files)
+      setMetadata(filename,
+                  section="ARCHIVEINFO",
+                  option="unpacked_size",
+                  value=unpacked_size)
       return 1
 
    else:
@@ -146,29 +153,41 @@ def upzipFile(FSfilename, FSBackupFolderBase=None):
       for zitem in z.namelist():
          checkValidIdResult = checkValidId(zitem)
          if checkValidIdResult != 1:
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() :: checkValidId(%s) failed:: %s" % (zitem,checkValidIdResult) ) 
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+              "upzipFile() :: checkValidId(%s) failed:: %s" \
+              % (zitem,checkValidIdResult) ) 
          else:
             if not zitem.endswith('/'):
                tofile = os.path.join(todir, zitem)
                oldRevisionNumber = 0
                newRevisionNumber = 1
-               # if file already exists, back it up to FSBackupFolderBase if specified
+               # if file already exists, back it up to 
+               # FSBackupFolderBase if specified
                if os.path.exists(tofile) and FSBackupFolderBase:
-                  # get revision of existing file (or 1 if revision metadata missing)
-                  oldRevisionNumberText = getMetadataElement(tofile, section="GENERAL", option="revision")
+                  # get revision of existing file 
+                  # (or 1 if revision metadata missing)
+                  oldRevisionNumberText = getMetadataElement(tofile,
+                                                             section="GENERAL",
+                                                             option="revision")
                   if oldRevisionNumberText:
                       oldRevisionNumber = int(oldRevisionNumberText)
                   else:
                       oldRevisionNumber = 1
    
                   # move existing file to backup location renamed with trailing rev.#
-                  backupdestpath = os.path.dirname(os.path.join(FSBackupFolderBase,zitem))
+                  backupdestpath = \
+                     os.path.dirname(os.path.join(FSBackupFolderBase,zitem))
                   backupFileSuffix = '.' + str(oldRevisionNumber)
-                  backupfilename = os.path.join(backupdestpath, os.path.basename(zitem)) + backupFileSuffix
-                  # create skeleton directory structure under backupFolder if necessary 
-                  if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
+                  backupfilename = \
+                     os.path.join(backupdestpath, os.path.basename(zitem)) + \
+                        backupFileSuffix
+                  # create skeleton directory structure under 
+                  # backupFolder if necessary 
+                  if not os.path.exists(backupdestpath):
+                     os.makedirs(backupdestpath)
                   shutil.move(tofile, backupfilename)
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() move(%s, %s)" % (tofile,backupfilename))
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                  #"upzipFile() move(%s, %s)" % (tofile,backupfilename))
                
                # extract the file
                f = open(tofile, 'wb')
@@ -177,13 +196,18 @@ def upzipFile(FSfilename, FSBackupFolderBase=None):
    
                # set/update metadata 
                newRevisionNumber = oldRevisionNumber + 1
-               setMetadata(tofile, section="GENERAL", option="revision", value=newRevisionNumber)
+               setMetadata(tofile,
+                           section="GENERAL",
+                           option="revision",
+                           value=newRevisionNumber)
 
-      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() finished unzip'ing %s" % FSfilename)
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      #"upzipFile() finished unzip'ing %s" % FSfilename)
       return 1
 
    else:
-      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() ABORTED: %s not a valid zip file." % FSfilename )
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+               "upzipFile() ABORTED: %s not a valid zip file." % FSfilename )
       return 0    
 
 # --------------------------------------------------------------------
@@ -216,18 +240,24 @@ def generate_md5(filename,syscallcommand='none'):
    if len(md5_hexvalue) == MD5_LENGTH:
       return md5_hexvalue
    else:
-      # failure should throw an exception, but for now, return easily identified bogus checksum 
+      # failure should throw an exception, but for now, return 
+      # easily identified bogus checksum 
       return "99999999999999999999999999999999"
 
 # --------------------------------------------------------------------
 def determine_bytes_usage(startObject):
     """ 
-        attempt to determine the total size in bytes of all subobjects of object.
-        Note: this only gathers sizes of objects that have the 'get_size' attribute.
+        attempt to determine the total size in bytes of all subobjects of 
+        object.  Note: this only gathers sizes of objects that have the 
+        'get_size' attribute.
     """
-    exclude_quota_objects = [] # not used now, but might come in handy at some point
+    # not used now, but might come in handy at some point
+    exclude_quota_objects = []
     
-    obj_sizes = [ obj.get_size() for id, obj in startObject.ZopeFind( startObject, search_sub=1 ) if hasattr( aq_base( obj ), 'get_size') and getattr( obj, 'meta_type', None ) not in exclude_quota_objects ]
+    obj_sizes = [ obj.get_size() for id, \
+       obj in startObject.ZopeFind( startObject, search_sub=1 ) \
+       if hasattr( aq_base( obj ), 'get_size') and \
+       getattr( obj, 'meta_type', None ) not in exclude_quota_objects ]
     if obj_sizes:
         objects_size = int( reduce( lambda x,y: x+y, obj_sizes ) )
     else:
@@ -249,7 +279,8 @@ def checkValidId(id):
     if not id:
         return 'The id is invalid because it is empty or not specified'
     if bad_id(id) is not None:
-        return 'The id is invalid because it contains characters illegal in URLs.'
+        return \
+        'The id is invalid because it contains characters illegal in URLs.'
     if id in ('.', '..'):
         return 'The id is invalid because it is not traversable.'
     if id.startswith('_'):
@@ -265,15 +296,17 @@ def checkValidId(id):
     return 1
 
 # --------------------------------------------------------------------
-def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypesTool, 
-                     uidBase, view_roles, effective, expires, meta_type):
+def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, 
+                     mimetypesTool, uidBase, view_roles, effective, expires,
+                     meta_type):
    
    #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
    #   "catalogFSContent(%s,%s,%s,%s,%s,%s,%s,%s,%s)" \
    #   % (FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypesTool, \
    #    uidBase, view_roles, effective, expires, meta_type) )
 
-   # uidBase = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/')
+   # uidBase = str('/' + portalId + '/'+ \
+   # this_portal.getRelativeContentURL(self) + '/')
    
    filesCataloged = 0
 
@@ -306,7 +339,9 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypes
       checkValidIdResult = checkValidId(fileName)
       if checkValidIdResult != 1: 
          skipThisItem = 1
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: checkValidId(%s) failed:: %s" % (FSfullPathFileName,checkValidIdResult) )
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+         "catalogFSContent() :: checkValidId(%s) failed:: %s" \
+         % (FSfullPathFileName,checkValidIdResult) )
       for suffix in fileSuffixesSkipList:
          if fileName.endswith(suffix): 
             skipThisItem = 1
@@ -316,7 +351,10 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypes
          filteredFileList.append(fileName)
    
    # instantiate a barebones FileProxy instance
-   dummyFileProxy = FileProxy(id="dummy", filepath=FSfullPath, fullname="dummy", properties=None)
+   dummyFileProxy = FileProxy(id="dummy",
+                              filepath=FSfullPath,
+                              fullname="dummy",
+                              properties=None)
    dummyFileProxy.meta_type = meta_type
    dummyFileProxy.effective = effective
    dummyFileProxy.expires = expires 
@@ -333,31 +371,38 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypes
       dummyFileProxy.setIconPath(mi.icon_path)
       dummyFileProxy.mime_type = mi.normalized()
       
-      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % FSfullPathFileName )
-      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
-      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      #"catalogContents() :: file=%s" % FSfullPathFileName )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      #"catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      #"catalogContents() :: catalog uid=%s" % uid )
                  
       catalogTool.catalog_object( dummyFileProxy, uid )
                    
       filesCataloged = filesCataloged + 1
    
-   # catalog all of the contents of the subfolders in the filtered subfolders list
+   # catalog all the contents of the subfolders in the filtered subfolders list
    for subfolder in filteredSubfolderItems:
       subfolderFullName = os.path.join(FSfullPathFolderName, subfolder)
-      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: subdir=%s" % subfolderFullName )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      #"catalogFSContent() :: subdir=%s" % subfolderFullName )
       newUidBase = uidBase + subfolder + '/'
       subfolderfilesCataloged = \
-         catalogFSContent(subfolderFullName, filetypePhrasesSkipList,catalogTool, \
-                          mimetypesTool, newUidBase, view_roles, effective, expires, meta_type)
+         catalogFSContent(subfolderFullName, filetypePhrasesSkipList, 
+                          catalogTool, mimetypesTool, newUidBase, view_roles,
+                          effective, expires, meta_type)
       filesCataloged = filesCataloged + subfolderfilesCataloged
 
    return filesCataloged
 
 
 # --------------------------------------------------------------------
-def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrasesSkipList, 
-                       filePrefixesSkipList, fileSuffixesSkipList, fileNamesSkipList,
-                       folderPrefixesSkipList, folderSuffixesSkipList, folderNamesSkipList):
+def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, 
+                       filetypePhrasesSkipList, filePrefixesSkipList,
+                       fileSuffixesSkipList, fileNamesSkipList,
+                       folderPrefixesSkipList, folderSuffixesSkipList,
+                       folderNamesSkipList):
    
    # this method returns the filteredFileList & filteredFolderList children of 
    # the specified filesystem (FS) path
@@ -367,20 +412,25 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
    
    if not os.path.exists(FSfullPath):
       # raise exception here?
-      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: FSfullPath not found (%s)" % FSfullPath )
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      "getFilteredFSItems() :: FSfullPath not found (%s)" % FSfullPath )
       
    else:   
       try:
          rawItemList = os.listdir(FSfullPath)
       except:
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: error reading folder (%s) contents" % FSfullPath )
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+         "getFilteredFSItems() :: error reading folder (%s) contents" \
+         % FSfullPath )
          return filteredFileList, filteredFolderList
 
       for item in rawItemList:
          if skipInvalidIds:
             checkValidIdResult = checkValidId(item)
             if checkValidIdResult != 1: 
-               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+               #"getFilteredFSItems() :: checkValidId(%s) failed:: %s" \
+               #% (item,checkValidIdResult) )
                continue
       
          FSfullPathItemName = os.path.join(FSfullPath, item)
@@ -435,23 +485,27 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
              if not skipThisItem: 
                 filteredFileList.append(item)
      
-   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFolderList= %s" % filteredFolderList)
-   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" % filteredFileList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+   #"filteredFolderList= %s" % filteredFolderList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" \
+   #% filteredFileList)
    
    return filteredFileList, filteredFolderList
    
    
 # --------------------------------------------------------------------
-def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesTool, filetypePhrasesSkipList, 
-                       filePrefixesSkipList, fileSuffixesSkipList, fileNamesSkipList,
-                       folderPrefixesSkipList, folderSuffixesSkipList, folderNamesSkipList):
+def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds,
+                          mimetypesTool, filetypePhrasesSkipList, 
+                          filePrefixesSkipList, fileSuffixesSkipList,
+                          fileNamesSkipList,folderPrefixesSkipList,
+                          folderSuffixesSkipList, folderNamesSkipList):
    
-   # this method is the inverse of the getFilteredFSItems().  It returns the file 
-   # and folder children of the specified filesystem (FS) path that are ***NOT*** 
-   # returned by the getFilteredFSItems() method
+   # this method is the inverse of the getFilteredFSItems().  It returns
+   # the file and folder children of the specified filesystem (FS) path
+   # that are ***NOT*** returned by the getFilteredFSItems() method
    
    if PLFNGrelPath != '':
-      PLFNGrelPath = '/' + PLFNGrelPath
+      PLFNGrelPath = PLFNGrelPath.replace('\\', '/') + '/'
 
    illegalFilesList = []
    illegalFoldersList = []
@@ -461,13 +515,16 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
    if not os.path.exists(FSfullPath):
 
       # raise exception here?
-      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: FSfullPath not found (%s)" % FSfullPath )
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+      "getFilteredOutFSItems() :: FSfullPath not found (%s)" % FSfullPath )
       
    else:   
       try:
          rawItemList = os.listdir(FSfullPath)
       except:
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: error reading folder (%s) contents" % FSfullPath )
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+         "getFilteredOutFSItems() :: error reading folder (%s) contents" \
+         % FSfullPath )
          return filteredFileList, filteredFolderList
 
       for item in rawItemList:
@@ -477,8 +534,10 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
          if os.path.isdir(FSfullPathItemName):
              checkValidIdResult = checkValidId(item)
              if skipInvalidIds and checkValidIdResult != 1:
-                illegalFoldersList.append(PLFNGrelPath+'/'+item)
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+                illegalFoldersList.append(PLFNGrelPath+item)
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                #"getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" \
+                #% (item,checkValidIdResult) )
              else:
                 for prefix in folderPrefixesSkipList:
                    if item.startswith(prefix): 
@@ -496,17 +555,19 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
                       break
                 
                 if skipThisItem: 
-                   filteredOutFolderList.append(PLFNGrelPath+'/'+item)
+                   filteredOutFolderList.append(PLFNGrelPath+item)
          
          else:
              checkValidIdResult = checkValidId(item)
              if skipInvalidIds and checkValidIdResult != 1:
-                illegalFilesList.append(PLFNGrelPath+'/'+item)
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+                illegalFilesList.append(PLFNGrelPath+item)
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                #"getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" \
+                #% (item,checkValidIdResult) )
              
              else:
                 if mimetypesTool:
-                   mi = mimetypesTool.classify(data=None, filename=item.lower())
+                   mi = mimetypesTool.classify(data=None,filename=item.lower())
                    item_mime_type = mi.normalized()
                 
                    for filetypePhrase in filetypePhrasesSkipList:
@@ -530,9 +591,12 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
                       break
              
                 if skipThisItem: 
-                   filteredOutFileList.append(PLFNGrelPath+'/'+item)
+                   filteredOutFileList.append(PLFNGrelPath+item)
      
-   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredOutFolderList= %s" % filteredOutFolderList)
-   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredOutFileList= %s" % filteredOutFileList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+   #"filteredOutFolderList= %s" % filteredOutFolderList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+   #"filteredOutFileList= %s" % filteredOutFileList)
    
-   return illegalFilesList, illegalFoldersList, filteredOutFileList, filteredOutFolderList   
+   return illegalFilesList, illegalFoldersList,\
+          filteredOutFileList, filteredOutFolderList   
