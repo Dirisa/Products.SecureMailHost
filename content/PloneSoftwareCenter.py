@@ -1,5 +1,5 @@
 """
-$Id: PloneSoftwareCenter.py,v 1.4 2005/03/11 02:38:27 optilude Exp $
+$Id: PloneSoftwareCenter.py,v 1.5 2005/03/11 03:00:58 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -73,9 +73,11 @@ class PloneSoftwareCenter(OrderedBaseFolder):
             return None
             
     security.declarePrivate('_getContained')
-    def _getContained(self, states, category, portal_type):
+    def _getContained(self, states, category, portal_type, limit=None):
         """Get contained objects of type portal_type
         that are in states and have category."""
+        
+        catalog = getToolByName(self, 'portal_catalog')
         my_path = '/'.join(self.getPhysicalPath())
         query = { 'path'         : my_path,
                   'portal_type'  : portal_type,
@@ -83,31 +85,40 @@ class PloneSoftwareCenter(OrderedBaseFolder):
                   'sort_on'      : 'effective',
                   'sort_order'   : 'reverse',
                 }
+                
         if states:
             query['review_state'] = states
         if category:
-            query['categories'] = category
-        return self.portal_catalog(query)
+            query['getCategories'] = category
+        if limit:
+            query['sort_limit'] = limit
+            
+        results = catalog.searchResults(query)
+        
+        if limit:
+            return results[:int(limit)]
+        else:
+            return results
 
     security.declareProtected(CMFCorePermissions.View, 'getPackages')
-    def getPackages(self, states=[]):
+    def getPackages(self, states=[], limit=None):
         """Get catalog brain of packages."""
-        return self._getContained(states, None, 'PSCProject')
+        return self._getContained(states, None, 'PSCProject', limit)
 
     security.declareProtected(CMFCorePermissions.View, 'getPackagesByCategory')
-    def getPackagesByCategory(self, category, states=[]):
+    def getPackagesByCategory(self, category, states=[], limit=None):
         """Get catalog brains for packages in category."""
-        return self._getContained(states, category, 'PSCProject')
+        return self._getContained(states, category, 'PSCProject', limit)
 
     security.declareProtected(CMFCorePermissions.View, 'getReleases')
-    def getReleases(self, states=[]):
+    def getReleases(self, states=[], limit=None):
         """Get catalog brain of releases."""
-        return self._getContained(states, None, 'PSCRelease')
+        return self._getContained(states, None, 'PSCRelease', limit)
 
     security.declareProtected(CMFCorePermissions.View, 'getReleasesByCategory')
-    def getReleasesByCategory(self, category, states=[]):
+    def getReleasesByCategory(self, category, states=[], limit=None):
         """Get catalog brains for releases in category."""
-        return self._getContained(states, category, 'PSCRelease')
+        return self._getContained(states, category, 'PSCRelease', limit)
 
     security.declareProtected(CMFCorePermissions.View, 'getCategoriesToList')
     def getCategoriesToList(self, states=[]):

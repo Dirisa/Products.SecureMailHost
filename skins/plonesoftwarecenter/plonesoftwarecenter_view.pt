@@ -80,7 +80,7 @@
                     </span>
             </h6>
             <div class="portletBody">
-                <tal:list define="releases python:here.getReleasesByCategory(categoryId)" condition="releases">
+                <tal:list define="releases python:here.getReleasesByCategory(categoryId, limit = 5)" condition="releases">
                   <div class="portletContent" tal:repeat="release releases">
                         <img tal:replace="structure here/product_icon.gif" />
                         <a href="" tal:content="release/Title"
