@@ -26,9 +26,11 @@
 
     
 <div metal:define-macro="transcript_plain" i18n:domain="plonecollectorng">
-  
+
   <span tal:define="groups python: here.getTranscript().getEventsGrouped();
                     num_groups python: len(groups)">
+
+    <span tal:condition="not: groups" i18n:translate="no_entries">No entries</span>
 
     <span tal:repeat="events groups">
       <div class="transcriptheader">
