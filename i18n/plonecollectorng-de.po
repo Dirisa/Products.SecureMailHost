@@ -570,7 +570,7 @@ msgid "collector_overview"
 msgstr "Bugtracker Übersicht"
 
 msgid "issue_artifacts_table_no_uploads_available"
-msgstr "Keine Uploads vorhanden"
+msgstr "Es wurden noch keine Dateien hochgeladen"
 
 msgid "label_name"
 msgstr "Name"
@@ -908,3 +908,6 @@ msgstr "Zuweisung an Benutzer"
 
 msgid "assign_to_group"
 msgstr "Zuweisung an Gruppe"
+
+msgid "label_notification_language"
+msgstr "Sprache für Benachrichtigungen"
