@@ -34,6 +34,16 @@
       </div>
 
       <div class="row">
+        <div class="label">Action</div>
+        <div class="field">
+          <input type="radio" name="action" value="comment" checked>Comment
+          <metal:block tal:repeat="action here/validActions">
+            <br><input type="radio" name="action" tal:attributes="value action" /><span tal:content="action" /> 
+          </metal:block>                 
+        </div>
+      </div>
+
+      <div class="row">
         <div class="label">&nbsp;</div>
         <div class="field">
           <input class="context" type="submit" value=" Save " i18n:attributes="value"/>
