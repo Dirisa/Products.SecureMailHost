@@ -22,7 +22,9 @@
       <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="?mode=simple">Simple view</a>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
-        <legend tal:content="fieldset" />
+        <legend><a class="schemata_legend"  
+                   tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${fieldset}"  
+                   tal:content="fieldset" /></legend>
         <metal:block tal:repeat="fieldname python: ('title', 'description', 'solution')" >
           <div class="row" tal:condition="python: getattr(here, fieldname)" >
 	        <span metal:use-macro="python: here.widget(fieldname, mode='view', use_label=1)"/>

@@ -38,7 +38,7 @@ th.staff {
     font-size: 120%;
 }
 
-legend {
+a.schemata_legend {
     text-transform: capitalize;
 }
 

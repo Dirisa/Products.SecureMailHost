@@ -13,7 +13,7 @@
 
       <div tal:repeat="collector python: sequence.sort(here.portal_catalog.searchResults(meta_type='PloneCollectorNG', review_state='published'), (('getId', 'nocase'),))">
 
-        <h2><a tal:attributes="href collector/getURL" 
+        <h2><a tal:attributes="href string:${collector/getURL}/pcng_view" 
                tal:content="string: ${collector/getId} (${collector/Title})"/>
         </h2>
         <div class="ticket_stats">
