@@ -1070,3 +1070,12 @@ msgstr "Workflow Gesichte alle Issues migrieren"
 
 msgid "help_migrate_issue_workflow_histories"
 msgstr "Benutzen Sie diese Funktion beim Upgrade von PloneCollectorNG 1.1 nach 1.2 nur in Ausnahmefällen. Normalerweise benötigen Sie diese Methode <b>niemals</b>."
+
+msgid "topic_groups"
+msgstr "Topic Gruppen"
+
+msgid "gruf_groups"
+msgstr "GRUF Gruppen"
+
+msgid "group_members"
+msgstr "Gruppen Teilnehmer"

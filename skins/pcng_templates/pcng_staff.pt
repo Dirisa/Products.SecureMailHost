@@ -26,8 +26,8 @@
           <th i18n:translate="Managers">Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
-          <th i18n:translate="Groups">Topic groups</th>
-          <th i18n:translate="GRUFGroups">GRUF groups</th>
+          <th i18n:translate="topic_groups">Topic groups</th>
+          <th i18n:translate="gruf_groups">GRUF groups</th>
           <th i18n:translate="group_members">Group members</th>
         </tr>
 
