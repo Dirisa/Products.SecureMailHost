@@ -57,5 +57,3 @@ Contact:
     EMail: andreas@andreas-jung.com  
     D-72070 Tübingen
     Germany
-
-

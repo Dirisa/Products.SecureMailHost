@@ -3,11 +3,7 @@ A: Archetypes 1.2.4 is required. AT 1.3+ is needed if you want to have
    support for references between issues.
 
 Q: Which Plone version do I need to run PCNG?
-A: Plone 2.X is recommended. The skins of PCNG are designed to be used
-   with Plone 2.0. Future versions of PCNG will depend on PCNG V2 functionality
-   that is not available with Plone 1.X installations. Plone 1.0 compatiblity
-   was never a goal for PCNG and will never be a goal (means no support for
-   PCNG/Plone 1.X issues).
+A: Plone 2.X is required. No support for Plone 1.X
 
 Q: How can I set my member collector preferences?
 A: Navigate to the collector instance and you should see a link to 
