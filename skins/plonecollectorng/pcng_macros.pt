@@ -2,7 +2,7 @@
 
   <div class="collector_headline" tal:condition="python: here.meta_type=='PloneCollectorNG'" >
     <div>
-      Collector: <span tal:content="here/title_or_id" />
+      Collector: <a tal:attributes="href here/absolute_url" tal:content="here/title_or_id" />
       <span tal:condition="here/description"  tal:content="string:(${here/description})" />
     </div>
     <div class="collector_headline_right" tal:condition="action|nothing" tal:content="action" />
@@ -10,7 +10,7 @@
 
   <div class="collector_headline" tal:condition="python: here.meta_type=='PloneIssueNG'" >
     <div>
-      Collector: <span tal:content="python: here.aq_parent.title_or_id()" />
+      Collector: <a tal:attributes="href python: here.aq_parent.absolute_url()" tal:content="python: here.aq_parent.title_or_id()" />
       <br>Issue <span tal:content="string:#${here/getId}: ${here/Title}" />
     </div>
     <div tal:condition="action|nothing" tal:content="action" />
