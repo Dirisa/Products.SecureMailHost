@@ -1,3 +1,7 @@
+- There is a security problem when trying to view a FAQ section
+
+- The FAQ folder lists all FAQs in every section - it shouldn't do that. :)
+
 - We should populate the Sections attribute with 'General' so there is a section available at all times.
 
 - We should use Keywords (DublinCore Subject) for the Sections, and restrict the usage to only being the ones defined in the folder (is this possible?)
@@ -22,7 +26,7 @@
 
   - The content is not visible or searchable to anybody else than the Reviewers/Managers before it is Published
 
-  - Ie: there is no 'visible state', available states are:
+  - There is no 'visible state', available states are:
 
     - Private
 
@@ -36,11 +40,10 @@
 
     - User creates content object (state=private)
 
-    - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu
+    - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu (state="pending")
 
-    - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes.
+    - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes. (state="published")
 
     - Ideally, every time someone adds a comment to an item, the owner of it gets a mail containing the comment + content URL.
 
     - The Obsolete state is for later, when the ratings tool can push something into an obsolete status if 3 or more people have marked the content wrong/obsolete. The Owner should then get a mail about it.
-
