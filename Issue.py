@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.77 2003/11/10 15:59:54 ajung Exp $
+$Id: Issue.py,v 1.78 2003/11/14 14:35:59 ajung Exp $
 """
 
 import sys, os
@@ -482,6 +482,16 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ return the id + title (override for navigation tree) """
         return '%s: %s' %  (self.getId(), self.Title())
 
+    def asPDF(self,RESPONSE):
+        """ return the issue as pdf"""
+        import pdfwriter
+
+        pdf = pdfwriter.pdfwriter(self) 
+        RESPONSE.setHeader('content-type', 'application/pdf')
+        RESPONSE.setHeader('content-length', str(len(pdf)))
+        RESPONSE.write(pdf)
+
+
     ######################################################################
     # Callbacks for pcng_issue_workflow
     ######################################################################
@@ -520,7 +530,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         return [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
 
     security.declareProtected(View, 'getWorkflowHistory')
-    def getWorkflowHistory(self):
+    def getWorkflowHistory(self):                     
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
 
