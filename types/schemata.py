@@ -5,12 +5,12 @@ from Products.PloneHelpCenter.config import *
 
 VersionSchema = Schema((
     LinesField('versions',
-               accessor='Versions',
+               # accessor='Versions',
                index='KeywordIndex',
                vocabulary='_get_versions_vocab',
                widget=MultiSelectionWidget(
                        label='Versions',
-                       description='Versions of Plone that apply to this FAQ question '
+                       description='Versions of Product that apply to this FAQ question '
                                    '(leave blank if not version-specific)',
                       ),
                ),

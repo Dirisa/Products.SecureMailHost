@@ -11,10 +11,11 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HowToFolderSchema
+from PHCFolder import PHCFolder
 
 
 
-class HelpCenterHowToFolder(BaseFolder):
+class HelpCenterHowToFolder(PHCFolder,BaseFolder):
     """A simple folderish archetype"""
 
     content_icon = 'topic_icon.gif'
@@ -36,10 +37,4 @@ class HelpCenterHowToFolder(BaseFolder):
          },
          )
 
-    def _get_versions_vocab(self):
-        return self.versions
-
-    def _get_sections_vocab(self):
-        return self.sections
-        
 registerType(HelpCenterHowToFolder, PROJECTNAME)

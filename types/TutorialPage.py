@@ -2,8 +2,9 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from Products.PloneHelpCenter.config import *
 from schemata import TutorialPageSchema
+from PHCContent import PHCContent
 
-class HelpCenterTutorialPage(BaseContent):
+class HelpCenterTutorialPage(PHCContent,BaseContent):
     """Part of a tutorial."""
 
     schema = TutorialPageSchema

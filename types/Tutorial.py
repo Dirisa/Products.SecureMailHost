@@ -1,8 +1,9 @@
 from Products.Archetypes.public import *
 from Products.PloneHelpCenter.config import *
 from schemata import TutorialSchema
+from PHCContent import PHCContent
 
-class HelpCenterTutorial(OrderedBaseFolder):
+class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
     """A tutorial containing TutorialPages, Files and Images."""
 
     schema = TutorialSchema
@@ -22,6 +23,7 @@ class HelpCenterTutorial(OrderedBaseFolder):
     def getTutorialDescription(self):
         """ Returns the description of the Tutorial - convenience method for TutorialPage """
         return self.Description()
-    
+
+   
 registerType(HelpCenterTutorial, PROJECTNAME)
     

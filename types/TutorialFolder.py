@@ -11,8 +11,9 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import TutorialFolderSchema
+from PHCFolder import PHCFolder
 
-class HelpCenterTutorialFolder(BaseFolder):
+class HelpCenterTutorialFolder(PHCFolder,BaseFolder):
     """A simple folderish archetype"""
 
     content_icon = 'tutorial_icon.gif'
@@ -33,11 +34,5 @@ class HelpCenterTutorialFolder(BaseFolder):
         'permissions' : (CMFCorePermissions.View,)
          },
          )
-
-    def _get_versions_vocab(self):
-        return self.versions
-
-    def _get_sections_vocab(self):
-        return self.sections
 
 registerType(HelpCenterTutorialFolder, PROJECTNAME)

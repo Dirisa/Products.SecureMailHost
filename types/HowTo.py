@@ -3,9 +3,10 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HowToSchema
+from PHCContent import PHCContent
 
 
-class HelpCenterHowTo(BaseFolder):
+class HelpCenterHowTo(PHCContent,BaseFolder):
     """This is a howto document content object, to which you can attach images and
     files.
     """
@@ -37,26 +38,7 @@ class HelpCenterHowTo(BaseFolder):
 
     security = ClassSecurityInfo()
     
-    def _get_versions_vocab(self):
-        return self.aq_parent._get_versions_vocab()
-    
-    def _get_sections_vocab(self):
-        return self.aq_parent._get_sections_vocab()
-
     security.declareProtected(CMFCorePermissions.View,'Versions')
     #
-    def Versions(self):
-        """method to display the versions in a nicer way
-        """
-
-        # XXX is this really necessary? the widget supports this, doesn't it? ~limi
-        result=""
-        for version in self.versions:
-            if result:
-                result=result+", "+ version
-            else:
-                result=version
-        return result
-
 
 registerType(HelpCenterHowTo, PROJECTNAME)

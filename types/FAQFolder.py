@@ -10,8 +10,9 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import FAQFolderSchema
+from PHCFolder import PHCFolder
 
-class HelpCenterFAQFolder(BaseFolder):
+class HelpCenterFAQFolder(PHCFolder,BaseFolder):
     """A simple folderish archetype"""
 
     typeDescription= 'This is a folder that holds FAQs, and it allows you to display individual sections.'
@@ -36,12 +37,6 @@ class HelpCenterFAQFolder(BaseFolder):
          },
          )
     
-    def _get_versions_vocab(self):
-        return self.versions
-
-    def _get_sections_vocab(self):
-        return self.sections
-        
     def getFaqItemsBySection(section):	
         return [o for o in self.objectValues() if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]
     
