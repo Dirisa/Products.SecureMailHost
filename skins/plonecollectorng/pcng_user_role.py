@@ -3,8 +3,16 @@
 
 from AccessControl import getSecurityManager
 
+
+if context.meta_type == 'PloneCollectorNG':
+    collector = context
+elif context.meta_type == 'PloneIssueNG':
+    collector = context.aq_parent
+else:
+    raise ValueError('unknown context')
+
 user = getSecurityManager().getUser()
-roles = user.getRolesInContext(context.aq_parent)
+roles = user.getRolesInContext(collector)
 
 for role in ('TrackerAdmin', 'Supporter', 'Reporter', 'Authenticated', 'Anonymous'):
     if role in roles:
