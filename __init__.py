@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.8 2003/11/18 18:05:05 ajung Exp $
+$Id: __init__.py,v 1.9 2003/11/20 06:07:41 ajung Exp $
 """
 
 import os, sys
@@ -40,10 +40,4 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
-
-from Products.PythonScripts.Utility import allow_module
-allow_module('reportlab')
-allow_module('reportlab.lib.units')
-allow_module('reportlab.lib.pagesizes')
-allow_module('reportlab.pdfgen')
 
