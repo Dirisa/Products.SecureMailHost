@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.130 2004/02/28 16:27:03 ajung Exp $
+$Id: Issue.py,v 1.131 2004/02/29 07:27:02 ajung Exp $
 """
 
 import sys, os, time, random
@@ -203,12 +203,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """
 
         schema = self.Schema()
-        for k in parameters.keys():
+        for k in parameters.keys():                                                          #
             if  k in ('id',):
                 raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
             field = schema[k]
-            print field, self, v
             field.set(self, v)
 
     def getParameter(self, key):
@@ -304,12 +303,17 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     ######################################################################
 
     security.declareProtected(AddCollectorIssueFollowup, 'upload_file')
-    def upload_file(self, uploaded_file=None, comment='', RESPONSE=None):
+    def upload_file(self, uploaded_file=None, comment='', srcname='', mimetype='', RESPONSE=None):
         """ Upload a file """
 
         if uploaded_file:
-            file_id = uploaded_file.filename.split('/')[-1].split('\\')[-1]
-            ct = guess_content_type(file_id, uploaded_file.read())
+            if isinstance(uploaded_file, StringType): # File passed as string
+                file_id = srcname
+                ct = (mimetype, '')
+            else:
+                file_id = uploaded_file.filename.split('/')[-1].split('\\')[-1]
+                ct = guess_content_type(file_id, uploaded_file.read())
+
             if file_id in self.objectIds():
                 name,ext = os.path.splitext(file_id)
                 file_id = '%s_%s%s' % (name, time.strftime('%Y%m%d_%H%M%S', time.localtime()), ext)

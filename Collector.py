@@ -5,8 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.124 2004/02/28 16:19:13 ajung Exp $
+$Id: Collector.py,v 1.125 2004/02/29 07:27:02 ajung Exp $
 """
+
+import base64
 
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -21,7 +23,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 
 from Transcript import Transcript
-from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
+from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES 
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
@@ -552,8 +554,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
-    security.declareProtected(View, 'add_xml')
-    def add_xml(self, xml, RESPONSE=None):
+    security.declareProtected(EmailSubmission, 'issue_from_xml')
+    def issue_from_xml(self, xml, RESPONSE=None):
         """ add issue through xml """
         from xml.dom.minidom import parseString
 
@@ -584,38 +586,52 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         R = record()
         R.set('title', fromDOM(DOM, 'subject'))
         R.set('description', fromDOM(DOM, 'body'))
-        R.set('collector_email', fromDOM(DOM, 'senderaddress'))
+        R.set('contact_email', fromDOM(DOM, 'senderaddress'))
 
-        if not self._verify_email(R.collector_email):
+        member = self._member_for_email(R.contact_email)
+        if member is None:
             if RESPONSE:
                 RESPONSE.setStatus(401)
+                RESPONSE.write('Unknown email address: %s' % str(R.contact_email))
                 return
             else:
                 raise ValueError('Email "%s" not allowed to post' % R.email)
-            
 
         id = self.new_issue_number()
         self.invokeFactory('PloneIssueNG', id)
         issue =  self._getOb(id)
         issue.post_creation_actions()
-
-        print 'keys:',R.keys()
         issue.setParameters(R)
-
         transcript = issue.getTranscript()
-        transcript.addComment(R.description)
+        transcript.addComment(u'Issue submitted through email')
+
+        # attachments
+        for node in DOM.getElementsByTagName('attachment'):
+            cn = node.childNodes[0]
+            xmldata = cn.data 
+            imgdata = base64.decodestring(xmldata)
+            issue.upload_file(imgdata, 
+                              srcname=node.getAttribute('filename'), 
+                              mimetype=node.getAttribute('mimetype'))
+
+        if R.description:
+            transcript.addComment(R.description)
+        issue.reindexObject()
 
         RESPONSE.write(issue.absolute_url())
 
-    def _verify_email(self, email):
-        """ verify if 'email' exists or if is it is allowed to post """
+    def _member_for_email(self, email):
+        """ return the member object for a given email address """
 
         for member in self.portal_membership.listMembers():
             member_email = member.getProperty('email')
             if member_email:
                 if email.lower().strip() == member_email.lower().strip():
-                    return self.pcng_member_allowed_to_post(member)
-        return 1   # XXX: FIX THIS
+                    if self.pcng_member_allowed_to_post(member):
+                        return member
+                    else:
+                        return None
+        return None  
 
 registerType(PloneCollectorNG)
 
