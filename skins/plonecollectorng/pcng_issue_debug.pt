@@ -1,0 +1,12 @@
+<ul>
+  <li>Status:<span tal:content="here/status" />
+</ul>
+
+<pre>
+Workflow history
+
+<metal:block tal:repeat="item here/getWorkflow" >
+  <span tal:content="item" />
+</metal:block>
+
+</pre>
