@@ -1,5 +1,5 @@
 <span metal:define-macro="field_shortview">
- <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="python: getattr(here, field.accessor)()" /> &nbsp;
+ <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="python: here.getParameter(field.getName())" /> &nbsp;
 </span>
 
 <!-- Issue related macros -->
