@@ -4,6 +4,9 @@
       i18n:domain="plonecollectorng">
 
 <body>
+  <div metal:fill-slot="css_slot">
+   <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+  </div>
   <div metal:fill-slot="main">	  
     <h1 i18n:translate="legend_notifications">Notifications</h1>
     <form action="set_notification_emails" method="post">

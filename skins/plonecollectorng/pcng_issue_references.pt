@@ -4,6 +4,9 @@
       i18n:domain="plonecollectorng">
 
 <body>
+  <div metal:fill-slot="css_slot">
+    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+  </div>
   <div metal:fill-slot="main">	  
     <h1 i18n:translate="legend_references_and_uploads"> References & Uploads </h1>
     <table width="100%">

@@ -11,6 +11,9 @@
 </metal:block>
 
 <body>
+    <div metal:fill-slot="css_slot">
+      <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+    </div>
 
    <div metal:fill-slot="main">
       <div metal:define-macro="main"
