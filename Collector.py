@@ -149,6 +149,10 @@ class Collector(BaseFolder):
 
         for state in notifications.keys():
             emails = getattr(notifications, state)
+            emails = [e.strip() for e in emails if e.strip()]
+            for email in emails:
+                if not util.isValidEmailAddress(email):
+                    raise ValueError('Invalid email address: %s' % email)
             self._notification_emails[state] = emails
         self._p_changed = 1
 
