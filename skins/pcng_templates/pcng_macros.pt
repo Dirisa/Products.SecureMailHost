@@ -54,7 +54,7 @@
 
     <tal:loop tal:repeat="events groups">
       <tal:if tal:condition="events">
-<span tal:content="events"/>
+
           <div id="transcriptheader">
             #<span tal:content="python: num_groups - repeat['events'].index" />:
              <span tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
@@ -82,27 +82,28 @@
                 </div>
               </tal:if>
 
-              <span tal:condition="python: event.getType()=='change'">
+              <tal:if tal:condition="python: event.getType()=='change'">
                <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" <b>-></b> 
                         "<span tal:content="python: event.getValue('new')" />"              
-              </span>
+              </tal:if>
 
-              <span tal:condition="python: event.getType()=='incrementalchange'">
+              <tal:if tal:condition="python: event.getType()=='incrementalchange'">
                <b><span tal:content="python: event.getValue('field')" /></b> <span i18n:translate="removed">removed</span>: <span tal:content="python: event.getValue('removed')" />, 
                         <span i18n:translate="added">added</span>: <span tal:content="python: event.getValue('added')" />              
-              </span>
+              </tal:if>
 
-              <span tal:condition="python: event.getType()=='reference'"> 
-                <span i18n:translate="issue_reference">Issue reference</span>:
+              <tal:if tal:condition="python: event.getType()=='reference'"> 
+                <b><span i18n:translate="issue_reference">Issue reference</span>:</b>
                 <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
                    tal:content="python: '%s/%s: %s' % (event.getValue('tracker'), event.getValue('ticketnum'), event.getValue('comment'))" />
-              </span>
+              </tal:if>
 
-              <span tal:condition="python: event.getType()=='upload'"><span i18n:translate="uploaded_file">Uploaded file</span>:
+              <tal:if tal:condition="python: event.getType()=='upload'">
+                <b><span i18n:translate="uploaded_file">Uploaded file</span></b>:
                 <a tal:attributes="href python: event.getValue('fileid')"
                    tal:content="python: event.getValue('fileid')" />
                 <span tal:condition="python: event.getValue('comment')" tal:content="python: '(%s)' % event.getValue('comment')" />
-              </span>
+              </tal:if>
             </div>
           </metal:block>
           <br/>
