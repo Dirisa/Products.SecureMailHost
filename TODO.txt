@@ -6,18 +6,16 @@ Developer claiming item is in [brackets].
 Bugs found when testing on plone.org
 ====================================
 
-- psc_project_view should show latest release that is *published* not just the
-  latest one added, as it does now.
+- IMPORTANT: Download doesn't work at all right now! We get 
+  AttributeError: downloadableFile 
+  when clicking the download link. To reproduce, make sure you have latest
+  ExternalStorage and latest Archetypes from the 1.3 branch.
   
-- psc_releasefolder_view should only show published releases, you use the Roadmap
-  to navigate to future releases. Or list upcoming releases in a separate section
-  of the template - mixing released and unrelased items like it does now is not
-  optimal. [The folder listing should *definitely* list the future releases;
-  it's completely unexpected behavior to not see them here. A separate section
-  is fine. - Joel]
-
-- psc_improvements_listing only shows completed items, it has to show items
-  in all states, that's its job :)
+- psc_project_view should show latest release that is *published* not just the
+  latest one added, as it does now. (getLatestRelease() in PSCProject.py)
+  
+- psc_releasefolder_view should show upcoming releases first, with header - then 
+  published releases - mixing released and unrelased items is not good. 
   
 - When you add a file inside a release, you get AttributeError: downloadableFile,
   template is psc_download_view.

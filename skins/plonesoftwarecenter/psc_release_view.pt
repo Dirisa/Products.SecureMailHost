@@ -193,11 +193,6 @@
             </a>
           </p>
 
-          <p>
-            <a tal:replace="structure python:here.spamProtect(here.aq_parent.contact_email)" />
-          </p>
-
-
         <tal:changelog condition="here/getChangelog">
           <h2>Change log</h2>
 
