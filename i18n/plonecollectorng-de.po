@@ -791,3 +791,9 @@ msgstr "Bild"
 
 msgid "reaccept"
 msgstr "Wiedereinstellen"
+
+msgid "Change"
+msgstr "Änderung"
+
+msgid "reject"
+msgstr "Zurueckgewiesen"
