@@ -4,17 +4,20 @@
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
 #
-# RCS-ID:       $Id: config.py,v 1.5 2004/10/08 16:57:32 huron_ Exp $
+# RCS-ID:       $Id: config.py,v 1.6 2004/10/20 20:17:06 dreamcatcher Exp $
 # Copyright:    (c) 2004 by jens quadrat, Klein & Partner KEG, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
 
+GLOBALS = globals()
+ADD_CONTENT_PERMISSION = 'Add PloneFormMailer content'
+PROJECTNAME = 'PloneFormMailer'
 
 default_mailtemplate_subject = \
 """string:PloneFormMailer"""
 
 default_mailtemplate_body = \
-"""<tal:block i18n:domain="pfm" 
+"""<tal:block i18n:domain="pfm"
            tal:define="form here/form;
                        groups form/get_groups;">
 <html>

@@ -5,7 +5,7 @@
 # Author:       Daniel Nouri <daniel.nouri@con-fuse.org>
 #
 # Created:      2004-01-28
-# RCS-ID:       $Id: TALES.py,v 1.1 2004/05/22 15:50:58 yenzenz Exp $
+# RCS-ID:       $Id: TALES.py,v 1.2 2004/10/20 20:17:05 dreamcatcher Exp $
 # Copyright:    (c) 2004 by Daniel Nouri, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -58,15 +58,15 @@ class TALESLines:
 
         for line in lines:
             li.append(Expression.Expression(line))
-        
+
         self._v_expressions = expressions
-        
+
     def getEvaluatedExpressions(self, name):
         if not getattr(self.aq_base, '_v_expressions', {}).has_key(name):
             self.compileExpressions(name)
 
         r = []
-        
+
         for expr in self._v_expressions.get(name, []):
             r.append(str(expr(getExprContext(self, self))))
         return r
@@ -88,5 +88,5 @@ class TALESString:
         expr = self._v_expressions.get(name, None)
         if not expr:
             return None
-        
+
         return str(expr(getExprContext(self, self)))

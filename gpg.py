@@ -1,15 +1,15 @@
 #------------------------------------------------------------------------------
 # Name:         gpg.py
-# Purpose:      Provides a GPGSubprocess class that can be used to encrypt, 
-#               decrypt, sign, and verify GPG messages.  It runs GPG in batch 
-#               mode, which causes it to output lines prefixed with '[GNUPG:]' 
+# Purpose:      Provides a GPGSubprocess class that can be used to encrypt,
+#               decrypt, sign, and verify GPG messages.  It runs GPG in batch
+#               mode, which causes it to output lines prefixed with '[GNUPG:]'
 #               that contain well-structured information about the results.
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
-# copied:       from python-gpg project (unfinished) 
+# copied:       from python-gpg project (unfinished)
 #
 # Created:      Sun Jan 25 22:09:22 2004
-# RCS-ID:       $Id: gpg.py,v 1.1 2004/05/22 15:50:58 yenzenz Exp $
+# RCS-ID:       $Id: gpg.py,v 1.2 2004/10/20 20:17:06 dreamcatcher Exp $
 # Copyright:    (c) 2004 by jens quadrat GbR, Germany
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ to output lines prefixed with '[GNUPG:]' that contain well-structured
 information about the results.
 """
 
-__revision__ = '$Id: gpg.py,v 1.1 2004/05/22 15:50:58 yenzenz Exp $'
+__revision__ = '$Id: gpg.py,v 1.2 2004/10/20 20:17:06 dreamcatcher Exp $'
 
 import os, string, sys, tempfile
 import cStringIO, popen2
@@ -47,7 +47,7 @@ class gpg_subprocess:
         if gpg_binary is None:
             # error
             pass
-        
+
     def _findbinary(self,binname):
         import os
         if os.environ.has_key('PATH'):
@@ -58,9 +58,9 @@ class gpg_subprocess:
         for dir in path:
             fullname = os.path.join(dir, binname)
             if os.path.exists( fullname ):
-              return fullname
+                return fullname
         return None
-  
+
     def _open_subprocess(self, *args):
         # Internal method: open a pipe to a GPG subprocess and return
         # the file objects for communicating with it.
@@ -74,35 +74,35 @@ class gpg_subprocess:
         child_stdout, child_stdin, child_stderr = \
             self._open_subprocess('--encrypt',
                 '-r '+ recipient_key_id,
-                input.name, 
+                input.name,
                 output.name)
         return child_stdout, child_stdin, child_stderr
 
     def encrypt(self, data, recipient_key_id):
         "Encrypt the message contained in the string 'data'"
-        
+
         # get communication objects
         child_stdout, child_stdin, child_stderr = \
             self._open_subprocess('--encrypt',
                 '-a',
                 '-r '+ recipient_key_id)
-            
-        # feed data 
-        child_stdin.write(data)        
+
+        # feed data
+        child_stdin.write(data)
         child_stdin.close()
 
         # get response
         datagpg = child_stdout.read()
-        
+
         return datagpg
-    
+
     def import_key(self,keydata):
         "Import a key"
         child_stdout, child_stdin, child_stderr = \
             self._open_subprocess('--import')
 
-        # feed data 
-        child_stdin.write(keydata)        
+        # feed data
+        child_stdin.write(keydata)
         child_stdin.close()
 
         # get response
@@ -111,11 +111,8 @@ class gpg_subprocess:
 
 
 if __name__ == '__main__':
-    
+
     obj = gpg_subprocess()
-    #data = 
+    #data =
     data = obj.encrypt('BLABLA','1A7D064A')
-    print data    
-    
-
-
+    print data
