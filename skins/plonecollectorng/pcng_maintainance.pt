@@ -19,6 +19,7 @@
       <li><a href="update_schema_for_issues"><span i18n:translate="update_schema_for_all_issues">Update schema for all issues</span></a> </li>
       <li><a href="update_collector_schema"><span i18n:translate="update_collector_schema">Update Collector schema</span></a> </li>
       <li><a href="setup_collector_catalog"><span i18n:translate="recreate_collector_catalog">Recreate collector catalog</span></a> </li>
+      <li><a href="pcng_incomplete_issues"><span i18n:translate="show_incomplete_issues">Show incomplete issues</span></a> </li>
     </ul>
   </div>
 </body>

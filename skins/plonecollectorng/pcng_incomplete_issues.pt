@@ -1,0 +1,27 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+  <div metal:fill-slot="css_slot">
+    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+  </div>
+  <div metal:fill-slot="main">	  
+
+    <metal:block tal:define="action string: Incomplete issues">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
+    <ul>
+      <metal:block tal:repeat="issue python: here.objectValues('PloneIssueNG')">
+        <tal:if tal:condition="python: not issue.Title() and not issue.description and issue.status() != 'rejected'">
+          <li><a tal:attributes="href string:${issue/absolute_url}/pcng_issue_followup?comment=Empty%20issue&state=reject" 
+                 tal:content="issue/getId" />          
+        </tal:if>
+      </metal:block>
+    </ul>
+
+  </div>
+</body>
+</html>                                          
