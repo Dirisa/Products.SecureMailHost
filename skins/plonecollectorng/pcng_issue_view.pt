@@ -141,9 +141,9 @@
       <metal:block tal:condition="python: mode.startswith('full')" >
 
         <metal:block tal:condition="python: mode == 'fullimages'" >
-          <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
+          <div tal:repeat="image python: here.objectValues(('Portal Image',))">
             <img tal:attributes="src image/absolute_url">
-          </metal:block>
+          </div>
         </metal:block>
 
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
