@@ -50,6 +50,16 @@
         </metal:block>
       </metal:block>
 
+      <metal:block tal:condition="not: python: request.get('mode', 'simple') == 'full'" 
+                   tal:define="uploads here/objectValues">
+        <div class="group" tal:condition="uploads">
+          <span class="legend" i18n:translate="uploads">Uploads</span>
+            <metal:block tal:repeat="item uploads">
+              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
+            </metal:block>
+        </div>
+      </metal:block>
+
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
       </metal:block>
