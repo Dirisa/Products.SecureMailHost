@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.8 2003/09/09 12:21:07 ajung Exp $
+$Id: Issue.py,v 1.9 2003/09/09 13:32:05 ajung Exp $
 """
 import sys
 
@@ -45,6 +45,11 @@ class Issue(BaseFolder, WatchList):
         'action': 'pcng_issue_references',
         'permissions': (AddCollectorIssue,)
         },
+        {'id': 'issue_add_issue',
+        'name': 'Add Issue',
+        'action': 'add_issue',
+        'permissions': (AddCollectorIssue,)
+        },
         )
 
     security = ClassSecurityInfo()
@@ -69,8 +74,8 @@ class Issue(BaseFolder, WatchList):
             ATT: we pass the Field instance as kw-arg 'field'
             This requires a hacked Archetypes.BaseObject.py (lines 366ff)
         """
-        field = kw['field']  # ATT: maybe sniff into the stack frames
-        self.Schema()[field.getName()].storage.set(field.getName(), self, v, **kw)
+        field = sys._getframe().f_back.f_locals['field']
+        field.storage.set(field.getName(), self, v, **kw)
 
     def archetypes_accessor(self, *args, **kw):
         """ this method is a very bad hack since we do intercept
@@ -167,6 +172,11 @@ class Issue(BaseFolder, WatchList):
             to reindex the issue.
         """
         self.reindexObject()
+
+    def add_issue(self, RESPONSE):
+        """ redirect to parent """
+        return self.aq_parent.add_issue(RESPONSE=RESPONSE)
+
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
     def reindexObject(self):
