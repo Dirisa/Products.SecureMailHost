@@ -50,13 +50,13 @@
     </div> <!-- End row -->
     
     <hr>
-    <span i18n:translate="help_topics_users">
+    <div class="formHelp" i18n:translate="help_topics_users">
     Topics taken from the Archetypes field 'topic' can be assigned to a set of staff members.
     All staff members are automatically assigned to an issue if the submitter/supporter chooses
     to assign an issue to a topic-group. The group of topics is taken from the list of all topics
     except that topics named <em>maintopic/subtopic</em> are considered to belong to the topic
     <em>maintopic</em>.  
-    </span>
+    </div>
   </form>
 </div>
 </body>

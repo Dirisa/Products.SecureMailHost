@@ -87,18 +87,18 @@
             </tr>
           </span>
         </span>
+      </table>
 
-       <tr>
-         <th colspan="9" i18n:translate="help_staff" style="text-align: left">
+       <div class="formHelp" i18n:translate="help_staff" style="text-align: left">
          <b>Collector administors</b> are responsible for the configuration and the
          maintainance of a collector
-         <br><b>Supporters</b> work on issues. Usually issues are assigned to a supporter
+         <br>
+         <b>Supporters</b> work on issues. Usually issues are assigned to a supporter
          in order to resolve the issue.
-         <br><b>Reporters</b> file new issues and have only limited rights on an issue
+         <br>
+         <b>Reporters</b> file new issues and have only limited rights on an issue
          after the issue has been filed.
-         </th>
-       </tr>
-      </table>
+       </div>
 
       <div class="row">
         <div class="label">&nbsp;</div>

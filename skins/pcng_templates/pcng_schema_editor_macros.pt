@@ -114,7 +114,7 @@
 
   <div class="portlet">
     <h5 i18n:translate="maintenance">Maintenance</h5>
-    <div class="portletBody">
+    <div class="portletBody" id="pcng_schema_editor_maintenance">
       <div>
         <a href="update_schema_for_issues?return_to=pcng_schema_editor" i18n:translate="update_schema_for_all_issues">Update schema for all issues</a>
       </div>
@@ -126,7 +126,7 @@
 <metal:div metal:define-macro="fieldsets">
   <div class="portlet" tal:condition="fieldsets">    <!-- Fieldsets -->
     <h5 i18n:translate="schematas">Schematas</h5>
-    <div class="portletBody">
+    <div class="portletBody" id="pcng_schema_editor_fieldsets">
       <div tal:repeat="set fieldsets">
         <div class="left">
            <a tal:content="string: ${set}" 
@@ -144,7 +144,7 @@
       <div>
         <form action="atse_addSchemata" method="post">
          <input type="text" name="name" value="" >
-         <input type="submit" value="Add"  class="standalone" valign="top" i18n:attributes="value">
+         <input type="image" src="add_icon.gif">
         </form>
       </div>
     </div>
@@ -155,7 +155,7 @@
 <metal:div metal:define-macro="fields">
   <div class="portlet" tal:condition="fieldsets">    <!-- Fields -->
     <h5 i18n:translate="fields">Fields</h5>
-    <div class="portletBody">  
+    <div class="portletBody" id="pcng_schema_editor_fields">  
       <div  tal:repeat="field python: here.atse_getSchemata(fieldset).fields()">
         <div class="left">
           <a tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
@@ -175,7 +175,7 @@
           <input type="hidden" name="fielddata.schemata:record:string"    
                tal:attributes="value fieldset" />
             <input type="text" name="name" value=""> 
-            <input type="submit" name="add_field" value="Add" class="standalone" i18n:attributes="value">
+            <input type="image" src="add_icon.gif" name="add_field" value="Add">
         </form>
       </div>
     </div>

@@ -125,7 +125,7 @@
 
             </tal:loop>
           </select>
-          <input type="submit" value="Search" i18n:attributes="value" class="standalone"/>
+          <input  src="search_icon.gif" i18n:attributes="value" type="image">
         </form>    
       </div>
 
@@ -134,8 +134,8 @@
         <span id="pcng_saved_searches" i18n:translate="save_this_search_as">Save search as</span>:
         <form method="post" action="pcng_save_search">
           <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
-          <input type="text" name="query_id" value="" size="20" maxlength="20">
-          <input type="submit" value="Save" i18n:attributes="value" class="standalone" />
+          <input type="text" name="query_id" value="" size="10" maxlength="20">
+          <input type="image" src="add_icon.gif" />
           </form>    
       </div>
 

@@ -36,7 +36,7 @@
 
         <div class="portlet" id="pcng_field_editor" tal:condition="request/field|nothing"> 
           <h5 i18n:translate="field_definition">Field definition for <b tal:content="request/field"/></h5>
-          <div class="portletBody">
+          <div class="portletBody" id="pcng_schema_editor_fieldeditor">
 
             <form action="atse_update" method="post"
                   tal:define="field python: here.atse_getField(request['field']);
@@ -57,11 +57,12 @@
                  <div class="left">
                    <tal:div metal:use-macro="here/pcng_schema_editor_macros/macros/size" />         
                 </div>
-                <div class="clear"> </div>
-                &nbsp;
+                <div class="clear">&nbsp; </div>
+           
               </div>
+              <div class="clear"> </div>
 
-              <div class="clear" tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget')">
+              <div tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget')">
                 <span class="label" i18n:translate="vocabulary">
                   Vocabulary (Use "key|value" for passing key-value pairs 
                   or 'method:&lt;methodname&gt;')
