@@ -168,7 +168,7 @@ function show_tickets() {
           <select name="reference.tracker:record:string">
             <option value="" />
             <metal:block tal:repeat="tracker python:here.superValues(('PloneCollectorNG',))">
-              <option tal:attributes="value python: tracker.absolute_url(1);
+              <option tal:attributes="value python: '/'.join(tracker.getPhysicalPath());
                                       selected python: tracker.getId()==here.aq_parent.getId()"
                       tal:content="string: ${tracker/getId} (${tracker/title})" />
 
