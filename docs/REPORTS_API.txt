@@ -1,0 +1,24 @@
+PloneCollectorNG provides a simple API to create your own reports.
+
+ - look at 'pcng_reports.pt'. The file contains a generic report
+   "pcng_show_report?report=open_unassigned". 
+
+ - 'open_unassigned' is a PythonScript in pcng_templates/reports
+
+ - the script performs a search of the pcng_catalog and returns
+   a list of find issues (see code for details)
+
+ - 'pcng_show_report' is a generic template that calls the script
+   and iterates over the resultset to perform the rendering of the hits
+
+To add your own reports:
+
+ - specify your report as PythonScript and put it into the pcng_templates/reports
+   folder
+
+ - add an entry to pcng_reports.pt
+
+That's it.
+
+
+ 
