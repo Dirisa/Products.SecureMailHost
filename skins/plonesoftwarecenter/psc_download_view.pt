@@ -33,17 +33,27 @@
             description
         </div>
 
-        <p tal:define="externalURL here/getExternalURL;
-                       internalURL here/absolute_url;
-                       downloadURL python:externalURL and externalURL or internalURL">
-            <a tal:attributes="href downloadURL"
-               tal:condition="not:externalURL">
+        <p tal:define="file        python:here.getDownloadableFile();
+                       externalURL here/getExternalURL;
+                       internalURL string:${here/absolute_url}/getDownloadableFile;">
+                       
+            <!-- Interally uploaded file -->
+            <a tal:attributes="href internalURL"
+               tal:condition="nocall:file">
                 <img tal:replace="structure here/download_icon.gif" />
             </a>
-            <a tal:attributes="href downloadURL"
-               tal:define="filename python:here.downloadableFile.filename"
+            <a tal:attributes="href internalURL"
+               tal:condition="nocall:file"
+               tal:define="filename here/getId"
                tal:content="string:Download $filename">
                 Download
+            </a>
+            
+            <!-- Externally linked file -->
+            <a tal:attributes="href externalURL"
+               tal:condition="not:nocall:file"
+               tal:content="string:Download from $externalURL">
+               Download from
             </a>
         </p>
 
