@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.19 2003/11/06 13:27:52 ajung Exp $
+$Id: collector_schema.py,v 1.20 2003/11/14 07:53:13 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -32,11 +32,6 @@ VOC_WATCHLIST = DisplayList((
   ('disabled', 'Disabled'),
   ('anonymous', 'Watchlist enabled for anyone'),
   ('authenticated', 'Watchlist enabled for authenticated users'),
-))
-
-VOC_UI_ISSUE_VIEW = DisplayList((
-  ('simple', 'Simple view'),
-  ('full', 'Full view'),
 ))
 
 
@@ -155,12 +150,4 @@ schema = OrderedSchema((
                 schemata='E-Mail'
                 ),
 
-    StringField('ui_default_issue_view',
-                vocabulary=VOC_UI_ISSUE_VIEW,
-                widget=SelectionWidget(format='select', label='Issue default view',
-                                       label_msgid='label_ui_issue_default_view',
-                                       i18n_domain='plonecollectorng'),
-                default='simple',
-                schemata='UI'
-                ),
     ))
