@@ -534,6 +534,15 @@ msgstr "Email Adresse $email nicht registriert"
 msgid "watchlist_removed" 
 msgstr "Sie wurden von der Watchlist entfernt"
 
+msgid "collector_notifications"
+msgstr "Benachrichtigungen"
 
+msgid "Staff"
+msgstr "Staff"
 
+msgid "added"
+msgstr "hinzu"
+
+msgid "removed"
+msgstr "entfernt"
 
