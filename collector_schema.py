@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.54 2004/06/26 18:14:21 ajung Exp $
+$Id: collector_schema.py,v 1.55 2004/07/01 14:05:48 ajung Exp $
 """
 
 
@@ -90,7 +90,7 @@ schema = BaseSchema + Schema((
                 accessor="getId",
                 mutator="setId",
                 default=None,
-                schemata='main',
+                schemata='Main',
                 widget=IdWidget(label_msgid="label_name",
                                 description_msgid="help_name",
                                 i18n_domain="plone"),
@@ -101,7 +101,7 @@ schema = BaseSchema + Schema((
                 searchable=1,
                 default='',
                 accessor='Title',
-                schemata='main',
+                schemata='Main',
                 widget=StringWidget(label_msgid="label_title",
                                     description_msgid="help_title",
                                     label='Title',
@@ -114,7 +114,7 @@ schema = BaseSchema + Schema((
     StringField('description',
                 required=1,
                 searchable=1,
-                schemata='main',
+                schemata='Main',
                 widget=TextAreaWidget(label='Description',
                                       label_msgid='label_description',
                                       i18n_domain='plonecollectorng'),
@@ -133,7 +133,7 @@ schema = BaseSchema + Schema((
                 widget=StringWidget(label='Automatic deadline in days for new issues',
                                     label_msgid='label_deadline_tickets',
                                     i18n_domain='plonecollectorng'),
-                schemata='main',
+                schemata='Main',
                 ),
     StringField('collector_workflow',
                 vocabulary=VOC_WORKFLOWS,
@@ -142,7 +142,7 @@ schema = BaseSchema + Schema((
                                        label='Workflow',
                                        label_msgid='label_workflow',
                                        i18n_domain='plonecollectorng'),
-                schemata='main'
+                schemata='Main'
                 ),
     StringField('collector_email',
                 searchable=0,
@@ -203,7 +203,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_watchlist',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
-                schemata='main'
+                schemata='Main'
                 ),
 
     StringField('references_mode',
@@ -213,7 +213,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_references',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
-                schemata='main'
+                schemata='Main'
                 ),
 
     StringField('uploads_mode',
@@ -223,7 +223,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_file_image_uploads',
                                        i18n_domain='plonecollectorng'),
                 default='enabled',
-                schemata='main'
+                schemata='Main'
                 ),
 
     StringField('portlet_usage',
@@ -251,7 +251,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_participation_mode',
                                        i18n_domain='plonecollectorng'),
                 default='staff',
-                schemata='permissions',
+                schemata='Permissions',
                 ),
     StringField('view_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
@@ -260,7 +260,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_view_mode',
                                        i18n_domain='plonecollectorng'),
                 default='staff',
-                schemata='permissions',
+                schemata='Permissions',
                 ),
     StringField('owner_view_mode',
                 vocabulary=VOC_OWNER_VIEW_MODE,
@@ -269,6 +269,6 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_owner_view_mode',
                                        i18n_domain='plonecollectorng'),
                 default='no',
-                schemata='permissions',
+                schemata='Permissions',
                 ),
     ))
