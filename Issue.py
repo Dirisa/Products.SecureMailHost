@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.163 2004/05/02 16:04:04 ajung Exp $
+$Id: Issue.py,v 1.164 2004/05/02 16:44:34 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -646,6 +646,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             self._v_left_slots.append('here/pcng_slots/macros/pcng_issue_uploads')
             self._v_left_slots.append('here/pcng_slots/macros/pcng_issue_references')
             self._v_left_slots.append('here/pcng_slots/macros/pcng_searchresults')
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_search_portlet')
             self._v_left_slots = tuple(self._v_left_slots)
         return self._v_left_slots
     left_slots = ComputedAttribute(left_slots, 1)

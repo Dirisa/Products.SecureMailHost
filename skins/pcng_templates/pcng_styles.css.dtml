@@ -182,4 +182,8 @@ div.pcng_action {
     padding-left: 25px;
     padding-bottom: 2px;
 }
+
+.portlet #pcng_quicklinks, .portlet #pcng_saved_searches,.portlet #pcng_navigation {
+    font-weight: bold;
+}
 /* </dtml-with> */

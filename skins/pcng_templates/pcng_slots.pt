@@ -110,6 +110,53 @@
   </div>
 </div>
 
+<!-- Collector search portlet -->
+<div metal:define-macro="pcng_search_portlet" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng_search_portlet">
+    <h5 i18n:translate="Search">Search</h5>
+    <div class="portletBody"  id="pcng_search-portlet">
+
+      <div>
+        <span id="pcng_navigation" i18n:translate="Navigation">Navigation:</span>
+        <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
+          <span i18n:translate="show_issue_number">Show issue #</span> 
+          <input type="text" name="issuenumber" size="5" /> &nbsp;
+        </form>
+      </div>
+
+      <br/>
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+        <span id="pcng_saved_searches" i18n:translate="saved_searches">Saved searches</span>:
+        <form method="post" action="pcng_do_search">
+          <!-- saved searches are stored as a list of string 'RELATIVE_URL::query_id::QUERY_STRING' -->
+          <select name="query"
+                  tal:define="url python: test(here.meta_type=='PloneIssueNG', here.aq_parent.absolute_url(1), here.absolute_url(1))">
+            <tal:loop tal:repeat="saved_search python: [s for s in member.getProperty('pcng_saved_searches', ()) if s.startswith(url)]" >
+              <option tal:content="python: saved_search.split('::', 2)[1]" 
+                      tal:attributes="value python: saved_search.split('::', 2)[2]"
+                  />
+
+            </tal:loop>
+          </select>
+          <input type="submit" value="Search" i18n:attributes="value" class="standalone"/>
+        </form>    
+      </div>
+
+      <br/>
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+        <span id="pcng_quicklinks" i18n:translate="quicklinks">Quicklinks:</span>
+        <div>
+          <a tal:attributes="href string:pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> 
+        </div>
+        <div>
+          <a tal:attributes="href string:pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- Issue actions porlet -->
 <div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_issue_portlet">
@@ -140,7 +187,8 @@
       <ul>
         <li tal:repeat="ref references">
           <a tal:define="target ref/getTargetObject"
-             tal:attributes="href target/absolute_url" 
+             tal:attributes="href target/absolute_url;
+                             title ref/comment;" 
              tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
         </li>
       </ul>
@@ -166,7 +214,7 @@
           <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
           <a tal:attributes="href item/absolute_url">
             <span  tal:content="item/getId" 
-                   tal:attributes="title python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
+                   tal:attributes="title python: '(%s, %s): %s' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator(), item.title_or_id())" />
           </a>
         </li>
       </ul>

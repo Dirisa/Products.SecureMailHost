@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.169 2004/04/26 05:37:06 ajung Exp $
+$Id: Collector.py,v 1.170 2004/05/02 16:44:34 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -48,6 +48,12 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         'id': 'pcng_browse',
         'name': 'Browse issues',
         'action': 'pcng_view',
+        'permissions': (View,),
+        'category' : 'pcng_collector',
+        },
+        {'id': 'pcng_search_form',
+        'name': 'New search',
+        'action': 'pcng_search_form',
         'permissions': (View,),
         'category' : 'pcng_collector',
         },
@@ -817,6 +823,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 self._v_left_slots = []                                                   
             self._v_portlet_usage = pu
             self._v_left_slots.append('here/pcng_slots/macros/pcng_collector_portlet')
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_search_portlet')
             self._v_left_slots = tuple(self._v_left_slots)
         return self._v_left_slots
     left_slots = ComputedAttribute(left_slots, 1)
