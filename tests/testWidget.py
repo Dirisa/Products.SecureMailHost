@@ -24,7 +24,7 @@ class TestWidget(PloneTestCase.PloneTestCase):
         tool.createDefaultClipboards()
 
     
-    def testSingleValuedField(self):
+    def testProcessForm(self):
         field = ReferenceField(
             'reffield',
             widget=ReferenceClipboardWidget,
@@ -38,62 +38,26 @@ class TestWidget(PloneTestCase.PloneTestCase):
         form = {'reffield_clipboard': cb.getId()}
         
         value, kwargs = field.widget.process_form(self.doc1, field, form)
-        self.assertEqual(self.doc2.UID(), value)
+        self.assertEqual([self.doc2.UID()], value)
         self.assertEqual(field.validate(value, self.doc1), None)
 
-        field.set(self.doc1, self.doc1.UID())
-        self.assertEqual(field.get(self.doc1), self.doc1.UID())
+        field.set(self.doc1, [self.doc1.UID()])
+        self.assertEqual(field.getRaw(self.doc1), [self.doc1.UID()])
 
         form.update({'reffield_replace': 1})        
         value, kwargs = field.widget.process_form(self.doc1, field, form)
         self.assertEqual(field.validate(value, self.doc1), None)
-        self.assertEqual(self.doc2.UID(), value)
+        self.assertEqual([self.doc2.UID()], value)
 
         field.allowed_types = ('SomePortalType',)
         # type not allowed:
-        self.assertNotEqual(field.validate(value, self.doc1),
-                            None)
+        self.assertNotEqual(field.validate(value, self.doc1), None)
 
         field.allowed_type = ('DDocument',)
         cb.manage_pasteObjects(self.folder.manage_copyObjects('doc1'))
         value, kwargs = field.widget.process_form(self.doc1, field, form)
-        # value is list but field is single valued:
-        self.assertNotEqual(field.validate(value, self.doc1),
-                            None)
 
         form.update({'reffield_clipboard': '__CLEAR__'})
-        value, kwargs = field.widget.process_form(self.doc1, field, form)
-        self.failIf(value)
-
-        field.required = 1
-        errors = {}
-        field.validate(value, self.doc1, errors=errors)
-        self.failUnless(errors.has_key('reffield'))
-
-
-    def testMultiValuedField(self):
-        field = ReferenceField(
-            'reffield',
-            widget=ReferenceClipboardWidget,
-            validators = ('referenceclipboardvalidator',),
-            multiValued = 1,
-            )
-
-        cb = self.tool.getClipboards()[0]
-        cb.manage_pasteObjects(self.folder.manage_copyObjects('doc2'))
-        form = {'reffield_clipboard': cb.getId()}
-
-        value, kwargs = field.widget.process_form(self.doc1, field, form)
-        self.assertEqual(self.doc2.UID(), value[0])
-        field.set(self.doc1, value)
-
-        form.update({'reffield_replace': 1})
-        cb.manage_pasteObjects(self.folder.manage_copyObjects('doc1'))
-        value, kwargs = field.widget.process_form(self.doc1, field, form)
-        self.assertEqual(len(value), 2)
-
-        form.update({'reffield_clipboard': '__CLEAR__',
-                     'reffield_replace': None})
         value, kwargs = field.widget.process_form(self.doc1, field, form)
         self.failIf(value)
 
@@ -114,7 +78,7 @@ class TestWidget(PloneTestCase.PloneTestCase):
 
         self.assertEqual(field.widget.getTitles(self.doc1, field), [])
 
-        field.set(self.doc1, self.doc1.UID())
+        field.set(self.doc1, [self.doc1.UID()])
         self.assertEqual(field.widget.getTitles(self.doc1, field),
                          ['SomeTitle'])
 

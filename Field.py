@@ -21,7 +21,7 @@
 """
 Validator and Widget for use with ReferenceField.
 
-$Id: Field.py,v 1.1 2004/03/24 11:30:00 dpunktnpunkt Exp $
+$Id: Field.py,v 1.2 2004/05/21 14:49:12 dpunktnpunkt Exp $
 """
 
 from Products.CMFCore.utils import getToolByName
@@ -39,7 +39,8 @@ class ReferenceClipboardWidget(TypesWidget):
         'macro': 'referenceclipboardwidget',
         })
 
-    def process_form(self, instance, field, form, empty_marker=None):
+    def process_form(self, instance, field, form, empty_marker=None,
+                     emptyReturnsMarker=False):
         # We want to work together with ReferenceField so we return a list
         # of UIDs.
 
@@ -79,29 +80,11 @@ class ReferenceClipboardWidget(TypesWidget):
                 if uid not in uids:
                     uids.append(uid)
 
-        # try to return the only UID for single valued fields
-        if not field.multiValued and len(uids) == 1:
-            uids = uids[0]
-        
         return uids, {}
 
     def getTitles(self, instance, field):
-        value = field.get(instance)
-        if not value:
-            return []
-
-        uidtool = getToolByName(instance, 'uid_catalog')
-        value = field.get(instance)
-        if not field.multiValued:
-            value = (value,)
-
-        titles = []
-        for uid in value:
-            brain = uidtool(UID=uid)[0]
-            titles.append(brain.Title or brain.id)
-
-        return titles
-        
+        objs = field.get(instance)
+        return [o.title_or_id() for o in objs]
 
 class ReferenceClipboardValidator:
     __implements__ = (interfaces.ivalidator,)
@@ -114,13 +97,6 @@ class ReferenceClipboardValidator:
 
         if not value:
             return 1
-
-        if not field.multiValued:
-            if isinstance(value, (type(()), type([]))):
-                return 'Attempt to set %s references where only one is ' \
-                       'allowed.' % len(value)
-            else:
-                value = (value,)
 
         for uid in value:
             try:
