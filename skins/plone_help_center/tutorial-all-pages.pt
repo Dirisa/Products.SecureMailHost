@@ -20,17 +20,33 @@
     <div metal:define-macro="main"
          tal:define="sibl here/getPages;">
 
+        <h1>
+        <img tal:replace="structure here/tutorial_icon.gif" />
+        <span tal:replace="here/Title" />
+        </h1>
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+        </div>
+
+        <p class="discreet noPrint">
+        Note: This is the print view with all the tutorial pages on one page.
+        <a href="" tal:attributes="href here/absolute_url">
+        The paginated version is available here</a>, if you prefer that.
+        </p>
+
+        <div class="documentDescription" 
+             tal:content="here/getTutorialDescription">
+        Tutorial Description
+        </div>
+
         <tal:pages repeat="page sibl">
       
             <h1>
-                <img tal:replace="structure here/howto_icon.gif" />
+                <img tal:replace="structure here/tutorial_icon.gif" />
                 <span tal:replace="page/title_or_id">Title or id</span>
             </h1>
         
-            <div metal:use-macro="here/document_actions/macros/document_actions">
-                Document actions (print, sendto etc)
-            </div>
-    
             <div class="documentDescription"
                  tal:content="page/Description">
                 description
