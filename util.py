@@ -439,3 +439,100 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
    #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" % filteredFileList)
    
    return filteredFileList, filteredFolderList
+   
+   
+# --------------------------------------------------------------------
+def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesTool, filetypePhrasesSkipList, 
+                       filePrefixesSkipList, fileSuffixesSkipList, fileNamesSkipList,
+                       folderPrefixesSkipList, folderSuffixesSkipList, folderNamesSkipList):
+   
+   # this method is the inverse of the getFilteredFSItems().  It returns the file 
+   # and folder children of the specified filesystem (FS) path that are ***NOT*** 
+   # returned by the getFilteredFSItems() method
+   
+   if PLFNGrelPath != '':
+      PLFNGrelPath = '/' + PLFNGrelPath
+
+   illegalFilesList = []
+   illegalFoldersList = []
+   filteredOutFileList = []
+   filteredOutFolderList = []
+   
+   if not os.path.exists(FSfullPath):
+
+      # raise exception here?
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: FSfullPath not found (%s)" % FSfullPath )
+      
+   else:   
+      try:
+         rawItemList = os.listdir(FSfullPath)
+      except:
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: error reading folder (%s) contents" % FSfullPath )
+         return filteredFileList, filteredFolderList
+
+      for item in rawItemList:
+         FSfullPathItemName = os.path.join(FSfullPath, item)
+         skipThisItem = 0
+         
+         if os.path.isdir(FSfullPathItemName):
+             checkValidIdResult = checkValidId(item)
+             if skipInvalidIds and checkValidIdResult != 1:
+                illegalFoldersList.append(PLFNGrelPath+'/'+item)
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+             else:
+                for prefix in folderPrefixesSkipList:
+                   if item.startswith(prefix): 
+                      skipThisItem = 1
+                      break
+                
+                for suffix in folderSuffixesSkipList:
+                   if item.endswith(suffix): 
+                      skipThisItem = 1
+                      break
+                
+                for completeName in folderNamesSkipList:
+                   if item == completeName: 
+                      skipThisItem = 1
+                      break
+                
+                if skipThisItem: 
+                   filteredOutFolderList.append(PLFNGrelPath+'/'+item)
+         
+         else:
+             checkValidIdResult = checkValidId(item)
+             if skipInvalidIds and checkValidIdResult != 1:
+                illegalFilesList.append(PLFNGrelPath+'/'+item)
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+             
+             else:
+                if mimetypesTool:
+                   mi = mimetypesTool.classify(data=None, filename=item)
+                   item_mime_type = mi.normalized()
+                
+                   for filetypePhrase in filetypePhrasesSkipList:
+                      if item_mime_type.find(filetypePhrase) >= 0:
+                         skipThisItem=1
+                         break
+                
+                for prefix in filePrefixesSkipList:
+                   if item.startswith(prefix): 
+                      skipThisItem = 1
+                      break
+                
+                for suffix in fileSuffixesSkipList:
+                   if item.endswith(suffix): 
+                      skipThisItem = 1
+                      break
+                
+                for completeName in fileNamesSkipList:
+                   if item == completeName: 
+                      skipThisItem = 1
+                      break
+             
+                if skipThisItem: 
+                   filteredOutFileList.append(PLFNGrelPath+'/'+item)
+     
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredOutFolderList= %s" % filteredOutFolderList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredOutFileList= %s" % filteredOutFileList)
+   
+   return illegalFilesList, illegalFoldersList, filteredOutFileList, filteredOutFolderList   
