@@ -31,12 +31,11 @@
       <tal:package tal:repeat="package python:here.getPackagesByCategory(category)">
         <dt>
           <img tal:replace="structure here/product_icon.gif" />
-          <a tal:attributes="href package/getURL" tal:content="package/Title">[Title]</a>
+          <a tal:attributes="href package/getURL" tal:content="package/Title">Title</a>
           </dt>
-        <dd tal:content="package/Description">[Descrip]</dd>
+        <dd tal:content="package/Description">Description</dd>
       </tal:package>
-    </div>
-
+    </dl>
 
     <div metal:use-macro="here/document_byline/macros/byline">
       Get the byline - contains details about author and modification date.
