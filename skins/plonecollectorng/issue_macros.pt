@@ -19,7 +19,8 @@
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-     <span tal:omit-tag="" tal:condition="not: field/vocabulary|nothing" tal:replace="value"/>
+     <span tal:omit-tag="" tal:condition="not: field/vocabulary|nothing" 
+           metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)" />
      <metal:block tal:condition="field/vocabulary|nothing" 
                   tal:define="vocab python: field.Vocabulary(here);
                               display python: here.displayValue(vocab, value)">
