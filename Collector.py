@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.228 2004/11/12 15:37:52 ajung Exp $
+$Id: Collector.py,v 1.229 2004/11/14 15:59:53 ajung Exp $
 """
 
 
@@ -437,6 +437,11 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
     base_view = view
 
+
+    def isCollectorContext(self):
+        """ our context is a collector?"""
+        return isinstance(self, PloneCollectorNG)    
+
     ######################################################################
     # Topic-user mapping
     ######################################################################
@@ -567,7 +572,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             from Products.Archetypes.config import REFERENCE_CATALOG
             return self.getReferences_mode() == 'enabled'
         except ImportError:
-            return 0
+            return False
 
     security.declareProtected(View, 'haveUploads')
     def haveUploads(self):
@@ -711,7 +716,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             user_ids= [u['username'] for u in tool.getTrackerUsers()]
             return userid in user_ids
         elif mode == 'anyone':
-            return 1
+            return True
 
     ######################################################################
     # Securitytoken

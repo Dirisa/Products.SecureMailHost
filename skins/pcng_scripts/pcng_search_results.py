@@ -57,6 +57,21 @@ if len(query) == 0:
 if debug: print query
 results = list(context.pcng_catalog.searchResults(query))
 
+# Filter results by role and view mode
+view_mode = context.getView_mode()
+user_role = context.pcng_user_role()
+
+no_auth = False
+if view_mode == 'restricted' and not user_role in ('Manager', 'TrackerAdmin', 'Supporter'):
+    no_auth = True
+elif view_mode == 'staff' and not user_role in ('Manager', 'TrackerAdmin', 'Supporter', 'Reporter'):
+    no_auth = True
+elif view_mode == 'authenticated' and not user_role in ('Manager',  'TrackerAdmin', 'Supporter', 'Reporter', 'Authenticated'):
+    no_auth = True
+
+if no_auth:
+    return context.REQUEST.RESPONSE.redirect('pcng_no_permission')
+
 if sort_on: results.sort(query_sort)
 if debug: return printed
 

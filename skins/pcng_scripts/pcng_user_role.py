@@ -3,7 +3,6 @@
 
 from AccessControl import getSecurityManager
 
-
 if context.meta_type == 'PloneCollectorNG':
     collector = context
 elif context.meta_type == 'PloneIssueNG':

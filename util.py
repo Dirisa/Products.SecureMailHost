@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.22 2004/11/12 15:37:52 ajung Exp $
+$Id: util.py,v 1.23 2004/11/14 15:59:53 ajung Exp $
 """
 
 import os, urllib
@@ -72,26 +72,26 @@ def isValidEmailAddress(email):
     pt = email.find('.')
     # Minimal lenght must be 8
     if len(email) <= 7 :
-        return 0
+        return False
     # We must have an @ but not first and not last
     if at == -1 or at == 0 or email[-1] == '@':
-        return 0
+        return False
     # Same applies for the point
     if pt == -1 or pt == 0 or email[-1] == '.':
-        return 0
+        return False
     # Only one @ is valid
     if email.find('@',at+1) > -1:
-        return 0
+        return False
     # @ and . cannot be together
     if email[at-1] == '.' or email[at+1] == '.':
-        return 0
+        return False
     # subdomain must have at least 2 letters
     if email[at+2] == '.':
-        return 0
+        return False
     # no spaces allowed
     if email.find(' ') > -1:
-        return 0
-    return 1
+        return False
+    return True
 
 
 def remove_dupes(lst):

@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: WatchList.py,v 1.11 2004/11/12 15:37:52 ajung Exp $
+$Id: WatchList.py,v 1.12 2004/11/14 15:59:53 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -42,7 +42,7 @@ class WatchList:
     security.declareProtected(View, 'wl_isWatcher')
     def wl_isWatcher(self, email):
         """ is watcher """
-        if email is None: return 0
+        if email is None: return False
         return email.lower() in self._watchers
 
     security.declareProtected(View, 'wl_addWatcher')

@@ -7,6 +7,7 @@
 
     <metal:block metal:fill-slot="head_slot">
 	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+      <tal:check tal:define="dummy context/pcng_check_access" />
     </metal:block>
 
     <div metal:fill-slot="main" >

@@ -12,6 +12,7 @@
 
   <metal:block tal:define="action string: Topic-Staff mapping; navig_configuration nothing">
     <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    <tal:check tal:define="dummy context/pcng_check_access" />
   </metal:block>
 
 

@@ -11,6 +11,7 @@
 
   <metal:block tal:define="action string: Staff; navig_configuration nothing">
     <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    <tal:check tal:define="dummy context/pcng_check_access" />
   </metal:block>
 
   <form action="set_staff" method="post">

@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.229 2004/11/12 15:37:52 ajung Exp $
+$Id: Issue.py,v 1.230 2004/11/14 15:59:53 ajung Exp $
 """
 
 import os, time, random
@@ -663,12 +663,15 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
 
     security.declareProtected(View, 'isPersistent')
     def isPersistent(self):
-        """ are in our final landing position """
+        """ Issue has been moved from the temporary storage to
+            a persistent ZODB storage.
+        """
+
         try:
             id = int(self.getId())
-            return 1
+            return True
         except:
-            return 0
+            return False
 
     security.declareProtected(View, 'numberUploads')
     def numberUploads(self):
@@ -679,6 +682,10 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     def numberReferences(self):
         """ number of references """
         return len(self.getForwardReferences())
+
+    def isIssueContext(self):
+        """ our context is a collector?"""
+        return isinstance(self, PloneIssueNG)    
 
     ######################################################################
     # Slots handling

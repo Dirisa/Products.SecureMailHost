@@ -242,11 +242,11 @@ td.pcng_top {
 }
 
 tr.evenRow {
-    background: #bbbbbb;
+    background: #dddddd;
 }
 
 tr.oddRow {
-    background: #888888;
+    background: #bbbbbb;
 }
 
 /* </dtml-with> */

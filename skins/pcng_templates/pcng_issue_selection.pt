@@ -4,6 +4,7 @@
 <head>
   <title i18n:translate="title_issue_selection">Issue selection</title>
   <link rel="stylesheet" href="plone.css" type="text/css">
+  <tal:check tal:define="dummy context/pcng_check_access" />
 </head>
 <body>
 <html>
