@@ -5,8 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.13 2004/01/21 11:58:36 ajung Exp $
+$Id: Translateable.py,v 1.14 2004/01/28 12:44:06 ajung Exp $
 """
+
+from types import UnicodeType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -45,12 +47,16 @@ class Translateable:
 
 
     security.declarePublic('translate')
-    def translate(self, msgid, text, target_language=None, as_unicode=0,**kw):
+    def translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
         """ ATT: this code is subject to change """
 
         pts = self._getPTS()
         if pts is None:
-            return self._interpolate(text, kw)
+            r = self._interpolate(text, kw)
+            if as_unicode:
+                return unicode(r, self._getPloneEncoding())
+            else: 
+                return r
 
         # Using the as_unicode parameter requires the lastest PTS version
         # from the CVS. In generell we retrieve the translations from PTS
@@ -65,6 +71,7 @@ class Translateable:
                             target_language=target_language,
                             as_unicode=1)
 
+        assert(v, UnicodeType)
         if as_unicode: return v
         else: return v.encode(self._getPloneEncoding())
 
