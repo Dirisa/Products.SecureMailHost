@@ -7,10 +7,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.126 2004/02/23 17:06:54 ajung Exp $
+$Id: Issue.py,v 1.127 2004/02/28 10:36:04 ajung Exp $
 """
 
-import sys, os, time
+import sys, os, time, random
 from urllib import unquote
 from types import StringType, UnicodeType
 
@@ -557,6 +557,21 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def get_size(self):
         """ hook for 'folder_contents' view """
         return 0 
+
+    ######################################################################
+    # Securitytoken
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'getToken')
+    def getToken(self):
+        """ return security token"""
+        return self._token
+
+    security.declareProtected(ManageCollector, 'createToken')
+    def createToken(self):
+        """ create a new token"""
+        self._token = str(time.time() * random.random())
+
 
 registerType(PloneIssueNG)
 
