@@ -1,4 +1,5 @@
 from Products.Archetypes.public import *
+from Products.CMFCore import CMFCorePermissions
 from Products.PloneHelpCenter.config import *
 
 schema = BaseSchema + Schema((
@@ -15,7 +16,7 @@ schema = BaseSchema + Schema((
     rows = 5,
     i18n_domain = "plone")),
     
-    TextField('text',
+    TextField('body',
               required = 1,
               searchable = 1,
               primary = 1,
@@ -37,6 +38,14 @@ class HelpCenterTutorialPage(BaseContent):
     archetype_name = 'Tutorial Page'
     meta_type='HelpCenterTutorialPage'
     global_allow = 0
+    allow_discussion = 1
+
+    actions = ({'id': 'view',
+                'name': 'View',
+                'action': 'string:${object_url}/tutorialpage_view',
+                'permissions': (CMFCorePermissions.View,)
+                },)
+
 
 registerType(HelpCenterTutorialPage, PROJECTNAME)
     
