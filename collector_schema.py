@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.46 2004/05/09 18:43:42 ajung Exp $
+$Id: collector_schema.py,v 1.47 2004/05/10 18:32:04 ajung Exp $
 """
 
 
@@ -38,6 +38,12 @@ VOC_ISSUE_EMAIL_SUBMISSION = DisplayList((
   ('authenticated', 'Any authenticated user'),                                       
   ('anyone', 'Anyone'),                                       
 ))
+
+VOC_REFERENCES_MODE= DisplayList((
+  ('disabled', 'Disabled'),
+  ('enabled', 'Enabled'),
+))
+
 
 VOC_ISSUE_EMAIL_VERIFICATION = DisplayList((
   ('disabled', 'Disabled'),
@@ -194,6 +200,16 @@ schema = BaseSchema + Schema((
                 widget=SelectionWidget(format='select', 
                                        label='Watchlist (Subscription to an issue)',
                                        label_msgid='label_watchlist',
+                                       i18n_domain='plonecollectorng'),
+                default='disabled',
+                schemata='collectordata'
+                ),
+
+    StringField('references_mode',
+                vocabulary=VOC_REFERENCES_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='References between issues',
+                                       label_msgid='label_references',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
                 schemata='collectordata'
