@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.21 2003/12/08 12:35:38 ajung Exp $
+$Id: migrate.py,v 1.22 2003/12/09 08:19:05 ajung Exp $
 """
 
 
@@ -118,6 +118,7 @@ def migrate_tracker(tracker, dest):
 
     print '-'*75
     print 'Migrating collector:', tracker.getId()
+
     
     try: dest.manage_delObjects(tracker.getId())
     except: pass
@@ -140,7 +141,10 @@ def migrate_tracker(tracker, dest):
 
     # Number of issues
     collector._num_issues = len(issues) + 1
-    
+
+    # migrate all references    
+    migrate_references(tracker, dest)
+
     # Reindex issues
     collector.reindex_issues()
 
@@ -379,3 +383,27 @@ def migrate_issue(issue, collector):
             raise ValueError(new_state)
 
     new_issue.workflow_history['pcng_issue_workflow'][-1]['assigned_to'] = assignees
+
+def migrate_references(tracker, dest):
+
+    collector = dest[tracker.getId()]
+    print collector
+
+    issues = tracker.objectValues('CMF CollectorNG Issue')
+    for issue in issues:
+        
+        new_issue = collector[issue.getId()]
+
+        for ref in issue.references:
+
+            if ref.getTracker() == tracker.getId():
+                print 'migrating references for:', tracker.getId(), issue.getId()
+                print "\t -->", ref.getTracker(), ref.getTicketNumber(), ref.getURL() 
+                referenced_issue = collector[ref.getTicketNumber()]
+
+                new_issue.addReference(referenced_issue, "relates_to", 
+                                       issue_id=ref.getTicketNumber(),
+                                       issue_url='/'+referenced_issue.absolute_url(1), 
+                                       collector_title=collector.getId(),
+                                       comment=ref._comment)
+
