@@ -15,6 +15,16 @@
         <span tal:define="dummy python: request.set('status', ['pending', 'accepted'])" />
       </metal:block>   
 
+      <metal:block tal:condition="python: request.get('filter','') == 'assigned'">
+        <span tal:define="dummy python: request.set('status', ['pending', 'accepted']);
+                          dummy python: request.set('assigned_to', [member.getUserName()])" />
+      </metal:block>   
+
+      <metal:block tal:condition="python: request.get('filter','') == 'submitted'">
+        <span tal:define="dummy python: request.set('status', ['pending', 'accepted']);
+                          dummy python: request.set('Creator', [member.getUserName()])" />
+      </metal:block>   
+
       <metal:block tal:define="action string: View">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
