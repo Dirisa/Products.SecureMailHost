@@ -70,8 +70,5 @@ class HelpCenterFAQ(BaseContent):
     def _get_sections_vocab(self):
         return self.aq_parent._get_sections_vocab()
 
-    security.declareProtected(CMFCorePermissions.View, 'getQuestion')
-    def getQuestion(self):
-        return self.getQuestion() or self.Title()
     
 registerType(HelpCenterFAQ, PROJECTNAME)
