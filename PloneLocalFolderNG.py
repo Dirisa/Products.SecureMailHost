@@ -250,6 +250,40 @@ class PloneLocalFolderNG(BaseContent):
         },
       )
 
+    
+    security.declareProtected(ManagePortal, 'getFileRealPath')
+    def getFileRealPath(self, REQUEST):
+        """ get the real (file system) path for the file """
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        return os.path.join(self.folder, rel_dir)
+    
+    security.declareProtected('View', 'getFileMetadata')
+    def getFileMetadata(self, REQUEST, section="GENERAL", option="comment"):
+        """ get file metadata"""
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
+        #zLOG.LOG('PLFNG', zLOG.INFO , "getFileMetadata() :: destpath = %s" % destpath)
+        metadataText = getMetadataElement(destpath, section, option)
+        return metadataText
+    
+    
+    security.declareProtected(ManagePortal, 'setFileMetadata')
+    def setFileMetadata(self, REQUEST, section, option, newvalue):
+        """ set the metadata for the file """
+        result = 0
+        zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: section=%s option=%s newvalue=%s" % (section, option, newvalue))
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        targetFile = os.path.join(self.folder, rel_dir)
+
+        if section and option and newvalue:
+            result = setMetadata(targetFile, section, option, newvalue)
+        
+        if result == 1:
+        		REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=file metadata updated.')
+        else:
+        		REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=Error updating file metadata.')
+
+
     security.declareProtected('View', 'showFile')
     def showFile(self, destpath, REQUEST, RESPONSE):
         """ view file """
@@ -336,54 +370,54 @@ class PloneLocalFolderNG(BaseContent):
         
         else:
         
-	        this_portal = getToolByName(self, 'portal_url')
-	        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
-	
-	        trimmedFolderBasePath = os.path.normpath(self.folder)
-	        show_dir = '/'.join(REQUEST['_e'])
-	        
-	        if show_dir.startswith('/') or show_dir.find('..') > -1:
-	            raise ValueError('illegal directory: %s' % show_dir)
-	
-	        destfolder = os.path.join(trimmedFolderBasePath, show_dir)
-	        
-	        if not destfolder.startswith(trimmedFolderBasePath):
-	            raise ValueError('illegal directory: %s' % show_dir)
-	
-	    
-	        rel_dir = destfolder.replace(self.folder, '')
-	        if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
-	
-	        l = []
-	        if os.path.exists(destfolder):
-	           for f in os.listdir(destfolder):
-	               if f.endswith('.metadata'): continue
-	   
-	               fullname = os.path.join(destfolder, f)
-	               P = FileProxy(f, fullname, f)
-	               mi = self.mimetypes_registry.classify(data=None, filename=f)
-	
-	               if os.path.isdir(fullname):
-	                   P.setIconPath('folder_icon.gif')
-	                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-	                   P.setMimeType('directory')
-	               else:
-	                   P.setIconPath(mi.icon_path)
-	                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-	                   P.setMimeType(mi.normalized())
-	   
-	               if os.path.exists(fullname + '.metadata'):
-	                   try:
-	                     P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
-	                   except:
-	                     P.setComment('')
-	               else:
-	                   P.setComment('')
-	               l.append(P) 
-	
-	        else:
-	            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
-	        return l
+           this_portal = getToolByName(self, 'portal_url')
+           mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
+   
+           trimmedFolderBasePath = os.path.normpath(self.folder)
+           show_dir = '/'.join(REQUEST['_e'])
+           
+           if show_dir.startswith('/') or show_dir.find('..') > -1:
+               raise ValueError('illegal directory: %s' % show_dir)
+   
+           destfolder = os.path.join(trimmedFolderBasePath, show_dir)
+           
+           if not destfolder.startswith(trimmedFolderBasePath):
+               raise ValueError('illegal directory: %s' % show_dir)
+   
+       
+           rel_dir = destfolder.replace(self.folder, '')
+           if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
+   
+           l = []
+           if os.path.exists(destfolder):
+              for f in os.listdir(destfolder):
+                  if f.endswith('.metadata'): continue
+      
+                  fullname = os.path.join(destfolder, f)
+                  P = FileProxy(f, fullname, f)
+                  mi = self.mimetypes_registry.classify(data=None, filename=f)
+   
+                  if os.path.isdir(fullname):
+                      P.setIconPath('folder_icon.gif')
+                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+                      P.setMimeType('directory')
+                  else:
+                      P.setIconPath(mi.icon_path)
+                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+                      P.setMimeType(mi.normalized())
+      
+                  if os.path.exists(fullname + '.metadata'):
+                      try:
+                        P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+                      except:
+                        P.setComment('')
+                  else:
+                      P.setComment('')
+                  l.append(P) 
+   
+           else:
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
+           return l
 
     security.declareProtected('View', 'breadcrumbs')
     def breadcrumbs(self, instance): 
@@ -424,6 +458,8 @@ class PloneLocalFolderNG(BaseContent):
                elif REQUEST.get('action', '') == 'catalog':
                   #catalogTool = getToolByName(self, 'portal_catalog')
                   return self.catalogContents()
+               elif REQUEST.get('action', '') == 'editMetadata':
+                  RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_editMetadata')).replace('\\','/'))   
                else: 
                   return self.showFile(destpath, REQUEST, RESPONSE)
            else:
@@ -534,7 +570,7 @@ class PloneLocalFolderNG(BaseContent):
             #open(filename + '.metadata', 'wb').write(comment)
             setMetadata(filename, section="GENERAL", option="comment", value=comment)
         
-        # if .zip file, set ZIPINFO metadata
+        # if .zip file, set ARCHIVEINFO metadata
         if self.mimetypes_registry.classify(data=None, filename=upload.filename) == 'application/zip':
             setZipInfoMetadata(filename)
 
@@ -623,11 +659,11 @@ class PloneLocalFolderNG(BaseContent):
                      break
             
             try:
-               unpackedSize = int(getMetadataElement(packedFile, section="ZIPINFO", option="unpacked_size"))
+               unpackedSize = int(getMetadataElement(packedFile, section="ARCHIVEINFO", option="unpacked_size"))
             except:
                try:
                   setZipInfoMetadata(packedFile)
-                  unpackedSize = int(getMetadataElement(packedFile, section="ZIPINFO", option="unpacked_size"))
+                  unpackedSize = int(getMetadataElement(packedFile, section="ARCHIVEINFO", option="unpacked_size"))
                except:
                   RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked (not a valid file?!).')
                   return 0
