@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.40 2004/04/18 11:36:44 ajung Exp $
+$Id: collector_schema.py,v 1.41 2004/04/18 16:42:41 ajung Exp $
 """
 
 
@@ -218,7 +218,7 @@ schema = Schema((
     StringField('navigation_slot',
                 vocabulary=VOC_NAVIGATION_SLOT,
                 widget=SelectionWidget(format='select', 
-                                       label='Navigation slot',
+                                       label='Show additional informations as portlet',
                                        label_msgid='label_navigation_slot',
                                        i18n_domain='plonecollectorng'),
                 default='no',
