@@ -33,3 +33,8 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
+
+    # Force the loading of test data generation scripts that
+    # we're currently attaching to the portal_migration tool.
+    # XXX: Remove this hack when we final have a portal_test_script tool.
+    import tests
