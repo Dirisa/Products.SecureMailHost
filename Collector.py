@@ -9,6 +9,7 @@ from Products.Archetypes.public import BaseFolder, registerType
 
 from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
+from config import IssueWorkflowName
 import util
 import collector_schema
 
@@ -51,6 +52,7 @@ class Collector(BaseFolder):
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
         self._supporters = self._managers = self._reporters = []
+        self._notification_emails = {}
         self.transcript = Transcript()
         self._setup_collector_catalog()
         self.transcript.addComment('Tracker created')
@@ -131,6 +133,29 @@ class Collector(BaseFolder):
         self.manage_permission(AddCollectorIssueFollowup,
                                roles=target_roles,
                                acquire=0)
+
+    ######################################################################
+    # Notifications
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'set_notification_emails')
+    def set_notification_emails(self, notifications, RESPONSE=None):
+        """ set the email addresses for notifications when a workflow
+            state changes.
+            
+            'notifications' -- record where the keys are the names of the
+                        states and the values are lists of email addresses
+        """
+        for state in notifications.keys():
+            emails = getattr(notifications, state)
+            self._notification_emails = emails
+        self._p_changed = 1
+
+    security.declareProtected(ManageCollector, 'issue_states')
+    def issue_states(self):
+        """ return a list of all related issue workflow states """
+
+        return getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
 
 
 registerType(Collector)
