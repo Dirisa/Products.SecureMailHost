@@ -6,6 +6,19 @@ from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.PloneCollectorNG.config import *
 from Products.CMFCore.utils import getToolByName
 
+
+configlets = \
+( { 'id'         : 'PloneCollectorNG'
+  , 'name'       : 'PloneCollectorNG member preferences'
+  , 'action'     : 'string:pcng_member_preferences'
+  , 'category'   : 'Member'
+  , 'appId'      : 'PloneCollectorNG'
+  , 'permission' : 'View'
+#  , 'imageUrl'  : 'ploneboard_icon.gif'
+  }
+,
+)
+
 def install(self):                                       
     out = StringIO()
 
@@ -48,5 +61,24 @@ def install(self):
         except: 
             print >>out, 'Skipping "%s" - already in memberdata_tool' % key
 
+    configTool = getToolByName(self, 'portal_controlpanel', None)
+    if configTool:
+        for conf in configlets:
+            print >>out, 'Adding configlet %s\n' % conf['id']
+            configTool.registerConfiglet(**conf)
+
     print >> out, "Successfully installed %s." % PROJECTNAME
+    return out.getvalue()
+
+
+def uninstall(self):                                       
+    out = StringIO()
+
+    configTool = getToolByName(self, 'portal_controlpanel', None)
+    if configTool:
+        for conf in configlets:
+            print >>out, 'Removing configlet %s\n' % conf['id']
+            configTool.unregisterConfiglet(conf['id'])
+
+    print >> out, "Successfully uninstalled %s." % PROJECTNAME
     return out.getvalue()
