@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.28 2004/02/12 10:13:17 ajung Exp $
+$Id: Translateable.py,v 1.29 2004/02/12 13:43:39 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -31,15 +31,10 @@ class Translateable:
         """ return PTS instance """
         if not have_pts: return None
 
-        pts = getattr(self, '_v_have_pts', None)
-        if pts is None:
-            try:
-                pts = getTranslationService()
-                self._v_have_pts = pts
-            except:
-                self._v_have_pts = None
-
-        return self._v_have_pts
+        try:
+            return getTranslationService()
+        except:
+            return None
 
     def _getPloneEncoding(self):
         """ return the site encoding of Plone """
