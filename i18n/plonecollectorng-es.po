@@ -1,0 +1,910 @@
+# Gettext Message File for PloneCollectorNG.
+# Sebastián Vázquez <chane0@yahoo.com><svazquez@sadiel.es>
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.0\n"
+"POT-Creation-Date: 2004-03-24 00:00+0300\n"
+"PO-Revision-Date: 2003-03-24 00:00+3000\n"
+"Last-Translator: Sebastián Vázquez\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: es\n"
+"Language-name: Español\n"
+"Preferred-encodings: utf-8 latin1\n"
+"X-Is-Fallback-For: \n"
+"Domain: plonecollectorng\n"
+
+msgid "changes_saved"
+msgstr "Cambios guardados"
+
+msgid "reference_no_comment"
+msgstr "Las referencias necesitan al menos un comentario"
+
+msgid "no_ticket"
+msgstr "No existe el ticket #$ticketnum"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "label_solution"
+msgstr "Solución"
+
+msgid "label_description"
+msgstr "Descripción"
+
+msgid "label_topic"
+msgstr "Asunto"
+
+msgid "UserID" 
+msgstr "Identificación"
+
+msgid "Managers" 
+msgstr "Administradores"
+
+msgid "Email" 
+msgstr "e-mail"
+
+msgid "Reporter" 
+msgstr "Solicitante"
+
+msgid "Supporter"
+msgstr "Técnico" 
+
+msgid "Authenticated"
+msgstr "Identificado" 
+
+
+msgid "unassigned"
+msgstr "sin asignar"
+
+msgid "Unassigned"
+msgstr "sin asignar"
+
+msgid "Assigned"
+msgstr "asignado"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "View"
+msgstr "Ver"
+
+msgid "transcript_time"
+msgstr "Hora"
+
+msgid "transcript_user"
+msgstr "Usuario"
+
+msgid "transcript_changes"
+msgstr "Cambios"
+
+msgid "help_staff"
+msgstr "<b>Administradores</b> son responsables de la configuración y mantenimiento del gestor de Incidencias<br><b>Técnicos de soporte</b> trabajan sobre las incidencias propuestas<br><b>Solicitantes</b> proponen las incidencias"
+
+msgid "legend_search_form"
+msgstr "Buscar"
+
+msgid "edit_fieldsets"
+msgstr "Esquemas"
+
+msgid "simpleview"
+msgstr "Vista simple"
+
+msgid "fullview"
+msgstr "vista completa"
+
+msgid "fullview_with_images"
+msgstr "vista completa (con imágenes)"
+
+msgid "status"
+msgstr "Estado"
+
+msgid "assigned_to"
+msgstr "asignado a"
+
+msgid "uploads"
+msgstr "adjuntos"
+
+msgid "transcript"
+msgstr "transcripción"
+
+msgid "contact"
+msgstr "contacto"
+
+msgid "issuedata"
+msgstr "Datos de la incidencia"
+
+msgid "Issuedata"
+msgstr "Datos de la incidencia"
+
+msgid "progress"
+msgstr "progreso"
+
+msgid "deadline"
+msgstr "Fecha límite"
+
+msgid "legend_references"
+msgstr "Referencias a otras incidencias"
+
+msgid "references"
+msgstr "referencias"
+
+msgid "referenced_by"
+msgstr "Referenciado por"
+
+msgid "dependency_graph"
+msgstr "Gráfico de dependencias"
+
+msgid "issue_followup"
+msgstr "Seguimiento"
+
+msgid "assign_to"
+msgstr "asignar a:"
+
+msgid "comment"
+msgstr "Comentario"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "save"
+msgstr "Guardar"
+
+msgid "Reset"
+msgstr "Reiniciar"
+
+msgid "Accept"
+msgstr "Aceptar"
+
+msgid "Resolve"
+msgstr "Resolver"
+
+msgid "Reject"
+msgstr "Rechazar"
+
+msgid "Resign"
+msgstr "Dimitir"
+
+msgid "Defer"
+msgstr "Diferir"
+
+msgid "workflow_action_current_state"
+msgstr "Estado actual"
+
+
+msgid "action"
+msgstr "Acción"
+
+msgid "pending"
+msgstr "Pendiente"
+
+
+msgid "issue_artifacts_table_info_link"
+msgstr "Info"
+
+msgid "issue_artifacts_table_deletion_link"
+msgstr "Borrar"
+
+msgid "legend_artifacts_upload"
+msgstr "Adjuntar datos"
+
+msgid "add_artifacts_table_comment"
+msgstr "Comentarios"
+
+msgid "legend_new_reference_to_issue"
+msgstr "Referencia a nueva incidencia"
+
+msgid "add_references_table_collector"
+msgstr "Gestor de incidencias"
+
+msgid "add_references_table_issue_number"
+msgstr "Incidencia Nº"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid "add_references_table_comment"
+msgstr "Comentario"
+
+msgid "collectordata"
+msgstr "Metadatos"
+
+msgid "preferences"
+msgstr "preferencias"
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "Position"
+msgstr "Cargo"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "send_emails"
+msgstr "Notificaciones por correo electónico"
+
+msgid "send_attachments"
+msgstr "Adosar adjuntos"
+
+msgid "position_searchform"
+msgstr "Formulario de búsqueda"
+
+msgid "default_searchform"
+msgstr "Formulario de búsqueda por defecto"
+
+msgid "default_issue_view"
+msgstr "Vista por defecto"
+
+msgid "hits_per_page"
+msgstr "Nº por página"
+
+msgid " Save changes "
+msgstr "Guardar cambios"
+
+msgid " Reset "
+msgstr "Reiniciar"
+
+msgid "My collectorpreferences"
+msgstr "Mi gestor de Incidencias"
+
+msgid "No"
+msgstr "No"
+
+msgid "Yes"
+msgstr "Si"
+
+msgid "Bottom"
+msgstr "Fondo"
+
+msgid "Top"
+msgstr "Arriba"
+
+msgid "Simple search form"
+msgstr "Búsqueda simple"
+
+msgid "Advanced search form"
+msgstr "Búsqueda avanzada"
+
+msgid "Simple view"
+msgstr "Vista simple"
+
+msgid "Full view"
+msgstr "Vista completa"
+
+msgid "Full view with images"
+msgstr "Vista completa con imágenes"
+
+msgid "Maintenance"
+msgstr "Mantenimiento"
+
+msgid "number_issues"
+msgstr "Número de incidencias"
+
+msgid "reindex_all_issues"
+msgstr "Recatalogar Incidencias"
+
+msgid "update_schema_for_all_issues"
+msgstr "Actualizar propiedades para todas las incidencias"
+
+msgid "update_collector_schema"
+msgstr "Actualizar propiedades del gestor"
+
+msgid "recreate_collector_catalog"
+msgstr "Generar catálogo del Gestor"
+
+msgid "Browse issues"
+msgstr "Visualizar incidencias"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Schema Editor"
+msgstr "Editor de propiedades"
+
+msgid "Notifications"
+msgstr "Notificaciones"
+
+msgid "jump_to_ticket"
+msgstr "Ir a la incidencia"
+
+msgid " Jump "
+msgstr "Ir"
+
+msgid "heading_status"
+msgstr "Estado"
+
+msgid "heading_requester"
+msgstr "Solicitante"
+
+msgid "heading_assigned"
+msgstr "Asignado a:"
+
+msgid "accepted"
+msgstr "Aceptado"
+
+msgid "created"
+msgstr "Creado"
+
+msgid "defered"
+msgstr "Aplazado"
+
+msgid "rejected"
+msgstr "Rechazado"
+
+msgid "resigned"
+msgstr "Dimitido"
+
+msgid "resolved"
+msgstr "Resuelto"
+
+msgid "Issue"
+msgstr "Incidencia"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Deadline"
+msgstr "Fecha límite"
+
+msgid "Submitter"
+msgstr "Solicitante"
+
+msgid "Progress"
+msgstr "Progreso"
+
+msgid "Classification"
+msgstr "Clasificación"
+
+msgid "classification"
+msgstr "Clasificación"
+
+msgid "Creator"
+msgstr "Creador"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Topic"
+msgstr "Categoría"
+
+msgid "Importance"
+msgstr "Importancia"
+
+msgid "Desc"
+msgstr "Desc"
+
+msgid "Asc"
+msgstr "Asc"
+
+msgid "fulltextsearch"
+msgstr "Buscar por todo el texto"
+
+msgid "followups"
+msgstr "Seguimiento"
+
+msgid "importance"
+msgstr "importancia"
+
+msgid "assigned"
+msgstr "asignado a"
+
+msgid "submitted_by"
+msgstr "Solicitado por"
+
+msgid "last_modified"
+msgstr "Última modificación"
+
+msgid "days_ago"
+msgstr "días"
+
+msgid "issues_submitted_by_me"
+msgstr "Incidencias que he propuesto"
+
+msgid "issues_assigned_to_me"
+msgstr "Incidencias a las que estoy asignado"
+
+msgid "Search"
+msgstr  "Buscar"
+
+msgid "schematas"
+msgstr "Esquemas"
+
+msgid "fields"
+msgstr "Campos"
+
+msgid "maintenance"
+msgstr "Mantenimiento"
+
+msgid "name"
+msgstr "Nombre"
+
+msgid "type"
+msgstr "Tipo"
+
+msgid "widget"
+msgstr "Widget"
+
+msgid "invisible"
+msgstr "Invisible"
+
+msgid "required"
+msgstr "Requerido por"
+
+msgid "size_schema_editor"
+msgstr "Tamaño"
+
+msgid "default"
+msgstr "Por defecto"
+
+msgid "label"
+msgstr "Etiqueta"
+
+msgid "Add"
+msgstr "Nuevo"
+
+msgid "field_definition"
+msgstr "Definición"
+
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "invalid_email_address" 
+msgstr "dirección de correo no válida"
+
+msgid "issues_updated" 
+msgstr "Incidencias actualizadas"
+
+msgid "issues_reindexed" 
+msgstr "Incidencias recatalogadas"
+
+msgid "invalid_action" 
+msgstr "Acción inválida"
+
+msgid "followup_submitted" 
+msgstr "Cambios guardados"
+
+msgid "reference_deleted"
+msgstr "Referencias borradas"
+
+msgid "no_tracker" 
+msgstr "No existe el gestor de incidencias: $tracker_url" 
+
+msgid "reference_stored" 
+msgstr "Referencia guardada"
+
+msgid "unknown_format" 
+msgstr "formato desconocido: $format"
+
+msgid "file_uploaded" 
+msgstr "Fichero cargado"
+
+msgid "nothing_for_upload" 
+msgstr "Nada que cargar"
+
+msgid "upload_removed" 
+msgstr "Fichero guardado"
+
+msgid "schema_exists" 
+msgstr "El esquema $schema existe" 
+
+msgid "schema_added" 
+msgstr "esquema añadido" 
+
+msgid "schema_deleted" 
+msgstr "Esquema borrado" 
+
+msgid "schema_field_deleted" 
+msgstr "Campo del esquema borrado"
+
+msgid "schema_field_added" 
+msgstr "Campo del esquema añadido" 
+
+msgid "schema_unknown_field" 
+msgstr "Campo desconocido: $field" 
+
+msgid "schema_unknown_widget" 
+msgstr "Elemento desconocido: $widget" 
+
+msgid "schema_moved_left" 
+msgstr "Esquema movido a la izquierda" 
+
+msgid "schema_moved_right" 
+msgstr "Esquema movido a la derecha"
+
+msgid "schema_field_moved_up" 
+msgstr "Campo desplazado hacia arriba"
+
+msgid "schema_field_moved_down" 
+msgstr "Campo desplazado hacia abajo" 
+
+msgid "schema_field_moved" 
+msgstr "Campo desplazado" 
+
+msgid "email_already_registered" 
+msgstr "La dirección de correo $email ya existe"
+
+msgid "watchlist_added" 
+msgstr "Lista añadida"
+
+msgid "email_not_registered" 
+msgstr "La dirección de correo $email no está registrada" 
+
+msgid "watchlist_removed" 
+msgstr "Lista borrada"
+
+msgid "collector_notifications"
+msgstr "Notificaciones"
+
+msgid "Staff"
+msgstr "Equipo"
+
+msgid "added"
+msgstr "añadido"
+
+msgid "removed"
+msgstr "borrado"
+
+msgid "open_issues"
+msgstr "Incidencias activas"
+
+msgid "total_issues"
+msgstr "Total de incidencias"
+
+msgid "collector_overview"
+msgstr "Vista general del gestor"
+
+msgid "issue_artifacts_table_no_uploads_available"
+msgstr "No hay cargas disponibles"
+
+msgid "label_name"
+msgstr "Nombre"
+
+msgid "label_title"
+msgstr "Título"
+
+msgid "label_classification"
+msgstr "Clasificación"
+
+msgid "label_importance"
+msgstr "Importancia"
+
+msgid "label_deadline"
+msgstr "Fecha límite"
+
+msgid "label_hours_estimated"
+msgstr "Num de horas estimadas"
+
+msgid "label_hours_needed"
+msgstr "Num de horas necesitadas"
+
+msgid "label_percent_done"
+msgstr "Porcentaje realizado"
+
+msgid "label_contact_name"
+msgstr "Nombre"
+
+msgid "label_contact_email"
+msgstr "e-mail"
+
+msgid "label_contact_company"
+msgstr "Empresa"
+
+msgid "label_contact_position"
+msgstr "Puesto"
+
+msgid "label_contact_address"
+msgstr "Dirección"
+
+msgid "label_contact_city"
+msgstr "Ciudad"
+
+msgid "label_contact_phone"
+msgstr "Teléfono"
+
+msgid "label_contact_fax"
+msgstr "Fax"
+
+msgid "label_limit_followups"
+msgstr "Límite de cambios"
+
+msgid "label_hostname"
+msgstr "Host"
+
+msgid "label_participation_mode"
+msgstr "Modo de participación"
+
+msgid "label_view_mode"
+msgstr "Modo de vista"
+
+msgid "label_deadline_tickets"
+msgstr "Fecha límite"
+
+msgid "label_collector_abbreviation"
+msgstr "Nombre corto"
+
+msgid "label_email_notification_policy"
+msgstr "Política de notificaciones por correo"
+
+msgid "label_email_issue_formatters"
+msgstr "Formato de correo"
+
+msgid "label_email_address"
+msgstr "Direciión de correo (para la cabecera FROM: y REPLY-TO:)"
+
+msgid "label_watchlist"
+msgstr "Watchlist"
+
+msgid "E-Mail"
+msgstr "e-mail"
+
+msgid "References and uploads"
+msgstr "Referencias y datos adjuntos"
+
+msgid "new_issue_created"
+msgstr "Nueva incidencia creada"
+
+msgid "notification_mode_disabled"
+msgstr "Modo de notificacion desactivado"
+
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Defered"
+msgstr "Aplazado"
+
+msgid "Rejected"
+msgstr "Rechazado"
+
+msgid "Accepted"
+msgstr "Aceptado"
+
+msgid "Resigned"
+msgstr "Dimitido"
+
+msgid "Resolved"
+msgstr "Resuelto"
+
+msgid "sorting"
+msgstr "Orden"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "topic"
+msgstr "Asunto"
+
+msgid "vocabulary"
+msgstr "Vocabulario (Añada Key|Value o 'method:METHODENNAME')"
+
+msgid "no_issues_found"
+msgstr "No se han encontrado Incidencias"
+
+msgid "advanced_search"
+msgstr "Búsqueda avanzada"
+
+msgid "changed"
+msgstr "Cambiado"
+
+msgid "issue_number"
+msgstr "Incidencia Nº $id"
+
+msgid "show_incomplete_issues"
+msgstr "Ver incidencias no resueltas"
+
+msgid "recreate_uids_imported_issues"
+msgstr "Archetypes UIDs für importierte Tickets regenerieren"
+
+msgid "Member preferences"
+msgstr "Preferencias de usuario"
+
+msgid "saved_searches"
+msgstr "Consultas almacenadas"
+
+msgid "Delete"
+msgstr "Borrar"
+
+msgid "my_saved_searches"
+msgstr "Mis consultas almacenadas"
+
+msgid "no_references"
+msgstr "Sin referencias"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "images"
+msgstr "Imágenes"
+
+msgid "uploaded_file"
+msgstr "Fichero cargado"
+
+msgid "file_for_upload"
+msgstr "Fichero a cargar"
+
+msgid "upload"
+msgstr "Cargar"
+
+msgid "progress_percent_done"
+msgstr "Progreso"
+
+msgid "help_notifications"
+msgstr "Aquí puede añadir otras direcciones de correo, a las que les serán enviadas notificaciones cuando se produzcan los siguientes cambios"
+
+
+msgid "help_reindex_issues"
+msgstr "Todas las incidencias deben ser recatalogadas después de mover o modificar el nombre del gestor de incidencias"
+
+msgid  "help_update_schema_for_issues"
+msgstr "Después de cambiar el esquema, todas las incidencias deben ser notificadas"
+
+msgid  "help_update_collector_schema"
+msgstr "A veces necesario después de actualizar PloneCollectorNG"
+
+msgid  "help_setup_collector_catalog"
+msgstr "A veces necesario después de actualizar PloneCollectorNG o cuando se cambia el catálogo. También es necesesario si se ha activado la opción de generar índice en algún campo"
+
+msgid  "help_incomplete_issues"
+msgstr "Muestra enlaces a incidencias incompletas para poder rechazarlas. Además, predefine el estado"
+
+msgid  "help_register_issue_uids"
+msgstr "Usar con <b>cuidado</b> y sólo si se ha importado un collector por medio de copiar/pegar o mediante la herramienta de importación."
+
+msgid "statistics"
+msgstr "Estadísticas"
+
+msgid "save_this_search_as"
+msgstr "Guardar esta consulta como"
+
+msgid "no_entries"
+msgstr "Sin entradas"
+
+msgid "no_images"
+msgstr "Sin imágenes"
+
+msgid "create_index"
+msgstr "Crear Índice"
+
+msgid "no_users_found"
+msgstr "No se han encontrado usuarios"
+
+msgid "image"
+msgstr "Imagen"
+
+msgid "reaccept"
+msgstr "Reaceptar"
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "reject"
+msgstr "Rechazar"
+
+msgid "page_number"
+msgstr "Página $num"
+
+msgid "collector_id"
+msgstr "Gestor $id"
+
+msgid "date_on"
+msgstr "en"
+
+msgid "followup_with_quote"
+msgstr "Comentario"
+
+msgid "no_access"
+msgstr "Sin acceso"
+
+msgid "issues_last_n_days"
+msgstr "Últimas incidencias"
+
+msgid "Recent activity"
+msgstr "Reciente"
+
+msgid "days"
+msgstr "Días"
+
+msgid "Refresh"
+msgstr "Refrescar"
+
+msgid "invalid_id_for_schemata"
+msgstr "El identificador de $schemata NO es válido"
+
+msgid "open_issue_in_new_window"
+msgstr "Abrir incidencia en una ventana nueva"
+
+msgid "staff_members"
+msgstr "Miembros del equipo"
+
+msgid "Topic-Staff mapping"
+msgstr "Equipos según temática"
+
+msgid "topic_user_mapping_saved"
+msgstr "Se han guardado los cambios en los equipos"
+
+msgid "atse_empty_name"
+msgstr "Sin nombre"
+
+msgid "atse_exists"
+msgstr "El esquema $schemata ya existe"
+
+msgid "atse_invalid_id_for_schemata"
+msgstr "Identificador de esquema no válido"
+
+msgid "atse_added"
+msgstr "Esquema añadido"
+
+msgid "atse_can_not_remove_last_schema"
+msgstr "No se puede borrar el último esquema"
+
+msgid "atse_deleted"
+msgstr "Esquema eliminado"
+
+msgid "atse_feld_not_deleteable"
+msgstr "No se puede borrar el campo"
+
+msgid "atse_field_deleted"
+msgstr "Campo eliminado"
+
+msgid "atse_empty_field_name"
+msgstr "Campo sin nombre"
+
+msgid "atse_not_a_valid_id"
+msgstr "Identificador no válido"
+
+msgid "atse_field_already_exists"
+msgstr "El campo ya existe"
+
+msgid "atse_field_added"
+msgstr "Campo añadido"
+
+msgid "atse_unknown_field"
+msgstr "Campo desconocido"
+
+msgid "atse_unknown_widget"
+msgstr "Widget desconocido"
+
+msgid "atse_moved_left"
+msgstr "Desplazado a la izquierda"
+
+msgid "atse_moved_right"
+msgstr "Desplazado a la derecha"
+
+msgid "atse_field_moved_up"
+msgstr "Desplazado hacia arriba"
+
+msgid "atse_field_moved_down"
+msgstr "Desplazado hacia abajo"
+
+msgid "atse_field_moved"
+msgstr "Campo desplazado"
+
+msgid "topic"
+msgstr "Asunto"
+
+msgid "help_topics_users"
+msgstr "Topics taken from the Archetypes field 'topic' can be assigned to a set of staff members. All staff members are automatically assigned to an issue if the submitter/supporter chooses to assign an issue to a topic-group. The group of topics is taken from the list of all topics except that topics named <em>maintopic/subtopic</em> are considered to belong to the topic <em>maintopic</em>."
+
+msgid "assign_to_users"
+msgstr "Asignar a usuarios"
+
+msgid "assign_to_group"
+msgstr "asignar a grupos"
