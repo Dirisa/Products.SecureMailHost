@@ -85,12 +85,12 @@
     <h5 i18n:translate="collector_actions">Collector actions</h5>
     <div class="portletBody"  id="pcng_portlet_collector">
       <div class="pcng_action" tal:repeat="a actions/object_pcng_collector|nothing">
-          <a tal:attributes="href a/url">
-            <span class="pcng_action"
-                  i18n:translate="" 
-                  tal:attributes="id a/id"
-                  tal:content="a/name" />
-          </a>
+        <a tal:attributes="href a/url">
+          <span class="pcng_action"
+                i18n:translate="" 
+                tal:attributes="id a/id"
+                tal:content="a/name" />
+        </a>
       </div>
     </div>
   </div>
