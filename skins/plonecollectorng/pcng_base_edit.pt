@@ -68,7 +68,7 @@
               i18n:translate=""
               tal:content="python:(len(fieldsets) > 1 and fieldset != 'default') and fieldset or here.archetype_name " />
 
-	    <tal:fields repeat="field python: schematas[fieldset].fields()">
+	    <tal:fields repeat="field python: here.schema_getSchema(fieldset).fields()">
             <metal:fieldMacro use-macro="python: here.widget(field.getName(), mode='edit')"/>
         </tal:fields>
 
