@@ -14,7 +14,7 @@
     </h2>
   </tal:if>
 
-  <div id="pcng_headline">
+  <div>
     <div class="left" tal:condition="python: here.meta_type=='PloneIssueNG'" >
       <a href=""
          class="link-parent"
@@ -23,7 +23,7 @@
          tal:content="string:Up to the ${here/aq_parent/title_or_id} instance"
      />
     </div>
-    <div class="right" tal:condition="action|nothing">  
+    <div class="right" id="pcng_headline" tal:condition="action|nothing">  
       <b>
           <span i18n:translate="" tal:content="string:${action}" />
           (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
@@ -221,7 +221,7 @@
       <div>
         <tal:loop tal:repeat="item here/getIndexes" >
           <div style="float: left; margin: 5pt">
-            <span class="label" i18n:translate="" tal:content="python: item[0]" />
+            <span id="label" i18n:translate="" tal:content="python: item[0]" />
             <br>
             <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
                     tal:define="displaylist python: here.pcng_vocabulary_values(item[0])">
@@ -249,13 +249,13 @@
 
     <div style="float: left">
       <div>
-        <span class="label" i18n:translate="fulltextsearch">Fulltext search</span>
+        <span id="label" i18n:translate="fulltextsearch">Fulltext search</span>
         <br/>
         <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
       </div>
 
       <div>
-        <span class="label" i18n:translate="search_by_date">Search by date</span>
+        <span id="label" i18n:translate="search_by_date">Search by date</span>
         <br/>
         <select name="datefield">
           <option i18n:translate=""
@@ -282,7 +282,7 @@
       </div>
 
       <div>
-        <span class="label" align="left" i18n:translate="sorting">Sorting</span>
+        <span id="label" align="left" i18n:translate="sorting">Sorting</span>
 
         <div>
           <select name="sort_on" size="1">
@@ -316,7 +316,7 @@
           </select> 
         </div>
             
-        <span class="label" i18n:translate="hits_per_page">Hits per page</span>
+        <span id="label" i18n:translate="hits_per_page">Hits per page</span>
 
         <div>
           <select name="batchsize:int" size="1">

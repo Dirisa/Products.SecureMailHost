@@ -51,7 +51,7 @@
                       results python: test(num_results > 20, results[:20], results)">
         <li tal:repeat="item results">
           <a tal:attributes="href python: item[0]">
-            <span tal:attributes="class python: test(item[1]==my_id, 'selected', '')"
+            <span tal:attributes="id python: test(item[1]==my_id, 'selected', '')"
                   tal:content="python: item[1]" />
           </a>
           - <span tal:replace="python: here.shorten_string(item[2], maxlength=40)" />

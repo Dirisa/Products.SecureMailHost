@@ -21,12 +21,12 @@
 
       <div tal:repeat="collector here/pcng_get_collectors" >
 
-        <h2 class="tracker_overview">
+        <h2 id="tracker_overview">
           <a tal:attributes="href string:${collector/url}/pcng_view">
             <span tal:content="collector/id" />
             <span tal:condition="collector/title" tal:content="string:(${collector/title})" />
           </a>
-          <span class="no_access" tal:condition="not: collector/view_permission" i18n:translate="no_access">(no access)</span>
+          <span id="no_access" tal:condition="not: collector/view_permission" i18n:translate="no_access">(no access)</span>
         </h2>
 
         <div id="ticket_stats" tal:condition="collector/view_permission"

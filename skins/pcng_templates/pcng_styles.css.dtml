@@ -1,38 +1,13 @@
 
 /* <dtml-with stylesheet_properties> (do not remove this :) */
 
-span.label {
+span #label {
     font-weight: bold;
-}
-
-div.border {
-    border: 1; solid black;
-
-}
-
-div.collector_headline {
-    background:  #dcdcff;
-    font-size: 120%;
-    font-weight: bold;
-    margin: 5px;
-    padding: 0.5em;
 }
 
 div #pcng_headline {
-    margin-bottom: 3em;
-}
-
-div.issue_view_navigation {
-    text-align: right;
-    font-size: 80%;
-}
-
-div.body {
-    padding: 0.5em;
-}
-
-div.collector_headline_right {
-    text-align: left;
+    margin-bottom: 1em;
+    font-size: 120%;
 }
 
 div #motd {
@@ -41,6 +16,7 @@ div #motd {
     font-weight: bold;
 }
 
+/* fix this */
 div.issue_metadata {
     background: #eeeeee;
     padding: 0.2em;
@@ -57,17 +33,14 @@ div #transcriptevent {
     margin-left: 15px;
 }
 
-div.pcng_issueview_metadata,div.pcng_issueview_legend {
+div #pcng_issueview_metadata,
+div #pcng_issueview_legend {
     margin-left: 15px;
 }
 
-div.pcng_issueview_description {
+div #pcng_issueview_description {
     background: #dddddd;
     margin-left: 15px;
-}
-
-pre.collector_description{
-    background: #eeeeee;
 }
 
 div #ticket_stats {
@@ -94,20 +67,17 @@ fieldset {
     margin: 0.25em;
 }
 
-span.schemata_label {
+span #schemata_label {
     font-weight: bold;
 }
 
-h2.tracker_overview {
+h2 #tracker_overview {
     font-size: 120%;
     font-weight: bold;
 }
 
-div.portletBody {
-    padding: 0.5em;
-}
 
-span.no_access {
+span #no_access {
     color: red;
     font-size: 90%;
 }
@@ -116,7 +86,7 @@ pre {
     padding: 0.2em;
 }
 
-span.selected {
+span #selected {
     font-weight: bold;
 }
 
@@ -124,7 +94,7 @@ span #headline_action {
    font-size: 90%;
 }
 
-div#metadata {
+div #metadata {
     float: left;
     padding-right: 2em;
 }
@@ -178,6 +148,5 @@ div #pcng_uploads_edit{
 .portlet li #pcng_actions {
     padding: 2em;
 }
-
 
 /* </dtml-with> */

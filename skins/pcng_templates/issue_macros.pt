@@ -328,7 +328,7 @@ function show_tickets() {
     <a tal:condition="have_reportlab" tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo_small.gif"  height="14" width="18" border="0" title="PDF"></a>
   </h2>
 
-  <div class="pcng_issueview_metadata">
+  <div id="pcng_issueview_metadata">
     <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
     <b i18n:translate="status">Status</b>: <span i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" /> &bull; 
     <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> &bull;
@@ -341,11 +341,11 @@ function show_tickets() {
     <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" />
   </div>
 
-  <div class="pcng_issueview_description" 
+  <div id="pcng_issueview_description" 
        tal:content="python: here.shorten_string(issue.Description, maxlength=180)" 
   />
 
-  <div class="pcng_issueview_legend">
+  <div id="pcng_issueview_legend">
     <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> <span i18n:translate="date_on">on</span> <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
     <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toLocalizedTime(issue.modified)" />
     (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
