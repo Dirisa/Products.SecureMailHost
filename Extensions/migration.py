@@ -30,7 +30,7 @@ class Wiki2PHCMigrator(BaseMigrator):
         destination = self.kwargs['destination']
         ttool = getToolByName(self.parent, 'portal_types')
         typeInfo = ttool.getTypeInfo(self.toType)
-        typeInfo.constructInstance(self.parent, self.new_id)
+        typeInfo.constructInstance(self.destination, self.new_id)
 
         self.new = getattr(destinationt, self.new_id)
 
