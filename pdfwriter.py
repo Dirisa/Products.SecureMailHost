@@ -5,23 +5,23 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.7 2003/11/16 12:29:23 ajung Exp $
+$Id: pdfwriter.py,v 1.8 2003/11/16 17:48:21 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
-from types import ListType
 
 try:
     from PIL import Image as PIL_Image
     have_pil = 1
 except ImportError: have_pil = 0
 
+from DateTime import DateTime
+
 from reportlab.platypus import *
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.lib.units import inch
 
-from DateTime import DateTime
 
 styles = getSampleStyleSheet()
 
@@ -42,7 +42,6 @@ def myLaterPages(canvas, doc):
     canvas.restoreState()
 
 myFirstPage = myLaterPages
-
 
 Elements = []
 
@@ -76,6 +75,8 @@ def definition(txt):
 
 
 def pdfwriter(collector, ids):
+
+    tempfiles = []
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
@@ -116,22 +117,24 @@ def pdfwriter(collector, ids):
         for img in issue.objectValues('Portal Image'):
 
             if have_pil:
-                fname = tempfile.mktemp()
-                open(fname, 'w').write(fname)
+                fname = tempfile.mktemp() + img.getId()
+                tempfiles.append(fname)
+                open(fname, 'w').write(str(img.data))
                 image = PIL_Image.open(fname)
                 width, height= image.size
                 ratio = width*1.0 / height
 
-                max = 7*inch
+                max = 4*inch
                 if ratio > 1.0:
                     width = max
-                    height = max / radio
+                    height = max / ratio
                 else:
                     height = max
-                    width = max / radio
+                    width = max / ratio
 
                 Elements.append(Image(fname, width, height))
-                os.unlink(fname)
+                Elements.append(Spacer(100, 0.2*inch))
+
             else:
                 p('Image: %s' % img.title_or_id())
 
@@ -172,5 +175,9 @@ def pdfwriter(collector, ids):
     doc.collector = collector
     doc.collector_title = 'Collector: %s' % collector.title_or_id()
     doc.build(Elements,onFirstPage=myFirstPage, onLaterPages=myLaterPages)
+
+    for f in tempfiles:
+        if os.path.exists(f):
+            os.unlink(f)
 
     return IO.getvalue()
