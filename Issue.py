@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.69 2003/11/05 22:06:43 ajung Exp $
+$Id: Issue.py,v 1.70 2003/11/06 08:24:09 ajung Exp $
 """
 
 import sys, os
@@ -235,7 +235,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ return the value of an Archetypes field """
 
         field = self.Schema()[key]
-        return field.storage.get(key, self)
+        try: return field.storage.get(key, self)  # avoid problems with updated schemas
+        except: return ''
 
     def archetypes_mutator(self, v, **kw):
         """ the Archetypes mutator callback.
