@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.147 2004/03/28 08:02:28 ajung Exp $
+$Id: Issue.py,v 1.148 2004/03/28 11:07:19 ajung Exp $
 """
 
-import sys, os, time, random
+import sys, os, time, random, base64
 from urllib import unquote
 from types import StringType, UnicodeType
 
@@ -106,7 +106,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def post_creation_actions(self):
         """ perform post-creation actions """
         self._transcript.setEncoding(self.getSiteEncoding())
-        self._transcript.addComment(self.Translate('Created', 'Created', as_unicode=1))
 
     security.declareProtected(AddCollectorIssue, 'setDefaults')
     def setDefaults(self):
@@ -447,10 +446,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
-
         self._get_catalog().indexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
+    indexObject = reindexObject
 
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
@@ -595,7 +594,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getEncryptedInformations(self):
         """ Return inportant informations encrypted """
         from util import encrypt
-        import base64
         s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" id="%s"/>' % (self.aq_parent.absolute_url(1), self.getId())
         s = encrypt(s, self.getToken()) 
         s = base64.encodestring(s)
