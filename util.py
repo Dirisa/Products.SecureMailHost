@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.11 2003/10/10 16:21:46 ajung Exp $
+$Id: util.py,v 1.12 2003/10/13 17:41:11 ajung Exp $
 """
 
 import urllib
@@ -16,16 +16,16 @@ def getUserName():
     return getSecurityManager().getUser().getUserName()
 
 
-def add_local_role(obj, userid, role):
-    """Add object role for userid if not already there."""
+def addLocalRole(obj, userid, role):
+    """ add a local role for a user """
     roles = list(obj.get_local_roles_for_userid(userid))
     if role not in roles:
         roles.append(role)
         obj.manage_setLocalRoles(userid, roles)
 
 
-def remove_local_role(obj, userid, role):
-    """Add object role for userid if not already there."""
+def removeLocalRole(obj, userid, role):
+    """ remove a local role from obj """
     roles = list(obj.get_local_roles_for_userid(userid))
     roles.remove(role)
     if roles:
@@ -34,10 +34,9 @@ def remove_local_role(obj, userid, role):
         obj.manage_delLocalRoles([userid])
 
 
-def users_for_local_role(obj, userids, role):
-    """Give only designated userids specified local role.
+def ajustLocalRoles(obj, userids, role):
+    """ adjust local roles for a role and a list of users """
 
-    Return 1 iff any role changes happened."""
     already = []
     changed = 0
     for u in obj.users_with_local_role(role):

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.41 2003/10/12 20:40:59 ajung Exp $
+$Id: Collector.py,v 1.42 2003/10/13 17:41:11 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -97,7 +97,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         # setup roles 
         username = util.getUserName()
         for role in ('Manager', 'TrackerAdmin', 'Owner'):
-            util.add_local_role(self, username, role)
+            util.addLocalRole(self, username, role)
 
     def manage_afterAdd(self, item, container):
         """ post creation actions """
@@ -217,9 +217,9 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         """
         if not self._managers:
             self._managers = [util.getUserName()]
-        util.users_for_local_role(self, self._managers, 'TrackerAdmin')
-        util.users_for_local_role(self, self._supporters, 'Supporter')
-        util.users_for_local_role(self, self._reporters, 'Reporter')
+        util.adjustLocalRoles(self, self._managers, 'TrackerAdmin')
+        util.adjustLocalRoles(self, self._supporters, 'Supporter')
+        util.adjustLocalRoles(self, self._reporters, 'Reporter')
 
     def _adjust_participation_mode(self):
         """Set role privileges according to participation mode."""
