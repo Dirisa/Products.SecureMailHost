@@ -17,3 +17,5 @@ Credits:
   - Parts of the WorkflowTool code was taken from the Plone sources
 
   - JA translation by Tamakoshi Hiroki
+
+  - Icons provided by the Plone team (Alexander Limi)
