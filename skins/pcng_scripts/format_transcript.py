@@ -11,12 +11,18 @@ def TR(id, default):
     return context.Translate(id, default, language, as_unicode=1)
 
 def getValue(fieldname, translate=0):
-    v = str(context.Schema()[fieldname].get(context))
+    context.LOG('getValue :%s' % fieldname)
+
     vocab = context.pcng_vocabulary_values(fieldname)
+    v = context.Schema()[fieldname].get(context)
+
     if translate:
-        return TR(vocab[v], vocab[v])
+        return TR(vocab[str(v)], vocab[str(v)])
     else:
-        return vocab[v]
+        if same_type(v, []):
+            return ', '.join([vocab[item] for item in v])
+        else:
+            return vocab[v]
 
 # convert string to unicode and append to list
 def nl(text=''):
