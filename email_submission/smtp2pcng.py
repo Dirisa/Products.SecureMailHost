@@ -7,8 +7,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.6 2004/02/29 07:25:19 ajung Exp $
+$Id: smtp2pcng.py,v 1.7 2004/02/29 08:50:29 ajung Exp $
 """
+
+""" Gateway to submit issues through email to a PloneCollectorNG instance """
 
 import sys, os, logging, base64
 import httplib, urllib, urlparse
