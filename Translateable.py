@@ -5,14 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.34 2004/06/18 06:22:14 ajung Exp $
+$Id: Translateable.py,v 1.35 2004/07/01 11:18:43 ajung Exp $
 """
 
 from types import UnicodeType, StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
-from Products.PlacelessTranslationService import getTranslationService
 
 try:
     from Products.PlacelessTranslationService import getTranslationService
