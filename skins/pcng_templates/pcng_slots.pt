@@ -20,7 +20,7 @@
 </div>
 
 <!-- searchresults -->
-<div metal:define-macro="searchresults" i18n:domain="plonecollectorng">
+<div metal:define-macro="pcng_searchresults" i18n:domain="plonecollectorng">
 
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">

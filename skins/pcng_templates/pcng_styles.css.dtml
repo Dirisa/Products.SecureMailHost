@@ -115,6 +115,10 @@ div #pcng_metadata {
     margin-right: 1em;
 }
 
+div #pcng_metadata_body {
+    padding: 0.5em;
+}
+
 // pcng_issue_view
 
 div #issue_description_solution {
@@ -161,6 +165,7 @@ div #pcng_uploads_edit{
 #pcng_portlet_references a {
     text-decoration: none;
 }
+
 
 div.pcng_action {
     margin-bottom: 0.5em;
