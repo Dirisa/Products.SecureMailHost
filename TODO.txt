@@ -36,7 +36,8 @@ about feature requests and/or to volunteer to help!!!
 - bug # 988620: rejected upload of file with same name 
    as existing file results in deletion of existing file
    
-- PLFNG objects appear twice in Nav tree (for admin user)
+- bug # 990294: PLFNG objects appear twice in Nav tree 
+ (for admin user)
 
 - directory creation succeeds but gives an error
    message (not found 404) on Windows 
@@ -47,10 +48,10 @@ about feature requests and/or to volunteer to help!!!
 - the add new item menu should be disabled, since 
     plone types cannot be added to a PLFNG
 
-- when descending in folders, there's no way to go 
-    up/back one level (goto parent).
-
 - i18n not complete.
+
+- various problems with filenames containing spaces
+  (need to quantify this)
 
 ----------------------------------
   BEFORE NEXT RELEASE (0.50)
@@ -58,10 +59,6 @@ about feature requests and/or to volunteer to help!!!
 Significant enhancements have been put into the 0.50 baseline,
 and we really need to get them officially released!
 
-- de-confuse presentation of PLFNG path on plfng_view.pt page
-  (current implementation of folder icon + '/' confuses users
-   into thinking that they are at the site root when they 
-   view a PLFNG object.)
 
 ----------------------------------
   BEFORE RELEASE 0.60
@@ -69,16 +66,15 @@ and we really need to get them officially released!
 - bug #971432: 'Adding a Local Folder ends up in a error'
   http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&atid=476390
 
+- bug # 988620: rejected upload of file with same name 
+   as existing file results in deletion of existing file
+   
+- bug # 990294: PLFNG objects appear twice in Nav tree
+
+- resolve any problems wrt filenames containing spaces
+
 - better docs! (specifics tbd)
 
-- validate 'folder' field inputs, possibly with
-  automatic fixing of trailing end of input path
-  (eg, add trailing '/' if *nix OS; remove trailing
-   '\' if Windows OS)
-
-- make file 'comments' metadata editable
-  (to include adding 'comments' to existing files)
-   
 - rework file uploads so that they are temporarily stored
   with a temporary filename to facilitate checking 
   (MD5, quota limit, archive integrity, etc). 
@@ -130,32 +126,15 @@ might be something to put as a "caveat" in the README file.
 
 - unpacking support for package types other than .zip (eg .tgz) file types
 
-- display all metadata
+- display all metadata (partially implemented now)
 
-- edit all metadata
+- edit all metadata 
+
+- ability to generate MD5 checksum metadata for existing files
+
+- ability to verify current file MD5 checksum against metadata MD5 value
 
 
-----------------------------------
- MISC NOTES
-----------------------------------
 
-Note from Marcel on de-confusing the presentation of PLFNG path
-on plfng_view.pt page:
-
-	I think there are 2 sensible choices, since this feels like
-	mounting a folder in the Zope folder structure. Say physical
-	folder X (and physical subfolder Y) is mounted as a PLFNG 
-	with title P:
-	
-	a) Show '/' and the contents of X
-	b) Show Home/..../P
-		
-	the subfolder Y would then be shown as:
-	a) /Y
-	b) Home/..../P/Y
-	
-	where ... is any number of intermediate plone folders
-	
-	I think I prefer b). Or make it configurable ;-)
 	
 	

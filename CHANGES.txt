@@ -28,6 +28,12 @@
   
   - various fixes to plfng_view.pt: (eg, removed download action for folders;
     Modified column now displays date AND time) 
+  
+  - added ability for Portal Admins to edit file metadata
+  
+  - added configurable display of relative | full folder path on plfng_view page
+
+  - added 'up one level' link on plfng_view page
 
 
 0.4
