@@ -15,15 +15,21 @@
 
 <body>
   <div metal:fill-slot="main"
-          tal:define="sibl here/getParentSectionsAndPages;
-		             num_sibl python:len(sibl);
-		             pos python:here.getParentItemPosition(here);">
+          tal:define="tocInfo         python:here.getTOC (here);
+                      toc             tocInfo/toc;
+		              tocIdx          tocInfo/currentIndex;
+		              nextIdx         tocInfo/nextIndex;
+		              prevIdx         tocInfo/previousIndex;
+		              parentIdx       tocInfo/parentIndex;
+		              sectionNumber   python:toc[tocIdx]['number'];
+		              sections        python:[c for c in toc if c['parentIndex'] == tocIdx]">
 
     <h1 class="documentFirstHeading">
         <img tal:replace="structure here/referencemanual_icon.gif" />
+        <span tal:replace="sectionNumber">1.2.</span>
         <span tal:replace="here/Title">Title</span>
     </h1>
-    
+        
     <a href=""
            class="link-parent"
            tal:define="parent_url python:here.navigationParent(here, template.getId())"
@@ -37,70 +43,79 @@
       Document actions (print, sendto etc)
     </div>
 
+     
+    <div class="listingBar" 
+        tal:condition="python: nextIdx >= 0 or prevIdx >= 0">
+        
+        <tal:next condition="python:nextIdx >= 0">
+            <a class="listingNext"
+               tal:define="next python:toc[nextIdx]" 
+               tal:attributes="href next/url"
+               tabindex="1"
+               href="">
+                <span i18n:translate="phc_next">
+                   Next:
+                </span>
+                <span tal:replace="next/title" /> 
+               <img tal:replace="structure here/arrowRight.gif" />
+           </a>   
+        </tal:next>
+	       
+        <tal:prev condition="python:prevIdx >= 0">
+            <a class="listingPrevious"
+               tal:define="prev python:toc[prevIdx]" 
+               tal:attributes="href prev/url"
+               tabindex="1"
+               href="">
+                <img tal:replace="structure here/arrowLeft.gif" />
+                <span i18n:translate="phc_previous">
+                   Previous:
+                </span>
+                <span tal:replace="prev/title" /> 
+           </a>   
+        </tal:prev>	       
+		
+        &nbsp;
+    </div>
+
+    <form method="get" action="redirect_to" style="text-align:right;">
+        <label for="dest">Jump to: </label>
+        <select name="dest" tabindex="3">
+            <option tal:repeat="item toc"
+                    tal:attributes="value item/url;
+                                    selected python:test (item['selected'], 'selected', None)">
+                <span tal:replace="item/number"/>
+                <span tal:replace="item/title"/>
+            </option>
+        </select>
+        <input class="standalone"
+               type="submit"
+               value="Go"
+               i18n:attributes="value"
+               tabindex="4" />
+    </form>
+
     <div class="documentDescription"
       tal:condition="here/Description"
       tal:content="structure here/Description">
       Description
     </div>
 
-    <tal:block define="sections here/getSectionsAndPages">
-        <ol tal:condition="nocall:sections">
-          <li tal:repeat="section sections">
-          <a tal:attributes="href section/absolute_url" 
-                tal:content="section/Title">Title</a>
-          <span tal:replace="section/Description">Descrip</span>
-          </li>
-        </ol>
-        
-        <p tal:condition="not:nocall:sections" class="discreet">
-          There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.
-        </p>
-    </tal:block>
-      
-    <div class="listingBar" tal:condition="python: next or prev"
-	      tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1];
-               prev python:pos != 0 and sibl[pos-1]"
-               >
-            <a class="listingNext"
-               tal:condition="python:next"
-               tal:attributes="href next/absolute_url"
-               tabindex="1"
-               href="">
-	       <span i18n:translate="phc_next">
-               Next: </span>
-	       <span tal:replace="next/title_or_id" /> 
-	       <img tal:replace="structure here/arrowRight.gif" />
-	       </a>
-            <a class="listingPrevious"
-               tal:condition="python:prev"
-               tal:attributes="href prev/absolute_url"
-               tabindex="1"
-               href="">
-               <img tal:replace="structure here/arrowLeft.gif" />
-	       <span i18n:translate="phc_previous">
-	        Previous: </span>
-		<span tal:replace="prev/title_or_id" />
-		</a>
-               &nbsp;
-        </div>
 
-        <form method="get" action="redirect_to" style="text-align:right;">
-            <label for="dest">Page index</label>
-            <select name="dest"
-                    tabindex="3">
-                <option value=".">Page Index</option>
-                <option tal:repeat="s sibl"
-                        tal:attributes="value s/getId;">
-                    Part <tal:index replace="repeat/s/number" />:
-                    <tal:page content="s/title_or_id">Some Page</tal:page>
-                </option>
-            </select>
-            <input class="standalone"
-                   type="submit"
-                   value="Go"
-                   i18n:attributes="value"
-                   tabindex="4" />
-        </form>
+    <dl condition="nocall:sections">
+        <tal:block repeat="section sections">
+            <dt>
+                <span tal:replace="section/number"/>
+                <a tal:attributes="href section/url" 
+                    tal:content="section/title">Title</a>
+            </dt>
+            <dd tal:content="section/description"/>
+        </tal:block>
+    </dl>
+    
+    <p tal:condition="not:nocall:sections" class="discreet">
+      There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.
+    </p>
 
     <div metal:use-macro="here/document_byline/macros/byline">
       Get the byline - contains details about author and modification date.

@@ -31,19 +31,21 @@
       Description
     </div>
 
-    <tal:block define="sections here/getSectionsAndPages">
-        <ol tal:condition="nocall:sections">
-          <li tal:repeat="section sections">
-          <a tal:attributes="href section/absolute_url" 
-                tal:content="section/Title">Title</a>
-          <span tal:replace="section/Description">Descrip</span>
-          </li>
-        </ol>
+    <tal:block define="toc here/getTOC" condition="nocall:toc">
+        <tal:block repeat="item toc/toc">
+          <div tal:attributes="class string:toc-depth-${item/depth}">
+              <span class="item-numbering" tal:content="item/number"/>
+              <a tal:attributes="href item/url" tal:content="item/title"/>
+              <blockquote tal:content="item/description">
+                Description
+              </blockquote>
+          </div>
+        </tal:block>
         
-        <p tal:condition="not:nocall:sections" class="discreet">
+        <p tal:condition="not:nocall:toc" class="discreet">
           There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.
         </p>
-        <p tal:condition="nocall:sections">
+        <p tal:condition="nocall:toc">
           <img tal:replace="structure here/referencemanual_icon.gif" />
           <a href="referencemanual-all-pages">
           All content on one page (useful for printing, presentation mode etc.)

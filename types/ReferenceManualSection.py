@@ -47,38 +47,6 @@ class HelpCenterReferenceManualSection(PHCContent,OrderedBaseFolder):
         convenience method for ReferenceManualPage
         """
         return self.Description()
-
-    def getSectionsAndPages(self, states=[]):
-        """Get the sections and pages, in order, of this section"""
-        items = self.contentValues(('HelpCenterReferenceManualSection',
-                                    'HelpCenterReferenceManualPage',))
-
-        if states:
-            wtool=getToolByName(self, 'portal_workflow', None)
-            if wtool:
-                getInfoFor=wtool.getInfoFor
-                items = [ o for o in items
-                          if getInfoFor(o, 'review_state') in states ]
-        return items
-
-    def getItemPosition(self, obj, states=[]):
-        """Get position in folder of the current context"""
-
-        items = self.getSectionsAndPages(states)
-        return items.index(obj)
-        
-    def getParentSectionsAndPages(self, states=[]):
-        """Convenience method to get the sections and pages of the parent
-        manual or section
-        """
-        return self.aq_inner.aq_parent.getSectionsAndPages (states)
-        
-    def getParentItemPosition(self, obj, states=[]):
-        """Convenience method to get the position in folder of the parent
-        context.
-        """
-        return self.aq_inner.aq_parent.getItemPosition(obj, states)
-    
     
 registerType(HelpCenterReferenceManualSection, PROJECTNAME)
 
