@@ -4,6 +4,7 @@
 # The return format is UNICODE !
 
 import DateTime
+from textwrap import wrap
 
 # Wrapper for translate()
 def TR(id, default):
@@ -15,10 +16,6 @@ def nl(text=''):
         l.append(text)
     else:
         l.append(unicode(text, site_encoding))
-
-# a simple indenter for text blocks
-def indent_block(text):
-    return '\n'.join(['    %s' % line    for line in text.split('\n')])
 
 l = []
 
@@ -50,7 +47,7 @@ for group in groups:
 
         if ev.type == 'comment':
             nl('%s:' % TR('comment', 'Comment'))
-            nl(indent_block(ev.comment))
+            nl(context.wrap_text(ev.comment,indent=4))
 
         elif ev.type == 'change':
             nl(u'%s: %s: "%s" -> "%s"' % (TR('Change', 'Change'), ev.field, ev.old, ev.new))
