@@ -2,7 +2,7 @@ Dependencies:
 
  * Plone 2.0.3 with it's dependencies (esp. Formulator and CMFFormController).
  
- * Archetypes 1.3 > beta 5 
+ * Archetypes 1.3 >= beta 5 
 
  * gpg binary (optional) 
 
