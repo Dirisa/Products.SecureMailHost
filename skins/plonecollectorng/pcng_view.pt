@@ -15,19 +15,19 @@
 	<h1 tal:content="here/title_or_id" />
 
       <metal:block tal:condition="python: search_form_position == 'top'">
-        <div class="group"><span class="legend">Search form</span>
+        <div class="group"><span class="legend" i18n:translate="legend_search_form">Search form</span>
           <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
         </div>
-        <div class="group"><span class="legend">Issue overview</span>
+        <div class="group"><span class="legend" i18n:translate="legend_issue_overview">Issue overview</span>
           <div metal:use-macro="here/pcng_macros/macros/show_issues" />
         </div>
       </metal:block>
 
       <metal:block tal:condition="python: search_form_position == 'bottom'">
-        <div class="group"><span class="legend">Issue overview</span>
+        <div class="group"><span class="legend" i18n:translate="legend_issue_overview">Issue overview</span>
           <div metal:use-macro="here/pcng_macros/macros/show_issues" />
         </div>
-        <div class="group"><span class="legend">Search form</span>
+        <div class="group"><span class="legend" i18n:translate="legend_search_form">Search form</span>
           <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
         </div>
       </metal:block>

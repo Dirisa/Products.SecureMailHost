@@ -8,7 +8,7 @@
     <span class="legend" i18n:translate="legend_references">References</span>
 
       <ul>
-        <li>References
+        <li><span i18n:translate="references">References</span>
           <ul>
             <li tal:repeat="rs here/getRelationships">
               <a tal:attributes="href string:/${rs/getURL}" tal:content="string: ${rs/getCollectorTitle}:${rs/getId} (${rs/getComment})" />
@@ -16,7 +16,7 @@
             </li>
           </ul>
         </li>
-        <li>Referenced by
+        <li><span i18n:translate="referenced_by">Referenced by</span>
           <ul>
             <li tal:repeat="ref breferences">
               <metal:block  tal:define="url python: ref.absolute_url(1)">
@@ -25,7 +25,7 @@
             </li>
           </ul>
         </li>
-        <li>Dependency graph: 
+        <li><span i18n:translate="dependency_graph">Dependency graph</span>: 
           <a href="pcng_references_tree?format=gif">[GIF]</a>
           <a href="pcng_references_tree?format=jpeg">[JPEG]</a>
           <a href="pcng_references_tree?format=png">[PNG]</a>
@@ -61,7 +61,7 @@
                  tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
 
               <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
-                 i18n:translate="issue_artifacts_table_info_link"
+                 i18n:translate="issue_artifacts_table_deletion_link"
                  tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
             </span>
              <span tal:replace="item/description"> DESCRIPTION</span>
@@ -70,7 +70,7 @@
         </div> <!-- End row -->
 
         <span i18n:translate="issue_artifacts_table_no_uploads_available"
-          tal:condition="not: here/objectValues">No uploads available</span>
+              tal:condition="not: here/objectValues">No uploads available</span>
 
   </div> <!-- End group -->
 </div> <!-- End macro: issue_artifacts_table -->

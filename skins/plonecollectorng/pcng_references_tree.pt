@@ -6,7 +6,7 @@
   <body>
     <div metal:fill-slot="main">
 
-      <h1>Dependency tree of related issues</h1>
+      <h1 i18n:translate="legendd_dependeny_tree">Dependency tree of related issues</h1>
       <div style="text-align: center">
         <img tal:attributes="src string:references_tree?format=${request/format}" >
       </div>

@@ -5,7 +5,7 @@
 
 <body>
   <div metal:fill-slot="main">	  
-    <h1>History</h1>
+    <h1 i18n:translate="legend_history">History</h1>
     <div metal:use-macro="here/pcng_macros/macros/transcript"/>
   </div>
 

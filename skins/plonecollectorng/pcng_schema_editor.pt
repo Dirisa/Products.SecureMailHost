@@ -21,48 +21,48 @@
         <th>Field definition</th>
       </tr>
 
-  <tr>
-    <td valign="top">
-      <div tal:condition="fieldsets">  <!-- Navigation -->
-        <form action="schema_newSchema" method="post">
-          <tal:block repeat="set fieldsets">
-            <div tal:condition="python: set == fieldset">
-              <b tal:content="string: ${set}" />
-                <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}"><img src="arrowUp.gif" title="Move up"></a> 
-                <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}"><img src="arrowDown.gif" title="Move down"></a> 
-                <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}"><img src="delete.gif" title="Delete"></a> 
-              <ul>
-                <metal:block tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
-                  <li> 
-                    <metal:block tal:condition="python: field.getName() == request.get('field')">
-                      <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
-                        <b tal:content="string: ${field/getName}"/></a>
-                      <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
-                      <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
-                      <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
+      <tr>
+        <td valign="top">
+          <div tal:condition="fieldsets">  <!-- Navigation -->
+            <form action="schema_newSchema" method="post">
+              <tal:block repeat="set fieldsets">
+                <div tal:condition="python: set == fieldset">
+                  <b tal:content="string: ${set}" />
+                    <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}"><img src="arrowUp.gif" title="Move up"></a> 
+                    <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}"><img src="arrowDown.gif" title="Move down"></a> 
+                    <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}"><img src="delete.gif" title="Delete"></a> 
+                  <ul>
+                    <metal:block tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
+                      <li> 
+                        <metal:block tal:condition="python: field.getName() == request.get('field')">
+                          <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
+                            <b tal:content="string: ${field/getName}"/></a>
+                          <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
+                          <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
+                          <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
+                        </metal:block>
+                          <metal:block tal:condition="not: python: field.getName() == request.get('field')">
+                            <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
+                              <span tal:content="string: ${field/getName}" /></a>
+                        </metal:block>
+                      </li>
                     </metal:block>
-                      <metal:block tal:condition="not: python: field.getName() == request.get('field')">
-                        <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
-                          <span tal:content="string: ${field/getName}" /></a>
-                    </metal:block>
-                  </li>
-                </metal:block>
-              </ul>
-            </div>
-            <div tal:condition="python: set != fieldset">
-              <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}"
-                 tal:content="string: ${set}" />
-            </div>
-          </tal:block>
-          <hr/>
-          <div class="row"> 
-            <input type="text" name="fieldset" value="" size="15">
-            <input type="submit" value=" Add new schemata"  class="standalone">
+                  </ul>
+                </div>
+                <div tal:condition="python: set != fieldset">
+                  <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}"
+                     tal:content="string: ${set}" />
+                </div>
+              </tal:block>
+              <hr/>
+              <div class="row"> 
+                <input type="text" name="fieldset" value="" size="15">
+                <input type="submit" value=" Add new schemata"  class="standalone">
+              </div>
+            </form>
+            <a href="update_schema_for_issues">Update schema for all issues</a>
           </div>
-        </form>
-        <a href="update_schema_for_issues">Update schema for all issues</a>
-      </div>
-    </td>  <!-- EOF Navigation -->
+        </td>  <!-- EOF Navigation -->
 
         <td valign="top" tal:condition="request/field|nothing">  <!-- field editor -->
 
