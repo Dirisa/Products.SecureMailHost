@@ -34,7 +34,8 @@
             </div>
         
             <form name="searchform"
-                  action="http://search.plone.org/search">
+                  action="search"
+                  tal:attributes="action string:${portal_url}/search">
                    
                 <fieldset style="float: right;">
                     
