@@ -1,9 +1,16 @@
 Remaining to do:
 
+Bug:
+
+- If you have a Tutorial page that is published, and the next Tutorial
+  page is in-progress, you don't have permission to view the next page.
+
 General:
 
 - PHC needs a Comment workflow! Priority #1, explained near the bottom of 
   this document.
+
+- All content types need Sharing tab
 
 - Bug: Howtos seem to not pick up the 'versions' defined in the Help Center.
 
