@@ -68,28 +68,16 @@ Internationalization support:
 
   - to translate the catalog to another language:
 
-    - copy i18n/plonecollectorng-de.po to i18n/plonecollectorng-XX.po
+    o copy i18n/plonecollectorng-de.po to i18n/plonecollectorng-XX.po
       (where XX is the shortcut for the destination language)
 
-    - translate all msgstr "..." in the copied file
+    o translate all msgstr "..." in the copied file
 
-    - create a 
-
-  - to translate the catalog to another language:
-
-    - copy i18n/plonecollectorng-de.po to i18n/plonecollectorng-XX.po
-      (where XX is the shortcut for the destination language)
-
-    - translate all msgstr "..." in the copied file
-
-    - create a .mo file for your language:
+    o create a .mo file for your language:
 
        msgfmt -o plonecollectorng-XX.mo plonecollectorng-XX.po
 
-    - send me a copy of your translated .po file for inclusion with
+    o send me a copy of your translated .po file for inclusion with
       the next PloneCollectorNG release
 
-    - restart Zope and enjoy :-) 
-   
-
-
+    o restart Zope and enjoy :-) 
