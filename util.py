@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.17 2003/11/06 16:01:55 ajung Exp $
+$Id: util.py,v 1.18 2004/02/29 10:15:32 ajung Exp $
 """
 
 import urllib
@@ -135,3 +135,19 @@ def safeGetProperty(userobj, property, default=None):
         else:
             raise
 
+def encrypt(text, key):
+    """ AES Encryption """
+    from Crypto.Cipher import AES
+    obj = AES.new(key, AES.MODE_ECB)
+
+    if len(text) % 16 != 0: # padding
+        text += ' ' *(16-(len(text)%16)) 
+    return obj.encrypt(text)
+
+
+def decrypt(text, key):
+    """ AES Decryption """
+    from Crypto.Cipher import AES
+    obj = AES.new(key, AES.MODE_ECB)
+    return obj.decrypt(text)
+    
