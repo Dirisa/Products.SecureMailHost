@@ -28,7 +28,7 @@ msgid "e-mail"
 msgstr "courriel"
 
 
-#others
+# others
 msgid "fullname"
 msgstr "nom complet"
 
@@ -89,7 +89,7 @@ msgid "help_formmailer_recipient_email"
 msgstr "Courriel du destinataire. Expression TALES. Si vous ne connaissez pas les expressions TALES, tapez juste string:VOTRETEXTE."
 
 
-#help
+# help
 msgid "help_formmailer_recipient_fullname"
 msgstr "Nom complet du destinataire. Expression TALES. Si vous ne connaissez pas les expressions TALES, tapez juste string:VOTRETEXTE."
 
@@ -166,7 +166,7 @@ msgid "label_formmailer_recipient_email"
 msgstr "Courriel du destinatire"
 
 
-#label
+# label
 msgid "label_formmailer_recipient_fullname"
 msgstr "Nom complet du destinataire"
 
