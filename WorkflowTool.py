@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: WorkflowTool.py,v 1.3 2004/06/29 13:07:25 ajung Exp $
+$Id: WorkflowTool.py,v 1.4 2004/09/21 14:51:28 ajung Exp $
 """
 
 # This code is in parts taken from Plone
@@ -13,6 +13,7 @@ $Id: WorkflowTool.py,v 1.3 2004/06/29 13:07:25 ajung Exp $
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from ZODB.POSException import ConflictError
 from Products.CMFCore.WorkflowTool import WorkflowTool as BaseTool
 from Products.CMFPlone import ToolNames
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
@@ -41,7 +42,9 @@ class WorkflowTool(BaseTool):
             trans=()
             try:
                 trans=self.getTransitionsFor(o, container)
-            except: #yikes
+            except ConflictError:
+                raise
+            except: 
                 pass
             if trans:
                 for t in trans:
