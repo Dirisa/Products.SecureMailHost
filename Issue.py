@@ -5,12 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.35 2003/10/03 09:16:26 ajung Exp $
+$Id: Issue.py,v 1.36 2003/10/03 11:59:52 ajung Exp $
 """
 
 import sys, os
 from urllib import unquote
 
+from Globals import Persistent, InitializeClass
 from AccessControl import  ClassSecurityInfo, Unauthorized
 from Acquisition import aq_base
 from DateTime import DateTime
@@ -27,11 +28,13 @@ from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import util
 
 
-class IssueRelationship:
+class IssueRelationship(Persistent):
     
     def __init__(self, issue_url, comment):
         self.issue_url = issue_url
         self.comment = comment
+
+InitializeClass(IssueRelationship)
 
 
 class PloneIssueNG(OrderedBaseFolder, WatchList):
