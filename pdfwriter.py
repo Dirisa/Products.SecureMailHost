@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.25 2004/01/15 13:01:53 ajung Exp $
+$Id: pdfwriter.py,v 1.26 2004/01/16 10:56:13 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -126,8 +126,13 @@ def pdfwriter(collector, ids):
     global SITE_ENCODING
 
     SITE_ENCODING = collector.getSiteEncoding()
-
     translate = collector.translate
+
+    ## SUX:: widget.Label() returns a translated string in the same encoding
+    ## as the corresponding language catalog instead of returning unicode
+    ## or at least a string encoded using the site_encoding
+    def translate_e(msgid, default, encoding='latin1', **kw):
+        return unicode(translate(msgid, default, **kw), encoding).encode('utf8')
 
     tempfiles = []
 
@@ -141,7 +146,7 @@ def pdfwriter(collector, ids):
         if issue.solution:
             header(translate('label_solution', 'Solution'))
             definition(html_quote(issue.solution))
-
+        
         for name in issue.atse_getSchemataNames():
             if name in ('default', 'metadata'): continue
             
@@ -159,7 +164,10 @@ def pdfwriter(collector, ids):
                     v = value
 
                 if v:
-                    l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
+                    ## SUX:: widget.Label() returns a translated string in the same encoding
+                    ## as the corresponding language catalog instead of returning unicode
+                    ## or at least a string encoded using the site_encoding
+                    l.append('<b>%s</b>: %s ' % (unicode(field.widget.Label(issue), 'latin1').encode('utf8'), v))
 
             s = (', '.join(l)).strip()
             if s:
@@ -206,7 +214,7 @@ def pdfwriter(collector, ids):
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
             datestr = issue.toLocalizedTime(DateTime(group[0].created), long_format=1)
             uid = group[0].user
-            header('#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
+            header('#%d %s %s (%s)' % (n, translate_e(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
 
             l = []
             comment = None
@@ -215,13 +223,13 @@ def pdfwriter(collector, ids):
                 if ev.type == 'comment':
                     comment = html_quote(ev.comment)
                 elif ev.type == 'change':
-                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed'), ev.field, ev.old, ev.new)))
+                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate_e('changed', 'Changed'), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
-                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate('changed', 'Changed'), ev.field, translate('added', 'added'), ev.added, translate('removed', 'removed'), ev.removed)))
+                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate_e('changed', 'Changed'), ev.field, translate('added', 'added'), ev.added, translate('removed', 'removed'), ev.removed)))
                 elif ev.type == 'reference':
-                    l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment)))
+                    l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate_e('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
-                    s = '<b>%s:</b> %s/%s ' % (translate('upload', 'Upload'), issue.absolute_url(), ev.fileid)
+                    s = '<b>%s:</b> %s/%s ' % (translate_e('upload', 'Upload'), issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
                     l.append(dowrap(s))
