@@ -88,6 +88,8 @@ SectionsVocabSchema = Schema((
                widget=LinesWidget(
                    label="Sections",
                    description="Define the available sections for classifying these items.",
+		   description_msgid = "phc_sections_vocab",
+		   label_msgid = "phc_label_sections-vocab",               
                    i18n_domain="plonehelpcenter",
                    rows=6)
                ),
@@ -105,6 +107,8 @@ if ENABLE_REFERENCES:
                    widget=PHCReferenceWidget (
                        label="Referenced Items",
                        description="Set one or more references to HelpCenter items.",
+		       description_msgid = "phc_reference",
+        	       label_msgid = "phc_label_reference",               
                        i18n_domain="plonehelpcenter")
                    ),
         ))
@@ -145,6 +149,7 @@ FAQSchema = HCSchema + Schema((
               required=0,
               searchable=1,
               widget=TextAreaWidget(
+	          description = 'Meaningful sentences that explains the answer.',
                   description_msgid = "desc_answer",
                   label_msgid = "label_answer",
                   i18n_domain = "plonehelpcenter",
@@ -163,12 +168,12 @@ FAQFolderSchema = HCFolderSchema + Schema((
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(
-    description="Description of the FAQ Container.",
-    description_msgid="desc_folder",
-    label_msgid="label_folder",
-    label="Description",
-    i18n_domain = "plonehelpcenter",
-    rows=6)
+			description="Description of the FAQ Container.",
+			description_msgid="phc_desc_folder",
+			label_msgid="phc_label_folder",
+			label="Description",
+			i18n_domain = "plonehelpcenter",
+			rows=6)
               ),
 
     )) + SectionsVocabSchema
@@ -177,14 +182,16 @@ FAQFolderSchema = HCFolderSchema + Schema((
 # Help Center base folder
 #########################
 
+
+
 HCRootSchema = BaseFolderSchema + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
-              widget=TextAreaWidget(description_msgid="desc_helpcenter",
+              widget=TextAreaWidget(description_msgid="phc_desc_helpcenter",
                                     description="Description for the Help Center.",
-                                    label_msgid="label_description",
+                                    label_msgid="phc_label_desc_helpcenter",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6),
@@ -192,9 +199,11 @@ HCRootSchema = BaseFolderSchema + Schema((
 
     LinesField('versions_vocab',
         required=1,
-        widget=LinesWidget(
+        widget=LinesWidget(description_msgid="phc_version_helpcenter",
             description="Versions that items in help can refer to.",
-            label="Versions"
+            label="Versions",
+	    label_msgid="phc_label_version_helpcenter",
+            i18n_domain = "plonehelpcenter",
             ),
         ),
     ))
@@ -209,17 +218,23 @@ HowToSchema = HCFolderSchema + Schema((
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
-              widget = TextAreaWidget(),
+              widget = TextAreaWidget(
+                 description = 'Brief explanation of the How To.',
+                 description_msgid = "phc_help_detailed_howto",
+                 label = "Summary",
+                 label_msgid = "phc_label_detailed_howto",
+                 i18n_domain = "plonehelpcenter"
+	      ),
     ),
     TextField('body',
               searchable=1,
               required=1,
               primary=1,
-              widget=RichWidget(description_msgid='desc_howto_body',
+              widget=RichWidget(description_msgid='phc_desc_howto_body',
                          description='The text of the Howto',
-                         label_msgid='body',
+                         label_msgid='phc_body',
                          label='Body',
-                         i18n_domain = "faq",
+                         i18n_domain = "plonehelpcenter",
                          rows=25,
                          ),
 

@@ -514,5 +514,57 @@ msgstr "Parole chiave correlate"
 msgid "phc_related"
 msgstr "Una lista di parole chiave che doverbbero essere indicizzate assieme al contenuto (per esempio per una Ricetta sulla VerboseSecurity, dovresti includere Verbose Security, Privilegi insufficienti, problemi di sicurezza nel debugging)"
 
+		 
+msgid "phc_desc_helpcenter"
+msgstr "Descrizione del Centro di Supporto."
+
+		 
+msgid "phc_label_desc_helpcenter"
+msgstr "Descrizione"
+
+		 
+msgid "phc_help_detailed_howto"
+msgstr "Breve riassunto della Ricetta."
+
+		 
+msgid "phc_label_detailed_howto"
+msgstr "Sommario"
+
+		 
+msgid "phc_desc_howto_body"
+msgstr "Il testo della Ricetta"
+
+		 
+msgid "phc_body"
+msgstr "Corpo"
+
+
+msgid "phc_sections_vocab"
+msgstr "Definisci le sezioni per classificare questi elementi."
+
+msgid "phc_label_sections-vocab"
+msgstr "Sezioni"
+
+
+msgid "phc_label_reference"
+msgstr "Elementi correlati"
+
+msgid "phc_reference"
+msgstr "Imposta uno o piu' riferimenti ad elementi del Centro di Supporto."
+
+
+msgid "phc_desc_folder"
+msgstr "Descrizione della cartella delle Domande Frequenti."
+
+msgid "phc_label_folder"
+msgstr "Descrizione"
+
+msgid "phc_version_helpcenter"
+msgstr "Versioni alle quali si possono riferire gli elementi di questo Centro di Supporto."
+
+msgid "phc_label_version_helpcenter"
+msgstr "Versioni"
+
+
 # MSB end mofification
 

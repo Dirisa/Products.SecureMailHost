@@ -518,5 +518,56 @@ msgstr "Related keywords"
 msgid "phc_related"
 msgstr "A list of keywords that should be indexed along with the content (e.g. for a how-to on VerboseSecurity, you might include Verbose Security, Insufficient Privileges, Debugging security problems)"
 
+		 
+msgid "phc_desc_helpcenter"
+msgstr "Description for the Help Center."
+
+		 
+msgid "phc_label_desc_helpcenter"
+msgstr "Description"
+
+		 
+msgid "phc_help_detailed_howto"
+msgstr "Brief explanation of the How To."
+
+		 
+msgid "phc_label_detailed_howto"
+msgstr "Summary"
+
+		 
+msgid "phc_desc_howto_body"
+msgstr "The text of the Howto"
+
+		 
+msgid "phc_body"
+msgstr "Body"
+
+
+msgid "phc_sections_vocab"
+msgstr "Define the available sections for classifying these items."
+
+msgid "phc_label_sections-vocab"
+msgstr "Sections"
+
+
+msgid "phc_label_reference"
+msgstr "Referenced Items"
+
+msgid "phc_reference"
+msgstr "Set one or more references to HelpCenter items."
+
+msgid "phc_desc_folder"
+msgstr "Description of the FAQ Container."
+
+msgid "phc_label_folder"
+msgstr "Description"
+
+msgid "phc_version_helpcenter"
+msgstr "Versions that items in help can refer to."
+
+msgid "phc_label_version_helpcenter"
+msgstr "Versions"
+
+
 # MSB end mofification
 

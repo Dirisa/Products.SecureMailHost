@@ -20,5 +20,28 @@ msgstr ""
 msgid "description_edit_faq"
 msgstr "You can add a Frequently Asked Question (preferrably with an answer), and it will be reviewed and approved by our documentation team."
 
-msgid "label_detailed_question"
-msgstr "Detailed Question"
+msgid "description_edit_faqfolder"
+msgstr "This is a folder that holds FAQs, and it allows you to display individual sections."
+
+msgid "FAQ Area"
+msgstr "FAQ Area"
+
+msgid "HelpCenterFAQFolder"
+msgstr "FAQ Folder"
+
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "HelpCenterFAQ"
+msgstr "HelpCenter FAQ"
+
+
+msgid "Help Center"
+msgstr "Help Center"
+
+msgid "HelpCenter"
+msgstr "Help Center"
+
+
+

@@ -19,3 +19,26 @@ msgstr ""
 
 msgid "description_edit_faq"
 msgstr "Puoi aggiungere una Domanda Frequente (preferibilmente con una risposta), sara' rivista ed approvata dalla nostra squadra della documentazione."
+
+msgid "description_edit_faqfolder"
+msgstr "Questa e' una cartella che contiene Domande Frequenti, e permette di visualizzare singole sezioni."
+
+msgid "FAQ Area"
+msgstr "Area Domande Frequenti"
+
+msgid "HelpCenterFAQFolder"
+msgstr "Cartella delle Domande Frequenti"
+
+msgid "FAQ"
+msgstr "Domande Frequenti"
+
+msgid "HelpCenterFAQ"
+msgstr "Domande Frequenti del Centro di Supporto"
+
+
+msgid "Help Center"
+msgstr "Centro di Supporto"
+
+msgid "HelpCenter"
+msgstr "Centro di Supporto"
+
