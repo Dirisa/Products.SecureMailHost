@@ -27,8 +27,6 @@ for group in groups:
         if ev.type == 'comment':
             nl('Comment:')
             nl(indent_block(ev.comment))
-#        elif ev.type == 'action':
-#            nl('Action: %s' % ev.action)
         elif ev.type == 'change':
             nl('Changed: %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
         elif ev.type == 'incrementalchange':
@@ -41,7 +39,7 @@ for group in groups:
                 s+= ' (%s)' % ev.comment
             nl(s)
         else: 
-            nl(str(ev))
+            raise TypeError('Unhandled event: %s' % repr(ev))
 
     n+=1; nl()
 
