@@ -53,10 +53,10 @@ for group in groups:
             nl(indent_block(ev.comment))
 
         elif ev.type == 'change':
-            nl('%s: %s: "%s" -> "%s"' % (TR('Change', 'Change'), ev.field, ev.old, ev.new))
+            nl(u'%s: %s: "%s" -> "%s"' % (TR('Change', 'Change'), ev.field, ev.old, ev.new))
 
         elif ev.type == 'incrementalchange':
-            nl('%s: %s: %s: %s , %s: %s' % (TR('changed', 'Changed'), ev.field, 
+            nl(u'%s: %s: %s: %s , %s: %s' % (TR('changed', 'Changed'), ev.field, 
                                             TR('added', 'Added'), ev.added, 
                                             TR('removed', 'Removed'), ev.removed))
         elif ev.type == 'reference':
