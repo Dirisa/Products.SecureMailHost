@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.74 2003/11/07 08:07:28 ajung Exp $
+$Id: Issue.py,v 1.75 2003/11/08 10:33:16 ajung Exp $
 """
 
 import sys, os
@@ -411,6 +411,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     def __len__(self):
         """ return the number of transcript events """
         return len(self._transcript.getEventsGrouped())
+    numberFollowups = __len__
 
     def pcng_ticket_browser(self, RESPONSE=None):
         """ redirect to ticket browser """
