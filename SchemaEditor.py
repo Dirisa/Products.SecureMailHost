@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.61 2004/07/05 07:12:40 ajung Exp $
+$Id: SchemaEditor.py,v 1.62 2004/07/05 11:09:39 ajung Exp $
 """
 
 import re
@@ -350,6 +350,10 @@ class SchemaEditor:
         self._ms = PCNGSchemaNonPersistent()
         for schemata_name in old_schema.getSchemataNames():
             for field in old_schema.getSchemataFields(schemata_name):
+                try:
+                    field._validationLayer()  # re-init validation layer (ValidationChain etc)
+                except AttributeError:
+                    pass
                 self._ms.addField(field)
         self._p_changed = 1
 
