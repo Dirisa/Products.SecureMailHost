@@ -47,7 +47,8 @@
         <hr>
         <span i18n:translate="help_notifications">
           This forms allows you to specify additional email addresses for each workflow
-          state that will be notified in case of a workflow state change.
+          state that will be notified in case of a workflow state change. Email addresses
+          must be put in different rows inside the textarea.
         </span>
         </div>
     
