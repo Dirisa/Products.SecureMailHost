@@ -2,6 +2,43 @@ History of significant changes for PloneHelpCenter:
 
    (name of developer listed in brackets)
 
+Post-sprint cleanup of ToDo.txt:
+
+     - BUG: Howtos seem to not pick up the 'versions' defined in the Help Center.
+         Check that this works for all content types.
+
+        -> Appears fixed (optilude)
+          
+  - BUG: Contents tab is visible to normal Members (at least on plone.org)
+         - it shouldn't be.
+    
+        -> Appears fixed (optilude)
+
+  - BUG: Comments on TutorialPages end up on the containerish Tutorial object
+         instead, at least on plone.org. It should be possible to add a comment
+         to a page.
+         
+         -> Appears fixed (optilude)
+
+  - BUG: error_reference object has "wrong attachments" tab
+
+         Note the path here - we're calling the howto_attachments!
+
+         /aPloneSite/myHelpCenter/error/anErrorref/howto_attachments
+
+         I get this wrong behavior, when trying to view the
+         Attachments tab after creating a *error reference*
+         
+         -> Fixed now (optilude)
+
+  - "Error on howto_attachments "name 'translate' is not defined"
+
+         FYI: I get the above error when trying to view the
+         attachements tab when writing a howto."
+         
+         -> Appears fixed (optilude)
+
+
     - Removed Help Center workflow from TutorialPages for now. They should
       probably just have a simple in-progress/finished marker workflow that
       doesn't really affect permissions, but just whether they are listed

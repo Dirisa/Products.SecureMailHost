@@ -1,252 +1,161 @@
 PloneHelpCenter - remaining issues
 
-====
-Bugs
-====
+=================
+Template changes:
+=================
 
-  - BUG: Howtos seem to not pick up the 'versions' defined in the Help Center.
-         Check that this works for all content types.
-
-        -> Appears fixed (optilude)
-          
-  - BUG: Contents tab is visible to normal Members (at least on plone.org)
-         - it shouldn't be.
-    
-        -> Appears fixed (optilude)
-  
-  - BUG: Owners can't edit their content when it has been published. They should
-         be able to do this, we don't want to have the retract/edit/re-publish
-         dance.
-         
-        -> I'm having some trouble here... I can't add content at all as
-        a regular member. I'm getting insufficient privileges, though I can't
-        see why. VerboseSecurity and portal_workflow seem to be in disagreement.
-        joel suggests this may be fixed by having the latest version of
-        PortalFormControoler. (optilude)
-          
-  - BUG: Comments on TutorialPages end up on the containerish Tutorial object
-         instead, at least on plone.org. It should be possible to add a comment
-         to a page.
-         
-         -> Appears fixed (optilude)
-  
-  - BUG: RSS feed doesn't work (fix was committed, needs testing, especially with 
-         foreign character sets and UTF-8 chars)
-    
-        -> XXX: Not yet tested (optilude)
-  
-  - BUG: error_reference object has "wrong attachments" tab
-
-         Note the path here - we're calling the howto_attachments!
-
-         /aPloneSite/myHelpCenter/error/anErrorref/howto_attachments
-
-         I get this wrong behavior, when trying to view the
-         Attachments tab after creating a *error reference*
-         
-         -> Fixed now (optilude)
-
-====
-Fixes
-====
-
-  - "Error on howto_attachments "name 'translate' is not defined"
-
-         FYI: I get the above error when trying to view the
-         attachements tab when writing a howto."
-         
-         -> Appears fixed (optilude)
-
-  - BUG: Owners can't mark their own content Obsolete, they should be able to.
-
-         FYI: I ALSO get the above error when trying to view the
-         attachements tab, after creating a *error reference*
-
-        -> Appears fixed (optilude)
-
-=======
-General
-=======
-
-  - PHC needs a Comment workflow! Priority #1, explained near the bottom of 
-    this document. ("Comment notifications")
-    
-        -> XXX: Not tested, but assume this is done? (optilude)
-  
-  - HistoryAware mix-in - PHC types should have a history attached, so we can
-    mount a non-packable storage on plone.org that will keep all the change
-    history for documentation content types. ATContentTypes already has this.
-  
-        -> Done, though not always sensible values to test, since some fields
-            use metadata only (answer in Description) and this doesn't seem
-            to be versioned in the ZODB (optilude)
-  
-  - I have removed workflow for TutorialPage (~limi), but we might consider a
-    visible/hidden scheme, so you can have pages that you're adding while the
-    Tutorial is available.
-    
-        -> TODO: Not yet done (optilude)
-   
-  - The help center template should list any other normal folders put into it, 
-    so you can add stuff that is just plain folders, like on plone.org.
-    
-        -> XXX: Not yet tested (optilude)
-
-  - Ideally, the "How to contribute to/use this resource" (phc_help) should be a 
-    pre-populated howto itself, so it can be translated/modified to suit the
-    particular use case.
-    
-        -> TODO: Not yet done (optilude)
-    
-  - Add LinguaPlone support to the types
-
-    - The LinguaPlone import statement
-
-    - Declare relevant fields as language-independent
-  
-  
-        -> XXX: Not yet tested (optilude)
-  
-  - The view templates for listings (howto, tutorial, faq etc - all of them)
-    should only display *published* items, even if you have the permissions
-    to see the others.
-  
-    Items that are "in-progress" are currently visible in the listings - they do
-    not show up on the main PHC page, though. The correct behaviour is that it 
-    should not show up for people who don't have the permission to see them
-    (ie. Anon, Member) until they are published. "In-progress" and 
-    "Pending" should both only be visible to Owner, Manager and in the
-    case of "Pending" - also to the Reviewer role.
-  
-    ADDENDUM: It seems these are using object listings instead of catalog
-              searches - which is not optimal. If we make them catalog-
-              powered, they will be able to color-code themselves, and not
-              wake up all the content objects as a bonus. ;)
-
-    ADDENDUM2: This requires ordering support in catalog, so we have to fix it
-               to not show content that isn't published for now, and we can do
-               the Catalog-based queries once Plone 2.1 with catalog-ordering is
-               out.
-  
-        -> TODO: Can still see in-progress items as manager (optilude)
-  
-  - Search needs to be hooked up! It should allow searching on all the different
-    types. Almost done, it doesn't search the Glossary at the moment, it seems.
-    This needs proper testing, the search seems to not be indexing things properly
-    at the moment - searching the PHC on plone.org is a miserable experience. :]
-  
-        -> XXX: Not yet tested (optilude)
-  
-  - The "Obsolete" state has non-obvious name for the transition to pull it back
-    into play.
-  
-        -> TODO: Not yet done (optilude)
-    
-  - A way to set PHC-wide default Rights attribute - on plone.org we want 
-    everything to be under the same license, for example. Maybe look at
-    PloneCC which is a product to add Creative Commons licenses.
-    http://woss.name/software/PloneCC/ (no idea if this is relevant or not)
-  
-        -> XXX: Unsure what this means, but doesn't appear to be done (optilude)
-  
-  - Definitions (in Glossary) need to be able to have Rich Text - the way it is
-    now, it can't have links to other definitions. The Description attribute 
-    should be this field, just rendered to Plain Text. If this is too much work,
-    having the "See also" thing so we can link to other definitions is also an
-    option. (Actually - probably a better option, as it is less susceptible to
-    link rot, since it's an AT reference)
-    
-        -> TODO: Not yet done (optilude)
-  
-  - Definitions (glossary_view template) should be alphabetically sorted - 
+ - All PHC types need to show the "log in to add FAQ/How-to/whatever" button  
+        
+ - Definitions (glossary_view template) should be alphabetically sorted - 
     proper human sorting, not UNIX-sorting (ie. not uppercase letters before 
     lowercase).
     
-        -> TODO: Not yet done (optilude)
-  
-  - Integrate with the ATRatings tool - we want ratings on content. If we get a
-    basic rating UI going, Limi will try to step up with an improved JS version. 
-    We need the initial implementation in place first, though. :)
-  
-        -> TODO: Not yet done (optilude)
-  
-  - Importance: I think we can/should generalize this more: add a ImportanceVocab
-    list to help center for list of importance raitings, ie,
-    ('Important','Normal') Then folder skins can just sort based on
-    the order that things are listed in the importance ratings, and
-    add the red bang to the top-level ones. This gives us more
-    flexibility for future importance ratings. --Joel
+ - Tutorial Page pulldown needs to show the existing page as selected
+
+ - The help center template should list any other normal folders put into it, 
+    so you can add stuff that is just plain folders, like on plone.org.
+
+ - The folder listing templates need to show only *published* items, regardless
+    of what the user is permitted to see. Managers and reviewers should also
+    see pending (but not in-progress or obsolete) items, styled in a different
+    colour (this styling already exists)
     
-        -> TODO: Not yet done (optilude)
+ - Reference manual front page should show TOC with all sections, sub-sections,
+    pages nested (need recursive script - see referencemanual_getSections.py).
+    
+ - Reference manual drop-down selector should show full chapter numbering, 
+    e.g. "1.1.3 Installing Plone", and should show entire TOC
 
-=================================
-Movie and Movie Area content type
-=================================
+====================
+Versions management:
+====================
 
-  Contains instructional flash videos.
-  
-    -> Appears done, though why are we limiting to Flash videos only? Also,
-    doesn't appear to be using external storage, which we probably want.
-    (optilude)
-  
-  - Based off the How-to type (needs to be folderish) - same type of general listing, with categories in the container etc.
-  
-  - For each movie, show: 
-  
-    - title
-
-    - file size
-
-    - description
-
-    - and *perhaps* an image of a screenshot
-
-  - A Movie is a series of files
-
-  Advanced:
-
-  - The controller is an xml file
-  
-  - One approach:
-
-    1. Get author to upload a ZIP
-
-    2. The content type opens the zip, parses the controller XML, keeps the SWF
-
-    3. Throws out everything else
-
-    4. Generates the controller XML on the fly, contains:
-
-      - what is the screen dimensions of the &lt;object&gt;
-
-      - metadata
-
-  - Benefits:
-
-    - you snarf metadata from the XML, not re-enter it
-
-    - minidom could handle this one 
-
-    The alternative is to just use the layout that Camtasia produces (the generated HTML)
-
-===============================
-"Reference Manual" content type
-===============================
+ - Add a way to set the "current" version(s) of the release - this way, we
+    can automatically display a portalMessage box on content that says:
+    "This content is only relevant to Plone 1.0. The current version is
+     Plone 2.0. Make sure you are using the correct version before
+     following the instructions given here."
  
-    -> Done (optilude)
+  - Nice to have: A way to set the default view help-center-wide 
+    (Example, let's say we just want to show Plone 2.0 elements 
+     in the listings). Probably want to be able to choose more than one
+     version, and provide some view to older content!
+
+===================================
+Workflow changes/permission issues:
+===================================
+
+ - Add visible/hidden workflow for tutorial and reference manual sections and
+    pages? Currently, these have no workflow, but being able to hide things in
+    progress would be good.
+    
+ - Owners should be able to edit content in the 'published' state to make
+    updates easier.
+    
+ - Owners should be able to mark their own content obsolete
  
-  For book-type manuals and individual products' documentation needs.
-  
-  - Add tests, test properly
-  
-    -> well, not this part :)
-
-
+ - Naming of transition from obsolete to in-progress (and other states?) is
+    non-obvious and must be changed.
+    
+ - Regular members don't have permission to add items if portal_factory is 
+    enabled (as it is now). Either we must fix permissions, or we must fix
+    the factory (or disable it, but that would a shame)
+    
 =====================
-Comment notifications
+Schema/class changes:
 =====================
 
-    -> XXX: Not yet tested (optilude)
+ - Definitions (in Glossary) need to be able to have links to other
+    definitions.   
+
+ - HistoryAware mixin should be enabled for all types. Done, but some fields
+    don't get history, since they are metadata-only (e.g. glossary definitions),
+    and these are not revisioned in the ZODB. We can make them non-metadata
+    fields, and provide secondary accessors, or turn of the history mixin.
+
+  - Add LinguaPlone support to the types
+    - The LinguaPlone import statement
+    - Declare relevant fields as language-independent
+    
+ - Integrate with ATRatings, so that we can have ratings on content
+
+ - The DC metadata "Rights" attribute needs to be set PHC-wide at the root
+    level. Content objects should use this. We can achieve this by taking
+    'rights' out of the schema, and ovveride the DC standard accessor to have
+    it acquire it from the PHC root. On Plone.org, we don't want to let people
+    override this site-wide default, but ideally, we'd have a switch in the 
+    root PHC object where it could be allowed back in the schema.
+    
+ - Importance vocabulary could be made dynamic, in the same way that "versions"
+    is currently.
+    
+ - Instructional video should use ExternalStorage for video files
+
+====================
+Installation issues:
+====================
+
+ - Ideally, the "How to contribute to/use this resource" (phc_help) should be a 
+    pre-populated howto itself, so it can be translated/modified to suit the
+    particular use case.
+    
+ - Include documentation review portlet from plone.org
+ 
+ 
+============================
+Need testing/unit test work:
+============================
+
+ - Need to test Search, ensuring it searches all content types (esp. glossary,
+    for where there were problems reported)
+    
+ - Need to test RSS feed, especially with foreign characters and UTF-8
+ 
+ - Comment workflow and notification
+ 
+  - We need many more unit tests!
+  
+=======
+Future:
+=======
+
+ - We'd like the listing pages to use catalogue searches, but this depends on
+    ExtendedPathIndex
+    
+ - Similarly, the Tutorial and especially Reference Manual TOC pages and
+    drop-down selectors should use the catalogue.
+    
+ - Advanced video upload:
+    
+ - Make it easier to choose which subcomponents get installed. For
+    example, put a simple textual list in config.py of the folderish
+    products, and have types/init.py, Install.py, and
+    HelpCenter.py/__init__ respect this. Easier for other people who
+    want to use product but might not want all parts. 
+
+  - It could be possible to save the longer content (howtos, tutorials)
+    as a PDF file for easier archival and printing. A small PDF icon
+    can be placed next to the email/print icons, and when clicked on
+    generates a PDF version of the page, minus all the navigation.
+    We could perhaps use the plonePrint.css to generate a nice looking PDF.
+  
+    Joel Burton reports good success with htmldoc for converting well-formed
+    HTML to decent PDFs. 
+  
+    Another possibility is to use CMFReportTool by Ulrich Eck 
+    <ueck@net-labs.de>, which can serve dynamically generated PDF-Documents for
+    every content-object of your CMF/Plone-Site. It uses PageTemplates to 
+    generate a XML-Document (syntax is called PML) that is rendered to PDF using
+    reportlabs platypus layout-engine. 
+    
+    http://www.zope.org/Members/jack-e/CMFReportTool  
+
+
+==================== END TASKS =======================
+
+===============================
+Comment notifications reference
+===============================
 
   People need to be notified when somebody adds a comment to their item,
   so they can maintain and refine. The PloneHelpCenter concept will not work 
@@ -254,13 +163,13 @@ Comment notifications
     
   Overview:
   
-  1. Author adds documentation, it is published.
+  1. Author adds documentation, it is published.  
   
   2. Reader finds documentation, adds comment.
   
   3. Author gets mail: "Somebody added a comment to documentation you have added,
      please go here [URL] and incorporate the comment in the docs, if needed"
-  
+     
   4. Author incorporates comment in documentation, if relevant and useful. Author can edit owned content in-place after initial publication, no need for another submit/publish cycle.
   
   5. Author removes the comment
@@ -294,99 +203,6 @@ Comment notifications
              self._container[ id ] = item
      
              return id
-
-===========================
-Versions (not versioning ;)
-===========================
-
-  - Add a way to set the "current" version(s) of the release - this way, we
-    can automatically display a portalMessage box on content that says:
-    "This content is only relevant to Plone 1.0. The current version is
-     Plone 2.0. Make sure you are using the correct version before
-     following the instructions given here."
-     
-        -> TODO: Not done (optilude)
-  
-  - Nice to have: A way to set the default view help-center-wide 
-    (Example, let's say we just want to show Plone 2.0 elements 
-     in the listings) (limi)
-
-
-==========
-Unit tests
-==========
-
-    - Need tests for RSS feed and foreign and UTF-8 chars.
-
-    - Need tests for searching
-
-    - We need more tests!
-
-        -> Word (optilude)
-
-=========
-Design/UI
-=========
-
-  - All PHC types need to show the "log in to add FAQ/How-to/whatever" button
-  
-    -> TODO: Not done (optilude)
-  
-  - Howtos need to have a note about the fact that they are folderish and can
-    contain images/files
-  
-    -> TODO: Not done (optilude)
-  
-  - Discreet "Powered by PHC" in footer
-  
-    -> TODO: Not done, but why do we care? (optilude)
-  
-  - A portlet to show content that hasn't been modified in 6 months - so we can go 
-    in and see if it's still relevant. We'll just hit save if it is, this is a
-    simple way of making sure content is reviewed periodically.
-  
-    -> Appears done (optilude)
-  
-  - Include the Documentation review portlet from plone.org
-  
-    -> XXX: No idea if this is done or not (optilude)
-  
-  - Tutorial Page Pulldown needs to show the existing page as selected
-  
-    -> XXX: Not yet tested. If it's missing there, it's also missing on the
-    refrence manual type (optilude)
-    
-========================
-Nice-to-have-but-not-yet
-========================
-
-  - Make it easier to choose which subcomponents get installed. For
-    example, put a simple textual list in config.py of the folderish
-    products, and have types/init.py, Install.py, and
-    HelpCenter.py/__init__ respect this. Easier for other people who
-    want to use product but might not want all parts.
-  
-  Saving content as PDF:
-  
-  - It could be possible to save the longer content (howtos, tutorials)
-    as a PDF file for easier archival and printing. A small PDF icon
-    can be placed next to the email/print icons, and when clicked on
-    generates a PDF version of the page, minus all the navigation.
-    We could perhaps use the plonePrint.css to generate a nice looking PDF.
-  
-    Joel Burton reports good success with htmldoc for converting well-formed HTML 
-    to decent PDFs. 
-  
-    Another possibility is to use CMFReportTool by Ulrich Eck <ueck@net-labs.de>,
-    which can serve dynamically generated PDF-Documents for every content-object 
-    of your CMF/Plone-Site. It uses PageTemplates to generate a XML-Document 
-    (syntax is called PML) that is rendered to PDF using reportlabs platypus 
-    layout-engine. http://www.zope.org/Members/jack-e/CMFReportTool
-
-
-==================== END TASKS =======================
-
-
 
 
 ==========================
