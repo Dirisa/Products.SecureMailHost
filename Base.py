@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.10 2004/01/12 19:53:06 ajung Exp $
+$Id: Base.py,v 1.11 2004/02/26 19:28:10 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -23,6 +23,9 @@ class Base(BaseBTreeFolder):
     def base_edit(self, RESPONSE):
         """ redirect to our own edit method """
         RESPONSE.redirect('pcng_base_edit')
+
+    def manage_afterAdd(self, item, container):
+        BaseBTreeFolder.manage_afterAdd(self, item, container)
 
 InitializeClass(Base)
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.122 2004/02/25 20:01:23 ajung Exp $
+$Id: Collector.py,v 1.123 2004/02/26 19:28:11 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -113,6 +113,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     def manage_afterAdd(self, item, container):
         """ post creation (or post renaming) actions """
+        Base.manage_afterAdd(self, item, container)
 
         if getattr(self, '_already_created', 0) == 0:    
             # Upon creation we need to add the transcript
