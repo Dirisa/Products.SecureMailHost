@@ -367,7 +367,7 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
    
    if not os.path.exists(FSfullPath):
       # raise exception here?
-      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: FSfullPath not found (%s)" % FSfullPath )
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: FSfullPath not found (%s)" % FSfullPath )
       
    else:   
       try:
@@ -380,7 +380,7 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
          if skipInvalidIds:
             checkValidIdResult = checkValidId(item)
             if checkValidIdResult != 1: 
-               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
                continue
       
          FSfullPathItemName = os.path.join(FSfullPath, item)
@@ -467,7 +467,7 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
       try:
          rawItemList = os.listdir(FSfullPath)
       except:
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: error reading folder (%s) contents" % FSfullPath )
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: error reading folder (%s) contents" % FSfullPath )
          return filteredFileList, filteredFolderList
 
       for item in rawItemList:
@@ -478,7 +478,7 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
              checkValidIdResult = checkValidId(item)
              if skipInvalidIds and checkValidIdResult != 1:
                 illegalFoldersList.append(PLFNGrelPath+'/'+item)
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
              else:
                 for prefix in folderPrefixesSkipList:
                    if item.startswith(prefix): 
@@ -502,7 +502,7 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
              checkValidIdResult = checkValidId(item)
              if skipInvalidIds and checkValidIdResult != 1:
                 illegalFilesList.append(PLFNGrelPath+'/'+item)
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredOutFSItems() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
              
              else:
                 if mimetypesTool:
