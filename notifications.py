@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.25 2004/04/04 09:07:35 ajung Exp $
+$Id: notifications.py,v 1.26 2004/04/13 17:52:18 ajung Exp $
 """
 
 import sys
@@ -102,7 +102,6 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email
     body = issue.format_transcript(collector.notification_language)
-    print repr(body)
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
 
@@ -113,7 +112,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
             outer.attach(MIMEImage(str(obj.data))) 
         
     MH = getattr(collector, 'MailHost') 
-
+    
     try:
         LOG('plongcollectorng', INFO, 'recipients for %s: %s' % (issue.absolute_url(1), dest_emails))
         MH._send(collector.collector_email, dest_emails, outer.as_string())
