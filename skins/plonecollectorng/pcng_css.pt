@@ -10,6 +10,11 @@ div.transcriptheader {
     font-size: 120%;
 }
 
+div.transcriptevent {
+    margin-top: 1px;
+    margin-left: 25px;
+}
+
 th.staff {
     text-align: center;
     font-weight: bold;

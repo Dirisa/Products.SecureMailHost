@@ -43,7 +43,7 @@
   </span>
 </div>
     
-<span metal:define-macro="transcript">
+<div metal:define-macro="transcript">
   <table class="listing"
          tal:define="groups python: here.getTranscript().getEventsGrouped();
                      num_groups python: len(groups)">
@@ -88,7 +88,7 @@
       </td>
     </tr>
   </table>
- </span>
+ </div>
     
 
 <div metal:define-macro="show_issues">
