@@ -48,4 +48,4 @@ def migrate(self):
     catalog = getToolByName(portal, 'portal_catalog')
     destination = self.documentation2.howto
     w = CatalogWalker(Wiki2PHCMigrator, catalog, destination=destination)
-    
+    return w.go()
