@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.27 2004/01/15 18:24:04 ajung Exp $
+$Id: collector_schema.py,v 1.28 2004/01/15 19:01:45 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -18,10 +18,10 @@ from config import VOC_ISSUE_FORMATTERS
 from notification_policies import VOC_NOTIFICATION_POLICIES
 
 VOC_NOTIFICATION_LANGUAGES = DisplayList((
-  ('EN', 'English'),
-  ('DE', 'German'),
-  ('FI', 'Finish'),
-  ('NL', 'Dutch'),
+  ('en', 'English'),
+  ('de', 'German'),
+  ('fi', 'Finish'),
+  ('nl', 'Dutch'),
 ))
 
 VOC_PARTICIPATION_MODE = DisplayList((
@@ -133,6 +133,7 @@ schema = Schema((
                 ),
     StringField('notification_language',
                 vocabulary=VOC_NOTIFICATION_LANGUAGES,
+                default='en',
                 widget=SelectionWidget(format='select', 
                                        label='Notification language',
                                        label_msgid='label_notification_language',
