@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.32 2004/01/21 09:26:41 ajung Exp $
+$Id: pdfwriter.py,v 1.33 2004/01/21 09:35:56 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -51,15 +51,15 @@ def utf8(text):
     assert isinstance(text, UnicodeType)
     return text.encode('utf-8')
 
-def dowrap(text):
-    return fill(text, 100)
+def dowrap(text, limit=80):
+    return fill(text, limit)
 
-def break_longlines(text):
+def break_longlines(text, limit=80):
 
     l = []
     for line in text.split('\n'):
-        if len(line) > 100:
-            l.append(dowrap(line))
+        if len(line) > limit:
+            l.append(dowrap(line, limit))
         else:
             l.append(line)
     return '\n'.join(l)
@@ -91,7 +91,7 @@ HeaderStyle.fontName = BOLD_FONT
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
-def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
+def header(txt, style=HeaderStyle, sep=0.05):
     assert isinstance(txt, UnicodeType)
     p = XPreformatted(utf8(txt), style)
     Elements.append(p)
@@ -151,7 +151,7 @@ def pdfwriter(collector, ids):
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
-        header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1)))
+        header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 50))
 
         header(translate('label_description', 'Description', as_unicode=1))
         definition(html_quote(getFieldValue(issue, 'description')), PreStyle)
