@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.22 2003/12/09 08:19:05 ajung Exp $
+$Id: migrate.py,v 1.23 2004/01/20 09:54:07 ajung Exp $
 """
 
 
@@ -20,6 +20,8 @@ PERFORM A BACKUP OF YOUR DATA.FS **BEFORE** RUNNING THIS SCRIPT.  DO NOT
 COMPLAIN IN CASE OF A FAILURE OR DATA LOSS. YOU HAVE BEEN WARNED!!!!!!!!!!!
 """
 
+from types import StringType
+
 from Acquisition import aq_base
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
@@ -28,6 +30,11 @@ from zLOG import LOG,INFO,ERROR,WARNING
 
 ENFORCE_STATUS = 1  # set this to 1 to set the destination state based on the transcript information
 ENFORCE_ASSIGNEES = 1 # set this to 1 to migrate the assignees based on transcript information
+CMF_ENCODING = 'iso-8859-15'
+PLONE_ENCODING = 'utf-8'
+
+CMF_ROOT_URL = '/trackers'
+PLONE_ROOT_URL = '/plone_trackers'
 
 class record:
 
@@ -43,7 +50,19 @@ class record:
         return self._k
 
 
-def migrate_trackers(self, url_from='/trackers', url_to='/plone'):
+def cmf2plone(text):
+    if isinstance(text, StringType):
+        return unicode(text, CMF_ENCODING).encode(PLONE_ENCODING)
+    return text
+
+
+def cmf2unicode(text):
+    if isinstance(text, StringType):
+        return unicode(text, CMF_ENCODING)
+    return text
+
+
+def migrate_members(self, url_from=CMF_ROOT_URL, url_to=PLONE_ROOT_URL):
     tracker_root = self.restrictedTraverse(url_from)
     plone_root = self.restrictedTraverse(url_to)
 
@@ -51,19 +70,35 @@ def migrate_trackers(self, url_from='/trackers', url_to='/plone'):
     # ATT: using migrate_acl_users() might *OVERRIDE* exisiting
     # user accounts on the destation site. BE WARNED !!!!!!
 
-    #  migrate_acl_users(tracker_root, plone_root)
+    migrate_acl_users(tracker_root, plone_root)
 
     # Remove the comment below to migrate the portal_memberdata.
     # ATT: using migrate_memberdata() might *OVERRIDE* exisiting
-    # settings on the destation site. BE WARNED !!!!!!
+    ##  settings on the destation site. BE WARNED !!!!!!
 
-    #  migrate_memberdata(tracker_root, plone_root)
-   
-    trackers = tracker_root.objectValues('CMF CollectorNG')
+    migrate_memberdata(tracker_root, plone_root)
+
+    print 'users and memberdata migrated'
+    
+
+def migrate_trackers(self, url_from=CMF_ROOT_URL, url_to=PLONE_ROOT_URL, tracker_id=None):
+    """ migrate all CMFCollectorNG instances from 'url_from' to the Plone site 'url_to'.
+        If 'tracker_id' is given then only this tracker will be migrated. Otherwise
+        all trackers in the 'url_from' folder will be migrated.
+    """
+
+    tracker_root = self.restrictedTraverse(url_from)
+    plone_root = self.restrictedTraverse(url_to)
+
+    if tracker_id is not None: 
+        trackers = [ tracker_root[tracker_id] ]
+    else:
+        trackers = tracker_root.objectValues('CMF CollectorNG')
+
     for tracker in trackers:
         migrate_tracker(tracker, plone_root)
 
-    return 'done'
+    return 'Trackers migrated'
 
 
 def migrate_acl_users(source, dest):
@@ -79,7 +114,9 @@ def migrate_acl_users(source, dest):
                                 u.getRoles(),
                                 u.getDomains())
 
+
 def migrate_memberdata(source, dest):
+    """ migrate all memberdata records """
 
     source_ms = source.portal_membership
     dest_ms = dest.portal_membership
@@ -114,12 +151,10 @@ def migrate_memberdata(source, dest):
 
 
 def migrate_tracker(tracker, dest):
-#    if tracker.getId() != 'HaufeReader': return
 
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
-    
     try: dest.manage_delObjects(tracker.getId())
     except: pass
 
@@ -142,11 +177,14 @@ def migrate_tracker(tracker, dest):
     # Number of issues
     collector._num_issues = len(issues) + 1
 
-    # migrate all references    
-    migrate_references(tracker, dest)
+    # Schema updaten
+    collector.update_schema_for_issues()
 
     # Reindex issues
     collector.reindex_issues()
+
+    # migrate all references    
+    migrate_references(tracker, dest)
 
 
 mapping = {
@@ -221,8 +259,8 @@ def migrate_schema(tracker, collector):
         # Fill widget attributes
         widget.visible = 1
         widget.i18n_domain = 'plonecollectorng'
-        widget.label = prop.getDescription()
-        widget.label_msgid = 'label_' + widget.label
+        widget.label = cmf2plone(prop.getDescription())
+        widget.label_msgid = 'label_' + new_id
 
         # Fill field attributes
         D = {}
@@ -234,7 +272,7 @@ def migrate_schema(tracker, collector):
         D['required'] = prop.getMandatory()
         D['widget'] = widget
         if widget.__class__.__name__ in ('SelectionWidget', 'MultiSelectionWidget'):
-            D['vocabulary'] = DisplayList(prop.getValuesAsList())
+            D['vocabulary'] = DisplayList([(cmf2unicode(k), cmf2unicode(v)) for k,v in prop.getValuesAsList()])
 
         if prop.getId() == 'topic':
             l = []
@@ -259,26 +297,31 @@ def migrate_schema(tracker, collector):
 
 
 def migrate_issue(issue, collector):
-#    if issue.getId() != '325': return
 
     print 'Migrating issue:', issue
 
     collector.invokeFactory('PloneIssueNG', issue.getId())
     new_issue = collector._getOb(issue.getId())
 
+#    from Products.PloneCollectorNG.Issue import PloneIssueNG
+#
+#    new_issue = PloneIssueNG(issue.getId())
+#    collector._setObject( issue.getId(),new_issue)
+#    new_issue = getattr(collector, new_issue.getId())
+
     P = record()
-    P.set('title', issue.title)
-    P.set('description',  issue.description)
-    P.set('solution', issue.solution)
-    P.set('topic',  issue.topic + "/" + issue.subtopic)
-    P.set('classification',  issue.classification)
-    P.set('importance',  issue.importance)
-    P.set('version_info',  issue.version_info)
+    P.set('title', cmf2plone(issue.title))
+    P.set('description',  cmf2plone(issue.description))
+    P.set('solution', cmf2plone(issue.solution))
+    P.set('topic',  cmf2plone(issue.topic) + "/" + cmf2plone(issue.subtopic))
+    P.set('classification',  cmf2plone(issue.classification))
+    P.set('importance',  cmf2plone(issue.importance))
+    P.set('version_info',  cmf2plone(issue.version_info))
 
     for f in ('submitter_name', 'submitter_email' , 'submitter_company',
               'submitter_position' , 'submitter_city', 'submitter_phone',
               'submitter_fax'):
-        P.set(f.replace('submitter', 'contact'), getattr(issue, f, ''))
+        P.set(cmf2plone(f.replace('submitter', 'contact')), cmf2plone(getattr(issue, f, '')))
 
     P.set('progress_hours_estimated', issue.hours_required)
     P.set('progress_hours_needed', issue.hours_needed)
@@ -311,22 +354,22 @@ def migrate_issue(issue, collector):
         ts = entry.getTimestamp().timeTime()
 
         for comment in entry.getComments():
-            transcript.addComment(comment.getComment(), 
+            transcript.addComment(cmf2unicode(comment.getComment()), 
                                   user=entry.getUser(), 
                                   created=ts)
 
         for change in entry.getChanges():
             if change.__class__.__name__ == 'ChangeEvent':
-                transcript.addChange(change.getField(), 
-                                     change.getOld(), 
-                                     change.getNew(), 
+                transcript.addChange(cmf2unicode(change.getField()), 
+                                     cmf2unicode(change.getOld()), 
+                                     cmf2unicode(change.getNew()), 
                                      created=ts,
                                      user=entry.getUser())   
                 if change.getField() == 'Status':
                     status = change.getNew()
 
             elif change.__class__.__name__ == 'IncrementalChangeEvent':
-                transcript.addIncrementalChange(change.getField(), 
+                transcript.addIncrementalChange(cmf2unicode(change.getField()), 
                                                 change.getRemoved(), 
                                                 change.getAdded(), 
                                                 created=ts,
@@ -340,14 +383,13 @@ def migrate_issue(issue, collector):
                     for u in change.getAdded():
                         if not u in tr_assignees: tr_assignees.append(u)
 
-
             else:
                 raise TypeError(change)
 
 
         for upload in entry.getUploads():
                 transcript.addUpload(upload.getFileId(),
-                                     upload.getComment(),
+                                     cmf2unicode(upload.getComment()),
                                      created=ts,
                                      user=entry.getUser())   
     # Workflow
@@ -385,7 +427,6 @@ def migrate_issue(issue, collector):
     new_issue.workflow_history['pcng_issue_workflow'][-1]['assigned_to'] = assignees
 
 def migrate_references(tracker, dest):
-
     collector = dest[tracker.getId()]
     print collector
 

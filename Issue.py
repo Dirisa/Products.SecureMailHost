@@ -1,15 +1,18 @@
 """
+        self.initializeArchetype()
+        self.initializeArchetype()
 PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.114 2004/01/16 20:50:45 ajung Exp $
+$Id: Issue.py,v 1.115 2004/01/20 09:53:49 ajung Exp $
 """
 
 import sys, os, time
 from urllib import unquote
+from types import StringType, UnicodeType
 
 from Globals import Persistent, InitializeClass
 from AccessControl import  ClassSecurityInfo, Unauthorized
@@ -91,7 +94,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
 
-        Base.manage_afterAdd(self, item, container)
+        self.initializeArchetype()
+        self._transcript.setEncoding(self.getSiteEncoding())
+
+        # notify workflow and index issue
+        if aq_base(container) is not aq_base(self):
+            wf = getToolByName(self, 'portal_workflow')
+            wf.notifyCreated(self)
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
@@ -113,13 +122,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         # pre-allocate the deadline property
         self.progress_deadline = DateTime() + self.deadline_tickets        
 
-        # notify workflow and index issue
-        if aq_base(container) is not aq_base(self):
-            wf = getToolByName(self, 'portal_workflow')
-            wf.notifyCreated(self)
+        Base.manage_afterAdd(self, item, container)
 
-        self._transcript.setEncoding(self.getSiteEncoding())
-        self.initializeArchetype()
                                                 
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
@@ -398,7 +402,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ reindex issue """
 
         self._get_catalog().indexObject(self)  # reindex with collector catalog
-
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
 
@@ -406,7 +409,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def unindexObject(self):
 
         self._get_catalog().unindexObject(self)  # reindex with collector catalog
-
         for c in self._get_archetypes_catalogs():
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
                 
@@ -414,14 +416,22 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def SearchableText(self):
         """ return all indexable texts """
 
+        encoding = self.getSiteEncoding()
+
         l = []
         l.extend(self.objectIds())
         l.extend([o.title_or_id() for o in self.objectValues()])
+        l.append(self.format_transcript().encode(encoding))
+
         for field in self.Schema().fields():
-            v = field.get(self)
+            v = getattr(self, field.getName())   # retrieve value directly as unicode
             if v:
                 if callable(v): v = v()
-                l.append( str(v) )
+                if isinstance(v, UnicodeType):
+                    l.append(v.encode(encoding))
+                else:
+                    l.append(str(v))
+
         return ' '.join(l)
 
     ######################################################################
