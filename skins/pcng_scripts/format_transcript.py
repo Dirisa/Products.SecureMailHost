@@ -11,7 +11,6 @@ def TR(id, default):
     return context.Translate(id, default, language, as_unicode=1)
 
 def getValue(fieldname, translate=0):
-    context.LOG('getValue :%s' % fieldname)
 
     vocab = context.pcng_vocabulary_values(fieldname)
     v = context.Schema()[fieldname].get(context)
