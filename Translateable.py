@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.9 2004/01/15 18:03:24 ajung Exp $
+$Id: Translateable.py,v 1.10 2004/01/16 10:17:54 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -37,19 +37,23 @@ class Translateable:
 
 
     security.declarePublic('translate')
-    def translate(self, msgid, text, target_language=None,**kw):
+    def translate(self, msgid, text, target_language=None, as_unicode=0,**kw):
         """ ATT: this code is subject to change """
 
         pts = self._getPTS()
         if pts is None:
             return self._interpolate(text, kw)
 
+        # using the as_unicode parameter requires the lastest PTS version
+        # from the CVS
+
         ret = pts.translate(domain=i18n_domain, 
                             msgid=msgid, 
                             context=self,
                             mapping=kw,  
                             default=text,
-                            target_language=target_language)
+                            target_language=target_language,
+                            as_unicode=as_unicode)
         return ret
 
 
