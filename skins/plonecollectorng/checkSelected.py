@@ -7,8 +7,29 @@
 ##bind subpath=traverse_subpath
 ##parameters=item, value
 
+#from zLOG import LOG, INFO
+
+if same_type(item, 0): item = str(item)
+if same_type(value, 0): value = str(value)
+
+if same_type(item, ''): 
+    try:
+        item = unicode(item, context.getSiteEncoding())
+    except:
+        item = unicode(item, 'latin1')
+
+if same_type(value , ''): 
+    try:
+        value = unicode(value, context.getSiteEncoding())
+    except:
+        value = unicode(value, 'latin1')
+
+
+#LOG('test', INFO, '%s %s %d' % (item, value, repr(value) == repr(item)))
+
 if value is not None and \
-   unicode(repr(value)) == unicode(repr(item)):
+    unicode(repr(value)) == unicode(repr(item)):
+#    LOG('test', INFO, 'returning 1')
     return 1
 
 try:
@@ -19,8 +40,11 @@ except AttributeError:
     try:
         for v in value:
             if unicode(repr(item)) == unicode(repr(v)):
+                LOG('test', INFO, 'vocab')
                 return 1
     except TypeError:
         pass
-
+#LOG('test', INFO, '%s %s ' % (repr(value), repr(item))) 
+#LOG('test', INFO, 'returning %s' % (not not unicode(repr(value)) == unicode(repr(item))))
 return not not unicode(repr(value)) == unicode(repr(item))
+
