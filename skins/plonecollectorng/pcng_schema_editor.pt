@@ -62,7 +62,7 @@
               <div>
                 <form action="atse_update" method="post">
                   <input type="hidden" name="fielddata.schemata:record:string"    
-                       tal:attributes="value request/fieldset|nothing" />
+                       tal:attributes="value fieldset" />
                     <input type="text" name="name" value=""> 
                     <input type="submit" name="add_field" value="Add" class="standalone" i18n:attributes="value">
                 </form>
