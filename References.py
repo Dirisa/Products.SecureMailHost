@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: References.py,v 1.4 2003/09/10 05:20:05 ajung Exp $
+$Id: References.py,v 1.5 2003/09/11 04:12:51 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -42,6 +42,7 @@ InitializeClass(ReferencesManager)
 class Reference(Persistent):
 
     security = ClassSecurityInfo()
+    security.setDefaultAccess('allow')
 
     def __init__(self, tracker, ticketnumber, comment):
         self._tracker = tracker
@@ -51,24 +52,24 @@ class Reference(Persistent):
         if not (tracker and ticketnumber):
             raise ValueError, 'References requires URL *and* Comment as parameters'
                             
-    security.declareProtected(CMFCorePermissions.View, 'getTracker')
+    security.declarePublic('getTracker')
     def getTracker(self):
         return self._tracker
 
-    security.declareProtected(CMFCorePermissions.View, 'getTicketNumber')
+    security.declarePublic('getTicketNumber')
     def getTicketNumber(self):
         return self._ticketnumber
 
-    security.declareProtected(CMFCorePermissions.View, 'getURL')
+    security.declarePublic('getURL')
     def getURL(self):
         return self._tracker + '/' + self._ticketnumber 
 
-    security.declareProtected(CMFCorePermissions.View, 'getComment')
+    security.declarePublic('getComment')
     def getComment(self):
         return self._comment
 
     def __str__(self):
-        return '%s: %s' % (self._url, self._comment)
+        return '%s (#%s): %s' % (self._tracker, self._ticketnumber, self._comment)
 
     __repr__ = __str__
 
