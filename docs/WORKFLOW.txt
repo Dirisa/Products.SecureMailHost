@@ -1,5 +1,21 @@
-PCNG uses the workflow component of Plone (DCWorkflow) to implement 
-its own workflow for issues (pcng_issue_workflow).
+PCNG uses the workflow component of Plone (DCWorkflow) to implement its own
+workflow for issues (pcng_issue_workflow).
 
 The complete workflow is shown in docs/workflow.gif.
 
+
+States:
+
+  - 'created'  -- initial state
+
+  - 'pending' -- state after submitting a new issues
+
+  - 'resolved' -- issue has been resolved
+
+  - 'accepted' -- issue accepted and assigned
+
+  - 'defered' -- issue effort defered
+
+  - 'rejected' -- issue has been rejected
+
+  - 'resigned' -- issue can not or will not be resolved

@@ -8,4 +8,5 @@ A: Plone 2.X is recommended. The skins of PCNG are designed to be used
    was never a goal for PCNG and will never be a goal (means no support for
    PCNG/Plone 1.X issues).
 
-
+Q:
+A: 

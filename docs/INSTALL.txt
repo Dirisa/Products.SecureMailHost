@@ -65,7 +65,7 @@ Internationalization support:
   - Requires the installation of PlacelessTranslationService (Localizer
     /TranslationService might work too, no support)
 
-  - included language catalogs: DE 
+  - included language catalogs: DE, FI, NL
 
   - to translate the catalog to another language:
 

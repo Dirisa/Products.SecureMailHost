@@ -45,3 +45,38 @@ msgstr "Referenzen &amp; Uploads"
 
 msgid "My collector preferences"
 msgstr "Meine Tracker Einstellungen"
+
+msgid "Only staff members"
+msgstr "Nur konfigurierte Benutzer"
+
+msgid "Any authenticated user"
+msgstr "Jeder authentifizierte Benutzer"
+
+msgid "Anyone"
+msgstr "Jeder (auch anonyme Benutzer)"
+
+msgid "Disabled"
+msgstr "Ausgeschaltet"
+
+msgid "Watchlist enabled for anyone"
+msgstr "Eingeschaltet für jeden"
+
+msgid "Watchlist enabled for authenticated users"
+msgstr "Eingeschaltet für authentifizierte Benutzer"
+                                                                                  
+msgid "no notifications"
+msgstr "Keine Benachrichtigungen"
+
+msgid "Submitter, all supporters and tracker administrators"
+msgstr "Einsteller, alle Unterstützer und alle Tracker Administratoren"
+
+msgid "Submitter, assigned supporters and tracker administrators"
+msgstr "Einsteller, zugewiesene Unterstützer und alle Tracker Administratoren"
+
+msgid "Standard formatter (EN)"
+msgstr "Standardformatierer (Englisch)"
+
+msgid "Standard formatter (DE)"
+msgstr "Standardformatierer (Deutsch)"
+
+

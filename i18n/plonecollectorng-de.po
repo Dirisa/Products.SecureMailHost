@@ -166,7 +166,7 @@ msgid "Reject"
 msgstr "Zurückweisen"
 
 msgid "Resign"
-msgstr "Resignieren"
+msgstr "Aufgeben"
 
 msgid "Defer"
 msgstr "Zurückstellen"
@@ -345,7 +345,7 @@ msgid "rejected"
 msgstr "Zurückgewiesen"
 
 msgid "resigned"
-msgstr "Resigniert"
+msgstr "Aufgegeben"
 
 msgid "resolved"
 msgstr "Gelöst"
@@ -678,7 +678,7 @@ msgid "Accepted"
 msgstr "Akzeptiert"
 
 msgid "Resigned"
-msgstr "Resigniert"
+msgstr "Aufgegeben"
 
 msgid "Resolved"
 msgstr "Gelöst"
@@ -774,4 +774,20 @@ msgstr "Statistik"
 msgid "save_this_search_as"
 msgstr "Suche speichern als"
 
+msgid "no_entries"
+msgstr "Keine Einträge"
 
+msgid "no_images"
+msgstr "Keine Bilder"
+
+msgid "create_index"
+msgstr "Index anlegen"
+
+msgid "no_users_found"
+msgstr "Keine Benutzer gefunden"
+
+msgid "image"
+msgstr "Bild"
+
+msgid "reaccept"
+msgstr "Wiedereinstellen"
