@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.56 2004/07/02 05:53:58 ajung Exp $
+$Id: collector_schema.py,v 1.57 2004/07/15 17:37:38 ajung Exp $
 """
 
 
@@ -286,6 +286,14 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_owner_view_mode',
                                        i18n_domain='plonecollectorng'),
                 default='no',
+                schemata='Permissions',
+                ),
+
+    IntegerField('upload_limit',
+                widget=StringWidget(label='Maximum size for uploaded files in bytes',
+                                     label_msgid='label_maximum_size_for_uploads',
+                                     i18n_domain='plonecollectorng'),
+                default=200000,
                 schemata='Permissions',
                 ),
     ))

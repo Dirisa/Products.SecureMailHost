@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.205 2004/07/14 13:53:03 ajung Exp $
+$Id: Issue.py,v 1.206 2004/07/15 17:37:38 ajung Exp $
 """
 
 import os, time, random 
@@ -384,9 +384,14 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if isinstance(uploaded_file, StringType): # File passed as string
                 file_id = srcname
                 ct = (mimetype, '')
+                data = uploaded_file
             else:
                 file_id = uploaded_file.filename.split('/')[-1].split('\\')[-1]
-                ct = guess_content_type(file_id, uploaded_file.read())
+                data = uploaded_file.read()
+                ct = guess_content_type(file_id, data)
+
+            if len(data) > self.getUpload_limit():
+                raise ValueError(self.Translate('file_too_large', 'File too large: size exceeds limit of $bytes bytes', bytes=self.getUpload_limit()))
 
             if file_id in self.objectIds():
                 name,ext = os.path.splitext(file_id)
@@ -401,7 +406,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if comment: obj.title = comment
             obj.manage_permission(View, acquire=1)
             obj.manage_permission(AccessContentsInformation, acquire=1)
-            obj.manage_upload(uploaded_file)
+            obj.manage_upload(data)
             self._transcript.addUpload(file_id, comment)
 
             self._last_action = 'Upload'
