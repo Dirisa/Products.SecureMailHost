@@ -70,6 +70,10 @@
                  tal:attributes="href string:pcng_issue_transcript_edit?timestamp:float=${event/getTimestamp}">
                  <img src="edit.gif" title="Edit this entry" i18n:attributes="title">
               </a>
+              <a tal:condition="python: member.has_permission('PloneCollectorNG: Manage PloneCollectorNG', here)"
+                 tal:attributes="href string:pcng_issue_transcript_delete?timestamp:float=${event/getTimestamp}">
+                 <img src="delete.gif" title="Delete this entry" i18n:attributes="title">
+              </a>
             </div>
           </tal:if>
 

@@ -1,13 +1,13 @@
-##parameters=comment,timestamp
+##parameters=timestamp
 
-# Update the comment of a transcript event
+# Delete the comment of a transcript event
 
 from AccessControl import getSecurityManager
 
-context.getTranscript().modifyEntry(timestamp, comment=comment)
+context.getTranscript().deleteEntry(timestamp)
 
-context.getTranscript().addComment(context.Translate('transcript_edited_by', 
-           'Transcript entry ($date) edited by $user', 
+context.getTranscript().addComment(context.Translate('transcript_entry_deleted', 
+           'Transcript entry ($date) deleted by $user', 
            hidden=1,
            date=context.toLocalizedTime(DateTime(float(timestamp)), long_format=1),
            user=getSecurityManager().getUser().getUserName(), as_unicode=1))

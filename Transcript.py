@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.25 2004/05/22 10:37:42 ajung Exp $
+$Id: Transcript.py,v 1.26 2004/05/29 15:24:00 ajung Exp $
 """
 
 import time 
@@ -92,12 +92,12 @@ class Transcript(Persistent, Implicit):
         return item
 
     security.declareProtected(View, 'addComment')
-    def addComment(self, comment, text_format='plain', user=None, created=None):
+    def addComment(self, comment, text_format='plain', user=None, created=None, hidden=0):
         if not isinstance(comment, UnicodeType):
             raise TypeError('comment must be unicode')
         event = TranscriptEvent('comment', comment=comment, 
                                  text_format=text_format, 
-                                 user=user, created=created)
+                                 user=user, created=created, hidden=hidden)
         self.add(event)
 
     security.declareProtected(View, 'addChange')
@@ -175,6 +175,16 @@ class Transcript(Persistent, Implicit):
             if str(event.getTimestamp()) == str(timestamp):
                 for k,v in kw.items():
                     setattr(event, k, v)
+
+    security.declareProtected(EditCollectorIssue, 'deleteEntry')
+    def deleteEntry(self, timestamp):
+        """ Delete an entry given by its timestamp """
+        
+        for k,v in self._items.items():
+            print k,timestamp
+            if str(k) == str(timestamp):
+                del self._items[k]
+                break
 
     security.declareProtected(ManageCollector, 'migrateUnicode')
     def migrateUnicode(self):
