@@ -76,18 +76,16 @@
 				</td>
 				<td>
 					<div tal:condition="md5">
-					  <form tal:attributes="action string:${request/URL1}/updateFileMetadatum" method="post">
-				      <input type="hidden" name="section" value="DIAGNOSTICS"/>
-					   <input type="hidden" name="option" value="md5"/>
+					  <form tal:attributes="action string:${request/URL1}/updateMD5Metadatum" method="post">
+				      <input type="hidden" name="PLFNGrelativePath" value=""/>
 					   <input type="hidden" name="mode" value="testonly"/>
 				      <input type="submit" value="test" >
 			        </form>
 			      </div>  
 		      </td>
 		      <td>
-		      <form tal:attributes="action string:${request/URL1}/updateFileMetadatum" method="post">
-			      <input type="hidden" name="section" value="DIAGNOSTICS"/>
-				   <input type="hidden" name="option" value="md5"/>
+		      <form tal:attributes="action string:${request/URL1}/updateMD5Metadatum" method="post">
+			      <input type="hidden" name="PLFNGrelativePath" value=""/>
 				   <input type="hidden" name="mode" value="update"/>
 			      <div tal:condition="md5">
 			        <input type="submit" value="update" >
