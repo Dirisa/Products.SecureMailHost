@@ -4,11 +4,26 @@ Requirements:
  
   - The 'email' package of Python *must* be available. Either use Python 2.2.3
     for running Zope or get the 'email' package from Python 2.2.3 and install
-it in the PYTHONPATH of your Python 2.1.3 installation.
+    it in the PYTHONPATH of your Python 2.1.3 installation.
 
   - Plone 1.0.X is for now officially not supported. So use it at your own
     risk. A quick test showed that it seems to run without problems under
     Plone 1.0.5.
+
+
+ATTENTION TO USERS of Plone 2.0 beta 3:
+
+    portal_workflow has been removed in Plone 2b3 from the action provider list.
+    This is a *big problem* and will be fixed in the next Plone release.
+    To fix this:
+
+       - remove the "deleteActionProvider()" call in 
+         CMFPlone/setup/ConfigurationMethods.py line 175
+
+       - *recreate* your Plone 2.0 site (if created *with* Plone 2.0 beta 3)
+
+       - there is currently no support from my side to re-enable the
+         portal_workflow as action provider for Plone sites created under Plone 2.0 beta 3
 
 Installation:
  
