@@ -26,7 +26,7 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
 
     actions = ({'id': 'view',
                 'name': 'View',
-                'action': 'string:${object_url}/faq_view',
+                'action': 'string:${object_url}/howto_view',
                 'permissions': (CMFCorePermissions.View,)
                 },
         {
