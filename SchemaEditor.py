@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.2 2003/09/07 07:26:33 ajung Exp $
+$Id: SchemaEditor.py,v 1.3 2003/09/07 07:58:24 ajung Exp $
 """
 
 import operator
@@ -83,16 +83,16 @@ class SchemaEditor:
             elif d.field == 'IntegerField': field = IntegerField
             else: raise TypeError('unknown field type: %s' % d.field)
 
+            print d
             D = {}
-            D['default'] = d.default
+            D['default'] = d.get('default', '')
             D['schemata'] = fieldset
             if d.widget == 'String': pass
             elif d.widget == 'Select': D['widget'] = SelectionWidget(format='select')
             elif d.widget == 'Radio': D['widget'] = SelectionWidget
             elif d.widget == 'Textarea': D['widget'] = TextAreaWidget
 
-            D['required'] = R.get('required', 0)
-            
+            D['required'] = d.get('required', 0)
             schema.addField(field(name, **D))
 
 

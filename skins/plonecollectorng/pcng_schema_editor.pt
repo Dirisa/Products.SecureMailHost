@@ -65,11 +65,13 @@
            </td>
           <td valign="top">
             <input type="text" value="" size="20" 
-                   tal:attributes="name string:${field/getName}.default:record:string"/>
+                   tal:attributes="name string:${field/getName}.default:record:string;
+                                   value field/getDefault"/>
            </td>
           <td valign="top">
             <input type="checkbox" value="1" 
-                   tal:attributes="name string:${field/getName}.required:record:int"/>
+                   tal:attributes="name string:${field/getName}.required:record:int;
+                                   checked field/required"/>
            </td>
           <td valign="top">
             <input type="checkbox" value="1" 
