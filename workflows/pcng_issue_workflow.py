@@ -13,11 +13,15 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+
+# NOTE: id + title must be added manually  
+id = 'pcng_issue_workflow'
+title = 'PloneCollectorNG default workflow'
 
 def setupPcng_issue_workflow(wf):
     "..."
@@ -199,7 +203,7 @@ def createPcng_issue_workflow(id):
     return ob
 
 addWorkflowFactory(createPcng_issue_workflow,
-                   id='pcng_issue_workflow',
-                   title='pcng_issue_workflow')
+                   id=id,
+                   title=title)
 
 
