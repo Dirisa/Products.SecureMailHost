@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.107 2004/01/20 13:54:37 ajung Exp $
+$Id: Collector.py,v 1.108 2004/01/21 17:01:08 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -510,7 +510,8 @@ class PloneCollectorNGCatalog(CatalogTool):
 
         custom = [['status', 'FieldIndex'],
                   ['Creator', 'FieldIndex'],
-                  ['created', 'FieldIndex'],
+                  ['created', 'DateIndex'],
+                  ['last_action', 'DateIndex'],
                   ['SearchableText', 'TextIndex'],
                   ['importance', 'FieldIndex'],
                   ['classification', 'FieldIndex'],
