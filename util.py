@@ -7,9 +7,12 @@ from Acquisition import aq_base
 
 import zLOG
 
+import md5
 MD5_LENGTH = 32
 
-# Note: the utility methods in this file depend on external system calls.
+# Note: the unzip utility methods in this file currently depend on 
+# external system calls.  Optional support for an external md5 
+# generation system utility is also provided.
 # These methods have only been tested with the following utilities:
 #   * unzip/zipinfo: UnZip v5.50 by Info-ZIP (http://www.info-zip.org/) 
 #   * md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
@@ -25,8 +28,6 @@ SYSCALL_UNZIP           = "c:\\plone-utils\\unzip -o -d"
 SYSCALL_UNZIP_SUCCESS   = 0
 SYSCALL_TESTZIP         = "c:\\plone-utils\\unzip -qt"
 SYSCALL_TESTZIP_SUCCESS = 0
-SYSCALL_GENMD5          = "c:\\plone-utils\\md5deep"
-SYSCALL_GENMD5_SUCCESS  = 1
 
 security = ClassSecurityInfo()
 
@@ -156,13 +157,33 @@ def upzipFile(filename):
 
 # --------------------------------------------------------------------
 security.declareProtected(ModifyPortalContent, 'generate_md5')
-def generate_md5(filename):
-   syscall_filename = fixDOSPathName(filename)
-   syscall = "%s %s" % (SYSCALL_GENMD5,syscall_filename)
-   process_fp = os.popen(syscall)
-   md5 = process_fp.read()[:MD5_LENGTH]
-   if len(md5) == MD5_LENGTH:
-      return md5
+def generate_md5(filename,syscallcommand='none'):
+
+   filename = fixDOSPathName(filename)
+   md5_hexvalue = ''
+
+   if syscallcommand == 'none':
+      m = md5.new()
+      blocksize = 2<<16
+      try:
+	      fobj = open(filename, 'rb')
+	      while True:
+	          chunk = fobj.read(blocksize)
+	          if not chunk:
+	              break
+	          m.update(chunk)
+	      md5_hexvalue = m.hexdigest()
+	      fobj.close()
+      except:
+         md5_hexvalue = '' 	
+
+   else:
+      fullsyscall = "%s %s" % (syscallcommand,filename)
+      process_fp = os.popen(fullsyscall)
+      md5_hexvalue = process_fp.read()[:MD5_LENGTH]
+
+   if len(md5_hexvalue) == MD5_LENGTH:
+      return md5_hexvalue
    else:
       # failure should throw an exception, but for now, return easily identified bogus checksum 
       return "99999999999999999999999999999999"

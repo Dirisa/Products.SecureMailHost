@@ -21,6 +21,7 @@ from config import *
 from util import *
 import zLOG
 from Products.CMFCore.utils import getToolByName
+#from Products.validation.chain import V_SUFFICIENT, V_REQUIRED
 
 from Acquisition import aq_chain
 
@@ -49,12 +50,21 @@ schema = BaseSchema +  Schema((
                 ),
     BooleanField ('generate_MD5_after_upload',
                 write_permission=CMFCorePermissions.ManagePortal,
-                default=0,
+                default=1,
                 widget=BooleanWidget(
                         label='Generate MD5 after upload?',
                         description='Generate an MD5 checksum for a file immediately after it is uploaded.',
                         ),
                  ),
+    StringField('external_syscall_md5',
+                default='none',
+                validators=("isValidExternalMD5Utility",),
+                write_permission=CMFCorePermissions.ManagePortal,
+                required=1,
+                widget=StringWidget(label='external md5 system call',
+                                    description='To use the standard python md5 implementation, specify "none".',
+                       )
+                ),
     BooleanField ('quota_aware',
                 write_permission=CMFCorePermissions.ManagePortal,
                 default=0,
@@ -90,9 +100,9 @@ schema = BaseSchema +  Schema((
                required=1,
                vocabulary='getAddressDisplayStyleVocab',
                widget=SelectionWidget(
-					   label='Folder Address Display Style',
-					   description="""Select the folder address style to be displayed""",
-					   format="select",),
+                  label='Folder Address Display Style',
+                  description="""Select the folder address style to be displayed""",
+                  format="select",),
       ),
     BooleanField ('fileBackup_enabled',
                 write_permission=CMFCorePermissions.ManagePortal,
@@ -299,7 +309,39 @@ class PloneLocalFolderNG(BaseContent):
         else:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=Error updating file metadata.')
 
+    security.declareProtected(View, 'updateFileMetadatum')
+    def updateFileMetadatum(self, REQUEST, section, option, mode='testonly'):
+        """ update a metadatum for the file """
+        result = 0
+        #zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: section=%s option=%s newvalue=%s" % (section, option, newvalue))
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        targetFile = os.path.join(self.folder, rel_dir)
+        
+        if section == 'DIAGNOSTICS' and option == 'md5':
+           metadataMD5 = getMetadataElement(targetFile, section, option)
+           start_time = DateTime()
+           fileMD5 = generate_md5(targetFile,self.external_syscall_md5)
+           stop_time = DateTime()
+           elapsed_time = (stop_time - start_time)*86400.0
+           
+           if metadataMD5 == fileMD5:
+               if mode == 'testonly':
+                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=MD5 metadata is valid.  (MD5 computation took '+str(elapsed_time)[:6]+' seconds).') 
+               else:
+                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=no need to update MD5 metadata (it is valid).')
+           else:
+               if mode == 'testonly':
+                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=WARNING: MD5 metadata does NOT match current file MD5 !!!') 
+               else:
+                   result = setMetadata(targetFile, section, option, fileMD5)
+                   if result == 1:
+                        REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=MD5 metadata updated.')
+                   else:
+                        REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=ERROR: MD5 metadata could not be updated !!!')
 
+        else:
+           REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=Unsupported metadata update type.')
+               
     security.declareProtected('View', 'showFile')
     def showFile(self, destpath, REQUEST, RESPONSE):
         """ view file """
@@ -592,12 +634,12 @@ class PloneLocalFolderNG(BaseContent):
         
         # calculate the MD5 for the tmpfile 
         if self.generate_MD5_after_upload:
-            serverMD5 = generate_md5(tmpfile)
+            serverMD5 = generate_md5(tmpfile,self.external_syscall_md5)
    
         # reject if client-provided MD5 for uploaded file does not match server-generated MD5
         if self.require_MD5_with_upload:
             if not serverMD5:
-               serverMD5 = generate_md5(tmpfile)
+               serverMD5 = generate_md5(tmpfile,self.external_syscall_md5)
             if clientMD5 != serverMD5:
                os.remove(tmpfile)
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file()::MD5 CHECK FAILED...DELETED: %s" % tmpfile )
