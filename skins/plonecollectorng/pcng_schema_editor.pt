@@ -81,8 +81,11 @@
          </tr>
  
          <tr> 
-           <td colspan="5">
-             <input type="submit">
+           <td colspan="6">
+             <input type="submit" value=" Save ">
+           </td>
+           <td colspan="2">
+             <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this fieldset</a>
            </td>
        </table>
     </form>

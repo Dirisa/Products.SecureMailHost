@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.1 2003/09/07 07:12:27 ajung Exp $
+$Id: SchemaEditor.py,v 1.2 2003/09/07 07:26:33 ajung Exp $
 """
 
 import operator
@@ -61,8 +61,8 @@ class SchemaEditor:
 
     def delSchema(self, name, RESPONSE=None):
         """ delete a schema """
+        self._schema_names.remove(name)
         del self._schemas[name]
-        self._schema_names[name]
         if RESPONSE is not None:
             RESPONSE.redirect('pcng_schema_editor?portal_status_message=Schema%20deleted')
 
@@ -79,7 +79,6 @@ class SchemaEditor:
         for name in fieldnames:
             d =  R[name]
 
-            print name, d            
             if d.field == 'StringField': field = StringField
             elif d.field == 'IntegerField': field = IntegerField
             else: raise TypeError('unknown field type: %s' % d.field)
