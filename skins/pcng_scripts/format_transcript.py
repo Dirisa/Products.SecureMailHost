@@ -91,15 +91,24 @@ for group in groups:
                                             TR('added', 'Added'), ev.added, 
                                             TR('removed', 'Removed'), ev.removed))
         elif ev.type == 'reference':
-            nl('%s: %s: %s/%s (%s)' % (TR('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment))
+            nl('%s: %s/%s - %s' % (TR('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment))
 
         elif ev.type == 'upload':
-            s = '%s: %s/%s ' % (TR('upload', 'Upload'), context.absolute_url(), ev.fileid)
+            s = '%s: %s ' % (TR('upload', 'Upload'), ev.fileid)
             if ev.comment:
                 s+= ' (%s)' % ev.comment
             nl(s)
 
     n+=1; nl()
+
+if context.haveATReferences():
+    refs = context.getForwardReferences()
+    if refs:
+        nl(TR('references_to_other_issues', 'References to other issues'))
+        nl('-'*40)
+        for r in refs:
+            target = r.getTargetObject()
+            nl('   -> http://%s/%s' % (context.aq_parent.canonical_hostname, target.absolute_url(1)))
 
 return '\n'.join(l)
                                      

@@ -93,12 +93,13 @@ for e in context.getTranscript().getEvents():
        w('\t\t</reference>') 
 
     elif e.type == 'upload':
-        o = getattr(context, e.fileid)
-
-        w('\t\t<upload id="%s" mimetype="%s">' % (o.getId(), o.content_type))
-        w('\t\t\t<data>')
-        w(base64.encodestring(str(o.data)))
-        w('\t\t\t</data>')
+        
+        o = getattr(context, e.fileid, None)
+        if o:
+            w('\t\t<upload id="%s" mimetype="%s">' % (o.getId(), o.content_type))
+            w('\t\t\t<data>')
+            w(base64.encodestring(str(o.data)))
+            w('\t\t\t</data>')
 
         type, value = convertValue(e.comment)
         w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
