@@ -88,6 +88,7 @@
   </table>
  </span>
     
+
 <div metal:define-macro="show_issues">
 
   <span tal:define="results here/pcng_search_results; 
@@ -96,45 +97,28 @@
                     b_start python: 0;
                     b_start request/b_start|b_start">
 
-
     <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
-      <table class="listing" width="100%">
-        <tr>
-          <th colspan="4" width="100%">
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
-          </th>
-        </tr>
-        <tr>
-          <th>Issue</th>
-          <th>Created</th>
-          <th>Category</th>
-          <th>Deadline/Assigned</th>
-          <th>Status</th>
-        </tr>
-        <tr tal:repeat="issue batch">
-          <td valign="top">
-            <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId">
-              <span tal:replace="issue/getId" />.
-              <span tal:replace="issue/Title" />
-            </a>
-            <div class="issue_short_description" 
-                 tal:content="python: here.shorten_string(issue.Description)" />
-          </td>
-          <td valign="top">
-            <span tal:content="python: '%s (%s)' % (here.toPortalTime(issue.created, long_format=1), issue.Creator)" />
-          </td>
-          <td valign="top">
-            <span tal:content="issue/topic" />
-          </td>
-          <td valign="top">
-            <span tal:replace ="python: here.toPortalTime(issue.progress_deadline)" />
-            <br/> -> <span tal:replace="python: ', '.join(issue.assigned_to)" />
-          </td>
-          <td valign="top">
-            <span tal:content="python: here.pcng_format_status(issue.status)" />
-          </td>
-        </tr>
-      </table>
+      <div metal:use-macro="here/batch_macros/macros/navigation" />
+
+      <metal:block tal:repeat="issue batch">
+        <h2 class="pcng_transcript">       
+          <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId">
+            <span tal:replace="issue/getId" />.
+            <span tal:replace="issue/Title" />
+          </a>
+        </h2>
+        <div class="pcng_issueview_metadata">
+         Status: <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
+         Topic: <span tal:replace="issue/topic" /> -
+         Importance: <span tal:replace="issue/importance" />
+        </div>
+        <div class="pcng_issueview_description" 
+             tal:content="python: here.shorten_string(issue.Description)" />
+
+        <div class="pcng_issueview_legend">
+        Submitted by <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
+        </div>
+      </metal:block>
     </div>
     <div tal:condition="not: results">No hits</div>
   </span>
