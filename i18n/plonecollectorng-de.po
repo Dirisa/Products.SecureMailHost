@@ -85,7 +85,7 @@ msgid "transcript_changes"
 msgstr "Änderungen"
 
 msgid "help_staff"
-msgstr "<b>Administratoren</b> sind verantwortlich für die Konfiguration und Wartung des Collectors<br><b>Unterstützer</b> bearbeiten eingestellte Tickets<br><b>Tester</b> stellen neue Tickets ein und haben nur eingeschränkte Rechte auf eingestellten Tickets"
+msgstr "<b>Administratoren</b> sind verantwortlich für die Konfiguration und Wartung des Collectors<br><b>Unterstützer</b> bearbeiten eingestellte Tickets<br><b>Reporter</b> stellen neue Tickets ein und haben nur eingeschränkte Rechte auf eingestellten Tickets"
 
 msgid "legend_search_form"
 msgstr "Suchmaske"
