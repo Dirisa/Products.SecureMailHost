@@ -34,10 +34,9 @@ schema = BaseFolderSchema +  Schema((
               ),
     ),
 
-    LinesField('subject',
+    LinesField('sections',
                multiValued=1,
                required=1,
-               accessor="Subject",
                vocabulary='_get_sections_vocab', # we acquire this from
                                                  # FAQFolder
                enforceVocabulary=1,
