@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.53 2003/11/01 17:03:25 ajung Exp $
+$Id: Collector.py,v 1.54 2003/11/02 12:03:28 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -217,7 +217,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._supporters = supporters
         self._adjust_staff_roles()
 
-        util.redirect(RESPONSE, 'pcng_view', 
+        util.redirect(RESPONSE, 'pcng_staff', 
                       self.translate('changes_saved', 'Your changes have been saved'))
 
     def _adjust_staff_roles(self):
@@ -308,6 +308,8 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
                       portal_status_message='New issue created',
                       fieldset='issuedata')
+        if RESPONSE is None:
+            return id
 
     ######################################################################
     # Maintainance
