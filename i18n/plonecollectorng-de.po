@@ -645,3 +645,6 @@ msgstr "Referenzen und hochgeladene Dateien"
 
 msgid "new_issue_created"
 msgstr "Ticket wurde angelegt"
+
+msgid "notification_mode_disabled"
+msgstr "Benachrichtigungsfunktion ist ausgeschaltet"
