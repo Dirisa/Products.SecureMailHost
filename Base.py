@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.11 2004/02/26 19:28:10 ajung Exp $
+$Id: Base.py,v 1.12 2004/04/01 16:45:20 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -76,13 +76,13 @@ class ParentManagedSchema:
                 name = field.getName()
 
                 method = lambda self=self, name=name, *args, **kw: \
-                         self.Schema()[name].get(self) 
+                         self.getField(name).get(self) 
                 setattr(self, '_v_%s_accessor' % name, method )
                 field.accessor = '_v_%s_accessor' % name
                 field.edit_accessor = field.accessor
 
                 method = lambda value,self=self, name=name, *args, **kw: \
-                         self.Schema()[name].set(self, value) 
+                         self.getField(name).set(self, value) 
                 setattr(self, '_v_%s_mutator' % name, method )
                 field.mutator = '_v_%s_mutator' % name
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.148 2004/03/28 11:07:19 ajung Exp $
+$Id: Issue.py,v 1.149 2004/04/01 16:45:20 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -225,7 +225,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getParameter(self, key):
         """ return the value of an Archetypes field """
 
-        field = self.Schema()[key]
+        field = self.getField(key)
         try: return field.get(self)  # avoid problems with updated schemas
         except: return ''
 

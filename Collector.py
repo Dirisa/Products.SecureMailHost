@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.150 2004/03/30 10:01:17 ajung Exp $
+$Id: Collector.py,v 1.151 2004/04/01 16:45:20 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -188,7 +188,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         wf_tool = getToolByName(self, CollectorWorkflow)
         # Get the workflow ID from the instance
-        wf_id = self.Schema()['collector_workflow'].get(self)
+        wf_id = self.getField('collector_workflow').get(self)
         wf_type = VOC_WORKFLOWS.getValue(wf_id) 
         wf_tool.manage_addWorkflow(id=wf_id, workflow_type=wf_id)
 
@@ -214,7 +214,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for name in REQUEST.form.keys():
             if not name in field_names: continue
             new = REQUEST.get(name, None)
-            old = self.Schema()[name].get(self)
+            old = self.getField(name).get(self)
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     self._transcript.addChange(name, old, new)

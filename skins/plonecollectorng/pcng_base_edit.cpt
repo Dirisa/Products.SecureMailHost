@@ -79,7 +79,7 @@
 
       <!-- Show assignees box for fresh issues -->
 
-      <div tal:condition="python: here.meta_type == 'PloneIssueNG' and here.Schema()['title'].get(here) == ''"
+      <div tal:condition="python: here.meta_type == 'PloneIssueNG' and here.getField('title').get(here) == ''"
            tal:define="assignees here/assigned_to|nothing">
         <div metal:use-macro="here/issue_macros/macros/followup_table" />
         <input type="hidden" name="assign_ticket" value="1">

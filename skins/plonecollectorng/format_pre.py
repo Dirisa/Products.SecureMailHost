@@ -2,7 +2,7 @@
 
 import textwrap
 
-text = context.Schema()[fieldname].get(context)
+text = context.getField(fieldname).get(context)
 if same_type(text, u''):
     text = text.encode(context.getSiteEncoding())
 

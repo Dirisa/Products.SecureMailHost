@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.39 2004/03/26 20:28:13 ajung Exp $
+$Id: pdfwriter.py,v 1.40 2004/04/01 16:45:20 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -141,7 +141,7 @@ def pdfwriter(collector, ids):
         return text
 
     def getFieldValue(issue, field):
-        v = issue.Schema()[field].get(issue)
+        v = issue.getField(field).get(issue)
         if isinstance(v, StringType) or isinstance(v, UnicodeType):
             v = v.replace(chr(13), '')
         if isinstance(v, StringType):
@@ -157,7 +157,7 @@ def pdfwriter(collector, ids):
         header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 70))
 
         header(translate('label_description', 'Description', as_unicode=1))
-        description = issue.Schema()['description'].get(issue)
+        description = issue.getField('description').get(issue)
         pre(dowrap(toUnicode(description)))
         if issue.solution:
             header(translate('label_solution', 'Solution', as_unicode=1))
