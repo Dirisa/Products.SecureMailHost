@@ -19,12 +19,10 @@ Requirements:
 
   Optional packages:
 
-   - PlacelessTranslationService - PTS
-     (http://savannah.nongnu.org/projects/opental -- 
-      YOU NEED AN UP-TO-DATE VERSION FROM THE OPENTAL CVS. The checkout
-     instructions are explained on the OpenTAL project page if you click
-     on the CVS link). ANY OLDER VERSION OF PTS WILL NOT RUN - NEITHER
-     ANY BETA FROM THE COLLECTIVE NOR FROM THE PTS-FORK!!!!!!!!!
+   - PlacelessTranslationService (PTS): You need an up-to-date version of PTS
+     from the Collective CVS (see sf.net/projects/collective) or download it
+     from the PloneCollectorNG download area (sf.net/projects/collective ->
+     Files)
 
    - Reportlab (www.reportlab.org) - required for PDF output
   

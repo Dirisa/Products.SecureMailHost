@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.20 2004/02/02 16:31:18 ajung Exp $
+$Id: Translateable.py,v 1.21 2004/02/08 13:19:52 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -13,6 +13,9 @@ from types import UnicodeType, StringType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
+from Products.PlacelessTranslationService import getTranslationService
+
+
 
 from config import i18n_domain
 
@@ -27,7 +30,7 @@ class Translateable:
         pts = getattr(self, '_v_have_pts', None)
         if pts is None:
             try:
-                pts = self.Control_Panel.TranslationService
+                pts = getTranslationService()
                 self._v_have_pts = pts
             except:
                 self._v_have_pts = None
@@ -67,13 +70,12 @@ class Translateable:
         # always as unicode and convert it back to the Plone site encoding
         # if necessary
 
-        v = pts.translate(domain=i18n_domain, 
+        v = pts.utranslate(domain=i18n_domain, 
                             msgid=msgid, 
                             context=self,
                             mapping=kw,  
                             default=text,
-                            target_language=target_language,
-                            as_unicode=1)
+                            target_language=target_language)
         
         if not v: v = u''
         if isinstance(v, StringType):
