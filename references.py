@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: references.py,v 1.1 2003/09/30 08:32:34 ajung Exp $
+$Id: references.py,v 1.2 2003/09/30 11:16:26 ajung Exp $
 """
 
 ##########################################################################
@@ -102,11 +102,33 @@ def build_graphviz(graphs, nodes, edges):
 
     print >>fp, '}'
     fp.close()
+    return fname
 
-#    print open(fname).read()
-    imgname = tempfile.mktemp()
-    os.system('/opt/graphviz/bin/dot -T gif %s > %s' % (fname, imgname))
-    os.unlink(fname)
+def viz2image(fname, format='gif', RESPONSE=None):
 
-    return imgname
-    
+    outputname = tempfile.mktemp()
+    st = os.system('dot -T %s  %s > %s' % (format, fname, outputname))
+    if st != 0: raise RuntimeError('graphviz execution failed')     
+    data = open(outputname).read()
+
+    if format in ('svg',):
+        RESPONSE.setHeader('content-type', 'image/svg+xml')
+    if format in ('ps',):
+        RESPONSE.setHeader('content-type', 'application/postscript')
+    else:
+        RESPONSE.setHeader('content-type', 'image/%s' % format)
+    RESPONSE.write(data)
+
+def viz2map(fname, format='cmap', RESPONSE=None):
+
+    outputname = tempfile.mktemp()
+    st = os.system('dot -T %s  %s > %s' % (format, fname, outputname))
+    if st != 0: raise RuntimeError('graphviz execution failed')     
+    data = open(outputname).read()
+
+    if format in ('svg',):
+        RESPONSE.setHeader('content-type', 'image/svg+xml')
+    else:
+        RESPONSE.setHeader('content-type', 'image/%s' % format)
+    RESPONSE.write(data)
+

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.31 2003/09/30 08:32:34 ajung Exp $
+$Id: Issue.py,v 1.32 2003/09/30 11:16:26 ajung Exp $
 """
 
 import sys, os
@@ -218,19 +218,21 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')
-    def references_tree(self, RESPONSE):
+    def references_tree(self, format='gif', RESPONSE=None):
         """ create graphical representation of the references tree
             (using Graphviz) 
         """
         from Products.PloneCollectorNG import references
 
         graphs, nodes, edges = references.build_tree(self, {}, [], [])
-        imgname = references.build_graphviz(graphs, nodes, edges)
-
-        RESPONSE.setHeader('content-type', 'image/gif')
-        imgdata = open(imgname).read()
-        os.unlink(imgname)
-        RESPONSE.write(imgdata)
+        vizfile = references.build_graphviz(graphs, nodes, edges)
+        
+        if format in ('gif','jpeg', 'png', 'mif', 'svg', 'ps'):
+            references.viz2image(vizfile, format, RESPONSE)
+        elif format in ('cmap',):
+            references.viz2map(vizfile, format, RESPONSE)
+        else:
+            raise RuntimeError('unknown format "%s"' % format)
 
     ######################################################################
     # File uploads 

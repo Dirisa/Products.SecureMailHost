@@ -14,8 +14,12 @@
           (<span tal:replace="ref/getComment"/>)
         </li>
 
-        <li>
-          <a href="references_tree">Show references as graph</a>
+        <li>Dependency graph: 
+          <a href="references_tree?format=gif">[GIF]</a>
+          <a href="references_tree?format=jpeg">[JPEG]</a>
+          <a href="references_tree?format=png">[PNG]</a>
+          <a href="references_tree?format=svg">[SVG]</a>
+          <a href="references_tree?format=ps">[PS]</a>
       </ul>
     </metal:block>
     <span i18n:translate="issue_references_table_no_references"
