@@ -63,11 +63,10 @@
         </div>
       </fieldset>
 
-      <fieldset tal:define="fieldset python: 'issuedata'">
+      <fieldset>
         <legend><a class="schemata_legend"  
-                   tal:attributes="href string:pcng_base_edit?fieldset=${fieldset}"  
-                   li18n:translate=""
-                   tal:content="fieldset" /></legend>
+                   tal:attributes="href string:pcng_base_edit?fieldset=issuedata"  
+                   i18n:translate="issuedata">issuedata</a></legend>
 
         <div style="float: left; width: 30%; vertical-align: top">
           <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">

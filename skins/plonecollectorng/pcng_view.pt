@@ -35,7 +35,7 @@
 
       <metal:block tal:condition="python: search_form_position == 'top'">
         <fieldset><legend i18n:translate="legend_search_form">Search form</legend>
-          <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
+          <metal:block metal:use-macro="here/pcng_macros/macros/search_issues_form" />
         </fieldset>
         <div metal:use-macro="here/pcng_macros/macros/show_issues" />
       </metal:block>
@@ -43,7 +43,7 @@
       <metal:block tal:condition="python: search_form_position == 'bottom'">
         <div metal:use-macro="here/pcng_macros/macros/show_issues" />
         <fieldset><legend i18n:translate="legend_search_form">Search form</legend>
-          <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
+          <metal:block metal:use-macro="here/pcng_macros/macros/search_issues_form" />
         </fieldset>
       </metal:block>
     </div>
