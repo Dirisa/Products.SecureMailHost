@@ -16,10 +16,10 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.10 2004/05/22 12:31:25 tiran Exp $
+$Id: SecureMailHost.py,v 1.11 2004/05/24 01:18:50 tiran Exp $
 """
 
-from config import BAD_HEADERS
+from config import BAD_HEADERS, USE_ASNYC_MAILER
 
 from types import StringType, TupleType, ListType
 from copy import deepcopy
@@ -148,6 +148,7 @@ class SecureMailBase(MailBase):
         return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
                              subject=subjet, encode=encode)
 
+    security.declareProtected(use_mailhost_services, 'secureSend')
     def secureSend(self, message, mto, mfrom, subject='[No Subject]',
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
                    debug=False, **kwargs):
@@ -173,11 +174,11 @@ class SecureMailBase(MailBase):
         kwargs:
             Additional headers
         """
-        # check email addresses
-        # XXX check Return-Path
         mto  = self.emailListToString(mto)
         mcc  = self.emailListToString(mcc)
         mbcc = self.emailListToString(mbcc)
+        # validate email addresses
+        # XXX check Return-Path
         for addr in mto, mcc, mbcc:
             if addr:
                 result = self.validateEmailAddresses(addr)
@@ -210,6 +211,7 @@ class SecureMailBase(MailBase):
         # finally send email
         return self._send(mfrom, mto, msg, debug=debug)
 
+    security.declarePrivate('setHeaderOf')
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
         """Set the headers of the email.Message based instance
         
@@ -248,8 +250,10 @@ class SecureMailBase(MailBase):
         else:
             mailQueue.queue(mail)
 
-    #_send = __A_SYNC_send
-    _send = __SYNC_send
+    if USE_ASNYC_MAILER:
+        _send = __A_SYNC_send
+    else:
+        _send = __SYNC_send
 
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):
