@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.110 2004/01/22 19:59:21 ajung Exp $
+$Id: Collector.py,v 1.111 2004/01/27 14:27:28 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -277,7 +277,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         # ModifyPortalContent
         target_roles = ('Supporter','TrackerAdmin','Manager', 'Owner')
-        self.manage_permission(ModifyPortalContent, roles=target_roles, acquire=0)
+        self.manage_permission(ModifyPortalContent, roles=target_roles+add_roles, acquire=0)
 
     def _adjust_view_mode(self):
         """Set role privileges according to view mode."""
