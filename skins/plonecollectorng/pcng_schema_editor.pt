@@ -60,7 +60,7 @@
                 <input type="submit" value=" Add new schemata"  class="standalone">
               </div>
             </form>
-            <a href="update_schema_for_issues">Update schema for all issues</a>
+            <a href="update_schema_for_issues?return_to=pcng_schema_editor">Update schema for all issues</a>
           </div>
         </td>  <!-- EOF Navigation -->
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.50 2003/10/20 12:20:39 ajung Exp $
+$Id: Collector.py,v 1.51 2003/10/26 15:55:08 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -318,7 +318,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     __len__ = getNumberIssues
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
-    def update_schema_for_issues(self, REQUEST=None, RESPONSE=None):
+    def update_schema_for_issues(self, return_to=None, REQUEST=None, RESPONSE=None):
         """ update stored issue schema for all issues """
 
         schema = self.schema_getWholeSchema()
@@ -326,14 +326,18 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
-        util.redirect(RESPONSE, REQUEST['HTTP_REFERER'], 
-                      self.translate('issues_updated', 'Issues updated'))
+        if return_to:
+            util.redirect(RESPONSE, return_to,
+                          self.translate('issues_updated', 'Issues updated'))
+        else:
+            util.redirect(RESPONSE, 'pcng_schema_editor',
+                          self.translate('issues_updated', 'Issues updated'))
 
     security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
         """ reindex all issues """
-        for issue in self.objectValues('PloneIssueNG'):
-            issue.reindexObject()
+
+        for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
         util.redirect(RESPONSE, 'pcng_maintainance', 
                       self.translate('issues_reindexed', 'Issues reindexed'))
 
