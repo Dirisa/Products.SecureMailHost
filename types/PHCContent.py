@@ -33,4 +33,4 @@ class PHCContent:
         """method to display the versions in a nicer way
         """
 
-        return ", ".join(self.versions)
+        return ", ".join(getattr(self, 'versions', []))

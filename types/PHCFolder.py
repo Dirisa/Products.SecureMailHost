@@ -23,16 +23,16 @@ class PHCFolder:
 
     def getVersionsVocab(self):
         """Get versions vocabulary"""
-        return self.aq_base.aq_parent.getVersions_vocab()
+        return self.getVersions_vocab()
 
     def getSectionsVocab(self):
         """Get sections vocabulary"""
-        return self.aq_base.aq_parent.getSections_vocab()
+        return self.getSections_vocab()
         
     def Versions(self):
         """method to display the versions in a nicer way
         """
-        return ", ".join(self.versions)
+        return ", ".join(getattr(self, 'versions', []))
 
     def getItems(self, states=[]):	
         """Get items"""
@@ -61,7 +61,7 @@ class PHCFolder:
     def getSectionsToList(self, states=[]):
         """Sections that have at least one listable item"""
         sections = {}
-        max_sections = len(self.sections)
+        max_sections = len(self.sections_vocab)
 
         for o in self.getItems(states):
             for s in o.sections:
