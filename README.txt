@@ -7,6 +7,11 @@ Requirements:
 
     Archetypes 1.2
 
+Install:
+
+    Use the CMFQuickinstaller tool in the ZMI or "Add/Remove Products" from
+    the Plone setup menu.
+
 Author:
 
     (C) by Andreas Jung, D-72070 Tübingen, Germany
