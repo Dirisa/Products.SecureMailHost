@@ -142,7 +142,7 @@
 
 <fieldset metal:define-macro="add_uploads" i18n:domain="plonecollectorng">
   <legend i18n:translate="legend_artifacts_upload">Upload files or images</legend>
-    <form method="post" action="upload_file" enctype="multipart/form-data">
+    <form method="post" tal:attributes="action string:${context/absolute_url}/upload_file" enctype="multipart/form-data">
 
       <div>
           <span class="label" i18n:translate="file_for_upload">File for upload</span>

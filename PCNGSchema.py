@@ -5,23 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.19 2004/09/11 15:31:39 ajung Exp $
+$Id: PCNGSchema.py,v 1.20 2004/09/11 17:05:54 ajung Exp $
 """
 
-from types import FileType
-
-from Globals import InitializeClass, Persistent
+from Globals import InitializeClass 
 from AccessControl import ClassSecurityInfo
-from Products.CMFCore.CMFCorePermissions import *
-from ZPublisher.HTTPRequest import FileUpload
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
-from Products.Archetypes.utils import mapply
-from Products.Archetypes.Layer import DefaultLayerContainer
-from Products.Archetypes.interfaces.layer import ILayerContainer, ILayerRuntime, ILayer 
-from Products.Archetypes.interfaces.field import IField, IImageField
-from Products.Archetypes.interfaces.base import IBaseUnit
-from Products.Archetypes.debug import log_exc
 
 from Products.Archetypes.public import ManagedSchema
 

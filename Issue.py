@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.214 2004/09/11 15:31:39 ajung Exp $
+$Id: Issue.py,v 1.215 2004/09/11 17:05:54 ajung Exp $
 """
 
 import os, time, random
@@ -22,7 +22,7 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
-from Products.Archetypes.BaseContent import BaseContent
+from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from zLOG import LOG, ERROR
 
 from Base import ParentManagedSchema
@@ -38,7 +38,7 @@ import util, notifications
 
 _marker = []
 
-class PloneIssueNG(BaseContent, ParentManagedSchema, WatchList, Translateable):
+class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = (
@@ -128,19 +128,14 @@ class PloneIssueNG(BaseContent, ParentManagedSchema, WatchList, Translateable):
 
     schema = issue_schema.schema
 
-
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
         self.initializeArchetype()
-        BaseContent.manage_afterAdd(self, item, container)
+        BaseBTreeFolder.manage_afterAdd(self, item, container)
 
+        self.wl_init()
         self._transcript2 = Transcript2().__of__(self)
         self._last_action = 'Created'          # last action from the followup form
-
-#        self.schema = PCNGSchema(issue_schema.schema.fields())
-
-
-        self.post_creation_actions()
 
         # Creator
         self._creator = getSecurityManager().getUser().getUserName()
@@ -150,11 +145,6 @@ class PloneIssueNG(BaseContent, ParentManagedSchema, WatchList, Translateable):
             wf = getToolByName(self, CollectorWorkflow, None)
             if wf:
                 wf.notifyCreated(self)
-
-    security.declareProtected(AddCollectorIssue, 'post_creation_actions')
-    def post_creation_actions(self):
-        """ perform post-creation actions """
-        pass
 
     security.declareProtected(View, 'setDefaults')
     def setDefaults(self):

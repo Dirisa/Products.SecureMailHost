@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.204 2004/09/11 15:31:39 ajung Exp $
+$Id: Collector.py,v 1.205 2004/09/11 17:05:54 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -447,6 +447,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         self.manage_renameObjects([issue.getId()], [new_id])
         tempfolder.manage_delObjects([issue.getId()])
         issue = getattr(self, new_id)
+        issue = issue.__of__(self)
         return issue
 
     security.declareProtected(AddCollectorIssue, 'add_issue')
@@ -455,9 +456,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         id = self.new_issue_number()
         self.invokeFactory('PloneIssueNG', id)
         issue = self._getOb(id)
-        issue.post_creation_actions()
-        print id
-        return id
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit",
                       portal_status_message=self.Translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')

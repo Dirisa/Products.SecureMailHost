@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.17 2004/09/11 15:31:39 ajung Exp $
+$Id: Base.py,v 1.18 2004/09/11 17:05:53 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -23,6 +23,15 @@ class ParentManagedSchema:
     security.declareProtected(View, 'Schema')
     def Schema(self):
         """ retrieve schema from parent object """
+
+        # Schema() seems to be called during the construction phase when there is
+        # not acquisition context. So we return the default schema itself.
+
+        if not hasattr(self, 'aq_parent'): return self.schema
+
+        # Otherwise get the schema from the parent collector through
+        # acquisition and assign it to a volatile attribute for performance
+        # reasons
 
         schema = getattr(self, '_v_schema', None)
         if schema is None:
