@@ -25,6 +25,11 @@ def registerNavigationTreeSettings(self, out):
                 mdntl.append(t)
         p._updateProperty('metaTypesNotToList', mdntl)
 
+def install_portlets(self, out):
+    # prepend to the left_slots list, so it appears on top for Reviewers
+    self.left_slots = [ 'here/portlet_stale_items/macros/portlet',] + list(self.left_slots)
+    print >>out, "Added portlet"
+
 def install(self):
     out = StringIO()
 
@@ -58,7 +63,7 @@ def install(self):
 
     print >> out, 'Installed helpcenter_workflow.'
     print >> out, 'Installed helpcenterfolder_workflow.'
-    
+
     wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ'
                                             ,'HelpCenterHowTo'
                                             ,'HelpCenterLink'
@@ -77,14 +82,13 @@ def install(self):
                                             ,'HelpCenterGlossary'], chain='helpcenterfolder_workflow')
     print >> out, 'Set helpcenterfolder_workflow as default for help center folder types.'
 
-    # Remove workflow from Tutorial Pages, code from ZWiki, can probably be simpler ~limi 
+    # Remove workflow from Tutorial Pages, code from ZWiki, can probably be simpler ~limi
     cbt = wf_tool._chains_by_type
     if cbt is None:
         cbt = PersistentMapping()
     cbt['HelpCenterTutorialPage'] = []
     wf_tool._chains_by_type = cbt
     print >> out, 'Set no workflow as default for Help Center TutorialPages.'
-
 
     fc_tool = getToolByName(self, 'portal_form_controller')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterHowTo', None, 'traverse_to', 'string:edit_reminder')
@@ -97,7 +101,9 @@ def install(self):
     print >> out, 'Set reminder to publish message hack on objects.'
 
     # make new types use portal_factory
-    ft = getToolByName(self, 'portal_factory')    portal_factory_types = ft.getFactoryTypes().keys()    for t in ['HelpCenter'
+    ft = getToolByName(self, 'portal_factory')
+    portal_factory_types = ft.getFactoryTypes().keys()
+    for t in ['HelpCenter'
              ,'HelpCenterGlossary'
              ,'HelpCenterDefinition'
              ,'HelpCenterErrorReference'
@@ -114,7 +120,27 @@ def install(self):
              ,'HelpCenterTutorialFolder'
              ,'HelpCenterTutorialPage']:
 
-        if t not in portal_factory_types:            portal_factory_types.append(t)    ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)    print >> out, 'New types use portal_factory'
+        if t not in portal_factory_types:
+            portal_factory_types.append(t)
+            ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)
 
+    print >> out, 'New types use portal_factory'
+
+    # Add "stale items" portlet, so HelpCenter Managers and Reviewers can
+    # review old stuff to see if it's still useful
+    install_portlets(self, out)
+    
     print >> out, "Successfully installed %s." % PROJECTNAME
+    return out.getvalue()
+
+def uninstall(self):
+    out = StringIO()
+
+    # remove the stale-items portlet from the portal root object
+    portletPath = 'here/portlet_stale_items/macros/portlet'
+    if portletPath in self.left_slots:
+        self.left_slots = [p for p in self.left_slots if (p != portletPath)]
+        print >> out, 'Removed stale-items portlet'
+
+    print >> out, "Successfully uninstalled %s." % PROJECTNAME
     return out.getvalue()

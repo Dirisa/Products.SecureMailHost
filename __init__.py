@@ -1,6 +1,7 @@
+from AccessControl import ModuleSecurityInfo
 from Globals import package_home
 from Products.Archetypes.public import process_types, listTypes
-from Products.CMFCore import utils
+from Products.CMFCore import utils as CMFCoreUtils
 from Products.CMFCore.DirectoryView import registerDirectory
 import os, os.path
 
@@ -15,6 +16,9 @@ registerDirectory(SKINS_DIR, GLOBALS)
 # MonkeyPatch CMFDefault.DiscussionItemContainer
 import Patch
 
+# make comment_notify importable ttw
+from utils import discussion_notify
+ModuleSecurityInfo('Products.PloneHelpCenter').declarePublic('discussion_notify')
 
 def initialize(context):
 
@@ -22,7 +26,7 @@ def initialize(context):
         listTypes(PROJECTNAME),
         PROJECTNAME)
  
-    utils.ContentInit(
+    CMFCoreUtils.ContentInit(
         PROJECTNAME + ' Content',
         content_types      = content_types,
         permission         = ADD_CONTENT_PERMISSION,

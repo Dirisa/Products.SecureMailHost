@@ -8,6 +8,9 @@ from Products.CMFCore.utils import getToolByName
 class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
     """A tutorial containing TutorialPages, Files and Images."""
 
+    __implements__ = (PHCContent.__implements__,
+                      OrderedBaseFolder.__implements__,)
+
     schema = TutorialSchema
     archetype_name = 'Tutorial'
     meta_type='HelpCenterTutorial'
@@ -22,11 +25,20 @@ class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
     typeDescription= 'A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content.'
     typeDescMsgId  = 'description_edit_tutorial'
 
-    actions = ({'id': 'view',
-                'name': 'View',
-                'action': 'string:${object_url}/tutorial_view',
-                'permissions': (CMFCorePermissions.View,)
-                },)
+    actions = (
+        {
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/tutorial_view',
+            'permissions': (CMFCorePermissions.View,)
+        },
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    ) + PHCContent.actions
 
     def getTutorialDescription(self):
         """ Returns the description of the Tutorial--convenience method for TutorialPage """

@@ -9,6 +9,10 @@ from PHCContent import PHCContent
 class HelpCenterErrorReference(PHCContent,OrderedBaseFolder):
     """This is an error reference object, meant to hold documentation about error messages""" 
 
+    __implements__ = (PHCContent.__implements__,
+                      OrderedBaseFolder.__implements__,)
+
+
     content_icon = 'errorref_icon.gif'
 
     schema = ErrorReferenceSchema
@@ -20,19 +24,24 @@ class HelpCenterErrorReference(PHCContent,OrderedBaseFolder):
     allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
     actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/errorreference_view',
-        'permissions': (CMFCorePermissions.View,)
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/errorreference_view',
+            'permissions': (CMFCorePermissions.View,)
         },
         {
-        'id': 'attachments',
-        'name': 'Attachments',
-        'action': 'string:${object_url}/howto_attachments',
-        'permissions': (CMFCorePermissions.ModifyPortalContent,)
+            'id': 'attachments',
+            'name': 'Attachments',
+            'action': 'string:${object_url}/howto_attachments',
+            'permissions': (CMFCorePermissions.ModifyPortalContent,)
         },
-        
-        )
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    ) + PHCContent.actions
 
     security = ClassSecurityInfo()
     

@@ -31,7 +31,31 @@
         <div id="bodyContent">
             <div tal:replace="structure python:here.getBody()" />
         </div>
-    
+                <metal:block tal:define="batch python:here.batchedFolderContents(suppressHiddenFiles=1);" 
+                                    tal:condition="batch|not:standalone|nothing" tal:repeat="item batch">
+                <span tal:define="getRelativeContentURL nocall:utool/getRelativeContentURL" />
+                <metal:block tal:define="item_url item/absolute_url;
+                                    item_id item/getId;
+                                    item_title_or_id item/title_or_id;
+                                    item_typeinfo item/getTypeInfo;
+                                    use_folder_contents site_properties/use_folder_contents;">
+        <div tal:define="action python:item_typeinfo.getActionById('view');
+              url python:test(item_typeinfo.getId() in use_folder_contents,
+              item_url+'/folder_contents',
+              item_url+'/'+action);">
+              The following items are included in this how-to:
+              <dl><dt><a href="#" tal:attributes="href url; title item/Description;">
+                 <img tal:define="icon python:item.getIcon(1); iconObject python:getattr(here,icon)"
+                     tal:attributes="src string:$portal_url/$icon; 
+                     alt iconObject/title_or_id;
+                     title item_typeinfo/Title"
+                     />&nbsp;<span tal:replace="item/title_or_id">Title</span>
+                    </a></dt>
+                    <dd tal:content="item/description">Description</dd>
+                    </dl>
+                    </div>
+                    </metal:block>
+                    </metal:block>
     <p tal:condition="here/getVersionsVocab" tal:define="versions here/Versions" class="discreet">
 	<span i18n:translate="phc_howto_applies_to">This How-to applies to:</span>         
     <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>

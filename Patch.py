@@ -4,6 +4,7 @@ from DateTime import DateTime
 from Acquisition import aq_inner, aq_parent, aq_base, aq_chain
 from Products.Archetypes.utils import shasattr
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.interfaces.Discussions import DiscussionResponse as IDiscussionResponse
 from Products.CMFCore.CMFCorePermissions import ReplyToItem
 from Products.CMFDefault.DiscussionItem import DiscussionItem, DiscussionItemContainer
 from Products.CMFDefault.DiscussionTool import DiscussionTool
@@ -78,26 +79,22 @@ class PatchedDiscussionTool:
 
     security = ClassSecurityInfo()
 
-    security.declarePublic( 'getDiscussionFor' )
+    # This patch fixes CMF collector issue 314
+
     def getDiscussionFor(self, content):
-        """
-            Return the talkback for content, creating it if need be.
-        """
-        if not self.isDiscussionAllowedFor( content ):
-            raise DiscussionNotAllowed
-        if content.__class__.__name__ == 'DiscussionItem':
-            talkback = getattr(content, 'talkback', None)
-            if not talkback:
-                talkback = self._createDiscussionFor( content )
-        else:
-            print 'getDiscussionFor: ', content.__class__.__name__
-            if not shasattr(aq_base(content), 'talkback'):
-                talkback = self._createDiscussionFor( content )
-            else:
-                talkback = content.talkback
+         """ Get DiscussionItemContainer for content, create it if 
+necessary.
+         """
+         if not self.isDiscussionAllowedFor( content ):
+             raise DiscussionNotAllowed
 
-        return talkback
-
+         if not IDiscussionResponse.isImplementedBy(content):
+             # Discussion Items use the DiscussionItemContainer object of the
+             # related content item, so talkback needs to be acquired
+             talkback = getattr( aq_base(content), 'talkback', None )
+             if not talkback:
+                 self._createDiscussionFor( content )
+         return content.talkback # make sure to return fully wrapped content object
 
 from Products.CMFCore import cmfcore_globals
 from App.Common import package_home

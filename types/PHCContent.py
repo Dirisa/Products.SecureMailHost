@@ -4,7 +4,27 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HCSchema as HCSchema
 
-class PHCContent:
+# Get HistoryAwareMixin on all our types:
+
+# This is currently in ATContentTypes, which introduces a dependency we'd rather 
+# do without. It's slated to move to Archetypes itself, so try that first in the
+# hope that it's there. If both fail, fall back on a dummy HistoryAwareMixin
+# which will let us continue as normal. Yep, it's another optilude hack (tm).
+
+try:
+    from Products.Archetypes.HistoryAware import HistoryAwareMixin
+except ImportError:
+    try:
+        from Products.ATContentTypes.HistoryAware import HistoryAwareMixin
+    except ImportError:
+        
+        class HistoryAwareMixin:
+            """Dummy class when we can't find the real McCoy"""
+            
+            __implements__ = ()
+            actions        = ()
+
+class PHCContent (HistoryAwareMixin):
     """A simple  mixin class to provide contentish functions
     archetype no schema defined"""
 
@@ -20,6 +40,9 @@ class PHCContent:
     #allow_discussion = 1
 
     security = ClassSecurityInfo()
+    
+    __implements__ = (HistoryAwareMixin.__implements__,)
+    actions = () + HistoryAwareMixin.actions
 
     def getImportanceVocab(self):
         """Get version vocabulary"""

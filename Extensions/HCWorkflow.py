@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.3 $"[11:-2]
+__version__ = "$Revision: 1.4 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
@@ -69,7 +69,7 @@ def setupHelpcenter_workflow(wf):
     sdef.setProperties(title="""Public""",
                        transitions=('mark_obsolete', 'reject', 'retract'))
     sdef.setPermission('Access contents information', 1, ['Anonymous', 'Manager'])
-    sdef.setPermission('Modify portal content', 0, ['Manager'])
+    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
     sdef.setPermission('View', 1, ['Anonymous', 'Manager'])
     sdef.setPermission('Change portal events', 0, ['Manager'])
     sdef.setPermission(ADD_HELP_AREA_PERMISSION, 0, ['Manager'])

@@ -6,7 +6,11 @@
 # /faq - contains the FAQ objects
 # /howto - contains the How-tos
 # /tutorial - contains the tutorials
-# 
+# /error - contains the error references
+# /link - contains the links to other documentation
+# /glossary - contains the definitions
+# /video - contains video files for training/instruction
+#
 # The main goals of these folders are to restrict the addable types and
 # provide a sensible default view out-of-the-box, like the FAQ view.
 #
@@ -21,12 +25,6 @@ class HelpCenter(OrderedBaseFolder):
     """A simple folderish archetype"""
     schema = HCRootSchema
 
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/helpcenter_view',
-        'permissions': (CMFCorePermissions.View,)
-        },)
     content_icon = 'helpcenter_icon.gif'
 
     archetype_name = 'Help Center'
@@ -42,13 +40,20 @@ class HelpCenter(OrderedBaseFolder):
 
     security = ClassSecurityInfo()
 
-    actions = ({
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${object_url}/helpcenter_view',
-        'permissions' : (CMFCorePermissions.View,)
-         },
-         )
+    actions = (
+        {
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/helpcenter_view',
+            'permissions': (CMFCorePermissions.View,)
+        },
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    )
 
     def initializeArchetype(self, **kwargs):
         # prepopulate folder

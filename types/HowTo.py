@@ -6,7 +6,7 @@ from schemata import HowToSchema
 from PHCContent import PHCContent
 from AccessControl import ClassSecurityInfo
 #from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
-
+            
 MAPPING = {'text_html' : 'text/html'}
 
 class HelpCenterHowTo(PHCContent,BaseFolder):
@@ -14,6 +14,9 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
     files.
     """
 
+    __implements__ = (PHCContent.__implements__,
+                      BaseFolder.__implements__,)
+                         
     content_icon = 'howto_icon.gif'
 
     schema = HowToSchema
@@ -24,19 +27,26 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
     allow_discussion = IS_DISCUSSABLE
     allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
-    actions = ({'id': 'view',
-                'name': 'View',
-                'action': 'string:${object_url}/howto_view',
-                'permissions': (CMFCorePermissions.View,)
-                },
-        {
-        'id': 'attachments',
-        'name': 'Attachments',
-        'action': 'string:${object_url}/howto_attachments',
-        'permissions': (CMFCorePermissions.ModifyPortalContent,)
+    actions = (
+        {  
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/howto_view',
+            'permissions': (CMFCorePermissions.View,)
         },
-        
-        )
+        {
+            'id': 'attachments',
+            'name': 'Attachments',
+            'action': 'string:${object_url}/howto_attachments',
+            'permissions': (CMFCorePermissions.ModifyPortalContent,)
+        },
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    ) + PHCContent.actions
         
     security = ClassSecurityInfo()
         

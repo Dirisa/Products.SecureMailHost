@@ -21,9 +21,26 @@ Bugs
   - BUG: RSS feed doesn't work (fix was committed, needs testing, especially with 
          foreign character sets and UTF-8 chars)
   
-  - BUG: From ML: "Error on howto_attachments "name 'translate' is not defined"
-         FYI: I get the above error when trying to view the 
+  - BUG: error_reference object has "wrong attachments" tab
+
+         Note the path here - we're calling the howto_attachments!
+
+         /aPloneSite/myHelpCenter/error/anErrorref/howto_attachments
+
+         I get this wrong behavior, when trying to view the
+         Attachments tab after creating a *error reference*
+
+====
+Fixes
+====
+
+  - "Error on howto_attachments "name 'translate' is not defined"
+
+         FYI: I get the above error when trying to view the
          attachements tab when writing a howto."
+
+         FYI: I ALSO get the above error when trying to view the
+         attachements tab, after creating a *error reference*
 
 =======
 General
@@ -244,7 +261,12 @@ Versions (not versioning ;)
 Unit tests
 ==========
 
-  - We need some!
+    - Need tests for RSS feed and foreign and UTF-8 chars.
+
+    - Need tests for searching
+
+    - We need more tests!
+
 
 
 =========

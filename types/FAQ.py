@@ -8,6 +8,9 @@ from PHCContent import PHCContent
 class HelpCenterFAQ(PHCContent,BaseContent):
     """A simple archetype"""
 
+    __implements__ = (PHCContent.__implements__,
+                      BaseContent.__implements__,)
+
     typeDescription= 'You can add a Frequently Asked Question (preferrably with an answer), and it will be reviewed and approved by our documentation team.'
     typeDescMsgId  = 'description_edit_faq'
 
@@ -19,11 +22,19 @@ class HelpCenterFAQ(PHCContent,BaseContent):
     global_allow = 0
     allow_discussion = IS_DISCUSSABLE
 
-    actions = ({'id': 'view',
-                'name': 'View',
-                'action': 'string:${object_url}/faq_view',
-                'permissions': (CMFCorePermissions.View,)
-                },)
+    actions = (
+        {'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/faq_view',
+            'permissions': (CMFCorePermissions.View,)
+        },
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    ) + PHCContent.actions
 
 
 registerType(HelpCenterFAQ, PROJECTNAME)

@@ -39,12 +39,19 @@ class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     
     security = ClassSecurityInfo()
 
-    actions = ({
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${object_url}/faqfolder_view',
-        'permissions' : (CMFCorePermissions.View,)
-         },
-         )
+    actions = (
+        {
+            'id'          : 'view',
+            'name'        : 'View',
+            'action'      : 'string:${object_url}/faqfolder_view',
+            'permissions' : (CMFCorePermissions.View,)
+        },
+        {
+            'id': 'local_roles',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,)
+        },
+    )
     
 registerType(HelpCenterFAQFolder, PROJECTNAME)

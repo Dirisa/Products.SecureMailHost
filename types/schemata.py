@@ -150,6 +150,7 @@ FAQSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
@@ -163,6 +164,7 @@ FAQSchema = HCSchema + Schema((
     TextField('answer',
               required=0,
               searchable=1,
+              primary=1,
               widget=TextAreaWidget(
 	          description = 'Meaningful sentences that explains the answer.',
                   description_msgid = "desc_answer",
@@ -180,6 +182,7 @@ FAQSchema = HCSchema + Schema((
 FAQFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(
@@ -202,6 +205,7 @@ FAQFolderSchema = HCFolderSchema + Schema((
 HCRootSchema = BaseFolderSchema + Schema((
     TextField('description',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(description_msgid="phc_desc_helpcenter",
@@ -231,6 +235,7 @@ HowToSchema = HCFolderSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
@@ -268,6 +273,7 @@ HowToSchema = HCFolderSchema + Schema((
 HowToFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(description_msgid="phc_desc_howto_folder",
@@ -286,6 +292,8 @@ TutorialSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
+              required=1,
+              primary=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
@@ -305,6 +313,7 @@ TutorialSchema = HCSchema + Schema((
 TutorialFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(description_msgid="phc_desc_folder_tutorial",
@@ -323,6 +332,7 @@ TutorialPageSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
+              required=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
@@ -357,6 +367,7 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
     TextField('description',
         default='',
         searchable=1,
+        required=1,
         accessor="Description",
         storage=MetadataStorage(),
         widget = TextAreaWidget(
@@ -394,6 +405,7 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
 ErrorReferenceFolderSchema = HCFolderSchema + Schema((
     TextField('description',
         searchable=1,
+        required=1,
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(description_msgid="description_edit_ErrorReference",
@@ -412,6 +424,7 @@ LinkSchema = HCFolderSchema + Schema((
     TextField('description',
         default='',
         searchable=1,
+        required=1,
         accessor="Description",
         storage=MetadataStorage(),
         widget = TextAreaWidget(description_msgid="description_edit_Link",
@@ -444,6 +457,7 @@ LinkSchema = HCFolderSchema + Schema((
 LinkFolderSchema = HCFolderSchema + Schema((
     TextField('description',
         searchable=1,
+        required=1,
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(description_msgid="desc_folder",
@@ -462,6 +476,8 @@ DefinitionSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
+              required=1,
+              primary=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
@@ -481,15 +497,17 @@ DefinitionSchema = HCSchema + Schema((
 GlossarySchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
+              required=1,
+              primary=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(
-    description="Description of the Glossary.",
-    description_msgid="phc_desc_folder_glossary",
-    label_msgid="phc_label_folder_glossary",
-    label="Description",
-    i18n_domain = "plonehelpcenter",
-    rows=6)
+                  description="Description of the Glossary.",
+                  description_msgid="phc_desc_folder_glossary",
+                  label_msgid="phc_label_folder_glossary",
+                  label="Description",
+                  i18n_domain = "plonehelpcenter",
+                  rows=6)
               ),
 
     )) + SectionsVocabSchema
