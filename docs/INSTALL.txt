@@ -21,9 +21,10 @@ Requirements:
 
    - PlacelessTranslationService - PTS
      (http://savannah.nongnu.org/projects/opental -- 
-      you need an up-to-date version from the OpenTAL CVS. The checkout
+      YOU NEED AN UP-TO-DATE VERSION FROM THE OPENTAL CVS. The checkout
      instructions are explained on the OpenTAL project page if you click
-     on the CVS link)
+     on the CVS link). ANY OLDER VERSION OF PTS WILL NOT RUN - NEITHER
+     ANY BETA FROM THE COLLECTIVE NOR FROM THE PTS-FORK!!!!!!!!!
 
    - Reportlab (www.reportlab.org) - required for PDF output
   
