@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.72 2003/11/06 16:01:55 ajung Exp $
+$Id: Issue.py,v 1.73 2003/11/06 17:53:53 ajung Exp $
 """
 
 import sys, os
@@ -135,6 +135,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         schema = getattr(self, '_v_schema', None)
         if schema is None:
             self._v_schema = self.aq_parent.schema_getWholeSchema()
+
+            # Check if we need to update our own properties
+            for field in self._v_schema.fields():
+                try:
+                    value = field.storage.get(field.getName(), self)  
+                except:
+                    field.storage.set(field.getName(), self, field.default)
+                
         return self._v_schema
 
     def SchemataNames(self):
@@ -457,7 +465,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """
 
         schemata = OrderedDict()
-        for f in self.schema.fields():
+        for f in self.Schema().fields():
             sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
             sub.addField(f)
             schemata[f.schemata] = sub
