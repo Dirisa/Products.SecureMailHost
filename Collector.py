@@ -8,7 +8,7 @@ from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import BaseFolder, registerType
 
 from Transcript import Transcript, TranscriptEntry
-from config import ManageCollector
+from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 import util
 import collector_schema
 
@@ -50,7 +50,7 @@ class Collector(BaseFolder):
 
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
-        self._supporters = self._admins = self._reporters = []
+        self._supporters = self._managers = self._reporters = []
         self.transcript = Transcript()
         self._setup_collector_catalog()
         self.transcript.addComment('Tracker created')
@@ -86,23 +86,51 @@ class Collector(BaseFolder):
     # Staff handling
     ######################################################################
 
-    security.declareProtected(ManageCollector, 'set_staff')
-    def set_staff(self, reporters=[], admins=[], supporters=[], RESPONSE=None):
-        """ set the staff """
-
-        self._reporters = reporters
-        self._admins = admins
-        self._supporters = supporters
-    
     security.declareProtected(ManageCollector, 'getSupporters')
     def getSupporters(self): return self._supporters
 
-    security.declareProtected(ManageCollector, 'getAdmins')
-    def getAdmins(self): return self._admins
+    security.declareProtected(ManageCollector, 'getManagers')
+    def getManagers(self): return self._managerss
 
     security.declareProtected(ManageCollector, 'getReporters')
     def getReporters(self): return self._reporters
-        
+
+    security.declareProtected(ManageCollector, 'set_staff')
+    def set_staff(self, reporters=[], managers=[], supporters=[], RESPONSE=None):
+        """ set the staff """
+        self._managers = managers
+        self._reporters = reporters
+        self._supporters = supporters
+        self._adjust_staff_roles()
+
+    def _adjust_staff_roles(self):
+        """ A djust local-role assignments to track staff roster settings.
+            Ie, ensure: only designated supporters and managers have 'Reviewer'
+            local role, only designated managers have 'Manager' local role.
+        """
+        if not managers:
+            self._managers = [getSecurityManager().getUser().getUserName()]
+        util.users_for_local_role(self, self._managers, 'TrackerAdmin')
+        util.users_for_local_role(self, self._supporters, 'Supporter')
+        util.users_for_local_role(self, self._reporters, 'Reporter')
+
+    def _adjust_participation_mode(self):
+        """Set role privileges according to participation mode."""
+
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+
+        if self.participation_mode == 'authenticated':
+            target_roles = target_roles + ('Authenticated', )
+        elif self.participation_mode == 'anyone':
+            target_roles = target_roles + ('Authenticated', 'Anonymous')
+
+        self.manage_permission(AddCollectorIssue,
+                               roles=target_roles,
+                               acquire=0)
+
+        self.manage_permission(AddCollectorIssueFollowup,
+                               roles=target_roles,
+                               acquire=0)
 
 
 registerType(Collector)
