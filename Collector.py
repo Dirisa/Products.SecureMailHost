@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.54 2003/11/02 12:03:28 ajung Exp $
+$Id: Collector.py,v 1.55 2003/11/02 19:54:35 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -385,6 +385,7 @@ class PloneCollectorNGCatalog(CatalogTool):
                   ('topic', 'FieldIndex'),
                   ('assigned_to', 'KeywordIndex'),
                   ('progress_deadline', 'FieldIndex'),
+                  ('progress_percent_done', 'FieldIndex'),
                   ('getId', 'FieldIndex'),
                   )
         custom = tuple([col for col in custom if col not in standard])
@@ -394,7 +395,8 @@ class PloneCollectorNGCatalog(CatalogTool):
         """Return field names of data to be cached on query results."""
         standard = CatalogTool.enumerateColumns(self)
         custom = ('id', 'status', 'topic', 'classification',
-                  'importance', 'assigned_to', 'progress_deadline', 'getId',
+                  'importance', 'assigned_to', 'progress_deadline', 
+                  'progress_percent_done', 'getId',
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
