@@ -4,6 +4,7 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HCFolderSchema as HCSchema
 from Products.CMFCore.utils import getToolByName
+from AccessControl import getSecurityManager
 
 class PHCFolder:
     """A simple mixin for folderish archetype"""
@@ -36,7 +37,9 @@ class PHCFolder:
 
     def getItems(self, states=[]):	
         """Get items"""
+        user = getSecurityManager().getUser()
         items = self.contentValues(self.allowed_content_types)
+        items = [ i for i in items if user.has_permission('View', i) ]
 
         if states:
             wtool=getToolByName(self, 'portal_workflow', None)
@@ -48,8 +51,10 @@ class PHCFolder:
 
     def getItemsBySection(self, section, states=[]):	
         """Get items in this section"""
+        user = getSecurityManager().getUser()
         items = [o for o in self.contentValues(self.allowed_content_types) 
                  if section in o.getSections()]
+        items = [ i for i in items if user.has_permission('View', i) ]
         if states:
             wtool=getToolByName(self, 'portal_workflow', None)
             if wtool:

@@ -2,7 +2,7 @@ from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.PloneHelpCenter.config import *
 from Products.CMFCore.utils import getToolByName
-from Products.PloneHelpCenter.Extensions import HCWorkflow 
+from Products.PloneHelpCenter.Extensions import HCWorkflow, HCFolderWorkflow
 
 from StringIO import StringIO
 
@@ -43,19 +43,30 @@ def install(self):
     registerNavigationTreeSettings(self, out)
 
     HCWorkflow.install()
+    HCFolderWorkflow.install()
     wf_tool = getToolByName(self, 'portal_workflow')
 
     if not 'helpcenter_workflow' in wf_tool.objectIds():
         wf_tool.manage_addWorkflow('helpcenter_workflow (Workflow for Help Center.)',
                                    'helpcenter_workflow')
+    if not 'helpcenterfolder_workflow' in wf_tool.objectIds():
+        wf_tool.manage_addWorkflow('helpcenterfolder_workflow (Workflow for Help Center Folders.)',
+                                   'helpcenterfolder_workflow')
     wf_tool.updateRoleMappings()
 
     print >> out, 'Installed helpcenter_workflow.'
+    print >> out, 'Installed helpcenterfolder_workflow.'
     
     wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ','HelpCenterHowTo','HelpCenterLink'
                                             ,'HelpCenterTutorial','HelpCenterTutorialPage'
                                             ,'HelpCenterErrorReference','HelpCenterDefinition'], chain='helpcenter_workflow')
     print >> out, 'Set helpcenter_workflow as default for help center content types.'
+
+    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQFolder','HelpCenterHowToFolder',
+                                             'HelpCenterLinkFolder','HelpCenterTutorialFolder',
+                                             'HelpCenterErrorReferenceFolder',
+                                             'HelpCenterGlossary'], chain='helpcenterfolder_workflow')
+    print >> out, 'Set helpcenterfolder_workflow as default for help center folder types.'
 
     fc_tool = getToolByName(self, 'portal_form_controller')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterHowTo', None, 'traverse_to', 'string:edit_reminder')

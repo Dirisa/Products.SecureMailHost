@@ -53,28 +53,34 @@ class HelpCenter(BaseFolder):
         # prepopulate folder
         BaseFolder.initializeArchetype(self,**kwargs)
 
-        self.invokeFactory('HelpCenterFAQFolder','faq')
-        self['faq'].setTitle('FAQs')
-        self['faq'].setDescription('Frequently Asked Questions.')
+        if 'faq' not in self.objectIds():
+            self.invokeFactory('HelpCenterFAQFolder','faq')
+            self['faq'].setTitle('FAQs')
+            self['faq'].setDescription('Frequently Asked Questions.')
 
-        self.invokeFactory('HelpCenterHowToFolder','howto')
-        self['howto'].setTitle('How-tos')
-        self['howto'].setDescription('Step-by-step instructions.')
+        if 'howto' not in self.objectIds():
+            self.invokeFactory('HelpCenterHowToFolder','howto')
+            self['howto'].setTitle('How-tos')
+            self['howto'].setDescription('Step-by-step instructions.')
 
-        self.invokeFactory('HelpCenterTutorialFolder','tutorial')
-        self['tutorial'].setTitle('Tutorials')
-        self['tutorial'].setDescription('Detailed tutorials.')
+        if 'tutorial' not in self.objectIds():
+            self.invokeFactory('HelpCenterTutorialFolder','tutorial')
+            self['tutorial'].setTitle('Tutorials')
+            self['tutorial'].setDescription('Detailed tutorials.')
 
-        self.invokeFactory('HelpCenterErrorReferenceFolder','error')
-        self['error'].setTitle('Error Reference')
-        self['error'].setDescription('Error reference section.')
+        if 'error' not in self.objectIds():
+            self.invokeFactory('HelpCenterErrorReferenceFolder','error')
+            self['error'].setTitle('Error Reference')
+            self['error'].setDescription('Error reference section.')
 
-        self.invokeFactory('HelpCenterLinkFolder','link')
-        self['link'].setTitle('Links')
-        self['link'].setDescription('Links section.')
+        if 'link' not in self.objectIds():
+            self.invokeFactory('HelpCenterLinkFolder','link')
+            self['link'].setTitle('Links')
+            self['link'].setDescription('Links section.')
 
-        self.invokeFactory('HelpCenterGlossary','glossary')
-        self['glossary'].setTitle('Glossary')
-        self['glossary'].setDescription('Glossary of terms.')
+        if 'glossary' not in self.objectIds():
+            self.invokeFactory('HelpCenterGlossary','glossary')
+            self['glossary'].setTitle('Glossary')
+            self['glossary'].setDescription('Glossary of terms.')
 
 registerType(HelpCenter, PROJECTNAME)

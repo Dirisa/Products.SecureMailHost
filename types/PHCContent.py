@@ -8,16 +8,16 @@ class PHCContent:
     """A simple  mixin class to provide contentish functions
     archetype no schema defined"""
 
-    typeDescription= 'Simple PHC content'
-    typeDescMsgId  = 'description_edit_phc'
+    #typeDescription= 'Simple PHC content'
+    #typeDescMsgId  = 'description_edit_phc'
 
-    content_icon = 'icon.gif'
+    #content_icon = 'icon.gif'
 
-    schema = HCSchema
-    archetype_name = 'PHCContent'
-    meta_type = 'PHCContent'
-    global_allow = 0
-    allow_discussion = 1
+    #schema = HCSchema
+    #archetype_name = 'PHCContent'
+    #meta_type = 'PHCContent'
+    #global_allow = 0
+    #allow_discussion = 1
 
     security = ClassSecurityInfo()
 
