@@ -5,33 +5,37 @@
  
 <body>
     <div metal:fill-slot="main">
-        <div metal:define-macro="faq" 
-             tal:define="w python:here.widget;">
-
-            <h2 tal:content="here/Title">Question</h2>
-            
-            <div class="documentDescription"
-                 tal:content="structure here/getQuestion|nothing">
-            Full Question
-            </div>
-               
-            <div tal:content="structure here/getAnswer">
-            Answer
-            </div>
+        <div metal:define-macro="faq">
+        
+            <tal:vars define="w python:context.widget;
+                              faq python: context;">
     
-            <p tal:condition="here/getVersions" 
-               class="discreet">
-                This FAQ applies to: 
-                <span tal:condition="here/versions"
-                      metal:use-macro="python:here.widget('versions')">
-                Versions
-                </span>
-
-                <span tal:condition="not: here/versions">
-                Any version.
-                </span>
-            </p>
+                <h2 tal:content="faq/Title">Question</h2>
+                
+                <div class="documentDescription"
+                     tal:content="structure faq/getQuestion|nothing">
+                Full Question
+                </div>
+                   
+                <div tal:content="structure faq/getAnswer">
+                Answer
+                </div>
+        
+                <p tal:condition="faq/getVersions" 
+                   class="discreet">
+                    This FAQ applies to: 
+                    <span tal:condition="faq/versions"
+                          metal:use-macro="python:faq.widget('versions')">
+                    Versions
+                    </span>
     
+                    <span tal:condition="not: faq/versions">
+                    Any version.
+                    </span>
+                </p>
+    
+            </tal:vars>
+
         </div>
     </div>
 </body>

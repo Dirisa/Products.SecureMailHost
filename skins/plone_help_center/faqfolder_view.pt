@@ -3,6 +3,13 @@
     metal:use-macro="here/main_template/macros/master"
     i18n:domain="plonehelpcenter">
 
+<head>
+    <metal:css fill-slot="css_slot">
+    <style type="text/css" media="all"
+           tal:content="string: @import url($portal_url/helpcenter.css);"></style>
+    </metal:css>
+</head>
+
 <body>
     <div metal:fill-slot="main">
         <div metal:define-macro="body" 
@@ -15,52 +22,58 @@
         Folder Title
         </h1>
         
+        <tal:entirefaq condition="python: req_section or not full">
+        <a class="link-expand"
+           tal:attributes="href python:'%s?full=1' % here.absolute_url()">View entire FAQ in full</a>
+        </tal:entirefaq>
+
+        <tal:toc condition="python: full and not req_section">
+        <a class="link-parent"
+           tal:attributes="href python:'%s' % here.absolute_url()">Up to table of contents</a>
+        </tal:toc>
+
+        <div tal:condition="request/form/section |nothing">
+            <a href=""
+                class="link-parent"
+                tal:define="parent_url here/absolute_url"
+                tal:condition="python: req_section"
+                tal:attributes="href parent_url"
+                i18n:translate="go_to_parent_url">
+                Up one level
+            </a>
+        </div>
+
         <div class="documentDescription"
              tal:content="here/Description">
         Description.
         </div>
-
-        <p style="discreet" tal:condition="python: req_section or not full">
-        [ <a tal:attributes="href python:'%s?full=1' % here.absolute_url()"> View entire FAQ in full </a>]
-        </p>
         
-        <p style="discreet" tal:condition="python: full and not req_section">
-        [ <a tal:attributes="href python:'%s' % here.absolute_url()">View table of contents</a> ]
-        </p>
-        
-            <div tal:condition="request/form/section |nothing">
-                <a href=""
-                    class="link-parent"
-                    tal:define="parent_url here/absolute_url"
-                    tal:condition="python: req_section"
-                    tal:attributes="href parent_url"
-                    i18n:translate="go_to_parent_url">
-                    Up one level
-                </a>
+        <div tal:define="sections python:test(req_section,[req_section],here.sections)" 
+             tal:repeat="section sections">
+
+            <h2 tal:content="section">Section Heading</h2>
+
+            <tal:section condition="python: not full and not req_section">
+                <a class="link-expand"
+                   tal:attributes="href python:'%s?full=1&section=%s' % ( here.absolute_url(), pss.url_quote(section) )">
+                View section in full</a> 
+            </tal:section>
+
+            <ul tal:condition="not: full">
+                <li tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
+                <a href="" tal:content="entry/Title"
+                    tal:attributes="href entry/getURL">FAQ Question</a>
+                </li>
+            </ul>
+            <div tal:condition="full" 
+                 tal:repeat="faq python: here.portal_catalog(portal_type='HelpCenterFAQ', 
+                                                             getSections=section, 
+                                                             path=faqpath)">
+            
+                <metal:faq metal:use-macro="here/faq_view/macros/faq" />
+            
             </div>
-
-            <p tal:content="here/description">Folder Content Description</p>
-
-
-            <div tal:define="sections python:test(req_section,[req_section],here.sections)" tal:repeat="section sections">
-                <h2 tal:content="section"></h2>
-                <p style="discreet" tal:condition="python: not full and not req_section">[ <a tal:attributes="href python:'%s?full=1&section=%s' % ( here.absolute_url(), pss.url_quote(section) )">View section in full</a> ]</p>
-
-                <ul tal:condition="not: full">
-                    <li tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
-                    <a href="" tal:content="entry/Title"
-                        tal:attributes="href entry/getURL">FAQ Question</a>
-                    </li>
-                </ul>
-                <div tal:condition="full" 
-                     tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
-                    <h3 tal:content="entry/Title"></h3>
-                    <tal:question define="entry entry/getObject">
-                    <div style="font-weight: bold; font-style: italic" tal:content="structure entry/getQuestion" tal:condition="python: entry.getQuestion() != entry.Title()"></div>
-                    <div tal:content="structure entry/getAnswer"></div>
-                    </tal:question>
-                </div>
-            </div>
+        </div>
 
         </div>
     </div>
