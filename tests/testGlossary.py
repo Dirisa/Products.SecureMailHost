@@ -15,9 +15,8 @@ class TestGlossary(PHCTestCase.PHCTestCase):
 
     def afterSetUp(self):
         self._createHelpCenter(self.folder, 'hc')
-        self.gf = self.folder.hc.glossary
-        self.gf.invokeFactory('HelpCenterDefinition', id='d')
-        self.definition = self.gf.d
+        self._createDefinition(self.folder.hc.glossary, 'd')
+        self.definition = self.folder.hc.glossary.d
 
     def testInitialSections(self):
         # Test that the default section list is correct.

@@ -15,9 +15,8 @@ class TestErrorReference(PHCTestCase.PHCTestCase):
 
     def afterSetUp(self):
         self._createHelpCenter(self.folder, 'hc')
-        self.ef = self.folder.hc.error
-        self.ef.invokeFactory('HelpCenterErrorReference', id='e')
-        self.errorRef = self.ef.e
+        self._createErrorReference(self.folder.hc.error, 'e')
+        self.errorRef = self.folder.hc.error.e
 
     def testInitialSections(self):
         # Test that the default section list is correct.

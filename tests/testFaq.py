@@ -15,9 +15,8 @@ class TestFaq(PHCTestCase.PHCTestCase):
 
     def afterSetUp(self):
         self._createHelpCenter(self.folder, 'hc')
-        self.ff = self.folder.hc.faq
-        self.ff.invokeFactory('HelpCenterFAQ', id='f')
-        self.faq = self.ff.f
+        self._createFAQ(self.folder.hc.faq, 'f')
+        self.faq = self.folder.hc.faq.f
 
     def testInitialSections(self):
         # Test that the default section list is correct.

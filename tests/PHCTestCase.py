@@ -71,7 +71,7 @@ class PHCTestCase(PloneTestCase.PloneTestCase):
 
     def _createHowto(self, howtoFolder, id, title=defaultTitle):
         """Creates and returns a refence to a PHC Howto.
-        This method publishes a Howto instance under a folder.  It fills in
+        This method creates a Howto instance under a folder.  It fills in
         all of the standard properties."""
         howtoFolder.invokeFactory('HelpCenterHowTo',
                                   id=id,
@@ -84,3 +84,85 @@ class PHCTestCase(PloneTestCase.PloneTestCase):
         howto = getattr(howtoFolder, id)
         self.portal.plone_utils.editMetadata(howto, format='text/x-rst')
         return howto
+
+    def _createTutorial(self, tutorialFolder, id, title=defaultTitle, numPages=2):
+        """Creates and returns a reference to a PHC Tutorial.
+        This method creates a Tutorial instance under a folder.  It fills in
+        all of the standard properties."""
+        tutorialFolder.invokeFactory('HelpCenterTutorial',
+                                     id=id,
+                                     title=title,
+                                     description='A PHC Tutorial for unit tests.',
+                                     versions=('Version 2.0',),
+                                     sections=('General',),
+                                     importance=self.defaultDefaultImportance)
+        tutorial = getattr(tutorialFolder, id)
+        # attach pages
+        for i in range(numPages):
+            pageNum = i + 1
+            tutorial.invokeFactory('HelpCenterTutorialPage',
+                                   id='page%d' % pageNum,
+                                   title='Test Tutorial Page %d' % pageNum,
+                                   description='A PHC Tutorial Page (%d) for unit tests.' % pageNum,
+                                   body=self.defaultBodyRst)
+            newPage = getattr(tutorial, 'page%d' % pageNum)
+            self.portal.plone_utils.editMetadata(newPage,format='text/x-rst')
+        return tutorial
+                                   
+    def _createFAQ(self, faqFolder, id, title=defaultTitle):
+        """Creates and returns a reference to a PHC FAQ.
+        This method creates an FAQ instance under a folder.  It fills in
+        all of the standard properties."""
+        faqFolder.invokeFactory('HelpCenterFAQ',
+                                id=id,
+                                title=title,
+                                description='An FAQ for unit tests.  Did you know that this field is supposed to be the question?',
+                                answer='No one knows; it is one of the great mysteries.',
+                                versions=('Version 2.0',),
+                                sections=('General',),
+                                importance=self.defaultDefaultImportance)
+        faq = getattr(faqFolder, id)
+        self.portal.plone_utils.editMetadata(faq, format='text/plain')
+        return faq
+
+    def _createLink(self, linkFolder, id, title=defaultTitle):
+        linkFolder.invokeFactory('HelpCenterLink',
+                                 id=id,
+                                 title=title,
+                                 description='A Link for unit tests.',
+                                 url='http://www.plone.org/',
+                                 versions=('Version 2.0',),
+                                 sections=('General',),
+                                 importance=self.defaultDefaultImportance)
+        link = getattr(linkFolder, id)
+        return link
+
+    def _createErrorReference(self, errorRefFolder, id, title=defaultTitle):
+        errorRefFolder.invokeFactory('HelpCenterErrorReference',
+                                     id=id,
+                                     title=title,
+                                     description='An error reference for unit tests.',
+                                     body=self.defaultBodyRst, 
+                                     versions=('Version 2.0',),
+                                     sections=('General',),
+                                     importance=self.defaultDefaultImportance)
+        errorRef = getattr(errorRefFolder, id)
+        self.portal.plone_utils.editMetadata(errorRef, format='text/x-rst')
+        return errorRef
+
+    def _createDefinition(self, glossaryFolder, id, title=defaultTitle):
+        glossaryFolder.invokeFactory('HelpCenterDefinition',
+                                     id=id,
+                                     title=title,
+                                     description='A definition for unit tests.',
+                                     versions=('Version 2.0',),
+                                     sections=('General',),
+                                     importance=self.defaultDefaultImportance)
+        definition = getattr(glossaryFolder, id)
+        return definition
+
+    def _createReferenceManual(self, glossaryFolder, id, title=defaultTitle):
+        pass
+
+    def _createVideo(self, videoFolder, id, title=defaultTitle):
+        pass

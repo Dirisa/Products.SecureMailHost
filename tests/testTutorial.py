@@ -15,9 +15,8 @@ class TestTutorial(PHCTestCase.PHCTestCase):
 
     def afterSetUp(self):
         self._createHelpCenter(self.folder, 'hc')
-        self.tf = self.folder.hc.tutorial
-        self.tf.invokeFactory('HelpCenterTutorial', id='t')
-        self.tutorial = self.tf.t
+        self._createTutorial(self.folder.hc.tutorial, 't')
+        self.tutorial = self.folder.hc.tutorial.t
 
     def testInitialSections(self):
         # Test that the default section list is correct.

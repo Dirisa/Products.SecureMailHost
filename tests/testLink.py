@@ -15,9 +15,8 @@ class TestLink(PHCTestCase.PHCTestCase):
 
     def afterSetUp(self):
         self._createHelpCenter(self.folder, 'hc')
-        self.lf = self.folder.hc.link
-        self.lf.invokeFactory('HelpCenterLink', id='l')
-        self.link = self.lf.l
+        self._createLink(self.folder.hc.link, 'l')
+        self.link = self.folder.hc.link.l
 
     def testInitialSections(self):
         # Test that the default section list is correct.
