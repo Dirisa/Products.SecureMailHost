@@ -16,7 +16,7 @@
     <table border="0" cellspacing="4" cellpadding="2"
            td tal:define="fieldsets python:[key for key in here.atse_getSchemataNames() if not key in ['metadata', 'default']];
                           default_fieldset python: fieldsets[0];
-                          fieldset request/fieldset|default_fieldset; ">
+                          fieldset request/schemata|default_fieldset; ">
       <metal:block tal:condition="not: request/fieldset|nothing">
         <span tal:define="dummy python: request.set('fieldset', fieldsets[0])" /> 
       </metal:block>
@@ -30,10 +30,10 @@
             <div class="portletBody">
               <div tal:repeat="set fieldsets">
                 <a tal:content="string: ${set}" t
-                   tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?fieldset=${set};
+                   tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${set};
                                    class python: test(set==fieldset, 'selected', '')"/>
-                <a tal:attributes="href string:atse_schemtaMoveLeft?name=${set}"><img src="arrowUp.gif" title="Move up"></a> 
-                <a tal:attributes="href string:atse_schemtaMoveRight?name=${set}"><img src="arrowDown.gif" title="Move down"></a> 
+                <a tal:attributes="href string:atse_schemataMoveLeft?name=${set}"><img src="arrowUp.gif" title="Move up"></a> 
+                <a tal:attributes="href string:atse_schemataMoveRight?name=${set}"><img src="arrowDown.gif" title="Move down"></a> 
                 <a tal:attributes="href string:atse_delSchemata?name=${set}"><img src="delete.gif" title="Delete"></a> 
               </div>
        
@@ -52,7 +52,7 @@
             <h5 i18n:translate="fields">Fields</h5>
             <div class="portletBody">  
               <div tal:repeat="field python: here.atse_getSchemata(fieldset).fields()">
-                <a tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${fieldset}&field=${field/getName};
+                <a tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
                                    class python: test(field.getName() == request.get('field'), 'selected', '')"
                     tal:content="string: ${field/getName}" />
                 <a tal:attributes="href string:atse_fieldMoveLeft?name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
@@ -60,11 +60,11 @@
                 <a tal:attributes="href string:atse_delField?name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
               </div>
               <div>
-                <form action="schema_update" method="post">
+                <form action="atse_update" method="post">
                   <input type="hidden" name="fielddata.schemata:record:string"    
                        tal:attributes="value request/fieldset|nothing" />
                     <input type="text" name="name" value=""> 
-                    <input type="submit" name="schema_add_field" value="Add" class="standalone" i18n:attributes="value">
+                    <input type="submit" name="add_field" value="Add" class="standalone" i18n:attributes="value">
                 </form>
               </div>
             </div>
@@ -80,6 +80,158 @@
           </div>
 
         </td>  <!-- EOF Navigation -->
+
+
+        <td valign="top" tal:condition="request/field|nothing">  <!-- field editor -->
+
+          <div class="portlet">
+            <h5 i18n:translate="field_definition">Field definition</h5>
+            <div class="portletBody">
+
+          <form action="atse_update" method="post"
+                tal:define="field python: here.atse_getField(request['field'])">
+            <input type="hidden" name="fielddata.name:record:string" 
+                   tal:attributes="value request/field|nothing" />
+            <input type="hidden" name="fielddata.schemata:record:string"    
+                   tal:attributes="value request/fieldset|nothing" />
+
+
+            <div class="row">
+              <div class="label" i18n:translate="name">Name</div>
+              <div class="field">
+                <span tal:content="field/getName" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="type">Type</div>
+              <div class="field">
+                <select name="fielddata.type:record:string">
+                  <span tal:repeat="item python: ('StringField', 'IntegerField', 'FloatField', 'FixedPointField', 'LinesField', 'DateTimeField', 'BooleanField')">
+                    <option tal:attributes="value item;
+                                            selected python: item==here.atse_getFieldType(field)"
+                            tal:content="item" />
+                  </span>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="widget">Widget</div>
+              <div class="field">
+                <select name="fielddata.widget:record:string">
+                  <option value="String" 
+                          tal:content="string:String"
+                          tal:attributes="selected python: field.getWidgetName()=='StringWidget'" />
+                  <option value="Textarea" 
+                          tal:content="string:Textarea"
+                          tal:attributes="selected python: field.getWidgetName()=='TextAreaWidget'" />
+                  <option value="Radio" 
+                          tal:content="string:Radio"
+                          tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='radio'"/>
+                  <option value="Select" 
+                          tal:content="string:Select"
+                          tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
+                  <option value="Flex" 
+                          tal:content="string:flexible Selection"
+                          tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='flex'"/>
+                  <option value="Lines" 
+                          tal:content="string:Lines"
+                          tal:attributes="selected python: field.getWidgetName()=='LinesWidget' "/>
+                  <option value="Calendar" 
+                          tal:content="string:Calendar"
+                          tal:attributes="selected python: field.getWidgetName()=='CalendarWidget' "/>
+                  <option value="Boolean" 
+                          tal:content="string:Boolean"
+                          tal:attributes="selected python: field.getWidgetName()=='BooleanWidget' "/>
+                  <option value="MultiSelect" 
+                          tal:content="string:MultiSelect"
+                          tal:attributes="selected python: field.getWidgetName()=='MultiSelectionWidget' "/>
+                  <option value="Keywords" 
+                          tal:content="string:Keywords"
+                          tal:attributes="selected python: field.getWidgetName()=='KeywordWidget' "/>
+                  <option value="Richtext" 
+                          tal:content="string:Richtext"
+                          tal:attributes="selected python: field.getWidgetName()=='RichWidget' "/>
+                  <option value="Password" 
+                          tal:content="string:Password"
+                          tal:attributes="selected python: field.getWidgetName()=='PasswordWidget' "/>
+                  <option value="Visual" 
+                          tal:content="string:Visual"
+                          tal:attributes="selected python: field.getWidgetName()=='VisualWidget' "/>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="size_schema_editor">Size (Use "ROWSxCOLS" for Textarea or Line widgets)</div>
+                
+              <div class="field">
+                <input type="text" value="20" size="10" name="fielddata.widgetsize:record:string"/>
+              </div>
+            </div>
+
+            <div class="row" tal:condition="python: field.getWidgetName() in ('MultiSelectionWidget', 'SelectionWidget')">
+              <div class="label" i18n:translate="vocabulary">Vocabulary (Use "key|value" for passing key-value pairs or 'method:&lt;methodname&gt;')</div>
+              <div class="field">
+                <textarea cols="60" rows="6"
+                       name="fielddata.vocabulary:record:lines"
+                       tal:condition="python: field.getWidgetName() in ('MultiSelectionWidget', 'SelectionWidget')"
+                       tal:content="python: here.atse_formatVocabulary(field)"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="default">Default</div>
+              <div class="field">
+                <input type="text" value="" size="40" 
+                       name="fielddata.default:record:string"
+                       tal:attributes="value field/getDefault"/>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="label">Label</div>
+              <div class="field">
+                <input type="text" value="" size="40" 
+                       name="fielddata.label:record:string"
+                       tal:attributes="value python: field.widget.label"/>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="required">Required</div>
+              <div class="field">
+                <input type="checkbox" value="1" 
+                       name="fielddata.required:record:int"
+                       tal:attributes="checked field/required"/>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="label" i18n:translate="invisible">Invisible</div>
+              <div class="field">
+                <input type="checkbox" value="1" 
+                       name="fielddata.invisible:record:int" 
+                       tal:attributes="checked python: field.widget.visible == 0"/>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <input type="submit" value="Save changes" class="standalone" i18n:attributes="value">
+              </div> 
+            </div>
+          </form>
+
+          </div>
+          </div>
+
+        </td>
+
+
+
+
 
       </tr>
 
