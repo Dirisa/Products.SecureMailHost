@@ -9,6 +9,7 @@
 
 REQUEST = context.REQUEST
 
+fieldset = REQUEST.get('fieldset', None)
 new_context = None
 
 # Support for portal_factory
@@ -53,7 +54,8 @@ if REQUEST.get('assign_ticket', None) == '1':
 
 
 portal_status_message = REQUEST.get('portal_status_message', new_context.Translate('changes_saved', 'Content changes saved'))
-return state.set(status='success',\
-                 context=new_context,\
+return state.set(status='success',
+                 context=new_context,
+                 fieldset=fieldset, 
                  portal_status_message=portal_status_message)
 
