@@ -36,7 +36,7 @@ for group in groups:
         elif ev.type == 'reference':
             nl('Reference: %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
         elif ev.type == 'upload':
-            nl('Upload: %s: %s (%s)' % (ev.fieldid, ev.comment))
+            nl('Upload: %s (%s)' % (ev.fileid, ev.comment))
         else: 
             nl(str(ev))
 
