@@ -6,13 +6,9 @@ sort_on = R.get('sort_on', 'getId')
 sort_direction = R.get('sort_direction', 'desc')
 query = {}
 
-print sort_on
-print sort_direction
-
 def toQuery(key):
     if R.has_key(key):
         query[key]= R[key]
-
 
 def query_sort(a, b):
     """ helper method to sort the result list """
