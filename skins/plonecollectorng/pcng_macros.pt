@@ -116,7 +116,8 @@
                     Batch python: modules['Products.CMFPlone'].Batch;
                     b_size python: request.get('batchsize', member.getProperty('pcng_hits_per_page', 10));
                     b_start python: 0;
-                    b_start request/b_start|b_start">
+                    b_start request/b_start|b_start;
+                    have_reportlab here/haveReportlab">
 
     <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
 
@@ -129,7 +130,7 @@
               <span tal:replace="issue/getId" />.
               <span tal:replace="issue/Title" />
             </a>
-          <a tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo.gif"  height="14" width="18" border="0" title="PDF"></a>
+          <a tal:condition="have_reportlab" tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo.gif"  height="14" width="18" border="0" title="PDF"></a>
           </h2>
         </metal:block>
         <div class="pcng_issueview_metadata">

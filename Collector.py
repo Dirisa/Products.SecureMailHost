@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.74 2003/11/21 07:36:06 ajung Exp $
+$Id: Collector.py,v 1.75 2003/11/21 07:49:49 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -408,6 +408,19 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         RESPONSE.setHeader('content-length', str(len(pdf)))
         RESPONSE.setHeader('content-disposition', 'attachment; filename=issues_%s.pdf' % self.getId())
         RESPONSE.write(pdf)
+
+    security.declareProtected(View, 'haveReportlab')
+    def haveReportlab(self):
+        """ check if Reportlab is installed """
+        have_rl = getattr(self, '_v_have_rl', None)
+        if have_rl is None:
+            try: 
+                import reportlab
+                self._v_have_rl = 1 
+            except ImportError:
+                self._v_have_rl = 0
+            have_rl = self._v_have_rl
+        return have_rl 
 
     ######################################################################
     # Some Archetypes madness

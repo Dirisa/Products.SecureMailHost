@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.9 2003/11/20 06:07:41 ajung Exp $
+$Id: __init__.py,v 1.10 2003/11/21 07:49:49 ajung Exp $
 """
 
 import os, sys
@@ -40,4 +40,5 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
+
 

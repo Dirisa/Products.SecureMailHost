@@ -53,7 +53,7 @@
           <a tal:condition="python: mode in ('simple', 'full')" href="pcng_issue_view?mode=fullimages">
             <span i18n:translate="fullview_with_images">Full view with images</span> &bull;
           </a> 
-          <a href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
+          <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
         </div>
 
       </fieldset>
