@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.27 2004/01/16 18:59:58 ajung Exp $
+$Id: pdfwriter.py,v 1.28 2004/01/17 13:09:00 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -40,19 +40,16 @@ PAGE_HEIGHT = rl_config.defaultPageSize[1]
 # Settup custom fonts for UTF8 handling
 rl_config.warnOnMissingFontGlyphs = 0
 rl_config.TTFSearchPath= list(rl_config.TTFSearchPath) + [ os.path.join(os.path.dirname(__file__), 'ttffonts') ]
-pdfmetrics.registerFont(TTFont('NFont', 'steelfis.ttf'))
-pdfmetrics.registerFont(TTFont('NFont-Bold', 'steelfib.ttf'))
+pdfmetrics.registerFont(TTFont('NFont', 'VeraSe.ttf'))
+pdfmetrics.registerFont(TTFont('NFont-Bold', 'VeraSeBd.ttf'))
 
 NORMAL_FONT = 'NFont'
 BOLD_FONT = 'NFont-Bold'
 
-SITE_ENCODING = 'n/a'
-
 def utf8(text):
-    if isinstance(text, UnicodeType):
-        return text.encode('utf-8')
-    else:
-        return unicode(text, SITE_ENCODING).encode('utf-8')
+    """ Unicode -> UTF8 """
+    assert isinstance(text, UnicodeType)
+    return text.encode('utf-8')
 
 def dowrap(text):
     return fill(text, 100)
@@ -85,14 +82,20 @@ myFirstPage = myLaterPages
 
 Elements = []
 
+##########################################################################
+# Formatter methods
+##########################################################################
+
 HeaderStyle = styles["Heading3"] 
 HeaderStyle.fontName = BOLD_FONT
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
+    assert isinstance(txt, UnicodeType)
     p = XPreformatted(utf8(txt), style)
     Elements.append(p)
+
 
 ParaStyle = styles["Normal"]
 ParaStyle.fontName = NORMAL_FONT
@@ -101,12 +104,15 @@ ParaStyle.leftIndent = 18
 def p(txt):
     return header(txt, style=ParaStyle, sep=0.0)
 
+
 PreStyle = styles["Code"]
 PreStyle.fontName = NORMAL_FONT
 
 def pre(txt):
+    assert isinstance(txt, UnicodeType)
     p = Preformatted(utf8(txt), PreStyle)
     Elements.append(p)
+
 
 DefStyle = styles["Definition"]
 DefStyle.leftIndent = 18
@@ -115,35 +121,37 @@ DefStyle.spaceBefore = 3
 DefStyle.spaceAfter = 1
 
 def definition(txt):
+    assert isinstance(txt, UnicodeType)
     p = XPreformatted(utf8(txt), DefStyle)
     Elements.append(p)
 
 
+##########################################################################
+# PDF Writer
+##########################################################################
+
 def pdfwriter(collector, ids):
-    global SITE_ENCODING
 
-    SITE_ENCODING = collector.getSiteEncoding()
+    def toUnicode(text):
+        if not isinstance(text, UnicodeType):
+            return unicode(text, collector.getSiteEncoding())
+        return text
+
     translate = collector.translate
-
-    ## SUX:: widget.Label() returns a translated string in the same encoding
-    ## as the corresponding language catalog instead of returning unicode
-    ## or at least a string encoded using the site_encoding
-    def translate_e(msgid, default, encoding='latin1', **kw):
-        return unicode(translate(msgid, default, **kw), encoding).encode('utf8')
 
     tempfiles = []
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
-        header(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.Title())))
+        header(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1))
 
-        header(translate('label_description', 'Description'))
+        header(translate('label_description', 'Description', as_unicode=1))
         definition(html_quote(issue.description))
 
         if issue.solution:
-            header(translate('label_solution', 'Solution'))
+            header(translate('label_solution', 'Solution', as_unicode=1))
             definition(html_quote(issue.solution))
-        
+
         for name in issue.atse_getSchemataNames():
             if name in ('default', 'metadata'): continue
             
@@ -161,15 +169,11 @@ def pdfwriter(collector, ids):
                     v = value
 
                 if v:
-                    ## SUX:: widget.Label() returns a translated string in the same encoding
-                    ## as the corresponding language catalog instead of returning unicode
-                    ## or at least a string encoded using the site_encoding
-                    l.append('<b>%s</b>: %s ' % (unicode(field.widget.Label(issue), 'latin1').encode('utf8'), v))
-                    print field.widget.Label(issue), type(field.widget.Label(issue))
+                    l.append('<b>%s</b>: %s ' % (translate(field.widget.label_msgid, field.widget.Label(issue), as_unicode=1), v))
 
             s = (', '.join(l)).strip()
             if s:
-                header(translate(name, name.capitalize()))
+                header(translate(name, name.capitalize(), as_unicode=1))
                 definition(dowrap(s))
 
         for img in issue.objectValues('Portal Image'):
@@ -190,29 +194,28 @@ def pdfwriter(collector, ids):
                     height = MAX_IMAGE_SIZE
                     width = height * ratio
 
-                if img.getId() == img.title_or_id():
-                    desc = img.getId()
-                else:
-                    desc = '%s (%s)' % (img.getId(), img.title_or_id())
+                istr = translate('image', 'Image', as_unicode=1)
+                desc = '%s: %s' % (istr, img.getId())
 
-                Elements.append(KeepTogether([XPreformatted('%s: %s' % (translate('image', 'Image'), desc), HeaderStyle),
+                Elements.append(KeepTogether([XPreformatted(desc, HeaderStyle),
                                               Spacer(100, 0.1*inch),
-                                              Image(fname, width, height)
+                                              Image(fname, width, height),
+                                              Preformatted(img.title, DefStyle)
                                              ]))
 
             else:
-                p('%s: %s' % (translate('image', 'Image'), img.title_or_id()))
+                p(u'%s: %s' % (translate('image', 'Image', as_unicode=1), img.getId()))
 
             Elements.append(Spacer(100, 0.2*inch))
 
-        header(translate('transcript', 'Transcript'))
+        header(translate('transcript', 'Transcript', as_unicode=1))
 
         n = 1
 
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
             datestr = issue.toLocalizedTime(DateTime(group[0].created), long_format=1)
             uid = group[0].user
-            header('#%d %s %s (%s)' % (n, translate_e(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
+            header(u'#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize(), as_unicode=1), datestr, uid)) 
 
             l = []
             comment = None
@@ -221,35 +224,36 @@ def pdfwriter(collector, ids):
                 if ev.type == 'comment':
                     comment = html_quote(ev.comment)
                 elif ev.type == 'change':
-                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate_e('changed', 'Changed'), ev.field, ev.old, ev.new)))
+                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed', as_unicode=1), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
-                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate_e('changed', 'Changed'), ev.field, translate('added', 'added'), ev.added, translate('removed', 'removed'), ev.removed)))
+                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate('changed', 'Changed', as_unicode=1), ev.field, translate('added', 'added', as_unicode=1), ev.added, translate('removed', 'removed', as_unicode=1), ev.removed)))
                 elif ev.type == 'reference':
-                    l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate_e('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment)))
+                    l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate('reference', 'Reference', as_unicode=1), ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
-                    s = '<b>%s:</b> %s/%s ' % (translate_e('upload', 'Upload'), issue.absolute_url(), ev.fileid)
+                    s = '<b>%s:</b> %s/%s ' % (translate('upload', 'Upload', as_unicode=1), issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
-                    l.append(dowrap(s))
+                    l.append(dowrap(toUnicode(s)))
+
 
             definition('\n'.join(l))
             if comment: 
-                definition('<b>%s</b>' % translate('comment', 'Comment'))
+                definition('<b>%s</b>' % translate('comment', 'Comment', as_unicode=1))
                 pre(break_longlines(comment))
             n+=1
 
         # references
         fw_refs = issue.getForwardReferences()
         if fw_refs:
-            header(translate('references', 'References'))
-            definition('\n'.join(['%s: %s' % (ref.getTargetObject().absolute_url(), ref.comment) for ref in fw_refs ]))
+            header(translate('references', 'References', as_unicode=1))
+            definition('\n'.join(['%s: %s' % (ref.getTargetObject().absolute_url(), toUnicode(ref.comment)) for ref in fw_refs ]))
 
         Elements.append(PageBreak())
 
     IO = cStringIO.StringIO()
     doc = SimpleDocTemplate(IO)
     doc.collector = collector
-    doc.collector_title = translate('collector_id', 'Collector: $id', id=collector.title_or_id())
+    doc.collector_title = translate('collector_id', 'Collector: $id', id=collector.title, as_unicode=1)
     doc.build(Elements,onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 
     for f in tempfiles:
