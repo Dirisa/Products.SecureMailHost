@@ -5,4 +5,4 @@ title = Edit
 validators = validate_base
 
 [actions]
-action.success = traverse_to:string:base_view
+action.success = traverse_to:string:pcng_content_edit
