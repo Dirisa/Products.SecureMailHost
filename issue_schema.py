@@ -5,13 +5,23 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.17 2003/10/03 09:08:01 ajung Exp $
+$Id: issue_schema.py,v 1.18 2003/10/13 19:09:05 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget, CalendarWidget
+
+
+VOCAB_CLASSIFICATION = DisplayList((
+  ('Bug', 'Bug'),
+  ('Bug+Solution', 'Bug+Solution'),
+  ('Feature', 'Feature'),
+  ('Feature+Solution', 'Feature+Solution'),
+  ('Documentation', 'Documentation'),
+))
+
 
 VOCAB_TOPIC = DisplayList((
   ('UI', 'UI'),
@@ -62,6 +72,16 @@ schema = OrderedSchema((
                 widget=TextAreaWidget(label='Solution',
                                       label_msgid='label_solution',
                                       i18n_domain='plonecollectorng'),
+                ),
+    StringField('classification',
+                required=1,
+                searchable=1,
+                schemata='issuedata',
+                vocabulary=VOCAB_CLASSIFICATION,
+                widget=SelectionWidget(format='select',
+                                       label='Classification',
+                                       label_msgid='label_classification',
+                                       i18n_domain='plonecollectorng'),
                 ),
     StringField('topic',
                 required=1,

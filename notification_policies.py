@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notification_policies.py,v 1.3 2003/10/12 19:34:28 ajung Exp $
+$Id: notification_policies.py,v 1.4 2003/10/13 19:09:05 ajung Exp $
 """
 
 """ 
@@ -14,7 +14,12 @@ notification mechanism to determine the list of recipients.
 """
 
 class BasePolicy:
-
+    """ Base class for all notification policies. By default we include
+        the submitter, all managers and all watchers. The recipients are
+        stored as a mapping where the key is either the UID of a recipient
+        or the email address and value is a dictionary that contains other
+        metadata. The email address is stored under the key 'email'. 
+    """
     def __init__(self, issue):
         self.issue = issue
         self.collector = self.issue._getCollector()

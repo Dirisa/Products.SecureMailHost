@@ -15,9 +15,10 @@
         </div> 
 
         <b>Topic: </b> <span class="field"  tal:content="here/topic" />&nbsp;&nbsp;
+        <b>Classification: </b><span class="field" tal:content="here/classification" />&nbsp;&nbsp;
         <b>Importance: </b><span class="field" tal:content="here/importance" />&nbsp;&nbsp;
         <b>Status: </b><span class="field" tal:content="python: here.pcng_format_status(here.status())" />&nbsp;&nbsp;
-        <b>Assigned to:</b><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+        <b>Assigned to: </b><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
       </div>
 
       <div class="group">

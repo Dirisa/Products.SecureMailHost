@@ -4,8 +4,8 @@
       i18n:domain="plonecollectorng">
 
 <body>
-
   <div metal:fill-slot="main">	  
+    <h1>History</h1>
     <div metal:use-macro="here/pcng_macros/macros/transcript"/>
   </div>
 

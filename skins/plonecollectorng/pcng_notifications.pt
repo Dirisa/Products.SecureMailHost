@@ -5,8 +5,9 @@
 
 <body>
   <div metal:fill-slot="main">	  
+    <h1>Notifications</h1>
     <form action="set_notification_emails" method="post">
-      <div class="group">
+      <div class="group" tal:condition="python: here.notification_policy != 'NoneNotificationPolicy'">
         <span class="legend" i18n:translate="collector_notifications">Collector notifications</span>
         <table class="listing" >
           <tr>
@@ -40,6 +41,9 @@
   
       </div> <!-- End group -->
     </form>
+   <div class="group" tal:condition="python: here.notification_policy == 'NoneNotificationPolicy'">
+   Notification mode is disabled.
+   </div>
   </div>
 </body>
 </html>

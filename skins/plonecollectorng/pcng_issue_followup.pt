@@ -6,7 +6,7 @@
 
 <body>
 <div metal:fill-slot="main">	  
-
+  <h1>Followup</h1>
   <form method="post" action="issue_followup">
     <div class="group"
          tal:define="assignees here/assigned_to">
@@ -22,7 +22,7 @@
       <table>
         <tr>
           <th> Assign to </th>
-          <th> Workflow action </th>
+          <th> Workflow action (Current state: <span tal:content="here/status" />)</th>
         </tr>
     
         <tr>

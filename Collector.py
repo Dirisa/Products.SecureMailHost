@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.42 2003/10/13 17:41:11 ajung Exp $
+$Id: Collector.py,v 1.43 2003/10/13 19:09:05 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -360,6 +360,7 @@ class PloneCollectorNGCatalog(CatalogTool):
         standard = CatalogTool.enumerateIndexes(self)
         custom = (('status', 'FieldIndex'),
                   ('importance', 'FieldIndex'),
+                  ('classification', 'FieldIndex'),
                   ('topic', 'FieldIndex'),
                   ('assigned_to', 'KeywordIndex'),
                   ('progress_deadline', 'FieldIndex'),

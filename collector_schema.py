@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.15 2003/10/13 17:59:23 ajung Exp $
+$Id: collector_schema.py,v 1.16 2003/10/13 19:09:05 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -26,12 +26,6 @@ VOC_PARTICIPATION_MODE = DisplayList((
   ('staff', 'Only staff members'),
   ('authenticated', 'Any authenticated user'),                                       
   ('anyone', 'Anyone'),                                       
-))
-
-VOC_EMAIL_NOTIFICATIONS = DisplayList((
-  ('all', 'Trackeradmins + Supporters + Reporters'),
-  ('assigned', 'Trackeradmins + assigned Supporters + Reporters'),                                       
-  ('none', 'no notifications'),                                       
 ))
 
 VOC_WATCHLIST = DisplayList((
@@ -137,7 +131,7 @@ schema = OrderedSchema((
                 widget=SelectionWidget(format='select', label='E-Mail notification policy',
                                        label_msgid='label_email_notification_policy',
                                        i18n_domain='plonecollectorng'),
-                default='none',
+                default='NoneNotificationPolicy',
                 schemata='E-Mail'
                 ),
     StringField('issue_formatter',

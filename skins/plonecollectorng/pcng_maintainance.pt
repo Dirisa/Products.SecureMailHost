@@ -5,6 +5,7 @@
 
 <body>
   <div metal:fill-slot="main">	  
+    <h1>Maintainance</h1>
     <ul>
       <li>Number issues: <span tal:replace="here/getNumberIssues" />
       <li><a href="reindex_issues">Reindex all issues</a>

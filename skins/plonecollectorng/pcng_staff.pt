@@ -5,7 +5,7 @@
 
 <body>
 <div metal:fill-slot="main">	  
-
+  <h1>Staff</h1>
   <form action="set_staff" method="post">
     <div class="group"><span class="legend">Collector Staff</span>
       <table class="listing" 
