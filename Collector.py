@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.63 2003/11/07 15:44:07 ajung Exp $
+$Id: Collector.py,v 1.64 2003/11/08 10:48:11 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -429,6 +429,7 @@ class PloneCollectorNGCatalog(CatalogTool):
                   ('progress_deadline', 'FieldIndex'),
                   ('progress_percent_done', 'FieldIndex'),
                   ('getId', 'FieldIndex'),
+                  ('numberFollowups', 'FieldIndex'),
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
@@ -438,7 +439,7 @@ class PloneCollectorNGCatalog(CatalogTool):
         standard = CatalogTool.enumerateColumns(self)
         custom = ('id', 'status', 'topic', 'classification',
                   'importance', 'assigned_to', 'progress_deadline', 
-                  'progress_percent_done', 'getId',
+                  'progress_percent_done', 'getId', 'numberFollowups'
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
