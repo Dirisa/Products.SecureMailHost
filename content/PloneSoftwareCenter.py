@@ -1,5 +1,5 @@
 """
-$Id: PloneSoftwareCenter.py,v 1.3 2005/03/10 17:03:50 optilude Exp $
+$Id: PloneSoftwareCenter.py,v 1.4 2005/03/11 02:38:27 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -77,9 +77,11 @@ class PloneSoftwareCenter(OrderedBaseFolder):
         """Get contained objects of type portal_type
         that are in states and have category."""
         my_path = '/'.join(self.getPhysicalPath())
-        query = { 'path': my_path,
-                  'portal_type':portal_type,
-                  'review_state':'published'
+        query = { 'path'         : my_path,
+                  'portal_type'  : portal_type,
+                  'review_state' : 'published',
+                  'sort_on'      : 'effective',
+                  'sort_order'   : 'reverse',
                 }
         if states:
             query['review_state'] = states
@@ -110,15 +112,19 @@ class PloneSoftwareCenter(OrderedBaseFolder):
     security.declareProtected(CMFCorePermissions.View, 'getCategoriesToList')
     def getCategoriesToList(self, states=[]):
         """Categories that have at least one listable package"""
-        categories = {}
-        avail_categories = self.getAvailableCategoriesAsDisplayList().keys()
-        maxCategories = len(avail_categories)
-        for o in self.getPackages(states):
-            for s in o.getCategories:
-                categories[s]=1
-            if len(categories) == maxCategories:
-                break
-        return [s for s in avail_categories if categories.has_key(s)]
+        vocab = self.getAvailableCategoriesAsDisplayList()
+        catalog = getToolByName(self, 'portal_catalog')
+        uniqueCategories = catalog.uniqueValuesFor('getCategories')
+        
+        categories = DisplayList()
+        for cat in uniqueCategories:
+            value = vocab.getValue(cat)
+            # Ensure the value came from our vocab and not some other 
+            # getCategories somewhere
+            if value:
+                categories.add(cat, value)
+                
+        return categories.sortedByValue()
 
     security.declareProtected(CMFCorePermissions.View,
                               'getAvailableCategoriesAsDisplayList')

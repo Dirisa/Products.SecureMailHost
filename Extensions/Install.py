@@ -33,6 +33,22 @@ def addWorkflow(self, out, tool, workflowName, workflowId):
         tool.manage_addWorkflow(workflowName, workflowId)
         print >> out, 'Added workflow %s.' % workflowName
 
+def addCatalogMetadata(self, out, catalog, column):
+    """Add the given column to the catalog's metadata schema"""
+    if column not in catalog.schema():
+        catalog.addColumn(column)
+        print >> out, "Added", column, "to catalog metadata"
+    else:
+        print >> out, column, "already in catalog metadata"
+        
+def removeCatalogMetadata(self, out, catalog, column):
+    """Delete the given metadata column"""
+    if column in catalog.schema():
+        catalog.delColumn(column)
+        print >> out, "Removed column", column
+    else:
+        print >> out, "Column", column, "not in catalog"
+        
 def installWorkflows(self, out):
     workflow = getToolByName(self, 'portal_workflow')
     print >> out, 'Installing custom workflows'
@@ -113,6 +129,15 @@ def setupFolderTabs(self, out):
     sp._updateProperty('use_folder_tabs', use_tabs + folderish)
     print >> out, 'Registered %s as folderish objects.' % ','.join(folderish)
 
+def setupCatalog(self, out):
+    catalog = getToolByName(self, 'portal_catalog')
+    addCatalogMetadata(self, out, catalog, 'getCategoryTitles')
+
+def cleanCatalog(self, out):
+    catalog = getToolByName(self, 'portal_catalog')
+    removeCatalogMetadata(self, out, catalog, 'getCategoryTitles')
+
+
 def install(self):
     out = StringIO()
 
@@ -124,6 +149,17 @@ def install(self):
 
     setupFolderTabs(self, out)
 
+    setupCatalog(self, out)
+
     print >> out, 'Successfully installed %s.' % config.PROJECTNAME
 
+    return out.getvalue()
+
+def uninstall(self):
+    out = StringIO()
+    
+    cleanCatalog(self, out)
+    
+    print >> out, 'Successfully uninstalled %s.' % config.PROJECTNAME
+    
     return out.getvalue()
