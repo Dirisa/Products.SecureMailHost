@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.148 2004/03/30 04:45:48 ajung Exp $
+$Id: Collector.py,v 1.149 2004/03/30 06:31:45 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -19,6 +19,7 @@ from ZODB.POSException import ConflictError
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Base import Base
+from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
