@@ -65,6 +65,7 @@ class HelpCenterFAQ(BaseContent):
     archetype_name = 'FAQ'
     meta_type = 'HelpCenterFAQ'
     global_allow = 0
+    allow_discussion = 1
 
     actions = ({'id': 'view',
                 'name': 'View',

@@ -63,6 +63,7 @@ class HelpCenterHowTo(BaseFolder):
     meta_type = 'HelpCenterHowTo'
     global_allow = 0
     filter_content_types = 1
+    allow_discussion = 1
     allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
     actions = ({
