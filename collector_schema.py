@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.53 2004/05/23 11:08:17 ajung Exp $
+$Id: collector_schema.py,v 1.54 2004/06/26 18:14:21 ajung Exp $
 """
 
 
@@ -73,6 +73,12 @@ VOC_PORTLET_USAGE = DisplayList((
   ('left', 'Use left slot, override plone settings'),
   ('plone-right', 'Use right slot, keep plone settings'),
   ('right', 'Use right slot, override plone settings'),
+))
+
+VOC_PORTLET_ISSUEDATA = DisplayList((
+  ('left', 'Left portlet slot'),
+  ('right', 'Right portlet slot'),
+  ('inline', 'Inside issue main view'),
 ))
 
 
@@ -227,6 +233,15 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_portlet_usage',
                                        i18n_domain='plonecollectorng'),
                 default='plone-left',
+                schemata='Look and Feel'
+                ),
+    StringField('portlet_issuedata',
+                vocabulary=VOC_PORTLET_ISSUEDATA,
+                widget=SelectionWidget(format='select', 
+                                       label='Portlet issue data',
+                                       label_msgid='label_portlet_issuedata',
+                                       i18n_domain='plonecollectorng'),
+                default='inline',
                 schemata='Look and Feel'
                 ),
     StringField('participation_mode',
