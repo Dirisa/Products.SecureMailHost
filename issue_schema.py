@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.12 2003/09/22 07:04:16 ajung Exp $
+$Id: issue_schema.py,v 1.13 2003/09/22 11:31:28 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -103,18 +103,21 @@ schema = OrderedSchema((
 
     StringField('progress_hours_estimated',
                 schemata='progress',
+                default='0',
                 widget=StringWidget(label='Hours estimated',
                                     label_msgid='label_hours_estimated',
                                     i18n_domain='plonecollectorng'),
                 ),
     StringField('progress_hours_needed',
                 schemata='progress',
+                default='0',
                 widget=StringWidget(label='Hours needed',
                                     label_msgid='label_hours_needed',
                                     i18n_domain='plonecollectorng'),
                 ),
     StringField('progress_percent_done',
                 schemata='progress',
+                default='0',
                 widget=StringWidget(label='Percent done',
                                     label_msgid='label_percent_done',
                                     i18n_domain='plonecollectorng'),
