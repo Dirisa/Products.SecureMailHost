@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.17 2003/12/14 12:03:02 ajung Exp $
+$Id: pdfwriter.py,v 1.18 2003/12/23 05:37:00 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -184,7 +184,7 @@ def pdfwriter(collector, ids):
                 elif ev.type == 'reference':
                     l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
-                    s = '<b>%s:</b> %s/%s ' % (trasnalte('upload', 'Upload'), issue.absolute_url(), ev.fileid)
+                    s = '<b>%s:</b> %s/%s ' % (translate('upload', 'Upload'), issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
                     l.append(dowrap(s))
