@@ -30,13 +30,14 @@
 	     description
         </div>
 
-	<p><a tal:attributes="href python:context.portal_url.absolute_url() + '/search_rss?review_state=published&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))">
+	<p>RSS feed for all documentation types: <a tal:attributes="href python:portal_url + '/search_rss?review_state=published&sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
 	  
-	  <img src="rss.gif"></a></p>
+	  <img tal:attributes="src string:$portal_url/rss.gif"></a></p>
     
 	<div tal:repeat="help_type python: context.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
-	  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:context.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
-	    <h2><a tal:attributes="href help_type/getURL" tal:content="help_type/Title">[type]</a></h2>
+	  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); inner_type python: subtypes[help_type.portal_type]; objs python:context.portal_catalog(portal_type=inner_type, review_state='published', path=folder_path)">
+	    <h2><a tal:attributes="href help_type/getURL" tal:content="help_type/Title">[type]</a> 
+	      <a tal:attributes="href string: $portal_url/search_rss?review_state=published&path=$folder_path&portal_type=$inner_type&sort_on=modified&sort_order=descending; title string:RSS feed for ${help_type/Title}"><img tal:attributes="src string:$portal_url/rss.gif"></a></h2>
 	    <a class="link-expand" tal:attributes="href help_type/getURL" tal:content="string: view ${help_type/Title}"> View  FAQ</a>
 	    <p tal:condition="help_type/Description"><i tal:content="help_type/Description"></i></p>
 
