@@ -10,6 +10,14 @@ from textwrap import wrap
 def TR(id, default):
     return context.Translate(id, default, language, as_unicode=1)
 
+def getValue(fieldname, translate=0):
+    v = str(context.Schema()[fieldname].get(context))
+    vocab = context.pcng_vocabulary_values(fieldname)
+    if translate:
+        return TR(vocab[v], vocab[v])
+    else:
+        return vocab[v]
+
 # convert string to unicode and append to list
 def nl(text=''):
     if same_type(text, u''):
@@ -34,10 +42,9 @@ nl('')
 s= '%s: #%s: %s, ' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding))
 s+='%s: %s, ' % (TR('topic', 'Topic'), context.topic)
 
-vocab = context.pcng_vocabulary_values('importance')
 s+='%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 
-                               TR('importance','Importance'), TR(context.importance, vocab[str(context.importance)]), 
-                               TR('classification', 'Classification'), context.classification)
+                               TR('importance','Importance'), getValue('importance'),
+                               TR('classification', 'Classification'), getValue('classification'))
 
 nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
