@@ -366,23 +366,33 @@ msgid "phc_nopublished"
 msgstr "There are contained help center object types, but none are viewable because of their permission settings."
 
 
+#: ./helpcenter_view.pt
 msgid "All_FAQs"
 msgstr "All FAQs"
 
+#: ./helpcenter_view.pt
 msgid "All_How-tos"
 msgstr "All How-tos"
 
+#: ./helpcenter_view.pt
 msgid "All_Tutorials"
 msgstr "All Tutorials"
 
+#: ./helpcenter_view.pt
 msgid "All_Links"
 msgstr "All Links"
 
+#: ./helpcenter_view.pt
 msgid "All_Error References"
 msgstr "All Error References"
 
+#: ./helpcenter_view.pt
 msgid "All_Glossary Definitions"
 msgstr "All Glossary Definitions"
+
+#: ./helpcenter_view.pt
+msgid "phc_help_doc"
+msgstr "helpcenter_help"
 
 
 # MSB end mofification

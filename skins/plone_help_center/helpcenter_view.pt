@@ -90,7 +90,9 @@
 
             <p>
             <img tal:attributes="src string:$portal_url/helpcenter_icon.gif" />
-            <a href="helpcenter_help">
+            <a href="helpcenter_help"
+	    	tal:attributes="href string:phc_help_doc"
+		i18n:attributes="href">
             <span i18n:translate="phc_contrib_use">Instructions on how to contribute to and use this resource</span>
             </a>
             </p>
