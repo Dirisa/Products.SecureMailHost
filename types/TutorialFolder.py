@@ -23,11 +23,13 @@ schema = BaseFolderSchema + Schema((
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
     LinesField('sections',
-                default=['General'],
-                widget=LinesWidget(description="Define the available sections a Tutorial can be assigned to.",
-                                            label="Sections",
-                                            i18n_domain = "plonehelpcenter",
-                                            rows=6)),
+               default=['General'],
+               widget=LinesWidget(
+    label="Sections",
+    description="Define the available sections a How-to can be assigned to.",
+    i18n_domain="plonehelpcenter",
+    rows=6)
+               ),
     ))
 
 
@@ -38,7 +40,7 @@ class HelpCenterTutorialFolder(BaseFolder):
     content_icon = 'tutorial_icon.gif'
 
     schema = schema
-    archetype_name = 'Tutorial Container'
+    archetype_name = 'Tutorial Area'
     meta_type = 'HelpCenterTutorialFolder'
     global_allow = 0
     filter_content_types = 1

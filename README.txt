@@ -22,9 +22,12 @@ To do
 
 Credits
 
-  User Interface, Project Architecture -- Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
+  Development, User Interface, Project Architecture, Quality Assurance -- 
+  Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
 
-  Project Architecture, How-to part -- "Joel Burton":mailto:joel@joelburton.com
+  Project Architecture, How-to part -- 
+  "Joel Burton":mailto:joel@joelburton.com
 
-  FAQ part -- "Tim Terlegard":mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - further enhancements by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
+  Original FAQ code -- 
+  "Tim Terlegard":mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - further enhancements by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
 

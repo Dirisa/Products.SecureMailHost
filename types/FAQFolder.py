@@ -44,7 +44,7 @@ class HelpCenterFAQFolder(BaseFolder):
     content_icon = 'faq_icon.gif'
 
     schema = schema
-    archetype_name = 'FAQ Container'
+    archetype_name = 'FAQ Area'
     meta_type = 'HelpCenterFAQFolder'
     global_allow = 0
     filter_content_types = 1

@@ -25,7 +25,8 @@
                 </a>
 
                 <div class="documentDescription"
-                     tal:content="structure faq/Description|nothing">
+                     tal:condition="faq/Description"
+                     tal:content="structure faq/Description">
                 Full Question
                 </div>
                    

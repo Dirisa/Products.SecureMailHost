@@ -18,4 +18,10 @@
     float: right;
 }
 
+.faqMarker {
+    list-style-type: square;
+    list-style-image: url(&dtml-portal_url;/faq_icon.gif);
+}
+
+
 /* </dtml-with> */

@@ -5,19 +5,6 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema +  Schema((
-    LinesField('sections',
-                multivalued=1,
-                required=1,
-                vocabulary='listDocSections',
-                enforceVocabulary=1,
-                index='KeywordIndex',
-                widget=MultiSelectionWidget(description_msgid='desc_howto_sections',
-                       description='The sections to which this Howto belongs',
-                       label_msgid='label_howto_sections',
-                       label='Sections',
-                       i18n_domain = "howto",
-                       ),
-                ),
     LinesField('versions',
                 multivalued=1,
                 vocabulary='listDocVersions',
@@ -46,6 +33,22 @@ schema = BaseFolderSchema +  Schema((
               **DEFAULT_CONTENT_TYPES
               ),
     ),
+
+    LinesField('subject',
+               multiValued=1,
+               required=1,
+               accessor="Subject",
+               vocabulary='_get_sections_vocab', # we acquire this from
+                                                 # FAQFolder
+               enforceVocabulary=1,
+               widget=MultiSelectionWidget(
+    label='Sections',
+    label_msgid='label_howto_sections',
+    description='Section(s) that this How-to should appear in.',),
+    description_msgid='desc_howto_sections',
+    i18n_domain = "plonehelpcenter",
+               ),
+
     marshall=PrimaryFieldMarshaller(),
  )
 
@@ -54,7 +57,7 @@ class HelpCenterHowTo(BaseFolder):
     files.
     """
 
-    content_icon = 'topic_icon.gif'
+    content_icon = 'howto_icon.gif'
 
     schema = schema
     archetype_name = 'How-to'

@@ -60,7 +60,8 @@
                 View section in full</a> 
             </tal:section>
  
-            <ul tal:condition="not: full">
+            <ul class="faqMarker"
+                tal:condition="not: full">
                 <li tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Subject()]">
                 <a href="" tal:content="faq/Title"
                     tal:attributes="href faq/absolute_url">FAQ Question</a>
