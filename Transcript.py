@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the MIT Public License
 
-$Id: Transcript.py,v 1.1 2003/09/05 05:09:53 ajung Exp $
+$Id: Transcript.py,v 1.2 2003/09/06 06:36:00 ajung Exp $
 """
 
 from types import StringType, ListType, TupleType
@@ -13,6 +13,7 @@ import os
 
 from Globals import Persistent, InitializeClass
 from AccessControl import ClassSecurityInfo, getSecurityManager
+from DateTime.DateTime import DateTime
 
 class Transcript(Persistent):
     """ container class for all TranscriptEntry objects """
@@ -41,6 +42,11 @@ class Transcript(Persistent):
     def addComment(self, comment):
         te = TranscriptEntry(getSecurityManager().getUser().getUserName())  
         te.addComment(comment)
+        self.add(te)
+
+    def addChange(self, field, old, new):
+        te = TranscriptEntry(getSecurityManager().getUser().getUserName())  
+        te.addChange(field, old, new)
         self.add(te)
 
     def __len__(self): return len(self._items)
@@ -243,8 +249,9 @@ class TranscriptEntry(Persistent):
     security = ClassSecurityInfo()
     security.declareObjectPublic()
 
-    def __init__(self, user):
-        from DateTime.DateTime import DateTime
+    def __init__(self, user=None):
+        if user is None:
+            user = getSecurityManager().getUser().getUserName()
 
         self._timestamp = DateTime()
         self._changes = []
