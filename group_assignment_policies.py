@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: group_assignment_policies.py,v 1.4 2004/02/24 15:40:14 ajung Exp $
+$Id: group_assignment_policies.py,v 1.5 2004/10/10 11:03:10 ajung Exp $
 """
 
 """ 
@@ -16,8 +16,8 @@ or PloneCollectorNG topic group. Currently we implement only a simple
 assignment policy where all members of a group are assigned to an issue.
 """
 
-def usersForTopicGroup(context, group):
-    return list(context.get_topics_user()[group])
+def usersForTopicGroup(context, topic):
+    return context.getTopics().getUsersForTopic(topic)
 
 def usersForGrufGroup(context, group):
 
@@ -36,11 +36,11 @@ def getUsersForGroups(context, groups):
     except:
         gruf_groups = []
 
-    topic_groups = context.get_topics_user()
+    topics =  context.getTopics().getTopics()
 
     lst = []
     for group in groups:
-        if group in topic_groups.keys():
+        if  group in topics:
             lst.extend(usersForTopicGroup(context, group))        
         if group in gruf_groups:
             lst.extend(usersForGrufGroup(context, group))        

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.220 2004/10/09 16:33:44 ajung Exp $
+$Id: Collector.py,v 1.221 2004/10/10 11:03:09 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -33,6 +33,7 @@ from Issue import PloneIssueNG
 from Translateable import Translateable
 from Catalog import PloneCollectorNGCatalog
 from Topics import Topics
+from Users import Users
 from workflows import VOC_WORKFLOWS
 
 
@@ -103,7 +104,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
                                  undeleteable_fields = UNDELETEABLE_FIELDS,
                                  domain='plonecollectorng')   
         self._num_issues = 0
-        self._supporters = self._managers = self._reporters = []
+        self._users = Users()
         self._notification_emails = OOBTree()
 
         # setup local roles for creator
@@ -217,14 +218,13 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     # Staff handling
     ######################################################################
 
-    security.declareProtected(View, 'getSupporters')
-    def getSupporters(self): return self._supporters
-
-    security.declareProtected(View, 'getManagers')
-    def getManagers(self): return self._managers
-
-    security.declareProtected(View, 'getReporters')
-    def getReporters(self): return self._reporters
+    security.declareProtected(View, 'getUsers')
+    def getUsers(self): 
+        """ return the user object """
+        if not hasattr(self, '_users'):
+            self._users = Users()
+            self._migrate_users()
+        return ImplicitAcquisitionWrapper(self._users, self)
 
     security.declareProtected(View, 'getTrackerUsers')
     def getTrackerUsers(self, staff_only=0, unassigned_only=0, with_groups=0):
@@ -235,7 +235,10 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
         membership_tool = getToolByName(self, 'portal_membership', None)
 
-        staff = self._managers + self._supporters + self._reporters
+        staff = []
+        users = self.getUsers()
+        for role in ('manager', 'supporter', 'reporter'):
+            staff.extend(users.getUsersForRole(role))
 
         all_names = []
         folder = self
@@ -261,6 +264,11 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
         l = []
         groups = self.pcng_get_groups()  # get group IDs from GRUF
+
+        reporters = users.getUsersForRole('reporter')
+        managers = users.getUsersForRole('manager')
+        supporters = users.getUsersForRole('supporter')
+
         for name in util.remove_dupes(names):
             if name.replace('group_', '') in groups and not with_groups: continue  # no group names !!!
             member = membership_tool.getMemberById(name)
@@ -270,9 +278,9 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
                 d['fullname'] = member.getProperty('fullname')
                 d['email'] = member.getProperty('email')
 
-            if name in self._reporters: d['role'] = 'Reporter'
-            if name in self._supporters: d['role'] = 'Supporter'
-            if name in self._managers: d['role'] = 'TrackerAdmin'
+            if name in reporters: d['role'] = 'Reporter'
+            if name in supporters: d['role'] = 'Supporter'
+            if name in managers: d['role'] = 'TrackerAdmin'
             l.append(d)
 
         l.sort(lambda a,b: cmp(a['username'].lower(), b['username'].lower()))
@@ -288,15 +296,17 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     def set_staff(self, reporters=[], managers=[], supporters=[], RESPONSE=None):
         """ set the staff """
 
+        users = self.getUsers()
         reporters.sort(); managers.sort(); supporters.sort()
 
-        self.getTranscript().add(IncrementalChangeEvent('managers', self._managers, managers))
-        self.getTranscript().add(IncrementalChangeEvent('supporters', self._supporters, supporters))
-        self.getTranscript().add(IncrementalChangeEvent('reporters', self._reporters, reporters))
+        self.getTranscript().add(IncrementalChangeEvent('managers', users.getUsersForRole('manager'), managers))
+        self.getTranscript().add(IncrementalChangeEvent('supporters', users.getUsersForRole('supporter'), supporters))
+        self.getTranscript().add(IncrementalChangeEvent('reporters', users.getUsersForRole('reporter'), reporters))
 
-        self._managers = managers
-        self._reporters = reporters
-        self._supporters = supporters
+        users.setUsersForRole('manager', managers)
+        users.setUsersForRole('reporter', reporters)
+        users.setUsersForRole('supporter', supporters)
+
         self._adjust_staff_roles()
         self._adjust_participation_mode()
 
@@ -308,11 +318,12 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             Ie, ensure: only designated supporters and managers have 'Reviewer'
             local role, only designated managers have 'Manager' local role.
         """
-        if not self._managers:
-            self._managers = [util.getUserName()]
-        util.adjustLocalRoles(self, self._managers, 'TrackerAdmin')
-        util.adjustLocalRoles(self, self._supporters, 'Supporter')
-        util.adjustLocalRoles(self, self._reporters, 'Reporter')
+        users = self.getUsers()
+        if not users.getUsersForRole('manager'):
+            users.setUserForRole('managaer', [util.getUserName()])
+        util.adjustLocalRoles(self, users.getUsersForRole('manager'), 'TrackerAdmin')
+        util.adjustLocalRoles(self, users.getUsersForRole('supporter'), 'Supporter')
+        util.adjustLocalRoles(self, users.getUsersForRole('reporter'), 'Reporter')
 
     def _adjust_participation_mode(self):
         """Set role privileges according to participation mode."""
@@ -861,6 +872,12 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """ redirect to our own edit method """
         if RESPONSE:
             RESPONSE.redirect('pcng_base_edit')
+
+    def _migrate_users(self):
+        """ migrate users to new Users framework (PCNG 1.3+) """
+        for u in self._supporters: self._users.addUser(u, 'supporter')
+        for u in self._reporters: self._users.addUser(u, 'reporters')
+        for u in self._managers: self._users.addUser(u, 'managers')
 
 registerType(PloneCollectorNG)
 

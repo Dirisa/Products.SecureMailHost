@@ -32,8 +32,6 @@ else:
 # Assign ticket to assignees ('assign_ticket' is a hidden var
 # set in pcng_base_edit.pt)
 
-topics_user = context.get_topics_user()
-
 if REQUEST.get('assign_ticket', None) == '1':
     assignees = REQUEST.get('assignees', [])
 

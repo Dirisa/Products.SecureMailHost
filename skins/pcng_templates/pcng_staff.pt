@@ -15,10 +15,12 @@
 
   <form action="set_staff" method="post">
       <table class="listing" 
-             tal:define="managers here/getManagers;
-                         supporters here/getSupporters;
-                         reporters here/getReporters;
-                         users_topics here/pcng_get_user_topics">
+             tal:define="user_obj here/getUsers;
+                         topic_obj here/getTopics;
+                         users user_obj/getUsers;
+                         supporters users/supporter|python: [];
+                         reporters users/reporter|python: [];
+                         managers users/manager|python: []">
         <tr>
           <th i18n:translate="UserID">User ID</th>
           <th i18n:translate="Name">Name</th>
@@ -69,7 +71,7 @@
                                          checked python: user['username'] in reporters" />
                 </td>
                 <td>
-                  <span tal:replace="structure python: ' &bull; '.join(users_topics.get(user['username'], []))" />
+                  <span tal:replace="structure python: ' &bull; '.join(topic_obj.getTopicsForUser(user['username']) or [])" />
                 </td>
                 <td>
                   <span tal:replace="structure python: ' &bull; '.join(here.pcng_get_groups_for_user(user['username']))" />
