@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.42 2004/06/30 15:42:59 ajung Exp $
+$Id: pdfwriter.py,v 1.43 2004/07/04 08:46:28 ajung Exp $
 """
 
 import os, cStringIO, tempfile
@@ -152,15 +152,19 @@ def pdfwriter(collector, ids):
     tempfiles = []
 
     for issue_id in ids:
+        
         issue = getattr(collector, str(issue_id))
+        fieldnames = [f.getName() for f in issue.Schema().fields()]
         header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 70))
 
         header(translate('label_description', 'Description', as_unicode=1))
         description = issue.getField('description').get(issue)
         pre(dowrap(toUnicode(description)))
-        if issue.solution:
-            header(translate('label_solution', 'Solution', as_unicode=1))
-            definition(html_quote(getFieldValue(issue, 'solution')), PreStyle)
+
+        if 'solution' in fieldnames:
+            if issue.solution:
+                header(translate('label_solution', 'Solution', as_unicode=1))
+                definition(html_quote(getFieldValue(issue, 'solution')), PreStyle)
 
 
         s = '%s: %s, %s: %s' % (translate('status', 'Status', as_unicode=1), translate(issue.status(), issue.status(), as_unicode=1),
