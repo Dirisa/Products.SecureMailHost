@@ -638,6 +638,10 @@ msgid "phc_label_link_url"
 msgstr "URL"
 
 
+msgid "phc_howto_applies_to"
+msgstr "This how-to applies to:"
+
+
 msgid "phc_desc_folder_glossary"
 msgstr "Description of the Glossary."
 
@@ -649,6 +653,20 @@ msgstr "An explanation of the term."
 
 msgid "phc_label_definition"
 msgstr "Definition"
+
+msgid "phc_tutorial_applies_to"
+msgstr "This Tutorial applies to:"
+
+msgid "phc_errorreference_applies_to"
+msgstr "This Error Reference applies to:"
+
+msgid "phc_link_applies_to"
+msgstr "This Link applies to:"
+
+
+msgid "phc_definition_applies_to"
+msgstr "This Definition applies to:"
+
 
 # MSB end mofification
 

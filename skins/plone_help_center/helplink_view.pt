@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
-      metal:use-macro="here/main_template/macros/master">
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
 <body>
 
 <div metal:fill-slot="main">
@@ -31,7 +32,7 @@
         </p>
     
     <p tal:condition="here/getVersionsVocab" tal:define="versions here/Versions" class="discreet">
-    This link applies to:
+	<span i18n:translate="phc_link_applies_to">This Link applies to:</span>         
     <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>
     <span tal:condition="not: versions">
 	  <span i18n:translate="phc_any_version">
@@ -39,6 +40,7 @@
 	  </span>
     </span>
     </p>
+    
     <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
       see also - shows the references if this feature is switched on
     </div>

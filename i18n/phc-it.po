@@ -369,7 +369,7 @@ msgstr "helpcenter_help_it"
 #.             Any version.
 #. </span>
 msgid "phc_any_version"
-msgstr "Qualunque versione."
+msgstr "Tutte"
 
 
 #: faqfolder_view.pt
@@ -401,7 +401,7 @@ msgstr "Visualizza l'indice delle domande frequenti"
 #.  This FAQ applies to:
 #. </span>
 msgid "phc_faq_applies_to"
-msgstr "Questa domanda si applica a:"
+msgstr "Questa domanda si applica alle versioni:"
 
 
 #: faqsection_view.pt
@@ -649,6 +649,25 @@ msgstr "Una spiegazione del termine."
 
 msgid "phc_label_definition"
 msgstr "Definizione"
+
+msgid "phc_howto_applies_to"
+msgstr "Questa ricetta si applica alle versioni:"
+
+
+msgid "phc_tutorial_applies_to"
+msgstr "Questa guida si applica alle versioni:"
+
+msgid "phc_errorreference_applies_to"
+msgstr "Questa decodifica di errore si applica alle versioni:"
+
+
+msgid "phc_link_applies_to"
+msgstr "Questo collegamento si applica alle versioni:"
+
+
+msgid "phc_definition_applies_to"
+msgstr "Questa definizione si applica alle versioni:"
+
 
 # MSB end mofification
 
