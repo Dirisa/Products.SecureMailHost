@@ -158,8 +158,8 @@
         <dd>
             <p>
                 A help link is a link (either external or internal). It is
-    different than a standard Plone link in that it can have sections
-    and versions information.
+    different from a standard Plone link in that it can have section
+    and version information.
 
             </p>
 
@@ -179,7 +179,7 @@
 
         <dd>
             <p>
-                An error reference is meant to be the explanation of a particular error.
+                An error reference is meant to be the explanation of a particular error, with details on how to fix it, if relevant.
             </p>
 
             <fieldset>
