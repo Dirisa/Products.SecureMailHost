@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.5 2003/11/15 12:33:18 ajung Exp $
+$Id: pdfwriter.py,v 1.6 2003/11/15 16:19:10 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -23,6 +23,22 @@ from reportlab.lib.units import inch
 from DateTime import DateTime
 
 styles = getSampleStyleSheet()
+
+PAGE_HEIGHT = defaultPageSize[1]
+
+def myLaterPages(canvas, doc):
+    #canvas.drawImage("snkanim.gif", 36, 36)
+    canvas.saveState()
+    canvas.setStrokeColorRGB(1,0,0)
+    canvas.setLineWidth(5)
+    canvas.line(66,72,66,PAGE_HEIGHT-72)
+    canvas.setFont('Times-Bold',11)
+    canvas.drawString(inch, 0.75 * inch, "Page %d " % doc.page)
+    canvas.drawString(inch, PAGE_HEIGHT-62, "%s: Issue #%s - %s" % (doc.issue.aq_parent.title_or_id(), doc.issue.getId(), doc.issue.Title()))
+    canvas.restoreState()
+
+myFirstPage = myLaterPages
+
 
 Elements = []
 
@@ -55,10 +71,6 @@ def definition(txt):
 
 def pdfwriter(issue):
 
-    header('Collector: %s' % issue.aq_parent.title_or_id(), sep=0.1)
-    header('Issue: %s' % issue.title_or_id(), sep=0.1)
-    header("")
-
     header("Description")
     definition(issue.description)
 
@@ -67,8 +79,8 @@ def pdfwriter(issue):
         definition(issue.solution)
 
     for name in issue.schema_getNames():
+        if name in ('default', 'metadata'): continue
         
-        header(name.capitalize())
         l =[]
 
         for field in issue.schema_getSchema(name).fields():
@@ -84,7 +96,11 @@ def pdfwriter(issue):
 
             if v:
                 l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
-        definition(', '.join(l))
+
+        s = (', '.join(l)).strip()
+        if s:
+            header(name.capitalize())
+            definition(s)
 
     for img in issue.objectValues('Portal Image'):
 
@@ -110,7 +126,7 @@ def pdfwriter(issue):
 
     header('Transcript')
 
-    groups = issue.getTranscript().getEventsGrouped()
+    groups = issue.getTranscript().getEventsGrouped(reverse=0)
     n = 0
     for group in groups:
         datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
@@ -121,7 +137,7 @@ def pdfwriter(issue):
 
         for ev in group:
             if ev.type == 'comment':
-#                l.append('<b>Comment:</b>\n%s' % ev.comment)
+                l.append('<b>Comment:</b>\n%s' % ev.comment)
                 pass
             elif ev.type == 'change':
                 l.append('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
@@ -141,7 +157,7 @@ def pdfwriter(issue):
 
     IO = cStringIO.StringIO()
     doc = SimpleDocTemplate(IO)
-    doc.build(Elements)
+    doc.issue = issue
+    doc.build(Elements,onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 
     return IO.getvalue()
-
