@@ -3,9 +3,6 @@ WORKFLOWS & PERMISSIONS:
 
 - Any logged in user can add FAQ/HowTo/Tutorial/Link/ErrorRef.
 
-  - At present, any logged in user can also add a FAQFolder, etc.,
-    too, which isn't what we want. See note in TODO.txt.
-
 - The content is not visible or searchable to anybody else than the
   Reviewers/Managers before it is Published.
 
@@ -13,7 +10,7 @@ WORKFLOWS & PERMISSIONS:
 
   - In-progress: Initial state, seen only to author/reviewers/managers.
 
-  - Pending: Usual meaning.
+  - Pending: In the review queue to be approved by reviewers/managers.
 
   - Published: Viewable to all.
 
