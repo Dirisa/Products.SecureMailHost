@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.168 2004/05/09 08:56:00 ajung Exp $
+$Id: Issue.py,v 1.169 2004/05/09 16:25:42 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -76,41 +76,48 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         {'id': 'pcng_issue_followup',
         'name': 'Followup',
         'action': 'pcng_issue_followup',
+        'condition' : 'object/isPersistent',
         'permissions': (AddCollectorIssueFollowup,),
         'category' : 'pcng_issue'
         },
         {'id': 'pcng_issue_uploads',
         'name': 'Uploads',
         'action': 'pcng_issue_uploads',
+        'condition' : 'object/isPersistent',
         'permissions': (AddCollectorIssueFollowup,),
         'category' : 'pcng_issue'
         },
         {'id': 'pcng_issue_references',
         'name': 'References',
         'action': 'pcng_issue_references',
+        'condition' : 'object/isPersistent',
         'permissions': (AddCollectorIssueFollowup,),
         'category' : 'pcng_issue'
         },
         {'id': 'pcng_issue_simple_view',
         'name': 'Simple view',
         'action': 'pcng_issue_view',
+        'condition' : 'object/isPersistent',
         'permissions': (View,),
         'category' : 'pcng_issue'
         },
         {'id': 'pcng_issue_view_with_images',
         'name': 'View with images',
         'action': 'pcng_issue_view_images',
+        'condition' : 'object/isPersistent',
         'permissions': (View,),
         'category' : 'pcng_issue'
         },
         {'id': 'pcng_issue_pdf',
         'name': 'PDF',
         'action': 'asPDF',
+        'condition' : 'object/isPersistent',
         'permissions': (View,),
         'category' : 'pcng_issue'
         },
         {'id': 'issue_debug',
         'name': 'Debug',
+        'condition' : 'object/isPersistent',
         'action': 'pcng_issue_debug',
         'permissions': (ManageCollector,)
         },
@@ -309,6 +316,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
+#            import pdb
+#            pdb.set_trace()
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                    issue_url=issue.absolute_url(1), 
                                                    collector_title=tracker.getId(),
@@ -451,7 +460,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def pcng_ticket_browser(self, RESPONSE=None):
         """ redirect to ticket browser """
-        util.redirect(RESPONSE, self.aq_parent.absolute_url() + '/pcng_view')
+        util.redirect(RESPONSE, self._getCollector().absolute_url() + '/pcng_view')
 
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
@@ -493,7 +502,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
-        if self.aq_parent.meta_type != 'PloneCollectorNG': return
+        if not self.isPersistent(): return
         self._get_catalog().indexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
@@ -502,7 +511,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
         """ unindex issue """
-        if self.aq_parent.meta_type != 'PloneCollectorNG': return
+        if not self.isPersistent(): return
         self._get_catalog().unindexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
@@ -555,10 +564,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Produce a PDF for issue"""
         import pdfwriter
 
-        pdf = pdfwriter.pdfwriter(self.aq_parent, [self.getId()]) 
+        pdf = pdfwriter.pdfwriter(self._getCollector(), [self.getId()]) 
         RESPONSE.setHeader('content-type', 'application/pdf')
         RESPONSE.setHeader('content-length', str(len(pdf)))
-        RESPONSE.setHeader('content-disposition', 'attachment; filename=issue_%s_%s.pdf' % (self.aq_parent.getId(), self.getId()))
+        RESPONSE.setHeader('content-disposition', 'attachment; filename=issue_%s_%s.pdf' % (self._getCollector().getId(), self.getId()))
         RESPONSE.write(pdf)
 
     ######################################################################
@@ -646,6 +655,25 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
+    security.declareProtected(View, 'isPersistent')
+    def isPersistent(self):
+        """ are in our final landing position """
+        try:
+            id = int(self.getId())
+            return 1
+        except:
+            return 0
+
+    security.declareProtected(View, 'numberUploads')
+    def numberUploads(self):
+        """ number of uploads """
+        return len(self.objectIds())
+
+    security.declareProtected(View, 'numberReferences')
+    def numberReferences(self):
+        """ number of references """
+        return len(self.getForwardReferences())
+
     ######################################################################
     # Slots handling
     ######################################################################
@@ -654,7 +682,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         pu = self.getPortlet_usage() 
         if not hasattr(self, '_v_left_slots') or getattr(self, '_v_porlet_usage', '') != pu:
             if pu == 'keep': 
-                self._v_left_slots = list(self.aq_parent.aq_parent.left_slots)
+                self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
             else:
                 self._v_left_slots = []
             self._v_portlet_usage = pu

@@ -108,6 +108,9 @@ msgstr "Zugewiesen an"
 msgid "Uploads"
 msgstr "Dateien"
 
+msgid "Upload"
+msgstr "Datei hochladen"
+
 msgid "transcript"
 msgstr "Ticketverlauf"
 
@@ -1013,3 +1016,6 @@ msgstr "Wird nicht gelöst"
 
 msgid "wont_fix"
 msgstr "Wird nicht gelöst"
+
+msgid "Create reference"
+msgstr "Referenz anlegen"
