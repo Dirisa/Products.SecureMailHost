@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.6 2003/09/09 12:01:09 ajung Exp $
+$Id: util.py,v 1.7 2003/09/09 12:09:02 ajung Exp $
 """
 
 import urllib
@@ -102,5 +102,4 @@ def redirect(RESPONSE, dest, msg=None,**kw):
         if kw:
             url += '&'.join(['%s=%s' % (k, urllib.quote(v)) for k,v in kw.items()])
 
-        print url
         RESPONSE.redirect(url) 
