@@ -10,17 +10,15 @@
 REQUEST = context.REQUEST
 
 fieldset = REQUEST.get('fieldset', None)
-new_context = None
 
-# Support for portal_factory
 if context.meta_type == 'PloneIssueNG':
-
-    try:        
+   
+    if context.aq_parent.meta_type == 'PloneCollectorNG':
         # persistent issue 
         id = int(context.getId()) 
         context.processForm()
         new_context = context
-    except:
+    else:
         # temporary issue 
         id = context.new_issue_number()
         parent = context.aq_parent.aq_parent  # tempissue -> tempfolder -> PCNG instance
