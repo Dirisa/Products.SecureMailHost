@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.198 2004/07/01 14:16:32 ajung Exp $
+$Id: Issue.py,v 1.199 2004/07/01 17:02:22 ajung Exp $
 """
 
 import os, time, random 
@@ -730,6 +730,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def pcng_ticket_browser(self, RESPONSE):
         """ redirect """
         RESPONSE.redirect(self._getCollector().absolute_url() + '/pcng_view')
+    
+    security.declareProtected(View, 'createObject')
+    def createObject(self, RESPONSE):
+        """ redirect """
+        RESPONSE.redirect('pcng_issue_uploads')
 
 registerType(PloneIssueNG)
 
