@@ -8,9 +8,9 @@ import DateTime
 
 l = []
 
-nl('context #%s: %s' % (context.getId(), context.Title()))
-nl('Topic: %s' % (context.topic))
-nl('Status: %s, Importance: %s' % (context.status(), context.importance))
+nl('Ticket #%s: %s' % (context.getId(), context.Title()))
+nl('Betreff: %s' % (context.topic))
+nl('Status: %s, Wichtigkeit: %s' % (context.status(), context.importance))
 nl('Ticket URL: http://%s/%s' % (context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
 
@@ -22,16 +22,16 @@ for group in groups:
     nl('#%d %s (%s) ----------------------------' % (len(groups)-n, datestr, uid)) 
     for ev in group:
         if ev.type == 'comment':
-            nl('Comment:')
+            nl('Kommentar:')
             nl(ev.comment)
         elif ev.type == 'action':
-            nl('Action: %s"' % ev.action)
+            nl('Aktion: %s"' % ev.action)
         elif ev.type == 'change':
-            nl('Changed: %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
+            nl('Geändert: %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
         elif ev.type == 'incrementalchange':
-            nl('Changed: %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
+            nl('Geändert: %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
         elif ev.type == 'reference':
-            nl('Reference: %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
+            nl('Referenz: %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
         elif ev.type == 'upload':
             nl('Upload: %s: %s (%s)' % (ev.fieldid, ev.comment))
         else: 
