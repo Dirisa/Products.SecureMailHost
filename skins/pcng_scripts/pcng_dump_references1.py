@@ -1,6 +1,12 @@
 # Dump references
 
-for c in context.objectValues('PloneCollectorNG'):
+if context.meta_type == 'PloneCollectorNG':
+    collectors = [context]
+else:
+    collectors = context.objectValues('PloneCollectorNG')
+
+
+for c in collectors:
   for o in c.objectValues('PloneIssueNG'):
 
      try:
@@ -12,7 +18,10 @@ for c in context.objectValues('PloneCollectorNG'):
      if refs:
         for r in refs:
             to = r.getTargetObject()
-            print o.absolute_url(1), to.absolute_url(1), r.comment
+            if to:
+                print o.absolute_url(1), to.absolute_url(1), r.comment
+            else:
+                print o.absolute_url(1), 'Fehler', r.comment
       
 return printed
 
