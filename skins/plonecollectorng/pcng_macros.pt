@@ -137,14 +137,18 @@
                                   vocab python: field.Vocabulary(here);
                                   display python: here.displayValue(vocab, issue.importance)">
             <span tal:content="structure display" />
-         </metal:block>
+         </metal:block> -
          <b i18n:translate="assigned">Assigned:</b> <span tal:replace="python: ', '.join(issue.assigned_to)" />
         </div>
         <div class="pcng_issueview_description" 
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
+          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" /> - 
+          <span i18n:translate="modified">Modified:</span> <span tal:replace="python: here.toPortalTime(issue.modified)" />
+          (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
+          <span i18n:translate="days_ago">days ago</span>)
+
         </div>
       </metal:block>
     </div>
