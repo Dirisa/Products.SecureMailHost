@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.12 2003/10/12 09:38:27 ajung Exp $
+$Id: collector_schema.py,v 1.13 2003/10/12 19:32:29 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -88,20 +88,20 @@ schema = OrderedSchema((
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
                 widget=SelectionWidget(format='select', 
-                                       label='Participation mode'),
+                                       label='Participation mode (who can file issues)'),
                 default='staff',
                 schemata='collectordata',
                 ),
     StringField('view_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
                 widget=SelectionWidget(format='select', 
-                                       label='View mode'),
+                                       label='View mode (who can view issues)'),
                 default='staff',
                 schemata='collectordata',
                 ),
     IntegerField('deadline_tickets',
                 default=14,
-                widget=StringWidget(label='Deadline for new tickets'),
+                widget=StringWidget(label='Automatic deadline in days for new issues'),
                 schemata='collectordata',
                 ),
     StringField('collector_email',
