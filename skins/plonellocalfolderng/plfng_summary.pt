@@ -12,7 +12,7 @@
                  global filterValues decodedFilter;
                  global filter decodedFilter;
                  standalone python:1;
-                 folder_contents python:here.getContents(REQUEST=request);
+                 folder_contents python:here.listFolderContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();">
 
