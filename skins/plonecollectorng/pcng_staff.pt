@@ -27,17 +27,17 @@
          <td tal:content="user/username" />
          <td tal:content="user/fullname|nothing" />
          <td tal:content="user/email|nothing" />
-         <td>
+         <td style="text-align: center">
            <input type="checkbox" name="managers:list:string" 
                   tal:attributes="value user/username;
                                   checked python: user['username'] in managers" />
          </td>
-         <td>
+         <td style="text-align: center">
            <input type="checkbox" name="supporters:list:string" 
                   tal:attributes="value user/username;
                                   checked python: user['username'] in supporters" />
          </td>
-         <td>
+         <td style="text-align: center">
            <input type="checkbox" name="reporters:list:string" 
                   tal:attributes="value user/username;
                                   checked python: user['username'] in reporters" />
