@@ -1,5 +1,5 @@
 """
-$Id: PSCReleaseFolder.py,v 1.2 2005/03/04 01:56:27 optilude Exp $
+$Id: PSCReleaseFolder.py,v 1.3 2005/03/05 01:35:21 optilude Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -99,7 +99,7 @@ class PSCReleaseFolder(OrderedBaseFolder):
         catalog = getToolByName(self, 'portal_catalog')
         res = catalog.searchResults(portal_type = 'PSCRelease',
                                     review_state = ['planning', 'in-progress'],
-                                    path = self.getPhysicalPath(),
+                                    path = '/'.join(self.getPhysicalPath()),
                                     sort_on = 'effective',
                                     sort_order = 'reverse')
         return [r.getObject() for r in res]
@@ -112,7 +112,7 @@ class PSCReleaseFolder(OrderedBaseFolder):
         catalog = getToolByName(self, 'portal_catalog')
         res = catalog.searchResults(portal_type = 'PSCRelease',
                                     review_state = ['published'],
-                                    path = self.getPhysicalPath(),
+                                    path = '/'.join(self.getPhysicalPath()),
                                     sort_on = 'effective',
                                     sort_order = 'reverse')
         return [r.getObject() for r in res]
