@@ -33,7 +33,8 @@ Support:
 
 Contact:
 
-    Andreas Jung, andreas@andreas-jung.com  
+    Andreas Jung
+    EMail: andreas@andreas-jung.com  
     D-72070 Tübingen
     Germany
 

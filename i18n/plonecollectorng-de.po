@@ -691,3 +691,9 @@ msgstr "Keine Tickets gefunden"
 
 msgid "advanced_search"
 msgstr "Expertensuche"
+
+msgid "changed"
+msgstr "Geändert"
+
+msgid "issue_number"
+msgstr "Ticket #$id"
