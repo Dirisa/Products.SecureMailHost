@@ -21,9 +21,9 @@
                              tid template/id;
                              tabindex python:Iterator()">
                 <div class="portletContent odd">
-                <form action="pfmbox"
-                      tal:define="groups form/get_groups"
-                      tal:attributes="id form/name;
+                <form tal:define="groups form/get_groups"
+                      tal:attributes="action pfm/id;
+                                      id form/name;
                                       method form/method;
                                       enctype form/enctype">
     
