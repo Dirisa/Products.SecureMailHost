@@ -293,11 +293,11 @@ msgstr "Expertensuchmaske"
 msgid "Simple view"
 msgstr "Einfache Ansicht"
 
-msgid "Full view"
-msgstr "Vollansicht"
+msgid "With images"
+msgstr "Mit Bildern"
 
-msgid "View with images"
-msgstr "Vollansicht mit Bildern"
+msgid "Without images"
+msgstr "Ohne Bilder"
 
 msgid "Maintenance"
 msgstr "Wartung"
