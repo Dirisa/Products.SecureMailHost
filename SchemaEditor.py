@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.48 2004/01/11 08:40:34 ajung Exp $
+$Id: SchemaEditor.py,v 1.49 2004/01/22 09:04:37 ajung Exp $
 """
 
 import copy, re
@@ -171,11 +171,6 @@ class SchemaEditor:
         D['schemata'] = FD.schemata
         D['createindex'] = FD.get('createindex', 0)
          
-        if FD.get('invisible', 0) == 0:
-            visible = 1
-        else:
-            visible = 0
-
         # build widget
         if   FD.widget == 'String':      widget = StringWidget()
         elif FD.widget == 'Select':      widget = SelectionWidget(format='select')
@@ -209,7 +204,7 @@ class SchemaEditor:
         else:
             raise RuntimeError
 
-        widget.visible = visible
+        widget.visible = 1
         widget.label = FD.label
         widget.label_msgid = 'label_' + FD.label
         widget.i18n_domain = 'plonecollectorng'

@@ -267,16 +267,6 @@
                     </div>
                   </div>
                 </td>
-                <td>
-                  <div class="row">
-                    <div class="label" i18n:translate="invisible">Invisible</div>
-                    <div class="field">
-                      <input type="checkbox" value="1" 
-                             name="fielddata.invisible:record:int" 
-                             tal:attributes="checked python: field.widget.visible == 0"/>
-                    </div>
-                  </div>
-                </td>
               </tr>
             </table>
             <div class="row">
@@ -290,9 +280,7 @@
           </div>
 
         </td>
-
       </tr>
-
     </table>
 
   </div>
