@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.196 2004/07/18 18:11:27 bcsaller Exp $
+$Id: Collector.py,v 1.197 2004/07/18 19:47:52 bcsaller Exp $
 """
 
 import base64, time, random, md5, os
@@ -890,8 +890,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 if callable(slots):
                     slots = slots()
                 self._v_right_slots = list(slots)
-
-                self._v_right_slots = list(self.aq_parent.right_slots)
             if pa == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
             self._v_right_slots = tuple(self._v_right_slots)
