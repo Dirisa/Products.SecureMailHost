@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.31 2004/01/30 15:08:31 ajung Exp $
+$Id: collector_schema.py,v 1.32 2004/02/18 19:21:34 dtremea Exp $
 """
 
 
@@ -22,6 +22,7 @@ VOC_NOTIFICATION_LANGUAGES = DisplayList((
   ('de', 'German'),
   ('fi', 'Finish'),
   ('nl', 'Dutch'),
+  ('pt-br', 'Português do Brasil'),
 ))
 
 VOC_PARTICIPATION_MODE = DisplayList((
