@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.21 2003/10/19 15:07:47 ajung Exp $
+$Id: SchemaEditor.py,v 1.22 2003/10/19 16:30:45 ajung Exp $
 """
 
 import operator
@@ -68,12 +68,13 @@ class SchemaEditor:
     def schema_newSchema(self, fieldset, RESPONSE=None):
         """ add a new schema """
         if fieldset in self._schemata_names:
-            raise ValueError('Schemata "%s" already exists' % fieldset)
+            raise ValueError(self.translate('schema_exists', 'Schemata "$schema" already exists', schema=fieldset))
         self._schemata_names.append(fieldset)
         self._schemas[fieldset] = OrderedSchema()
         self._p_changed = 1
 
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema added', fieldset=fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_added', 'Schema added'), fieldset=fieldset)
 
     security.declareProtected(ManageCollector, 'schema_delSchema')
     def schema_delSchema(self, fieldset, RESPONSE=None):
@@ -81,13 +82,15 @@ class SchemaEditor:
         self._schemata_names.remove(fieldset)
         del self._schemas[fieldset]
         self._p_changed = 1
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted', fieldset=self._schemata_names[0])
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_deleted', 'Schema deleted'), fieldset=self._schemata_names[0])
 
     security.declareProtected(ManageCollector, 'schema_del_field')
     def schema_del_field(self, fieldset, name, RESPONSE=None):
         """ remove a field from a fieldset """
         del self._schemas[fieldset][name]
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field deleted', fieldset=fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_field_deleted', 'Field deleted'), fieldset=fieldset)
 
     security.declareProtected(ManageCollector, 'schema_update')
     def schema_update(self, fielddata,  REQUEST, RESPONSE=None):
@@ -106,7 +109,8 @@ class SchemaEditor:
                 schema.addField(f)
             self._schemas[fieldset] = schema
 
-            util.redirect(RESPONSE, 'pcng_schema_editor', 'Field added', fieldset=fieldset, field=R['name'])
+            util.redirect(RESPONSE, 'pcng_schema_editor', 
+                          self.translate('schema_field_added', 'Field added'), fieldset=fieldset, field=R['name'])
             return            
 
         if   FD.type == 'StringField':     field = StringField
@@ -116,7 +120,7 @@ class SchemaEditor:
         elif FD.type == 'BooleanField':    field = BooleanField
         elif FD.type == 'LinesField':      field = LinesField
         elif FD.type == 'DateTimeField':   field = DateTimeField
-        else: raise TypeError('unknown field type: %s' % FD.field)
+        else: raise TypeError(self.translate('schema_unknown_field', 'unknown field type: $field', field=FD.field))
 
         D = {}    # dict to be passed to the field constructor
         D['default'] = FD.get('default', '')
@@ -141,7 +145,7 @@ class SchemaEditor:
         elif FD.widget == 'Password':    widget = PasswordWidget()
         elif FD.widget == 'Lines':       widget = LinesWidget()
         elif FD.widget == 'Visual':      widget = VisualWidget()
-        else: raise ValueError('unknown widget type: %s' % d.widget)
+        else: raise ValueError(self.translate('schema_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
         if hasattr(widget, 'size'):
             widget.size = FD.widgetsize
@@ -204,7 +208,8 @@ class SchemaEditor:
         if pos > 0:
             self._schemata_names.remove(fieldset)
             self._schemata_names.insert(pos-1, fieldset)
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schemata moved to left', fieldset=fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_moved_left', 'Schemata moved to left'), fieldset=fieldset)
 
     security.declareProtected(ManageCollector, 'schema_moveRight')
     def schema_moveRight(self, fieldset, RESPONSE=None):
@@ -213,7 +218,8 @@ class SchemaEditor:
         if pos < len(self._schemata_names):
             self._schemata_names.remove(fieldset)
             self._schemata_names.insert(pos+1, fieldset)
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schemata moved to right ', fieldset=fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_moved_right', 'Schemata moved to right'), fieldset=fieldset)
 
     security.declareProtected(ManageCollector, 'schema_field_up')
     def schema_field_up(self, fieldset, name, RESPONSE=None):
@@ -232,7 +238,8 @@ class SchemaEditor:
             schema.addField(field)
 
         self._schemas[fieldset] = schema
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved up', fieldset=fieldset, field=name)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_field_moved_up', 'Field moved up'), fieldset=fieldset, field=name)
 
     security.declareProtected(ManageCollector, 'schema_field_down')
     def schema_field_down(self, fieldset, name, RESPONSE=None):
@@ -251,7 +258,8 @@ class SchemaEditor:
             schema.addField(field)
 
         self._schemas[fieldset] = schema
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved down', fieldset=fieldset, field=name)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_field_moved_down', 'Field moved down'), fieldset=fieldset, field=name)
 
     security.declareProtected(ManageCollector, 'schema_field_to_fieldset')
     def schema_field_to_fieldset(self, fieldset, name, RESPONSE=None):
@@ -260,7 +268,8 @@ class SchemaEditor:
         field = self.schema_getWholeSchema()[name]
         del self._schemas[field.schemata][name]
         self._schemas[fieldset].addField(field)
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved to other fieldset', fieldset=fieldset, field=name)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('schema_field_moved', 'Field moved to other fieldset'), fieldset=fieldset, field=name)
 
     security.declareProtected(ManageCollector, 'schema_get_fieldtype')
     def schema_get_fieldtype(self, field):

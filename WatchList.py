@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: WatchList.py,v 1.6 2003/10/13 17:43:46 ajung Exp $
+$Id: WatchList.py,v 1.7 2003/10/19 16:30:46 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -43,16 +43,18 @@ class WatchList:
     def wl_addWatcher(self, email, RESPONSE):
         """ add watcher """
         if self.wl_isWatcher(email):
-            raise RuntimeError('Email address %s already registered' % email)
+            raise RuntimeError(self.translate('email_already_registered', 'Email address $email already registered', email=email))
         self._watchers.append(email.lower())
-        util.redirect(RESPONSE, 'pcng_issue_view', 'You were added to the watchlist')
+        util.redirect(RESPONSE, 'pcng_issue_view', 
+                      self.translate('watchlist_added', 'You were added to the watchlist'))
 
     security.declareProtected(CMFCorePermissions.View, 'wl_removeWatcher')
     def wl_removeWatcher(self, email, RESPONSE):
         """ remove watcher """
         if not self.wl_isWatcher(email):
-            raise RuntimeError('Email address %s is not registered' % email)
+            raise RuntimeError(self.translate('email_not_registered', 'Email address $email not registered', email=email))
         self._watchers.remove(email.lower())
-        util.redirect(RESPONSE, 'pcng_issue_view', 'You were removed from the watchlist')
+        util.redirect(RESPONSE, 'pcng_issue_view', 
+                      self.translate('watchlist_removed', 'You were removed from the watchlist'))
 
 InitializeClass(WatchList)
