@@ -130,13 +130,17 @@
 
 <div metal:define-macro="search_issues_form">
 
+  <a href="?advanced_search=1"
+     tal:condition="not: request/advanced_search|nothing">Advanced search</a>
+
   <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
     <span i18n:translate="jump_to_ticket">Jump to issue number </span> 
     <input type="text" name="issuenumber" size="5" /> &nbsp;
     <input type="submit" value=" Jump " i18n:attributes="value" class="standalone"/>
   </form>
+
         
-  <form action="pcng_view" method="post"  name="search_form">
+  <form action="pcng_view" method="post"  name="search_form" tal:condition="request/advanced_search|nothing">
     <table>
       <tr>
         <th align="center" i18n:translate="heading_status"> Status </th>
