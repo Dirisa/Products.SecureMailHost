@@ -1,14 +1,12 @@
 PloneFormMailer 
 
- PloneFormMailer is a Plone product which make it easy to create forms through 
- the web (ttw) and send them formatted to one or more fixed recipients. After 
- successful sending a form, a very easy customizeable response-page will be 
- displayed.
+ PloneFormMailer is a Plone product for through the web (ttw) creation of forms
+ and sending them formatted to one or more fixed recipients. After successful 
+ sent a customizeable response-page will be displayed.
 
- It combines the power of Formulator and CMFFormController glued together in an 
- Archetypes product, which was initially created by ArchGenXML.
+ It combines the power of Formulator and CMFFormController glued together in an Archetypes product.
 
- PloneFormMailer is designed to be customized very easy.
+ PloneFormMailer is designed for easy adaption.
 
 Features:
 
@@ -22,13 +20,13 @@ Features:
 
  * add header and footer (txt, stx, html, ...) to form
 
- * optional use of own controller page template
+ * own controller page template (optional)
 
  * customizeable response page (displayed after succeccful send)
 
- * optional response redirect with TALES support
+ * response redirect with TALES support (optional)
 
- * encrypt message using a gpg
+ * encrypt message using a gpg (optional)
 
  * i18n support with LinguaPlone (optional)
 
@@ -76,7 +74,7 @@ Features:
 
   * review with using SecureMailHost 
 
-  * better MailTemplate
+  * better MailTemplate: Support for clean text/plain and mime/multipart
 
   * encryption: import a public key or get it from keyserver, 
     if not in current keyring
@@ -85,7 +83,7 @@ Features:
 
   Future ideas ...
 
-  * seperate Formulator-Integration and Mailer in two products
+  * separate Formulator-Integration and FormMailer in two products
 
   * integrate Formulator in Plone-UI
 
