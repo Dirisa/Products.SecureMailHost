@@ -1,5 +1,15 @@
 0.6.0 (unstable)
 
+beta1
+	- added 'MD5only' mode and 'redir' output to updateMD5Metadatum()
+
+   - eliminated unnecessary 'editMetadata' action from __call__()
+   
+   - added metadata edit link for subfolders in plfng_view.pt
+   
+   - added setRevision() and setChecksum() utility methods to FileProxy;
+     and invoke them in _createProxy()
+
 alpha9
 	- removed unnecessary REQUEST param from the following methods:
 		* getFileRealPath()

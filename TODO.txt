@@ -30,8 +30,6 @@ about feature requests and/or to volunteer to help!!!
 - bug #1006379: there is only limited handling of OS 
   'permission denied' situations
 
-- bug #1003808: PLFNG doesnt work with Chinese
-
 - bug #1001789: Unpickable error (not reproducable yet)
  
 - subfolders of a PLFNG instance do not appear in the
