@@ -5,37 +5,34 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.210 2004/09/19 09:22:31 ajung Exp $
+$Id: Collector.py,v 1.211 2004/09/19 09:25:12 ajung Exp $
 """
 
 import base64, time, random, md5, os
 
 from Globals import InitializeClass 
-from ComputedAttribute import ComputedAttribute
-from AccessControl import  ClassSecurityInfo
-from Products.CMFCore.CatalogTool import CatalogTool
+from DateTime import DateTime
 from BTrees.OOBTree import OOBTree
 from ZODB.POSException import ConflictError
+from AccessControl import  ClassSecurityInfo
+from ComputedAttribute import ComputedAttribute
+from Products.CMFCore.CatalogTool import CatalogTool
 from Products.Archetypes.public import registerType
-from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
-from Transcript2 import Transcript2, CommentEvent, ChangeEvent, IncrementalChangeEvent
-from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
-from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
-from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
-from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
-from Issue import PloneIssueNG
 from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
+from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
+from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
+from config import UNDELETEABLE_FIELDS
+from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
+from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
+from Transcript2 import Transcript2, CommentEvent, ChangeEvent, IncrementalChangeEvent
+import notifications, collector_schema, issue_schema, util
+from Issue import PloneIssueNG
 from Translateable import Translateable
 from workflows import VOC_WORKFLOWS
-import notifications
-import collector_schema
-import issue_schema
-from config import UNDELETEABLE_FIELDS
-import util
 
 
 class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
