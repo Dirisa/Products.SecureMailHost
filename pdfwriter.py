@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.3 2003/11/14 18:08:54 ajung Exp $
+$Id: pdfwriter.py,v 1.4 2003/11/14 19:36:59 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -19,14 +19,11 @@ from DateTime import DateTime
 
 styles = getSampleStyleSheet()
 
-
 Elements = []
 
 HeaderStyle = styles["Heading2"] 
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
-    s = Spacer(0.05*inch, sep*inch)
-    Elements.append(s)
     para = klass(txt, style)
     Elements.append(para)
 
@@ -43,6 +40,12 @@ def pre(txt):
     p = Preformatted(txt, PreStyle)
     Elements.append(p)
 
+DefStyle = styles["Definition"]
+
+def definition(txt):
+    p = XPreformatted(txt, DefStyle)
+    Elements.append(p)
+
 
 def pdfwriter(issue):
 
@@ -51,11 +54,11 @@ def pdfwriter(issue):
     header("")
 
     header("Description")
-    pre(issue.description)
+    definition(issue.description)
 
     if issue.solution:
         header("Solution")
-        pre(issue.solution)
+        definition(issue.solution)
 
     for name in issue.schema_getNames():
         
@@ -75,7 +78,7 @@ def pdfwriter(issue):
 
             if v:
                 l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
-        p(', '.join(l))
+        definition(', '.join(l))
 
     for img in issue.objectValues('Portal Image'):
         from PIL import Image as PIL_Image
@@ -98,21 +101,25 @@ def pdfwriter(issue):
         uid = group[0].user
         header('#%d %s %s (%s)' % (len(groups)-n, issue.lastAction().capitalize(), datestr, uid)) 
 
+        l = []
+
         for ev in group:
             if ev.type == 'comment':
-                p('<b>Comment:</b>')
-                pre(ev.comment)
+#                l.append('<b>Comment:</b>\n%s' % ev.comment)
+                pass
             elif ev.type == 'change':
-                p('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
+                l.append('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
             elif ev.type == 'incrementalchange':
-                p('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
+                l.append('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
             elif ev.type == 'reference':
-                p('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
+                l.append('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
             elif ev.type == 'upload':
                 s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
                 if ev.comment:
                     s+= ' (%s)' % ev.comment
-                p(s)
+                l.append(s)
+
+        definition('\n'.join(l))
 
         n+=1
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.79 2003/11/14 18:08:53 ajung Exp $
+$Id: Issue.py,v 1.80 2003/11/14 19:36:59 ajung Exp $
 """
 
 import sys, os
@@ -489,6 +489,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         pdf = pdfwriter.pdfwriter(self) 
         RESPONSE.setHeader('content-type', 'application/pdf')
         RESPONSE.setHeader('content-length', str(len(pdf)))
+        RESPONSE.setHeader('content-disposition', 'attachment; filename=issue.pdf')
         RESPONSE.write(pdf)
 
     ######################################################################
