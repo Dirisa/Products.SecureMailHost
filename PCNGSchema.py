@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.9 2004/03/20 13:15:10 ajung Exp $
+$Id: PCNGSchema.py,v 1.10 2004/05/04 07:45:51 ajung Exp $
 """
 
 from types import FileType
@@ -15,6 +15,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 from ZPublisher.HTTPRequest import FileUpload
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.utils import mapply
 from Products.Archetypes.Layer import DefaultLayerContainer
 from Products.Archetypes.interfaces.layer import ILayerContainer, ILayerRuntime, ILayer 
@@ -372,6 +373,45 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                 except Exception, E:
                     log_exc()
                     errors[name] = E
+
+    security.declareProtected(CMFCorePermissions.View, 'filterFields')
+    def filterFields(self, *predicates, **values):
+        """Returns a subset of self.fields(), containing only fields that
+        satisfy the given conditions.
+
+        You can either specify predicates or values or both. If you provide
+        both, all conditions must be satisfied.
+
+        For each ``predicate`` (positional argument), ``predicate(field)`` must
+        return 1 for a Field ``field`` to be returned as part of the result.
+
+        Each ``attr=val`` function argument defines an additional predicate:
+        A field must have the attribute ``attr`` and field.attr must be equal
+        to value ``val`` for it to be in the returned list.
+        """
+
+        results = []
+
+        for field in self.fields(): # step through each of my fields
+
+            # predicate failed:
+            failed = [pred for pred in predicates if not pred(field)]
+            if failed: continue
+
+            # attribute missing:
+            missing_attrs = [attr for attr in values.keys() \
+                             if not hasattr(field, attr)]
+            if missing_attrs: continue
+
+            # attribute value unequal:
+            diff_values = [attr for attr in values.keys() \
+                           if getattr(field, attr) != values[attr]]
+            if diff_values: continue
+
+            results.append(field)
+
+        return results
+
 
     ######################################################################
     # Schema manipulation methods 
