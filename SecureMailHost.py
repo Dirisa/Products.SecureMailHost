@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.12 2004/05/24 12:51:33 tiran Exp $
+$Id: SecureMailHost.py,v 1.13 2004/05/24 13:01:51 tiran Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -22,6 +22,7 @@ from copy import deepcopy
 
 import email.Message
 import email.MIMEText
+import email
 
 import re
 
@@ -141,7 +142,7 @@ class SecureMailBase(MailBase):
                 'Use secureSend instead!' % self.absolute_url(0))
             self._v_send = 1
 
-        return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
+        return MailBase.send(self, message, mto=mto, mfrom=mfrom,
                              subject=subjet, encode=encode)
 
     security.declareProtected(use_mailhost_services, 'secureSend')
@@ -223,9 +224,13 @@ class SecureMailBase(MailBase):
     def __SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        mail = Mail(mfrom, mto, messageText,
-                    smtp_host=self.smtp_host, smtp_port=self.smtp_port,
-                    userid=self._smtp_userid, password=self._smtp_pass
+        if not isistance(messageText, email.MIMEText.MIMEText):
+            message = email.message_from_string(messageText)
+        else:
+            message = messageText
+        mail = Mail(mfrom, mto, message, smtp_host=self.smtp_host,
+                    smtp_port=self.smtp_port, userid=self._smtp_userid,
+                    password=self._smtp_pass
                    )
         if debug:
             return mail
@@ -235,6 +240,10 @@ class SecureMailBase(MailBase):
     def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
+        if not isistance(messageText, email.MIMEText.MIMEText):
+            message = email.message_from_string(messageText)
+        else:
+            message = messageText
         from asyncmailer import mailQueue, initializeMailThread
         initializeMailThread()
         mail = Mail(mfrom, mto, messageText,
