@@ -5,7 +5,7 @@
 # Author:       Daniel Nouri <daniel.nouri@con-fuse.org>
 #
 # Created:      2004-01-28
-# RCS-ID:       $Id: validators.py,v 1.3 2004/10/20 20:17:06 dreamcatcher Exp $
+# RCS-ID:       $Id: validators.py,v 1.4 2004/10/20 20:56:29 dreamcatcher Exp $
 # Copyright:    (c) 2004 by Daniel Nouri, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -36,6 +36,7 @@ class TALESValidator:
 validation.register(TALESValidator())
 
 class ZPTValidator:
+
     __implements__ = (interfaces.ivalidator,)
 
     name = 'zptvalidator'
