@@ -368,9 +368,21 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool,
       dummyFileProxy.url = FSfullPathFileName
       dummyFileProxy.encoding = None
       mi = mimetypesTool.classify(data=None, filename=fileItem.lower())
-      dummyFileProxy.setIconPath(mi.icon_path)
-      dummyFileProxy.mime_type = mi.normalized()
-      
+      try:
+         item_mime_type = mi.normalized()
+      except:
+         item_mime_type = mimetypesTool.defaultMimetype
+         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+         #         "warning: no filename mime type for %s" % filename)
+      dummyFileProxy.mime_type = item_mime_type
+
+      try:
+          iconPath = mi.icon_path
+      except:
+          iconPath = 'unknown.png'
+
+      dummyFileProxy.setIconPath(iconPath)
+
       #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
       #"catalogContents() :: file=%s" % FSfullPathFileName )
       #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
@@ -460,7 +472,12 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool,
              
              if mimetypesTool:
                 mi = mimetypesTool.classify(data=None, filename=item.lower())
-                item_mime_type = mi.normalized()
+                try:
+                   item_mime_type = mi.normalized()
+                except:
+                   item_mime_type = mimetypesTool.defaultMimetype
+                   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                   # "warning: no filename mime type for %s" % filename)
              
                 for filetypePhrase in filetypePhrasesSkipList:
                    if item_mime_type.find(filetypePhrase) >= 0:
@@ -568,7 +585,12 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds,
              else:
                 if mimetypesTool:
                    mi = mimetypesTool.classify(data=None,filename=item.lower())
-                   item_mime_type = mi.normalized()
+                   try:
+                      item_mime_type = mi.normalized()
+                   except:
+                      item_mime_type = mimetypesTool.defaultMimetype
+                      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                      # "warning: no filename mime_type for %s" % filename)
                 
                    for filetypePhrase in filetypePhrasesSkipList:
                       if item_mime_type.find(filetypePhrase) >= 0:

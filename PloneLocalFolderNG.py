@@ -492,7 +492,12 @@ class PloneLocalFolderNG(BaseContent):
 
         mi = self.mimetypes_registry.classify(data=None,
                                               filename=destpath.lower())
-        RESPONSE.setHeader('content-type', mi.normalized())
+        try:
+           item_mime_type = mi.normalized()
+        except:
+           item_mime_type = self.mimetypes_registry.defaultMimetype
+
+        RESPONSE.setHeader('content-type', item_mime_type)
         RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
         if REQUEST.get('action', '') == 'download':
             REQUEST.RESPONSE.setHeader('content-disposition',
@@ -619,8 +624,17 @@ class PloneLocalFolderNG(BaseContent):
             proxy.setIconPath('folder_icon.gif')
             proxy.setMimeType('folder')
         else:
-            proxy.setIconPath(mi.icon_path)
-            proxy.setMimeType(mi.normalized())
+            try:
+               item_mime_type = mi.normalized()
+            except:
+               item_mime_type = self.mimetypes_registry.defaultMimetype
+            try:
+               iconPath = mi.icon_path
+            except:
+               iconPath = 'unknown.png'   
+
+            proxy.setIconPath(iconPath)
+            proxy.setMimeType(item_mime_type)
 
         GENERAL_MD = getMetadataElements(fullpath, 'GENERAL') or {}
         proxy.setComment(GENERAL_MD.get('comment',''))
