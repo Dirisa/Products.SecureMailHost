@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.197 2004/07/18 19:47:52 bcsaller Exp $
+$Id: Collector.py,v 1.198 2004/07/21 10:16:12 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -954,7 +954,7 @@ class PloneCollectorNGCatalog(CatalogTool):
             widget = f.widget.__class__.__name__
             if getattr(f, 'createindex', 0) == 1 and f.getName() not in custom_keys:
                 if klass in ('StringField', 'TextField'):
-                    if widget in ('MultiSelectionWidget',):
+                    if widget in ('MultiSelectionWidget', 'SelectionWidget'):
                         custom.append( [f.getName(), 'FieldIndex'] )
                     else:
                         custom.append( [f.getName(), 'TextIndex'] )
