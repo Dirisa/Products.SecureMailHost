@@ -10,18 +10,20 @@ from textwrap import wrap
 def TR(id, default):
     return context.Translate(id, default, language, as_unicode=1)
 
+
 def getValue(fieldname, translate=0):
 
     vocab = context.pcng_vocabulary_values(fieldname)
     v = context.Schema()[fieldname].get(context)
 
     if translate:
-        return TR(vocab[str(v)], vocab[str(v)])
+        v = str(v)
+        return TR(vocab.get(v, v), vocab.get(v,v))
     else:
         if same_type(v, []):
-            return ', '.join([vocab[item] for item in v])
+            return ', '.join([vocab.get(item, item) for item in v])
         else:
-            return vocab[v]
+            return vocab.get(v, v)
 
 # convert string to unicode and append to list
 def nl(text=''):
