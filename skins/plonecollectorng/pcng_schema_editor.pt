@@ -159,6 +159,21 @@
                       <option value="Visual" 
                               tal:content="string:Visual"
                               tal:attributes="selected python: widget_name=='VisualWidget' "/>
+                      <option value="Epoz" 
+                              tal:content="string:Epoz"
+                              tal:attributes="selected python: widget_name=='EpozWidget' "/>
+                      <option value="Image" 
+                              tal:content="string:Image"
+                              tal:attributes="selected python: widget_name=='ImageWidget' "/>
+                      <option value="Integer" 
+                              tal:content="string:Integer"
+                              tal:attributes="selected python: widget_name=='IntegerWidget' "/>
+                      <option value="Decimal" 
+                              tal:content="string:Decimal"
+                              tal:attributes="selected python: widget_name=='DecimalWidget' "/>
+                      <option value="Reference" 
+                              tal:content="string:Reference"
+                              tal:attributes="selected python: widget_name=='ReferenceWidget' "/>
                     </select>
                   </div>
                 </div>
@@ -176,6 +191,7 @@
                                tal:attributes="value widget/rows|string:10"/>
                       </metal:block>
                       <metal:block tal:condition="python: hasattr(widget, 'cols')">       
+                        <br>
                         <span i18n:translate="cols">Cols</span>
                         <input type="text" size="3" name="fielddata.widgetcols:record:int" 
                                tal:attributes="value widget/cols|string:60"/>
