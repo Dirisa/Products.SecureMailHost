@@ -1,5 +1,19 @@
 0.6.0 (unstable)
 
+alpha9
+	- removed unnecessary REQUEST param from the following methods:
+		* getFileRealPath()
+		* getFileMetadata()
+		* setFileMetadata()
+		* updateMD5Metadatum()
+		* HTMLFormUploadFile()
+		* validFolder()
+	
+	- added _getFSBasePath() and _getFSFullPath() 'gatekeeper' methods to 
+	  consolidate all accesses to the local directory field (self.folder) of 
+	  PLFNG instances. Rewrote all PLFNG methods to use these new methods.
+	  (hopefully, this resolves SF bug #1024187, and then some!)
+
 alpha8
 	- view() method added in response to SF bug #1020213
 	  (good catch, Marcel!)
