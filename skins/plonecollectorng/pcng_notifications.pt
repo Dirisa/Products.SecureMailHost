@@ -40,7 +40,7 @@
       </div> <!-- End group -->
     </form>
    <div class="group" tal:condition="python: here.notification_policy == 'NoneNotificationPolicy'">
-   Notification mode is disabled.
+   <span i18n:translate="notification_mode_disabled">Notification mode is disabled</span>.
    </div>
   </div>
 </body>

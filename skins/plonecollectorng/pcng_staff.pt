@@ -5,9 +5,9 @@
 
 <body>
 <div metal:fill-slot="main">	  
-  <h1>Staff</h1>
+  <h1 i18n:translate="legend_staff">Staff</h1>
   <form action="set_staff" method="post">
-    <div class="group"><span class="legend">Collector Staff</span>
+    <div class="group"><span class="legend" i18n:translate="staff">Collector Staff</span>
       <table class="listing" 
              tal:define="managers here/getManagers;
                          supporters here/getSupporters;
