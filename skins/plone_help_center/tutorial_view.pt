@@ -59,7 +59,7 @@
     <p tal:condition="not:here/getPages" class="discreet">
       There are no pages in this Tutorial. Use the 'add new item' menu to add Tutorial Pages, Files, or Images.
     </p>
-    <p>
+    <p tal:condition="nocall:here/getPages">
       <img tal:replace="structure here/tutorial_icon.gif" />
       <a href="tutorial-all-pages">
       All content on one page (useful for printing, presentation mode etc.)

@@ -91,6 +91,13 @@ Schema/class changes:
     
  - Instructional video should use ExternalStorage for video files
 
+===========
+Marshallers
+===========
+
+  - It would be very nice to have the ability to serialize and deserialize stuff
+    to the file system.
+
 ====================
 Installation issues:
 ====================

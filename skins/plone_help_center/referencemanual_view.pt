@@ -43,7 +43,7 @@
         <p tal:condition="not:nocall:sections" class="discreet">
           There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.
         </p>
-        <p>
+        <p tal:condition="nocall:sections">
           <img tal:replace="structure here/referencemanual_icon.gif" />
           <a href="referencemanual-all-pages">
           All content on one page (useful for printing, presentation mode etc.)

@@ -13,8 +13,7 @@ def registerNavigationTreeSettings(self, out):
 
     data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference',
             'HelpCenterFAQ', 'HelpCenterDefinition', 'HelpCenterLink'
-            'HelpCenterInstructionalVideo', 'HelpCenterReferenceManual',
-            'HelpCenterReferenceManualSection']
+            'HelpCenterInstructionalVideo', 'HelpCenterReferenceManual']
     pp=getToolByName(self,'portal_properties')
     p = getattr(pp , 'navtree_properties', None)
     mdntl = list(p.getProperty('metaTypesNotToList', []))

@@ -14,7 +14,7 @@ class HelpCenterReferenceManual(PHCContent,OrderedBaseFolder):
                       OrderedBaseFolder.__implements__,)
 
     schema = ReferenceManualSchema
-    archetype_name = 'ReferenceManual'
+    archetype_name = 'Reference Manual'
     meta_type='HelpCenterReferenceManual'
     content_icon = 'referencemanual_icon.gif'
 
