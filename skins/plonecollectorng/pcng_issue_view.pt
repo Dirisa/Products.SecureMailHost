@@ -38,7 +38,7 @@
             <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
             <tal:block repeat="set fieldsets">
               <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_base_edit?fieldset=${set}">
-                 <span tal:content="set" /></a> <span tal:condition="not: repeat/set/end">&bull;</span>
+                 <span i18n:translate="" tal:content="set" /></a> <span tal:condition="not: repeat/set/end">&bull;</span>
             </tal:block>
           </metal:block>
         </div>

@@ -32,7 +32,7 @@
       </metal:block>
 
      <div tal:condition="fieldsets">
-        <span i18n:translate="fieldsets">Fieldsets</span>: 
+        <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
        <tal:block repeat="set fieldsets">
          <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
            <b i18n:translate="" tal:content="set" />

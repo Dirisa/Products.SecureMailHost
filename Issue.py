@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.85 2003/11/18 14:37:46 ajung Exp $
+$Id: Issue.py,v 1.86 2003/11/20 16:08:33 ajung Exp $
 """
 
 import sys, os, time
@@ -476,6 +476,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
             sub.addField(f)
             schemata[f.schemata] = sub
+
         return schemata
 
     ######################################################################
