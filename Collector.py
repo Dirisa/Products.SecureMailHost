@@ -3,7 +3,7 @@ from Globals import InitializeClass
 from AccessControl import getSecurityManager, ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.CatalogTool import CatalogTool
-
+from BTrees.OOBTree import OOBTree
 from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import BaseFolder, registerType
 
@@ -52,7 +52,7 @@ class Collector(BaseFolder):
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
         self._supporters = self._managers = self._reporters = []
-        self._notification_emails = {}
+        self._notification_emails = OOBTree()
         self.transcript = Transcript()
         self._setup_collector_catalog()
         self.transcript.addComment('Tracker created')
@@ -120,10 +120,21 @@ class Collector(BaseFolder):
         """ set the staff """
 
         reporters.sort(); managers.sort(); supporters.sort()
+
+        te = TranscriptEntry()
+        te.addChange('managers', self._managers, managers)
+        te.addChange('supporters', self._supporters, supporters)
+        te.addChange('reporters', self._reporters, reporters)
+
         self._managers = managers
         self._reporters = reporters
         self._supporters = supporters
         self._adjust_staff_roles()
+
+        self.transcript.add(te)
+        self.transcript._p_changed = 1
+
+        if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
 
     def _adjust_staff_roles(self):
         """ A djust local-role assignments to track staff roster settings.
@@ -167,14 +178,21 @@ class Collector(BaseFolder):
                         states and the values are lists of email addresses
         """
 
+        te = TranscriptEntry()
+
         for state in notifications.keys():
             emails = getattr(notifications, state)
             emails = [e.strip() for e in emails if e.strip()]
             for email in emails:
                 if not util.isValidEmailAddress(email):
                     raise ValueError('Invalid email address: %s' % email)
+
+            te.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
-        self._p_changed = 1
+
+        self.transcript.add(te)
+        self.transcript._p_changed = 1
+        if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
