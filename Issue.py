@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.23 2003/09/21 14:03:26 ajung Exp $
+$Id: Issue.py,v 1.24 2003/09/21 18:46:24 ajung Exp $
 """
 
 import sys
@@ -267,12 +267,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ return all indexable texts """
 
         l = []
-        for attr in ('title' ,'description' ,'solution' ,'topic' ,'subtopic',
-                     'classification' ,'importance' ,'status' ,'version_info',
-                     'contact_name' ,'contact_city' ,'contact_fax',
-                     'contact_phone' ,'contact_address' ,'contact_email'):
-
-            v = getattr(self, attr, None)
+        for field in self.Schema().fields():
+            v = getattr(self, field.getName(), None)
             if v:
                 if callable(v): v = v()
                 l.append( str(v) )
