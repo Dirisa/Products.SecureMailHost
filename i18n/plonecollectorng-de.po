@@ -66,6 +66,9 @@ msgstr "nicht zugewiesen"
 msgid "Assigned"
 msgstr "Zugewiesen"
 
+msgid "Assign"
+msgstr "Zuweisen"
+
 msgid "History"
 msgstr "Verlauf"
 
