@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.49 2004/05/14 17:15:46 ajung Exp $
+$Id: collector_schema.py,v 1.50 2004/05/14 17:21:02 ajung Exp $
 """
 
 
@@ -47,6 +47,11 @@ VOC_REFERENCES_MODE= DisplayList((
 VOC_UPLOADS_MODE= DisplayList((
   ('disabled', 'Disabled'),
   ('enabled', 'Enabled'),
+))
+
+VOC_OWNER_VIEW_MODE = DisplayList((
+  ('yes', 'yes'),
+  ('no', 'no'),
 ))
 
 
@@ -238,6 +243,15 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_view_mode',
                                        i18n_domain='plonecollectorng'),
                 default='staff',
+                schemata='permissions',
+                ),
+    StringField('owner_view_mode',
+                vocabulary=VOC_OWNER_VIEW_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='Issues are private to the issue owner and staff',
+                                       label_msgid='label_owner_view_mode',
+                                       i18n_domain='plonecollectorng'),
+                default='no',
                 schemata='permissions',
                 ),
     ))
