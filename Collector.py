@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.18 2003/09/08 05:08:15 ajung Exp $
+$Id: Collector.py,v 1.19 2003/09/09 11:59:30 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -21,7 +21,8 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import Issue
 from SchemaEditor import SchemaEditor
-import collector_schema, issue_schema
+import collector_schema 
+import issue_schema
 import util
 
 class Collector(BaseFolder, SchemaEditor):
@@ -72,6 +73,7 @@ class Collector(BaseFolder, SchemaEditor):
 
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
+        self.initializeArchetype()
         self.schema_init(issue_schema.schema)
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
@@ -242,7 +244,7 @@ class Collector(BaseFolder, SchemaEditor):
         """ create a new issue """
         self._num_issues += 1
         id = str(self._num_issues)
-        issue = Issue(id, id, schema=self.getWholeSchema())
+        issue = Issue(id, '', self.getWholeSchema())
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
@@ -276,6 +278,7 @@ class Collector(BaseFolder, SchemaEditor):
             issue.reindexObject()
 
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
+
 
 registerType(Collector)
 
