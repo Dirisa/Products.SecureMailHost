@@ -48,10 +48,10 @@
                 <div metal:use-macro="here/issue_macros/macros/view_schemata_as_div" />
 
                   <tal:if tal:condition="python: schemata_name == 'issuedata'" >
-                    <span id="schemata_label" i18n:translate="status">Status</span>: 
+                    <span id="label" i18n:translate="status">Status</span>: 
                     <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
                     <br>
-                    <span id="schemata_label" i18n:translate="assigned_to">Assigned to</span>: 
+                    <span id="label" i18n:translate="assigned_to">Assigned to</span>: 
                     <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
                   </tal:if>
               </div>
@@ -66,7 +66,7 @@
            tal:define="schema python: here.atse_getSchemata('issuedata')">
         <tal:def tal:define="field python: schema['description']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
-            <span id="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
             <pre class="issue_metadata"
                  tal:content="python: here.format_pre('description')" />
           </div>
@@ -74,7 +74,7 @@
 
         <tal:def tal:define="field python: schema['solution']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
-            <span id="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
             <pre class="issue_metadata">
               <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
             </pre>
@@ -83,7 +83,7 @@
       </div>
 
       <div id="issue_transcript">
-        <span id="schemata_label" i18n:translate="transcript">Transcript</span>
+        <span id="label_large" i18n:translate="transcript">Transcript</span>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </div>
 

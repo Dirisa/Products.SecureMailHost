@@ -67,9 +67,15 @@ fieldset {
     margin: 0.25em;
 }
 
-span #schemata_label {
+span #label {
     font-weight: bold;
 }
+
+span #label_large {
+    font-weight: bold;
+    font-size: 140%;
+}
+
 
 h2 #tracker_overview {
     font-size: 120%;

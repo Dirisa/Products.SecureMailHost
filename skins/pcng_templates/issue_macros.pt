@@ -18,7 +18,7 @@
 <metal:block metal:define-macro="field_shortview" i18n:domain="plonecollectorng">
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
-      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+      <span id="label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
 
       <tal:if tal:condition="not: field/vocabulary|nothing" >
         <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)" />
