@@ -74,6 +74,27 @@
               <option value="Select" 
                       tal:content="string:Select"
                       tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
+              <option value="Calendar" 
+                      tal:content="string:Calendar"
+                      tal:attributes="selected python: field.getWidgetName()=='CalendarWidget' "/>
+              <option value="Boolean" 
+                      tal:content="string:Boolean"
+                      tal:attributes="selected python: field.getWidgetName()=='BooleanWidget' "/>
+              <option value="MultiSelect" 
+                      tal:content="string:MultiSelect"
+                      tal:attributes="selected python: field.getWidgetName()=='MultiSelectionWidget' "/>
+              <option value="Keywords" 
+                      tal:content="string:Keywords"
+                      tal:attributes="selected python: field.getWidgetName()=='KeywordsWidget' "/>
+              <option value="Richtext" 
+                      tal:content="string:Richtext"
+                      tal:attributes="selected python: field.getWidgetName()=='RichWidget' "/>
+              <option value="Password" 
+                      tal:content="string:Password"
+                      tal:attributes="selected python: field.getWidgetName()=='PasswordWidget' "/>
+              <option value="Visual" 
+                      tal:content="string:Visual"
+                      tal:attributes="selected python: field.getWidgetName()=='VisualWidget' "/>
             </select>
            </td>
           <td valign="top">

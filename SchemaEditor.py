@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.9 2003/09/09 11:59:00 ajung Exp $
+$Id: SchemaEditor.py,v 1.10 2003/09/09 16:16:25 ajung Exp $
 """
 
 import operator
@@ -13,9 +13,8 @@ import operator
 from BTrees.OOBTree import OOBTree
 from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import DisplayList
-from Products.Archetypes.public import StringField, TextField, IntegerField, FloatField
-from Products.Archetypes.public import DateTimeField, FixedPointField, LinesField, BooleanField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget, StringWidget
+from Products.Archetypes.Field import *
+from Products.Archetypes.Widget import *
 
 import util
 
@@ -109,10 +108,20 @@ class SchemaEditor:
             D = {}
             D['default'] = d.get('default', '')
             D['schemata'] = fieldset
+         
             if d.widget == 'String': pass
             elif d.widget == 'Select': D['widget'] = SelectionWidget(format='select')
             elif d.widget == 'Radio': D['widget'] = SelectionWidget
             elif d.widget == 'Textarea': D['widget'] = TextAreaWidget
+            elif d.widget == 'Calendar': D['widget'] = CalendarWidget
+            elif d.widget == 'Boolean': D['widget'] = BooleanWidget
+            elif d.widget == 'MultiSelect': D['widget'] = MultiSelectionWidget
+            elif d.widget == 'Keywords': D['widget'] = KeywordWidget
+            elif d.widget == 'Richtext': D['widget'] = RichWidget
+            elif d.widget == 'Password': D['widget'] = PasswordWidget
+            elif d.widget == 'Visual': D['widget'] = VisualWidget
+            else:
+                raise ValueError('unknown widget type: %s' % d.widget)
 
             if d.widget in ('Radio', 'Select'):
 
@@ -152,3 +161,4 @@ class SchemaEditor:
             if k == v: l.append(k)
             else: l.append('%s|%s' % (k,v))
         return '\n'.join(l)
+
