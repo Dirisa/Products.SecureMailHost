@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.51 2003/10/20 12:53:01 ajung Exp $
+$Id: Issue.py,v 1.52 2003/10/26 10:28:09 ajung Exp $
 """
 
 import sys, os
@@ -318,6 +318,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             obj.manage_permission(CMFCorePermissions.AccessContentsInformation, acquire=1)
             obj.manage_upload(uploaded_file)
             self._transcript.addUpload(file_id, comment)
+            notifications.notify(self)
 
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.translate('file_uploaded', 'File base been uploaded'))
