@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.81 2003/11/28 11:47:38 ajung Exp $
+$Id: Collector.py,v 1.82 2003/11/28 12:11:14 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -429,9 +429,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     # Some Archetypes madness
     ######################################################################
 
-    def getSchemataFields(self, name):
-        print self.schema.getSchemataFields(name)
-        return self.schema.getSchemataFields(name)
 
 registerType(PloneCollectorNG)
 
