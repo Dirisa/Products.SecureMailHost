@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.22 2003/10/19 16:30:45 ajung Exp $
+$Id: SchemaEditor.py,v 1.23 2003/10/24 19:46:03 ajung Exp $
 """
 
 import operator
@@ -168,17 +168,28 @@ class SchemaEditor:
         # build DisplayList instance for SelectionWidgets
         if FD.widget in ('Radio', 'Select', 'MultiSelect'):
             vocab = FD.get('vocabulary', [])
-            l = []
-            for line in vocab:
-                line = line.strip()
-                if not line: continue
-                if line.find('|') == -1:
-                    k = v = line
-                else:
-                    k,v = line.split('|', 1)
-                l.append( (k,v))
 
-            D['vocabulary'] = DisplayList(l)
+            # The vocabulary can either be a list of string of 'values'
+            # or a list of strings 'key|value' or a list with *one*
+            # string 'method:<methodname>'. 'method:<methodname>' is used
+            # specify a method that is called to retrieve a DisplayList
+            # instance
+
+            if len(vocab) == 1 and vocab[0].startswith('method:'):
+                dummy,method = vocab[0].split(',')
+                D['vocabulary'] = method.strip()
+            else:
+                l = []
+                for line in vocab:
+                    line = line.strip()
+                    if not line: continue
+                    if line.find('|') == -1:
+                        k = v = line
+                    else:
+                        k,v = line.split('|', 1)
+                    l.append( (k,v))
+
+                D['vocabulary'] = DisplayList(l)
 
         D['required'] = FD.get('required', 0)
         D['mutator'] = 'archetypes_mutator'
