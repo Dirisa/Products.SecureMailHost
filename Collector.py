@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.49 2003/10/19 15:31:45 ajung Exp $
+$Id: Collector.py,v 1.50 2003/10/20 12:20:39 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -41,7 +41,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
-        {'id': 'edit',
+        {'id': 'pcng_edit',
         'name': 'Edit',
         'action': 'portal_form/pcng_base_edit',
         'permissions': (ManageCollector,)
@@ -389,7 +389,7 @@ class PloneCollectorNGCatalog(CatalogTool):
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
     for a in fti['actions']:
-        if a['id'] in ('syndication','references','metadata'):
+        if a['id'] in ('syndication','references','metadata', 'edit'):
             a['visible'] = 0
     return fti
 
