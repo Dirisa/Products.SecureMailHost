@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.162 2004/04/14 19:15:35 ajung Exp $
+$Id: Collector.py,v 1.163 2004/04/15 15:57:15 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -796,7 +796,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         orig = util.decrypt(encrypted,self.getToken())
         return orig
 
-    security.declareProtected(View, 'enccode_information')
+    security.declareProtected(View, 'encode_information')
     def encode_information(self, s):
         """ encode a string """
 
