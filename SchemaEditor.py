@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.30 2003/11/20 17:22:47 ajung Exp $
+$Id: SchemaEditor.py,v 1.31 2003/11/24 11:03:05 ajung Exp $
 """
 
 import operator
@@ -97,9 +97,14 @@ class SchemaEditor:
         if name in UNDELETEABLE_FIELDS:
             raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted', name=name))
             
-        f = self._schemas[fieldset]
-        del f[name]
-        self._schemas[fieldset] = f
+        schema = self._schemas[fieldset]
+        new_schema = OrderedSchema()
+        for f in schema.fields():
+            if f.getName() != name:
+                new_schema.addField(f)
+		
+        self._schemas[fieldset] = new_schema 
+	
         util.redirect(RESPONSE, 'pcng_schema_editor', 
                       self.translate('schema_field_deleted', 'Field deleted'), fieldset=fieldset)
 
@@ -117,12 +122,12 @@ class SchemaEditor:
         
             fieldset = FD.schemata    
             fields = self._schemas[fieldset].fields()
+	    
             fields.append(StringField(R['name'], schemata=fieldset, widget=StringWidget))
             schema = OrderedSchema()
             for f in fields:
                 schema.addField(f)
             self._schemas[fieldset] = schema
-
             util.redirect(RESPONSE, 'pcng_schema_editor', 
                           self.translate('schema_field_added', 'Field added'), fieldset=fieldset, field=R['name'])
             return            
