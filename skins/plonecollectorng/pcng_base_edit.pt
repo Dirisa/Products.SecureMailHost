@@ -59,11 +59,6 @@
 	</div>
 -->
 
-
-        <span class="legend"
-              i18n:translate=""
-              tal:content="python:(len(fieldsets) > 1 and fieldset != 'default') and fieldset or here.archetype_name " />
-
 	    <tal:fields  tal:condition="python: here.meta_type == 'PloneCollectorNG'"
              repeat="field python: here.Schemata()[fieldset].fields()">
             <metal:fieldMacro use-macro="python: here.widget(field.getName(), mode='edit')"/>
