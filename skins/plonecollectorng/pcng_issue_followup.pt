@@ -8,18 +8,20 @@
 <div metal:fill-slot="main">	  
 
   <form method="post" action="issue_followup">
-    <div class="group"><span class="legend">Issue Followup #<span tal:content="python: len(here) + 1"/></span>
-      <table class="listing" 
-             tal:define="assignees here/getAssignees">
-        <tr>
-          <th i18n:translate="Comment">Comment</th>
-          <td>
-            <textarea name="comment" cols="80" rows="10"></textarea>
-          </td>
-       </tr>
-       <tr>
-         <th i18n:translate="Assigned to">Assigned to</th>
-         <td>
+    <div class="group"
+         tal:define="assignees here/getAssignees">
+      <span class="legend">Issue Followup #<span tal:content="python: len(here) + 1"/></span>
+
+      <div class="row">
+        <div class="label">Comment</div>
+        <div class="field">
+          <textarea name="comment" cols="80" rows="10"></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">Assigned to</div>
+        <div class="field">
            <select name="assignees:list" size="7" multiple>
              <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
                <option tal:content="string: ${u/fullname} (${u/username})"
@@ -28,9 +30,8 @@
                 />
              </span>
            </select>
-         </td>
-       </tr>
-      </table>
+        </div>
+      </div>
 
       <div class="row">
         <div class="label">&nbsp;</div>
