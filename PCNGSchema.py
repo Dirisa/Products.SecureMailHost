@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.7 2004/02/13 13:36:15 ajung Exp $
+$Id: PCNGSchema.py,v 1.8 2004/03/18 18:54:48 ajung Exp $
 """
 
 from types import FileType
 
-from Globals import Persistent, InitializeClass
+from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 from ZPublisher.HTTPRequest import FileUpload
@@ -29,7 +29,7 @@ except ImportError:
 
 # Some replacement classes for Archetypes
 
-class PCNGSchemata(Persistent):
+class PCNGSchemata:
 
     __pcng__ = 1
 
