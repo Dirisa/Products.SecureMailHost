@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.206 2004/09/12 07:42:06 ajung Exp $
+$Id: Collector.py,v 1.207 2004/09/17 14:15:21 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -35,6 +35,7 @@ from workflows import VOC_WORKFLOWS
 import notifications
 import collector_schema
 import issue_schema
+from config import UNDELETEABLE_FIELDS
 import util
 
 
@@ -96,7 +97,10 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         BaseBTreeFolder.manage_afterAdd(self, item, container)
 
         # Initialization
-        self.atse_init(issue_schema.schema)   # initialize SchemaEditor
+        self.atse_init(issue_schema.schema,
+                       filtered_schemas=('default', 'metadata'),
+                       undeleteable_fields = UNDELETEABLE_FIELDS,
+                       domain='plonecollectorng')   
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
