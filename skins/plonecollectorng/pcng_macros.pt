@@ -122,7 +122,7 @@
         </div>
       </metal:block>
     </div>
-    <div tal:condition="not: results" i18n:translate="no_hits">No hits</div>
+    <div tal:condition="not: results" i18n:translate="no_issues_found">No issues found</div>
   </span>
 </div>    
 
