@@ -35,11 +35,30 @@
 
       <div class="row">
         <div class="label">Action</div>
-        <div class="field">
+        <div class="field" 
+             tal:define="actions here/validActions">
           <input type="radio" name="action" value="comment" checked>Comment
-          <metal:block tal:repeat="action here/validActions">
-            <br><input type="radio" name="action" tal:attributes="value action" /><span tal:content="action" /> 
-          </metal:block>                 
+          <metal:block tal:condition="python: 'accept' in actions">
+            <br><input type="radio" name="action" value="accept">Accept
+          </metal:block>
+          <metal:block tal:condition="python: 'assign' in actions">
+            <br><input type="radio" name="action" value="assign">Assign
+          </metal:block>
+          <metal:block tal:condition="python: 'resolve' in actions">
+            <br><input type="radio" name="action" value="resolve">Resolve
+          </metal:block>
+          <metal:block tal:condition="python: 'reject' in actions">
+            <br><input type="radio" name="action" value="reject">Reject
+          </metal:block>
+          <metal:block tal:condition="python: 'defer' in actions">
+            <br><input type="radio" name="action" value="defer">Defer
+          </metal:block>
+          <metal:block tal:condition="python: 'restrict_accepted' in actions">
+            <br><input type="radio" name="action" value="restrict_accepted">Restrict
+          </metal:block>
+          <metal:block tal:condition="python: 'resign' in actions">
+            <br><input type="radio" name="action" value="resign">Resign
+          </metal:block>
         </div>
       </div>
 
