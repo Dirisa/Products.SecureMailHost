@@ -85,11 +85,16 @@ class PatchedDiscussionTool:
         """
         if not self.isDiscussionAllowedFor( content ):
             raise DiscussionNotAllowed
-
-        if not shasattr(aq_base(content), 'talkback'):
-            talkback = self._createDiscussionFor( content )
+        if content.__class__.__name__ == 'DiscussionItem':
+            talkback = getattr(content, 'talkback', None)
+            if not talkback:
+                talkback = self._createDiscussionFor( content )
         else:
-            talkback = content.talkback
+            print 'getDiscussionFor: ', content.__class__.__name__
+            if not shasattr(aq_base(content), 'talkback'):
+                talkback = self._createDiscussionFor( content )
+            else:
+                talkback = content.talkback
 
         return talkback
 
