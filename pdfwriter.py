@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.28 2004/01/17 13:09:00 ajung Exp $
+$Id: pdfwriter.py,v 1.29 2004/01/18 12:08:55 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
-from types import UnicodeType
+from types import UnicodeType, StringType
 from textwrap import fill
 from zLOG import WARNING, LOG
    
@@ -137,6 +137,12 @@ def pdfwriter(collector, ids):
             return unicode(text, collector.getSiteEncoding())
         return text
 
+    def getFieldValue(issue, field):
+        v = issue.Schema()[field].get(issue)
+        if isinstance(v, StringType):
+            return unicode(v, collector.getSiteEncoding())
+        return v
+
     translate = collector.translate
 
     tempfiles = []
@@ -146,11 +152,11 @@ def pdfwriter(collector, ids):
         header(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1))
 
         header(translate('label_description', 'Description', as_unicode=1))
-        definition(html_quote(issue.description))
+        definition(html_quote(getFieldValue(issue, 'description')))
 
         if issue.solution:
             header(translate('label_solution', 'Solution', as_unicode=1))
-            definition(html_quote(issue.solution))
+            definition(html_quote(getFieldValue(issue, 'solution')))
 
         for name in issue.atse_getSchemataNames():
             if name in ('default', 'metadata'): continue
@@ -235,8 +241,7 @@ def pdfwriter(collector, ids):
                         s+= ' (%s)' % ev.comment
                     l.append(dowrap(toUnicode(s)))
 
-
-            definition('\n'.join(l))
+            definition(u'\n'.join(l))
             if comment: 
                 definition('<b>%s</b>' % translate('comment', 'Comment', as_unicode=1))
                 pre(break_longlines(comment))
