@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.38 2003/10/03 09:05:21 ajung Exp $
+$Id: Collector.py,v 1.39 2003/10/06 18:00:28 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -117,7 +117,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     def _setup_collector_catalog(self):
         """Create and situate properly configured collector catalog."""
         catalog = PloneCollectorNGCatalog()
-        self._setObject(catalog.id, catalog)
+        self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
 
     def pre_validate(self, REQUEST, errors):
