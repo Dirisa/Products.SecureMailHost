@@ -1,3 +1,8 @@
+0.4 (unreleased)
+
+  - added support to create directories
+
+
 0.3:
 
   - comment for uploaded files are now displayed
