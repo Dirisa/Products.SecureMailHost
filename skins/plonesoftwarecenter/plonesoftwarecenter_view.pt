@@ -1,0 +1,114 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+<head>
+    <metal:css fill-slot="css_slot">
+    <style type="text/css" media="all"
+           tal:content="string: @import url($portal_url/plonesoftwarecenter.css);"></style>
+    </metal:css>
+
+    <metal:override fill-slot="column_two_slot" />
+
+    <metal:block fill-slot="top_slot">
+      <tal:noborder condition="python: not user.has_permission('Modify portal content', context)">
+        <tal:noborderset tal:define="dummy python:request.set('disable_border', 1)" />
+      </tal:noborder>
+    </metal:block>
+
+
+</head>
+
+
+  <body>
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
+
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
+
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+      Document actions (print, sendto etc)
+    </div>
+
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
+
+    <form style="float: right"
+          action="createObject"
+          tal:condition="python: user.has_permission('Add portal content', context)">
+        <input name="type_name"
+             type="hidden"
+             value="PSCProject" />
+
+        <input class="standalone"
+               type="submit"
+               value="Add New Software Project"
+               />
+    </form>
+
+    <form style="float: right"
+          tal:condition="python: not user.has_permission('Add portal content', context)"
+          tal:define="pss modules/Products/PythonScripts/standard"
+          tal:attributes="action python:'%s/login_form?came_from=%s' %
+                                        (here.portal_url(),
+                                        pss.url_quote(request['URL']))">
+
+        <input class="standalone"
+               type="submit"
+               value="Log in to add Software Project"
+               i18n:attributes="value"
+               />
+    </form>
+
+
+
+    <div tal:repeat="category here/getCategoriesToList">
+
+        <div class="portlet portletThirdWidth">
+            <h6>
+                    <span i18n:translate="">
+                        <span tal:replace="category">
+                            Category heading
+                        </span>
+                    </span>
+            </h6>
+            <div class="portletBody">
+                <tal:list define="releases python:here.getReleasesByCategory(category)" condition="releases">
+                  <div class="portletContent" tal:repeat="release releases">
+                        <img tal:replace="structure here/product_icon.gif" />
+                        <a href="" tal:content="release/Title"
+                          tal:define="review_state release/review_state"
+                           tal:attributes="href release/getURL;
+                                           title release/Description;
+                                           class string:state-$review_state">Package</a>
+                    </div>
+                </tal:list>
+<!--
+                <div class="portletContent odd" tal:define="myall string:All_${help_type/id}">
+                    <a class="portletMore" tal:attributes="href help_type/getURL;
+                                                   title help_type/Description|nothing;">
+                        <span i18n:translate="">
+                            <span tal:replace="myall">
+                                ALL DOCS
+                            </span>
+                        </span>
+                    </a>
+                </div>
+-->
+            </div>
+        </div>
+    </div>
+
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+    </div>
+  </body>
+
+</html>

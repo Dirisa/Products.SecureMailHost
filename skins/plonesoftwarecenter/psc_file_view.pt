@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      i18n:domain="archpackage"
+      metal:use-macro="here/main_template/macros/master">
+<body>
+
+<div metal:fill-slot="main">
+
+    <div metal:define-macro="main">
+
+        <h1 class="documentFirstHeading">
+            <img tal:replace="structure here/product_icon.gif" />
+            <span tal:replace="here/aq_parent/title_or_id">Title or id</span> -
+            <span tal:replace="here/title_or_id">Title or id</span>
+        </h1>
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+        </div>
+
+        <a href=""
+           class="link-parent"
+           i18n:translate="label_up_to_release_page"
+           tal:define="parent_url python:here.navigationParent(here, template.getId())"
+           tal:condition="parent_url"
+           tal:attributes="href parent_url">
+             Up to Release page
+        </a>
+
+        <div class="documentDescription"
+             tal:content="here/aq_parent/Description">
+            description
+        </div>
+
+        <p tal:define="externalURL here/getExternalURL;
+                       internalURL string:${here/absolute_url}/downloadableFile/at_download;
+                       downloadURL python:externalURL and externalURL or internalURL">
+            <a tal:attributes="href downloadURL"
+               tal:condition="not:externalURL">
+                <img tal:replace="structure here/download_icon.gif" />
+            </a>
+            <a tal:attributes="href downloadURL"
+               tal:define="filename python:here.getFilename('downloadableFile')"
+               tal:content="string:Download $filename">
+                Download
+            </a>
+        </p>
+
+        <div metal:use-macro="here/document_byline/macros/byline">
+            Get the byline - contains details about author and modification date.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+PloneSoftwareCenter was primarily written to be used at plone.org;
+we hope that it's written in such a way to be useful for other
+projects.
+
+This is not intended to compete exactly with SourceForge. It is
+intended to be the user-friendly structured information for software
+add-on products for Plone.
+
+Ultimately, other things should be addable to the software centers:
+
+* bug trackers (most likely, based on PloneCollectorNG)
+
+* mailing list or forum  (most likely, based on CMFBoard)
+
+PloneSoftwareCenter is also intended as an interim product. We
+believe that PloneForge looks like a more promising "software
+manager" for Plone, and expect to move plone.org to that when
+possible. At this time, this isn't possible, since that has
+requirements for TeamSpaces and CMFMembers that would be difficult
+to make work on plone.org. We've tried to keep our API matching
+theirs to make migration easy in the future.

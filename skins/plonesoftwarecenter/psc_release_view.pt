@@ -1,0 +1,216 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xml:lang="en"
+  lang="en"
+  i18n:domain="archpackage"
+  metal:use-macro="here/main_template/macros/master">
+
+  <body>
+
+    <div metal:fill-slot="main">
+
+      <div metal:define-macro="main">
+
+        <h1 class="documentFirstHeading">
+          <img tal:replace="structure here/product_icon.gif" />
+          <span tal:replace="here/title_or_id">Title or id</span>
+          <tal:codename condition="here/getCodename">&mdash;
+           <span tal:replace='string:"${here/getCodename}"'>codename</span>
+           </tal:codename>
+        </h1>
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+          Document actions (print, sendto etc)
+        </div>
+
+        <a href=""
+          class="link-parent"
+          i18n:translate="label_up_to_product_page"
+          tal:define="parent_url python:here.aq_parent.aq_parent.absolute_url()"
+          tal:condition="parent_url"
+          tal:attributes="href parent_url">
+          Up to Product page
+        </a>
+
+        <div class="documentDescription"
+          tal:content="here/Description">
+          description
+        </div>
+
+        <p class="portalMessage"
+           tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')!='published'">
+        This release needs to be published before it will show up in the download
+        listings of the software center. When the files have been added, you
+        should publish this release.
+        </p>        
+
+        <h2 i18n:translate="heading_available_downloads">
+          Available downloads
+        </h2>
+
+        <div class="visualIEFloatFix" style="margin-top: 1em;">
+
+          <div style="float:right; text-align: center; margin: 1em 0 1em 1em;"
+            tal:condition="here/screenshot_thumb | nothing">
+            <a class="discreet"
+              tal:attributes="href string:${here/absolute_url}/screenshot/image_view_fullscreen">
+              <img tal:replace="structure here/screenshot_thumb" />
+              <br />
+              <img tal:replace="structure here/search_icon.gif" />
+              <span i18n:translate="label_click_to_enlarge">
+                Click to enlarge
+              </span>
+            </a>
+          </div>
+
+          <tal:nodownloads tal:condition="not: here/contentValues">
+
+            <div class="discreet">
+              <span i18n:translate="description_no_available_releases">
+                There are no available software files in this release yet.
+              </span>
+              <span tal:condition="is_editable"
+                i18n:translate="description_use_add_menu_to_add_releases">
+                Use the Add menu to add software files.
+              </span>
+            </div>
+
+          </tal:nodownloads>
+
+          <dl>
+            <tal:file tal:repeat="file here/contentValues">
+              <dt>
+                <img tal:replace="structure here/download_icon.gif" />
+
+                <a tal:condition="not:file/getExternalURL"
+                  tal:attributes="href string:${file/absolute_url}">
+                  <span i18n:translate="label_download">Download</span>
+                  <span tal:replace="file/id">Ploneboard 1.0</span>
+                  (<span tal:replace="python:here.getObjSize(file)">256KB</span>)
+                </a>
+
+                <a class="link-plain"
+                  tal:condition="file/getExternalURL"
+                  tal:attributes="href file/getExternalURL">
+                  <span i18n:translate="label_download">Download</span>
+                  <span tal:replace="here/Title">Ploneboard 1.0</span>
+                </a>
+
+                (<span tal:replace="file/getPlatform" />)
+              </dt>
+
+              <dd tal:content="file/Title">
+                Windows installer.
+              </dd>
+            </tal:file>
+          </dl>
+
+        </div>
+
+        <div class="visualClear"></div>
+
+        <tal:relnotes condition="here/getText">
+        <h2>Release Notes</h2>
+
+        <table class="listing" style="float: right;">
+            <tr tal:condition="here/compatibility">
+                <th class="vertical"
+                     i18n:translate="heading_tested_and_working_with">
+                Tested with
+                </th>
+                <td class="vertical">
+                    <metal:versions 
+                     metal:use-macro="python:context.widget('compatibility')">
+                    Plone 1.0, Plone 2.0...
+                    </metal:versions>
+                </td>
+            </tr>
+            <tr>
+                <th class="vertical" i18n:translate="heading_state">State</th>
+                <td class="vertical" i18n:translate="" 
+                    tal:content="here/getMaturity">Stable</td>
+            </tr>
+            <tr>
+                <th  class="vertical" 
+                     i18n:translate="heading_license">License</th>
+                <td class="vertical" i18n:translate=""
+                    tal:content="here/getLicense">
+                    GPL
+                </td>
+            </tr>
+            <tr tal:condition="here/getExpectedReleaseDate">
+                <th class="vertical"
+                    i18n:translate="heading_expecteddate">
+                    Expected Release</th>
+                <td class="vertical" i18n:translate=""
+                    tal:content="here/getExpectedReleaseDate">Date</td>
+            </tr>
+        </table>
+
+        <div tal:replace="structure here/getText" />
+
+        </tal:relnotes>
+
+        <div class="visualClear"></div>
+            
+
+          <!-- XXX: The sort below should probably make it into a function 
+          on the object -->
+          <tal:proposals define="proposals here/getRelatedFeatures;
+            dummy python:proposals.sort (lambda x,y: cmp (x.getId (), y.getId ()))"
+            condition="nocall:proposals">
+
+            <h2>Feature enhancements in this release</h2>
+
+            <dl>
+                <tal:proposals repeat="proposal proposals">
+                
+                <dt>
+                  <a tal:attributes="href proposal/absolute_url">
+                     #<span tal:replace="proposal/getId"/> &mdash;
+                     <span tal:replace="proposal/title_or_id" />
+                  </a>
+                </dt>
+                
+                <dd tal:content="proposal/Description" />
+
+                </tal:proposals>
+            </dl>
+
+          </tal:proposals>
+
+        <tal:comment replace="nothing">
+          XXX: FIXME
+          <h2 i18n:translate="heading_documentation">Documentation</h2>
+        </tal:comment>
+
+          <h2 i18n:translate="heading_contact_details">Contact details</h2>
+
+          <p>
+            <a href=""
+              tal:content="here/aq_parent/getHomepage"
+              tal:attributes="href here/aq_parent/getHomepage">
+              Project homepage
+            </a>
+          </p>
+
+          <p>
+            <a tal:replace="structure python:here.spamProtect(here.aq_parent.contact_email)" />
+          </p>
+
+
+        <tal:changelog condition="here/getChangelog">
+          <h2>Change log</h2>
+
+          <div tal:replace="structure here/getChangelog"></div>
+        </tal:changelog>
+
+        <div metal:use-macro="here/document_byline/macros/byline">
+          Get the byline - contains details about author and modification date.
+        </div>
+
+      </div>
+
+    </div>
+
+  </body>
+</html>

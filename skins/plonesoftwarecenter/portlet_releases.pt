@@ -1,0 +1,63 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="archpackage">
+
+<body>
+
+<!-- Release portlet -->
+
+<div metal:define-macro="portlet"
+     tal:define="results python:context.portal_catalog(
+                                        portal_type='PSCRelease',
+                                        sort_on='Date',
+                                        sort_order='reverse',
+                                        review_state='published')[:5]">
+
+    <div class="portlet" id="portlet-releases">
+
+        <h5 i18n:translate="box_latest_products">Latest Products</h5>
+
+        <div class="portletBody">
+
+            <tal:block tal:repeat="obj results">
+
+                <div tal:define="oddrow repeat/obj/odd"
+                     tal:attributes="class python:test(oddrow, 'portletContent even', 'portletContent odd')">
+
+                    <a href=""
+                       tal:attributes="href obj/getProjectURL;
+                                       title obj/Description">
+                        <tal:block replace="structure here/product_icon.gif"/>
+                        <span tal:replace="python:test(obj.Title, obj.Title, obj.getId)">
+                            Product
+                        </span>
+                    </a>
+
+                    <div class="portletDetails"
+                         tal:content="python:here.toPortalTime(obj.Date)">
+                        July 7, 08:11
+                    </div>
+                </div>
+
+            </tal:block>
+
+            <div class="portletContent odd">
+
+                <a href=""
+                   class="portletMore"
+                   tal:attributes="href string:${utool}/downloads"
+                   i18n:translate="box_more_products">
+                    More Products...
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

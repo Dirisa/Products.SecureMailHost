@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plone"
+      metal:use-macro="here/main_template/macros/master">
+
+<body>
+
+
+<div metal:fill-slot="main"
+     tal:define="
+           plips python: context.portal_catalog(
+                                    portal_type='PSCImprovementProposal',
+                                    path='/'.join(context.getPhysicalPath())
+                                    );
+           b_start python:request.get('b_start', 0);
+           Batch python:modules['Products.CMFPlone'].Batch;
+           batch python:Batch(plips, 100, int(b_start), orphan=0);
+           states python: here.portal_catalog.uniqueValuesFor('review_state');
+           ">
+
+    <h1>Roadmap</h1>
+    
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+
+    <div class="portlet" style="margin-left: 0.5em; width: 40%; float: right; clear: right;">
+        <h6>Upcoming Releases</h6>
+        <div class="portletBody">
+            <div class="portletContent odd">
+                <ul>
+                    <tal:release repeat="release here/getUpcomingReleases">
+                    <li>
+                        <a href="" 
+                            tal:content="release/Title"
+                            tal:attributes="href string:${current_page_url}#${release/id}"
+                            >
+                        Some release
+                        </a>
+                    </li>
+                    </tal:release>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="documentDescription">
+    An overview of the upcoming releases for this project. Participants in the
+    project can add new features to the list.
+    </div>
+    
+    <p>
+    If you want to see all the feature proposals available, go to the 
+    <a href="psc_improvements_listing">Improvement Proposal listing</a>.
+    </p>
+    
+    <div class="visualClear"></div>
+
+    <tal:release repeat="release here/getUpcomingReleases">
+    <h2 tal:attributes="id release/id"> 
+        <a href="" tal:attributes="href release/absolute_url">
+            <span tal:replace="release/Title">Release Name</span>
+            <tal:codename condition="release/getCodename">&mdash;
+               <span tal:replace='string:"${release/getCodename}"'>codename</span>
+            </tal:codename>
+        </a>
+    </h2>
+    <div class="discreet">
+    Expected release date: <span tal:replace="release/getExpectedReleaseDate" />
+    </div>
+    <dl>
+    <tal:feature condition="release/getRelatedFeatures"
+                 repeat="feature release/getRelatedFeatures">
+        <dt>
+        <a href=""
+           tal:content="feature/Title"
+           tal:attributes="href feature/absolute_url">Feature title</a>
+           (#<span tal:replace="feature/id" />)
+        </dt>
+        <dd tal:content="feature/Description">Feature Description</dd>
+    </tal:feature>
+    </dl>
+    </tal:release>
+
+</div>
+
+
+</body>
+</html>

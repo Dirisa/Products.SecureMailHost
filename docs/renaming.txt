@@ -1,0 +1,10 @@
+Renaming from ArchPackage.
+
+ArchPackageArea -> PloneSoftwareCenter
+ArchPackage -> PSCProject
+ReleaseFolder -> PSCReleaseFolder
+Release -> PSCRelease
+File -> PSCFile
+ImprovementProposalArea -> PSCImprovementProposalFolder
+ImprovementProposal -> PSCImprovementProposal
+

@@ -1,0 +1,119 @@
+ArchPackage - Remaining issues
+
+Developer claiming item is in [brackets].
+
+===========================================
+PloneHelpCenter integration considerations:
+===========================================
+
+ - Test carefully that all the methods/fields found on the PHC root and used
+    as vocabs for contained objects are found in PSC as well, or that they
+    are only optionally used.
+    
+        - DC metadata 'rights' attribute gets acquired from project/package
+        
+        - Importance vocabulary falls back on default Low, Medium, High
+        
+        - Versions vocab for PHC items (not the same as versions vocab for
+            releases, which relate to which version of Plone it's been
+            tested with!) use a catalog search of all releases, in custom
+            method getVersions_vocab () in PSCProject.
+            
+        - Active versions set in field on PSCProject.
+
+====
+Bugs
+====
+
+- AttributeError: getFilename when viewing software file. Does this have to do
+    with ExternalStorage?
+    
+- Right now, anonymous users can't see the following folders in navtree:
+
+  - Release Folder
+  
+  - Roadmap folder
+
+=======
+General
+=======
+
+- Need to ensure proper security declarations exist on all methods!
+
+- RSS feed for Latest Releases
+
+- DOAP feed support (Description of a Project)
+  http://www-106.ibm.com/developerworks/xml/library/x-osproj3/
+  - This will require us to expand the Software Project schema (Package)
+    a bit, to incorporate info about CVS/SVN etc, but it's all useful. :)
+
+- i18n support - right now there is no multilingual support.
+
+=========
+Design/UI
+=========
+
+- Hard for regular members to find Package after it's been created, before 
+  it's been published (Standard problem in Plone in general without Workspaces
+                        ~limi)
+    
+- We may want to use the currentVersions field of a release to mark relases 
+    which are not currently supported.
+
+- Need to list the documentation types in the Additional resources box.
+
+- Display of "recommended" in psc_project_view.pt and psc_releasefolder_view.pt.
+    How does "recommended" work anyway? (Reviewers can flag something as a best-
+    of-breed product, but we need some guidelines for this first. ~limi)
+
+- Correct platform icons for the download links.
+
+- Page that lists all the downloads in a category, with batching. (needs template work)
+
+- Portlet listing the latest published Releases should have Category listed. This
+  requires the attribute metadata in the Catalog.
+
+- Now that we have data grids on licenses etc., we should probably clean it up
+a bit in the view templates for releases  (show links etc.)
+
+========================
+Nice-to-have-but-not-yet
+========================
+
+Stuff that should be there eventually - but is probably better handled by Plone(Forge|Collab):
+
+- Mailing list/discussion forums inside of ArchPackages
+
+- Have a marshaller for 'Release'. When you upload a .tgz, .zip, .bz2
+  file, it should try to extract the PKGINFO, or maybe setup.py and
+  populate the objects.
+
+- Maybe have a custom setup.py that is able to register with plone.org
+  and populate the objects (also doing upload, and asking for username
+  and password).
+
+- SVN integration, you could be able to do the following:
+
+  - Tag a release in the SVN repository
+
+  - Add a release in Plone
+
+  - Select which tag you want the release to be based on
+
+  - Automatically get tar.gz and .zip files for the release
+
+Dependencies, here's Sidnei's comments:
+
+- Add a 'dependencies' tab to release, that shows the existing
+  dependencies on a nice layout and allows for adding a dependency
+  directly if the user has permission to do so.
+
+- Filter the 'versions' for a choosen package on 'Dependency', as soon
+  as the user chooses a package (maybe using javascript?)
+
+- Add pluggable content creation to a 'Package' (or is that a
+  'Release'?), so that an instance of a given object is created and
+  initialized as soon as the user creates the object. This should also
+  be allowed to change after the object has been added (only allowed
+  to enable new features, not disable?).
+
