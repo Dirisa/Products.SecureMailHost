@@ -48,11 +48,10 @@
         <li><span i18n:translate="referenced_by">Referenced by</span>
           <ul>
             <li tal:repeat="ref breferences">
-              <metal:block  tal:define="url python: ref.issue_url">
-                <a tal:attributes="href url">
-                  <span tal:content="ref/collector_title|nothing"/>: <span tal:content="ref/issue_id" />
-               </a>
-              </metal:block>
+              <tal:if tal:define="url python: ref.issue_url">
+                <a tal:attributes="href url"
+                  tal:content="string: ${ref/collector_title|nothing}: ${ref/issue_id} (${ref/comment|nothing})" />
+              </tal:if>
             </li>
           </ul>
         </li>
