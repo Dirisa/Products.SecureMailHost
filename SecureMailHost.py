@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.20 2004/12/04 01:53:49 shh42 Exp $
+$Id: SecureMailHost.py,v 1.21 2005/01/27 07:05:38 panjunyong Exp $
 """
 
 try:
@@ -61,6 +61,28 @@ if USE_ASNYC_MAILER:
 ##EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_RE = re.compile(r"^(\w&.+-]+!)*[\w&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
+
+# We need to encode usernames in email addresses.
+# This is especially important for Chinese and other languanges.
+# Sample email addresses:
+# 
+# aaa<a@b.c>, "a,db"<a@b.c>, apn@zopechina.com, "ff s" <a@b.c>, asdf<a@zopechina.com>
+EMAIL_ADDRESSES_RE = re.compile(r'(".*?" *|[^,^"^>]+?)(<.*?>)')
+
+class MailAddressTransformer:
+    """ a transformer for substitution """
+    def __init__(self, charset):
+        self.charset = charset
+
+    def __call__(self, matchobj):
+        name = matchobj.group(1)
+        address = matchobj.group(2)
+        return str(email.Header.Header(name, self.charset)) + address
+
+def encodeHeaderAddress(address, charset):
+    """ address ecoder """
+    return address and \
+      EMAIL_ADDRESSES_RE.sub(MailAddressTransformer(charset), address)
 
 #XXX Remove this when we don't depend on python2.1 any longer, use email.Utils.getaddresses instead
 from rfc822 import AddressList
@@ -217,9 +239,16 @@ class SecureMailBase(MailBase):
         else:
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
+        mfrom = mfrom and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mfrom)
+        mto = mfrom and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mto)
+        mcc = mcc and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mcc)
+        mbcc = mbcc and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mbcc)
+
         # set important headers
-        self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
-                              Subject=str(email.Header.Header(subject, charset)), Cc = mcc, Bcc = mbcc)
+        self.setHeaderOf(msg, skipEmpty=True, 
+                 From=encodeHeaderAddress(mfrom), To=encodeHeaderAddress(mto),
+                 Subject=str(email.Header.Header(subject, charset)), 
+                 Cc=encodeHeaderAddress(mcc), Bcc=encodeHeaderAddress(mbcc))
 
         for bad in BAD_HEADERS:
             if bad in kwargs:

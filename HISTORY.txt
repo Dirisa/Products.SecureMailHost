@@ -1,6 +1,13 @@
 SecureMailHost
 ==============
 
+2005-01-27
+----------------
+
+  * usernames in email address now encoded by email.Header
+    This is especially important for Chinese and other languanges.
+    [panjunyong]
+
 0.2-rc3  2004-07-19
 ---------------------
 
