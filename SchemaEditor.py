@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.45 2003/12/05 12:14:22 ajung Exp $
+$Id: SchemaEditor.py,v 1.46 2003/12/08 11:32:41 ajung Exp $
 """
 
 import copy, re
@@ -58,6 +58,8 @@ class SchemaEditor:
     security.declareProtected(View, 'atse_getSchemataNames')
     def atse_getSchemataNames(self):
         """ return names of all schematas """
+        if not hasattr(self, '_filtered_schemas'):          # migration
+            self._filtered_schemas = ('default', 'metadata')
         return [n  for n in self._ms.getSchemataNames() if not n in self._filtered_schemas]
 
     security.declareProtected(View, 'atse_getSchemata')
