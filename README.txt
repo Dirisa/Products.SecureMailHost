@@ -6,9 +6,19 @@ PloneLocalFolderNG
 Requirements:
 
     Archetypes 1.2+
-    TextIndexNG2 2.0.6 (for optional catalog text-indexing of local filesystem contents)
-    various system utilities for optional MD5 checksum generation; unzip'ing; text harvesting
-      from file formats such as pdf's, MS Word/Powerpoint/Excel files, etc.
+    
+    TextIndexNG2 (developer URL: http://www.zope.org/Members/ajung/TextIndexNG)
+     and associated system utilites for optional zCatalog text-indexing of 
+     local filesystem contents.  For example, with converters like pdftotext, 
+     pptHtml, and vwWare, PDF MSPowerpoint, and MSWord files can be text indexed.
+     TextIndexNG2 has built-in support for text indexing plain, html, sgml, & xml
+     file types).  See DEPENDENCIES.txt for more information.
+     
+    System utilities for optional file unzip'ing and MD5 checksum generation.
+      So far, this product has only been tested with the following utilities:
+        - unzip/zipinfo: UnZip v5.50 by Info-ZIP (http://www.info-zip.org/) 
+        - md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
+      See DEPENDENCIES.txt for more information.
 
 Install:
 
@@ -18,7 +28,7 @@ Install:
     Optional features such MD5-based checksum verification of file uploads, verification
     and unpacking of zip'd files, and TextIndexNG2-based catalog text indexing of 
     PloneLocalFolderNG file contents require installation of additional system utilities.
-    (specific documentation for this to follow as time permits!)
+    See DEPENDENCIES.txt for more information.
 
 Author:
 
