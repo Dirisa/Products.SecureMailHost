@@ -131,8 +131,7 @@
         </form>    
       </div>
 
-
-      <div>
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
         <span id="pcng_saved_searches" i18n:translate="save_this_search_as">Save search as</span>:
         <form method="post" action="pcng_save_search">
           <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
@@ -141,8 +140,8 @@
           </form>    
       </div>
 
-      <br/>
       <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+        <br/>
         <span id="pcng_quicklinks" i18n:translate="quicklinks">Quicklinks:</span>
         <div>
           <a tal:attributes="href string:pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> 
