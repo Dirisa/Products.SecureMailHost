@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.113 2004/02/01 14:56:28 ajung Exp $
+$Id: Collector.py,v 1.114 2004/02/11 14:38:19 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -13,6 +13,7 @@ from Acquisition import aq_base
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
+from ZODB.POSException import ConflictError
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Base import Base
@@ -131,7 +132,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def setup_collector_catalog(self, RESPONSE=None):
         """Create and situate properly configured collector catalog."""
 
-        try: self.manage_delObjects(CollectorCatalog)
+        try: 
+            self.manage_delObjects(CollectorCatalog)
+        except ConflictError: raise
         except: pass
         
         catalog = PloneCollectorNGCatalog()
@@ -416,6 +419,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 issue._v_schema = None
 
         self._transcript.addComment(u'Issue schemas reseted')
+        print self.translate('issues_updated', 'Issues updated')
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.translate('issues_updated', 'Issues updated'))
@@ -433,6 +437,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
             try:
                 value = field.get(self)  
+            except ConflictError:
+                pass
             except:
                 field.set(self, field.default)
 
