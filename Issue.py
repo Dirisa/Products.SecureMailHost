@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.22 2003/09/21 12:55:02 ajung Exp $
+$Id: Issue.py,v 1.23 2003/09/21 14:03:26 ajung Exp $
 """
 
 import sys
@@ -75,7 +75,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
-        self._assignees = []
         self._references = ReferencesManager()
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
@@ -109,10 +108,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ issue followup handling """
 
         # action for changes in assignment
+        old_assignees = self.assigned_to()
         assignees_changed = 0
-        if not util.lists_eq(assignees, self._assignees):
-            self._transcript.addChange('assignees', self._assignees, assignees)
-            self._assignees = assignees 
+        if not util.lists_eq(assignees, old_assignees):
+            self._transcript.addChange('assignees', old_assignees, assignees)
             assignees_changed = 1
 
         if comment: self._transcript.addComment(comment)  
@@ -232,11 +231,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     # Misc
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'getAssignees')
-    def getAssignees(self):
-        """ return list of assigned usernames """
-        return self._assignees
-
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
@@ -334,7 +328,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def is_assigned(self):
         """ return if the current is user among the assignees """
         username = util.getUserName()
-        return username in self._assignees
+        return username in self.assigned_to()
 
     security.declareProtected(CMFCorePermissions.View, 'is_confidential')
     def is_confidential(self):
