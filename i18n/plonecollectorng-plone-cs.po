@@ -1,0 +1,183 @@
+# Gettext Message File for PloneCollectorNG.
+# Andreas Jung <andreas@andreas-jung.com>, 2003
+# This file keeps some translation under the domain 'plone'
+# and is needed to translate several action strings
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.0\n"
+"POT-Creation-Date: 2003-11-21 00:00+0300\n"
+"PO-Revision-Date: 2004-05-19 00:00+3000\n"
+"Last-Translator: Lukas Kubin<kubin@opf.slu.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: cs\n"
+"Language-name: Èe¹tina\n"
+"Preferred-encodings: utf-8 iso-8859-2\n"
+"X-Is-Fallback-For: cs-CS\n"
+"Domain: plone\n"
+
+msgid "Topic"
+msgstr "Téma"
+
+msgid "Add issue"
+msgstr "Pøidat nový záznam"
+
+msgid "Issue schema"
+msgstr "Editor schematu"
+
+msgid "Followup"
+msgstr "Reagovat"
+
+msgid "Notifications"
+msgstr "Upozoròování"
+
+msgid "Maintenance"
+msgstr "Údr¾ba"
+
+msgid "Staff"
+msgstr "Lidé"
+
+msgid "Member preferences"
+msgstr "U¾ivatelské nastavení"
+
+msgid "References &amp; Uploads"
+msgstr "Reference &amp; Uploady"
+
+msgid "My collector preferences"
+msgstr "Moje nastavení Collectoru"
+
+msgid "Only staff members"
+msgstr "Jen èlenové týmu"
+
+msgid "Any authenticated user"
+msgstr "Ka¾dý autentizovaný u¾ivatel"
+
+msgid "Anyone"
+msgstr "Kdokoliv (i anonymní u¾ivatel)"
+
+msgid "Disabled"
+msgstr "Vypnuto"
+
+msgid "Enabled"
+msgstr "Zapnuto"
+
+msgid "Watchlist enabled for anyone"
+msgstr "Povolen pro kohokoliv"
+
+msgid "Watchlist enabled for authenticated users"
+msgstr "Povolen pro autentizované u¾ivatele"
+                                                                                  
+msgid "no notifications"
+msgstr "¾ádné upozoròování"
+
+msgid "Submitter, all supporters and tracker administrators"
+msgstr "Ohla¹ovatel, v¹ichni øe¹itelé a v¹ichni správci trackeru"
+
+msgid "Submitter, assigned supporters and tracker administrators"
+msgstr "Ohla¹ovatel, pøiøazení øe¹itelé a v¹ichni správci trackeru"
+
+msgid "Standard formatter (EN)"
+msgstr "Standardní formátování (Anglicky)"
+
+msgid "Standard formatter (DE)"
+msgstr "Standardní formátování (Nìmecky)"
+
+msgid "Your changes have been saved."
+msgstr "Va¹e zmìny byly ulo¾eny"
+
+msgid "Clear all Plone slots"
+msgstr "Zru¹it v¹echny Plone sloty"
+
+msgid "Use Plone settings"
+msgstr "Pøevzít nastavení Plone"
+
+msgid "Keep left Plone slot, clear right"
+msgstr "Ponechat levý Plone slot, zru¹it pravý"
+
+msgid "Clear left Plone slot, keep right"
+msgstr "Zru¹it levý Plone slot, ponechat pravý"
+
+msgid "Plone slots"
+msgstr "Plone sloty"
+
+msgid "German"
+msgstr "Nìmèina"
+
+msgid "English"
+msgstr "Angliètina"
+
+msgid "Finish"
+msgstr "Fin¹tina"
+
+msgid "Dutch"
+msgstr "Holand¹tina"
+
+msgid "Portuguese/Brazil"
+msgstr "Portugal¹tina/Brazílie"
+
+msgid "Reports"
+msgstr "Reporty"
+
+msgid "Configuration"
+msgstr "Nastavení"
+
+msgid "Enter a value for Title"
+msgstr "Vlo¾te nadpis záznamu."
+
+msgid "Enter a value for Description"
+msgstr "Vlo¾te popis problému."
+
+msgid "Enter a value for Classification"
+msgstr "Vyberte klasifikaci."
+
+msgid "Enter a value for Topic"
+msgstr "Vyberte kategorii."
+
+msgid "Enter a value for Importance"
+msgstr "Zvolte dùle¾itost."
+
+msgid "Enter a value for Solution"
+msgstr "Popi¹te navrhované øe¹ení problému."
+
+msgid "Enter a value for Deadline"
+msgstr "Vyberte termín vyøe¹ení problému."
+
+msgid "Enter a value for Hours estimated"
+msgstr "Zadejte odhadovaný poèet hodin."
+
+msgid "Enter a value for Hours needed"
+msgstr "Zadejte poèet hodin do dokonèení."
+
+msgid "Enter a value for Percent done"
+msgstr "Vlo¾te, kolik procent je splnìno."
+
+msgid "Enter a value for Name"
+msgstr "Zadejte jméno."
+
+msgid "Enter a value for E-Mail"
+msgstr "Zadejte e-mailovou adresu."
+
+msgid "Enter a value for Company"
+msgstr "Zadejte organizaci."
+
+msgid "Enter a value for Position"
+msgstr "Zadejte funkci."
+
+msgid "Enter a value for Address"
+msgstr "Zadejte adresu."
+
+msgid "Enter a value for City"
+msgstr "Zadejte mìsto."
+
+msgid "Enter a value for Phone"
+msgstr "Zadejte telefonní èíslo."
+
+msgid "Enter a value for Fax"
+msgstr "Zadejte èíslo faxu."
+
+msgid "Description"
+msgstr "Popis"
+
