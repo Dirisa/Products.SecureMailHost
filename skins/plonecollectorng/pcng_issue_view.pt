@@ -45,7 +45,9 @@
       </div>
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
-        <div metal:use-macro="here/issue_macros/macros/issue_uploads" /> 
+        <metal:block tal:repeat="image python: here.objectValues('Portal Image')">
+          <img tal:attributes="src image/absolute_url">
+        </metal:block>
       </metal:block>
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
