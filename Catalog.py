@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Catalog.py,v 1.2 2004/10/10 14:58:34 ajung Exp $
+$Id: Catalog.py,v 1.3 2004/10/10 15:05:48 ajung Exp $
 """
 
 
@@ -112,10 +112,6 @@ class PloneCollectorNGCatalog(CatalogTool):
     security.declareProtected(View, 'getIndexes')
     def getIndexes(self):
         """ return a sequence of tuples (indexId, indexType)"""
-        print [ (id, idx.meta_type)
-                 for id, idx in self._catalog.indexes.items()
-                 if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
-
         return [ (id, idx.meta_type)
                  for id, idx in self._catalog.indexes.items()
                  if not id in SEARCHFORM_IGNOREABLE_INDEXES ]

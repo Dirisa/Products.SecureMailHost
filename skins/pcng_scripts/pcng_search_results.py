@@ -42,7 +42,7 @@ if d_value:
         dummy = int(d_value)
         date = DateTime() - dummy
     except:
-        date = context.String2DateTime(d_value)
+        date = context.pcng_tool.String2DateTime(d_value)
 
     if d_direction == 'since': qrange = 'min'
     elif d_direction == 'until': qrange = 'max'

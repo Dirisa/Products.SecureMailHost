@@ -259,7 +259,7 @@ function show_tickets() {
                      Topics context/getTopics;
                      topics Topics/getTopics;
                      topics python: [t for t in topics if Topics.getUsersForTopic(t)];
-                     gruf_groups here/get_gruf_groups" >
+                     gruf_groups here/pcng_tool/get_gruf_groups" >
 
     <div class="left">
       <span class="label"

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.223 2004/10/10 14:58:34 ajung Exp $
+$Id: Collector.py,v 1.224 2004/10/10 15:05:48 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -440,17 +440,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             self._topics = Topics()
         return ImplicitAcquisitionWrapper(self._topics, self)
         
-    ######################################################################
-    # GroupUserFolder
-    ######################################################################
-
-    security.declareProtected(View, 'get_gruf_groups')
-    def get_gruf_groups(self):
-        """ return list of GRUF group IDs """
-
-        GT = getToolByName(self, 'portal_groups', None)
-        if GT is None: return ()
-        return GT.listGroupIds()
 
     ######################################################################
     # Maintainance
@@ -752,28 +741,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         encoded_text = ''.join(['%02x' % ord(c) for c in encrypted_text])
         return encoded_text
 
-    ######################################################################
-    # Misc
-    ######################################################################
-
-    def String2DateTime(self, datestr):
-        """ Try to convert a date string to a DateTime instance. """
-
-        for fmt in (self.portal_properties.site_properties.localTimeFormat, '%d.%m.%Y', '%d-%m-%Y'):
-            try:
-                return DateTime('%d/%d/%d' % (time.strptime(datestr, fmt))[:3])
-            except ValueError:
-                pass
-
-        try:
-            return DateTime(datestr)
-        except:
-            raise ValueError('Unsupported date format: %s' % datestr)
-
-    security.declareProtected(View, 'quote')
-    def quote(self, s):
-        """ urlquote wrapper """
-        return urllib.quote(s)
 
     ######################################################################
     # Slots handling

@@ -5,12 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: CollectorTool.py,v 1.1 2004/10/10 14:26:09 ajung Exp $
+$Id: CollectorTool.py,v 1.2 2004/10/10 15:05:48 ajung Exp $
 """
 
+import urllib
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from DateTime.DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import View
 from OFS.SimpleItem import SimpleItem
@@ -90,5 +92,34 @@ class CollectorTool(SimpleItem):
             return [item for item in l if item['username'] not in staff]
         else:
             return l
+
+
+    security.declareProtected(View, 'get_gruf_groups')
+    def get_gruf_groups(self):
+        """ return list of GRUF group IDs """
+
+        GT = getToolByName(self, 'portal_groups', None)
+        if GT is None: return ()
+        return GT.listGroupIds()
+
+
+    def String2DateTime(self, datestr):
+        """ Try to convert a date string to a DateTime instance. """
+
+        for fmt in (self.portal_properties.site_properties.localTimeFormat, '%d.%m.%Y', '%d-%m-%Y'):
+            try:
+                return DateTime('%d/%d/%d' % (time.strptime(datestr, fmt))[:3])
+            except ValueError:
+                pass
+
+        try:
+            return DateTime(datestr)
+        except:
+            raise ValueError('Unsupported date format: %s' % datestr)
+
+    security.declareProtected(View, 'quote')
+    def quote(self, s):
+        """ urlquote wrapper """
+        return urllib.quote(s)
 
 InitializeClass(CollectorTool)
