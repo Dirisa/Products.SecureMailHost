@@ -591,7 +591,7 @@ msgid "label_title"
 msgstr "Titel"
 
 msgid "label_classification"
-msgstr "Klassifizerung"
+msgstr "Klassifizierung"
 
 msgid "label_importance"
 msgstr "Wichtigkeit"
