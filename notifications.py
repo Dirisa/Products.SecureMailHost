@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.39 2004/06/18 06:22:14 ajung Exp $
+$Id: notifications.py,v 1.40 2004/06/24 06:49:14 ajung Exp $
 """
 
 import sys
@@ -95,6 +95,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
     dest_emails = [ v['email'] for v in recipients.values()     
                                if util.isValidEmailAddress(v.get('email','')) and
                                   v.get('send_emails','yes').lower() == 'yes']
+    dest_emails = util.remove_dupes(dest_emails)
     # No recipients? Don't send notifications for half-filled issues!
     if not dest_emails or not issue.isPersistent(): return  
 
