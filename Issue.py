@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.99 2003/12/07 16:59:44 ajung Exp $
+$Id: Issue.py,v 1.100 2003/12/08 11:32:20 ajung Exp $
 """
 
 import sys, os, time
@@ -477,7 +477,6 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
 
             # Set things by calling the mutator
             mutator = field.getMutator(self)
-            print field, mutator
             __traceback_info__ = (self, field, mutator)
             mutator(result[0], **result[1])
 
