@@ -58,26 +58,42 @@
               </div>
             </metal:block>
           </metal:block>
+
           <span class="schemata_label" i18n:translate="status">Status</span>: 
           <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
           <br>
           <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
         </div>
 
-        <div style="float: right; width: 70%; vertical-align: top;">
-          <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
-            <metal:block tal:condition="python: field.getName() in ('title', 'description', 'solution')">
-              <div class="row" tal:condition="python: getattr(here, field.getName())" >
-                <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-                <div class="issue_metadata">
-                    <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
-                </div>
+        <div style="float: right; width: 70%; vertical-align: top;"
+             tal:define="schema python: here.atse_getSchemata('issuedata')">
+
+          <tal:def tal:define="field python: schema['title']" >
+            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+              <div class="issue_metadata">
+                <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
               </div>
-            </metal:block> 
-          </metal:block> 
+            </div>
+          </tal:def>
+
+          <tal:def tal:define="field python: schema['description']" >
+            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+              <pre class="issue_metadata"><span  metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/></pre>
+            </div>
+          </tal:def>
+
+          <tal:def tal:define="field python: schema['solution']" >
+            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+              <div class="issue_metadata">
+                <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+              </div>
+            </div>
+          </tal:def>
         </div>
       </fieldset>
-
 
       <metal:block tal:condition="python: mode.startswith('full')" >
         <metal:block tal:repeat="schemata_name python: here.atse_getSchemataNames()">
