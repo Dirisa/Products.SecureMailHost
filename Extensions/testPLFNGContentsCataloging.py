@@ -10,7 +10,7 @@ import os
 
 UID_CATALOG = 'testZcat'
 UID_INDEX = 'SearchableText'
-UID_PLFNG_TEST = 'PLFNG_test'
+UID_PLFNG_TEST = 'testPLFNG'
 
 
 class arguments: 
@@ -62,7 +62,7 @@ def PLFNGCatalogTest(self):
 		FSpath = os.path.join(SOFTWARE_HOME,'Products')
 		FSpath = os.path.join(FSpath,'PloneLocalFolderNG')
 		FSpath = os.path.join(FSpath,'tests')
-		FSpath = os.path.join(FSpath,'SamplesFiles')
+		FSpath = os.path.join(FSpath,'SamplesFiles')+os.path.sep
 
 		portal.invokeFactory(id=UID_PLFNG_TEST, type_name='PloneLocalFolderNG')
 		newObj = getattr( portal, UID_PLFNG_TEST )
@@ -78,3 +78,9 @@ def PLFNGCatalogTest(self):
 	out.write("\nfilesCataloged=%d , filesNotCataloged = %d" % (filesCataloged,filesNotCataloged))	
 		
 	return out.getvalue()
+	
+def macPathTest(self):	
+	out=StringIO()
+	return out.getvalue()
+	
+		
