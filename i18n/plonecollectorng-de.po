@@ -917,3 +917,7 @@ msgstr "Tools wurden neu angelegt"
 
 msgid "medium"
 msgstr "Mittel"
+
+msgid "Look and Feel"
+msgstr "Benutzerinterface"
+

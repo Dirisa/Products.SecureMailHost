@@ -82,4 +82,17 @@ msgstr "Standardformatierer (Deutsch)"
 msgid "Your changes have been saved."
 msgstr "Ihre Änderungen wurden gespeichert"
 
+msgid "Clear all Plone slots"
+msgstr "Alle Plone Slots löschen"
 
+msgid "Use Plone settings"
+msgstr "Plone Einstellungen übernehmen"
+
+msgid "Keep left Plone slot, clear right"
+msgstr "Linken Slot beibehalten, rechten Slot löschen"
+
+msgid "Clear left Plone slot, keep right"
+msgstr "Linken Slot löschen, rechten Slot beibehalten"
+
+msgid "Plone slots"
+msgstr "Plone Slots"
