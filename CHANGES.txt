@@ -1,5 +1,23 @@
 0.6.0 (unstable)
 
+alpha7
+  - small bugfix in catalogFSContent()
+  
+  - fixed bug wrt case-sensitive filenames causing mimetypes_registry.classify()
+    to incorrectly classify with uppercase extensions (eg sample.JPG)
+
+  - (kudos to Radim!) improved testPLFNGContentsCataloging.py unit code:
+    
+    * bugfix + support for INSTANCE_HOME in addition to SOFTWARE_HOME installations
+    * added ID index to test catalog; added some catalog search capability.  
+
+  - (kudos again to Radim!) added 'title' capability to PLFNG file contents
+    via .metadata persistance layer
+    
+  - setFileMetadata() now takes params as lists to support multiple metadatum
+    updating via single call  
+    
+
 alpha6
   - added addFile() method to support non-web file addition 
     (this logic was mostly taken from HTMLFormUploadFile(), which
