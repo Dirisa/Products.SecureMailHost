@@ -1,10 +1,8 @@
 import os
 import shutil
-#from urllib import quote
 from string import split,find
 
 from DateTime.DateTime import DateTime
-#from Globals import InitializeClass, Persistent
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permission import Permission
 
@@ -15,7 +13,6 @@ from Products.Archetypes.public import StringField, StringWidget
 from Products.Archetypes.public import BooleanField, BooleanWidget
 from Products.Archetypes.public import BaseContent, registerType
 from Products.Archetypes.ExtensibleMetadata import FLOOR_DATE,CEILING_DATE
-#from Products.Archetypes.Referenceable import Referenceable
 
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
@@ -23,23 +20,17 @@ from Products.CMFCore.utils import getToolByName
 
 from config import *
 from util import *
-import zLOG
-
 from FileProxy import FileProxy
 
-#from Products.validation.chain import V_SUFFICIENT, V_REQUIRED
+import zLOG
 
 from Acquisition import aq_chain
-
-#from App.FindHomes import INSTANCE_HOME   # eg, windows INSTANCE_HOME = C:\Plone\Data
 
 try:
     from Products.mxmCounter import mxmCounter
 except ImportError:
     zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "Warning: mxmCounter was not imported")
     mxmCounter = None
-
-
 
 schema = BaseSchema +  Schema((
     StringField('folder',
@@ -73,13 +64,11 @@ schema = BaseSchema +  Schema((
                                     description='To use the standard python md5 implementation, specify "none".',
                        )
                 ),
-    BooleanField ('quota_aware',
+    StringField('quota_maxbytes',
                 write_permission=CMFCorePermissions.ManagePortal,
-                default=0,
-                widget=BooleanWidget(
-                        label='Quota Aware?',
-                        description='Prevent users from performing actions that would violate parent-level folder quota limits.',
-                        ),
+                default='0',
+                widget=StringWidget(label='max # bytes quota limit',
+                                    description='Prevent users from performing actions that would violate quota limits as follows: -1 -> use parent-level quota_maxbytes; 0 -> no limit, n -> # bytes quota limit',)
                 ),
     BooleanField ('allow_file_unpacking',
                 write_permission=CMFCorePermissions.ManagePortal,
@@ -219,6 +208,52 @@ class PloneLocalFolderNG(BaseContent):
         metadataText = getMetadataElement(destpath, section, option)
         return metadataText
     
+    security.declareProtected('View', 'getAvailableQuotaSpace')
+    def getAvailableQuotaSpace(self):
+        """ get the remaining space in # of bytes that are available for storage
+            by the PLFNG instance without violating its byte quantity quota limit.
+            A positive or zero return value indicates remaining space in # of bytes.
+            A negative return value indicates that parent-level quota_maxbytes
+            attribute is to be used to determine the remaining space in # of bytes """
+        
+        # if quota_maxbytes for PLFNG instance > 0  :: use its value
+
+        # if quota_maxbytes for PLFNG instance = 0  :: return -1 (quota limit checking disabled)
+
+        # if quota_maxbytes for PLFNG instance < 0 ::         
+        #   traverse up the acquisition tree looking for first container with 
+        #   a non-zero 'quota_maxbytes' attribute.  If such a container is found,
+        #   find out the total number of bytes used by the contents of this container
+            
+        PLFNGInstanceQuotaLimit = int(self.quota_maxbytes)
+        
+        if PLFNGInstanceQuotaLimit > 0:
+           quotaLimit = int(self.quota_maxbytes)
+           folderProps = self.getProperties()
+           usedBytes = folderProps['size']
+           max_allowed_bytes = quotaLimit - usedBytes
+           if max_allowed_bytes < 0: 
+              max_allowed_bytes = 0
+           
+        elif PLFNGInstanceQuotaLimit == 0:
+           max_allowed_bytes = -1
+
+        else:
+           quotaLimit = 0
+           for parent in self.aq_chain[1:]:
+              if hasattr(parent, "quota_maxbytes"):
+                 quotaLimit = int(getattr(parent, "quota_maxbytes"))
+                 if quotaLimit > 0:
+                    usedBytes = determine_bytes_usage(parent)
+                    break
+           if quotaLimit > 0:
+              max_allowed_bytes = quotaLimit - usedBytes
+              if max_allowed_bytes < 0: 
+                 max_allowed_bytes = 0      
+           else:
+              max_allowed_bytes = -1
+              
+        return max_allowed_bytes  
     
     security.declareProtected(ModifyPortalContent, 'setFileMetadata')
     def setFileMetadata(self, REQUEST, section, option, newvalue):
@@ -347,6 +382,10 @@ class PloneLocalFolderNG(BaseContent):
     security.declareProtected('View', 'listFolderContents')
     def listFolderContents(self,  spec=None, contentFilter=None, suppressHiddenFiles=0, REQUEST=None, RESPONSE=None):
         """ list content of local filesystem """
+        
+        filteredFileList = []
+        filteredFolderList = []
+        
         #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: REQUEST = %s" % REQUEST)
         #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST = %s" % self.REQUEST)
                 
@@ -413,113 +452,63 @@ class PloneLocalFolderNG(BaseContent):
            
            if not destfolder.startswith(trimmedFolderBasePath):
                raise ValueError('illegal directory: %s' % show_dir)
-   
-       
+
            rel_dir = destfolder.replace(self.folder, '')
            if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
+
+           filteredFileList, filteredFolderList = \
+              getFilteredFSItems(FSfullPath=destfolder, 
+                                 skipInvalidIds=1, 
+                                 mimetypesTool=mimetypesTool,  
+                                 filetypePhrasesSkipList=[], 
+                                 filePrefixesSkipList=filePrefixesSkipList, 
+                                 fileSuffixesSkipList=fileSuffixesSkipList, 
+                                 fileNamesSkipList=fileNamesSkipList,
+                                 folderPrefixesSkipList=folderPrefixesSkipList, 
+                                 folderSuffixesSkipList=folderSuffixesSkipList, 
+                                 folderNamesSkipList=folderNamesSkipList)
            
-           l = []
-           if os.path.exists(destfolder):
-              try:
-                 rawItemList = os.listdir(destfolder)
-              except:
-                 zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: error reading folder (%s) contents" % destfolder )
-                 return [] 
-
-              filteredFileList = []
-              filteredFolderList = []
-              for item in rawItemList:
-                  checkValidIdResult = checkValidId(item)
-                  if checkValidIdResult != 1: 
-                     #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
-                     continue
+           proxyObjectsList = []   
+              
+           for f in filteredFolderList:
+                  
+               FSfullPathFolderName = os.path.join(destfolder, f)
+               P = FileProxy(id=f, filepath=FSfullPathFolderName, fullname=f, properties=None)
+               mi = self.mimetypes_registry.classify(data=None, filename=f)
+   
+               P.setIconPath('folder_icon.gif')
+               P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+               P.setMimeType('folder')
+               if os.path.exists(FSfullPathFolderName + '.metadata'):
+                   try:
+                     P.setComment(getMetadataElement(FSfullPathFolderName, section="GENERAL", option="comment"))
+                   except:
+                     P.setComment('')
+               else:
+                   P.setComment('')
+               proxyObjectsList.append(P)
+           
+           for f in filteredFileList:
                
-                  FSfullPathFileName = os.path.join(destfolder, item)
-                  skipThisItem = 0
-                  if os.path.isdir(FSfullPathFileName):
-                      
-                      for prefix in folderPrefixesSkipList:
-                         if item.startswith(prefix): 
-                            skipThisItem = 1
-                            break
-                      
-                      for suffix in folderSuffixesSkipList:
-                         if item.endswith(suffix): 
-                            skipThisItem = 1
-                            break
-                      
-                      for completeName in folderNamesSkipList:
-                         if item == completeName: 
-                            skipThisItem = 1
-                            break
-                      
-                      if not skipThisItem: 
-                         filteredFolderList.append(item)
-                  
-                  else:
-                      
-                      for prefix in filePrefixesSkipList:
-                         if item.startswith(prefix): 
-                            skipThisItem = 1
-                            break
-                      
-                      for suffix in fileSuffixesSkipList:
-                         if item.endswith(suffix): 
-                            skipThisItem = 1
-                            break
-                      
-                      for completeName in fileNamesSkipList:
-                         if item == completeName: 
-                            skipThisItem = 1
-                            break
-                      
-                      if not skipThisItem: 
-                         filteredFileList.append(item)
-              
-              #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFolderList= %s" % filteredFolderList)
-              #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" % filteredFileList)
-              
-              for f in filteredFolderList:
-                     
-                  FSfullPathFolderName = os.path.join(destfolder, f)
-                  P = FileProxy(id=f, filepath=FSfullPathFolderName, fullname=f, properties=None)
-                  mi = self.mimetypes_registry.classify(data=None, filename=f)
+               FSfullPathFileName = os.path.join(destfolder, f)
+               FSfullPathFolderName = os.path.dirname(FSfullPathFileName)
+               P = FileProxy(id=f, filepath=FSfullPathFileName, fullname=FSfullPathFileName, properties=None)
+               mi = self.mimetypes_registry.classify(data=None, filename=f)
+           
+               P.setIconPath(mi.icon_path)
+               P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+               P.setMimeType(mi.normalized())
       
-                  P.setIconPath('folder_icon.gif')
-                  P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                  P.setMimeType('folder')
-                  if os.path.exists(FSfullPathFolderName + '.metadata'):
-                      try:
-                        P.setComment(getMetadataElement(FSfullPathFolderName, section="GENERAL", option="comment"))
-                      except:
-                        P.setComment('')
-                  else:
-                      P.setComment('')
-                  l.append(P)
-              
-              for f in filteredFileList:
-                  
-                  FSfullPathFileName = os.path.join(destfolder, f)
-                  FSfullPathFolderName = os.path.dirname(FSfullPathFileName)
-                  P = FileProxy(id=f, filepath=FSfullPathFileName, fullname=FSfullPathFileName, properties=None)
-                  mi = self.mimetypes_registry.classify(data=None, filename=f)
-              
-                  P.setIconPath(mi.icon_path)
-                  P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-                  P.setMimeType(mi.normalized())
-         
-                  if os.path.exists(FSfullPathFileName + '.metadata'):
-                      try:
-                        P.setComment(getMetadataElement(FSfullPathFileName, section="GENERAL", option="comment"))
-                      except:
-                        P.setComment('')
-                  else:
-                      P.setComment('')
-                  l.append(P)
+               if os.path.exists(FSfullPathFileName + '.metadata'):
+                   try:
+                     P.setComment(getMetadataElement(FSfullPathFileName, section="GENERAL", option="comment"))
+                   except:
+                     P.setComment('')
+               else:
+                   P.setComment('')
+               proxyObjectsList.append(P)
 
-           else:
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: destfolder not found (%s)" % destfolder )
-           return l
+           return proxyObjectsList
 
     security.declareProtected(CMFCorePermissions.AccessContentsInformation,
                               'folderlistingFolderContents')
@@ -607,9 +596,9 @@ class PloneLocalFolderNG(BaseContent):
             if REQUEST.has_key('RESPONSE'):
                 REQUEST.RESPONSE.notFoundError(name)
 
-    security.declareProtected(ModifyPortalContent, 'upload_file')
-    def upload_file(self, upload, comment, REQUEST, clientMD5=None):
-        """ upload a file """
+    security.declareProtected(ModifyPortalContent, 'HTMLFormUploadFile')
+    def HTMLFormUploadFile(self, upload, comment, REQUEST, clientMD5=None):
+        """ upload a file via HTML form-based file upload mechanism """
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
         destpath = os.path.join(self.folder, rel_dir)
@@ -635,31 +624,16 @@ class PloneLocalFolderNG(BaseContent):
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=you MUST provide the MD5 checksum for the file you want to upload!')
             return 0
         
-        if self.quota_aware:
-            # traverse up the acquisition tree looking for first container with 
-            # a non-zero 'quota_maxbytes' attribute.  If such a container is found,
-            # find out the total number of bytes used by the contents of this
-            # container in order to determine if the addition of the newly uploaded 
-            # file will exceed quota_maxbytes --in which case reject it.  
+        
+        max_allowed_bytes = getAvailableQuotaSpace()
             
-            max_allowed_bytes = 0
-
-            for parent in self.aq_chain[1:]:
-               if hasattr(parent, "quota_maxbytes"):
-                  max_allowed_bytes = int(getattr(parent, "quota_maxbytes"))
-                  if max_allowed_bytes > 0:
-                     usedBytes = determine_bytes_usage(parent)
-                     break
-            
-            contentLength = int(REQUEST.get_header('CONTENT_LENGTH'))
-            
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file() :: CONTENT_LENGTH=%d usedBytes=%d max_allowed_bytes=%d" % (contentLength,usedBytes, max_allowed_bytes) )
-
-
-            if max_allowed_bytes > 0 and (contentLength + usedBytes) > max_allowed_bytes:
-                 REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file rejected as it would result in quota limit being exceeded.')
-                 zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file() :: file rejected! CONTENT_LENGTH (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (contentLength,usedBytes, max_allowed_bytes) )
-                 return 0
+        contentLength = int(REQUEST.get_header('CONTENT_LENGTH'))
+        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile() :: CONTENT_LENGTH=%d usedBytes=%d max_allowed_bytes=%d" % (contentLength,usedBytes, max_allowed_bytes) )
+        
+        if max_allowed_bytes != -1 and contentLength > max_allowed_bytes:
+           REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file rejected as it would result in quota limit being exceeded.')
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile() :: file rejected! CONTENT_LENGTH (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (contentLength,usedBytes, max_allowed_bytes) )
+           return 0
         
         filename = os.path.join(destpath, os.path.basename(upload.filename))
         tmpfile = filename + '.plfngtmp'
@@ -678,7 +652,7 @@ class PloneLocalFolderNG(BaseContent):
                serverMD5 = generate_md5(tmpfile,self.external_syscall_md5)
             if clientMD5 != serverMD5:
                os.remove(tmpfile)
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file()::MD5 CHECK FAILED...DELETED: %s" % tmpfile )
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile()::MD5 CHECK FAILED...DELETED: %s" % tmpfile )
                REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file failed MD5 integrity test and was deleted!')
                return 0
 
@@ -906,37 +880,6 @@ class PloneLocalFolderNG(BaseContent):
         REQUEST.RESPONSE.redirect(REQUEST['URL2']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
         return 1
 
-    security.declareProtected('View', 'quota_aware')
-    def quota_aware(self): 
-        """ return quota_aware value """
-        return self.quota_aware
-
-    security.declareProtected('View', 'requireUploadMD5')
-    def requireUploadMD5(self): 
-        """ return require_MD5_with_upload value """
-        return self.require_MD5_with_upload
-
-    security.declareProtected('View', 'genMD5OnUpload')
-    def genMD5OnUpload(self): 
-        """ return generate_MD5_after_upload value """
-        return self.generate_MD5_after_upload
-
-    security.declareProtected('View', 'fileUnpackingAllowed')
-    def fileUnpackingAllowed(self): 
-        """ return allow_file_unpacking value """
-        return self.allow_file_unpacking 
-
-    security.declareProtected('View', 'catalogingEnabled')
-    def catalogingEnabled(self): 
-        """ return cataloging_enabled value """
-        return self.cataloging_enabled 
-    
-    security.declareProtected('View', 'folderAddressDisplayStyle')
-    def folderAddressDisplayStyle(self): 
-        """ return the folder_address_display_style value """
-        return self.folder_address_display_style
-
-        
     def catalogContents(self,rel_dir=None, catalog='portal_catalog'):
         filesCataloged = 0
         filesNotCataloged = 0
@@ -965,7 +908,7 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: rel_dir=%s" % rel_dir )
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: portal path=%s" % this_portal.getRelativeContentURL(self) )
         
-        filesCataloged, filesNotCataloged = \
+        filesCataloged = \
            catalogFSContent(FSfullPath=FSfullPathFolderName, 
                             filetypePhrasesSkipList=filetypePhrasesSkipList,
                             catalogTool=catalogTool,
@@ -976,7 +919,7 @@ class PloneLocalFolderNG(BaseContent):
                             expires=expires,
                             meta_type=meta_type)
 
-        return filesCataloged, filesNotCataloged            
+        return filesCataloged
 
     security.declarePublic('allowedContentTypes')
     def allowedContentTypes( self ):
@@ -995,30 +938,40 @@ class PloneLocalFolderNG(BaseContent):
         
 
 def _getFolderProperties(FSfullPathFolderName):
+   
+   filteredFileList = []
+   filteredFolderList = []
    bytesInFolder = 0
    folderCount = 0
    fileCount = 0
-   if os.path.exists(FSfullPathFolderName):
-      try:
-         for f in os.listdir(FSfullPathFolderName):
-            # don't include the PloneLocalFolderNG special metadata files  
-            if f.endswith('.metadata'): continue
-            
-            FSfullPathFileName = os.path.join(FSfullPathFolderName, f)
-      
-            if os.path.isdir(FSfullPathFileName): 
-               folderCount = folderCount + 1
-               subfolder_props = _getFolderProperties(FSfullPathFileName)
-               bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
-               folderCount = folderCount + subfolder_props.get('folders',0)
-               fileCount = fileCount + subfolder_props.get('files',0)
-            else:
-               fileCount = fileCount + 1     
-               try: file_size = os.stat(FSfullPathFileName)[6]
-               except: file_size = 0
-               bytesInFolder = bytesInFolder + file_size
-      except:
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "_getFolderProperties() :: error reading folder (%s) contents" % FSfullPathFolderName )
+   
+   filteredFileList, filteredFolderList = \
+      getFilteredFSItems(FSfullPath=FSfullPathFolderName,
+                         skipInvalidIds=1, 
+                         mimetypesTool=None,
+                         filetypePhrasesSkipList=[], 
+                         filePrefixesSkipList=[], 
+                         fileSuffixesSkipList=['.metadata','.plfngtmp'], 
+                         fileNamesSkipList=[],
+                         folderPrefixesSkipList=[], 
+                         folderSuffixesSkipList=[], 
+                         folderNamesSkipList=[])
+   
+   fileCount = fileCount + len(filteredFileList)
+   folderCount = folderCount + len(filteredFolderList)
+   
+   for f in filteredFileList:
+      FSfullPathFileName = os.path.join(FSfullPathFolderName,f)
+      try: file_size = os.stat(FSfullPathFileName)[6]
+      except: file_size = 0
+      bytesInFolder = bytesInFolder + file_size
+   
+   for subfolder in filteredFolderList:
+      subfolderFullName = os.path.join(FSfullPathFolderName, subfolder)
+      subfolder_props = _getFolderProperties(subfolderFullName)
+      bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
+      folderCount = folderCount + subfolder_props.get('folders',0)
+      fileCount = fileCount + subfolder_props.get('files',0)
      
    folderProps = { }
    folderProps['size'] = bytesInFolder

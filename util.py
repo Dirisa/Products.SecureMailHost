@@ -267,77 +267,175 @@ def checkValidId(id):
 # --------------------------------------------------------------------
 def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypesTool, 
                      uidBase, view_roles, effective, expires, meta_type):
-                     
+   
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+   #   "catalogFSContent(%s,%s,%s,%s,%s,%s,%s,%s,%s)" \
+   #   % (FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypesTool, \
+   #    uidBase, view_roles, effective, expires, meta_type) )
+
    # uidBase = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/')
    
    filesCataloged = 0
-   filesNotCataloged = 0
+
+   fileSuffixesSkipList=['.metadata','.plfngtmp']
+   
+   # 1st, get the filtered lists of files and folders to catalog
+   filteredFileList = []
+   filteredFolderList = []
+   
+   if os.path.isdir(FSfullPath):
+      FSfullPathFolderName = FSfullPath
+      
+      filteredFileList, filteredSubfolderItems = \
+         getFilteredFSItems(FSfullPath=FSfullPathFolderName, 
+                            skipInvalidIds=1, 
+                            mimetypesTool=mimetypesTool, 
+                            filetypePhrasesSkipList=filetypePhrasesSkipList, 
+                            filePrefixesSkipList=[], 
+                            fileSuffixesSkipList=fileSuffixesSkipList, 
+                            fileNamesSkipList=[],
+                            folderPrefixesSkipList=[], 
+                            folderSuffixesSkipList=[], 
+                            folderNamesSkipList=[])
+   else:
+      FSfullPathFolderName = os.path.basename(FSfullPath)
+      FSfullPathFileName = FSfullPath
+      fileName = os.path.basename(FSfullPathFileName)
+      
+      skipThisItem = 0
+      checkValidIdResult = checkValidId(fileName)
+      if checkValidIdResult != 1: 
+         skipThisItem = 1
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: checkValidId(%s) failed:: %s" % (FSfullPathFileName,checkValidIdResult) )
+      for suffix in fileSuffixesSkipList:
+         if item.endswith(suffix): 
+            skipThisItem = 1
+            break
+
+      if skipThisItem != 1:
+         filteredFileList.append(fileName)
    
    # instantiate a barebones FileProxy instance
    dummyFileProxy = FileProxy(id="dummy", filepath=FSfullPath, fullname="dummy", properties=None)
    dummyFileProxy.meta_type = meta_type
    dummyFileProxy.effective = effective
    dummyFileProxy.expires = expires 
+      
+   # catalog all of the files in the filtered file list
+   for fileItem in filteredFileList:
+      FSfullPathFileName = os.path.join(FSfullPathFolderName, fileItem)
+
+      uid = str(uidBase +  os.path.basename(FSfullPathFileName))
+      dummyFileProxy.id = str(fileItem)
+      dummyFileProxy.url = FSfullPathFileName
+      dummyFileProxy.encoding = None
+      mi = mimetypesTool.classify(data=None, filename=fileItem)
+      dummyFileProxy.setIconPath(mi.icon_path)
+      dummyFileProxy.mime_type = mi.normalized()
+      
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % FSfullPathFileName )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+                 
+      catalogTool.catalog_object( dummyFileProxy, uid )
+                   
+      filesCataloged = filesCataloged + 1
    
-   if os.path.isdir(FSfullPath):
-      FSfullPathFolderName = FSfullPath
+   # catalog all of the contents of the subfolders in the filtered subfolders list
+   for subfolder in filteredSubfolderItems:
+      subfolderFullName = os.path.join(FSfullPathFolderName, subfolder)
+      #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: subdir=%s" % subfolderFullName )
+      newUidBase = uidBase + subfolder + '/'
+      subfolderfilesCataloged = \
+         catalogFSContent(subfolderFullName, filetypePhrasesSkipList,catalogTool, \
+                          mimetypesTool, newUidBase, view_roles, effective, expires, meta_type)
+      filesCataloged = filesCataloged + subfolderfilesCataloged
+
+   return filesCataloged
+
+
+# --------------------------------------------------------------------
+def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrasesSkipList, 
+                       filePrefixesSkipList, fileSuffixesSkipList, fileNamesSkipList,
+                       folderPrefixesSkipList, folderSuffixesSkipList, folderNamesSkipList):
+   
+   # this method returns the filteredFileList & filteredFolderList children of 
+   # the specified filesystem (FS) path
+   
+   filteredFileList = []
+   filteredFolderList = []
+   
+   if not os.path.exists(FSfullPath):
+      # raise exception here?
+      zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: FSfullPath not found (%s)" % FSfullPath )
+      
+   else:   
       try:
-         folderItems = os.listdir(FSfullPathFolderName)
+         rawItemList = os.listdir(FSfullPath)
       except:
-         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSObjects() :: error reading folder (%s) contents" % FSfullPathFolderName )
-         folderItems = [] 
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getFilteredFSItems() :: error reading folder (%s) contents" % FSfullPath )
+         return filteredFileList, filteredFolderList
 
-      for item in folderItems:
-         itemFSfullPathName = os.path.join(FSfullPathFolderName, item)
-         
-         if os.path.isdir(itemFSfullPathName):
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: subdir=%s" % itemFSfullPathName )
-            newUidBase = uidBase + item + '/'
-            subfolderfilesCataloged,subfolderfilesNotCataloged = \
-               catalogFSContent(itemFSfullPathName, filetypePhrasesSkipList,catalogTool, \
-                                mimetypesTool, newUidBase, view_roles, effective, expires, meta_type)
-            filesCataloged = filesCataloged + subfolderfilesCataloged
-            filesNotCataloged = filesNotCataloged + subfolderfilesNotCataloged
-         
-         else:
-
+      for item in rawItemList:
+         if skipInvalidIds:
             checkValidIdResult = checkValidId(item)
             if checkValidIdResult != 1: 
-               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
                continue
-            # don't include the PloneLocalFolderNG special metadata files  
-            if item.endswith('.metadata'): 
-               continue
-
-            FSfullPathFileName = itemFSfullPathName
-            uid = str(uidBase +  os.path.basename(FSfullPathFileName))
-            dummyFileProxy.id = str(item)
-            dummyFileProxy.url = FSfullPathFileName
-            dummyFileProxy.encoding = None
-            mi = mimetypesTool.classify(data=None, filename=item)
-            dummyFileProxy.setIconPath(mi.icon_path)
-            dummyFileProxy.mime_type = mi.normalized()
-            
-            # check to see if the mimetype for this file is on the skip list. 
-            # The main reason for this is to avoid having TextIndexNG2 process 
-            # files that we know it doesnt handle, but this could also be useful
-            # for other scenarios.
-
-            skipFile = 0
-            for filetypePhrase in filetypePhrasesSkipList:
-               if dummyFileProxy.mime_type.find(filetypePhrase) >= 0: skipFile=1
-               
-               if skipFile:
-                  filesNotCataloged = filesNotCataloged + 1
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: not cataloging file=%s" % dummyFileProxy.url )
-               else:
-                  zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % FSfullPathFileName )
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
-                         
-                  catalogTool.catalog_object( dummyFileProxy, uid )
-                         
-                  filesCataloged = filesCataloged + 1
-
-   return filesCataloged, filesNotCataloged 
-
+      
+         FSfullPathItemName = os.path.join(FSfullPath, item)
+         skipThisItem = 0
+         
+         if os.path.isdir(FSfullPathItemName):
+             
+             for prefix in folderPrefixesSkipList:
+                if item.startswith(prefix): 
+                   skipThisItem = 1
+                   break
+             
+             for suffix in folderSuffixesSkipList:
+                if item.endswith(suffix): 
+                   skipThisItem = 1
+                   break
+             
+             for completeName in folderNamesSkipList:
+                if item == completeName: 
+                   skipThisItem = 1
+                   break
+             
+             if not skipThisItem: 
+                filteredFolderList.append(item)
+         
+         else:
+             
+             if mimetypesTool:
+                mi = mimetypesTool.classify(data=None, filename=item)
+                item_mime_type = mi.normalized()
+             
+                for filetypePhrase in filetypePhrasesSkipList:
+                   if item_mime_type.find(filetypePhrase) >= 0:
+                      skipThisItem=1
+                      break
+             
+             for prefix in filePrefixesSkipList:
+                if item.startswith(prefix): 
+                   skipThisItem = 1
+                   break
+             
+             for suffix in fileSuffixesSkipList:
+                if item.endswith(suffix): 
+                   skipThisItem = 1
+                   break
+             
+             for completeName in fileNamesSkipList:
+                if item == completeName: 
+                   skipThisItem = 1
+                   break
+             
+             if not skipThisItem: 
+                filteredFileList.append(item)
+     
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFolderList= %s" % filteredFolderList)
+   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" % filteredFileList)
+   
+   return filteredFileList, filteredFolderList
