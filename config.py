@@ -8,8 +8,9 @@ GLOBALS = globals()
 
 DEFAULT_CONTENT_TYPES = {
     'default_output_type': 'text/html',
-    'default_content_type': 'text/restructured',
-    'allowable_content_types': ('text/restructured',
+    'default_content_type': 'text/plain',
+    'allowable_content_types': ('text/plain',
+                                'text/restructured',
                                 'text/html',
                                 'text/structured',)
     }

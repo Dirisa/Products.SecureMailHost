@@ -4,16 +4,19 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 
 schema = BaseSchema + Schema((
-    TextField('question',
+    TextField('description',
+              default='',
               searchable=1,
-              widget=TextAreaWidget(
-    label_msgid="label_question",
-    description_msgid = "desc_question",
-    i18n_domain = "plonehelpcenter",
-    description='Full question. If blank, defaults to title of this FAQ.',
-    rows=4),
-              **DEFAULT_CONTENT_TYPES
-              ),
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                 description = 'More details on the question, if not evident from the title.', 
+                 description_msgid = "help_detailed_question",
+                 label = "Detailed Question",
+                 label_msgid = "label_detailed_question",
+                 rows = 5,
+                 i18n_domain = "plonehelpcenter")
+    ),
 
     TextField('answer',
               required=1,
@@ -22,7 +25,7 @@ schema = BaseSchema + Schema((
     description_msgid = "desc_answer",
     label_msgid = "label_answer",
     i18n_domain = "plonehelpcenter",
-    rows=6),
+    rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
             
@@ -45,7 +48,7 @@ schema = BaseSchema + Schema((
                enforceVocabulary=1,
                widget=MultiSelectionWidget(
     label='Sections',
-    description='Section(s) of FAQ that this question should appear in.',),
+    description='Section(s) of the FAQ that this question should appear in.',),
                ),
     ))
 

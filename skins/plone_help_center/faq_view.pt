@@ -11,10 +11,13 @@
         
             <tal:vars define="w python:context.widget;">
     
-                <h2 tal:content="faq/Title">Question</h2>
+                <h2>
+                <img tal:replace="structure here/faq_icon.gif" />
+                <span tal:replace="faq/Title">Question</span>
+                </h2>
                 
                 <div class="documentDescription"
-                     tal:content="structure faq/getQuestion|nothing">
+                     tal:content="structure faq/Description|nothing">
                 Full Question
                 </div>
                    
