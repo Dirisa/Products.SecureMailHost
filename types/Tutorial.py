@@ -21,19 +21,19 @@ class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
     # XXX - Why doesn't this show up in the edit form?
     typeDescription= 'A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content.'
     typeDescMsgId  = 'description_edit_tutorial'
-    
+
     actions = ({'id': 'view',
                 'name': 'View',
                 'action': 'string:${object_url}/tutorial_view',
                 'permissions': (CMFCorePermissions.View,)
                 },)
-    
+
     def getTutorialDescription(self):
         """ Returns the description of the Tutorial--convenience method for TutorialPage """
         return self.Description()
 
 
-    def getPages(self, states=[])
+    def getPages(self, states=[]):
         """Get items"""
         items = self.contentValues('HelpCenterTutorialPage')
 
@@ -45,11 +45,11 @@ class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
                           if getInfoFor(o, 'review_state') in states ]
         return items
 
-    def getPagePosition(self, obj, states=[])
+    def getPagePosition(self, obj, states=[]):
         """Get position in folder of the current context"""
 
         items = self.getPages(states)
         return items.index(obj)
-   
+
 registerType(HelpCenterTutorial, PROJECTNAME)
-    
+
