@@ -38,5 +38,19 @@ th.staff {
     font-size: 120%;
 }
 
+span.schemata_legend {
+    background: #ffffff;
+    font-size: 80%;
+    padding: 0.5em;
+    position : relative;
+    top: -0.8em;
+    left: 0em;
+    text-transform: capitalize;
+}
+
+span.schemata_label {
+    font-weight: bold;
+}
+
 </style>
 </metal:block>

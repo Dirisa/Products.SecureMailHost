@@ -1,10 +1,17 @@
 <span metal:define-macro="field_shortview">
   <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
-     <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="value"/>
+     <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:&nbsp;<span tal:content="value"/>
     </metal:block>
   </metal:block>
 </span>
+
+<div class="group" metal:define-macro="view_schemata">
+  <span class="schemata_legend" i18n:translate="" tal:content="schemata_name"></span>
+    <metal:block  tal:repeat="field python: schemata.fields()">
+      <span metal:use-macro="here/issue_macros/macros/field_shortview" />
+    </metal:block>
+</div>
 
 <!-- Issue related macros -->
 

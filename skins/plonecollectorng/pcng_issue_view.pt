@@ -22,54 +22,54 @@
 	        <span metal:use-macro="python: here.widget(fieldname, mode='view', use_label=1)"/>
           </div>
         </metal:block> 
-
-        <span class="label" i18n:translate="topic">Topic: </span> <span class="field"  tal:content="here/topic" />&nbsp;&nbsp;
-        <span class="label" i18n:translate="classification">Classification: </span><span class="field" tal:content="here/classification" />&nbsp;&nbsp;
-        <span class="label" i18n:translate="importance">Importance: </span><span class="field" tal:content="here/importance" />&nbsp;&nbsp;
-        <span class="label" i18n:translate="status">Status: </span><span class="field" tal:content="python: here.pcng_format_status(here.status())" />&nbsp;&nbsp;
-        <span class="label" i18n:translate="assigned_to">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
-      </div>
-
-      <div class="group" tal:condition="python: request.get('mode', 'simple') == 'full'" >
-        <span class="legend" i18n:translate="progress">Progress</span>
-        <metal:block tal:repeat="field python: here.schema_getSchema('progress').fields()">
-          <span metal:use-macro="here/issue_macros/macros/field_shortview" />
-        </metal:block> 
-      </div>
-
-      <div class="group" tal:condition="python: request.get('mode', 'simple') == 'full'" >
-        <span class="legend" i18n:translate="contact">Contact</span>
-        <metal:block  tal:repeat="field python: here.schema_getSchema('contact').fields()">
-          <span metal:use-macro="here/issue_macros/macros/field_shortview" />
+        
+        <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
+          <metal:block tal:condition="python: field.getName() not in ('title', 'description', 'solution')">
+          <div metal:use-macro="here/issue_macros/macros/field_shortview" />
         </metal:block>
+        </metal:block>
+
+        <span class="schemata_label" i18n:translate="status">Status: </span><span class="field" tal:content="python: here.pcng_format_status(here.status())" />&nbsp;&nbsp;
+        <span class="schemata_label" i18n:translate="assigned_to">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
       </div>
 
-      <metal:block tal:condition="not: python: request.get('mode', 'simple') == 'full'" 
-                   tal:define="uploads here/objectValues">
-        <div class="group" tal:condition="uploads">
-          <span class="legend" i18n:translate="uploads">Uploads</span>
-            <metal:block tal:repeat="item uploads">
-              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
+
+      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+
+        <metal:block tal:repeat="schemata_name python: here.schema_getNames()">
+          <metal:block tal:define="schemata python:here.schema_getSchema(schemata_name)">
+            <metal:block tal:condition="python: schemata_name not in ('default', 'issuedata') "> 
+              <div metal:use-macro="here/issue_macros/macros/view_schemata" />
             </metal:block>
+          </metal:block>
+        </metal:block>
+
+        <div tal:define="uploads here/objectValues" >
+          <div class="group" tal:condition="uploads">
+            <span class="legend" i18n:translate="uploads">Uploads</span>
+              <metal:block tal:repeat="item uploads">
+                <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
+              </metal:block>
+          </div>
         </div>
+
       </metal:block>
+
 
       <div class="group"><span class="legend" i18n:translate="transcript">Transcript</span>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </div>
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+
         <metal:block tal:repeat="image python: here.objectValues('Portal Image')">
           <img tal:attributes="src image/absolute_url">
         </metal:block>
-      </metal:block>
 
+        <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
 
-
-      <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
-
-      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
+
       </metal:block>
 
     </div>

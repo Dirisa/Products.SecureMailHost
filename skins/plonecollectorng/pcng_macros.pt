@@ -51,7 +51,6 @@
       <th i18n:translate="transcript_time">Time</th>
       <th i18n:translate="transcript_user">User</th>
       <th i18n:translate="transcript_changes">Changes</th>
-
     </tr>
 
     <tr tal:repeat="events groups">
