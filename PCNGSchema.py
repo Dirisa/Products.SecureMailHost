@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.5 2004/01/29 19:57:26 ajung Exp $
+$Id: PCNGSchema.py,v 1.6 2004/01/30 15:07:52 ajung Exp $
 """
 
 from types import FileType
@@ -14,11 +14,17 @@ from Globals import Persistent, InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 from ZPublisher.HTTPRequest import FileUpload
-
+from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.utils import mapply
 from Products.Archetypes.Layer import DefaultLayerContainer
 from Products.Archetypes.interfaces.layer import ILayerContainer, ILayerRuntime, ILayer 
-from Products.Archetypes.interfaces.field import IField
+from Products.Archetypes.interfaces.field import IField, IObjectField, IImageField
+from Products.Archetypes.interfaces.base import IBaseUnit
+
+try:
+    from generator.i18n import translate
+except ImportError:
+    from Products.generator.i18n import translate
 
 # Some replacement classes for Archetypes
 
