@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.22 2003/11/05 17:30:35 ajung Exp $
+$Id: issue_schema.py,v 1.23 2003/11/15 01:56:09 zopezen Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -65,13 +65,6 @@ schema = OrderedSchema((
                 searchable=1,
                 schemata='issuedata',
                 widget=TextAreaWidget,
-                ),
-    StringField('solution',
-                searchable=1,
-                schemata='issuedata',
-                widget=TextAreaWidget(label='Solution',
-                                      label_msgid='label_solution',
-                                      i18n_domain='plonecollectorng'),
                 ),
     StringField('classification',
                 required=1,
