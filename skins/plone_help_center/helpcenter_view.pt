@@ -35,7 +35,7 @@
         
             <form name="searchform"
                   action="phc_search"
-                  tal:attributes="action string:${portal_url}/phc_search">
+                  tal:attributes="action string:${here/absolute_url}/phc_search">
                    
                 <fieldset style="float: right;">
                     
