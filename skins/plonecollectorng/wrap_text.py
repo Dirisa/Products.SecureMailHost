@@ -1,4 +1,4 @@
-##parameters=text,cols=120,indent=0
+##parameters=text,cols=80,indent=0
 
 # Wrap and indent text
 
@@ -8,10 +8,8 @@ if same_type(text, u''):
     text = text.encode(context.getSiteEncoding())
 
 lst = []
-
-for line in text.split('\n'):
-    for l in wrap(line, int(cols)):
-        lst.append(l)
+for l in text.split('\n'):
+    lst.extend(textwrap.wrap(l, cols))
 
 if indent:
     for i in range(len(lst)):
