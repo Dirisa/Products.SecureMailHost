@@ -20,6 +20,11 @@
                     "<span tal:content="python: event.getValue('new')" />"              
           </span>
 
+          <span tal:condition="python: event.getType()=='incrementalchange'">
+           <b><span tal:content="python: event.getValue('field')" /></b> removed: <span tal:content="python: event.getValue('removed')" />, 
+                    added: <span tal:content="python: event.getValue('added')" />              
+          </span>
+
           <span tal:condition="python: event.getType()=='reference'"> Issue reference:
             <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
                tal:content="python: event.getValue('comment')" />
@@ -50,15 +55,20 @@
     <tr tal:repeat="events groups">
       <td valign="top" tal:content="python: here.toPortalTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
       <td valign="top" tal:content="python: events[0].getUser()" />
- 
+
       <td valign="top">           
           <div class="transcriptevent"
                tal:repeat="event events" >
+
             <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')" /> 
 
             <span tal:condition="python: event.getType()=='change'">
               <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" -> 
                        "<span tal:content="python: event.getValue('new')" />"              
+            </span>
+            <span tal:condition="python: event.getType()=='incrementalchange'">
+              <b><span tal:content="python: event.getValue('field')" /></b> removed: <span tal:content="python: event.getValue('removed')" />, 
+                       added: <span tal:content="python: event.getValue('added')" />              
             </span>
 
             <span tal:condition="python: event.getType()=='reference'"> Issue reference:

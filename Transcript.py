@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.8 2003/09/11 10:48:16 ajung Exp $
+$Id: Transcript.py,v 1.9 2003/09/11 11:04:58 ajung Exp $
 """
 
 import time 
@@ -83,10 +83,12 @@ class Transcript(Persistent, Implicit):
     def addIncrementalChange(self, field, old, new):
 
         assert isinstance(old, (list, tuple)) and isinstance(new, (list, tuple))
-        added = difference(OOSet(new), OOSet(old))
-        removed = difference(OOSet(old), OOSet(new))
-        event = TranscriptEvent('incrementalchange', field=field, added=list(added), removed=list(removed))
-        self.add(event)
+        added = list(difference(OOSet(new), OOSet(old)))
+        removed = list(difference(OOSet(old), OOSet(new)))
+
+        if removed or added:
+            event = TranscriptEvent('incrementalchange', field=field, added=added, removed=removed)
+            self.add(event)
 
     security.declareProtected(CMFCorePermissions.View, 'addReference')
     def addReference(self, tracker, ticketnum, comment):
