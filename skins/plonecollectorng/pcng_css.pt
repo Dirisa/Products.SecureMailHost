@@ -15,6 +15,10 @@ div.transcriptevent {
     margin-left: 25px;
 }
 
+div.pcng_issueview_description{
+    background: #dddddd;
+}
+
 th.staff {
     text-align: center;
     font-weight: bold;
