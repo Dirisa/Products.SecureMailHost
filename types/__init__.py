@@ -1,9 +1,7 @@
 import HelpCenter
 
-import FAQFolder
-import FAQ
+import FAQFolder, FAQ
 
-import HowToFolder
-import HowTo
+import HowToFolder, HowTo
 
-import TutorialFolder
+import TutorialFolder, Tutorial, TutorialPage
