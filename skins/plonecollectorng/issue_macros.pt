@@ -12,6 +12,7 @@
         <li tal:repeat="ref references">
           <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
           (<span tal:replace="ref/getComment"/>)
+          <a tal:attributes="href string: delete_reference?number:int=${repeat/ref/number}"> [del] </a>
         </li>
 
         <li>Dependency graph: 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: References.py,v 1.5 2003/09/11 04:12:51 ajung Exp $
+$Id: References.py,v 1.6 2003/09/30 14:22:41 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -27,7 +27,11 @@ class ReferencesManager(Persistent):
     def add(self, ref):
         self._references.insert(0, ref)
         self._p_changed = 1
-            
+
+    def delete(self, num):
+        del self._references[num]
+        self._p_changed = 1
+
     def __len__(self): return len(self._references)
 
     def __getitem__(self, n): 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.32 2003/09/30 11:16:26 ajung Exp $
+$Id: Issue.py,v 1.33 2003/09/30 14:22:41 ajung Exp $
 """
 
 import sys, os
@@ -196,6 +196,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ return a sequences of references """
         return self._references
 
+    def delete_reference(self, number, RESPONSE=None):
+        """ delete a reference given by its position """
+        self._references.delete(number-1) 
+        util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been deleted')
+
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
 
@@ -222,15 +227,15 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ create graphical representation of the references tree
             (using Graphviz) 
         """
-        from Products.PloneCollectorNG import references
+        from Products.PloneCollectorNG import graphviz
 
-        graphs, nodes, edges = references.build_tree(self, {}, [], [])
-        vizfile = references.build_graphviz(graphs, nodes, edges)
+        graphs, nodes, edges = graphviz.build_tree(self, {}, [], [])
+        vizfile = graphviz.build_graphviz(graphs, nodes, edges)
         
         if format in ('gif','jpeg', 'png', 'mif', 'svg', 'ps'):
-            references.viz2image(vizfile, format, RESPONSE)
+            graphviz.viz2image(vizfile, format, RESPONSE)
         elif format in ('cmap',):
-            references.viz2map(vizfile, format, RESPONSE)
+            graphviz.viz2map(vizfile, format, RESPONSE)
         else:
             raise RuntimeError('unknown format "%s"' % format)
 
