@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.20 2004/01/12 20:13:08 ajung Exp $
+$Id: Transcript.py,v 1.21 2004/01/16 20:49:43 ajung Exp $
 """
 
 import time 
-from types import UnicodeType
+from types import UnicodeType, StringType
 
 from Globals import Persistent, InitializeClass
 from Acquisition import Implicit
@@ -65,6 +65,7 @@ class Transcript(Persistent, Implicit):
 
     def __init__(self):
         self._items = OOBTree()
+        self.encoding = 'iso-8859-15' 
 
     def __len__(self): 
         return len(self._items)
@@ -79,6 +80,15 @@ class Transcript(Persistent, Implicit):
 
     replace = add  # make an alias to provide support to replace an event
 
+    security.declarePublic('setEncoding')
+    def setEncoding(self, encoding):             
+        self.encoding = encoding
+
+    def conv(self, item):
+        if isinstance(item, StringType):
+            return unicode(item, self.encoding)
+        return item
+
     security.declareProtected(View, 'addComment')
     def addComment(self, comment, text_format='plain', user=None, created=None):
         if not isinstance(comment, UnicodeType):
@@ -89,7 +99,7 @@ class Transcript(Persistent, Implicit):
     security.declareProtected(View, 'addChange')
     def addChange(self, field, old, new, user=None, created=None):
         if str(old) != str(new):
-            event = TranscriptEvent('change', field=field, old=old, new=new, user=user, created=created)
+            event = TranscriptEvent('change', field=field, old=self.conv(old), new=self.conv(new), user=user, created=created)
             self.add(event)
 
     security.declareProtected(View, 'addIncrementalChange')
@@ -99,17 +109,17 @@ class Transcript(Persistent, Implicit):
         removed = list(difference(OOSet(old), OOSet(new)))
 
         if removed or added:
-            event = TranscriptEvent('incrementalchange', field=field, added=added, removed=removed, user=user, created=created)
+            event = TranscriptEvent('incrementalchange', field=field, added=self.conv(added), removed=self.conv(removed), user=user, created=created)
             self.add(event)
 
     security.declareProtected(View, 'addReference')
     def addReference(self, tracker, ticketnum, comment, user=None, created=None):
-        event = TranscriptEvent('reference', tracker=tracker, ticketnum=ticketnum, comment=comment, user=user, created=created)
+        event = TranscriptEvent('reference', tracker=tracker, ticketnum=ticketnum, comment=self.conv(comment), user=user, created=created)
         self.add(event)
 
     security.declareProtected(View, 'addUpload')
     def addUpload(self, fileid, comment, user=None, created=None):
-        event = TranscriptEvent('upload', fileid=fileid, comment=comment, user=user, created=created)
+        event = TranscriptEvent('upload', fileid=fileid, comment=self.conv(comment), user=user, created=created)
         self.add(event)
 
     security.declareProtected(View, 'addAction')
