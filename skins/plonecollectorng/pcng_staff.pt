@@ -31,7 +31,7 @@
                                         ('Unassigned', here.getTrackerUsers(unassigned_only=1)))">
           <span tal:define="headline python: item[0]; users python: item[1]" >
             <tr>
-              <th class="staff" colspan="6" tal:content="headline" />
+              <th class="staff" colspan="6" i18n:translate="" tal:content="headline" />
             </tr>
             <span tal:repeat="user users" >
           
@@ -60,7 +60,7 @@
         </span>
        <tr> <td colspan="6"><hr></td></tr>
        <tr>
-         <td colspan="6">
+         <td colspan="6" i18n:translate="help_staff">
          <b>Collector administors</b> are responsible for the configuration and the
          maintainance of a collector
          <br><b>Supporters</b> work on issues. Usually issues are assigned to a supporter

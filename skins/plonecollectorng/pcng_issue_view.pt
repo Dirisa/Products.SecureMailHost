@@ -58,9 +58,10 @@
 
       </fieldset>
 
-      <fieldset tal:repeat="fieldset python: ('issuedata',)">
+      <fieldset tal:define="fieldset python: 'issuedata'">
         <legend><a class="schemata_legend"  
                    tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${fieldset}"  
+                   i18n:translate=""
                    tal:content="fieldset" /></legend>
 
         <div style="float: left; width: 30%; vertical-align: top">

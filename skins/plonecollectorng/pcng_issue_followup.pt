@@ -32,7 +32,9 @@
             <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to  </span>
           </th>
           <th>&nbsp;</th>
-          <th> <span i18n:translate="workflow_action_current_state">Action (Current state</span>: <span tal:content="here/status" />)</th>
+          <th> 
+            <span i18n:translate="action">Action </span>
+            (<span i18n:translate="workflow_action_current_state">Current state</span>: <span i18n:translate="" tal:content="here/status" />)</th>
         </tr>
     
         <tr>
@@ -61,7 +63,7 @@
                                     ">
                                                                    
               <span tal:condition="python: item[0] in actions">
-                <br><input type="radio" name="action" tal:attributes="value python: item[0]"/><span tal:replace="python: item[1]" />
+                <br><input type="radio" name="action" tal:attributes="value python: item[0]"/><span i18n:translate="" tal:content="python: item[1]" />
               </span>
             </metal:block>
           </td>
@@ -71,8 +73,8 @@
       <div class="row">
         <div class="label">&nbsp;</div>
         <div class="field">
-          <input class="context" type="submit" value=" Save " i18n:attributes="value" class="standalone"/>
-          <input class="context" type="reset" value=" Reset " i18n:attributes="value" class="standalone"/>
+          <input class="context" type="submit" value="Save" i18n:attributes="value" class="standalone"/>
+          <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
         </div>
       </div> <!-- End row -->
 

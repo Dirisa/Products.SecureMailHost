@@ -1,8 +1,8 @@
-<metal:block metal:define-macro="field_quoted">
+<metal:block metal:define-macro="field_quoted" i18n:domain="plonecollectorng">
   <span metal:use-macro="python: here.widget(request.get('fieldname'), mode='view', use_label=1)"/>
 </metal:block>
 
-<metal:block metal:define-macro="field_shortview">
+<metal:block metal:define-macro="field_shortview" i18n:domain="plonecollectorng">
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
@@ -17,11 +17,11 @@
   </metal:block>
 </metal:block>
 
-<fieldset metal:define-macro="view_schemata">
+<fieldset metal:define-macro="view_schemata" i18n:domain="plonecollectorng">
   <legend> <a class="schemata_legend"   
-              tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${schemata_name}" 
-              i18n:translate="" 
-              tal:content="schemata_name"/></legend>
+              tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${schemata_name}">
+            <span i18n:translate="" tal:content="schemata_name"/>
+           </a></legend>
   <metal:block  tal:repeat="field python: schemata.fields()">
     <span metal:use-macro="here/issue_macros/macros/field_shortview" /> &nbsp;&nbsp;
   </metal:block>
@@ -29,7 +29,7 @@
 
 <!-- Issue related macros -->
 
-<div metal:define-macro="issue_references">
+<div metal:define-macro="issue_references" i18n:domain="plonecollectorng">
   <fieldset tal:define="references here/getRefs;
                         breferences here/getBRefs">
     <legend i18n:translate="legend_references">References</legend>
@@ -64,8 +64,8 @@
 </div>  
 
 
-<fieldset metal:define-macro="issue_uploads">
-  <legend i18n:translate="legend_uploads">Uploads</legend>
+<fieldset metal:define-macro="issue_uploads" i18n:domain="plonecollectorng">
+  <legend i18n:translate="uploads">Uploads</legend>
     <ul>
         <li tal:repeat="item here/objectValues">
             <span tal:define="icon item/getIcon|item/icon|nothing">
@@ -98,7 +98,7 @@
 </fieldset> <!-- End group -->
 
 
-<fieldset metal:define-macro="add_uploads">
+<fieldset metal:define-macro="add_uploads" i18n:domain="plonecollectorng">
   <legend i18n:translate="legend_artifacts_upload">Upload files or images</legend>
     <form method="post" action="upload_file" enctype="multipart/form-data">
 
@@ -124,7 +124,7 @@
 
 
 
-<div metal:define-macro="add_references">
+<div metal:define-macro="add_references" i18n:domain="plonecollectorng">
 
 <script language="javascript">
 function show_tickets() {
@@ -192,7 +192,7 @@ function show_tickets() {
 </div>  <!-- End macro: add_references_table -->
 
 
-<div metal:define-macro="watchlist">
+<div metal:define-macro="watchlist" i18n:domain="plonecollectorng">
   <fieldset tal:condition="python: here.wl_getMode()=='anonymous' or 
                                    (here.wl_getMode()=='authenticated' and member.getUserName() != 'Anonymous User') "
             tal:define="email python: member.getProperty('email')">
