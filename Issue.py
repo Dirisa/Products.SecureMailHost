@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.166 2004/05/03 17:56:30 ajung Exp $
+$Id: Issue.py,v 1.167 2004/05/05 15:54:55 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -13,7 +13,7 @@ from urllib import unquote
 from types import StringType, UnicodeType
 
 from Globals import Persistent, InitializeClass
-from AccessControl import  ClassSecurityInfo, Unauthorized
+from AccessControl import  ClassSecurityInfo, Unauthorized, getSecurityManager
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
 from DateTime import DateTime
@@ -133,6 +133,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
         self.post_creation_actions()
+
+        # Creator
+        self._creator = getSecurityManager().getUser().getUserName()
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
@@ -455,6 +458,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         return self.pcng_issue_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
 
     base_view = view
+    
+    security.declareProtected(View, 'Creator')
+    def Creator(self):
+        """ creator """
+        return getattr(self,'_creator', None) or self.getOwner().getId()                
 
     ######################################################################
     # Catalog stuff
