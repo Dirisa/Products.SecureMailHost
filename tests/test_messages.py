@@ -8,10 +8,13 @@ if __name__ == '__main__':
 
 from common import *
 from DateTime import DateTime
+from email.MIMEText import MIMEText
 
 buergschaft_latin1_in = open('in/buergschaft.txt', 'rb').read()
 buergschaft_utf8_in = unicode(buergschaft_latin1_in, 'latin-1').encode('utf-8')
 loremipsum_in = open('in/loremipsum.txt', 'rb').read()
+buergschaft_latin1_msg = MIMEText(buergschaft_latin1_in, 'plain', 'latin-1')
+
 
 buergschaft_latin1_out = open('out/buergschaft.txt', 'rb').read()
 buergschaft_utf8_out = open('out/buergschaft_utf8.txt', 'rb').read()
@@ -64,9 +67,19 @@ class TestBuergschaftLatin1(TestMessage):
     subject = 'Die Buergschaft'
     charset = 'latin-1'
     subtype = 'plain'
-    out     = buergschaft_latin1_out
 
 tests.append(TestBuergschaftLatin1)
+
+class TestBuergschaftLatin1Message(TestMessage):
+    name    = 'buergschaft_latin_msg'
+    message = buergschaft_latin1_msg
+    out     = buergschaft_latin1_out
+
+    subject = 'Die Buergschaft'
+    #charset = 'us-ascii'
+    #subtype = 'plain'
+
+tests.append(TestBuergschaftLatin1Message)
 
 class TestBuergschaftUTF8(TestMessage):
     name    = 'buergschaft_uft8'
@@ -76,7 +89,6 @@ class TestBuergschaftUTF8(TestMessage):
     subject = 'Die Buergschaft'
     charset = 'utf8'
     subtype = 'plain'
-    out     = buergschaft_utf8_out
 
 tests.append(TestBuergschaftUTF8)
 
@@ -88,7 +100,6 @@ class TestLoremIpsum(TestMessage):
     subject = 'Lorem Ipsum'
     charset = 'ascii'
     subtype = 'plain'
-    out     = loremipsum_out
 
 tests.append(TestLoremIpsum)
 
