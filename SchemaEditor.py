@@ -5,16 +5,16 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.59 2004/06/10 11:31:38 ajung Exp $
+$Id: SchemaEditor.py,v 1.60 2004/06/18 06:22:13 ajung Exp $
 """
 
-import copy, re
+import re
 from types import StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
-from Products.Archetypes.public import DisplayList, Schema
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
 from PCNGSchema import PCNGSchemaNonPersistent

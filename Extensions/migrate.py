@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.25 2004/01/23 05:25:31 ajung Exp $
+$Id: migrate.py,v 1.26 2004/06/18 06:24:37 ajung Exp $
 """
 
 
@@ -22,11 +22,8 @@ COMPLAIN IN CASE OF A FAILURE OR DATA LOSS. YOU HAVE BEEN WARNED!!!!!!!!!!!
 
 from types import StringType
 
-from Acquisition import aq_base
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
-from Products.PloneCollectorNG.Issue import PloneIssueNG
-from Products.CMFCore.utils import getToolByName
-from zLOG import LOG,INFO,ERROR,WARNING
+from zLOG import LOG,ERROR,WARNING
 
 ENFORCE_STATUS = 1  # set this to 1 to set the destination state based on the transcript information
 ENFORCE_ASSIGNEES = 1 # set this to 1 to migrate the assignees based on transcript information

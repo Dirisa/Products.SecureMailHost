@@ -5,20 +5,18 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.192 2004/06/17 06:55:30 ajung Exp $
+$Id: Collector.py,v 1.193 2004/06/18 06:22:13 ajung Exp $
 """
 
 import base64, time, random, md5, os
 
 from Globals import InitializeClass
-from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
 from ZODB.POSException import ConflictError
 from Products.Archetypes.public import registerType
-from Products.Archetypes.utils import OrderedDict
 from Base import Base
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName

@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.38 2004/05/09 16:25:05 ajung Exp $
+$Id: notifications.py,v 1.39 2004/06/18 06:22:14 ajung Exp $
 """
 
-import sys, time
+import sys
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
@@ -16,6 +16,7 @@ from email.Header import Header
 import email.Utils 
 
 from zLOG import LOG, ERROR, INFO
+from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 
 import util, notification_policies
@@ -37,6 +38,12 @@ def enrich_recipients(issue, recipients):
 
     r = recipients
     membership = getToolByName(issue, 'portal_membership', None)
+
+    # add current user (might be a non-assigned supporter performing 
+    # an issue followup)
+    username = getSecurityManager().getUser().getUserName()
+    if username != 'Anonymous User':
+        r[username] = {}        
 
     for uid, u_dict in r.items():
         member = membership.getMemberById(uid)

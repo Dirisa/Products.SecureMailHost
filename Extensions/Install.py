@@ -1,4 +1,3 @@
-import os
 from StringIO import StringIO
 
 from Products.Archetypes.public import listTypes

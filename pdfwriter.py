@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.40 2004/04/01 16:45:20 ajung Exp $
+$Id: pdfwriter.py,v 1.41 2004/06/18 06:22:14 ajung Exp $
 """
 
-import os, sys, cStringIO, tempfile
+import os, cStringIO, tempfile
 from types import UnicodeType, StringType
-from textwrap import fill, wrap
+from textwrap import wrap
 from zLOG import WARNING, LOG
    
 try:
@@ -29,7 +29,6 @@ from reportlab import rl_config
 from reportlab.lib.units import inch                              
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.fonts import addMapping
 
 styles = getSampleStyleSheet()
 

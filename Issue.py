@@ -5,14 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.186 2004/06/16 05:33:25 ajung Exp $
+$Id: Issue.py,v 1.187 2004/06/18 06:22:13 ajung Exp $
 """
 
-import sys, os, time, random, base64
+import os, time, random 
 from urllib import unquote
 from types import StringType, UnicodeType
 
-from Globals import Persistent, InitializeClass, PersistentMapping
+from Globals import PersistentMapping
 from AccessControl import  ClassSecurityInfo, getSecurityManager
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
@@ -20,9 +20,7 @@ from DateTime import DateTime
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
-from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
-from Products.Archetypes.utils import OrderedDict
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
 from Products.Archetypes.config import REFERENCE_CATALOG
 from zLOG import LOG, ERROR

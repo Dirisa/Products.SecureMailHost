@@ -1,7 +1,5 @@
 # store member preferences for PloneCollectorNG
 
-from AccessControl import getSecurityManager
-
 mstool = context.portal_membership
 
 if mstool.isAnonymousUser(): 
