@@ -40,6 +40,30 @@ General:
   HelpCenter.py/__init__ respect this. Easier for other people who
   want to use product but might not want all parts.
 
+- Add simple Glossary type, with Glossary entries (by limi)
+
+  - I admit that it's 50% because we have 5 and not 6 different
+    types now, which makes everything asymmetrical. ;)
+
+  - I still think it could be useful though - say; define what an
+    action is, have an Archetypes section with stuff like
+    Schema, Schemata, they are referencable from other docs.
+    Makes a nice print-out for newbies too. :)
+
+  - Simple container folder, like the others - with Sections
+
+  - Super-simple object that is essentially a definition list
+
+  - No item-level rendering is really necessary, but anchors are
+    important. Everything can probably be on one page if anchors
+    are included, and visible as bookmarkable links.
+
+  - Advanced-level functionality (pie-in-the-sky) is automatic 
+    parsing of abbr tags to look in the glossary for entries.
+    (not realistic at this stage, just a fun thought :) - lots
+    of academic institutions would like something like this, with
+    proper integration in Kupu it could be killer functionality. :)
+
 Permissions:
 
 - Right now, both container-folders (ie FAQFolder) and contentishy
@@ -47,7 +71,7 @@ Permissions:
   So users can both add FAQs and add FAQFolders, which is wrong.
   We can either change them into two workflows or add a new permission
   to separate out adding a help-content type. Joel votes for the 
-  latter.
+  latter. Alex too.
 
 I18n:
 
@@ -60,6 +84,10 @@ Versions:
 - Add UI to folder screens to only show content for selected versions.
   Alllows Plone 1.0 people,for example, to see only stuff pertaining
   to them.
+
+- Also need a way to set the default view help-center-wide 
+  (Example, let's say we just want to show Plone 2.0 elements 
+   in the listings) (limi)
 
 
 Unit tests:
