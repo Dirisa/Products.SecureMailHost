@@ -21,7 +21,8 @@ Bugs
         -> I'm having some trouble here... I can't add content at all as
         a regular member. I'm getting insufficient privileges, though I can't
         see why. VerboseSecurity and portal_workflow seem to be in disagreement.
-        I'm probably missing something obvious (optilude)
+        joel suggests this may be fixed by having the latest version of
+        PortalFormControoler. (optilude)
           
   - BUG: Comments on TutorialPages end up on the containerish Tutorial object
          instead, at least on plone.org. It should be possible to add a comment
@@ -43,7 +44,7 @@ Bugs
          I get this wrong behavior, when trying to view the
          Attachments tab after creating a *error reference*
          
-         -> Fixed in PHC-reference-guide-branch now (optilude)
+         -> Fixed now (optilude)
 
 ====
 Fixes
@@ -53,6 +54,8 @@ Fixes
 
          FYI: I get the above error when trying to view the
          attachements tab when writing a howto."
+         
+         -> Appears fixed (optilude)
 
   - BUG: Owners can't mark their own content Obsolete, they should be able to.
 
@@ -67,6 +70,8 @@ General
 
   - PHC needs a Comment workflow! Priority #1, explained near the bottom of 
     this document. ("Comment notifications")
+    
+        -> XXX: Not tested, but assume this is done? (optilude)
   
   - All content types need Sharing tab
   
@@ -88,6 +93,8 @@ General
    
   - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
+    
+        -> XXX: Not yet tested (optilude)
 
   - Ideally, the "How to contribute to/use this resource" (phc_help) should be a 
     pre-populated howto itself, so it can be translated/modified to suit the
