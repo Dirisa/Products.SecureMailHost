@@ -27,7 +27,7 @@ class PHCFolder:
         if hasattr(self,'getVersions_vocab'):
             return self.getVersions_vocab()
         else:
-            return list()
+            return list ()
 
     def getSectionsVocab(self):
         """Get sections vocabulary."""
@@ -41,7 +41,11 @@ class PHCFolder:
         if hasattr(self,'getImportance_vocab'):
             return self.getImportance_vocab()
         else:
-            return list()
+            # XXX: This is here so that PloneSoftwareCenter will get some
+            #Êimportance ratings. We may want to put a dynamic importance vocab
+            # somewhere in PSC and change this to return list(), though this
+            # behaviour may be fine in either case.
+            return IMPORTANCE_VOCAB_DEFAULT
 
     def Versions(self):
         """Method to display the versions in a nicer way."""

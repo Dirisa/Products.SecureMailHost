@@ -70,13 +70,17 @@ class PHCContent (HistoryAwareMixin):
     def isOutdated(self):
         """Check the current versions of the PHC root container against the
         versions of this item. If the version of this item is not in the list
-        of current versions, return 1, else return 0
+        of current versions, return 1, else return 0. As a shortcircuit, if
+        no "currentVersions" is defined, always return 0.
         """
-        
-        myVersions = getattr(self, 'versions', [])
-        
+                
         # Acquire current versions
         currentVersions = self.getCurrentVersions ()
+        
+        if not currentVersions:
+            return 0
+        
+        myVersions = getattr(self, 'versions', [])
         
         for v in myVersions:
             if v in currentVersions:

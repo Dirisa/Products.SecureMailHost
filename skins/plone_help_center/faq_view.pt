@@ -22,6 +22,8 @@
 	  <span i18n:translate="phc_up_to_toc">Up to table of contents</span>
     </a>
 
+    <b tal:content="here/isOutdated"/>
+
     <div class="documentDescription"
       tal:condition="here/Description"
       tal:content="structure here/Description">

@@ -19,13 +19,8 @@ DEFAULT_CONTENT_TYPES = {
 
 IS_DISCUSSABLE=1
 
-IMPORTANCE_VOCAB = DisplayList((
-    ('low', 'Low'),
-    ('medium', 'Medium'),
-    ('high', 'High'),
-    ))
-    
-IMPORTANCE_DEFAULT = 'medium'
+IMPORTANCE_VOCAB_DEFAULT = ('Low', 'Medium', 'High')    
+IMPORTANCE_DEFAULT = 'Medium'
 
 # References to other referenceable (usally Archetypes based) items in the 
 # portal are disabled by default. By enabling them you'll get another Field in

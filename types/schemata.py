@@ -247,7 +247,7 @@ HCRootSchema = BaseFolderSchema + Schema((
         ),
 
     LinesField('currentVersions',
-        required=1,
+        required=0,
         multiValued=1,
         vocabulary='getVersions_vocab',
         widget=MultiSelectionWidget(
@@ -262,7 +262,7 @@ HCRootSchema = BaseFolderSchema + Schema((
 
     LinesField('importance_vocab',
         required=1,
-        default=IMPORTANCE_VOCAB,
+        default=IMPORTANCE_VOCAB_DEFAULT,
         widget=LinesWidget(description_msgid="phc_importance_helpcenter",
             description="Importance ratings content may have.",
             label="Importance",
