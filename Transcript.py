@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.24 2004/05/14 11:10:18 ajung Exp $
+$Id: Transcript.py,v 1.25 2004/05/22 10:37:42 ajung Exp $
 """
 
 import time 
@@ -175,7 +175,6 @@ class Transcript(Persistent, Implicit):
             if str(event.getTimestamp()) == str(timestamp):
                 for k,v in kw.items():
                     setattr(event, k, v)
-                print 'modifiziert'                
 
     security.declareProtected(ManageCollector, 'migrateUnicode')
     def migrateUnicode(self):
