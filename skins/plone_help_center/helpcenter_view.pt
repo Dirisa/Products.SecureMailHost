@@ -24,7 +24,8 @@
                                      ('HelpCenterLinkFolder','HelpCenterLink'),
                                      ('HelpCenterErrorReferenceFolder','HelpCenterErrorReference'),
                                      ('HelpCenterGlossary','HelpCenterDefinition'));
-                    subtypes python: [ t[0] for t in subtypes_tuples ]">
+                    subtypes python: [ t[0] for t in subtypes_tuples ];
+                    rss_subtypes python: [ t[1] for t in subtypes_tuples ];">
             <h1 tal:content="here/title_or_id" class="documentFirstHeading">
               Title or id
             </h1>
@@ -83,7 +84,7 @@
             <p>
             <img tal:attributes="src string:$portal_url/rss.gif" />
             <a tal:attributes="href python:here.getSyndicationURL(portal_url, my_path,
-            subtypes)" title="RSS feed for all documentation types">
+            rss_subtypes)" title="RSS feed for all documentation types">
 	    <span i18n:translate="phc_rss_all">RSS feed for all documentation types</span>
             </a>
             </p>
