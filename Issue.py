@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.109 2004/01/02 10:23:43 ajung Exp $
+$Id: Issue.py,v 1.110 2004/01/12 19:55:18 ajung Exp $
 """
 
 import sys, os, time
@@ -105,10 +105,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                 ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
                 if name in fieldnames:                
-                    schema[name].storage.set(name, self, member.getProperty(name1))
+                    schema[name].set(self, member.getProperty(name1))
         else:
             name = 'contact_name'
-            schema[name].storage.set(name, self, util.getUserName())
+            schema[name].set(self, util.getUserName())
 
         # pre-allocate the deadline property
         self.progress_deadline = DateTime() + self.deadline_tickets        
@@ -184,13 +184,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
             field = schema[k]
-            field.storage.set(k, self, v)
+            field.set(self, v)
 
     def getParameter(self, key):
         """ return the value of an Archetypes field """
 
         field = self.Schema()[key]
-        try: return field.storage.get(key, self)  # avoid problems with updated schemas
+        try: return field.get(self)  # avoid problems with updated schemas
         except: return ''
 
     ######################################################################
@@ -342,7 +342,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         for name in REQUEST.form.keys():
             if not name in field_names: continue
             new = REQUEST.get(name, None)
-            old = schema[name].storage.get(name, self)
+            old = schema[name].get(self)
             self._transcript.addChange(name, old, new)
 
     def post_validate(self, REQUEST, errors):
@@ -417,7 +417,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         l.extend(self.objectIds())
         l.extend([o.title_or_id() for o in self.objectValues()])
         for field in self.Schema().fields():
-            v = field.storage.get(field.getName(),self)
+            v = field.get(self)
             if v:
                 if callable(v): v = v()
                 l.append( str(v) )

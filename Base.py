@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.9 2003/12/13 11:32:10 ajung Exp $
+$Id: Base.py,v 1.10 2004/01/12 19:53:06 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -73,21 +73,21 @@ class ParentManagedSchema:
                 name = field.getName()
 
                 method = lambda self=self, name=name, *args, **kw: \
-                         self.Schema()[name].storage.get(name, self) 
+                         self.Schema()[name].get(self) 
                 setattr(self, '_v_%s_accessor' % name, method )
                 field.accessor = '_v_%s_accessor' % name
                 field.edit_accessor = field.accessor
 
                 method = lambda value,self=self, name=name, *args, **kw: \
-                         self.Schema()[name].storage.set(name, self, value) 
+                         self.Schema()[name].set(self, value) 
                 setattr(self, '_v_%s_mutator' % name, method )
                 field.mutator = '_v_%s_mutator' % name
 
                 # Check if we need to update our own properties
                 try:
-                    value = field.storage.get(field.getName(), self)  
+                    value = field.get(self)  
                 except:
-                    field.storage.set(field.getName(), self, field.default)
+                    field.set(self, field.default)
                         
         return self._v_schema
 
