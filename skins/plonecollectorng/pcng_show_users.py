@@ -23,12 +23,12 @@ for user in users:
         if roles:
             print "\t", c.getId(), roles
 
-        print
+    print 
 
-        ids = context.portal_memberdata.propertyIds(); ids.sort()
-        for id in ids:
-            v = member.getProperty(id)
-            print"\t%30s = %s (unicode=%s)" % (id, v, same_type(v, u''))
+    ids = context.portal_memberdata.propertyIds(); ids.sort()
+    for id in ids:
+        v = member.getProperty(id)
+        print"\t%30s = %s (unicode=%s)" % (id, v, same_type(v, u''))
 
     print 
 
