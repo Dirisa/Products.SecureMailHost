@@ -89,26 +89,20 @@
 
                 <dl>
                   <tal:file tal:repeat="file latestrelease/contentValues">
-                    <dt tal:define="download file/getDownloadableFile">
+                    <dt>
                         <img src="" alt="" tal:attributes="src string:${here/portal_url}/${file/getDownloadIconName}" />
 
-                      <a tal:condition="nocall:download"
-                        tal:attributes="href string:${file/absolute_url}/getDownloadableFile">
+                      <a class="link-plain"
+                        tal:attributes="href file/getDirectURL">
                         <span i18n:translate="label_download">Download</span>
                         <span tal:replace="here/Title">Ploneboard 1.0</span>
                         for
                         <span tal:replace="file/getPlatform" />
-                        (<span tal:replace="python:here.getObjSize(file)">256KB</span>)
+                        <tal:size define="fileSize file/getFileSize" condition="fileSize">
+                             (<span tal:replace="fileSize">256KB</span>)
+                        </tal:size>
                       </a>
 
-                      <a class="link-plain"
-                        tal:condition="not:nocall:download"
-                        tal:attributes="href file/getExternalURL">
-                        <span i18n:translate="label_download">Download</span>
-                        <span tal:replace="here/Title">Ploneboard 1.0</span>
-                        for
-                        <span tal:replace="file/getPlatform" />
-                        </a>
                     </dt>
 
                     <dd tal:content="file/Title">

@@ -113,22 +113,16 @@
                             <br />
                             <img src="" alt="" tal:attributes="src string:${here/portal_url}/${download/getDownloadIconName}" />
 
-                            <a href="#"
-                               tal:condition="not:download/getExternalURL"
-                               tal:attributes="href string:${download/absolute_url}">
+                            <a href="#" class="link-plain"
+                               tal:attributes="href download/getDirectURL">
                                 <span i18n:translate="label_download">Download</span>
                                 <span tal:replace="download/Title">Windows Installer</span>
-                                (<span tal:replace="python: here.getObjSize(download)">256KB</span>)
-
+                                
+                                <tal:size define="fileSize download/getFileSize" condition="fileSize">
+                                    (<span tal:replace="fileSize">256KB</span>)
+                                </tal:size>
                             </a>
                             
-                            <a href="#"
-                               class="link-plain"
-                               tal:condition="download/getExternalURL"
-                               tal:attributes="href download/getExternalURL">
-                                <span i18n:translate="label_download">Download</span>
-                                <span tal:replace="download/Title">Windows Installer</span>
-                            </a>
                         </tal:downloads>
                     </dd>
 

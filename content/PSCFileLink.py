@@ -1,5 +1,5 @@
 """
-$Id: PSCFile.py,v 1.3 2005/03/05 04:38:26 optilude Exp $
+$Id: PSCFileLink.py,v 1.1 2005/03/05 04:38:26 optilude Exp $
 """
 
 from Products.Archetypes.public import BaseContent
@@ -13,28 +13,28 @@ from Products.CMFCore import CMFCorePermissions
 
 from AccessControl import ClassSecurityInfo
 
-from schemata import PSCFileSchema
+from schemata import PSCFileLinkSchema
 
 import re
 
 def modify_fti(fti):
     std_modify_fti(fti)
 
-class PSCFile(BaseContent):
-    """Contains the downloadable file for the Release."""
+class PSCFileLink(BaseContent):
+    """Contains a link to a downloadable file for a Release."""
 
     security = ClassSecurityInfo()
     __implements__ = (BaseContent.__implements__)
 
-    archetype_name = 'Downloadable File'
-    immediate_view = default_view = 'psc_download_view'
-    content_icon = 'file_icon.gif'
-    schema = PSCFileSchema
+    archetype_name = 'External File'
+    immediate_view = default_view = 'psc_external_download_view'
+    content_icon = 'link_icon.gif'
+    schema = PSCFileLinkSchema
     
     actions = ({
         'id'          : 'view',
         'name'        : 'View',
-        'action'      : 'string:${object_url}/psc_download_view',
+        'action'      : 'string:${object_url}/psc_external_download_view',
         'permissions' : (CMFCorePermissions.View,)
          },
          )
@@ -47,8 +47,9 @@ class PSCFile(BaseContent):
         return DisplayList ([(item, item) for item in \
                                 self.getAvailablePlatforms ()])
                 
-    # XXX: These methods could be factored into their own mixin base class
-                
+    # XXX: This should be in a mixin, but it is too much overkill at 2:28am
+    #   day before release
+    
     security.declareProtected(CMFCorePermissions.View, 'getDownloadIconName')                
     def getDownloadIconName(self):
         """Given the currently selected platform, return the name of the
@@ -63,12 +64,12 @@ class PSCFile(BaseContent):
     def getFileSize(self):
         """Return the file size of the download, or None if unknown.
         """
-        return self.getObjSize(self)
+        return None
 
     security.declareProtected(CMFCorePermissions.View, 'getDirectURL')
     def getDirectURL(self):
         """Get the direct URL to the download.
         """
-        return "%s/getDownloadableFile" % (self.absolute_url(),)
+        return self.getExternalURL()
 
-registerType(PSCFile, PROJECTNAME)
+registerType(PSCFileLink, PROJECTNAME)

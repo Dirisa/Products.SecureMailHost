@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.1 2005/02/28 05:10:37 limi Exp $
+$Id: schemata.py,v 1.2 2005/03/05 04:38:26 optilude Exp $
 """
 
 from Products.Archetypes.public import *
@@ -914,6 +914,7 @@ PSCFileSchema += Schema((
     FileField(
         name='downloadableFile',
         primary=1,
+        required=1,
         widget=FileWidget(
             description="Click 'Browse' to upload a release file.",
             description_msgid="help_file_description",
@@ -938,11 +939,59 @@ PSCFileSchema += Schema((
         ),
     ),
 
+    ),
+
+    marshall = PrimaryFieldMarshaller(),
+
+    )
+
+###########
+# File link
+###########
+
+PSCFileLinkSchema = BaseSchema.copy()
+
+
+PSCFileLinkSchema += Schema((
+
+    TextField(
+        name='title',
+        default='',
+        searchable=1,
+        accessor="Title",
+        widget=StringWidget(
+            description="File description. Normally something like "
+                        "'Product Package', 'Windows Installer',  - "
+                        "or 'Events subsystem' if you have several "
+                        "separate modules. The actual file name will "
+                        "be the same as the file you upload.",
+            description_msgid="help_file_title",
+            label="File Description",
+            label_msgid="label_file_title",
+            i18n_domain="archpackage",
+        ),
+    ),
+
+    StringField(
+        name='platform',
+        required=1,
+        searchable=0,
+        vocabulary='getPlatformVocab',
+        widget=SelectionWidget(
+            description="",
+            description_msgid="help_file_platform",
+            label="Platform",
+            label_msgid="label_file_platform",
+            i18n_domain="archpackage",
+        ),
+    ),
+
     StringField(
         name='externalURL',
-        validators=(('isEmpty', V_SUFFICIENT), 'isURL',),
+        required=1,
+        validators=('isURL',),
         widget=StringWidget(
-            description="This will have priority over the file uploaded above, so leave blank if there is a file.",
+            description="Please enter the URL where the file is hosted.",
             description_msgid="help_file_ext_url",
             label="URL for externally hosted file",
             label_msgid="label_file_ext_url",
@@ -951,12 +1000,8 @@ PSCFileSchema += Schema((
     ),
 
     ),
-
-    marshall = PrimaryFieldMarshaller(),
-
     )
-
-
+    
 ##############
 # Package area
 ##############

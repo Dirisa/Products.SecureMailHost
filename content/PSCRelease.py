@@ -1,5 +1,5 @@
 """
-$Id: PSCRelease.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: PSCRelease.py,v 1.2 2005/03/05 04:38:26 optilude Exp $
 """
 
 from Acquisition import aq_inner
@@ -20,7 +20,7 @@ from schemata import PSCReleaseSchema
 import re
 
 def modify_fti(fti):
-    folder_modify_fti(fti, allowed=('PSCFile',))
+    folder_modify_fti(fti, allowed=('PSCFile','PSCFileLink'))
 
 class PSCRelease(OrderedBaseFolder):
     """A Package contains Releases, which have Files."""
@@ -143,8 +143,7 @@ class PSCRelease(OrderedBaseFolder):
         """We don't want the behavior of release folder, choosing on
         versions. So use the standard Plone behavior.
         """
-                        
-
+        
         from DateTime import DateTime
         from random import random
 
