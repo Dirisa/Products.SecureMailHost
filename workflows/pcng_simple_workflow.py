@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -28,7 +28,7 @@ def setupPcng_simple_workflow(wf):
 
     for s in ['resolved', 'created', 'rejected', 'accepted', 'pending']:
         wf.states.addState(s)
-    for t in ['resolve', 'reject', 'accept', 'assign', 'pending']:
+    for t in ['resolve', 'reject', 'accept', 'assign', 'pending', 'reaccept']:
         wf.transitions.addTransition(t)
     for v in ['assigned_to']:
         wf.variables.addVariable(v)
@@ -143,13 +143,6 @@ def setupPcng_simple_workflow(wf):
     wf.variables.setStateVar('state')
 
     ## Variables initialization
-    vdef.setProperties(description="""""",
-                       default_value="""""",
-                       default_expr="""""",
-                       for_catalog=1,
-                       for_status=1,
-                       update_always=1,
-                       props=None)
 
     vdef = wf.variables['assigned_to']
     vdef.setProperties(description="""""",
