@@ -92,14 +92,34 @@ class Collector(BaseFolder):
     def getSupporters(self): return self._supporters
 
     security.declareProtected(ManageCollector, 'getManagers')
-    def getManagers(self): return self._managerss
+    def getManagers(self): return self._managers
 
     security.declareProtected(ManageCollector, 'getReporters')
     def getReporters(self): return self._reporters
 
+    security.declareProtected(ManageCollector, 'getTrackerUsers')
+    def getTrackerUsers(self):   
+        """ return a list of dicts where every item of the list
+            represents a user and the dict contain the necessary
+            informations for the presentation.
+        """
+
+        l = []
+        names = self._managers + self._supporters + self._reporters + self.acl_users.getUserNames()
+        for name in util.remove_dupes(names):
+            d = {}
+            d['username'] = name; d['roles'] = []
+            if name in self._managers: d['roles'].append('TrackerAdmin')
+            if name in self._supporters: d['roles'].append('Supporter')
+            if name in self._reporters: d['roles'].append('Reporter')
+            l.append(d)
+        return l
+
     security.declareProtected(ManageCollector, 'set_staff')
     def set_staff(self, reporters=[], managers=[], supporters=[], RESPONSE=None):
         """ set the staff """
+
+        reporters.sort(); managers.sort(); supporters.sort()
         self._managers = managers
         self._reporters = reporters
         self._supporters = supporters
@@ -110,7 +130,7 @@ class Collector(BaseFolder):
             Ie, ensure: only designated supporters and managers have 'Reviewer'
             local role, only designated managers have 'Manager' local role.
         """
-        if not managers:
+        if not self._managers:
             self._managers = [getSecurityManager().getUser().getUserName()]
         util.users_for_local_role(self, self._managers, 'TrackerAdmin')
         util.users_for_local_role(self, self._supporters, 'Supporter')
@@ -167,7 +187,9 @@ class Collector(BaseFolder):
     def issue_states(self):
         """ return a list of all related issue workflow states """
 
-        return getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
+        states = getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
+        states.sort()
+        return states
 
 
 registerType(Collector)
