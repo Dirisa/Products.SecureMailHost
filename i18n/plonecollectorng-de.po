@@ -1001,3 +1001,11 @@ msgstr "Eine Ebene höher zum Bugtracker"
 
 msgid "label_up_to_configuration"
 msgstr "Eine Ebene höher zur Konfiguration"
+
+msgid "creator"
+msgstr "Ersteller"
+
+msgid "created_at"
+msgstr "Erstellt am"
+
+
