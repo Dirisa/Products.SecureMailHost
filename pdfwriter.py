@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.16 2003/12/14 11:58:08 ajung Exp $
+$Id: pdfwriter.py,v 1.17 2003/12/14 12:03:02 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -33,17 +33,12 @@ def dowrap(text):
 
 def break_longlines(text):
 
-    print 'text', text
-
     l = []
     for line in text.split('\n'):
         if len(line) > 100:
             l.append(dowrap(line))
         else:
             l.append(line)
-
-    print l
-
     return '\n'.join(l)
 
 def myLaterPages(canvas, doc):
