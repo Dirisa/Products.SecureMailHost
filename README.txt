@@ -43,6 +43,73 @@ Install:
     verification and unpacking of zip'd files, and TextIndexNG2-based catalog
     text indexing of PloneLocalFolderNG file contents require installation of
     additional system utilities. See DEPENDENCIES.txt for more information.
+    
+    Configuration notes on the optional PLFNG cataloging action capability:
+    (This is a rough outline of the recipe that I have used to get
+     PLFNG-based files text-indexed into Plone's portal_catalog.  
+     You ***MUST*** have the TextIndexNG2 product successfully working
+     before the PLFNG catalog action will work!)
+     
+	    1. using ZMI, traverse to the 'portal_catalog'
+
+		 2. select the 'Indexes' tab
+
+	    3. delete the Index 'SearchableText' (type=ZCTextIndex)
+
+		 4. add a 'TextIndexNG2' with defaults except:
+    
+	    		Id = 'SearchableText' 
+  		  		Left truncation = enabled
+    			Document Converters = enabled
+
+		 5. to test, go to one of your PLFNG instances
+          (preferrably pointing to a folder without
+           thousands of files in it....but with
+           representative file types in it)
+
+       6. click the catalog tab of the PLFNG object
+
+		 7. click on the 'Catalog Contents' button
+
+		 8. view results of the PLFNG catalog operation 
+		   (on my box, if 'average index rate' is 
+		   10^5 KB/sec, it finished too quickly, meaning
+		   that the something is not right with the
+		   config of TextIndexNG2 --ie, it didnt do
+		   text extraction of the PLFNG files)
+
+		 9. using ZMI, traverse to the 'portal_catalog'
+ 		    and click the 'Catalog' tab. 
+
+		10. look for Object Identifier(s) matching the
+		    PLFNG files you just cataloged, Note, 
+		    Object type will be 'FileProxy', and only
+		    20 entries are listed per page, so don't 
+		    freak out if you don't see your newly 
+		    cataloged items on the 1st page ;)
+		
+		11. click on one of your newly cataloged items
+		    to bring up its catalog record, and study
+		    the 'SearchableText' key in the Index Contents
+		    section.  It should contain a list of the text
+		    words from the cataloged file
+
+    
+    For those who have TextIndexNG2 successfully running, there is now a
+    an initial but primative unit testing implementation of the catalog 
+    action.  To use it, create an external method as follows:
+
+		id = PLFNG_catalogUnitTest (or whatever you want to call it)
+		Module Name = PloneLocalFolderNG.testPLFNGContentsCataloging
+		Function Name = PLFNGCatalogTest
+
+	 when you run it (by clicking the test tab), it will create a 
+	 'testZcat' ZCatalog along with a PLFNG instance 'testPLFNG' 
+	 (pathed to the SamplesFiles subfolder of the PLFNG tests folder)
+	  and then catalog these files.
+	  
+	  
+
 
 Author:
 
