@@ -11,7 +11,9 @@ def registerNavigationTreeSettings(self, out):
     We don't want users to think of the HowTo as a folder, even though
     technically, it is."""
 
-    data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference', 'HelpCenterFAQ']
+    data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference',
+            'HelpCenterFAQ', 'HelpCenterDefinition', 'HelpCenterLink'
+            'HelpCenterInstructionalVideo']
     pp=getToolByName(self,'portal_properties')
     p = getattr(pp , 'navtree_properties', None)
     mdntl = list(p.getProperty('metaTypesNotToList', []))
@@ -61,6 +63,7 @@ def install(self):
                                             ,'HelpCenterHowTo'
                                             ,'HelpCenterLink'
                                             ,'HelpCenterTutorial'
+                                            ,'HelpCenterInstructionalVideo'
                                             ,'HelpCenterErrorReference'
                                             ,'HelpCenterDefinition'], chain='helpcenter_workflow')
     print >> out, 'Set helpcenter_workflow as default for help center content types.'
@@ -69,6 +72,7 @@ def install(self):
                                             ,'HelpCenterHowToFolder'
                                             ,'HelpCenterLinkFolder'
                                             ,'HelpCenterTutorialFolder'
+                                            ,'HelpCenterInstructionalVideoFolder'
                                             ,'HelpCenterErrorReferenceFolder'
                                             ,'HelpCenterGlossary'], chain='helpcenterfolder_workflow')
     print >> out, 'Set helpcenterfolder_workflow as default for help center folder types.'
@@ -86,6 +90,7 @@ def install(self):
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterHowTo', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterFAQ', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorial', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterInstructionalVideo', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterLink', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterErrorReference', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterDefinition', None, 'traverse_to', 'string:edit_reminder')
@@ -101,6 +106,8 @@ def install(self):
              ,'HelpCenterFAQFolder'
              ,'HelpCenterHowTo'
              ,'HelpCenterHowToFolder'
+             ,'HelpCenterInsrtuctionalVideo'
+             ,'HelpCenterInstructionalVideoFolder'
              ,'HelpCenterLink'
              ,'HelpCenterLinkFolder'
              ,'HelpCenterTutorial'

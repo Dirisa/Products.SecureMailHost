@@ -31,7 +31,7 @@ class HelpCenterLinkFolder(PHCFolder,OrderedBaseFolder):
     content_icon = 'link_icon.gif'
 
     schema = FAQFolderSchema
-    archetype_name = 'Link Area'
+    archetype_name = 'Link Section'
     meta_type = 'HelpCenterLinkFolder'
     global_allow = 0
     filter_content_types = 1

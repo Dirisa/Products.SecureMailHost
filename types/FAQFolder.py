@@ -31,7 +31,7 @@ class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     content_icon = 'faq_icon.gif'
 
     schema = FAQFolderSchema
-    archetype_name = 'FAQ Area'
+    archetype_name = 'FAQ Section'
     meta_type = 'HelpCenterFAQFolder'
     global_allow = 0
     filter_content_types = 1

@@ -29,7 +29,7 @@ class HelpCenterHowToFolder(PHCFolder,OrderedBaseFolder):
     content_icon = 'topic_icon.gif'
 
     schema = HowToFolderSchema
-    archetype_name = 'How-to Area'
+    archetype_name = 'How-to Section'
     meta_type = 'HelpCenterHowToFolder'
     global_allow = 0
     filter_content_types = 1

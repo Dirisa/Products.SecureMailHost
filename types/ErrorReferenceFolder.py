@@ -30,7 +30,7 @@ class HelpCenterErrorReferenceFolder(PHCFolder,BaseFolder):
     content_icon = 'errorref_icon.gif'
 
     schema = ErrorReferenceFolderSchema
-    archetype_name = 'Error Reference Area'
+    archetype_name = 'Error Reference Section'
     meta_type = 'HelpCenterErrorReferenceFolder'
     global_allow = 0
     filter_content_types = 1

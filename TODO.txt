@@ -47,16 +47,18 @@ General
     particular use case.
     
   - Add LinguaPlone support to the types
+
     - The LinguaPlone import statement
+
     - Declare relevant fields as language-independent
   
   - The view templates for listings (howto, tutorial, faq etc - all of them)
     should only display *published* items, even if you have the permissions
     to see the others.
   
-    Items that are "in-progress" are currently visible in the listings - they do not
-    show up on the main PHC page, though. The correct behaviour is that it should
-    not show up for people who don't have the permission to see them
+    Items that are "in-progress" are currently visible in the listings - they do
+    not show up on the main PHC page, though. The correct behaviour is that it 
+    should not show up for people who don't have the permission to see them
     (ie. Anon, Member) until they are published. "In-progress" and 
     "Pending" should both only be visible to Owner, Manager and in the
     case of "Pending" - also to the Reviewer role.
@@ -65,6 +67,7 @@ General
               searches - which is not optimal. If we make them catalog-
               powered, they will be able to color-code themselves, and not
               wake up all the content objects as a bonus. ;)
+
     ADDENDUM2: This requires ordering support in catalog, so we have to fix it
                to not show content that isn't published for now, and we can do
                the Catalog-based queries once Plone 2.1 with catalog-ordering is
@@ -124,8 +127,11 @@ Movie and Movie Area content type
   - For each movie, show: 
   
     - title
+
     - file size
+
     - description
+
     - and *perhaps* an image of a screenshot
 
   - A Movie is a series of files
@@ -260,10 +266,6 @@ Design/UI
   
   - Tutorial Page Pulldown needs to show the existing page as selected
   
-  - Needs "All pages" choice that renders all the pages on one page for printing or
-    similar.
-
-
 
 ========================
 Nice-to-have-but-not-yet

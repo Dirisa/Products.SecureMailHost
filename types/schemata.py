@@ -9,8 +9,9 @@ except ImportError:
     PHCReferenceWidget = ReferenceWidget
 
 
-#############################################################################################
-# Common components to Help Types schemas
+###########################################
+# Common components to Help Types schemas #
+###########################################
 
 # how important the item is
 ImportanceSchema = Schema((
@@ -270,7 +271,7 @@ HowToFolderSchema = HCFolderSchema + Schema((
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(description_msgid="phc_desc_howto_folder",
-                                    description="Description for the How-to Container.",
+                                    description="Description for the How-to section.",
                                     label_msgid="phc_label_howto_folder",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
@@ -396,7 +397,7 @@ ErrorReferenceFolderSchema = HCFolderSchema + Schema((
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(description_msgid="description_edit_ErrorReference",
-            description="Description for the Error Reference Container.",
+            description="Description for the Error Reference section.",
             label_msgid="description_label_ErrorReference",
             label="Description",
             i18n_domain = "plonehelpcenter",
@@ -446,7 +447,7 @@ LinkFolderSchema = HCFolderSchema + Schema((
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(description_msgid="desc_folder",
-            description="Description for the Link Container.",
+            description="Description for the Link section.",
             label_msgid="label_folder",
             label="Description",
             i18n_domain = "plonehelpcenter",
@@ -492,3 +493,46 @@ GlossarySchema = HCFolderSchema + Schema((
               ),
 
     )) + SectionsVocabSchema
+
+#####################
+# Instructional Video
+#####################
+
+InstructionalVideoSchema = HCFolderSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                 description = "Brief explanation of the video's content.",
+                 description_msgid = "phc_help_detailed_video",
+                 label = "Summary",
+                 label_msgid = "phc_label_detailed_video",
+                 i18n_domain = "plonehelpcenter"
+              ),
+              **DEFAULT_CONTENT_TYPES
+    ),
+    ),
+
+    marshall=PrimaryFieldMarshaller(),
+
+ ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+
+############################
+# Instructional Video Folder
+############################
+
+InstructionalVideoFolderSchema = HCFolderSchema + Schema((
+    TextField('description',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget=TextAreaWidget(description_msgid="phc_desc_video_folder",
+                                    description="Description for the Video section.",
+                                    label_msgid="phc_label_video_folder",
+                                    label="Description",
+                                    i18n_domain = "plonehelpcenter",
+                                    rows=6)),
+    )) + SectionsVocabSchema
+

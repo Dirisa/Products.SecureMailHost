@@ -11,6 +11,8 @@ import HowToFolder, HowTo
 
 import TutorialFolder, Tutorial, TutorialPage
 
+import InstructionalVideoFolder, InstructionalVideo
+
 import LinkFolder, Link
 
 import ErrorReferenceFolder, ErrorReference

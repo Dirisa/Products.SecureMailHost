@@ -15,7 +15,7 @@ class PHCFolder:
     content_icon = 'icon.gif'
 
     schema = HCSchema
-    archetype_name = 'PHCFolder'
+    archetype_name = 'Help Center Folder'
     meta_type = 'PHCFolder'
     global_allow = 0
     filter_content_types = 1

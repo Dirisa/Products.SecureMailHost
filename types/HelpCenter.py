@@ -35,6 +35,7 @@ class HelpCenter(OrderedBaseFolder):
     allowed_content_types = ( 'HelpCenterFAQFolder'
                             , 'HelpCenterHowToFolder'
                             , 'HelpCenterTutorialFolder'
+                            , 'HelpCenterInstructionalVideoFolder'
                             , 'HelpCenterLinkFolder'
                             , 'HelpCenterErrorReferenceFolder'
                             , 'HelpCenterGlossary' )
@@ -67,6 +68,11 @@ class HelpCenter(OrderedBaseFolder):
             self.invokeFactory('HelpCenterTutorialFolder','tutorial')
             self['tutorial'].setTitle('Tutorials')
             self['tutorial'].setDescription('Detailed tutorials.')
+
+        if 'video' not in self.objectIds():
+            self.invokeFactory('HelpCenterInstructionalVideoFolder','video')
+            self['video'].setTitle('Videos')
+            self['video'].setDescription('Instructional videos.')
 
         if 'error' not in self.objectIds():
             self.invokeFactory('HelpCenterErrorReferenceFolder','error')
