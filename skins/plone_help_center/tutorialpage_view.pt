@@ -61,11 +61,7 @@
         </p>
     
         <div class="tutorialAbout"
-             tal:define="portrait python: mtool.getPersonalPortrait(here.Creator);">
-        
-            <!-- XXX - none of these seem to work, I am not able to get the correct
-                       portrait, nor the Description from the Tutorial object. ~limi
-              -->
+             tal:define="portrait python: mtool.getPersonalPortrait(here.Creator());">
         
             <div style="text-align: center;">
                 <img src=""
@@ -75,9 +71,18 @@
                      height="100"
                      tal:attributes="src portrait/absolute_url" />
             </div>
+                  
+            <p tal:content="python: mtool.getMemberById(here.Creator()).getProperty('fullname')"
+               tal:on-error="nothing">
+            Full name
+            </p>
                     
             <div tal:content="here/getTutorialDescription">
             Tutorial Description
+            </div>
+            
+            <div>
+            Page XX of YY.
             </div>
         </div>
 

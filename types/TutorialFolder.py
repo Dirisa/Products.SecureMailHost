@@ -48,4 +48,18 @@ class HelpCenterTutorialFolder(BaseFolder):
     
     security = ClassSecurityInfo()
     
+    actions = ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/tutorialfolder_view',
+        'permissions' : (CMFCorePermissions.View,)
+         },
+         )
+
+    def _get_versions_vocab(self):
+        return self.versions
+
+    def _get_sections_vocab(self):
+        return self.sections
+
 registerType(HelpCenterTutorialFolder, PROJECTNAME)

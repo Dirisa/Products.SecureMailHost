@@ -48,6 +48,14 @@ class HelpCenterHowToFolder(BaseFolder):
     
     security = ClassSecurityInfo()
     
+    actions = ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/howtofolder_view',
+        'permissions' : (CMFCorePermissions.View,)
+         },
+         )
+
     def _get_versions_vocab(self):
         return self.versions
 
