@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.8 2004/04/30 10:27:18 ajung Exp $
+$Id: graphviz.py,v 1.9 2004/05/19 04:22:34 ajung Exp $
 """
 
 ##########################################################################
@@ -124,7 +124,8 @@ def viz2image(fname, format='gif', RESPONSE=None):
     st = os.system('dot -Gpack -T %s  %s > %s' % (format, fname, outputname))
     if st != 0: raise RuntimeError('graphviz execution failed')     
     data = open(outputname).read()
-
+    RESPONSE.setHeader('content-length', str(len(data)))
+ 
     if format in ('svg',):
         RESPONSE.setHeader('content-type', 'image/svg+xml')
     if format in ('ps',):
@@ -139,6 +140,7 @@ def viz2map(fname, format='cmap', RESPONSE=None):
     st = os.system('dot -T %s  %s > %s' % (format, fname, outputname))
     if st != 0: raise RuntimeError('graphviz execution failed')     
     data = open(outputname).read()
+    RESPONSE.setHeader('content-length', str(len(data)))
 
     if format in ('svg',):
         RESPONSE.setHeader('content-type', 'image/svg+xml')
