@@ -18,6 +18,11 @@ div.collector_headline {
     padding: 0.5em;
 }
 
+div.issue_view_navigation {
+    text-align: right;
+    font-size: 80%;
+}
+
 div.body {
     padding: 0.5em;
 }
@@ -36,7 +41,7 @@ div.transcriptheader {
 }
 
 div.transcriptevent {
-    margin-top: 1px;                                                    e
+    margin-top: 1px;
     margin-left: 15px;
 }
 

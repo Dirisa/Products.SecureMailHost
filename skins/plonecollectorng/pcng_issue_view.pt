@@ -42,25 +42,6 @@
             </tal:block>
           </metal:block>
         </div>
-
-        <div style="float: right; width: 50%; vertical-align: top; text-align: right">
-          <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
-            <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
-            <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
-            &bull;
-          </a> 
-          <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
-            <em tal:condition="choosen" i18n:translate="fullview">Full view </em> 
-            <span tal:condition="not: choosen" i18n:translate="fullview">Full view </span> 
-            &bull;
-          </a> 
-          <a tal:define="choosen python: mode == 'fullimages'" href="pcng_issue_view?mode=fullimages">
-            <em tal:condition="choosen" i18n:translate="fullview_with_images">Full view with images</em> 
-            <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
-            &bull;
-          </a> 
-          <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
-        </div>
       </fieldset>
 
       <fieldset tal:define="fieldset python: 'issuedata'">
