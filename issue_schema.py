@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.24 2003/11/28 07:32:33 ajung Exp $
+$Id: issue_schema.py,v 1.25 2003/11/28 10:46:00 ajung Exp $
 """
 
-from OrderedSchema import OrderedSchema 
+from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget, CalendarWidget
@@ -37,7 +37,7 @@ VOCAB_IMPORTANCE = DisplayList((
 ))
 
 
-schema = OrderedSchema((
+schema = Schema((
     StringField('id',
                 required=1,
                 mode="rw",
