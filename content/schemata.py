@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.6 2005/03/09 22:51:41 optilude Exp $
+$Id: schemata.py,v 1.7 2005/03/10 02:58:15 dtremea Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -933,6 +933,8 @@ PSCFileSchema = BaseSchema.copy() + Schema((
 marshall = PrimaryFieldMarshaller(),
 
 )
+
+PSCFileSchema['id'].widget.visible = {'edit': 'hidden'}
 
 ###########
 # File link
