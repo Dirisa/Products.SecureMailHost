@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.5 2003/11/05 11:38:34 ajung Exp $
+$Id: migrate.py,v 1.6 2003/11/05 15:02:31 ajung Exp $
 """
 
 
@@ -108,7 +108,7 @@ def migrate_memberdata(source, dest):
 
 def migrate_tracker(tracker, dest):
 
-    if tracker.getId() != 'SoftUse': return
+#    if tracker.getId() != 'HaufeReader': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -118,6 +118,9 @@ def migrate_tracker(tracker, dest):
     collector = PloneCollectorNG(tracker.getId())
     dest._setObject(tracker.getId(), collector)
     collector = dest[tracker.getId()]
+
+    # Schema migration
+    migrate_schema(tracker, collector)
 
     issues = tracker.objectValues('CMF CollectorNG Issue')
     for issue in issues:
@@ -134,6 +137,80 @@ def migrate_tracker(tracker, dest):
     # Reindex issues
     collector.reindex_issues()
 
+
+mapping = {
+'classification' : ('classification', 'collectordata'),
+'title' : ('title', 'collectordata'),
+'description' : ('description', 'collectordata'),
+'version_info' : ('version_info', 'collectordata'),
+'importance' : ('importance', 'collectordata'),
+'operating_system' : ('operating_system', 'collectordata'),
+'solution' : ('solution', 'collectordata'),
+'hours_needed' : ('progress_hours_needed', 'progress'),
+'hours_required' : ('progress_hours_estimated', 'progress'),
+'progress' : ('progress_percent_done', 'progress'),
+'deadline' : ('progress_deadline', 'progress'),
+'submitter_email' : ('contact_email', 'contact'),
+'submitter_address' : ('contact_address', 'contact'),
+'submitter_name' : ('contact_name', 'contact'),
+'submitter_phone' : ('contact_phone', 'contact'),
+'submitter_fax' : ('contact_fax', 'contact'),
+'submitter_position' : ('contact_position', 'contact'),
+'submitter_company' : ('contact_company', 'contact'),
+'submitter_city' : ('contact_city', 'contact'),
+'custom1' : ('custom1', 'collectordata'),
+'custom2' : ('custom2', 'collectordata'),
+'custom3' : ('custom3', 'collectordata'),
+}
+
+def migrate_schema(tracker, collector):
+    """ migrate old configuration to Archetypes schema """
+
+    from Products.Archetypes.public import StringField, DateTimeField, FloatField
+    from Products.Archetypes.public import Schema
+
+    schema = Schema()
+    PM = tracker.issuePropertyManager
+
+    for oldfield in mapping.keys():
+        new_field, schemata = mapping[oldfield]
+
+        prop = PM.getPropertyById(oldfield)
+
+        new_id,schemata = mapping[prop.getId()]
+
+        if prop.getType() == 'date': field = DateTimeField
+        elif prop.getType() == 'float': field = FloatField
+        elif prop.getType() in ('textarea', 'select', 'text', 'select-multiple'): field = StringField
+        else:
+            raise ValueError('Unsupported field type: %s' % prop.getType())
+
+        D = {}
+        D['mutator'] = 'archetypes_mutator'
+        D['accessor'] = 'archetypes_accessor'
+        D['edit_accessor'] = 'archetypes_accessor'
+        D['schemata'] = schemata
+        D['default'] = prop.getDefaultValue()
+        D['required'] = prop.getMandatory()
+        field = field(new_id, **D)
+
+        schema.addField(field)
+
+    # Specialtreatemnt for topic/subtopic
+    field = StringField('topic',
+                         mutator='archetypes_mutator',
+                         accessor='archetypes_accessor',
+                         edit_accessor='archetypes_accessor',
+                         schemata = 'collectordata',
+                         )
+    schema.addField(field)
+
+    for id in PM.getPropertyIds():
+        if id  in ('assignees','security_related', 'status', 'subtopic', 'topic'): continue
+        if not id in mapping.keys():
+            raise ValueError('unknown field "%s"' % id)
+
+    collector.schema_init(schema)
 
 
 def migrate_issue(issue, collector):
