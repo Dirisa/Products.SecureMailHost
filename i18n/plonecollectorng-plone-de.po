@@ -144,3 +144,17 @@ msgstr "Tickets sind sichtbar für den Ticket Einsteller und Mitarbeiter"
 
 msgid "PloneCollectorNG member preferences"
 msgstr "Bugtracker Teilnehmer Voreinstellungen"
+
+msgid "Portlet issue data"
+msgstr "Anzeige der Ticket Daten als Portlet"
+
+msgid "Left portlet slot"
+msgstr "Im linken Portlet Slot"
+
+msgid "Right portlet slot"
+msgstr "Im rechten Portlet Slot"
+
+msgid "Inside issue main view"
+msgstr "Innerhalb der Ticket Hauptanzeige"
+
+
