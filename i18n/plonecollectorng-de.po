@@ -738,7 +738,7 @@ msgid "images"
 msgstr "Bilder"
 
 msgid "uploaded_file"
-msgstr "Hochgeladenen Datei"
+msgstr "Hochgeladene Datei"
 
 msgid "file_for_upload"
 msgstr "Datei zum Hochladen"
