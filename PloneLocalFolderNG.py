@@ -1,4 +1,7 @@
 import os
+import win32con, win32api
+from stat import *
+from sys import platform
 import shutil
 from string import split,find
 
@@ -194,6 +197,16 @@ schema = BaseSchema +  Schema((
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=0,
                 widget=StringWidget(label='Local backup directory name')
+                ),
+    BooleanField ('ignore_readonly',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default=0,
+                widget=BooleanWidget(
+                        label='Ignore OS read-only attribute settings',
+                        description='Enable this field to bypass any \
+                        os read-only attribute settings when performing \
+                        operations on files',
+                        ),
                 ),
     ))
 
@@ -676,92 +689,86 @@ class PloneLocalFolderNG(BaseContent):
 
         destpath = self._getFSFullPath(PLFNGRelativePath='')
 
-        if REQUEST.get('action', '') == 'deleteFolder':
-           self.deleteFolder(rel_dir, destpath, REQUEST)
-           return []
+        trimmedFSBasePath = self._getFSBasePath()
 
-        else:
+        relURL = destpath.replace(trimmedFSBasePath, '').replace('\\','/')
 
-           trimmedFSBasePath = self._getFSBasePath()
+        #if relURL.startswith('/'): relURL = relURL[1:]
+        relURL = relURL+'/'
+        this_portal = getToolByName(self, 'portal_url')
+        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
 
-           relURL = destpath.replace(trimmedFSBasePath, '').replace('\\','/')
-
-           #if relURL.startswith('/'): relURL = relURL[1:]
-           relURL = relURL+'/'
-           this_portal = getToolByName(self, 'portal_url')
-           mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
-
-           filePrefixesSkip = self._getAttribute('hidden_file_prefixes')
-           fileSuffixesSkip = self._getAttribute('hidden_file_suffixes')
-           fileNamesSkip = self._getAttribute('hidden_file_names')
-           folderPrefixesSkip = self._getAttribute('hidden_folder_prefixes')
-           folderSuffixesSkip = self._getAttribute('hidden_folder_suffixes')
-           folderNamesSkip = self._getAttribute('hidden_folder_names')
+        filePrefixesSkip = self._getAttribute('hidden_file_prefixes')
+        fileSuffixesSkip = self._getAttribute('hidden_file_suffixes')
+        fileNamesSkip = self._getAttribute('hidden_file_names')
+        folderPrefixesSkip = self._getAttribute('hidden_folder_prefixes')
+        folderSuffixesSkip = self._getAttribute('hidden_folder_suffixes')
+        folderNamesSkip = self._getAttribute('hidden_folder_names')
 
 
-           #msg = 'listFolderContents() :: calling getFilteredFSItems() :\
-           # FSfullPath = ' + destpath
-           #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
+        #msg = 'listFolderContents() :: calling getFilteredFSItems() :\
+        # FSfullPath = ' + destpath
+        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
 
-           filteredFileList, filteredFolderList = \
-              getFilteredFSItems(FSfullPath=destpath,
-                                 skipInvalidIds=1,
-                                 mimetypesTool=mimetypesTool,
-                                 filetypePhrasesSkipList=[],
-                                 filePrefixesSkipList=filePrefixesSkip,
-                                 fileSuffixesSkipList=fileSuffixesSkip,
-                                 fileNamesSkipList=fileNamesSkip,
-                                 folderPrefixesSkipList=folderPrefixesSkip,
-                                 folderSuffixesSkipList=folderSuffixesSkip,
-                                 folderNamesSkipList=folderNamesSkip)
+        filteredFileList, filteredFolderList = \
+           getFilteredFSItems(FSfullPath=destpath,
+                              skipInvalidIds=1,
+                              mimetypesTool=mimetypesTool,
+                              filetypePhrasesSkipList=[],
+                              filePrefixesSkipList=filePrefixesSkip,
+                              fileSuffixesSkipList=fileSuffixesSkip,
+                              fileNamesSkipList=fileNamesSkip,
+                              folderPrefixesSkipList=folderPrefixesSkip,
+                              folderSuffixesSkipList=folderSuffixesSkip,
+                              folderNamesSkipList=folderNamesSkip)
 
-           proxyObjectsList = []
+        proxyObjectsList = []
 
-           for f in filteredFolderList:
+        for f in filteredFolderList:
 
-               FSfullPathFolderName = os.path.join(destpath, f)
-               P = FileProxy(id=f,
-                             filepath=FSfullPathFolderName,
-                             fullname=f,
-                             properties=None)
+            FSfullPathFolderName = os.path.join(destpath, f)
+            P = FileProxy(id=f,
+                          filepath=FSfullPathFolderName,
+                          fullname=f,
+                          properties=None)
 
-               P.setIconPath('folder_icon.gif')
-               P.setAbsoluteURL(self.absolute_url() + relURL + f)
-               P.setMimeType('folder')
-               if os.path.exists(FSfullPathFolderName + '.metadata'):
-                   try:
-                     P.setComment(getMetadataElement(FSfullPathFolderName,
-                                                     section="GENERAL",
-                                                     option="comment"))
-                   except:
-                     P.setComment('')
-                   try:
-                     P.setTitle(getMetadataElement(FSfullPathFolderName,
-                                                   section="GENERAL",
-                                                   option="title"))
-                   except:
-                     P.setTitle('')
+            P.setIconPath('folder_icon.gif')
+            P.setAbsoluteURL(self.absolute_url() + relURL + f)
+            P.setMimeType('folder')
+            if os.path.exists(FSfullPathFolderName + '.metadata'):
+                try:
+                  P.setComment(getMetadataElement(FSfullPathFolderName,
+                                                  section="GENERAL",
+                                                  option="comment"))
+                except:
+                  P.setComment('')
+                try:
+                  P.setTitle(getMetadataElement(FSfullPathFolderName,
+                                                section="GENERAL",
+                                                option="title"))
+                except:
+                  P.setTitle('')
 
-               else:
-                   P.setComment('')
-                   P.setTitle('')
+            else:
+                P.setComment('')
+                P.setTitle('')
 
-               proxyObjectsList.append(P)
+            proxyObjectsList.append(P)
 
-           for file in filteredFileList:
+        for file in filteredFileList:
 
-               destpath = self._getFSFullPath(PLFNGRelativePath='')
-               trimmedFSBasePath = self._getFSBasePath()
-               rel_dir = destpath.replace(trimmedFSBasePath, '')
-               if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
+            destpath = self._getFSFullPath(PLFNGRelativePath='')
+            trimmedFSBasePath = self._getFSBasePath()
+            rel_dir = destpath.replace(trimmedFSBasePath, '')
+            if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
 
-               _proxy = self._createProxy(file,
-                                          rel_dir=rel_dir,
-                                          destination=destpath)
+            _proxy = self._createProxy(file,
+                                       rel_dir=rel_dir,
+                                       destination=destpath)
 
-               proxyObjectsList.append(_proxy)
+            proxyObjectsList.append(_proxy)
 
-           return proxyObjectsList
+        return proxyObjectsList
 
     security.declareProtected(CMFCorePermissions.AccessContentsInformation,
                               'folderlistingFolderContents')
@@ -837,6 +844,20 @@ class PloneLocalFolderNG(BaseContent):
                else:
                   return self.showFile(destpath, REQUEST, RESPONSE)
            elif os.path.isdir(destpath):
+               if REQUEST.get('action', '') == 'deleteFolder':
+                   #msg = 'listFolderContents() :: deleteFolder(%s)' % destpath
+                   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
+                   if self.deleteFolder(destpath):
+                      msg = '/plfng_view?portal_status_message='\
+                       + destpath + ' deleted.'
+                      RESPONSE.redirect(REQUEST['URL2']+ msg)
+                      return
+                   else:
+                      msg = '/plfng_view?portal_status_message='\
+                       + destpath + ' NOT deleted.'
+                      RESPONSE.redirect(REQUEST['URL2']+ msg)
+                      return
+          
                if hasattr(self, "default_page") and self.default_page:
                    FSDefaultPageFullPath = \
                      os.path.join(destpath, self.default_page)
@@ -927,7 +948,8 @@ class PloneLocalFolderNG(BaseContent):
         # make sure add operation will not violate quota limit restrictions
 
         max_allowed_bytes = self.getAvailableQuotaSpace()
-        contentLength = 0 # mpg fix this!!!
+        try: contentLength = os.stat(sourceFSfullPath)[6]
+        except: contentLength = 0
         if max_allowed_bytes != -1 and contentLength > max_allowed_bytes:
            # uploaded file rejected as it would result in quota limit
            # being exceeded
@@ -1269,10 +1291,63 @@ class PloneLocalFolderNG(BaseContent):
     security.declareProtected('Delete objects', 'deleteFile')
     def deleteFile(self, rel_dir, fileToDelete, REQUEST, RESPONSE):
         """ delete the file """
+        
+        # Note: this method includes a 1st rough cut at providing the optional
+        # (via ignore_readonly flag) means to force deletion of files with OS 
+        # permission settings intended to make the files protected from 
+        # deletion. Per notes below, OS differences complicate detection of and
+        # override of file permissions:
+        #
+        # in Unix, write permission is not the same thing as delete permission
+        # (which requires write permission on the directory, and ownership of
+        # the file if the directory has the sticky bit set).
+        #
+        # in NTFS, to prevent a file from being deleted, you must ensure that
+        # the user is not granted the Delete Subfolders and Files special
+        # permission on the parent folder (MyFolder), explicitly or through
+        # group membership. To do this, use the Effective Permissions tab to
+        # view the folder's special permissions that are granted to the user.
+        # If Delete Subfolders and Files is selected, the user can delete all
+        # files within the folder.
 
         if not os.path.exists(fileToDelete):
            return 0
+
+        okToDeleteFile = 0
+
+        # determine the delete permission setting for the file
+        # (per notes above, this is a very crude implementation!)
+        st = os.stat(fileToDelete)
+        mode = st[ST_MODE]
+        if mode & S_IWRITE:
+           fileHasDeletePermission = 1
         else:
+           fileHasDeletePermission = 0
+
+        #msg = 'deleteFile() :: fileHasDeletePermission=%d' %fileHasDeletePermission
+        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)        
+        
+        if fileHasDeletePermission:
+           okToDeleteFile = 1
+        # if we normally wouldnt be able to delete this file 
+        # but ignore_readonly is set, then change its permissions
+        elif not fileHasDeletePermission and getattr(self, "ignore_readonly", 0):
+           if platform == 'win32':
+               try:
+                  win32api.SetFileAttributes(fileToDelete,
+                                             win32con.FILE_ATTRIBUTE_NORMAL)
+                  okToDeleteFile = 1
+               except:
+                  pass
+           else:
+               try:
+                  if hasattr(os, 'chmod'):
+                     os.chmod(fileToDelete, 0600)
+                     okToDeleteFile = 1
+               except OSError:
+                  pass
+           
+        if okToDeleteFile:
            # move file to backupFolder if file backup is enabled &
            # backup_folder path is set
            if self.fileBackup_enabled and self.backup_folder:
@@ -1289,7 +1364,7 @@ class PloneLocalFolderNG(BaseContent):
                    # metadata if its also going to be backed up
                    #setMetadata(fileToDelete, section="GENERAL", \
                    #  option="revision", value=oldRevisionNumber)
-
+   
                # move existing file to backup location, changing its name
                # at the backup location to include trailing rev.#
                backupdestpath = \
@@ -1301,25 +1376,45 @@ class PloneLocalFolderNG(BaseContent):
                # create skeleton dir structure under backupFolder if necessary
                if not os.path.exists(backupdestpath):
                    os.makedirs(backupdestpath)
-               shutil.move(fileToDelete, backupfilename)
+               try:
+                   shutil.move(fileToDelete, backupfilename)
+                   msg = fileToDelete + ' deleted.'
+               except:
+                   msg = fileToDelete + ' NOT deleted (OS error).'
            else:
-               os.remove(fileToDelete)
+               
+               try:
+                  os.remove(fileToDelete)
+                  msg = fileToDelete + ' deleted.'
+                  fileWasDeleted = 1
+               except:
+                  msg = fileToDelete + ' NOT deleted (OS error).'
 
+           # delete the associated .metadata file, too!
            metadataFileToDelete = fileToDelete + '.metadata'
-           if os.path.exists(metadataFileToDelete):
-               os.remove(metadataFileToDelete)
+           #if os.path.exists(metadataFileToDelete):
+               #os.remove(metadataFileToDelete)
+        else:             
+            msg = fileToDelete + ' NOT deleted (it is Read-Only).' 
 
-           RESPONSE.redirect(REQUEST['URL1']+\
-             '/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
-           return 1
+        RESPONSE.redirect(REQUEST['URL1']+\
+          '/plfng_view?portal_status_message=' + msg)
+        return 1
 
     security.declareProtected('Delete objects', 'deleteFolder')
-    def deleteFolder(self, rel_dir, folderToDelete, REQUEST):
+    def deleteFolder(self, folderToDelete):
         """ delete the folder """
-        shutil.rmtree(folderToDelete)
-        REQUEST.RESPONSE.redirect(REQUEST['URL2']+\
-          '/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
-        return 1
+        
+        FSBasePath = self._getFSBasePath()
+        if not folderToDelete.startswith(FSBasePath):
+           msg = "illegal folder: " + folderToDelete
+           zLOG.LOG('PLFNG', zLOG.INFO , "deleteFolder() :: " + msg)
+           raise ValueError(msg)
+        try:
+           shutil.rmtree(folderToDelete)
+           return 1
+        except:
+           return 0   
 
     def catalogContents(self,rel_dir=None, catalog='portal_catalog'):
         filesCataloged = 0
