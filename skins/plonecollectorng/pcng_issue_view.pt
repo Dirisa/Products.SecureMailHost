@@ -46,7 +46,6 @@
 
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
-
         <metal:block tal:repeat="schemata_name python: here.schema_getNames()">
           <metal:block tal:define="schemata python:here.schema_getSchema(schemata_name)">
             <metal:block tal:condition="python: schemata_name not in ('default', 'issuedata') "> 
@@ -54,18 +53,16 @@
             </metal:block>
           </metal:block>
         </metal:block>
-
-        <div tal:define="uploads here/objectValues" >
-          <fieldset tal:condition="uploads">
-            <legend i18n:translate="uploads">Uploads</legend>
-              <metal:block tal:repeat="item uploads">
-                <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
-              </metal:block>
-          </fieldset>
-        </div>
-
       </metal:block>
 
+      <div tal:define="uploads here/objectValues" >
+        <fieldset tal:condition="uploads">
+          <legend i18n:translate="uploads">Uploads</legend>
+            <metal:block tal:repeat="item uploads">
+              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
+            </metal:block>
+        </fieldset>
+      </div>
 
       <fieldset><legend i18n:translate="transcript">Transcript</legend>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
