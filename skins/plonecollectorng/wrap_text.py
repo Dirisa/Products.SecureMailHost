@@ -9,7 +9,7 @@ if same_type(text, u''):
 
 lst = []
 for l in text.split('\n'):
-    lst.extend(textwrap.wrap(l, cols))
+    lst.extend(wrap(l, cols))
 
 if indent:
     for i in range(len(lst)):
