@@ -60,7 +60,7 @@
       </div>
 
 
-      <fieldset tal:condition="python: mode == 'fullimages'" 
+      <fieldset tal:condition="python: mode == 'full'" 
                 tal:define="images python: here.objectValues(('Portal Image',))">
         <legend i18n:translate="images">Images</legend>
         <div tal:repeat="image images">
