@@ -19,48 +19,48 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="label">Assigned to</div>
-        <div class="field">
-           <select name="assignees:list" size="7" multiple>
-             <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
-               <option tal:content="string: ${u/fullname} (${u/username})"
-                       tal:attributes="value u/username;
-                                       selected python: u['username'] in assignees" 
-                />
-             </span>
-           </select>
-        </div>
-      </div>
+      <table>
+        <tr>
+          <th> Assign to </th>
+          <th> Workflow action </th>
+        </tr>
+    
+        <tr>
+          <td valign="top">
+            <select name="assignees:list" size="7" multiple>
+              <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
+                <option tal:content="string: ${u/fullname} (${u/username})"
+                        tal:attributes="value u/username;
+                                        selected python: u['username'] in assignees" 
+                 />
+              </span>
+            </select>
+          </td>
 
-      <div class="row">
-        <div class="label">Action</div>
-        <div class="field" 
-             tal:define="actions here/validActions">
-          <input type="radio" name="action" value="comment" checked>Comment
-          <metal:block tal:condition="python: 'accept' in actions">
-            <br><input type="radio" name="action" value="accept">Accept
-          </metal:block>
-          <metal:block tal:condition="python: 'assign' in actions">
-            <br><input type="radio" name="action" value="assign">Assign
-          </metal:block>
-          <metal:block tal:condition="python: 'resolve' in actions">
-            <br><input type="radio" name="action" value="resolve">Resolve
-          </metal:block>
-          <metal:block tal:condition="python: 'reject' in actions">
-            <br><input type="radio" name="action" value="reject">Reject
-          </metal:block>
-          <metal:block tal:condition="python: 'defer' in actions">
-            <br><input type="radio" name="action" value="defer">Defer
-          </metal:block>
-          <metal:block tal:condition="python: 'restrict_accepted' in actions">
-            <br><input type="radio" name="action" value="restrict_accepted">Restrict
-          </metal:block>
-          <metal:block tal:condition="python: 'resign' in actions">
-            <br><input type="radio" name="action" value="resign">Resign
-          </metal:block>
-        </div>
-      </div>
+          <td valign="top" tal:define="actions here/validActions">
+            <input type="radio" name="action" value="comment" checked>Comment
+            <metal:block tal:repeat="item python: (('accept', 'Accept'),
+                                                   ('accept_confidential', 'Accept confidental'),
+                                                   ('unrestrict_accepted', 'Accept unrestricted'),
+                                                   ('assign', 'Assign'),
+                                                   ('assign_confidential', 'Assign confidential'),
+                                                   ('resolve', 'Resolve'),
+                                                   ('reject', 'Reject'),
+                                                   ('restrict_pending', 'Restrict'),
+                                                   ('restrict_accepted', 'Restrict'),
+                                                   ('unrestrict_pending', 'Unrestrict'),
+                                                   ('resign', 'Resign'),
+                                                   ('defer', 'Defer'),
+                                                  )
+                                    ">
+                                                                   
+              <span tal:condition="python: item[0] in actions">
+                <br><input type="radio" name="action" tal:attributes="value python: item[0]"/><span tal:replace="python: item[1]" />
+              </span>
+            </metal:block>
+          </td>
+        </tr>
+      </table>
 
       <div class="row">
         <div class="label">&nbsp;</div>
@@ -70,7 +70,7 @@
         </div>
       </div> <!-- End row -->
 
-    </div> <!-- End group -->
+    </div> 
   </form>
 </div>
 </body>
