@@ -63,13 +63,13 @@
 
       <div class="row">
           <div class="label">&nbsp;</div>
-          <div class="field"><input type="file" name="uploaded_file" size="60"/></div>
+          <div class="field"><input type="file" name="uploaded_file" size="40"/></div>
       </div> <!-- End row -->
 
        <div class="row">
         <div class="label" i18n:translate="add_artifacts_table_comment">Comment</div>
         <div class="field">
-          <textarea name="comment" cols="80" rows="5"></textarea>
+          <textarea name="comment" cols="60" rows="5"></textarea>
         </div>
        </div> <!-- End row -->
 
