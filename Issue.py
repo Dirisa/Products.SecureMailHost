@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.33 2003/09/30 14:22:41 ajung Exp $
+$Id: Issue.py,v 1.34 2003/09/30 15:10:23 ajung Exp $
 """
 
 import sys, os
@@ -22,7 +22,6 @@ from Products.Archetypes.utils import OrderedDict
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
-from References import Reference, ReferencesManager
 from WatchList import WatchList
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import util
@@ -78,7 +77,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
-        self._references = ReferencesManager()
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
 
@@ -191,35 +189,29 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     # References handling
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'getReferences')
-    def getReferences(self):
-        """ return a sequences of references """
-        return self._references
-
-    def delete_reference(self, number, RESPONSE=None):
+    def delete_reference(self, issue_url, RESPONSE=None):
         """ delete a reference given by its position """
-        self._references.delete(number-1) 
+
+        issue = self.restrictedTraverse(issue_url)
+        self.deleteReference(issue)
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been deleted')
 
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
 
         tracker_url = unquote(reference.tracker)
-
-        if not reference.comment:
-            raise ValueError('References must have a comment')
-
         tracker = self.restrictedTraverse(tracker_url)
         if not tracker:
             raise ValueError('Tracker does not exist: %s' % tracker_url)
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
             raise ValueError('Ticket number does not exist: %s' % reference.ticketnumber)
+        issue = tracker[reference.ticketnumber]
 
-        ref = Reference(tracker_url, reference.ticketnumber, reference.comment)
-        self._references.add(ref)
-        self._transcript.addReference(tracker_url, reference.ticketnumber, reference.comment)
+        if not reference.comment:
+            raise ValueError('References must have a comment')
 
+        self.addReference(issue, reference.comment)
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')

@@ -3,16 +3,17 @@
 
 <div metal:define-macro="issue_references">
   <div class="group"
-       tal:define="references here/getReferences">
+       tal:define="references here/getRefs">
     <span class="legend" i18n:translate="legend_references">References</span>
 
     <metal:block tal:condition="references" 
                  tal:omit-tag="">
       <ul>
         <li tal:repeat="ref references">
-          <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
-          (<span tal:replace="ref/getComment"/>)
-          <a tal:attributes="href string: delete_reference?number:int=${repeat/ref/number}"> [del] </a>
+          <metal:block  tal:define="url python: ref.absolute_url(1)">
+            <a tal:attributes="href url" tal:content="ref/title_or_id" />
+            [<a tal:attributes="href string: delete_reference?issue_url=${url}">del</a>]
+          </metal:block>
         </li>
 
         <li>Dependency graph: 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: graphviz.py,v 1.1 2003/09/30 14:02:06 ajung Exp $
+$Id: graphviz.py,v 1.2 2003/09/30 15:10:24 ajung Exp $
 """
 
 ##########################################################################
@@ -74,8 +74,9 @@ def build_tree(issue, graphs={}, nodes=[], edges=[]):
     if not node.id in graphs[collector_id]:
         graphs[collector_id].append(node)
     
-    for ref in issue.getReferences():
-        ref_issue = issue.unrestrictedTraverse(ref.getURL())
+    for ref in issue.getRefs():
+        from urllib import unquote
+        ref_issue = issue.unrestrictedTraverse(unquote(ref.absolute_url(1)))
         e = Edge(node, Node(ref_issue)) 
         edges.append(e) 
         build_tree(ref_issue, graphs, nodes, edges)
