@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.57 2003/11/01 20:37:17 ajung Exp $
+$Id: Issue.py,v 1.58 2003/11/02 08:54:53 ajung Exp $
 """
 
 import sys, os
@@ -207,6 +207,17 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     ######################################################################
     # Archetypes callbacks 
     ######################################################################
+
+    security.declareProtected(AddCollectorIssue, 'setParameters')
+    def setParameters(self, parameters):
+        """ Takes the 'parameters' record object and updated fields.
+            (Used for TTW creation of issues)
+        """
+
+        for k in parameters.keys():
+            v = getattr(parameters, k)
+            field = self.Schema()[k]
+            field.storage.set(k, self, v)
 
     def archetypes_mutator(self, v, **kw):
         """ the Archetypes mutator callback.
