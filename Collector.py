@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.205 2004/09/11 17:05:54 ajung Exp $
+$Id: Collector.py,v 1.206 2004/09/12 07:42:06 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -29,7 +29,7 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from Issue import PloneIssueNG
-from SchemaEditor import SchemaEditor
+from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
 from Translateable import Translateable
 from workflows import VOC_WORKFLOWS
 import notifications

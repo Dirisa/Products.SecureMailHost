@@ -5,15 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.29 2004/05/09 18:56:25 ajung Exp $
+$Id: issue_schema.py,v 1.30 2004/09/12 07:42:06 ajung Exp $
 """
 
 
-from Products.Archetypes.public import DisplayList, BaseSchema
+from Products.Archetypes.public import DisplayList, BaseSchema, Schema
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget, CalendarWidget
 
-from PCNGSchema import PCNGSchema as Schema
 
 VOCAB_CLASSIFICATION = DisplayList((
   ('Bug', 'Bug'),

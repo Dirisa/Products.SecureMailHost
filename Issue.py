@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.215 2004/09/11 17:05:54 ajung Exp $
+$Id: Issue.py,v 1.216 2004/09/12 07:42:06 ajung Exp $
 """
 
 import os, time, random
@@ -25,7 +25,7 @@ from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from zLOG import LOG, ERROR
 
-from Base import ParentManagedSchema
+from Products.ATSchemaEditorNG.ParentManagedSchema import ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
 from group_assignment_policies import getUsersForGroups
@@ -33,7 +33,6 @@ from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, Ref
 from WatchList import WatchList
 from Translateable import Translateable
 import issue_schema 
-from PCNGSchema import PCNGSchema
 import util, notifications
 
 _marker = []
