@@ -22,6 +22,10 @@ Migration:
     Migration from CMFCollector to PloneCollectorNG is not supported and there are
     no plans to support it. 
 
+Bugs:
+
+    Use the Collective bugtracker at http://sf.net/projects/collective to file bugreports.
+    Bug reports through mailinglists are not very acceptable and might be ignored.
 
 Support:
 
