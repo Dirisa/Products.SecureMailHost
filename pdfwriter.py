@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.38 2004/03/24 09:05:32 ajung Exp $
+$Id: pdfwriter.py,v 1.39 2004/03/26 20:28:13 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -189,7 +189,7 @@ def pdfwriter(collector, ids):
                     v = value
 
                 if v:
-                    label = translate(field.widget.label_msgid, field.widget.Label(issue), as_unicode=1)
+                    label = translate(getattr(field.widget, 'label_msgid', field.getName()), field.widget.Label(issue), as_unicode=1)
                     l.append(u'<b>%s</b>: %s ' % (toUnicode(label), toUnicode(v)))
 
             s = (', '.join(l)).strip()
