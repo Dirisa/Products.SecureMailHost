@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.6 2003/11/15 16:19:10 ajung Exp $
+$Id: pdfwriter.py,v 1.7 2003/11/16 12:29:23 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
+from types import ListType
 
 try:
     from PIL import Image as PIL_Image
@@ -31,10 +32,13 @@ def myLaterPages(canvas, doc):
     canvas.saveState()
     canvas.setStrokeColorRGB(1,0,0)
     canvas.setLineWidth(5)
-    canvas.line(66,72,66,PAGE_HEIGHT-72)
-    canvas.setFont('Times-Bold',11)
-    canvas.drawString(inch, 0.75 * inch, "Page %d " % doc.page)
-    canvas.drawString(inch, PAGE_HEIGHT-62, "%s: Issue #%s - %s" % (doc.issue.aq_parent.title_or_id(), doc.issue.getId(), doc.issue.Title()))
+    canvas.line(66,45,66,PAGE_HEIGHT-45)
+    canvas.line(66,PAGE_HEIGHT-70, 555, PAGE_HEIGHT-70)
+    canvas.setFont('Helvetica-Bold',15)
+    canvas.drawString(inch, PAGE_HEIGHT-62, doc.collector_title)
+    canvas.setFont('Helvetica',11)
+    canvas.drawString(inch, 0.75 * inch, "Page %d" % doc.page)
+    canvas.drawString(450, 0.75 * inch, doc.collector.toPortalTime(DateTime(), long_format=1))
     canvas.restoreState()
 
 myFirstPage = myLaterPages
@@ -42,18 +46,19 @@ myFirstPage = myLaterPages
 
 Elements = []
 
-HeaderStyle = styles["Heading2"] 
+HeaderStyle = styles["Heading3"] 
+HeaderStyle.defaults['fontName'] = 'Helvetica'
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
-#    para = klass(txt, style)
-#    Elements.append(para)
-
+    txt = '<font face="helvetica">%s</font>' % txt
     p = XPreformatted(txt, style)
     Elements.append(p)
 
 ParaStyle = styles["Normal"]
+ParaStyle.defaults['fontName'] = 'Helvetica'
 
 def p(txt):
+    txt = '<font face="helvetica">%s</font>' % txt
     return header(txt, style=ParaStyle, sep=0.0)
 
 PreStyle = styles["Code"]
@@ -65,99 +70,107 @@ def pre(txt):
 DefStyle = styles["Definition"]
 
 def definition(txt):
+    txt = '<font face="helvetica">%s</font>' % txt
     p = XPreformatted(txt, DefStyle)
     Elements.append(p)
 
 
-def pdfwriter(issue):
+def pdfwriter(collector, ids):
 
-    header("Description")
-    definition(issue.description)
+    for issue_id in ids:
+        issue = getattr(collector, str(issue_id))
 
-    if issue.solution:
-        header("Solution")
-        definition(issue.solution)
+        header('Issue #%s' % issue.title_or_id())
 
-    for name in issue.schema_getNames():
-        if name in ('default', 'metadata'): continue
-        
-        l =[]
+        header("Description")
+        definition(issue.description)
 
-        for field in issue.schema_getSchema(name).fields():
-            if field.getName() in ('description', 'title'): continue
+        if issue.solution:
+            header("Solution")
+            definition(issue.solution)
 
-            value = issue.getParameter(field.getName())
+        for name in issue.schema_getNames():
+            if name in ('default', 'metadata'): continue
+            
+            l =[]
 
-            if hasattr(field, 'vocabulary'):
-                vocab = field.Vocabulary(issue)
-                v = issue.displayValue(vocab, value)
+            for field in issue.schema_getSchema(name).fields():
+                if field.getName() in ('description', 'title'): continue
+
+                value = issue.getParameter(field.getName())
+
+                if hasattr(field, 'vocabulary'):
+                    vocab = field.Vocabulary(issue)
+                    v = issue.displayValue(vocab, value)
+                else:
+                    v = value
+
+                if v:
+                    l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
+
+            s = (', '.join(l)).strip()
+            if s:
+                header(name.capitalize())
+                definition(s)
+
+        for img in issue.objectValues('Portal Image'):
+
+            if have_pil:
+                fname = tempfile.mktemp()
+                open(fname, 'w').write(fname)
+                image = PIL_Image.open(fname)
+                width, height= image.size
+                ratio = width*1.0 / height
+
+                max = 7*inch
+                if ratio > 1.0:
+                    width = max
+                    height = max / radio
+                else:
+                    height = max
+                    width = max / radio
+
+                Elements.append(Image(fname, width, height))
+                os.unlink(fname)
             else:
-                v = value
+                p('Image: %s' % img.title_or_id())
 
-            if v:
-                l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
+        header('Transcript')
 
-        s = (', '.join(l)).strip()
-        if s:
-            header(name.capitalize())
-            definition(s)
+        groups = issue.getTranscript().getEventsGrouped(reverse=0)
+        n = 1
+        for group in groups:
+            datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
+            uid = group[0].user
+            header('#%d %s %s (%s)' % (n, issue.lastAction().capitalize(), datestr, uid)) 
 
-    for img in issue.objectValues('Portal Image'):
+            l = []
 
-        if have_pil:
-            fname = tempfile.mktemp()
-            open(fname, 'w').write(fname)
-            image = PIL_Image.open(fname)
-            width, height= image.size
-            ratio = width*1.0 / height
+            for ev in group:
+                if ev.type == 'comment':
+                    l.append('<b>Comment:</b>\n%s' % ev.comment)
+                    pass
+                elif ev.type == 'change':
+                    l.append('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
+                elif ev.type == 'incrementalchange':
+                    l.append('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
+                elif ev.type == 'reference':
+                    l.append('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
+                elif ev.type == 'upload':
+                    s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
+                    if ev.comment:
+                        s+= ' (%s)' % ev.comment
+                    l.append(s)
 
-            max = 7*inch
-            if ratio > 1.0:
-                width = max
-                height = max / radio
-            else:
-                height = max
-                width = max / radio
+            definition('\n'.join(l))
 
-            Elements.append(Image(fname, width, height))
-            os.unlink(fname)
-        else:
-            p('Image: %s' % img.title_or_id())
-
-    header('Transcript')
-
-    groups = issue.getTranscript().getEventsGrouped(reverse=0)
-    n = 0
-    for group in groups:
-        datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
-        uid = group[0].user
-        header('#%d %s %s (%s)' % (len(groups)-n, issue.lastAction().capitalize(), datestr, uid)) 
-
-        l = []
-
-        for ev in group:
-            if ev.type == 'comment':
-                l.append('<b>Comment:</b>\n%s' % ev.comment)
-                pass
-            elif ev.type == 'change':
-                l.append('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
-            elif ev.type == 'incrementalchange':
-                l.append('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
-            elif ev.type == 'reference':
-                l.append('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
-            elif ev.type == 'upload':
-                s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
-                if ev.comment:
-                    s+= ' (%s)' % ev.comment
-                l.append(s)
-
-        definition('\n'.join(l))
-
-        n+=1
+            n+=1
+        Elements.append(PageBreak())
 
     IO = cStringIO.StringIO()
     doc = SimpleDocTemplate(IO)
-    doc.issue = issue
+    doc.collector = collector
+    doc.collector_title = 'Collector: %s' % collector.title_or_id()
     doc.build(Elements,onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 
     return IO.getvalue()

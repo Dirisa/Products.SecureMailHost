@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.82 2003/11/15 07:50:25 ajung Exp $
+$Id: Issue.py,v 1.83 2003/11/16 12:29:23 ajung Exp $
 """
 
 import sys, os
@@ -482,14 +482,15 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ return the id + title (override for navigation tree) """
         return '%s: %s' %  (self.getId(), self.Title())
 
-    def asPDF(self,RESPONSE):
-        """ return the issue as pdf"""
+    security.declareProtected(View, 'asPDF')
+    def asPDF(self, RESPONSE):
+        """ Produce a PDF for issue"""
         import pdfwriter
 
-        pdf = pdfwriter.pdfwriter(self) 
+        pdf = pdfwriter.pdfwriter(self.aq_parent, self.getId()) 
         RESPONSE.setHeader('content-type', 'application/pdf')
         RESPONSE.setHeader('content-length', str(len(pdf)))
-        RESPONSE.setHeader('content-disposition', 'attachment; filename=issue.pdf')
+        RESPONSE.setHeader('content-disposition', 'attachment; filename=issue_%s_%s.pdf' % (self.aq_parent.getId(), self.getId()))
         RESPONSE.write(pdf)
 
     ######################################################################

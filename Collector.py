@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.71 2003/11/15 10:11:37 ajung Exp $
+$Id: Collector.py,v 1.72 2003/11/16 12:29:23 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -396,6 +396,17 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         util.redirect(RESPONSE, 'pcng_maintainance',
                           self.translate('collector_schema_updated', 'Collector schema updated'))
 
+
+    security.declareProtected(View, 'asPDF')
+    def asPDF(self, ids, RESPONSE):
+        """ Produce a PDF for all issues in 'ids'"""
+        import pdfwriter
+
+        pdf = pdfwriter.pdfwriter(self, ids)
+        RESPONSE.setHeader('content-type', 'application/pdf')
+        RESPONSE.setHeader('content-length', str(len(pdf)))
+        RESPONSE.setHeader('content-disposition', 'attachment; filename=issues_%s.pdf' % self.getId())
+        RESPONSE.write(pdf)
 
     ######################################################################
     # Some Archetypes madness
