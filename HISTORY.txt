@@ -1,11 +1,13 @@
 SecureMailHost
 ==============
 
-0.2-rc3  YYYY-MM-DD
+0.2-rc3  2004-07-19
 ---------------------
 
  * Changed email package test to import test. This allowes the manual
    installation of the email package into site-packages.
+   
+ * More compat for python 2.1 in tests/
 
 0.2-rc2  2004-07-15
 ---------------------
