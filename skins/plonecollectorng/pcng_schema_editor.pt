@@ -60,6 +60,7 @@
             <input type="submit" value=" Add new schemata"  class="standalone">
           </div>
         </form>
+        <a href="update_schema_for_issues">Update schema for all issues</a>
       </div>
     </td>  <!-- EOF Navigation -->
 
@@ -199,17 +200,35 @@
                 <input type="submit" value=" Save changes" class="standalone">
               </div> 
             </div>
+          </form>
 
-
+          <form action="schema_update" method="post">
+            <input type="hidden" name="fielddata.schemata:record:string"    
+                   tal:attributes="value request/fieldset|nothing" />
             <div class="row">
               <div class="field">
                 <input type="text" name="name" value=""> 
                 <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
               </div>
             </div>
-
           </form>
+
         </td>
+
+        <td valign="top" tal:condition="not: request/field|nothing">  <!-- field editor -->
+          <form action="schema_update" method="post">
+            <input type="hidden" name="fielddata.schemata:record:string"    
+                   tal:attributes="value request/fieldset|nothing" />
+            <div class="row">
+              <div class="field">
+                <input type="text" name="name" value=""> 
+                <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
+              </div>
+            </div>
+          </form>
+
+        </td>
+
       </tr>
 
     </table>
