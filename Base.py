@@ -5,13 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.16 2004/09/11 13:09:35 ajung Exp $
+$Id: Base.py,v 1.17 2004/09/11 15:31:39 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
-from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
-from Products.Archetypes.Schema import WrappedSchema
+from Acquisition import ImplicitAcquisitionWrapper
+from Products.CMFCore.CMFCorePermissions import View
 
 class ParentManagedSchema:
     """ mix-in class for AT content-types whose schema is managed by
@@ -20,62 +20,14 @@ class ParentManagedSchema:
 
     security = ClassSecurityInfo()    
 
-    def Schemata(self):
-        """ return dict of Schematas """
-        d = {}
-        schema = self.Schema()
-        for name in schema.getSchemataNames():
-            s = WrappedSchema()
-            for f in schema.getSchemataFields(name):
-                s.addField(f)
-            d[name] = s.__of__(self)
-        return d
-
+    security.declareProtected(View, 'Schema')
     def Schema(self):
-        """ Return our schema (through acquisition....uuuuuh). We override
-            the Archetypes implementation because the schema for Issue is 
-            maintained as attribute of the parent collector instance.
-        """
-        
-        # Schema seems to be called during the construction phase when there is
-        # not acquisition context. So we return the schema itself.
-
-        if not hasattr(self, 'aq_parent'): return self.schema
-
-        # Otherwise get the schema from the parent collector through
-        # acquisition and assign it to a volatile attribute for performance
-        # reasons
+        """ retrieve schema from parent object """
 
         schema = getattr(self, '_v_schema', None)
         if schema is None:
-            self._v_schema = self.aq_parent.atse_getSchema()
+            schema = self._v_schema = self.aq_parent.atse_getSchema()
 
-            for field in self._v_schema.fields():
-
-                ##########################################################
-                # Fake accessor and mutator methods
-                ##########################################################
-
-                name = field.getName()
-
-                method = lambda self=self, name=name, *args, **kw: \
-                         self.getField(name).get(self) 
-                setattr(self, '_v_%s_accessor' % name, method )
-                field.accessor = '_v_%s_accessor' % name
-                field.edit_accessor = field.accessor
-
-                method = lambda value,self=self, name=name, *args, **kw: \
-                         self.getField(name).set(self, value) 
-                setattr(self, '_v_%s_mutator' % name, method )
-                field.mutator = '_v_%s_mutator' % name
-
-                # Check if we need to update our own properties
-                try:
-                    value = field.get(self)  
-                except:
-                    field.set(self, field.default)
-                        
-#        return self._v_schema.__of__(self)
-        return self._v_schema
+        return ImplicitAcquisitionWrapper(self._v_schema, self)
 
 InitializeClass(ParentManagedSchema)

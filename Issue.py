@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.213 2004/09/11 13:09:35 ajung Exp $
+$Id: Issue.py,v 1.214 2004/09/11 15:31:39 ajung Exp $
 """
 
 import os, time, random
@@ -137,7 +137,7 @@ class PloneIssueNG(BaseContent, ParentManagedSchema, WatchList, Translateable):
         self._transcript2 = Transcript2().__of__(self)
         self._last_action = 'Created'          # last action from the followup form
 
-        self.schema = PCNGSchema(issue_schema.schema.fields())
+#        self.schema = PCNGSchema(issue_schema.schema.fields())
 
 
         self.post_creation_actions()

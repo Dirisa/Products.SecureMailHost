@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.66 2004/09/11 13:09:35 ajung Exp $
+$Id: SchemaEditor.py,v 1.67 2004/09/11 15:31:39 ajung Exp $
 """
 
 import re
@@ -15,6 +15,7 @@ from types import StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from Acquisition import ImplicitAcquisitionWrapper
 from Products.CMFCore.CMFCorePermissions import *
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
@@ -39,13 +40,13 @@ class SchemaEditor:
 
     security.declareProtected(ManageCollector, 'atse_init')
     def atse_init(self, schema, filtered_schemas=('default', 'metadata')):
-        self._ms = schema
+        self._ms = PCNGSchema(schema.fields())
         self._filtered_schemas = filtered_schemas
 
     security.declareProtected(View, 'atse_getSchema')
     def atse_getSchema(self):
         """ return the concatenation of all schemas """       
-        return self._ms.__of__(self)
+        return self._ms
 
     security.declareProtected(View, 'atse_getSchemataNames')
     def atse_getSchemataNames(self):
@@ -60,7 +61,7 @@ class SchemaEditor:
         s = PCNGSchema()
         for f in self._ms.getSchemataFields(name):
             s.addField(f)
-        return s
+        return ImplicitAcquisitionWrapper(s, self)
 
     ######################################################################
     # Add/remove schematas

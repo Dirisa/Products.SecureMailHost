@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.203 2004/09/11 13:09:35 ajung Exp $
+$Id: Collector.py,v 1.204 2004/09/11 15:31:39 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -456,6 +456,8 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         self.invokeFactory('PloneIssueNG', id)
         issue = self._getOb(id)
         issue.post_creation_actions()
+        print id
+        return id
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit",
                       portal_status_message=self.Translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')
@@ -530,7 +532,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
     def reindexObject(self, idxs=None):
         """ hook for reindexing the object """
-        Base.reindexObject(self)
+        BaseBTreeFolder.reindexObject(self)
         self._adjust_view_mode()           # can we hook this somewhere else?
         self._adjust_participation_mode()
 
