@@ -30,7 +30,7 @@
                    tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${fieldset}"  
                    tal:content="fieldset" /></legend>
 
-        <div style="float: left; width: 20%; vertical-align: top">
+        <div style="float: left; width: 30%; vertical-align: top">
           <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
             <metal:block tal:condition="python: field.getName() not in ('title', 'description', 'solution')">
               <div>
@@ -43,11 +43,15 @@
           <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
         </div>
 
-        <div style="float: right; width: 80%; vertical-align: top;">
-          <metal:block tal:repeat="fieldname python: ('title', 'description', 'solution')" >
-            <div class="row" tal:condition="python: getattr(here, fieldname)" >
-              <span metal:use-macro="python: here.widget(fieldname, mode='view', use_label=1)"/>
-            </div>
+        <div style="float: right; width: 70%; vertical-align: top;">
+          <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
+            <metal:block tal:condition="python: field.getName() in ('title', 'description', 'solution')">
+               <div class="row" tal:condition="python: getattr(here, field.getName())" >
+                <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+                <br>
+                <pre class="plain" tal:content="python: here.getParameter(field.getName())" />
+              </div>
+            </metal:block> 
           </metal:block> 
         </div>
       </fieldset>
