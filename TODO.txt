@@ -18,6 +18,8 @@ Bugs
        instead, at least on plone.org. It should be possible to add a comment
        to a page.
 
+- BUG: RSS feed doesn't work.
+
 =======
 General
 =======
