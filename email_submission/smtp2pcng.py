@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.5 2004/02/29 05:46:11 ajung Exp $
+$Id: smtp2pcng.py,v 1.6 2004/02/29 07:25:19 ajung Exp $
 """
 
 import sys, os, logging, base64
@@ -34,7 +34,7 @@ class Result:
         IO.write('<?xml version="1.0" encoding="utf-8"?>\n')
         IO.write('<issue>\n')
         for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body'):
-            IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a)
+            IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a))
 
         for a in self.getAttachments():
             IO.write('<attachment mimetype="%s" filename="%s">\n' % a[1:])
@@ -45,9 +45,12 @@ class Result:
         return IO.getvalue()
     
 
-def parse_mail():
+def parse_mail(options):
 
-    text = sys.stdin.read()
+    if options.filename is not None:
+        text = open(options.filename).read()
+    else:
+        text = sys.stdin.read()
     msg = email.message_from_string(text)
 
     R = Result()
@@ -77,21 +80,23 @@ def submit_request(R, options):
     params = urllib.urlencode({'xml': R.toXML()})
     headers = {"Content-type": "application/x-www-form-urlencoded", 
                "Accept": "text/plain",
-               'Authorization': 'Basic ' + base64.encodestring('%s:%s' % (options.username, options.password))[:-1],
               }
+    if options.username and options.password:
+        headers['Authorization'] = 'Basic ' + base64.encodestring('%s:%s' % (options.username, options.password))[:-1]
+
     f = urlparse.urlparse(options.url)
     conn = httplib.HTTPConnection(f[1])
-
     conn.request("POST", f[2], params, headers)
     response = conn.getresponse()
-    print response.status, response.reason
     data = response.read()
     conn.close()
+    return (response.status, response.reason, data)
 
 if __name__ == '__main__':
 
     parser = OptionParser()
-    parser.add_option('-u', '--url', dest='url', help='PloneCollectorNG URL to add issues')
+    parser.add_option('-f', '--file', dest='filename', help='File to read from email from', default=None)
+    parser.add_option('-u', '--url', dest='url', help='PloneCollectorNG URL to add issues', default=None)
     parser.add_option('-X', '--username', dest='username', help='Plone user name', default='')
     parser.add_option('-P', '--password', dest='password', help='Plone user password', default='')
 
@@ -99,5 +104,5 @@ if __name__ == '__main__':
     if options.url is None:
         raise ValueError('URL must be specified using the --url option')
 
-    R = parse_mail()
-    submit_request(R, options)
+    R = parse_mail(options)
+    print submit_request(R, options)
