@@ -5,9 +5,10 @@
 # Copyright (C) 2002, 2003 Python Software Foundation.
 # Written by Greg Ward <gward@python.net>
 
-__revision__ = "$Id: textwrap.py,v 1.1 2003/11/17 16:46:08 ajung Exp $"
+__revision__ = "$Id: textwrap.py,v 1.2 2003/12/19 18:55:48 ajung Exp $"
 
 import string, re
+from types import StringType, UnicodeType
 
 # Do the right thing with boolean values for all known Python versions
 # (so this module can be copied to projects that don't depend on Python
@@ -120,9 +121,9 @@ class TextWrapper:
         if self.expand_tabs:
             text = text.expandtabs()
         if self.replace_whitespace:
-            if isinstance(text, str):
+            if isinstance(text, StringType):
                 text = text.translate(self.whitespace_trans)
-            elif isinstance(text, unicode):
+            elif isinstance(text, UnicodeType):
                 text = text.translate(self.unicode_whitespace_trans)
         return text
 
