@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.13 2003/09/14 11:42:13 ajung Exp $
+$Id: SchemaEditor.py,v 1.14 2003/09/14 14:42:48 ajung Exp $
 """
 
 import operator
@@ -105,7 +105,6 @@ class SchemaEditor:
             return            
 
         schema = OrderedSchema()
-
         fieldnames = [name for name in R.keys()  if not isinstance(R[name], str) ]
         fieldnames.sort(lambda a,b,R=R: cmp(R[a].order, R[b].order))
 
@@ -126,7 +125,7 @@ class SchemaEditor:
             D['schemata'] = fieldset
          
             visible = d.get('visible', 1)
-            if d.widget == 'String': pass
+            if d.widget == 'String':        widget = StringWidget(visible=visible)
             elif d.widget == 'Select':      widget = SelectionWidget(format='select', visible=visible)
             elif d.widget == 'Radio':       widget = SelectionWidget(visible=visible)
             elif d.widget == 'Textarea':    widget = TextAreaWidget(visible=visible)
@@ -136,6 +135,7 @@ class SchemaEditor:
             elif d.widget == 'Keywords':    widget = KeywordWidget(visible=visible)
             elif d.widget == 'Richtext':    widget = RichWidget(visible=visible)
             elif d.widget == 'Password':    widget = PasswordWidget(visible=visible)
+            elif d.widget == 'Lines':       widget = LinesWidget(visible=visible)
             elif d.widget == 'Visual':      widget = VisualWidget(visible=visible)
             else:
                 raise ValueError('unknown widget type: %s' % d.widget)
@@ -155,9 +155,11 @@ class SchemaEditor:
                 D['vocabulary'] = DisplayList(l)
 
             D['required'] = d.get('required', 0)
+            D['widget'] = widget
             D['mutator'] = 'archetypes_mutator'
             D['accessor'] = 'archetypes_accessor'
             D['edit_accessor'] = 'archetypes_accessor'
+
             schema.addField(field(name, **D))
 
         self._schemas[fieldset] = schema

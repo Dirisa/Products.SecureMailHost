@@ -78,6 +78,9 @@
               <option value="Select" 
                       tal:content="string:Select"
                       tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
+              <option value="Lines" 
+                      tal:content="string:Lines"
+                      tal:attributes="selected python: field.getWidgetName()=='LinesWidget' "/>
               <option value="Calendar" 
                       tal:content="string:Calendar"
                       tal:attributes="selected python: field.getWidgetName()=='CalendarWidget' "/>
