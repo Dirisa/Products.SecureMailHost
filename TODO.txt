@@ -34,6 +34,12 @@ Template changes:
  - Need to expose importance more clearly in content views. Currently, it's
     discretely tucked away at the bottom.
 
+ - Delete helpcenterhowtofolder_view.pt?  It is broken and hasn't been updated 
+    since last June.
+
+ - Documentation search shows only a subset of the content types.  There should 
+    be a "search only in" for each of the major PHC content types.
+
 ===================================
 Workflow changes/permission issues:
 ===================================
@@ -43,7 +49,7 @@ Workflow changes/permission issues:
     progress would be good.
     
  - Owners should be able to edit content in the 'published' state to make
-    updates easier.
+    updates easier.  (TOM, adding unit tests)
     
  - Owners should be able to mark their own content obsolete
  
@@ -55,7 +61,14 @@ Workflow changes/permission issues:
     the factory (or disable it, but that would a shame)
 
  - If we're not using portal_factory, users should be able to delete their 
-    own documents (maybe? -- consider an add->cancel).
+    own documents (maybe? -- consider an add->cancel).  Or the user should 
+    at least be able to mark his own documents as obsolete so that managers 
+    can delete them during the next review cycle.
+
+ - If a PHC Folderish item is visible and content in it is published, then 
+    anonymous users see the item in the portlet and the folder view, but 
+    the user is not permitted to view the content itself.  (Tested with 
+    a visible HelpCenterHowtoFolder and published HelpCenterHowto.)
     
 =====================
 Schema/class changes:
