@@ -6,3 +6,6 @@ Credits:
     questions
 
   - FI translation by Heimo Laukkanen
+
+  - Marc Lindahl for several bug reports and pointing out some
+    deficiencies in PCNG 
