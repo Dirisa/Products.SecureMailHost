@@ -253,7 +253,7 @@ msgstr "Domande frequenti (FAQ)"
 #.  How-tos
 #. </span>
 msgid "phc_howto"
-msgstr "Come fare (How to)"
+msgstr "Ricette (How to)"
 
 
 #: ./helpcenter_view.pt
@@ -261,7 +261,7 @@ msgstr "Come fare (How to)"
 #.  Tutorials
 #. </span>
 msgid "phc_tutorial"
-msgstr "Vademecum"
+msgstr "Guide"
 
 
 #: ./helpcenter_view.pt
