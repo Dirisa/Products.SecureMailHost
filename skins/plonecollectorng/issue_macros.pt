@@ -44,7 +44,7 @@
               <tal:def tal:define="target python: ref.getTargetObject()">
                 <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
                 [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
-                <div tal:content="ref/comment" />
+                <pre tal:content="ref/comment" />
               </tal:def>
             </li>
              <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
@@ -56,7 +56,7 @@
             <li tal:repeat="ref breferences">
               <tal:def tal:define="source python: ref.getSourceObject()">
                 <a tal:attributes="href source/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${source/title_or_id}"/>
-                <div tal:content="ref/comment" />
+                <pre tal:content="ref/comment" />
               </tal:def>
             </li>
             <li tal:condition="not: breferences" i18n:translate="no_references">No references found</li>
