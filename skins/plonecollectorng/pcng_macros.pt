@@ -134,22 +134,22 @@
           </h2>
         </metal:block>
         <div class="pcng_issueview_metadata">
-         <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> - 
-         <b i18n:translate="status">Status</b>: <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
-         <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> -
+         <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
+         <b i18n:translate="status">Status</b>: <span i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" /> &bull; 
+         <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> &bull;
          <b i18n:translate="importance">Importance</b>:
          <metal:block tal:define="field python: here.schema_getWholeSchema()['importance'];
                                   vocab python: field.Vocabulary(here);
                                   display python: here.displayValue(vocab, issue.importance)">
             <span tal:content="structure display" />
-         </metal:block> -
+         </metal:block> &bull;
          <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" />
         </div>
         <div class="pcng_issueview_description" 
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" /> - 
+          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" /> &bull; 
           <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toPortalTime(issue.modified)" />
           (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
           <span i18n:translate="days_ago">days ago</span>)

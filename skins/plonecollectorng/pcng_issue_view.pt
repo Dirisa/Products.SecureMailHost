@@ -72,7 +72,8 @@
               </div>
             </metal:block>
           </metal:block>
-          <span class="schemata_label" i18n:translate="status">Status</span>: <span class="field" tal:content="python: here.pcng_format_status(here.status())" />
+          <span class="schemata_label" i18n:translate="status">Status</span>: 
+          <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
           <br>
           <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
         </div>

@@ -648,3 +648,33 @@ msgstr "Ticket wurde angelegt"
 
 msgid "notification_mode_disabled"
 msgstr "Benachrichtigungsfunktion ist ausgeschaltet"
+
+msgid "Pending"
+msgstr "Wartend"
+
+msgid "Created"
+msgstr "Angelegt"
+
+msgid "Defered"
+msgstr "Zurückgestellt"
+
+msgid "Rejected"
+msgstr "Zurückgewiesen"
+
+msgid "Accepted"
+msgstr "Akzeptiert"
+
+msgid "Resigned"
+msgstr "Resigniert"
+
+msgid "Resolved"
+msgstr "Gelöst"
+
+msgid "sorting"
+msgstr "Sortierung"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "topic"
+msgstr "Topic"
