@@ -57,29 +57,29 @@ Features:
   If you like to help out in writing code and/or documentation, just start 
   and cvs commit. Ok, bigger changes would be nice to discuss ;-)
 
- Known Bugs:
+ Support
 
-  * pressing reload on sent-page resent the message - bad behaviour.  
+  There isn't enough traffic for a own mailing-list. So feel free to post to
+  the "plone-users list":http://plone.org/documentation/lists/
 
-  * DateTime Fields are not rendered in E-Mail. Someone needs to fix the 
-    default mailtemplate.
+ Known Bugs, Bug-Tracker
+
+  Search the "bugtracker":http://sourceforge.net/tracker/?group_id=55262&atid=476390 
+  at sourceforge.net in the project collective. Report bugs and if possible drop 
+  bugfixes.
 
  Todo:
+  
+  Version 0.3 
 
-  For Version 0.2
+  * review with using SecureMailHost 
+
+  * better MailTemplate
 
   * encryption: import a public key or get it from keyserver, 
     if not in current keyring
 
-  * fix DateTime Fields
-
-  * review with using SecureMailHost 
-
-  * redirect to 'sent-page' after mail is sent
-
-  * testing, bugfixing
-  
-  For Version 0.3 and future
+  Future ideas ...
 
   * seperate Formulator-Integration and Mailer in two products
 

@@ -12,5 +12,5 @@ context.send_form()
 if context.getSent_redirect().strip():
     return state.set(next_action='redirect_to:'+context.getSent_redirect())
 
-return state.set(next_action='traverse_to:string:formmailer_sent')
+return state.set(next_action='redirect_to:string:formmailer_sent')
 
