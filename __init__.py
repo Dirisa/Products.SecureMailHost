@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.13 2003/12/08 08:04:53 ajung Exp $
+$Id: __init__.py,v 1.14 2004/02/11 17:06:15 ajung Exp $
 """
 
 import os, sys
@@ -49,3 +49,5 @@ def initialize(context):
     if not hasattr(Schema(), 'replaceField'):
         raise RuntimeError('Wrong Archetypes version detected. You need at least Archetype 1.3 or higher')
 
+from Products.PythonScripts.Utility import allow_module
+allow_module('textwrap')
