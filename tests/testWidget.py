@@ -42,7 +42,7 @@ class TestWidget(PloneTestCase.PloneTestCase):
         self.assertEqual(field.validate(value, self.doc1), None)
 
         field.set(self.doc1, [self.doc1.UID()])
-        self.assertEqual(field.getRaw(self.doc1), [self.doc1.UID()])
+        self.assertEqual(field.getRaw(self.doc1), self.doc1.UID())
 
         form.update({'reffield_replace': 1})        
         value, kwargs = field.widget.process_form(self.doc1, field, form)

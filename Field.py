@@ -21,7 +21,7 @@
 """
 Validator and Widget for use with ReferenceField.
 
-$Id: Field.py,v 1.3 2004/06/04 17:16:52 dpunktnpunkt Exp $
+$Id: Field.py,v 1.4 2004/09/04 16:01:27 dpunktnpunkt Exp $
 """
 
 from Products.CMFCore.utils import getToolByName
@@ -88,7 +88,7 @@ class ReferenceClipboardWidget(TypesWidget):
         # cope with multi valued vs single valued return type
         if not field.multiValued:
             if objs is None:
-                return []
+                objs = []
             else:
                 objs = objs,
         

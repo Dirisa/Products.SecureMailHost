@@ -20,7 +20,7 @@
 ##############################################################################
 """
 
-$Id: ReferenceBag.py,v 1.3 2004/05/13 18:17:34 dpunktnpunkt Exp $
+$Id: ReferenceBag.py,v 1.4 2004/09/04 16:01:29 dpunktnpunkt Exp $
 """
 
 from Products.Archetypes.debug import log, log_exc
@@ -35,6 +35,14 @@ from Products.CMFCore.utils import getToolByName
 class ReferenceBag(ReferenceFolder):
     portal_type = meta_type = 'ReferenceBag'
     archetype_name = 'Reference Bag'
+
+    # Since the introduction of _verifyObjectPaste() in Plone 2.0.1 the
+    # filter_content_types approach ceased to work.
+    # The downside is that the UI is kinda borked because we don't want users
+    # to add content inside a Reference Bag.
+    allowed_content_types = ()
+    filter_content_types = 0
+    global_allow = 0
 
     # XXX Needs to be moved to ReferenceFolder eventually
     __ac_permissions__ = (
@@ -52,9 +60,6 @@ class ReferenceBag(ReferenceFolder):
         try:
             objects = self.cb_dataItems()
         except KeyError: # item does not exist
-            objects = None
-
-        if not objects:
             return 0
 
         rtool = getToolByName(self, 'reference_catalog')
@@ -66,17 +71,5 @@ class ReferenceBag(ReferenceFolder):
 
     def clear(self):
         self.manage_delObjects(self.objectIds())
-
-def modify_fti(fti):
-    # Since the introduction of _verifyObjectPaste() in Plone 2.0.1 the
-    # filter_content_types approach ceased to work.
-    # The downside is that the UI is kinda borked because we don't want users
-    # to add content inside a Reference Bag.
-
-    fti.update({
-        'allowed_content_types': (),
-        'filter_content_types': 0, # <-- XXX
-        'global_allow': 0
-        })
     
 registerType(ReferenceBag)
