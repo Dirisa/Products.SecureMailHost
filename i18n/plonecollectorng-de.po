@@ -492,7 +492,7 @@ msgid "invalid_action"
 msgstr "Ungültige Aktion: $action"
 
 msgid "followup_submitted" 
-msgstr "Followup eingestellt"
+msgstr "Antwort wurde eingestellt"
 
 msgid "reference_deleted"
 msgstr "Referenz wurde gelöscht"
