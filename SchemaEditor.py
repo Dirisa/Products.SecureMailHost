@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.35 2003/11/28 10:49:49 ajung Exp $
+$Id: SchemaEditor.py,v 1.36 2003/11/28 14:36:24 ajung Exp $
 """
 
 import copy
@@ -38,6 +38,16 @@ class SchemaEditor:
     def atse_getSchema(self):
         """ return the concatenation of all schemas """       
 
+        # Migration from old SchemaEditor
+        from OrderedSchema import OrderedSchema
+
+        if not hasattr(self, '_ms'):
+            schema = Schema()
+            for name in self._schemata_names:
+                for f in self._schemas[name].fields():
+                    schema.addField(f)
+            self._ms = copy.copy(schema)
+ 
         for field in self._ms.fields():
             if field.mutator is None:
                 field.mutator = 'archetypes_mutator'
@@ -272,12 +282,10 @@ class SchemaEditor:
     # Hook for UI
     ######################################################################
 
-
     security.declareProtected(ManageCollector, 'atse_getField')
     def atse_getField(self, name):
         """ return a field by its name """
         return self._ms[name]
-    
 
     security.declareProtected(ManageCollector, 'atse_getFieldType')
     def atse_getFieldType(self, field):
