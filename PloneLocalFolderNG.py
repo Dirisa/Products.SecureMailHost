@@ -15,6 +15,8 @@ from Products.Archetypes.public import StringField, StringWidget
 from Products.Archetypes.public import BooleanField, BooleanWidget
 from Products.Archetypes.public import BaseContent, registerType
 from Products.Archetypes.ExtensibleMetadata import FLOOR_DATE,CEILING_DATE
+from Products.Archetypes.Referenceable import Referenceable
+
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
 from config import *
@@ -32,6 +34,8 @@ try:
 except ImportError:
     zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "Warning: mxmCounter was not imported")
     mxmCounter = None
+
+
 
 schema = BaseSchema +  Schema((
     StringField('folder',
@@ -75,7 +79,7 @@ schema = BaseSchema +  Schema((
                 ),
     BooleanField ('allow_file_unpacking',
                 write_permission=CMFCorePermissions.ManagePortal,
-                default=0,
+                default=1,
                 widget=BooleanWidget(
                         label='Allow File Unpacking?',
                         description='Allow users to extract the contents of archive files (eg, .zip, .tar) on to server local filesystem.',
@@ -537,7 +541,7 @@ class PloneLocalFolderNG(BaseContent):
            if os.path.isfile(destpath):
                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: %s :: isfile()" % destpath)
                if REQUEST.get('action', '') == 'unpack':
-                  self.unpackFile(destpath, REQUEST, RESPONSE)
+                  self.unpackFile(os.path.dirname(rel_dir), destpath, REQUEST, RESPONSE)
                
                elif REQUEST.get('action', '') == 'deleteFile':
                   self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)
@@ -771,13 +775,13 @@ class PloneLocalFolderNG(BaseContent):
         return localfolder_props.get('size',0)
 
     security.declareProtected(ModifyPortalContent, 'unpackFile')
-    def unpackFile(self, packedFile, REQUEST, RESPONSE):
+    def unpackFile(self, plfngRelativeDir, FSpackedFile, REQUEST, RESPONSE):
         """ unpack a file """
 
         # for now, unzip is the only type of unpacking implemented
         
         # 1st, make sure the file is an unpackable type
-        if not self.mimetypes_registry.classify(data=None, filename=packedFile) == 'application/zip':
+        if not self.mimetypes_registry.classify(data=None, filename=FSpackedFile) == 'application/zip':
             RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file cannot be unpacked (not a recognized packed file type).')
             return 0
         # then, make sure the file unpacking property is set
@@ -803,11 +807,11 @@ class PloneLocalFolderNG(BaseContent):
                      break
             
             try:
-               unpackedSize = int(getMetadataElement(packedFile, section="ARCHIVEINFO", option="unpacked_size"))
+               unpackedSize = int(getMetadataElement(FSpackedFile, section="ARCHIVEINFO", option="unpacked_size"))
             except:
                try:
-                  setZipInfoMetadata(packedFile)
-                  unpackedSize = int(getMetadataElement(packedFile, section="ARCHIVEINFO", option="unpacked_size"))
+                  setZipInfoMetadata(FSpackedFile)
+                  unpackedSize = int(getMetadataElement(FSpackedFile, section="ARCHIVEINFO", option="unpacked_size"))
                except:
                   RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked (not a valid file?!).')
                   return 0
@@ -816,7 +820,12 @@ class PloneLocalFolderNG(BaseContent):
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "unpackFile() :: unpack rejected! unpackedSize (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (unpackedSize,usedBytes, max_allowed_bytes) )
                return 0
         # if we made it to this point, unpack the file
-        if upzipFile(packedFile):
+        if self.backup_folder:
+            backupdestpath = os.path.join(self.backup_folder, plfngRelativeDir)
+        else:
+            backupdestpath = None
+        
+        if upzipFile(FSfilename=FSpackedFile, FSBackupFolderBase=backupdestpath):
             RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file unpacked.')
             return 1
         else:
