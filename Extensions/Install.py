@@ -127,9 +127,23 @@ def install(self):
              ,'HelpCenterReferenceManualSection'
              ,'HelpCenterReferenceManualPage']:
 
-        if t not in portal_factory_types:
-            portal_factory_types.append(t)
-            ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)
+        #if t not in portal_factory_types:
+        #    portal_factory_types.append(t)
+        #    ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)
+
+        # XXX: Until the bug in Portal Factory that causes insufficient privileges
+        # is fixed in a stable release of Plone, we CANNOT use portal_factory for
+        # our types, given that we use the "Add portal content" permission in
+        # individual folder to allow people to add things.
+
+        # Either that bug needs to be fixed, or we need to rewrite our FTIs to use
+        # different permissions for adding the folders versus the user-addable
+        # content (which is probably a VERY good thing for someone to do).
+
+        # But don't uncomment those lines above until someone does one of those two
+        # things. - joel@joelburton.com
+
+        pass
 
     print >> out, 'New types use portal_factory'
 
