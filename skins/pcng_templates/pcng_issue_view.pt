@@ -53,6 +53,12 @@
                     <br>
                     <span id="label" i18n:translate="assigned_to">Assigned to</span>: 
                     <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+                    <br>
+                    <span id="label" i18n:translate="creator">Created by</span>: 
+                    <span class="field" tal:content="here/Creator" />
+                    <br>
+                    <span id="label" i18n:translate="created_at">Created at</span>: 
+                    <span class="field" tal:content="python: here.toLocalizedTime(here.CreationDate())" />
                   </tal:if>
               </div>
             </div>
