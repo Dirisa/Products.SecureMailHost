@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.27 2004/04/14 18:13:17 ajung Exp $
+$Id: notifications.py,v 1.28 2004/04/14 18:18:38 ajung Exp $
 """
 
 import sys, time
@@ -119,8 +119,6 @@ def _send_notifications(recipients, issue, send_attachments=0):
         if obj.meta_type in('Portal Image',):
             outer.attach(MIMEImage(str(obj.data))) 
 
-    print outer.as_string()
-        
     MH = getattr(collector, 'MailHost') 
     
     try:
