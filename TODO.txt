@@ -27,6 +27,8 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   KNOWN ISSUES
 ----------------------------------
+- there is no handling of OS 'permission denied' situations.
+
 - subfolders of a PLFNG instance do not appear in the
   navtree or global path bar 
 
@@ -53,6 +55,8 @@ about feature requests and/or to volunteer to help!!!
 
 - i18n not complete.
 
+- bug #1003808: PLFNG doesnt work with Chinese 
+
 - various problems with filenames containing spaces
   (not an issue on Mac OSX; need to quantify this)
     
@@ -64,8 +68,7 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   BEFORE RELEASE 0.60
 ----------------------------------
-- eliminate external unzip utilities dependency
-  (use python's standard unzip capability)
+- graceful handling of OS 'permission denied' situations
 
 - resolve any problems wrt filenames containing spaces
 

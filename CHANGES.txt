@@ -1,5 +1,15 @@
-0.60 (unstable)
+0.6.0 (unstable)
 
+alpha2
+  - unzip support improvements
+     * eliminated requirement for external unzip utility.
+       
+     * added backup support for existing files that get
+       overwritten by unzip action
+  -        
+
+
+alpha1
   - MD5 support improvements:
 
      * eliminated requirement for external MD5 checksum generation utility.

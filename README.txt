@@ -14,25 +14,17 @@ Requirements:
      TextIndexNG2 has built-in support for text indexing plain, html, sgml, & xml
      file types).  See DEPENDENCIES.txt for more information.
      
-    (optional) System utilities for optional file unzip'ing and MD5 checksum
-      generation. Note: python provides built-in support for both md5 generation
-      and unzip functionality, and the official 0.60 release of PLNFG will 
-      not require these external utilities.  FYI, native python MD5 support 
-      has already been added to the CVS baseline, with now optional support for
-      external MD5 system utilities (mainly because the glue code was already
-      written for it!, but possibly for performance reasons).  Speaking of 
-      performance, for small files, my informal benchmarking shows
+    (optional) A system utility for MD5 checksum generation. Note: python provides 
+      built-in support for md5 generation and as of the 0.6 release of PLNFG,
+      this product does not require an external MD5 generation utility for its
+      md5 needs.  However, since the glue code for external MD5 utility support 
+      was already written into PLFNG 0.5, I kept it in the 0.6 baseline 'just in 
+      case'. Performance? for small files, my informal benchmarking shows
       that the python md5 module is approx 2x faster than the md5deep utility.
       Rock on, python team!!!!  For medium-sized files (~100MB), performance 
       for both was about the same. For larger files (550MB was the only one I 
-      tested), md5deep was about 30% faster.
-      
-      So far, this product has only been tested with the following 
-      utilities:
-        - unzip/zipinfo: UnZip v5.50 by Info-ZIP (http://www.info-zip.org/) 
-        - md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
-      
-      See DEPENDENCIES.txt for more information.
+      tested), md5deep was about 30% faster.  I have only tested PLFNG with the 
+      following external md5 utility: md5deep v1.2 (http://md5deep.sourceforge.net/)
       
     (optional) mxmCounter (http://www.mxm.dk/products/public/mxmCounter)
      mxmCounter is a nice little hit counter, and I put hooks into PLFNG's 

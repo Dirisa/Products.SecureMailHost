@@ -1,16 +1,8 @@
 External dependencies:
 
-PloneLocalFolderNG dependencies
--------------------------------
- * system utils:
- 	- unzip/zipinfo:  UnZip v5.50 by Info-ZIP (developer URL: http://www.info-zip.org/)
-								(unz550xN.exe self-extracting archive)
- 	- md5: 			 	 md5deep v1.2 (developer URL: http://md5deep.sourceforge.net/)
-
-
-TextIndexNG2 dependencies 
--------------------------
- * system utils:
+TextIndexNG2-specific dependencies 
+----------------------------------
+ * various system utils, such as:
 	- pptHtml:			pptHtml 0.4 (developer URL: http://chicago.sourceforge.net/xlhtml)
 	- wvWare:			wvware 0.7.2 (developer URL: http://www.wvware.com)
 	- pdftotext:		xpdf-3.00-win32 (developer URL: http://www.foolabs.com)
@@ -32,8 +24,6 @@ I created a 'c:\plone-utils' directory, appended this directory to the System Va
 'path' environment variable, and copied the following files into it:
 
 	c:\plone-utils\
-		unzip.exe		UnZip\
-		md5deep.exe		MD5Deep\
 		pdftotext.exe	ZAAPlugins\PDF\win32\
 		pptHtml.exe		ZAAPlugins\MSPowerPoint\win32\
 		freetype.dll	ZAAPlugins\MSWord\win32\bin\
