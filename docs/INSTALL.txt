@@ -23,7 +23,7 @@ Requirements:
      from the Collective CVS (see sf.net/projects/collective) or download it
      from the PloneCollectorNG download area (sf.net/projects/collective ->
      Files)
-
+                                                         
    - Reportlab (www.reportlab.org) - required for PDF output
   
    - PIL (Python Imaging Library)  - required to include uploaded images
@@ -31,6 +31,10 @@ Requirements:
 
    - Graphviz (www.graphivz.org) to produce dependency tree for 
      issue references
+
+   - PyCrypto (www.amk.ca/python/code/crypto) if you want to the
+     "issue submission through email" feature.
+
 
 Installation:
     
