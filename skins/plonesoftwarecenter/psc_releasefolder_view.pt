@@ -38,7 +38,7 @@
             <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
         </tal:block>
         
-        <h2 i18n:translate="heading_previous_releases">Previous Releases</h2>
+        <h2 i18n:translate="heading_previous_releases">Downloadable Releases</h2>
         
         <tal:block define="global releases here/getPreviousReleases">
             <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
@@ -111,7 +111,8 @@
                         <tal:downloads tal:repeat="download release/contentValues">
 
                             <br />
-                            <img tal:replace="structure here/download_icon.gif" />
+                            <img src="" alt="" tal:attributes="src string:${here/portal_url}/${download/getDownloadIconName}" />
+
                             <a href="#"
                                tal:condition="not:download/getExternalURL"
                                tal:attributes="href string:${download/absolute_url}">

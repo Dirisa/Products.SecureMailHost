@@ -39,12 +39,16 @@
         to the general public.
         </p>        
 
-        <h2 i18n:translate="heading_latest_release">Latest release</h2>
+        <h2 i18n:translate="heading_latest_release">
+        <a href="#" tal:attributes="href latestrelease/absolute_url">
+        Latest release: 
+           <span tal:replace="latestrelease/Title">Ploneboard 1.0</span></a>
+        </h2>
 
         <tal:noreleases tal:condition="not:latestrelease">
 
             <p class="discreet" i18n:translate="description_no_available_releases">
-                    There are no available releases in this project yet.
+                    There are no published releases in this project yet.
             </p>
             <p class="discreet" tal:condition="is_editable">
                 <a i18n:translate=""
@@ -71,66 +75,58 @@
                     </a>
                 </div>
 
+                <p>
+                    <span tal:replace="latestrelease/Description">
+                    Main focus for this release is blah blah.
+                    </span>
+
+                    <br />
+                    <img tal:replace="structure here/document_icon.gif" />
+                    <a href="#"
+                       i18n:translate="label_read_more"
+                       tal:attributes="href latestrelease/absolute_url">Read more</a>
+                </p>
+
                 <dl>
+                  <tal:file tal:repeat="file latestrelease/contentValues">
+                    <dt tal:define="download file/getDownloadableFile">
+                        <img src="" alt="" tal:attributes="src string:${here/portal_url}/${file/getDownloadIconName}" />
 
-                    <dt>
-                        <img tal:replace="structure here/product_icon.gif" />
-                        <a href="#"
-                           tal:content="latestrelease/Title"
-                           tal:attributes="href latestrelease/absolute_url">Ploneboard 1.0</a>
+                      <a tal:condition="nocall:download"
+                        tal:attributes="href string:${file/absolute_url}/getDownloadableFile">
+                        <span i18n:translate="label_download">Download</span>
+                        <span tal:replace="here/Title">Ploneboard 1.0</span>
+                        for
+                        <span tal:replace="file/getPlatform" />
+                        (<span tal:replace="python:here.getObjSize(file)">256KB</span>)
+                      </a>
+
+                      <a class="link-plain"
+                        tal:condition="not:nocall:download"
+                        tal:attributes="href file/getExternalURL">
+                        <span i18n:translate="label_download">Download</span>
+                        <span tal:replace="here/Title">Ploneboard 1.0</span>
+                        for
+                        <span tal:replace="file/getPlatform" />
+                        </a>
                     </dt>
 
-                    <dd>
-                        <span tal:replace="latestrelease/Description">
-                            Main focus for this release is blah blah.
-                        </span>
-
-                        <br />
-                        <img tal:replace="structure here/document_icon.gif" />
-                        <a href="#"
-                           i18n:translate="label_read_more"
-                           tal:attributes="href latestrelease/absolute_url">Read more</a>
-
-                        <tal:downloads tal:repeat="download latestrelease/contentValues">
-
-                            <br />
-                            <img tal:replace="structure here/download_icon.gif" />
-                            <a href="#"
-                               tal:condition="not:download/getExternalURL"
-                               tal:attributes="href string:${download/absolute_url}">
-                                <span i18n:translate="label_download">Download</span>
-                                <span tal:replace="download/Title">Windows Installer</span>
-                                (<span tal:replace="python: here.getObjSize(download)">256KB</span>)
-
-                            </a>
-                            
-                            <a href="#"
-                               class="link-plain"
-                               tal:condition="download/getExternalURL"
-                               tal:attributes="href download/getExternalURL">
-                                <span i18n:translate="label_download">Download</span>
-                                <span tal:replace="download/Title">Windows Installer</span>
-                            </a>
-                        </tal:downloads>
+                    <dd tal:content="file/Title">
+                      Windows installer.
                     </dd>
-
-                    <dt>
-                    <!-- Should be a dedicated template that only lists releases,
-                         using the folder_listing macro, but will just use this
-                         for now. Should also only be visible if releases > 1. -->
-                        <img tal:replace="structure here/hour_icon.gif" />
-                        <a i18n:translate="label_previous_releases"
-                           tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show older releases&#8230;</a>
-                    </dt>
-
-                    <dt>
-                        <img tal:replace="structure here/improvementproposal_icon.gif" />
-                        <a i18n:translate="label_previous_releases"
-                           tal:attributes="href python:here.getRoadmapFolder().absolute_url()">Show upcoming releases&#8230;</a>
-
-                    </dt>
-
+                  </tal:file>
                 </dl>
+
+                <p style="float: right;">
+                    <img tal:replace="structure here/hour_icon.gif" />
+                    <a i18n:translate="label_previous_releases"
+                       tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show older releases&#8230;</a>
+
+                    <img tal:replace="structure here/improvementproposal_icon.gif" />
+                    <a i18n:translate="label_previous_releases"
+                       tal:attributes="href python:here.getRoadmapFolder().absolute_url()">Show upcoming releases&#8230;</a>
+                </p>
+
             </div>
 
         </tal:releases>
@@ -139,50 +135,46 @@
 
         <h2>Project Description</h2>
 
-        <fieldset style="float: right;">
+        <fieldset style="float: right; margin-left: 0.5em;">
             <legend>Additional resources</legend>
             
             <ul style="list-style-type: none; list-style-image: none; margin-left: 0;">
                 <li tal:condition="here/getHomepage">
-                    <a href=""
-                       style="display: block"
-                       class="link-plain" 
-                       tal:attributes="href here/getHomepage">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/link_icon.gif" />
+                    <a href=""
+                       class="link-plain" 
+                       tal:attributes="href here/getHomepage">
                     Project home page
                     </a>
                 </li>
                 
                 <li tal:condition="here/getTracker">
-                    <a href=""
-                       style="display: block"
-                       class="link-plain" 
-                       tal:attributes="href here/getTracker">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/issuetracker_icon.gif" />
+                    <a href=""
+                       class="link-plain" 
+                       tal:attributes="href here/getTracker">
                     Issue tracker
                     </a>
                 </li>
                 
                 <li tal:condition="here/getMailingList">
-                    <a href=""
-                       style="display: block"
-                       class="link-plain" 
-                       tal:attributes="href here/getMailingList">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/info_icon.gif" />
+                    <a href=""
+                       class="link-plain" 
+                       tal:attributes="href here/getMailingList">
                     Support
                     </a>
                 </li>
                 
                 <li tal:condition="here/getRepository">
-                    <a href=""
-                       style="display: block"
-                       class="link-plain" 
-                       tal:attributes="href here/getRepository">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/sitemap_icon.gif" />
+                    <a href=""
+                       class="link-plain" 
+                       tal:attributes="href here/getRepository">
                     Development repository
                     </a>
                 </li>
