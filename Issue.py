@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.4 2003/09/07 17:50:36 ajung Exp $
+$Id: Issue.py,v 1.5 2003/09/08 04:04:45 ajung Exp $
 """
 
 from AccessControl import getSecurityManager, ClassSecurityInfo
@@ -17,9 +17,10 @@ from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from References import Reference, ReferencesManager
+from WatchList import WatchList
 import util
 
-class Issue(BaseFolder):
+class Issue(BaseFolder, WatchList):
     """ PloneCollectorNG """
 
     actions = ({
@@ -48,11 +49,12 @@ class Issue(BaseFolder):
     security = ClassSecurityInfo()
 
     def __init__(self, id, title, schema, **kw):
+        BaseFolder.__init__(self, id, **kw)
+        self.wl_init()
         self.schema = schema
         self.id = id
         self.title = title 
         self._references = ReferencesManager()
-        BaseFolder.__init__(self, id, **kw)
         self.transcript = Transcript()
         self.transcript.addComment('Issue created')
 
