@@ -18,8 +18,8 @@ div.collector_headline {
     padding: 0.5em;
 }
 
-div #headline_action {
-    font-size: 100%;
+div #pcng_headline {
+    margin-bottom: 3em;
 }
 
 div.issue_view_navigation {
@@ -149,6 +149,14 @@ div #issue_description_solution {
 div #issue_transcript{
     clear: both;
     margin-top: 2em;
+}
+
+div.left{
+    float: left;
+}
+
+div.right {
+    float: right;
 }
 
 /* </dtml-with> */
