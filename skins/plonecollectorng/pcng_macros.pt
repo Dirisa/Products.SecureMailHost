@@ -140,6 +140,8 @@
         <th align="center" i18n:translate="heading_status"> Status </th>
         <th align="center" i18n:translate="heading_requester">Requester</th>
         <th align="center" i18n:translate="heading_assigned">Assigned </th>
+        <th align="center" i18n:translate="heading_assigned">Importance</th>
+        <th align="center" i18n:translate="heading_assigned">Topic</th>
         <th></th>
         <th colspan="2" i18n:translate="sorting"> Sorting </th>
       </tr>
@@ -184,6 +186,32 @@
           </select>
         </td>
 
+        <td align="center">
+          <select name="importance:list:ignore_empty"      
+                  multiple 
+                  size="5"
+                  tal:define="values python: here.pcng_uniquevalsFor('importance')" >
+              
+            <option tal:repeat="item values"
+                    tal:attributes="value item;
+                                    selected python: item in request.get('importance', [])"
+                    tal:content="item" />
+          </select>
+        </td>
+
+        <td align="center">
+          <select name="topic:list:ignore_empty"      
+                  multiple 
+                  size="5"
+                  tal:define="values python: here.pcng_uniquevalsFor('topic')" >
+              
+            <option tal:repeat="item values"
+                    tal:attributes="value item;
+                                    selected python: item in request.get('topic', [])"
+                    tal:content="item" />
+          </select>
+        </td>
+
         <td> &nbsp</td>
 
         <td align="center" valign="top">
@@ -211,8 +239,8 @@
           <select name="sort_direction" size="2">
             <option i18n:translate=""
                     tal:repeat="item python: (
-                          ('desc','Descending'),
-                          ('asc','Ascending'),
+                          ('desc','Desc'),
+                          ('asc','Asc'),
                           )"
                      tal:attributes="value python: item[0];
                                      selected python: request.get('sort_direction', 'desc') == item[0]"

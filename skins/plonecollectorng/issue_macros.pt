@@ -3,31 +3,37 @@
 
 <div metal:define-macro="issue_references">
   <div class="group"
-       tal:define="references here/getRefs">
+       tal:define="references here/getRefs;
+                   breferences here/getBRefs">
     <span class="legend" i18n:translate="legend_references">References</span>
-
-    <metal:block tal:condition="references" 
-                 tal:omit-tag="">
       <ul>
-        <li tal:repeat="ref references">
-          <metal:block  tal:define="url python: ref.absolute_url(1)">
-            <a tal:attributes="href url" tal:content="ref/title_or_id" />
-            [<a tal:attributes="href string: delete_reference?issue_url=${url}">del</a>]
-          </metal:block>
+        <li>References
+          <ul>
+            <li tal:repeat="ref references">
+              <metal:block  tal:define="url python: ref.absolute_url(1)">
+                <a tal:attributes="href url" tal:content="ref/title_or_id" />
+                [<a tal:attributes="href string: delete_reference?issue_url=${url}">del</a>]
+              </metal:block>
+            </li>
+          </ul>
         </li>
-
+        <li>Referenced by
+          <ul>
+            <li tal:repeat="ref breferences">
+              <metal:block  tal:define="url python: ref.absolute_url(1)">
+                <a tal:attributes="href url" tal:content="ref/title_or_id" />
+              </metal:block>
+            </li>
+          </ul>
+        </li>
         <li>Dependency graph: 
-          <a href="references_tree?format=gif">[GIF]</a>
-          <a href="references_tree?format=jpeg">[JPEG]</a>
-          <a href="references_tree?format=png">[PNG]</a>
-          <a href="references_tree?format=svg">[SVG]</a>
-          <a href="references_tree?format=ps">[PS]</a>
+          <a href="pcng_references_tree?format=gif">[GIF]</a>
+          <a href="pcng_references_tree?format=jpeg">[JPEG]</a>
+          <a href="pcng_references_tree?format=png">[PNG]</a>
+          <a href="pcng_references_tree?format=svg">[SVG]</a>
+          <a href="pcng_references_tree?format=ps">[PS]</a>
+        </li>
       </ul>
-    </metal:block>
-    <span i18n:translate="issue_references_table_no_references"
-          tal:condition="not: references">No references available</span>
-
-
   </div> <!-- End group -->
 </div>  <!-- End macro: issue_references_table -->
 
@@ -137,7 +143,7 @@ function show_tickets() {
       </div> <!-- End row -->
 
       <div class="row">
-        <div class="label" i18n:translate="add_references_table_issue_number">Issue #</div>
+        <div class="required_label" i18n:translate="add_references_table_issue_number">Issue #</div>
         <div class="field">
           <input type="text" name="reference.ticketnumber:record:string"  value="" size="5" />
           <input class="context" type="button"  onClick="javascript:show_tickets()" value="Select"
@@ -146,7 +152,7 @@ function show_tickets() {
       </div> <!-- End row -->
 
       <div class="row">
-        <div class="label" i18n:translate="add_references_table_comment">
+        <div class="required_label" i18n:translate="add_references_table_comment">
           Comment
         </div>
         <div class="field">

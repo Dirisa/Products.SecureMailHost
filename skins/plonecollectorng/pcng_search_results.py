@@ -32,6 +32,8 @@ toQuery('SearchableText')
 toQuery('status')
 toQuery('Creator')
 toQuery('assigned_to')
+toQuery('importance')
+toQuery('topic')
 
 # Default query
 if len(query) == 0:

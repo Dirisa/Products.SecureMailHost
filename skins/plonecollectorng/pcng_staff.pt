@@ -7,7 +7,7 @@
 <div metal:fill-slot="main">	  
 
   <form action="set_staff" method="post">
-    <div class="group"><span class="legend">Tracker Staff</span>
+    <div class="group"><span class="legend">Collector Staff</span>
       <table class="listing" 
              tal:define="managers here/getManagers;
                          supporters here/getSupporters;
@@ -16,7 +16,7 @@
           <th i18n:translate="UserID">User ID</th>
           <th i18n:translate="Name">Name</th>
           <th i18n:translate="Email">Email</th>
-          <th i18n:translate="Managers">Tracker Administrator</th>
+          <th i18n:translate="Managers">Collector Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
        </tr>

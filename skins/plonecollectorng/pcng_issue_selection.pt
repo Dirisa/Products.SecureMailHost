@@ -22,10 +22,13 @@
     <table class="listing"  border="0">
 
       <tr>
-        <th colspan="2" tal:content="string: Tracker: ${here/title_or_id}" />
+        <th colspan="2" tal:content="string: Collector: ${here/title_or_id}" />
       </tr>
       <tr tal:repeat="ticket python: here.pcng_catalog(meta_type='PloneIssueNG', sort_on='created')">
-        <th style="text-align: right" tal:content="ticket/getId"/>
+        <th style="text-align: right">
+          <a tal:content="ticket/getId"
+             tal:attributes="href python: 'javascript:do_submit(%s)' % ticket.getId" />
+        </th>
         <th style="text-align: left" wrap>
             <a tal:content="python: here.shorten_string(ticket.Title, maxlength=50)" 
                tal:attributes="href python: 'javascript:do_submit(%s)' % ticket.getId" />
