@@ -135,7 +135,7 @@ class PloneLocalFolderNG(BaseContent):
         RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
         if REQUEST.get('action', '') == 'download':
             REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(destpath))
-        fp = open(destpath)
+        fp = open(destpath, 'rb')
         while 1:
             data = fp.read(32768)
             if data:    
@@ -178,7 +178,7 @@ class PloneLocalFolderNG(BaseContent):
                 P.setMimeType(mi.normalized())
 
             if os.path.exists(fullname + '.metadata'):
-                P.setComment(open(fullname + '.metadata').read())
+                P.setComment(open(fullname + '.metadata', 'rb').read())
             else:
                 P.setComment('')
             l.append(P) 
@@ -232,9 +232,9 @@ class PloneLocalFolderNG(BaseContent):
         destpath = os.path.join(self.folder, rel_dir)
         
         filename = os.path.join(destpath, os.path.basename(upload.filename))
-        open(filename, 'w').write(upload.read())
+        open(filename, 'wb').write(upload.read())
         if comment:
-            open(filename + '.metadata', 'w').write(comment)
+            open(filename + '.metadata', 'wb').write(comment)
         REQUEST.RESPONSE.redirect('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view'))
 
 
