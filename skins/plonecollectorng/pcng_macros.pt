@@ -119,7 +119,7 @@
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-        <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
+          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
         </div>
       </metal:block>
     </div>

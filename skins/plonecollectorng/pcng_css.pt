@@ -12,11 +12,24 @@ div.transcriptheader {
 
 div.transcriptevent {
     margin-top: 1px;
-    margin-left: 25px;
+    margin-left: 15px;
 }
 
-div.pcng_issueview_description{
+div.pcng_issueview_metadata,div.pcng_issueview_legend {
+    margin-left: 15px;
+}
+
+div.pcng_issueview_description {
     background: #dddddd;
+    margin-left: 15px;
+}
+
+pre.collector_description{
+    background: #eeeeee;
+}
+
+div.ticket_stats {
+    text-align: right;
 }
 
 th.staff {

@@ -1,0 +1,25 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+    <div metal:fill-slot="css_slot">
+      <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+    </div>
+    <div metal:fill-slot="main" >
+      <h1 i18n:translate="collector_overview">Collector overview</h1>
+
+      <div tal:repeat="collector python: sequence.sort(here.portal_catalog.searchResults(meta_type='PloneCollectorNG', review_state='published'), (('getId', 'nocase'),))">
+
+        <h2><a tal:attributes="href collector/getURL" 
+               tal:content="string: ${collector/getId} (${collector/Title})"/>
+        </h2>
+        <div class="ticket_stats">
+           <span tal:content="collector/getNumberIssues"/> <span i18n:translate="issues">issues</span>
+        </div> 
+      </div>
+    </div>
+  </body>
+</html>
