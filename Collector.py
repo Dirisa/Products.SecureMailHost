@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.99 2003/12/28 18:28:30 ajung Exp $
+$Id: Collector.py,v 1.100 2003/12/30 13:21:25 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -21,7 +21,7 @@ from Products.CMFCore.CMFCorePermissions import *
 
 from Transcript import Transcript
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
-from config import IssueWorkflowName, CollectorCatalog
+from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES 
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
@@ -362,9 +362,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         
         return [ (id, idx.meta_type) 
                  for id, idx in getToolByName(self, CollectorCatalog)._catalog.indexes.items()
-                 if not id in ('progress_deadline', 'created', 'numberFollowups', 'getId',
-                               'SearchableText')
-               ]
+                 if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
 
     security.declareProtected(ManageCollector, 'update_searchform')
     def update_searchform(self, REQUEST, RESPONSE):
