@@ -16,7 +16,7 @@
     </metal:block>   
 
 	<h1 tal:content="here/title_or_id" />
-      <pre class="collector_description" tal:content="here/description" />
+      <pre tal:condition="here/description" class="collector_description" tal:content="here/description" />
 
       <metal:block tal:condition="python: search_form_position == 'top'">
         <fieldset><legend i18n:translate="legend_search_form">Search form</legend>
