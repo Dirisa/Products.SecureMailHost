@@ -1,6 +1,11 @@
-##parameters=query_id
+##parameters=query_id=''
 
 # Modify the saved searches member properties
+
+if query_id=='':
+    msg = context.translate(msgid='no_search_for_deletion', default='No search for deletion selected', domain='plonecollectorng')
+    context.REQUEST.RESPONSE.redirect('pcng_member_preferences?portal_status_message=%s' % msg)
+    return
 
 mstool = context.portal_membership
 
