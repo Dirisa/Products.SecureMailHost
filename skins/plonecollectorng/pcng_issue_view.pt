@@ -31,7 +31,7 @@
 
       <fieldset style="border: 0">
 
-        <div style="float: left; width: 50%; vertical-align: top"
+        <div class="issue_view_navigation"
              tal:define="schematas here/Schemata;
                          schemata_names here/SchemataNames;
                          default_fieldset python:  schemata_names[0];
