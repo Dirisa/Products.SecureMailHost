@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.187 2004/06/18 06:22:13 ajung Exp $
+$Id: Issue.py,v 1.188 2004/06/21 20:13:01 ajung Exp $
 """
 
 import os, time, random 
@@ -711,6 +711,16 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             except: pass
         return self._v_right_slots
     right_slots = ComputedAttribute(right_slots, 1)
+
+    security.declareProtected(View, 'pcng_search_form')
+    def pcng_search_form(self, RESPONSE):
+        """ redirect """
+        RESPONSE.redirect(self._getCollector().absolute_url() + '/pcng_search_form')
+
+    security.declareProtected(View, 'pcng_ticket_browser')
+    def pcng_ticket_browser(self, RESPONSE):
+        """ redirect """
+        RESPONSE.redirect(self._getCollector().absolute_url() + '/pcng_view')
 
 registerType(PloneIssueNG)
 
