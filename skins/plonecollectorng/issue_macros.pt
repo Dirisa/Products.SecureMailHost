@@ -308,7 +308,7 @@ function show_tickets() {
   </table>
 </tal:macro>
 
-<tal:macro metal:define-macro="issue_shortview">
+<tal:macro metal:define-macro="issue_shortview" i18n:domain="plonecollectorng">
 
   <h2 class="pcng_transcript"> 
      <a tal:attributes="href string:${issue/getURL}/pcng_issue_view;
