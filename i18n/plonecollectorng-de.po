@@ -998,3 +998,6 @@ msgstr "Nächster"
 
 msgid "label_up_to_collector"
 msgstr "Eine Ebene höher zum Bugtracker"
+
+msgid "label_up_to_configuration"
+msgstr "Eine Ebene höher zur Konfiguration"
