@@ -59,71 +59,6 @@
           </tal:if>
         </tal:loop>
 
-        <div class="portlet"  id="pcng_metadata" tal:define="references here/getForwardReferences">
-          <h5>
-            <span i18n:translate="references">References</span>
-            <a tal:condition="canFollowup" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
-          </h5>
-          <div class="portletBody">
-            <metal:loop tal:repeat="ref references">
-              <a tal:define="target ref/getTargetObject"
-                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-              <span tal:condition="not: repeat/ref/end">&bull;</span>   
-            </metal:loop>
-            <span tal:condition="not: references" i18n:translate="no_references">No references</span>
-          </div>
-        </div>
-
-        <div class="portlet" id="pcng_metadata" tal:define="uploads here/objectValues">
-          <h5>
-            <span i18n:translate="Uploads">Uploads</span>
-            <a tal:condition="canFollowup" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
-          </h5>
-          <div class="portletBody">
-            <ul>
-              <li tal:repeat="item uploads">
-                <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
-                <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
-                <a tal:attributes="href item/absolute_url">
-                  <span  tal:content="item/getId" 
-                         tal:attributes="title python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
-                </a>
-              </li>
-            </ul>
-            <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
-          </div>
-        </div>
-
-        <div class="portlet" id="pcng_metadata">
-          <h5>
-            <span i18n:translate="actions">Actions</span>
-          </h5>
-          <div class="portletBody"
-               tal:define="mode request/mode|string:simple">
-              <a href="redirect_create_object"><span i18n:translate="new_issue">New Issue</span></a>
-              <br>
-              <a href="pcng_issue_followup"><span i18n:translate="followup">Followup</span></a>
-              <br>
-              <a href="pcng_issue_references"><span i18n:translate="references">Referenzen</span></a>
-              <br>
-              <a href="pcng_issue_uploads"><span i18n:translate="uploads">Uploads</span></a>
-              <br>
-              <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
-                <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
-                <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
-              </a> 
-              <br>
-              <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
-               <em tal:condition="choosen" i18n:translate=">fullview_with_images">Full view with images</em> 
-                <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
-              </a> 
-              <br>
-              <a tal:condition="here/haveReportlab" href="asPDF">
-                 <img src="pdflogo.gif" border="0" title="PDF">
-              </a>
-          </div>
-        </div>
-
        </div>
 
 
@@ -165,6 +100,13 @@
       <metal:block tal:condition="python: mode=='full'" >
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
       </metal:block>
+
+<div tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)" 
+     tal:repeat="key python: actions.keys()" >
+  <h1 tal:content="key"/>
+  <div tal:content="actions/?key" />
+</div>
+
 
       <div class="documentByLine">
       PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Andreas Jung</a>

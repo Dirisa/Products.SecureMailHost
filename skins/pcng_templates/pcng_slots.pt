@@ -6,7 +6,7 @@
 
 <!-- The news box -->
 
-<div metal:define-macro="navigation">
+<div metal:define-macro="navigation" i18n:domain="plonecollectorng">
 
     <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'">
       <div metal:use-macro="here/pcng_slots/macros/issue_metadata" />
@@ -20,7 +20,7 @@
 </div>
 
 <!-- searchresults -->
-<div metal:define-macro="searchresults">
+<div metal:define-macro="searchresults" i18n:domain="plonecollectorng">
 
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
@@ -63,7 +63,7 @@
 </div>
 
 <!-- Collector metadata -->
-<div metal:define-macro="collector_metadata">
+<div metal:define-macro="collector_metadata" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng-collector-metadata">
     <h5 i18n:translate="collector_metadata">Collector data</h5>
     <div class="portletBody">
@@ -74,7 +74,7 @@
 </div>
 
 <!-- Issue metadata -->
-<div metal:define-macro="issue_metadata">
+<div metal:define-macro="issue_metadata" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng-issue-metadata">
     <h5 i18n:translate="issue_metadata">Issue data</h5>
     <div class="portletBody">
@@ -91,6 +91,69 @@
     </div>
   </div>
 </div>
+
+
+<!-- Issue actions -->
+<div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
+  <div class="portlet" id="pcng_issue_portlet">
+    <h5 i18n:translate="issue_actions">Issue actions</h5>
+    <div class="portletBody"
+         tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
+      <ul>
+        <tal:loop tal:repeat="a actions/pcng_issue">
+          <li>
+            <a tal:attributes="href a/url">
+              <span i18n:translate="" tal:content="a/name" />
+            </a>
+          </li>
+        </tal:loop>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div metal:define-macro="pcng_issue_references" i18n:domain="plonecollectorng"
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+        <div class="portlet" tal:define="references here/getForwardReferences">
+          <h5>
+            <span i18n:translate="references">References</span>
+            <a tal:condition="canFollowup" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
+            <metal:loop tal:repeat="ref references">
+              <a tal:define="target ref/getTargetObject"
+                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              <span tal:condition="not: repeat/ref/end">&bull;</span>   
+            </metal:loop>
+            <span tal:condition="not: references" i18n:translate="no_references">No references</span>
+          </div>
+        </div>
+</div>
+
+
+<div metal:define-macro="pcng_issue_uploads" i18n:domain="plonecollectorng"
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+        <div class="portlet" tal:define="uploads here/objectValues">
+          <h5>
+            <span i18n:translate="Uploads">Uploads</span>
+            <a tal:condition="canFollowup" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
+            <ul>
+              <li tal:repeat="item uploads">
+                <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
+                <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
+                <a tal:attributes="href item/absolute_url">
+                  <span  tal:content="item/getId" 
+                         tal:attributes="title python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
+                </a>
+              </li>
+            </ul>
+            <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
+          </div>
+        </div>
+</div>
+
 
 </body>
 </html>
