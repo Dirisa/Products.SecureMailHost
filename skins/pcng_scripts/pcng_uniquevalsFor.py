@@ -11,9 +11,12 @@ def mycmp(x, y):
 values = []
 for v in context.pcng_catalog.uniqueValuesFor(key):
     if same_type(v, []) or same_type(v, ()):
-        values.extend(v)
+        for item in v:
+            if not item in values:
+                values.append(item)
     else:
-        values.append(v)
+        if not v in values:
+            values.append(v)
 values = [v for v in values if v]
 values.sort(mycmp)
 return values
