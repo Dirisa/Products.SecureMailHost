@@ -32,8 +32,8 @@ Features:
 
  Download
 
-  PloneFormMailer resides in BlueDynamics public CVS. 
-  http://cvs.bluedynamics.org/viewcvs/PloneFormMailer
+  PloneFormMailer resides in the 'collective'
+  http://sourceforge.net/projects/collective
 
  Author
 
@@ -50,6 +50,11 @@ Features:
   Thanks to the unknown author of the howto at plone.org "Integrating 
   CMFFormController with Formulator":http://plone.org/documentation/howto/IntegratingCMFFormControllerWithFormulator
   and also to the authors of CMFFormController and Formulator.
+
+ Contribution:
+
+  If you like to help out in writing code and/or documentation, just start 
+  and cvs commit. Ok, bigger changes would be nice to discuss ;-)
 
  Known Bugs:
 
