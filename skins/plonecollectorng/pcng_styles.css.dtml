@@ -95,6 +95,9 @@ div.portletBody {
     padding: 0.5em;
 }
 
-
+span.no_access {
+    color: red;
+    font-size: 90%;
+}
 
 /* </dtml-with> */
