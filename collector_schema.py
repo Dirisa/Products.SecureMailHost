@@ -5,15 +5,16 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.29 2004/01/15 20:34:28 ajung Exp $
+$Id: collector_schema.py,v 1.30 2004/01/29 16:41:39 ajung Exp $
 """
 
-from Products.Archetypes.Schema import Schema
+
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
+from PCNGSchema import PCNGSchema as Schema
 from notification_policies import VOC_NOTIFICATION_POLICIES
 
 VOC_NOTIFICATION_LANGUAGES = DisplayList((
