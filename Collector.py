@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.75 2003/11/21 07:49:49 ajung Exp $
+$Id: Collector.py,v 1.76 2003/11/21 09:21:59 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -133,7 +133,10 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             hook to log changed properties to the transcript.
         """
 
+        schema = self.Schema()
+        field_names = [ f.getName() for f in schema.fields()]
         for name in REQUEST.form.keys():
+            if not name in field_names: continue
             new = REQUEST.get(name, None)
             old = self.Schema()[name].storage.get(name, self)
             if old:
@@ -323,7 +326,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         issue = aq_base(self._getOb(id))
 
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
-                      portal_status_message='New issue created',
+                      portal_status_message=self.translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')
         if RESPONSE is None:
             return id

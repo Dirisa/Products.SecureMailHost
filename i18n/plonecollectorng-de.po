@@ -630,8 +630,17 @@ msgstr "Benachrichtigungspolicy"
 msgid "label_email_issue_formatters"
 msgstr "Formatierer für Ticketbenachrichtigungen"
 
+msgid "label_email_address"
+msgstr "EMail Adresse (für FROM: und REPLY-TO: Header)"
+
 msgid "label_watchlist"
 msgstr "Watchlist"
 
+msgid "E-Mail"
+msgstr "EMail"
+
 msgid "References and uploads"
 msgstr "Referenzen und hochgeladene Dateien"
+
+msgid "new_issue_created"
+msgstr "Ticket wurde angelegt"
