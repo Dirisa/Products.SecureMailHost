@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.191 2004/06/26 08:37:40 ajung Exp $
+$Id: Issue.py,v 1.192 2004/06/26 20:05:07 ajung Exp $
 """
 
 import os, time, random 
@@ -692,10 +692,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
             if pu.endswith('left'):
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
-            self._v_left_slots = tuple(self._v_left_slots)                               
             try: del self._v_right_slots
             except: pass
-        return self._v_left_slots
+        if self.getPortlet_issuedata() == 'left':
+            self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
+        return tuple(self._v_left_slots)
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
@@ -704,13 +705,15 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if pu == 'right': 
                 self._v_right_slots = []
             else:
-                self._v_righ_slots = list(self._getCollector().aq_parent.right_slots)
+                self._v_right_slots = list(self._getCollector().aq_parent.right_slots)
             if pu.endswith('right'):
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
-            self._v_right_slots = tuple(self._v_right_slots)                               
             try: del self._v_left_slots
             except: pass
-        return self._v_right_slots
+
+        if self.getPortlet_issuedata() == 'right':
+            self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
+        return tuple(self._v_right_slots)
     right_slots = ComputedAttribute(right_slots, 1)
 
     security.declareProtected(View, 'pcng_search_form')
