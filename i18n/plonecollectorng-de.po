@@ -539,7 +539,7 @@ msgid "collector_notifications"
 msgstr "Benachrichtigungen"
 
 msgid "Staff"
-msgstr "Staff"
+msgstr "Mitarbeiter"
 
 msgid "added"
 msgstr "hinzu"

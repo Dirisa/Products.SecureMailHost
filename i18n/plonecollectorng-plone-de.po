@@ -28,6 +28,9 @@ msgstr "Schema Editor"
 msgid "Maintainance"
 msgstr "Wartung"
 
+msgid "Staff"
+msgstr "Mitarbeiter"
+
 msgid "Member preferences"
 msgstr "Teilnehmer Voreinstellungen"
 
