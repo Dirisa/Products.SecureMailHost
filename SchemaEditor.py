@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.62 2004/07/05 11:09:39 ajung Exp $
+$Id: SchemaEditor.py,v 1.63 2004/07/22 04:57:20 ajung Exp $
 """
 
 import re
@@ -361,5 +361,25 @@ class SchemaEditor:
     def atse_schema_baseclass(self):
         """ return name of baseclass """
         return str(self._ms.__class__)
+
+    security.declareProtected(ManageCollector, 'atse_migrate_vocabularies')
+    def atse_migrate_vocabularies(self):
+        """ Convert DisplayList instance to new AT standard where keys *must*
+            be StringType and not UnicodeType.
+        """
+
+        for field in self._ms.fields():
+            if hasattr(field, 'vocabulary'):
+                if field.vocabulary.__class__.__name__ == 'DisplayList':
+                    D = DisplayList()
+                    for k in field.vocabulary.keys():
+                        if isinstance(k, unicode):
+                            k = k.encode('iso-8859-15', 'ignore')
+                        k = (k)
+                        v = field.vocabulary.getValue(k)
+                        D.add(k,v)
+                    field.vocabulary = D
+
+        return 'Conversion done'
 
 InitializeClass(SchemaEditor)
