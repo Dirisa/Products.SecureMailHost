@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.6 2004/01/30 15:07:52 ajung Exp $
+$Id: PCNGSchema.py,v 1.7 2004/02/13 13:36:15 ajung Exp $
 """
 
 from types import FileType
@@ -20,6 +20,7 @@ from Products.Archetypes.Layer import DefaultLayerContainer
 from Products.Archetypes.interfaces.layer import ILayerContainer, ILayerRuntime, ILayer 
 from Products.Archetypes.interfaces.field import IField, IObjectField, IImageField
 from Products.Archetypes.interfaces.base import IBaseUnit
+from Products.Archetypes.debug import log, log_exc
 
 try:
     from generator.i18n import translate
