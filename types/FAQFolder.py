@@ -12,7 +12,10 @@ from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
     TextField('description',
-                widget=TextAreaWidget(
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget=TextAreaWidget(
     description="Description of the FAQ Container.",
     description_msgid="desc_folder",
     label_msgid="label_folder",
