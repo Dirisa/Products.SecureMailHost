@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.14 2005/03/12 04:00:41 optilude Exp $
+$Id: schemata.py,v 1.15 2005/03/12 07:11:01 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -1104,13 +1104,17 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
     LinesField(
         name='availableVersions',
         default=[
-            'Plone 1.0',
-            'Plone 1.0.1',
-            'Plone 1.0.2',
-            'Plone 1.0.3',
-            'Plone 1.0.4',
-            'Plone 1.0.5',
+            'Plone 2.0.5',
+            'Archetypes 1.3.2',
+            'Plone 2.0.4',
+            'Plone 2.0.3',
+            'Plone 2.0.2',
+            'Plone 2.0.1',
             'Plone 2.0',
+            'Plone 1.0',
+            'Archetypes 1.3.1',
+            'Archetypes 1.3',
+            'Archetypes 1.2',
         ],
         widget=LinesWidget(
             label='Versions',

@@ -104,7 +104,7 @@
                        class="portletMore"
                        tal:attributes="href string:${here/absolute_url}/by-category/${categoryId}"
                         >
-                    Show all&#8230;
+                    Show all projects in this category&#8230;
                     </a>
                 </div>
             </div>

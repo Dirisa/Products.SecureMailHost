@@ -33,12 +33,26 @@
 
         <div class="discreet">
             Category: <span tal:replace="python: ', '.join(here.getCategoryTitles())" />
+            &mdash;
+            <a href=""
+               tal:attributes="href string:${portal_url}/search?portal_type%3Alist=PSCProject&Creator=${here/Creator}"
+               >Other products by this author</a>
+
+        </div>
+
+        <div style="float:right; margin: 1em 0 1em 1em; border: 1px solid black;"
+             tal:condition="here/getLogo | nothing">
+            <a tal:attributes="href string:${latestrelease/absolute_url}/screenshot/image_view_fullscreen">
+                <img tal:replace="structure here/getLogo" />
+            </a>
         </div>
 
         <div class="documentDescription"
              tal:content="here/Description">
             description
         </div>
+        
+        <div class="visualClear"></div>
 
         <p class="portalMessage"
            i18n:translate="description_cannot_add_before_approved"
@@ -138,7 +152,7 @@
                   </tal:file>
                 </dl>
 
-                <p style="float: right;">
+                <p style="float: right; clear:both;">
                     <img tal:replace="structure here/product_icon.gif" />
                     <a i18n:translate="label_show_all_releases"
                        tal:attributes="href python:here.getReleaseFolder().absolute_url()">
@@ -167,9 +181,8 @@
                          tal:attributes="src string:${portal_url}/link_icon.gif" />
                     <a href=""
                        class="link-plain"
-                       tal:attributes="href here/getHomepage">
-                    Project home page
-                    </a>
+                       title="Additional home page for this project"
+                       tal:attributes="href here/getHomepage">Project home page</a>
                 </li>
 
                 <li tal:condition="here/getTracker">
@@ -177,9 +190,8 @@
                          tal:attributes="src string:${portal_url}/issuetracker_icon.gif" />
                     <a href=""
                        class="link-plain"
-                       tal:attributes="href here/getTracker">
-                    Issue tracker
-                    </a>
+                       title="A place to submit bug reports and feature requests for this project"
+                       tal:attributes="href here/getTracker">Issue tracker</a>
                 </li>
 
                 <li tal:condition="here/getMailingList">
@@ -187,9 +199,8 @@
                          tal:attributes="src string:${portal_url}/info_icon.gif" />
                     <a href=""
                        class="link-plain"
-                       tal:attributes="href here/getMailingList">
-                    Support
-                    </a>
+                       title="Support options for this product"
+                       tal:attributes="href here/getMailingList">Support</a>
                 </li>
 
                 <li tal:condition="here/getRepository">
@@ -197,9 +208,8 @@
                          tal:attributes="src string:${portal_url}/sitemap_icon.gif" />
                     <a href=""
                        class="link-plain"
-                       tal:attributes="href here/getRepository">
-                    Development repository
-                    </a>
+                       title="Version control repository location for this project"
+                       tal:attributes="href here/getRepository">Development repository</a>
                 </li>
 
                 <li tal:repeat="resource here/getAdditionalContainedResources">
@@ -207,10 +217,9 @@
                          alt="" />
                     <a href=""
                        class="link-plain"
-                       tal:attributes="href resource/getId"
-                       tal:content="resource/Title">
-                    Additional resource
-                    </a>
+                       tal:attributes="href resource/getId;
+                                       title resource/Description;"
+                       tal:content="resource/Title">Additional resource</a>
                 </li>
     
             </ul>
