@@ -40,7 +40,7 @@ nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
 
-nl(context.Translate('description', 'Description') + ":")
+nl(context.Translate('label_description', 'Description') + ":")
 nl('-'*40)
 nl(context.wrap_text(context.Description()))
 
