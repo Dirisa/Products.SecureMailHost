@@ -155,7 +155,7 @@
 
                     </div>
                 </div>
-                        <div class="visualClear" tal:condition="python: repeat['help_type_tuple'].number() % 3 == 0" />
+                <div class="visualClear" tal:condition="python: repeat['help_type_tuple'].number() % 3 == 0" />
             </tal:listings>
             <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes)">
               <!-- or at least none that this person has the rights to see -->
@@ -172,7 +172,7 @@
             </tal:nopublished>
             </tal:defs>
 
-        <div class="visualClear"></div>
+        <div class="visualClear"> <br> </div>
       
         </tal:main-macro>
     </metal:main>
