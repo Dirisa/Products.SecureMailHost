@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.28 2003/11/11 07:45:28 ajung Exp $
+$Id: SchemaEditor.py,v 1.29 2003/11/11 08:02:16 ajung Exp $
 """
 
 import operator
@@ -22,6 +22,8 @@ from Products.Archetypes.Widget import *
 import util
 from config import ManageCollector
 from OrderedSchema import OrderedSchema
+
+UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
 
 class SchemaEditor:
@@ -91,7 +93,10 @@ class SchemaEditor:
     security.declareProtected(ManageCollector, 'schema_del_field')
     def schema_del_field(self, fieldset, name, RESPONSE=None):
         """ remove a field from a fieldset """
-        
+
+        if name in UNDELETEABLE_FIELDS:
+            raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted', name=name))
+            
         del self._schemas[fieldset][name]
         self._schemas._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
