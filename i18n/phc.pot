@@ -15,7 +15,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: latin1 utf-8\n"
-"Domain: plone\n"
+"Domain: plonehelpcenter\n"
 
 #: ./errorreference_attachments.pt
 #. <a href="" i18n:attributes="title" tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$item_id" title="Move item down">
