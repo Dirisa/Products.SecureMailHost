@@ -9,17 +9,20 @@
       <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
     </div>
 
+    <div metal:fill-slot="main">
 
-    <div metal:fill-slot="main"
-         tal:define="mode python: request.get('mode', 'simple')" >
+
+      <!-- set the view mode based on the collector preferences -->
+
+      <metal:block tal:condition="not: request/mode|nothing">
+        <metal:block tal:define="global mode python: member.getProperty('pcng_default_view')" />
+      </metal:block>
+      <metal:block tal:condition="request/mode|nothing">
+        <metal:block tal:define="global mode request/mode" />
+      </metal:block>
 
       <metal:block tal:define="action string: View">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
-      </metal:block>
-
-      <!-- set the view mode based on the collector preferences -->
-      <metal:block tal:condition="not: python: request.has_key('mode')">
-        <tal:def tal:define="dummy python: request.set('mode', member.getProperty('pcng_default_view'))" />
       </metal:block>
 
       <a tal:condition="python: mode in ('full', 'fullimages')"  href="pcng_issue_view?mode=simple">
@@ -90,7 +93,7 @@
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </fieldset>
 
-      <metal:block tal:condition="python: request.get('mode', 'simple').startswith('full')" >
+      <metal:block tal:condition="python: mode.startswith('full')" >
 
         <metal:block tal:condition="python: mode == 'fullimages'" >
           <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
