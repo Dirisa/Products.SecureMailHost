@@ -2,7 +2,7 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from DateTime import DateTime
 from Acquisition import aq_inner, aq_parent, aq_base, aq_chain
-from Products.Archetypes import TOOL_NAME
+from Products.Archetypes.utils import shasattr
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import ReplyToItem
 from Products.CMFDefault.DiscussionItem import DiscussionItem, DiscussionItemContainer
@@ -86,7 +86,7 @@ class PatchedDiscussionTool:
         if not self.isDiscussionAllowedFor( content ):
             raise DiscussionNotAllowed
 
-        if not hasattr(aq_base(content), 'talkback'):
+        if not shasattr(aq_base(content), 'talkback'):
             talkback = self._createDiscussionFor( content )
         else:
             talkback = content.talkback
