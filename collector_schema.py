@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.23 2003/11/28 10:46:00 ajung Exp $
+$Id: collector_schema.py,v 1.24 2003/11/28 11:46:13 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -61,8 +61,8 @@ schema = Schema((
                                     i18n_domain="plone"),
                 ),
 
-    DateTimeField('effectiveDate', schemata='metadata'),
-    DateTimeField('expirationDate', schemata='metadata'),
+    DateTimeField('effectiveDate', schemata='default'),
+    DateTimeField('expirationDate', schemata='default'),
 
     StringField('description',
                 required=1,

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.25 2003/11/28 10:46:00 ajung Exp $
+$Id: issue_schema.py,v 1.26 2003/11/28 11:46:12 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -61,7 +61,7 @@ schema = Schema((
                                     i18n_domain="plone"),
                 ),
 
-    StringField('subject', schemata='metadata'),
+    StringField('subject', schemata='default'),
 
     StringField('description',
                 required=1,
