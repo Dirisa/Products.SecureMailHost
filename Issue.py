@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.63 2003/11/03 17:17:56 ajung Exp $
+$Id: Issue.py,v 1.64 2003/11/03 17:49:38 ajung Exp $
 """
 
 import sys, os
@@ -16,7 +16,7 @@ from AccessControl import  ClassSecurityInfo, Unauthorized
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
 from DateTime import DateTime
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Schema import Schemata
 from Products.Archetypes.public import registerType
@@ -70,7 +70,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         'id': 'view',
         'name': 'View',
         'action': 'pcng_issue_view',
-        'permissions': (CMFCorePermissions.View,)
+        'permissions': (View,)
         },
         {'id': 'followup',
         'name': 'Followup',
@@ -80,7 +80,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         {'id': 'pcng_edit',
         'name': 'Edit',
         'action': 'portal_form/pcng_base_edit',
-        'permissions': (AddCollectorIssueFollowup,)
+        'permissions': (ModifyPortalContent,)
         },
         {'id': 'issue_references',
         'name': 'References & Uploads',
@@ -203,7 +203,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         util.redirect(RESPONSE, 'pcng_issue_view', 
                       self.translate('followup_submitted', 'Followup submitted'))
 
-    security.declareProtected(CMFCorePermissions.View, 'lastAction')
+    security.declareProtected(View, 'lastAction')
     def lastAction(self):
         """ return the latest action done """
         return self._last_action
@@ -265,7 +265,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     # Transcript
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'getTranscript')
+    security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
         return self._transcript
@@ -304,7 +304,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         util.redirect(RESPONSE, 'pcng_issue_references', 
                       self.translate('reference_stored', 'Reference has been stored'))
 
-    security.declareProtected(CMFCorePermissions.View, 'references_tree')
+    security.declareProtected(View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
         """ create graphical representation of the references tree
             (using Graphviz) 
@@ -336,8 +336,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
                 self.invokeFactory('File', file_id)
 
             obj = self._getOb(file_id)
-            obj.manage_permission(CMFCorePermissions.View, acquire=1)
-            obj.manage_permission(CMFCorePermissions.AccessContentsInformation, acquire=1)
+            obj.manage_permission(View, acquire=1)
+            obj.manage_permission(AccessContentsInformation, acquire=1)
             obj.manage_upload(uploaded_file)
             self._transcript.addUpload(file_id, comment)
 
@@ -362,7 +362,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     # Misc
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, '_getCollector')
+    security.declareProtected(View, '_getCollector')
     def _getCollector(self):
         """ return collector instance """
         return self.aq_parent
@@ -392,13 +392,13 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     # Catalog stuff
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
+    security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'unindexObject')
+    security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.unindexObject(self)
@@ -450,7 +450,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     # Callbacks for pcng_issue_workflow
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'assigned_to')
+    security.declareProtected(View, 'assigned_to')
     def assigned_to(self, sorted=0):
         """ return assigned users according to the workflow """
         wftool = getToolByName(self, 'portal_workflow')
@@ -458,32 +458,32 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         if sorted: users.sort()
         return users
 
-    security.declareProtected(CMFCorePermissions.View, 'is_assigned')
+    security.declareProtected(View, 'is_assigned')
     def is_assigned(self):
         """ return if the current is user among the assignees """
         username = util.getUserName()
         return username in self.assigned_to()
 
-    security.declareProtected(CMFCorePermissions.View, 'is_confidential')
+    security.declareProtected(View, 'is_confidential')
     def is_confidential(self):
         """ return if the issue is confidential according to the workflow """
         wftool = getToolByName(self, 'portal_workflow')
         return wftool.getInfoFor(self, 'confidential', 0)
 
-    security.declareProtected(CMFCorePermissions.View, 'status')
+    security.declareProtected(View, 'status')
     def status(self):
         """ return workflow state """
         wftool = getToolByName(self, 'portal_workflow')
         return wftool.getInfoFor(self, 'state', 'pending')
 
-    security.declareProtected(CMFCorePermissions.View, 'validActions')
+    security.declareProtected(View, 'validActions')
     def validActions(self):
         """ return valid transitions for issue 'pcng_issue_workflow' """
         pa = getToolByName(self, 'portal_actions', None)
         allactions = pa.listFilteredActionsFor(self)
         return [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
 
-    security.declareProtected(CMFCorePermissions.View, 'getWorkflowHistory')
+    security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
