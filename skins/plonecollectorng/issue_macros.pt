@@ -13,10 +13,14 @@
           <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
           (<span tal:replace="ref/getComment"/>)
         </li>
+
+        <li>
+          <a href="references_tree">Show references as graph</a>
       </ul>
     </metal:block>
     <span i18n:translate="issue_references_table_no_references"
           tal:condition="not: references">No references available</span>
+
 
   </div> <!-- End group -->
 </div>  <!-- End macro: issue_references_table -->

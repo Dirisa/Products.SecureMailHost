@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.30 2003/09/29 19:44:55 ajung Exp $
+$Id: Issue.py,v 1.31 2003/09/30 08:32:34 ajung Exp $
 """
 
-import sys
+import sys, os
+from urllib import unquote
 
 from AccessControl import  ClassSecurityInfo, Unauthorized
 from Acquisition import aq_base
@@ -198,21 +199,38 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
 
+        tracker_url = unquote(reference.tracker)
+
         if not reference.comment:
             raise ValueError('References must have a comment')
 
-        tracker = self.restrictedTraverse(reference.tracker)
+        tracker = self.restrictedTraverse(tracker_url)
         if not tracker:
-            raise ValueError('Tracker does not exist: %s' % reference.tracker)
+            raise ValueError('Tracker does not exist: %s' % tracker_url)
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
             raise ValueError('Ticket number does not exist: %s' % reference.ticketnumber)
 
-        ref = Reference(reference.tracker, reference.ticketnumber, reference.comment)
+        ref = Reference(tracker_url, reference.ticketnumber, reference.comment)
         self._references.add(ref)
-        self._transcript.addReference(reference.tracker, reference.ticketnumber, reference.comment)
+        self._transcript.addReference(tracker_url, reference.ticketnumber, reference.comment)
 
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
+
+    security.declareProtected(CMFCorePermissions.View, 'references_tree')
+    def references_tree(self, RESPONSE):
+        """ create graphical representation of the references tree
+            (using Graphviz) 
+        """
+        from Products.PloneCollectorNG import references
+
+        graphs, nodes, edges = references.build_tree(self, {}, [], [])
+        imgname = references.build_graphviz(graphs, nodes, edges)
+
+        RESPONSE.setHeader('content-type', 'image/gif')
+        imgdata = open(imgname).read()
+        os.unlink(imgname)
+        RESPONSE.write(imgdata)
 
     ######################################################################
     # File uploads 
