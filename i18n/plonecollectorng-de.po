@@ -734,6 +734,27 @@ msgstr "Hochgeladenen Datei"
 msgid "file_for_upload"
 msgstr "Datei zum Hochladen"
 
-
 msgid "upload"
 msgstr "Hochladen"
+
+msgid "help_notifications"
+msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Email-Adressen eingetragen werden, die im Falle eines Workflow-Änderungen eines Tickets ebenfalls eine Benachrichtigung erhalten."
+
+
+msgid "help_reindex_issues"
+msgstr "Alle Tickets müssen nach der Umbenennung oder Verschieben der Collector Instanz reindexiert werden"
+
+msgid  "help_update_schema_for_issues"
+msgstr "Nach der Änderung des Ticket Schemas müssen alle Tickets über die Änderung benachrichtigt werden"
+
+msgid  "help_update_collector_schema"
+msgstr "Manchmal notwendig nach einem PloneCollectorNG Upgrade"
+
+msgid  "help_setup_collector_catalog"
+msgstr "Benutzen Sie diese Funktion, um den Catalog einer Collector Instanz neu anzulegen"
+
+msgid  "help_incomplete_issues"
+msgstr "Zeigt alle nicht ausgefüllten Tickets an und produziert einen Link, um ein Ticket mit fixen Vorgaben zurückzuweisen"
+
+msgid  "help_register_issue_uids"
+msgstr "Diese Funktion darf <b>nur</b> benutzt werden, wenn eine Collector Instanz in eine Plone Site entweder über Cut/Paste oder via Zope's Import/Export Funktionalität eingefügt wurde."
