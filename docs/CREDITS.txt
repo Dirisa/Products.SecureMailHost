@@ -21,3 +21,5 @@ Credits:
   - some icons provided by the Plone team (Alexander Limi)
 
   - CS translation by Lukas Kubin
+
+  - "pydot" module written by Ero Carrera (published under MIT license)

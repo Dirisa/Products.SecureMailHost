@@ -35,12 +35,17 @@ Bugs:
         - Anonymous bug reports are likely to be ignored (I refuse to 
           fix bugs for ghosts).
 
-        - if *you* have a problem then it is up to *you* to provide the
+        - If *you* have a problem then it is up to *you* to provide the
           necessary informations for me to get the problem fixed. It is not up
           to me to get the required informations from you through an iteration
           of questions back to you. Because *you* want help I do expect that 
-          *you* are doing your homework.
-          
+          *you* are doing your homework and provide all necessary informations.
+
+        - No support is provided for broken installations using any alpha 
+          version of PloneCollectorNG. If you are using alpha or beta software
+          you should be aware of the risks using unstable software. Perform
+          a backup in *advance*. Don't blame me if you can not recover from a 
+          broken system.
 
 Support:
 
