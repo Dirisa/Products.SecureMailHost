@@ -359,57 +359,71 @@ class PloneLocalFolderNG(BaseContent):
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
             '/plfng_editMetadata?portal_status_message=' + msg)
 
-    security.declareProtected(View, 'updateFileMetadatum')
-    def updateFileMetadatum(self, REQUEST, section, option, mode='testonly'):
+    security.declareProtected(ModifyPortalContent, 'updateMD5Metadatum')
+    def updateMD5Metadatum(self, REQUEST, PLFNGrelativePath, mode='testonly'):
         """ update a metadatum for the file """
+        # if REQUEST param exists, this method uses the rel_dir from
+        # the '_e' field of REQUEST, and the result of the method is
+        # provided via redirect portal_status_message output.
+        #
+        # Otherwise, this method returns one of the following values:
+        #
+        #   if existing metadata valid :: return -1
+        #
+        #   if existing metadata invalid AND metadata updated :: return 1
+        #
+        #   if existing metadata invalid AND metadata NOT updated :: return 0
+        #   (note: this result will be returned either when mode=='testonly'
+        #          or when setMetadata() failed for whatever reason)
+
         result = 0
-        #zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: \
-        #section=%s option=%s newvalue=%s" % (section, option, newvalue))
-        rel_dir = '/'.join(REQUEST.get('_e', []))
+        section = 'DIAGNOSTICS'
+        option = 'md5'
+
+        #zLOG.LOG('PLFNG', zLOG.INFO , "updateMD5Metadatum() :: \
+        #REQUEST=%s rel_dir=%s mode=%s" % (REQUEST, rel_dir, mode))
+
+        if REQUEST:
+            PLFNGrelativePath = '/'.join(REQUEST.get('_e', []))
+
         # protect against potential '_e' shenanigans
-        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
-            raise ValueError('illegal directory: %s' % rel_dir)
+        if PLFNGrelativePath.startswith('/') or \
+          PLFNGrelativePath.find('..') > -1:
+            raise ValueError('illegal path: %s' % PLFNGrelativePath)
 
-        targetFile = os.path.join(self.folder, rel_dir)
+        targetFile = os.path.join(self.folder, PLFNGrelativePath)
+        if not os.path.isfile(targetFile):
+            raise ValueError('not a file: %s' % PLFNGrelativePath)
 
-        if section == 'DIAGNOSTICS' and option == 'md5':
-           metadataMD5 = getMetadataElement(targetFile, section, option)
-           start_time = DateTime()
-           fileMD5 = generate_md5(targetFile,self.external_syscall_md5)
-           stop_time = DateTime()
-           elapsed_time = (stop_time - start_time)*86400.0
+        metadataMD5 = getMetadataElement(targetFile, section, option)
+        start_time = DateTime()
+        fileMD5 = generate_md5(targetFile,self.external_syscall_md5)
+        stop_time = DateTime()
+        elapsed_time = (stop_time - start_time)*86400.0
 
-           if metadataMD5 == fileMD5:
-               if mode == 'testonly':
-                   msg = 'MD5 metadata is valid. (MD5 computation took '+ \
-                         str(elapsed_time)[:6] + ' seconds).'
-                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
-                     '/plfng_editMetadata?portal_status_message=' + msg)
-               else:
-                   msg = 'no need to update MD5 metadata (it is valid).'
-                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
-                     '/plfng_editMetadata?portal_status_message=' + msg)
-           else:
-               if mode == 'testonly':
-                   msg = \
-                    'WARNING: MD5 metadata does NOT match current file MD5 !!!'
-                   REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
-                     '/plfng_editMetadata?portal_status_message=' + msg)
-               else:
-                   result = setMetadata(targetFile, section, option, fileMD5)
-                   if result == 1:
-                        msg = 'MD5 metadata updated.'
-                        REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
-                          '/plfng_editMetadata?portal_status_message=' + msg)
-                   else:
-                        msg = 'ERROR: MD5 metadata could not be updated !!!'
-                        REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
-                        '/plfng_editMetadata?portal_status_message=' + msg)
-
+        if metadataMD5 == fileMD5:
+            result = -1
+            if mode == 'testonly':
+                msg = 'MD5 metadata is valid. (MD5 computation took '+ \
+                      str(elapsed_time)[:6] + ' seconds).'
+            else:
+                msg = 'no need to update MD5 metadata (it is valid).'
         else:
-           msg = 'Unsupported metadata update type.'
+            if mode == 'testonly':
+                result = 0
+                msg='WARNING: MD5 metadata does NOT match current file MD5 !!!'
+            else:
+                result = setMetadata(targetFile, section, option, fileMD5)
+                if result == 1:
+                     msg = 'MD5 metadata updated.'
+                else:
+                     msg = 'ERROR: MD5 metadata could not be updated !!!'
+
+        if REQUEST:
            REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
            '/plfng_editMetadata?portal_status_message=' + msg)
+        else:
+           return result
 
     def _increment_mxmcount(self):
         """ backwards compatibility """
@@ -1441,6 +1455,83 @@ class PloneLocalFolderNG(BaseContent):
            (
             ('PLFNG_Base_Relative','PLFNG_Base_Relative'),
            ))
+
+    security.declareProtected('View', 'getFilteredContents')
+    def getFilteredContents(self,rel_dir=None):
+        """ list filtered content of local filesystem """
+
+        filteredFileList = []
+        filteredFolderList = []
+        resultList = []
+
+        if rel_dir == None: rel_dir = ''
+        destpath = os.path.join(self.folder, rel_dir)
+        
+        if rel_dir == '':
+           outputPrefix = ''
+        else:
+           outputPrefix = rel_dir.replace('\\', '/') + '/'
+           
+
+        this_portal = getToolByName(self, 'portal_url')
+        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
+
+        if hasattr(self, "hidden_file_prefixes") and self.hidden_file_prefixes:
+           filePrefixesSkipList = split(self.hidden_file_prefixes,',')
+        else:
+           filePrefixesSkipList = []
+
+        if hasattr(self, "hidden_file_suffixes") and self.hidden_file_suffixes:
+           fileSuffixesSkipList = split(self.hidden_file_suffixes,',')
+        else:
+           fileSuffixesSkipList = []
+
+        if hasattr(self, "hidden_file_names") and self.hidden_file_names:
+           fileNamesSkipList = split(self.hidden_file_names,',')
+        else:
+           fileNamesSkipList = []
+
+        if hasattr(self, "hidden_folder_prefixes") and \
+          self.hidden_folder_prefixes:
+           folderPrefixesSkipList = split(self.hidden_folder_prefixes,',')
+        else:
+           folderPrefixesSkipList = []
+
+        if hasattr(self, "hidden_folder_suffixes") and \
+          self.hidden_folder_suffixes:
+           folderSuffixesSkipList = split(self.hidden_folder_suffixes,',')
+        else:
+           folderSuffixesSkipList = []
+
+        if hasattr(self, "hidden_folder_names") and self.hidden_folder_names:
+           folderNamesSkipList = split(self.hidden_folder_names,',')
+        else:
+           folderNamesSkipList = []
+
+        trimmedFolderBasePath = os.path.normpath(destpath)
+
+        filteredFileList, filteredFolderList = \
+           getFilteredFSItems(FSfullPath=trimmedFolderBasePath,
+                                 skipInvalidIds=1,
+                                 mimetypesTool=mimetypesTool,
+                                 filetypePhrasesSkipList=[],
+                                 filePrefixesSkipList=filePrefixesSkipList,
+                                 fileSuffixesSkipList=fileSuffixesSkipList,
+                                 fileNamesSkipList=fileNamesSkipList,
+                                 folderPrefixesSkipList=folderPrefixesSkipList,
+                                 folderSuffixesSkipList=folderSuffixesSkipList,
+                                 folderNamesSkipList=folderNamesSkipList)
+
+        for filename in filteredFileList:
+           resultList.append(outputPrefix + filename)
+        
+        for subFolder in filteredFolderList:
+           resultList.append(outputPrefix + subFolder+'/')
+           new_rel_dir = os.path.join(rel_dir,subFolder)
+           sub_resultList = self.getFilteredContents(rel_dir=new_rel_dir)
+           resultList = resultList + sub_resultList
+
+        return resultList
 
     security.declareProtected('View', 'getFilteredOutContents')
     def getFilteredOutContents(self,rel_dir=None):
