@@ -49,7 +49,7 @@
         </div>
         
         <div tal:define="sections python:test(req_section,[req_section],here.sections);
-                         objects python:context.objectValues();" 
+                         objects python:here.objectValues();" 
              tal:repeat="section sections">
  
             <h2 tal:content="section">Section Heading</h2>

@@ -16,7 +16,7 @@
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
-                    tal:define="my_path python: '/'.join(context.getPhysicalPath());
+                    tal:define="my_path python: '/'.join(here.getPhysicalPath());
                                 subtypes python:{'HelpCenterFAQFolder':'HelpCenterFAQ',
                                        'HelpCenterTutorialFolder':'HelpCenterTutorial',
                                        'HelpCenterHowToFolder':'HelpCenterHowTo'}">
@@ -39,8 +39,8 @@
             <img tal:attributes="src string:$portal_url/rss.gif"></a>
             </p>
 
-            <tal:listings repeat="help_type python: context.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
-                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:context.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
+            <tal:listings repeat="help_type python: here.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
+                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
 
                     <div class="portlet portletThirdWidth">
                         <h6>
