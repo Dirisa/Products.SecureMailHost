@@ -90,7 +90,9 @@
                         <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
                         i18n:translate="listingheader_modified">Modified</span>&nbsp;</th>
                         <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_modified">Action</span>&nbsp;</th>
+                        i18n:translate="listingheader_comment">Comment</span>&nbsp;</th>
+                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                        i18n:translate="listingheader_action">Action</span>&nbsp;</th>
                     </tr>
                     </metal:block>
                 </thead>
@@ -138,6 +140,9 @@
                         <td tal:content="python:toPortalTime(item.ModificationDate())">
                         08/19/2001 03:01 AM
                         </td>
+
+                        <td tal:content="item/getComment" />
+
                         <td> 
                           <a tal:condition="python: getObjSize(item)"
                               tal:attributes="href string:${item/absolute_url}?action=download">Download</a>

@@ -60,6 +60,9 @@ class FileProxy(FSObject):
     def setAbsoluteURL(self, url):
         self.url = url
 
+    def setComment(self, comment):
+        self.comment = comment
+
     security.declarePublic('absolute_url')
     def absolute_url(self):
         """ return url """
@@ -69,6 +72,11 @@ class FileProxy(FSObject):
     def title_or_id(self):
         """ return title or id """
         return self.id
+
+    security.declarePublic('getComment')
+    def getComment(self):
+        """ return comment"""
+        return self.comment
 
     security.declarePublic('getTypeInfo')
     def getTypeInfo(self):
@@ -154,6 +162,7 @@ class PloneLocalFolderNG(BaseContent):
 
         l = []
         for f in os.listdir(destfolder):
+            if f.endswith('.metadata'): continue
 
             fullname = os.path.join(destfolder, f)
             P = FileProxy(f, fullname, f)
@@ -167,6 +176,11 @@ class PloneLocalFolderNG(BaseContent):
                 P.setIconPath(mi.icon_path)
                 P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
                 P.setMimeType(mi.normalized())
+
+            if os.path.exists(fullname + '.metadata'):
+                P.setComment(open(fullname + '.metadata').read())
+            else:
+                P.setComment('')
             l.append(P) 
 
         return l
