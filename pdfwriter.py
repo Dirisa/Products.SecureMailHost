@@ -5,16 +5,19 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.18 2003/12/23 05:37:00 ajung Exp $
+$Id: pdfwriter.py,v 1.19 2003/12/28 18:26:53 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
 from textwrap import fill
+from zLOG import WARNING, LOG
    
 try:
     from PIL import Image as PIL_Image
     have_pil = 1
-except ImportError: have_pil = 0
+except ImportError: 
+    LOG('plonecollectorng', WARNING, 'Python Imaging Library not available. Pdfwriter will not be able to include images in issue PDFs') 
+    have_pil = 0
 
 from DateTime import DateTime
 from DocumentTemplate.html_quote import html_quote
@@ -52,7 +55,7 @@ def myLaterPages(canvas, doc):
     canvas.drawString(inch, PAGE_HEIGHT-62, doc.collector_title)
     canvas.setFont('Helvetica',11)
     canvas.drawString(inch, 0.75 * inch, "Page %d" % doc.page)
-    canvas.drawString(450, 0.75 * inch, doc.collector.toPortalTime(DateTime(), long_format=1))
+    canvas.drawString(450, 0.75 * inch, doc.collector.toLocalizedTime(DateTime(), long_format=1))
     canvas.restoreState()
 
 myFirstPage = myLaterPages
@@ -167,7 +170,7 @@ def pdfwriter(collector, ids):
         n = 1
 
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
-            datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
+            datestr = issue.toLocalizedTime(DateTime(group[0].created), long_format=1)
             uid = group[0].user
             header('#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
 
