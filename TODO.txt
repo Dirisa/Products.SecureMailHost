@@ -5,11 +5,7 @@ Template changes:
 =================
 
  - All PHC types need to show the "log in to add FAQ/How-to/whatever" button  
-        
- - Definitions (glossary_view template) should be alphabetically sorted - 
-    proper human sorting, not UNIX-sorting (ie. not uppercase letters before 
-    lowercase).
-    
+     
  - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
 
@@ -64,7 +60,8 @@ Schema/class changes:
 =====================
 
  - Definitions (in Glossary) need to be able to have links to other
-    definitions.   
+    definitions. There seems to be currently-disabled generic reference fields
+    on PHC content. Should we just enable this?
 
  - HistoryAware mixin should be enabled for all types. Done, but some fields
     don't get history, since they are metadata-only (e.g. glossary definitions),
@@ -88,6 +85,13 @@ Schema/class changes:
     is currently.
     
  - Instructional video should use ExternalStorage for video files
+ 
+  - glossary_view template should use a catalogue search to show definitions.
+    This is in getItemsBySection(), overridden from PHCFolder. Both should use a
+    search, but the latter requires ExtendedPathIndex. Since the Glossary is
+    sorted anyway, it does not. In either case, we need a catalogue index on
+    getSections. We should probably also fix the templates to use brains,
+    not objects.
 
 ===========
 Marshallers
@@ -118,7 +122,7 @@ Need testing/unit test work:
  
  - Comment workflow and notification
  
-  - We need many more unit tests!
+ - We need many more unit tests!
   
 =======
 Future:

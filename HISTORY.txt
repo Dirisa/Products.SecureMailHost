@@ -2,6 +2,7 @@ History of significant changes for PloneHelpCenter:
 
    (name of developer listed in brackets)
 
+    - Made Glossary's getItemsBySection() return sorted list.
 
     - Made reference manual and todo navigation drop-downs select current page
         (optilude)

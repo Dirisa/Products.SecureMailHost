@@ -10,6 +10,8 @@ from Products.PloneHelpCenter.config import *
 from schemata import GlossarySchema
 from PHCFolder import PHCFolder
 
+from Products.CMFCore.utils import getToolByName
+from AccessControl import getSecurityManager
 
 # generate the add method ourselves so we can set the add permission
 security = ModuleSecurityInfo('Products.PloneHelpCenter.Glossary')
@@ -52,5 +54,28 @@ class HelpCenterGlossary(PHCFolder,OrderedBaseFolder):
             'permissions': (CMFCorePermissions.ManageProperties,)
         },
     )
+    
+    def getItemsBySection(self, section, states=[]):
+        """Get items in this section - in alphabetical order"""
+    
+        # XXX: This should use a catalogue query. It is rather inefficient!
+
+        user = getSecurityManager().getUser()
+        items = [o for o in self.contentValues(self.allowed_content_types)
+                 if section in o.getSections()]
+        items = [i for i in items if user.has_permission('View', i) ]
+        
+        if states:
+            wtool=getToolByName(self, 'portal_workflow', None)
+            if wtool:
+                getInfoFor=wtool.getInfoFor
+                items = [o for o in items
+                         if getInfoFor(o, 'review_state') in states]
+                         
+        items.sort (lambda x, y: cmp (x.title_or_id ().lower (),
+                                      y.title_or_id ().lower ()))
+        
+        return items
+
     
 registerType(HelpCenterGlossary, PROJECTNAME)
