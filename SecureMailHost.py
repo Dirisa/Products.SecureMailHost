@@ -10,13 +10,9 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE
 #
-###############
-# 12/23/03 bowerymarc added ESMTP support
-# based on v.1.74.6.6 from zope 2.6.2
-# 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.11 2004/05/24 01:18:50 tiran Exp $
+$Id: SecureMailHost.py,v 1.12 2004/05/24 12:51:33 tiran Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -125,7 +121,7 @@ class SecureMailBase(MailBase):
         if not hasattr(self,'_v_sendtemplate'):
             LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
                 'The usage of sendTemplate() in %s is deprecated. '
-                'Use secureSend instead!' % self.absulute_url(0))
+                'Use secureSend instead!' % self.absolute_url(0))
             self._v_sendtemplate = 1
 
         return MailBase.sendTemplate(trueself, self, messageTemplate,
@@ -142,7 +138,7 @@ class SecureMailBase(MailBase):
         if not hasattr(self,'_v_send'):
             LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
                 'The usage of send() in %s is deprecated. '
-                'Use secureSend instead!' % self.absulute_url(0))
+                'Use secureSend instead!' % self.absolute_url(0))
             self._v_send = 1
 
         return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
