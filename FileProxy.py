@@ -15,32 +15,77 @@ class FileProxy(FSObject):
     security = ClassSecurityInfo()
     meta_type = 'PloneLocalFolderFileProxy'
     language  = 'neutral'
+    checksum = ''
+    revision = ''
 
-    def setLanguage(self, language='neutral'):
-        self.language = language
+    security.declarePublic('getChecksum')
+    def getChecksum(self):
+        """ return checksum"""
+        return self.checksum
+
+    security.declarePublic('getComment')
+    def getComment(self):
+        """ return comment"""
+        return self.comment
+
+    security.declarePublic('getIcon')
+    def getIcon(self, arg=None):
+        """ icon """
+        return self.icon_path
+
+    security.declarePublic('getRevision')
+    def getRevision(self):
+        """ return revision"""
+        return self.revision
+
+    security.declarePublic('get_size')
+    def get_size(self):
+        """ None """
+        if os.path.isdir(self._filepath):
+           return ''
+        try:
+           size = os.stat(self._filepath)[6]
+           return size
+        except: return ''
+
+    security.declarePublic('getTitle')
+    def getTitle(self):
+        return self.title
+
+    security.declarePublic('getTypeInfo')
+    def getTypeInfo(self):
+        """ return type info """
+        TI = TypeInfo(self.id, self.mime_type)
+        TI.setMimeType(self.mime_type)
+        return TI
 
     security.declarePublic('Language')
     def Language(self):
         return self.language
 
-    def setMimeType(self, mt):
-        self.mime_type = mt
-
-    def setIconPath(self, icon_path):
-        self.icon_path = icon_path
-
     def setAbsoluteURL(self, url):
         self.url = url
+
+    def setChecksum(self, checksum):
+        self.checksum = checksum
 
     def setComment(self, comment):
         self.comment = comment
 
+    def setIconPath(self, icon_path):
+        self.icon_path = icon_path
+
+    def setLanguage(self, language='neutral'):
+        self.language = language
+
+    def setMimeType(self, mt):
+        self.mime_type = mt
+
+    def setRevision(self, revision):
+        self.revision = revision
+
     def setTitle(self, title):
         self.title = title
-
-    security.declarePublic('getTitle')
-    def getTitle(self):
-        return self.title
 
     security.declarePublic('absolute_url')
     def absolute_url(self,relative=0):
@@ -52,25 +97,12 @@ class FileProxy(FSObject):
         """ return title or id """
         return self.title or self.id
 
-    security.declarePublic('getComment')
-    def getComment(self):
-        """ return comment"""
-        return self.comment
 
-    security.declarePublic('getTypeInfo')
-    def getTypeInfo(self):
-        """ return type info """
-        TI = TypeInfo(self.id, self.mime_type)
-        TI.setMimeType(self.mime_type)
-        return TI
 
     def _readFile(self, *args, **kw):
         """ read the file """
 
-    security.declarePublic('getIcon')
-    def getIcon(self, arg=None):
-        """ icon """
-        return self.icon_path
+
 
 
     security.declarePublic('ModificationDate')
@@ -81,15 +113,7 @@ class FileProxy(FSObject):
         except:
             return DateTime()
 
-    security.declarePublic('get_size')
-    def get_size(self):
-        """ None """
-        if os.path.isdir(self._filepath):
-           return ''
-        try:
-           size = os.stat(self._filepath)[6]
-           return size
-        except: return ''
+
 
     def txng_get(self, attr):
         """ TextIndexNG support method that returns the source
