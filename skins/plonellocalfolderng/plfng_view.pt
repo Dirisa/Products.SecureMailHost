@@ -30,8 +30,8 @@
             </h1>
 
             <h1 tal:condition="not:myfolder">
-            <img tal:replace="structure here/folder.gif" />
-            <span tal:content="here/title_or_id" tal:omit-tag="">Directory Id</span>
+              <img tal:replace="structure here/folder.gif" />
+              <span tal:content="python: '/%s/%s' % (here.absolute_url(1), request.get('showdir',''))" />
             </h1>
 
             <metal:block tal:condition="not: folder_contents">
