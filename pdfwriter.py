@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.45 2004/07/23 06:42:13 ajung Exp $
+$Id: pdfwriter.py,v 1.46 2004/09/23 18:55:58 ajung Exp $
 """
 
 import os, cStringIO, tempfile
@@ -29,6 +29,8 @@ from reportlab import rl_config
 from reportlab.lib.units import inch                              
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+
+from config import SCHEMA_ID
 
 styles = getSampleStyleSheet()
 
@@ -175,12 +177,12 @@ def pdfwriter(collector, ids):
         # Schematas + Metadata
         ##################################################################
 
-        for name in issue.atse_getSchemataNames():
+        for name in issue.atse_getSchemataNames(SCHEMA_ID):
             if name in ('default', 'metadata'): continue
             
             l =[]
 
-            for field in issue.atse_getSchemata(name).fields():
+            for field in issue.atse_getSchemata(SCHEMA_ID, name).fields():
                 if field.getName() in ('description', 'title'): continue
 
                 value = issue.getParameter(field.getName())
