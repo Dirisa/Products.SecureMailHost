@@ -76,7 +76,7 @@ class HelpCenterHowTo(BaseFolder):
         'id': 'attachments',
         'name': 'Attachments',
         'action': 'string:${object_url}/howto_attachments',
-        'permissions': (CMFCorePermissions.View,)
+        'permissions': (CMFCorePermissions.ModifyPortalContent,)
         },
         
         )
@@ -110,6 +110,8 @@ class HelpCenterHowTo(BaseFolder):
     def Versions(self):
         """method to display the versions in a nicer way
         """
+
+        # XXX is this really necessary? the widget supports this, doesn't it? ~limi
         result=""
         for version in self.versions:
             if result:
