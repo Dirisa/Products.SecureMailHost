@@ -16,7 +16,6 @@ $Id:
 """
 
 import SecureMailHost
-import SendMailTag
 
 def initialize(context):
     context.registerClass(

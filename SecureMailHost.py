@@ -15,17 +15,21 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.1 2004/05/16 02:24:55 tiran Exp $
+$Id: SecureMailHost.py,v 1.2 2004/05/16 07:36:28 tiran Exp $
 """
+
+X_MAILER = 'Zope/SecureMailHost'
+BAD_HEADERS = ()
 
 import sys
 from types import StringType, TupleType, ListType
+from copy import deepcopy
 
 from smtplib import SMTP
 import mimetools
 import base64
-import email
-from email.MIMEText import MIMEText
+import email.Message
+import email.MIMEText
 
 import re
 from cStringIO import StringIO
@@ -125,13 +129,14 @@ class SecureMailBase(MailBase):
         """
         raise MailHostError, 'send is disabled'
 
-    def secureSend(self, messageText, mto, mfrom, subject='[No Subject]',
+    def secureSend(self, message, mto, mfrom, subject='[No Subject]',
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
-                   **kwargs):
+                   debug=False, **kwargs):
         """A more secure way to send a message
             
-        messageText:
-            The plain message text without any headers
+        message:
+            The plain message text without any headers or an
+            email.Message.Message based instance
         mto:
             To: field (string or list)
         mfrom:
@@ -150,6 +155,7 @@ class SecureMailBase(MailBase):
             Additional headers
         """
         # check email addresses
+        # XXX check Return-Path
         mto  = self.emailListToString(mto)
         mcc  = self.emailListToString(mcc)
         mbcc = self.emailListToString(mbcc)
@@ -163,23 +169,50 @@ class SecureMailBase(MailBase):
             raise MailHostError, 'Invalid email address: %s' % addr
 
         # create message
-        msg = MIMEText(messageText, subtype, charset)
-        msg['From']     = mfrom
-        msg['To']       = mto
-        msg['Subject' ] = subject
-        if mcc:
-            msg['Cc']   = mcc
-        if mbcc:
-            msg['Bcc']  = mbcc
-        if 'Date' not in kwargs.keys():
+        if isinstance(message, email.Message.Message):
+            # got an email message. Make a deepcopy because we don't want to
+            # change the message
+            msg = deepcopy(message)
+            # XXX what about subtype and charset?
+            if subtype != 'plain' or charset != 'us-ascii':
+                raise MailHostError
+        else:
+            msg = email.MIMEText.MIMEText(message, subtype, charset)
+
+        # set important headers
+        self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
+                              Subject=subject, Cc = mcc, Bcc = mbcc)
+
+        # set additional headers
+        if 'Date' not in kwargs:
             kwargs['Date'] = DateTime().rfc822()
-        for key, val in kwargs.items():
-            msg[key] = val
+        if 'X-Mailer' not in kwargs:
+            kwargs['X-Mailer'] = X_MAILER
+        for bad in BAD_HEADERS:
+            if bad in kwargs:
+                raise MailHostError, 'Header %s is forbidden' % bad
+        self.setHeaderOf(msg, **kwargs)
+
         # finally send email
-        self._send( mfrom, mto, str(msg))
+        if debug:
+            return (mfrom, mto, msg)
+        else:
+            self._send(mfrom, mto, msg.as_string())
+
+    def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
+        """Set the headers of the email.Message based instance
+        
+        All occurences of the key are deleted first!
+        """
+        for key, val in kwargs.items():
+            del msg[key] # save - email.Message won't raise a KeyError
+            if not val:
+                continue
+            msg[key] = val
+        return msg
 
     security.declarePrivate( '_send' )
-    def _send( self, mfrom, mto, messageText, debug=False ):
+    def _send( self, mfrom, mto, messageText, debug = False):
         """ Send the message """
         smtpserver = SMTP( self.smtp_host, int(self.smtp_port) )
         if debug:
@@ -214,11 +247,11 @@ class SecureMailBase(MailBase):
         addresses = []
         for addr in addr_list:
             if type(addr) is StringType:
-                addresses.append(email.formataddr(('', addr)))
+                addresses.append(email.Utils.formataddr(('', addr)))
             else:
                 if size(addr) != 2:
                     raise ValueError, "Wrong format: ('name', 'email') is required"
-                addresses.append(email.formataddr(addr))
+                addresses.append(email.Utils.formataddr(addr))
         # stage 3: return the addresses as comma seperated string
         return ', '.join(addresses)
 
