@@ -43,10 +43,12 @@
 	    <tal:if tal:condition="clipboards">
 	      <input type="radio"
 		     value="__CB__"
-		     tal:define="cb python:clipboards[0]"
-		     tal:condition="cb/isCopyBufferPasteable"
+		     tal:define="cb python:clipboards[0];
+                                 global cbPasteable cb/isCopyBufferPasteable"
+		     tal:condition="cbPasteable"
 		     tal:attributes="name string:${fieldname}_clipboard;" />
-              <span i18n:translate="label_copy_buffer">
+              <span i18n:translate="label_copy_buffer"
+                    tal:condition="cbPasteable">
 		Copy buffer
 	      </span>
 	    </tal:if>

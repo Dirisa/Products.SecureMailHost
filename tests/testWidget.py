@@ -33,39 +33,93 @@ class TestWidget(PloneTestCase.PloneTestCase):
             allowed_types = ('DDocument',)
             )
 
-        cb = self.tool.getClipboards()[0]
-        cb.manage_pasteObjects(self.folder.manage_copyObjects('doc2'))
-        form = {'reffield_clipboard': cb.getId()}
+        # Let's get the first of our clipboards and paste the 'doc2'
+        # object into it.
+        cb1 = self.tool.getClipboards()[0]
+        cb1.manage_pasteObjects(self.folder.manage_copyObjects('doc2'))
+
+        # We leave the second clipboard empty.
+        cb2 = self.tool.getClipboards()[1]        
+
+        # 'reffield_clipboard' is the id of the input element that
+        # selects the clipboard to be used as the source in the
+        # widget.
+        form = {'reffield_clipboard': cb1.getId()}
         
+        # We use these form values to call process_form on the widget,
+        # which returns a list of UIDs.  In this case the list
+        # consists of one element: the doc2 object that we pasted into
+        # our clipboard:
         value, kwargs = field.widget.process_form(self.doc1, field, form)
         self.assertEqual([self.doc2.UID()], value)
+
+        # We use the returned value to call field.validate, which in
+        # turn calls our validator.  'None' indicates that there was
+        # no error.
         self.assertEqual(field.validate(value, self.doc1), None)
 
-        field.set(self.doc1, [self.doc1.UID()])
-        self.assertEqual(field.getRaw(self.doc1), self.doc1.UID())
+        # Now we call the field's set method.
+        field.set(self.doc1, value, **kwargs)
 
-        form.update({'reffield_replace': 1})        
-        value, kwargs = field.widget.process_form(self.doc1, field, form)
-        self.assertEqual(field.validate(value, self.doc1), None)
-        self.assertEqual([self.doc2.UID()], value)
-
-        field.allowed_types = ('SomePortalType',)
-        # type not allowed:
-        self.assertNotEqual(field.validate(value, self.doc1), None)
-
-        field.allowed_type = ('DDocument',)
-        cb.manage_pasteObjects(self.folder.manage_copyObjects('doc1'))
+        # At this point the reference got set and we can use
+        # process_form to add the contents of the second clipboard to
+        # the references we already have.
+        cb2.manage_pasteObjects(self.folder.manage_copyObjects('doc1'))
+        form = {'reffield_clipboard': cb2.getId()}
         value, kwargs = field.widget.process_form(self.doc1, field, form)
 
+        # To the effect that both UIDs are in value now:
+        self.failUnless(self.doc1.UID() in value)
+        self.failUnless(self.doc2.UID() in value)
+        self.assertEqual(len(value), 2)
+
+        # 'reffield_replace' in the replace indicates that we want to
+        # replace old values.
+        form = {'reffield_replace': 1}
+        # Let's replace with the contents of the second clipboard:
+        form['reffield_clipboard'] = cb2.getId()
+        value, kwargs = field.widget.process_form(self.doc1, field, form)
+        self.assertEqual([self.doc1.UID()], value)
+
+        # '__CLEAR__' indicates that we want to unset the values.
         form.update({'reffield_clipboard': '__CLEAR__'})
         value, kwargs = field.widget.process_form(self.doc1, field, form)
         self.failIf(value)
 
-        field.required = 1
-        errors = {}
-        field.validate(value, self.doc1, errors=errors)
-        self.failUnless(errors.has_key('reffield'))
+    def testValidator(self):
+        # Here we test the "referenceclipboardvalidator".
+        field = ReferenceField(
+            'reffield',
+            widget=ReferenceClipboardWidget,
+            validators = ('referenceclipboardvalidator',),
+            relationship = 'somerel',
+            )
 
+        # First we attempt to set an invalid UID:
+        res = field.validate(['invalid UID'], self.doc1)
+        self.assertNotEqual(res, None)
+        
+        # Now we try to set multiple references with a single valued reffield.
+        # (A reffield is single valued by default.)
+        res = field.validate([self.doc1.UID(), self.doc2.UID()], self.doc1)
+        self.assertNotEquals(res, None)
+
+        # Set multiValued=1.  Now the last call to field.validate()
+        # should be ok.
+        field.multiValued = 1
+        res = field.validate([self.doc1.UID(), self.doc2.UID()], self.doc1)
+        self.assertEqual(res, None)
+
+        # Let's attempt to set a reference to a disallowed type.  The
+        # validator must fail here.
+        field.allowed_types = ('SomePortalType',)
+        res = field.validate([self.doc1.UID()], self.doc1)
+        self.assertNotEqual(res, None)
+
+        # While with an allowed type it should work:
+        field.allowed_types = (self.doc1.portal_type,)
+        res = field.validate([self.doc1.UID()], self.doc1)
+        self.assertEqual(res, None)
 
     def testGetTitles(self):
         field = ReferenceField(

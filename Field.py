@@ -21,11 +21,12 @@
 """
 Validator and Widget for use with ReferenceField.
 
-$Id: Field.py,v 1.4 2004/09/04 16:01:27 dpunktnpunkt Exp $
+$Id: Field.py,v 1.5 2004/10/19 21:20:11 dpunktnpunkt Exp $
 """
 
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Widget import TypesWidget
+from Products.Archetypes.utils import unique
 
 try:
     from validation import validation, interfaces
@@ -80,7 +81,8 @@ class ReferenceClipboardWidget(TypesWidget):
                 if uid not in uids:
                     uids.append(uid)
 
-        return uids, {}
+        # uniquify
+        return unique(uids), {}
 
     def getTitles(self, instance, field):
         objs = field.get(instance)
@@ -106,11 +108,15 @@ class ReferenceClipboardValidator:
         if not value:
             return 1
 
+        if not field.multiValued and len(value) > 1:
+            return 'You attempted to set multiple references with the ' \
+                   'non multivalued reference field "%s".' % field.getName()
+
         for uid in value:
             try:
                 targetBrain = catalog(UID=uid)[0]
             except IndexError:
-                return 'Invalid reference to %s' % uid
+                return 'Invalid reference to %r' % uid
 
             if field.allowed_types and \
                    targetBrain.portal_type not in field.allowed_types:
