@@ -7,18 +7,18 @@
   <div metal:fill-slot="main">	  
     <table width="100%">
       <tr>
-        <td valign="top">
+        <td valign="top" width="50%">
           <div metal:use-macro="here/issue_macros/macros/issue_references" />
         </td>
-        <td valign="top">
+        <td valign="top" width="50%">
           <div metal:use-macro="here/issue_macros/macros/issue_uploads" />
         </td>
       </tr>
       <tr>
-        <td valign="top">
+        <td valign="top" width="50%">
           <div metal:use-macro="here/issue_macros/macros/add_references" />
         </td>
-        <td valign="top">
+        <td valign="top" width="50%">
           <div metal:use-macro="here/issue_macros/macros/add_uploads" />
         </td>
       </tr>
