@@ -6,7 +6,8 @@
   <div metal:fill-slot="main">
     <h1>Member preferences</h1>
     <form method="post" action="pcng_set_member_preferences">
-      <div class="group">
+      <div class="group">   
+        <span class="legend">Preferences</span>
         <metal:block tal:repeat="item python: ( 
                                          ('pcng_company','Company'), 
                                          ('pcng_position','Position'), 
