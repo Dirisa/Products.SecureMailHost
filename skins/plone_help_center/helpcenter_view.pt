@@ -110,7 +110,7 @@
                   <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath());
                                    objs python:here.portal_catalog(portal_type=help_type_tuple[1], 
                                                                    path=folder_path,
-                                                                   review_state='published' 
+                                                                   review_state='published',
                                                                    sort_on='modified', 
                                                                    sort_order='reverse', 
                                                                    sort_limit=5)[:5]">
