@@ -1,1 +1,5 @@
-PloneCollectorNG is published under the Zope Public License
+PloneCollectorNG has been written by Andreas Jung (andreas@andreas-jung.com)
+and is based on the ideas of CMFCollectorNG and CMFCollector (written by Ken
+Manheimer of Zope Corporation).
+
+PloneCollectorNG is published under the Zope Public License (ZPL) V 2.0.
