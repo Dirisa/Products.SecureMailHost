@@ -1,0 +1,17 @@
+SecureMailHost
+==============
+
+0.2-beta2  2004-05-24
+---------------------
+
+ * Multiple small fixes to make the old send() method run
+   [longsleep, tiran]
+
+0.2-beta1  2004-05-24
+---------------------
+
+ * First beta testing version
+   [tiran]
+
+ * Implemented all the new stuff like async thread, mailer class, starttls ...
+   [tiran]
