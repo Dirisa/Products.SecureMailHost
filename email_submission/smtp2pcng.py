@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.11 2004/04/13 10:20:37 ajung Exp $
+$Id: smtp2pcng.py,v 1.12 2004/04/13 14:41:15 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
@@ -83,8 +83,12 @@ def parse_mail(options):
     else:
         print >>sys.stderr, 'Reading mail from stdin'
         text = sys.stdin.read()
-    msg = email.message_from_string(text)
 
+    LOG.debug('Length of message: %d bytes' % len(text))
+    if len(text) > options.max_length:
+        raise RuntimeError('Message size exceeds allowed length of %d bytes' % options.max_length)
+
+    msg = email.message_from_string(text)
     R = Result()
 
     for part in msg.walk():
@@ -159,6 +163,8 @@ if __name__ == '__main__':
                       help='Path to configuration file (~/%s)' % CFG_FILE, default='~/%s' % CFG_FILE)
     parser.add_option('-C', '--configuration', dest='configuration', 
                       help='Section from configuration file to be used', default=None)
+    parser.add_option('-m', '--max-length', dest='max_length', 
+                      help='Maximum length of incoming messages in bytes', type='int', default=16384)
     options, args = parser.parse_args()
 
     LOG.info('-'*75)
