@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.96 2003/12/19 13:05:34 ajung Exp $
+$Id: Collector.py,v 1.97 2003/12/19 19:53:24 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -363,10 +363,11 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
  
         for k in REQUEST.form.keys():
             if not k.startswith('field_'):  continue
-            d[k[6:]] = {'mode' : REQUEST.form[k]}
+            d[k[6:]] = {'mode' : REQUEST.form[k],
+                        'visibility' : 1}
 
         self._search_form = d
-        print d
+        
         util.redirect(RESPONSE, 'pcng_searchform_editor',     
                       self.translate('searchform_saved', 'Search form has been saved')) 
 
