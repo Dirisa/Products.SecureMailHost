@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.203 2004/07/04 08:00:22 ajung Exp $
+$Id: Issue.py,v 1.204 2004/07/05 17:54:21 ajung Exp $
 """
 
 import os, time, random 
@@ -450,14 +450,14 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             old = self.getField(name).get(self)
             self._transcript.addChange(name, old, new)
 
-
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this
             to reindex the issue.
         """
 
         self.notifyModified() # notify DublinCore
-        self.send_notifications()
+        if not errors:
+            self.send_notifications()
 
 
     def __len__(self):
