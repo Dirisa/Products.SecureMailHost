@@ -100,15 +100,15 @@ elif type == 'upload':
 elif type == 'reference':
 
     if format == 'plain':
-        s = '%s: %s/%s - %s' % (TR('reference', 'Reference'), e.getTracker(), e.getTicketNum(), e.getComment())
+        s = '%s: %s/%s - %s' % (TR('reference', 'Reference'), e.getTrackerId(), e.getIssueId(), e.getComment())
         return s
 
     elif format == 'html':
-        s = '<span id="pcng_transcript_key">%s</span>: %s/%s - %s' % (TR('reference', 'Reference'), e.getTracker(), e.getTicketNum(), e.getComment())
+        s = '<a href="/%s">%s/%s</a> - %s' % (e.getIssueURL(),  e.getTrackerId(), e.getIssueId(), e.getComment())
         return s
 
     elif format == 'pdf':
-        s = '<b>%s</b>: %s/%s - %s' % (TR('reference', 'Reference'), e.getTracker(), e.getTicketNum(), e.getComment())
+        s = '<b>%s</b>: %s/%s - %s' % (TR('reference', 'Reference'), e.getTrackerId(), e.getIssueId(), e.getComment())
         return s
 
     elif format == 'xml':

@@ -31,10 +31,10 @@ div.issue_metadata {
     padding: 0.2em;
 }
 
-div #transcriptheader {
-    background: #dddddd;
+#transcriptheader {
+    background: #aaaaff;
     font-size: 120%;
-    margin-top: 1em;
+    margin-top: 0.5em;
 }
 
 div #transcriptevent {

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript2.py,v 1.5 2004/09/24 17:17:20 ajung Exp $
+$Id: Transcript2.py,v 1.6 2004/09/25 09:01:02 ajung Exp $
 """
 
 import time, random 
@@ -137,16 +137,18 @@ class ReferenceEvent(BaseEvent):
 
     meta_type = 'reference'
 
-    def __init__(self, tracker, ticketnum, comment, state='private'):
+    def __init__(self, issue_id, issue_url, tracker_id, comment, state='private'):
         BaseEvent.__init__(self, state=state)
         if not isinstance(comment, unicode):
             raise TypeError("Parameter 'comment' must be unicode")
-        self._tracker = tracker
-        self._ticketnum = ticketnum
+        self._issue_id = issue_id
+        self._issue_url = issue_url
+        self._tracker_id = tracker_id
         self._comment = comment
 
-    def getTracker(self): return self._tracker
-    def getTicketNum(self): return self._ticketnum
+    def getTrackerId(self): return self._tracker_id
+    def getIssueId(self): return self._issue_id
+    def getIssueURL(self): return self._issue_url
     def getComment(self): return self._comment
 
 InitializeClass(ReferenceEvent)
