@@ -24,6 +24,7 @@
       <metal:block tal:condition="request/mode|nothing">
         <metal:block tal:define="global mode request/mode" />
       </metal:block>
+<span tal:content="mode" />
 
       <metal:block tal:define="action string: View">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
@@ -94,7 +95,7 @@
       </div>
 
 
-      <fieldset tal:condition="python: mode == 'full'" 
+      <fieldset tal:condition="python: mode == 'fullimages'" 
                 tal:define="images python: here.objectValues(('Portal Image',))">
         <legend i18n:translate="images">Images</legend>
         <div tal:repeat="image images">
