@@ -196,6 +196,7 @@
               <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
                       tal:define="displaylist python: here.pcng_vocabulary_values(item[0])">
 
+
                 <select multiple size="5" 
                         tal:attributes="name python: '%s:list:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
                   <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
