@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.196 2004/06/30 15:30:29 ajung Exp $
+$Id: Issue.py,v 1.197 2004/06/30 18:34:19 ajung Exp $
 """
 
 import os, time, random 
@@ -338,7 +338,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.haveATReferences():
             from Products.Archetypes.config import REFERENCE_CATALOG
             tool = getToolByName(self, REFERENCE_CATALOG)
-            return tool.getReferences(self)
+            return [r for r in tool.getReferences(self) if r.getTargetObject()]
         else:
             return ()
         
