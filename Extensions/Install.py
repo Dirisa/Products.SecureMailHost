@@ -6,7 +6,7 @@ from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.PloneCollectorNG.config import *
 from Products.CMFCore.utils import getToolByName
 
-def install(self):
+def install(self):                                       
     out = StringIO()
 
     installTypes(self, out,
@@ -67,6 +67,10 @@ def install(self):
                ('pcng_address', '', 'string') , ('pcng_fax', '', 'string') , 
                ('pcng_send_emails','yes', 'string'),
                ('pcng_send_attachments','no', 'string'),
+               ('pcng_position_searchform','bottom', 'string'),
+               ('pcng_default_searchform','simple', 'string'),
+               ('pcng_hits_per_page', 15 , 'int'),
+               ('pcng_default_view', 'simple', 'string'),
                ('pcng_phone', '', 'string') ):
         try:
             memberdata_tool.manage_addProperty(key, default, tpe)
