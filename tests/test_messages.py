@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 #
 # Tests the email validation
 #
@@ -19,7 +20,8 @@ loremipsum_in = open('in/loremipsum.txt', 'rb').read()
 buergschaft_latin1_msg = MIMEText(buergschaft_latin1_in, 'plain', 'latin-1')
 
 
-buergschaft_latin1_out = open('out/buergschaft.txt', 'rb').read()
+buergschaft_latin1_out = open('out/buergschaft_latin1.txt', 'rb').read()
+buergschaft_out = open('out/buergschaft.txt', 'rb').read()
 buergschaft_utf8_out = open('out/buergschaft_utf8.txt', 'rb').read()
 loremipsum_out = open('out/loremipsum.txt', 'rb').read()
 
@@ -63,6 +65,27 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
         self.failUnless(isinstance(msg, email.Message.Message), 'message is not a email.Message.Message instance')
 
         msgstr = msg.as_string()
+
+##        # compare each char
+##        for i, m in enumerate(msgstr):
+##            if len(self.out) < i:
+##                self.fail('output has less chars')
+##            o = self.out[i]
+##            self.failUnlessEqual(m, o, "%s != %s at %s (%s/%s)" % (m, o, i,
+##                                 msgstr[i-10:i+10], self.out[i-10:i+10]))
+##        
+##        # test for amount of chars
+##        self.failUnlessEqual(len(msgstr), len(self.out))
+
+        # compare line by line
+        outlines = self.out.split('\n')
+        for i, m in enumerate(msgstr.split('\n')):
+            if len(outlines) < i:
+                self.fail('output has less lines than msg')
+            o = outlines[i]
+            self.failUnlessEqual(m, o)
+
+        # compare the complete string 
         self.failUnlessEqual(msgstr, self.out)
 
 tests = []
@@ -72,22 +95,22 @@ class TestBuergschaftLatin1(TestMessage):
     message = buergschaft_latin1_in
     out     = buergschaft_latin1_out
 
-    subject = 'Die Buergschaft'
+    subject = 'Die Bürgschaft'
     charset = 'latin-1'
     subtype = 'plain'
 
 tests.append(TestBuergschaftLatin1)
 
-class TestBuergschaftLatin1Message(TestMessage):
+class TestBuergschaftASCII(TestMessage):
     name    = 'buergschaft_latin_msg'
     message = buergschaft_latin1_msg
-    out     = buergschaft_latin1_out
+    out     = buergschaft_out
 
     subject = 'Die Buergschaft'
     #charset = 'us-ascii'
     #subtype = 'plain'
 
-tests.append(TestBuergschaftLatin1Message)
+tests.append(TestBuergschaftASCII)
 
 class TestBuergschaftUTF8(TestMessage):
     name    = 'buergschaft_uft8'
