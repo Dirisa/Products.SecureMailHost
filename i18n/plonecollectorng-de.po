@@ -83,7 +83,7 @@ msgid "legend_search_form"
 msgstr "Suchmaske"
 
 msgid "edit_fieldsets"
-msgstr "Editieren Schemata"
+msgstr "Schemata"
 
 msgid "simpleview"
 msgstr "Einfachansicht"
@@ -555,3 +555,83 @@ msgstr "Tickets gesamt"
 msgid "collector_overview"
 msgstr "Bugtracker Übersicht"
 
+msgid "issue_artifacts_table_no_uploads_available"
+msgstr "Keine Uploads vorhanden"
+
+msgid "label_name"
+msgstr "Name"
+
+msgid "label_title"
+msgstr "Titel"
+
+msgid "label_classification"
+msgstr "Klassifizerung"
+
+msgid "label_importance"
+msgstr "Wichtigkeit"
+
+msgid "label_deadline"
+msgstr "Deadline"
+
+msgid "label_hours_estimated"
+msgstr "Stunden (veranschlagt)"
+
+msgid "label_hours_needed"
+msgstr "Stunden (benötigt)"
+
+msgid "label_percent_done"
+msgstr "Prozent fertig"
+
+msgid "label_contact_name"
+msgstr "Name"
+
+msgid "label_contact_email"
+msgstr "Email"
+
+msgid "label_contact_company"
+msgstr "Firma"
+
+msgid "label_contact_position"
+msgstr "Position"
+
+msgid "label_contact_address"
+msgstr "Adresse"
+
+msgid "label_contact_city"
+msgstr "Stadt"
+
+msgid "label_contact_phone"
+msgstr "Telefon"
+
+msgid "label_contact_fax"
+msgstr "Fax"
+
+msgid "label_limit_followups"
+msgstr "Limitierung von Followups"
+
+msgid "label_hostname"
+msgstr "Hostname"
+
+msgid "label_participation_mode"
+msgstr "Berechtigung zur Teilnahme (Einstellen von Tickets)"
+
+msgid "label_view_mode"
+msgstr "Berechtigung zur Ansicht (Ansicht von Tickets)"
+
+msgid "label_deadline_tickets"
+msgstr "Deadline"
+
+msgid "label_collector_abbreviation"
+msgstr "Abkürzung"
+
+msgid "label_email_notification_policy"
+msgstr "Benachrichtigungspolicy"
+
+msgid "label_email_issue_formatters"
+msgstr "Formatierer für Ticketbenachrichtigungen"
+
+msgid "label_watchlist"
+msgstr "Watchlist"
+
+msgid "References and uploads"
+msgstr "Referenzen und hochgeladene Dateien"
