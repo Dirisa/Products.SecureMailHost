@@ -42,7 +42,7 @@ elif type == 'change':
         return s
 
     elif format == 'html':
-        s = '%s -> %s' % (e.getOld(), e.getNew())
+        s = '%s -> %s' % (repr(e.getOld()), repr(e.getNew()))
         return s
 
     elif format == 'pdf':

@@ -35,7 +35,7 @@
 
 
       <div style="clear: both"  id="issue_description_solution"
-           tal:define="schema python: here.atse_getSchemata('PloneCollectorNG', 'issuedata')">
+           tal:define="schema python: here.atse_getSchemata('PloneIssueNG', 'issuedata')">
         <tal:def tal:define="field python: schema['description']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
             <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
@@ -59,7 +59,6 @@
         <span id="label_large" i18n:translate="changes">Changes</span>
         <div metal:use-macro="here/pcng_macros/macros/transcript_changes" /> 
       </div>
-
 
       <fieldset tal:condition="python: mode == 'full'" 
                 tal:define="images python: here.objectValues(('Portal Image',))">

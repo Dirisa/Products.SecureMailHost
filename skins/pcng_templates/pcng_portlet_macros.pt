@@ -343,10 +343,10 @@
                    canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
 
         
-    <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames('PloneCollectorNG')">
+    <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames('PloneIssueNG')">
       <tal:if  tal:condition="python: schemata_name not in ('default',) "> 
         <div class="portlet" id="pcng_metadata"
-                 tal:define="schemata python:here.atse_getSchemata(schema_id='PloneCollectorNG', name=schemata_name);
+                 tal:define="schemata python:here.atse_getSchemata(schema_id='PloneIssueNG', name=schemata_name);
                              fields python: test(schemata_name=='issuedata', 
                                             [f for f in schemata.fields() if not f.getName() in ('title', 'description', 'solution')], 
                                             schemata.fields())">

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.24 2004/09/23 15:34:10 ajung Exp $
+$Id: config.py,v 1.25 2004/09/27 15:40:35 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -42,4 +42,4 @@ SEARCHFORM_IGNOREABLE_INDEXES = ('progress_deadline', 'created', 'numberFollowup
 UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
 # ATSchemaEditorNG
-SCHEMA_ID = 'PloneCollectorNG'
+SCHEMA_ID = 'PloneIssueNG'

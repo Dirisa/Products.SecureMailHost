@@ -15,7 +15,7 @@
     <!-- any application using ATSchemaEditorNG must define SCHEMA_ID and SCHEMA_TEMPLATE -->
 
     <div metal:fill-slot="main" 
-         tal:define="SCHEMA_ID string:PloneCollectorNG;
+         tal:define="SCHEMA_ID string:PloneIssueNG;
                      SCHEMA_TEMPLATE string:pcng_schema_editor">
       <div id="pcng_schema_editor">
         <div metal:use-macro="here/atse_main_macro/macros/schema_editor" />
