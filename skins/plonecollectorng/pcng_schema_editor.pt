@@ -44,9 +44,8 @@
            <th>Default</th>
            <th>Required</th>
            <th>Visible</th>
+           <th>Action</th>
          </tr>
-         <td tal:content="python: here.getSchema(fieldset)" />
-         <td tal:content="python: here.getSchema(fieldset).fields()" />
          <tr tal:repeat="field python: here.getSchema(fieldset).fields()" >
           <th tal:content="field/getName" />
           <td valign="top">
@@ -103,6 +102,9 @@
                    tal:attributes="name string:${field/getName}.order:record:int;
                                    value repeat/field/index"/>
            </td>
+          <td valign="top">
+            <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete field</a>
+          </td>
          </tr>
  
          <tr> 

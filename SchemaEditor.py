@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.6 2003/09/07 11:16:25 ajung Exp $
+$Id: SchemaEditor.py,v 1.7 2003/09/07 15:16:57 ajung Exp $
 """
 
 import operator
@@ -21,7 +21,8 @@ class SchemaEditor:
 
     def test(self):
         """test"""
-        self.schema_init()
+        import issue_schema
+        self.schema_init(issue_schema.schema)
         print 'done'
 
     def schema_init(self, schema):
@@ -66,24 +67,23 @@ class SchemaEditor:
         if RESPONSE is not None:
             RESPONSE.redirect('pcng_schema_editor?portal_status_message=Schema%20deleted')
 
+    def schema_del_field(self, fieldset, name, RESPONSE=None):
+        """ remove a field from a fieldset """
+        del self._schemas[fieldset][name]
+        if RESPONSE is not None:
+                RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Field deleted' % fieldset)
+
     def schema_update(self, REQUEST, RESPONSE=None):
         """ update a schema schema """
 
         R = REQUEST.form
         fieldset = R['fieldset'] 
 
-
         if R.has_key('schema_add_field'):
             schema = self._schemas[fieldset]
-            print schema
-            print schema.fields()
             field = StringField(R['name'], schemata=fieldset, widget=StringWidget)
             schema.addField(field)
-            self._p_changed = 1
-            schema._p_changed = 1
-            self._schemas._p_changed = 1
-            print "-->",self._schemas[fieldset]
-            print "-->",self._schemas[fieldset].fields()
+            self._schemas[fieldset] = schema
 
             if RESPONSE is not None:
                 RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Field added' % fieldset)
