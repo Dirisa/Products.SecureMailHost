@@ -132,7 +132,12 @@
          <b i18n:translate="followups"># Followups:</b> <span tal:content="issue/numberFollowups" /> - 
          <b i18n:translate="status">Status:</b> <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
          <b i18n:translate="topic">Topic:</b> <span tal:replace="issue/topic" /> -
-         <b i18n:translate="importance">Importance:</b> <span tal:replace="issue/importance" /> -
+         <b i18n:translate="importance">Importance:</b> 
+         <metal:block tal:define="field python: here.schema_getWholeSchema()['importance'];
+                                  vocab python: field.Vocabulary(here);
+                                  display python: here.displayValue(vocab, issue.importance)">
+            <span tal:content="structure display" />
+         </metal:block>
          <b i18n:translate="assigned">Assigned:</b> <span tal:replace="python: ', '.join(issue.assigned_to)" />
         </div>
         <div class="pcng_issueview_description" 
@@ -159,6 +164,8 @@
     <input type="submit" value=" Jump " i18n:attributes="value" class="standalone"/>
   </form>
 
+  <a href="pcng_view?filter=assigned">Issues assigned to me</a> - 
+  <a href="pcng_view?filter=submitted">Issues submitted by me</a>
         
   <form action="pcng_view" method="post"  name="search_form" tal:condition="request/advanced_search|nothing">
     <input type="hidden" name="advanced_search" value="1">
