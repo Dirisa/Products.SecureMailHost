@@ -30,9 +30,6 @@
           </tal:loop>                                         
         </li>
         <li>
-          <a href="pcng_base_edit"><span i18n:translate="base_configuration">Base configuration</span></a>
-        </li>
-        <li>
           <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
         </li>
         <li>
