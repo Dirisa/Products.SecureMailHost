@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.11 2005/03/11 18:42:45 limi Exp $
+$Id: schemata.py,v 1.12 2005/03/11 18:44:17 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -68,7 +68,7 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget (
             label="Short name",
             description="Short name of the container - this should be 'roadmap' to comply with the standards.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -122,7 +122,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget(
             label="Proposal number",
             description="The number of the Improvement Proposal.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -133,7 +133,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget(
             label="Proposer",
             description="The person proposing this improvement.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -144,7 +144,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget(
             label="Seconder",
             description="The person seconding this improvement.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -157,7 +157,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=TextAreaWidget(
             label="Proposal Summary",
             description="A short summary of the proposal.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=5,
         ),
     ),
@@ -174,7 +174,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid = "label_proposal_types",
             description='The type of proposal this is.',
             description_msgid = "help_proposal_types",
-            i18n_domain = "archpackage",
+            i18n_domain = "plonesoftwarecenter",
         ),
     ),
 
@@ -189,7 +189,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=RichWidget(
             label="Definitions",
             description="If you have any definitions for your proposal, please include them here.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=5,
         ),
     ),
@@ -205,7 +205,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=RichWidget(
             label="Motivation",
             description="Why does this proposal exist and what problem does it solve?",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=20,
         ),
     ),
@@ -221,7 +221,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
             label="Assumptions",
             description="Key assumptions made. What is being covered by and what is "
                         "intentionally left out of the scope of the proposal.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=20,
         ),
     ),
@@ -237,7 +237,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=RichWidget(
             label="Proposal",
             description="What needs to be done?",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=20,
         ),
     ),
@@ -253,7 +253,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=RichWidget(
             label="Implementation",
             description="How should it be done?",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=20,
         ),
     ),
@@ -271,7 +271,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
             description="What code and documentation needs to be produced? "
                         "Standard items: Unit tests, localization, and documentation",
             rows=10,
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -287,7 +287,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
             label="Risks",
             description="What are the risks of implementing this proposal? "
                         "What incompatibilities can it cause?",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=10,
         ),
     ),
@@ -304,7 +304,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
             label="Time Line",
             description="An approximate estimation of how long it will take to complete and "
                         "where you see it fit into the Plone versions.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=10,
         ),
     ),
@@ -319,7 +319,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=RichWidget(
             label="Participants",
             description="The people already identified for the implementation, if applicable.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=5,
         ),
     ),
@@ -329,7 +329,7 @@ PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget(
             label="Branch name/URL",
             description="The URL for the branch development is done on, if applicable.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -365,7 +365,7 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
             label_msgid="label_dependency_package",
             description="help_dependency_package",
             description_msgid="",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -381,7 +381,7 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
             label_msgid="label_dependency_release",
             description="",
             description_msgid="help_dependency_version",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -395,7 +395,7 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
             label_msgid="label_dependency_type",
             description="",
             description_msgid="help_dependency_type",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -419,7 +419,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_project_description",
             description="A short summary of the project.",
             description_msgid="help_description",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=5,
         ),
     ),
@@ -438,7 +438,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_body_text",
             description="The complete project description.",
             description_msgid="help_package_body_text",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
             rows=25,
         ),
     ),
@@ -457,7 +457,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_recommended",
             description="",
             description_msgid="help_package_recommended",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -473,7 +473,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_categories",
             description='Categories that this item should appear in.',
             description_msgid="help_categories",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -487,7 +487,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_current_versions",
             description_msgid="description_current_versions",
             description="For documentation items and releases, users will be warned if the relevant version is not in this list.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -501,7 +501,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_roadmap_types",
             description='You will have a roadmap available in your project, and you can add categories of enhancement specifications below.',
             description_msgid="help_roadmap_types",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -515,7 +515,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_homepage",
             description="The project's home page - if different from this.",
             description_msgid="help_package_homepage",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -529,7 +529,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_repository",
             description="Either the repository itself, or a repository page, if it exists.",
             description_msgid="help_package_repository",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -543,7 +543,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_tracker",
             description="URL of issue tracker, if the project has one.",
             description_msgid="help_package_tracker",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -557,7 +557,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_mailinglist",
             description="URL of mailing list information page/archives or support forum, if the project has one.",
             description_msgid="help_package_mailinglist",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -570,7 +570,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_contact_email",
             description="This will not be exposed publicly.",
             description_msgid="help_package_contact_email",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -584,7 +584,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_logo",
             description="Add a logo for the project (or company) by clicking the 'Browse' button. Max 300x150 pixels (will be resized if bigger).",
             description_msgid="help_package_logo",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -598,7 +598,7 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_package_screenshot",
             description="Add a screenshot by clicking the 'Browse' button. Max 800x600 (will be resized if bigger).",
             description_msgid="help_package_screenshot",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -618,7 +618,7 @@ PSCReleaseFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=StringWidget (
             label="Short name",
             description="Short name of the container - this should be 'release' to comply with the standards.",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -665,7 +665,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
                         "of the item, so don't use spaces and special "
                         "characters.",
             description_msgid='help_release_version',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -677,7 +677,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=ComputedWidget(
             label='Release title',
             description="The title of the release, computed from the title of the package and the version number.",
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             modes=('view',),
             visible={
                 'edit': 'invisible',
@@ -695,7 +695,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='help_release_codename_label',
             description='Codename for this release, if you have one.',
             description_msgid='help_release_codename_description',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -714,7 +714,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
                         'but in plain text what the main benefit of '
                         'this release is.',
             description_msgid='help_release_description',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=5,
         ),
     ),
@@ -731,7 +731,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_release_body_text',
             description='The complete release text.',
             description_msgid='help_release_body_text',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=15,
         ),
     ),
@@ -748,7 +748,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_release_changelog',
             description='A detailed log of what has changed since the previous release.',
             description_msgid='help_release_changelog',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=10,
         ),
     ),
@@ -761,7 +761,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='help_release_relmgr_label',
             description='Release manager for this release.',
             description_msgid='help_release_relmgr_description',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -773,7 +773,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='help_release_relmgr_label',
             description='Contact e-mail for Release Manager.',
             description_msgid='help_release_relmgr_email',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -783,7 +783,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=CalendarWidget(
             label='Expected Release Date',
             label_msgid='help_release_expected_date_label',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -793,7 +793,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=CalendarWidget(
             label='Date after which no new features can added to the release',
             label_msgid='help_release_feature_freeze_date_label',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -803,7 +803,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=CalendarWidget(
             label='Date after which no more Improvement Proposals can be associated with the release',
             label_msgid='help_release_improvement_proposal_freeze_date_label',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -816,7 +816,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_release_license',
             description='Release License',
             description_msgid='help_release_license',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -830,7 +830,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_release_compatibility',
             description='Tested and working with the following versions:',
             description_msgid='help_release_compatibility',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -845,7 +845,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_release_maturity',
             description='Release Maturity',
             description_msgid='help_release_maturity',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -863,7 +863,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
                           'don\'t add a file, it will default to the '
                           'screenshot for the project. Max 800x600 pixels.',
             description_msgid='help_release_screenshot',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
         ),
     ),
 
@@ -874,7 +874,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=ReferenceBrowserWidget(
             label='Associated feature proposals',
             description="Please select related improvement proposals for features going into this release.",
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             startup_directory="../%s" % (IMPROVEMENTS_ID,),
         ),
         vocabulary='getRelatedFeaturesVocab',
@@ -890,7 +890,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid="label_release_repository",
             description="URL of version control repository branch for this release.",
             description_msgid="help_release_repository",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -928,7 +928,7 @@ PSCFileSchema = BaseSchema.copy() + Schema((
                         "separate modules. The actual file name will "
                         "be the same as the file you upload.",
             description_msgid="help_file_title",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -941,7 +941,7 @@ PSCFileSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_description",
             description="Click 'Browse' to upload a release file.",
             description_msgid="help_file_description",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
         storage=downloadableFileStorage,
     ),
@@ -956,7 +956,7 @@ PSCFileSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_platform",
             description="",
             description_msgid="help_file_platform",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -988,7 +988,7 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
                         "separate modules. The actual file name will "
                         "be the same as the file you upload.",
             description_msgid="help_file_title",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -1002,7 +1002,7 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_platform",
             description="",
             description_msgid="help_file_platform",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -1015,7 +1015,7 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_ext_url",
             description="Please enter the URL where the file is hosted.",
             description_msgid="help_file_ext_url",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -1027,7 +1027,7 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_ext_size",
             description="Please enter the size of the externally hosted file, if known. Include the notation kB or MB.",
             description_msgid="help_file_ext_size",
-            i18n_domain="archpackage",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -1049,7 +1049,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label='Description',
             description_msgid='help_package_area',
             description='Description for the Software Package area.',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1065,7 +1065,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_categories_vocab',
             description='Define the available categories for classifying these packages. The format is Short Name | Long name. The id must be unique.',
             description_msgid='help_categories_vocab',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1087,7 +1087,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_licenses_vocab',
             description='Define the available licenses for software releases. The format is Short Name | Title | URL.',
             description_msgid='help_licenses_vocab',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1108,7 +1108,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_versions_vocab',
             description='Define the vocabulary for versions that software releases can be listed as being compatible with.',
             description_msgid='help_versions_vocab',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1127,7 +1127,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_maturities_vocab',
             description='Define the available maturity states for software releases. Format is Short Name | Description',
             description_msgid='help_maturities_vocab',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1142,7 +1142,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_preferred_maturity',
             description='When showing the latest release of a project, the software center will prefer releases with this maturity.',
             description_msgid='help_preferred_maturity',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
@@ -1162,7 +1162,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
             label_msgid='label_platforms_vocab',
             description='Define the available platforms for software files.',
             description_msgid='help_platforms_vocab',
-            i18n_domain='archpackage',
+            i18n_domain='plonesoftwarecenter',
             rows=6,
         ),
     ),
