@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.38 2003/10/11 11:30:26 ajung Exp $
+$Id: Issue.py,v 1.39 2003/10/11 20:48:21 ajung Exp $
 """
 
 import sys, os
@@ -87,6 +87,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
+        self._last_action = None    # last action from the followup form
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
 
@@ -149,6 +150,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             new_status = self.status()
             self._transcript.addChange('status', old_status, new_status)
 
+        self._last_action = action
+        self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
         notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
@@ -266,6 +269,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     ######################################################################
     # Misc
     ######################################################################
+
+    security.declareProtected(CMFCorePermissions.View, '_getCollector')
+    def _getCollector(self):
+        """ return collector instance """
+        return self.aq_parent
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
