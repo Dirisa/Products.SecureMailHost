@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.40 2003/12/02 09:54:54 ajung Exp $
+$Id: SchemaEditor.py,v 1.41 2003/12/02 17:42:35 ajung Exp $
 """
 
 import copy
@@ -129,7 +129,7 @@ class SchemaEditor:
         if R.has_key('add_field'):
             if not R['name']:
                 raise ValueError(self.translate('atse_empty_field_name', 'Field name is empty'))
-        
+
             fieldset = FD.schemata    
             field = StringField(R['name'], schemata=fieldset, widget=StringWidget)
             self._ms.addField(field)
@@ -222,7 +222,8 @@ class SchemaEditor:
         oldfield = self._ms[FD.name]
         f._index = oldfield._index
         self._ms[FD.name] = f
- 
+        self._p_changed = 1
+
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
                       schemata=FD.schemata, field=FD.name)
 
