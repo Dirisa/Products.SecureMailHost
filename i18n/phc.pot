@@ -474,23 +474,45 @@ msgstr "Full Question"
 msgid "phc_up_to_toc"
 msgstr "Up to table of contents"
 
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_next">
+#.                Next:
+#. </span>
+msgid "phc_next"
+msgstr "Next:"
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_previous">
+#. 	        Previous:
+#. </span>
+msgid "phc_previous"
+msgstr "Previous:"
+
+
+#: tutorialpage_view.pt
+#. <input class="standalone" i18n:attributes="value" tabindex="4" type="submit" value="Go"/>
+msgid "Go"
+msgstr "Go"
+
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_of">
+#. 	      of
+#. </span>
+msgid "phc_of"
+msgstr "of"
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_page">
+#. 	      Page
+#. </span>
+msgid "phc_page"
+msgstr "Page"
+
 # MSB end mofification
 
 
-#- Removed msgids:
-# 
-
-#- Added msgids:
-#  description_errorref_no_visible_items_add_paste label_add_item
-# label_select "Select all items" listingheader_title listingheader_size
-# listingheader_modified listingheader_status listingheader_order
-# time_expired "Move item up" "Move item down" text_search Search
-# accesskeys-search description_howto_no_visible_items_add_paste
-# heading_search_results description_no_results_found
-# search_results_advanced search_results_advanced_link
-# batch_x_items_matching_your_criteria
-# "RSS feed of these search results" "RSS Feed"
-# label_relevance_percentage Relevance results_by_author
-
-#- Added msgids by merging file None:
-# 

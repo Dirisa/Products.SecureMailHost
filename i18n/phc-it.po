@@ -416,5 +416,43 @@ msgstr "Testo completo della domanda"
 msgid "phc_up_to_toc"
 msgstr "Ritorna all'indice"
 
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_next">
+#.                Next:
+#. </span>
+msgid "phc_next"
+msgstr "Successiva:"
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_previous">
+#. 	        Previous:
+#. </span>
+msgid "phc_previous"
+msgstr "Precedente:"
+
+
+#: tutorialpage_view.pt
+#. <input class="standalone" i18n:attributes="value" tabindex="4" type="submit" value="Go"/>
+msgid "Go"
+msgstr "Vai"
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_of">
+#. 	      of
+#. </span>
+msgid "phc_of"
+msgstr "di"
+
+
+#: tutorialpage_view.pt
+#. <span i18n:translate="phc_page">
+#. 	      Page
+#. </span>
+msgid "phc_page"
+msgstr "Pagina"
+
 # MSB end mofification
 

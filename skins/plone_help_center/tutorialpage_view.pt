@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
-      metal:use-macro="here/main_template/macros/master">
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
 
 <head>
     <metal:css fill-slot="css_slot">
@@ -45,7 +46,7 @@
             <input class="standalone"
                    type="submit"
                    value="Go"
-                   i18n:translate="value"
+                   i18n:attributes="value"
                    tabindex="4" />
         </form>
 
@@ -82,7 +83,12 @@
             </div>
             
             <div>
-	      Page <span tal:replace="python:pos+1">5</span> of <span tal:replace="python:num_sibl">10</span>.
+	      <span i18n:translate="phc_page">
+	      Page </span>
+	      <span tal:replace="python:pos+1">5</span>
+	      <span i18n:translate="phc_of">
+	      of </span>
+	      <span tal:replace="python:num_sibl">10</span>.
             </div>
         </div>
 
@@ -99,13 +105,21 @@
                tal:attributes="href next/absolute_url"
                tabindex="1"
                href="">
-               Next: <span tal:replace="next/title_or_id" /> <img tal:replace="structure here/arrowRight.gif" /></a>
+	       <span i18n:translate="phc_next">
+               Next: </span>
+	       <span tal:replace="next/title_or_id" /> 
+	       <img tal:replace="structure here/arrowRight.gif" />
+	       </a>
             <a class="listingPrevious"
                tal:condition="python:prev"
                tal:attributes="href prev/absolute_url"
                tabindex="1"
                href="">
-               <img tal:replace="structure here/arrowLeft.gif" /> Previous: <span tal:replace="prev/title_or_id" /></a>
+               <img tal:replace="structure here/arrowLeft.gif" />
+	       <span i18n:translate="phc_previous">
+	        Previous: </span>
+		<span tal:replace="prev/title_or_id" />
+		</a>
                &nbsp;
         </div>
 
