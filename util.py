@@ -5,8 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.5 2003/09/08 05:05:13 ajung Exp $
+$Id: util.py,v 1.6 2003/09/09 12:01:09 ajung Exp $
 """
+
+import urllib
 
 def getUserName():
     """ return user name """
@@ -96,5 +98,9 @@ def redirect(RESPONSE, dest, msg=None,**kw):
     if RESPONSE is not None:    
         url = dest + "?"
         if msg:
-            url += "portal_status_message=%s" % quote(msg)
+            url += "portal_status_message=%s&" % quote(msg)
+        if kw:
+            url += '&'.join(['%s=%s' % (k, urllib.quote(v)) for k,v in kw.items()])
+
+        print url
         RESPONSE.redirect(url) 
