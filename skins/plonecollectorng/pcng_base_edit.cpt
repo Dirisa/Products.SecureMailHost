@@ -26,16 +26,14 @@
      tal:define="errors options/state/getErrors|nothing;
      Iterator python:modules['Products.Archetypes'].IndexIterator;
      tabindex python:Iterator();
-     schematas here/Schemata;
-     schemata_names here/SchemataNames;
+     schema here/Schema;
+     schemata_names  schema/getSchemataNames; 
+     schemata_names python: [s for s in schemata_names if s not in ('default', 'metadata')];   
      default_fieldset python: schemata_names[0];
-     fieldset request/fieldset|options/fieldset|default_fieldset;
-     fieldsets python:[key for key in schematas.keys() if key not in ('default', 'metadata')];
-     portal_type python:here.getPortalTypeName().lower();
-     edit_template python:'%s_edit' % portal_type;
-     edit_macros python:path('here/%s/macros|here/edit_macros/macros' % edit_template);"
+     fieldset request/fieldset|options/fieldset|default_fieldset;"
      tal:omit-tag="">
-
+     
+     
     <!-- headline -->
     <metal:block tal:define="action string: Edit">
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
@@ -68,16 +66,14 @@
 </div>
 -->
 
-      <tal:fields repeat="field python: schematas[fieldset].fields()">
+      <tal:fields repeat="field python: here.Schema().getSchemataFields(fieldset)">
         <metal:fieldMacro use-macro="python: here.widget(field.getName(), mode='edit')"/>
       </tal:fields>
 
       <input type="hidden" name="form.submitted" value="1" />
       <input type="hidden" name="fieldset" value="default" tal:attributes="value fieldset" />
 
-      <div class="field"
-    	   tal:define="fieldset_index python:fieldsets.index(fieldset);
-                	   n_fieldsets python:len(fieldsets);">
+      <div class="field">
         <label>&nbsp;</label>
 
         <input class="context"

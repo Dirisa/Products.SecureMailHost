@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.44 2003/12/04 13:39:34 ajung Exp $
+$Id: SchemaEditor.py,v 1.45 2003/12/05 12:14:22 ajung Exp $
 """
 
 import copy, re
@@ -187,6 +187,11 @@ class SchemaEditor:
         elif FD.widget == 'Password':    widget = PasswordWidget()
         elif FD.widget == 'Lines':       widget = LinesWidget()
         elif FD.widget == 'Visual':      widget = VisualWidget()
+        elif FD.widget == 'Epoz':        widget = EpozWidget()
+        elif FD.widget == 'Image':       widget = ImageWidget()
+        elif FD.widget == 'Integer':     widget = IntegerWidget()
+        elif FD.widget == 'Decimal':     widget = DecimalWidget()
+        elif FD.widget == 'Reference':   widget = ReferenceWidget()
         else: raise ValueError(self.translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
         if FD.has_key('widgetsize'):
