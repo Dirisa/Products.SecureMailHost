@@ -11,6 +11,12 @@ Requirements:
     risk. A quick test showed that it seems to run without problems under
     Plone 1.0.5.
 
+    WARNING: future versions of PloneCollectorNG might use advanced features
+    of Plone 2.0 that are not backward compatible with Plone 1.X
+    installations. There will be absolutely *NO* support to migrate your 
+    PloneCollectorNG installation from Plone 1 to Plone 2.
+
+
   Optional packages:
 
    - Reportlab (www.reportlab.org) - required for PDF output
