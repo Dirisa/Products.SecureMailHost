@@ -1,1 +1,1 @@
-1.2.0b3 (released)
+1.2.0 final (unreleased)
