@@ -25,7 +25,7 @@
                           dummy python: request.set('Creator', [member.getUserName()])" />
       </metal:block>   
 
-      <metal:block tal:define="action string: View">
+      <metal:block tal:define="action string: Browse issues">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
