@@ -40,7 +40,7 @@
        
                 <div> 
                   <input type="text" name="fieldset" value="" >
-                  <input type="submit" value=" Add "  class="standalone">
+                  <input type="submit" value=" Add "  class="standalone" valign="top">
                 </div>
               </form>
             </div>

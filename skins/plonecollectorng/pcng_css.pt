@@ -18,6 +18,10 @@ div.collector_headline {
     padding: 0.5em;
 }
 
+div.body {
+    padding: 0.5em;
+}
+
 div.collector_headline_right {
     text-align: left;
 }

@@ -254,7 +254,7 @@
         </td>
       </tr>
       <tr>
-        <th>Sorting</th>
+        <th align="left">Sorting</th>
 
         <td align="center" valign="top" colspan="2">
           <select name="sort_on" size="1">
@@ -312,9 +312,11 @@
       </tr>
  
       <tr>
-        <td colspan="4">
+        <th colspan="2" align="left">
           <span i18n:translate="fulltextsearch">Fulltext search</span>
-          <input type="text" name="SearchableText" value="" size="40">
+        </th>
+        <td colspan="3">
+          <input type="text" name="SearchableText" value="" size="30">
         </td>
       </tr>
 
