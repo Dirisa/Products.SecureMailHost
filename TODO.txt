@@ -11,9 +11,6 @@ Bugs found when testing on plone.org
   when clicking the download link. To reproduce, make sure you have latest
   ExternalStorage and latest Archetypes from the 1.3 branch.
   
-- psc_project_view should show latest release that is *published* not just the
-  latest one added, as it does now. (getLatestRelease() in PSCProject.py)
-  
 - psc_releasefolder_view should show upcoming releases first, with header - then 
   published releases - mixing released and unrelased items is not good. 
   
