@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.57 2003/11/03 17:50:48 ajung Exp $
+$Id: Collector.py,v 1.58 2003/11/05 10:03:47 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -194,6 +194,8 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             if name in self._supporters: d['roles'].append('Supporter')
             if name in self._reporters: d['roles'].append('Reporter')
             l.append(d)
+
+        l.sort(lambda a,b: cmp(a['username'].lower(), b['username'].lower()))
         
         if staff_only:
             return [item for item in l if item['username'] in staff]
