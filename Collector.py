@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.56 2003/11/03 17:06:14 ajung Exp $
+$Id: Collector.py,v 1.57 2003/11/03 17:50:48 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -234,16 +234,24 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     def _adjust_participation_mode(self):
         """Set role privileges according to participation mode."""
 
-        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
-
         if self.participation_mode == 'authenticated':
-            target_roles += ('Authenticated', )
+            add_roles = ('Authenticated', )
         elif self.participation_mode == 'anyone':
-            target_roles += ('Authenticated', 'Anonymous')
+            add_roles = ('Authenticated', 'Anonymous')  
+        else:
+            add_roles = ()
 
-        for p in (AddCollectorIssue, AddCollectorIssueFollowup, ModifyPortalContent):
-            self.manage_permission(p, roles=target_roles, acquire=0)
+        # AddCollectorIssue
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+        self.manage_permission(AddCollectorIssue, roles=target_roles+add_roles, acquire=0)
 
+        # AddCollectorIssueFollowup 
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+        self.manage_permission(AddCollectorIssueFollowup, roles=target_roles+add_roles, acquire=0)
+
+        # ModifyPortalContent
+        target_roles = ('Supporter','TrackerAdmin','Manager', 'Owner')
+        self.manage_permission(ModifyPortalContent, roles=target_roles, acquire=0)
 
     def _adjust_view_mode(self):
         """Set role privileges according to view mode."""
