@@ -9,6 +9,7 @@ div#pcng_submission_guideline {
     background: #cccccc;
     padding: 0.2em;
     margin-bottom: 2em;
+    padding: 0.5em;
 }
 
 div#pcng_headline {
