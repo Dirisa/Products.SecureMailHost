@@ -244,6 +244,7 @@ class PloneLocalFolderNG(BaseContent):
         'name': 'Folder Listing',
         'action': 'string:${object_url}/plfng_view',
         'permissions': (View,),
+        'visible'       : 0
         },  
       { 'id': 'edit',
         'name': 'Edit',
@@ -413,7 +414,7 @@ class PloneLocalFolderNG(BaseContent):
                   if os.path.isdir(fullname):
                       P.setIconPath('folder_icon.gif')
                       P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                      P.setMimeType('directory')
+                      P.setMimeType('folder')
                   else:
                       P.setIconPath(mi.icon_path)
                       P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
@@ -500,7 +501,8 @@ class PloneLocalFolderNG(BaseContent):
         else:
             try: return getattr(self, name)
             except AttributeError: pass
-            REQUEST.RESPONSE.notFoundError(name)
+            if REQUEST.has_key('RESPONSE'):
+                REQUEST.RESPONSE.notFoundError(name)
 
     security.declareProtected(ModifyPortalContent, 'upload_file')
     def upload_file(self, upload, comment, REQUEST, clientMD5=None):
