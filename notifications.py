@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.19 2004/01/15 16:50:20 ajung Exp $
+$Id: notifications.py,v 1.20 2004/01/15 18:30:29 ajung Exp $
 """
 
 import sys
@@ -97,7 +97,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer['Subject'] = Header(subject, encoding)
     outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email
-    body =  eval('issue.%s()' % collector.issue_formatter)   # skin method, unicode returned
+    body = issue.format_transcript(collector.notification_language)
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
 
