@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.161 2004/04/13 17:53:31 ajung Exp $
+$Id: Collector.py,v 1.162 2004/04/14 19:15:35 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -786,19 +786,24 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     security.declareProtected(View, 'decode_information')
     def decode_information(self, s):
-        """ decode encrypted information from incoming email """
+        """ decode a string """
 
-        res = []
-        for l in s.split('\n'):
-            pos = l.find('=>')
-            if pos > -1:
-                res.append(l[pos+3:])
-        res.append('\n')
-        s = '\n'.join(res)[:-1]
-        s = base64.decodestring(s)
-        s = util.decrypt(s, self.getToken())
-        return s
+        encrypted = ''
+        for i in range(len(s)/2):
+            x = s[i*2:i*2+2]
+            c = chr(int(x, 16))
+            encrypted += c
+        orig = util.decrypt(encrypted,self.getToken())
+        return orig
 
+    security.declareProtected(View, 'enccode_information')
+    def encode_information(self, s):
+        """ encode a string """
+
+        s = s + (' '*16)[:16-len(s) % 16]
+        encrypted_text = util.encrypt(s, self.getToken())
+        encoded_text = ''.join(['%02x' % ord(c) for c in encrypted_text])
+        return encoded_text
 
     ######################################################################
     # Misc
