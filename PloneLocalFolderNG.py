@@ -383,7 +383,7 @@ class PloneLocalFolderNG(BaseContent):
                   self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)   
                
                elif REQUEST.get('action', '') == 'catalog':
-                  catalogTool = getToolByName(self, 'portal_catalog')
+                  #catalogTool = getToolByName(self, 'portal_catalog')
                   return self.catalogContents()
                else: 
                   return self.showFile(destpath, REQUEST, RESPONSE)
@@ -626,7 +626,7 @@ class PloneLocalFolderNG(BaseContent):
         """ return cataloging_enabled value """
         return self.cataloging_enabled 
         
-    def catalogContents(self,rel_dir=None):
+    def catalogContents(self,rel_dir=None, catalog='portal_catalog'):
         
         portal = getToolByName(self, 'portal_url').getPortalObject()
         portalId = portal.getId()
@@ -653,7 +653,7 @@ class PloneLocalFolderNG(BaseContent):
         dummyFileProxy.expires = CEILING_DATE  
 
         this_portal = getToolByName(self, 'portal_url')
-        catalogTool = getToolByName(this_portal, 'portal_catalog')
+        catalogTool = getToolByName(this_portal, catalog)
         mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
 
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: fullfoldername=%s " % fullfoldername )
