@@ -30,12 +30,11 @@
 
       <h3>Email</h3>
       <tal:loop tal:repeat="lang python: ['en'] + here.getLanguages()">
-        <a tal:attributes="href string:pcng_issue_debug?language=${lang}" 
+        <a tal:attributes="href string:pcng_issue_debug?pcng_language=${lang}" 
            tal:content="lang" />
         <span tal:condition="not: repeat/lang/end">&bull;</span>
       </tal:loop>
-      <pre tal:content="python: here.format_transcript(request.get('language', 'en')).encode(here.getSiteEncoding())" />
-      
+      <pre tal:content="python: here.format_transcript(request.get('pcng_language', 'en')).encode(here.getSiteEncoding())" />
     </div>
   </body>
 </html>
