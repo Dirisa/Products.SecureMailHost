@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.156 2004/04/19 09:18:12 ajung Exp $
+$Id: Issue.py,v 1.157 2004/04/19 09:51:39 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -168,6 +168,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if action == 'comment' and assignees_changed: action = 'assign'
 
         # perform workflow action
+        self._last_action = action
         if not action in ('comment', ):
             if action != 'request' and not action in self.validActions():
                 raise Unauthorized(self.Translate('invalid_action', 
@@ -180,10 +181,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                            username=util.getUserName(),
                            assignees=assignees)
 
-
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
-        self._last_action = action
         self.reindexObject()
         # Notification is triggered by the workflow. Since comments do not trigger
         # a workflow action we must trigger the notification on our own.
