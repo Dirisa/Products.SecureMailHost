@@ -162,8 +162,9 @@
 </div>
 
 <div metal:define-macro="pcng_issue_references" i18n:domain="plonecollectorng"
-     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
-  <div class="portlet" tal:define="references here/getForwardReferences">
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here);
+                 references here/getForwardReferences">
+  <div class="portlet" tal:condition="references">
     <h5>
       <span i18n:translate="references">References</span>
       <a tal:condition="canFollowup" href="pcng_issue_references">
@@ -186,8 +187,9 @@
 
 
 <div metal:define-macro="pcng_issue_uploads" i18n:domain="plonecollectorng"
-     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
-  <div class="portlet" tal:define="uploads here/objectValues">
+     tal:define="canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here);
+                 uploads here/objectValues">
+  <div class="portlet" tal:condition="uploads">
     <h5>
       <span i18n:translate="Uploads">Uploads</span>
       <a tal:condition="canFollowup" href="pcng_issue_uploads">
