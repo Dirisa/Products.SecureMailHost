@@ -36,10 +36,10 @@
           <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema Editor</span></a>
         </li>
         <li>
-          <a href="pcng_topics_groups"><span i18n:translate="topic_groups">Topic-groups configuration</span></a>
+          <a href="pcng_topics_groups"><span i18n:translate="Topic-Staff mapping">Topic-groups configuration</span></a>
         </li>
         <li>
-          <a href="pcng_notifications"><span i18n:translate="notifications">Email notifications</span></a>
+          <a href="pcng_notifications"><span i18n:translate="collector_notifications">Email notifications</span></a>
         </li>
       </ul>
 
