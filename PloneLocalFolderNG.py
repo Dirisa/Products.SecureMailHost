@@ -128,9 +128,7 @@ class PloneLocalFolderNG(BaseFolder):
         REQUEST.RESPONSE.setHeader('content-type', mi.normalized())
         REQUEST.RESPONSE.setHeader('content-length', str(os.stat(fullname)[6]))
 #        REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(REQUEST['viewfile']))
-        print fullname
         fp = open(fullname)
-                
         while 1:
             data = fp.read(32768)
             if data:    
