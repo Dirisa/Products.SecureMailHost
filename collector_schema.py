@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.47 2004/05/10 18:32:04 ajung Exp $
+$Id: collector_schema.py,v 1.48 2004/05/10 19:14:25 ajung Exp $
 """
 
 
@@ -40,6 +40,11 @@ VOC_ISSUE_EMAIL_SUBMISSION = DisplayList((
 ))
 
 VOC_REFERENCES_MODE= DisplayList((
+  ('disabled', 'Disabled'),
+  ('enabled', 'Enabled'),
+))
+
+VOC_UPLOADS_MODE= DisplayList((
   ('disabled', 'Disabled'),
   ('enabled', 'Enabled'),
 ))
@@ -212,6 +217,16 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_references',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
+                schemata='collectordata'
+                ),
+
+    StringField('uploads_mode',
+                vocabulary=VOC_UPLOADS_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='File/Image uploads',
+                                       label_msgid='label_file_image_uploads',
+                                       i18n_domain='plonecollectorng'),
+                default='enabled',
                 schemata='collectordata'
                 ),
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.177 2004/05/10 18:33:42 ajung Exp $
+$Id: Collector.py,v 1.178 2004/05/10 19:16:23 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -638,6 +638,11 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             return self.getReferences_mode() == 'enabled'
         except ImportError:
             return 0
+
+    security.declareProtected(View, 'haveUploads')
+    def haveUploads(self):
+        """ Uploads enabled? """
+        return self.getUploads_mode() == 'enabled'
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
