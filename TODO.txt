@@ -4,8 +4,6 @@ FAQ/FAQFolder:
 
 - We should have a separate template for the Expanded Section view - the way it is now, it gets messy real quick. 'faq_section_view?SomeSection' or similar. This will also allow us to have the correct h2/h3 level.
 
-- RSS feed for Latest Documentation
-
 - Included help templates that explain what the different parts do, how a FAQ differs from a howto, differs from a Tutorial etc.
 
 - Consider having an "Important" marker on entries, to mark the most common ones visually with a red (!) marker in the overview/listing.
@@ -13,10 +11,6 @@ FAQ/FAQFolder:
 TUTORIAL TYPE
 
 - It's for creating multi-page articles
-
-- Tutorial consists of TutorialPages
-
-- Tutorial is an OrderedFolder
 
 - Tutorial will need template logic to display previous/next according to ordering of TutorialPages
 
