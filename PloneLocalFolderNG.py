@@ -39,6 +39,12 @@ schema = BaseSchema +  Schema((
                 required=1,
                 widget=StringWidget(label='Local directory name')
                 ),
+    StringField('default_page',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='',
+                widget=StringWidget(label='filename of default page to view',
+                                    description='specify the filename of the default page to show (if file exists in current folder) instead of current folder contents for folder View action.  Leave this empty to disable this default page feature.',)
+                ),
     BooleanField ('require_MD5_with_upload',
                 write_permission=CMFCorePermissions.ManagePortal,
                 default=0,
@@ -312,7 +318,7 @@ class PloneLocalFolderNG(BaseContent):
     def showFile(self, destpath, REQUEST, RESPONSE):
         """ view file """
 
-        mi = self.mimetypes_registry.classify(data=None, filename=destpath)
+        mi = self.mimetypes_registry.classify(data=None, filename=destpath.lower())
         RESPONSE.setHeader('content-type', mi.normalized())
         RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
         if REQUEST.get('action', '') == 'download':
@@ -478,10 +484,9 @@ class PloneLocalFolderNG(BaseContent):
                   
                FSfullPathFolderName = os.path.join(destfolder, f)
                P = FileProxy(id=f, filepath=FSfullPathFolderName, fullname=f, properties=None)
-               mi = self.mimetypes_registry.classify(data=None, filename=f)
    
                P.setIconPath('folder_icon.gif')
-               P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+               P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
                P.setMimeType('folder')
                if os.path.exists(FSfullPathFolderName + '.metadata'):
                    try:
@@ -497,7 +502,7 @@ class PloneLocalFolderNG(BaseContent):
                FSfullPathFileName = os.path.join(destfolder, f)
                FSfullPathFolderName = os.path.dirname(FSfullPathFileName)
                P = FileProxy(id=f, filepath=FSfullPathFileName, fullname=FSfullPathFileName, properties=None)
-               mi = self.mimetypes_registry.classify(data=None, filename=f)
+               mi = self.mimetypes_registry.classify(data=None, filename=f.lower())
            
                P.setIconPath(mi.icon_path)
                P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
@@ -573,6 +578,11 @@ class PloneLocalFolderNG(BaseContent):
                else: 
                   return self.showFile(destpath, REQUEST, RESPONSE)
            else:
+               if hasattr(self, "default_page") and self.default_page:
+                  FSDefaultPageFullPath = os.path.join(destpath,self.default_page)
+                  if os.path.exists(FSDefaultPageFullPath):
+                     return self.showFile(FSDefaultPageFullPath, REQUEST, RESPONSE)
+
                #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
                #  that os.path.join might produce
                RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view')).replace('\\','/'))
@@ -786,7 +796,7 @@ class PloneLocalFolderNG(BaseContent):
                setMetadata(filename, section="DIAGNOSTICS", option="md5", value=clientMD5)
            
            # if .zip file, set ARCHIVEINFO metadata
-           if self.mimetypes_registry.classify(data=None, filename=upload.filename) == 'application/zip':
+           if self.mimetypes_registry.classify(data=None, filename=upload.filename.lower()) == 'application/zip':
                setZipInfoMetadata(filename)
 
            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file added.')
@@ -848,7 +858,7 @@ class PloneLocalFolderNG(BaseContent):
         # for now, unzip is the only type of unpacking implemented
         
         # 1st, make sure the file is an unpackable type
-        if not self.mimetypes_registry.classify(data=None, filename=FSpackedFile) == 'application/zip':
+        if not self.mimetypes_registry.classify(data=None, filename=FSpackedFile.lower()) == 'application/zip':
             RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file cannot be unpacked (not a recognized packed file type).')
             return 0
         # then, make sure the file unpacking property is set
