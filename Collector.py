@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.137 2004/03/12 15:07:58 ajung Exp $
+$Id: Collector.py,v 1.138 2004/03/12 15:40:50 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -187,12 +187,12 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         # Assign PythonScript for workflows
         for id in ('addAssignees', 'send_notifications'):
             script = PythonScript(id)
-            script.write(open(os.path.join(os.path.dirname(__file__), 'workflows', id +'.py')).read())
+            script.write(open(os.path.join(os.path.dirname(__file__), 'workflows', 'scripts', id +'.py')).read())
             try:
                 self.manage_delObjects(id)
             except: pass
-            self._setObject(id, script)
-            getattr(self, id)._proxy_roles = ('Manager', )
+            wf_tool[wf_id].scripts._setObject(id, script)
+            getattr(wf_tool[wf_id].scripts, id)._proxy_roles = ('Manager', )
             
         wf_tool.setChainForPortalTypes(('PloneIssueNG',), wf_id)
 
