@@ -73,7 +73,7 @@
              tal:define="schema python: here.atse_getSchemata('issuedata')">
 
           <tal:def tal:define="field python: schema['title']" >
-            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
               <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
               <div class="issue_metadata">
                 <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
@@ -82,7 +82,7 @@
           </tal:def>
 
           <tal:def tal:define="field python: schema['description']" >
-            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
               <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
               <pre class="issue_metadata"
                    tal:content="python: here.format_pre('description')" />
@@ -90,7 +90,7 @@
           </tal:def>
 
           <tal:def tal:define="field python: schema['solution']" >
-            <div class="row" tal:condition="python: getattr(here, field.getName())" >
+            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
               <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
               <pre class="issue_metadata">
                 <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
