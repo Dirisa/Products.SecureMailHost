@@ -50,6 +50,7 @@ Features:
   Thanks to the unknown author of the howto at plone.org "Integrating 
   CMFFormController with Formulator":http://plone.org/documentation/howto/IntegratingCMFFormControllerWithFormulator
   and also to the authors of CMFFormController and Formulator.
+  And also thanks to all contributors of minor changes.
 
  Contribution:
 
