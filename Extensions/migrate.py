@@ -20,7 +20,7 @@ class record:
         return self._k
 
 def migrate_trackers(self):
-    self = self.restrictedTraverse('/plone')
+    self = self.restrictedTraverse('/plone1')
     root = self.restrictedTraverse('/trackers')
 
     try: self.manage_delObjects(DEST_ID)
@@ -38,7 +38,7 @@ def migrate_trackers(self):
 
 def migrate_tracker(tracker, dest):
 
-    if tracker.getId() != 'HaufeReader': return
+#    if tracker.getId() != 'HaufeReader': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -51,8 +51,9 @@ def migrate_tracker(tracker, dest):
     for issue in issues:
         migrate_issue(issue, collector)
 
+    collector._num_issues = len(issues)
+
 def migrate_issue(issue, collector):
-#    if issue.getId() != '16': return    
     print 'Migrating issue:', issue
 
     new_issue = PloneIssueNG(issue.getId(), issue.title, collector.schema_getWholeSchema())
@@ -84,35 +85,60 @@ def migrate_issue(issue, collector):
     new_issue.manage_pasteObjects(issue.manage_copyObjects(ids))
 
     # Transcript
+    transcript = new_issue.getTranscript()
     for entry in issue.transcript:
 
         ts = entry.getTimestamp().timeTime()
 
         for comment in entry.getComments():
-            new_issue.getTranscript().addComment(comment.getComment(), 
-                                                 user=entry.getUser(), 
-                                                 created=ts)
+            transcript.addComment(comment.getComment(), 
+                                  user=entry.getUser(), 
+                                  created=ts)
 
         for change in entry.getChanges():
             if change.__class__.__name__ == 'ChangeEvent':
-                new_issue.getTranscript().addChange(change.getField(), 
-                                                    change.getOld(), 
-                                                    change.getNew(), 
-                                                    created=ts,
-                                                    user=entry.getUser())   
+                transcript.addChange(change.getField(), 
+                                     change.getOld(), 
+                                     change.getNew(), 
+                                     created=ts,
+                                     user=entry.getUser())   
             elif change.__class__.__name__ == 'IncrementalChangeEvent':
-                new_issue.getTranscript().addIncrementalChange(change.getField(), 
-                                                               change.getAdded(), 
-                                                               change.getRemoved(), 
-                                                               created=ts,
-                                                               user=entry.getUser())   
+                transcript.addIncrementalChange(change.getField(), 
+                                                change.getRemoved(), 
+                                                change.getAdded(), 
+                                                created=ts,
+                                                user=entry.getUser())   
             else:
                 raise TypeError(change)
 
 
         for upload in entry.getUploads():
-                new_issue.getTranscript().addUpload(upload.getFileId(),
-                                                    upload.getComment(),
-                                                    created=ts,
-                                                    user=entry.getUser())   
+                transcript.addUpload(upload.getFileId(),
+                                     upload.getComment(),
+                                     created=ts,
+                                     user=entry.getUser())   
 
+
+    # Workflow
+    new_state = issue.status()
+    old_state = new_issue.status()
+    assignees = issue.assigned_to()
+    
+    if new_state.lower() != old_state.lower():
+
+        wftool = collector.portal_workflow  # evil
+        
+        if new_state == 'Resolved':
+            wftool.doActionFor(new_issue, 'accept', assignees=assignees)
+            wftool.doActionFor(new_issue, 'resolve', assignees=assignees)
+        elif new_state == 'Rejected':
+            wftool.doActionFor(new_issue, 'accept', assignees=assignees)
+            wftool.doActionFor(new_issue, 'reject', assignees=assignees)
+        elif new_state == 'Deferred':
+            wftool.doActionFor(new_issue, 'accept', assignees=assignees)
+            wftool.doActionFor(new_issue, 'defer', assignees=assignees)
+        elif new_state in ('Accepted',):
+            wftool.doActionFor(new_issue, 'accept', assignees=assignees)
+        else: 
+            raise ValueError(new_state)
+    
