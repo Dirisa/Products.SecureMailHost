@@ -1,6 +1,10 @@
-##parameters=text,cols=100
+##parameters=fieldname,cols=100
 
 import textwrap
+
+text = context.Schema()[fieldname].get(context)
+if same_type(text, u''):
+    text = text.encode(context.getSiteEncoding())
 
 lst = []
 for l in text.split('\n'):
