@@ -105,7 +105,7 @@ class FileProxy(FSObject):
         self.comment = comment
 
     security.declarePublic('absolute_url')
-    def absolute_url(self):
+    def absolute_url(self,relative=0):
         """ return url """
         return self.url
 
@@ -551,7 +551,7 @@ class PloneLocalFolderNG(BaseContent):
                 #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: subdir=%s" % new_rel_dir )
                 filesCataloged = filesCataloged + self.catalogContents(new_rel_dir)
             else:
-                uid = str('/' + this_portal.getRelativeContentURL(self) + '/' +  os.path.join(rel_dir, f).replace('\\','/'))
+                uid = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/' +  os.path.join(rel_dir, f).replace('\\','/'))
                 
                 dummyFileProxy.id = str(f)
                 dummyFileProxy.url = itemFullName
