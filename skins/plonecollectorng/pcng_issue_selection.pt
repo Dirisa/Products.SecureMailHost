@@ -20,10 +20,16 @@
   <form method="post" action="" name="myform" onSubmit="javascript:do_submit()">
 
     <table class="listing"  border="0">
-
       <tr>
         <th colspan="2" tal:content="string: Collector: ${here/title_or_id}" />
       </tr>
+
+      <tr>
+        <th>Issue #</th>
+        <th>Title</th>
+      </tr>
+
+
       <tr tal:repeat="ticket python: here.pcng_catalog(meta_type='PloneIssueNG', sort_on='created')">
         <th style="text-align: right">
           <a tal:content="ticket/getId"
