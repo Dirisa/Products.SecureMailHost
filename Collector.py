@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.184 2004/05/23 11:08:53 ajung Exp $
+$Id: Collector.py,v 1.185 2004/05/24 19:33:35 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -472,15 +472,15 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     # Topic-user mapping
     ######################################################################
 
-    security.declareProtected(ManageCollector, 'set_topics_user')    
-    def set_topics_user(self, d):
-        """Set the topics-user mapping. 'd' maps topic ids to a sequence
-           of userIds
+    security.declareProtected(ManageCollector, 'set_topic_users')    
+    def set_topic_users(self, topic, users):
+        """Set the topics-user mapping for 'topic' where 'users' is a list 
+           of user IDs.
         """
 
-        self._topic_user = OOBTree()
-        for k in d.keys():
-            self._topic_user[k] = getattr(d, k)
+        if not hasattr(self, '_topic_user'):
+            self._topic_user = OOBTree()
+        self._topic_user[topic] = users
 
     security.declareProtected(View, 'get_topics_user')    
     def get_topics_user(self):
