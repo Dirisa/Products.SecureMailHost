@@ -1,23 +1,22 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-  lang="en"
-  metal:use-macro="here/main_template/macros/master"
-  i18n:domain="plonehelpcenter">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
 
 <head>
     <metal:css fill-slot="css_slot">
-    <style type="text/css" media="all"
-        tal:content="string: @import url($portal_url/plonesoftwarecenter.css);"></style>
+      <style type="text/css" media="all"
+             tal:content="string: @import url($portal_url/plonesoftwarecenter.css);"></style>
     </metal:css>
-
     <metal:override fill-slot="column_two_slot" />
-
 </head>
 
+<body>
 
-  <body>
-    <div metal:fill-slot="main"
-         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
-                     category python:request.traverse_subpath[0]">
+  <div metal:fill-slot="main"
+       tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
+                   category python:request.traverse_subpath[0]">
 
     <h1 class="documentFirstHeading">
       Projects in category <span tal:replace="category" />
@@ -40,6 +39,8 @@
     <div metal:use-macro="here/document_byline/macros/byline">
       Get the byline - contains details about author and modification date.
     </div>
-  </body>
+  </div>
+
+</body>
 
 </html>
