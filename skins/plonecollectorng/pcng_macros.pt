@@ -62,7 +62,7 @@
       <metal:block tal:repeat="event events">
         <div class="transcriptevent">
           <tal:if tal:condition="python: event.getType()=='comment'">
-            <pre tal:content="python: here.wrap_text(event.getValue('comment'), 120)"> comment </pre>
+            <pre tal:content="python: here.wrap_text(event.getValue('comment'), 80)"> comment </pre>
             <div style="text-align: right" >
               <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
                 <span i18n:translate="followup_with_quote">Followup (with quoting this comment)</span>
