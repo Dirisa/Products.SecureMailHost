@@ -82,5 +82,8 @@ h2.tracker_overview {
     font-weight: bold;
 }
 
+div.portletBody {
+    padding: 0.5em;
+}
 </style>
 </metal:block>

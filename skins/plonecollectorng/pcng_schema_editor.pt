@@ -24,10 +24,10 @@
       <tr>
         <td valign="top">
 
-          <div class="box" tal:condition="fieldsets">    <!-- Fieldsets -->
+          <div class="portlet" tal:condition="fieldsets">    <!-- Fieldsets -->
             <div class="padding">
             <h5 i18n:translate="schematas">Schematas</h5>
-            <div class="body">
+            <div class="portletBody">
               <form action="schema_newSchema" method="post">
                 <div tal:repeat="set fieldsets">
                   <a tal:content="string: ${set}" t
@@ -48,9 +48,9 @@
           </div>
 
 
-          <div class="box" tal:condition="fieldsets">    <!-- Fields -->
+          <div class="portlet" tal:condition="fieldsets">    <!-- Fields -->
             <h5 i18n:translate="fields">Fields</h5>
-            <div class="body">  
+            <div class="portletBody">  
               <div tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
                 <a tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${fieldset}&field=${field/getName};
                                    class python: test(field.getName() == request.get('field'), 'selected', '')"
@@ -70,9 +70,9 @@
             </div>
           </div>
 
-          <div class="box">
+          <div class="portlet">
             <h5 i18n:translate="maintainance">Maintainance</h5>
-            <div class="body">
+            <div class="portletBody">
               <div>
                 <a href="update_schema_for_issues?return_to=pcng_schema_editor" i18n:translate="update_schema_for_all_issues">Update schema for all issues</a>
               </div>
@@ -83,9 +83,9 @@
 
         <td valign="top" tal:condition="request/field|nothing">  <!-- field editor -->
 
-          <div class="box">
+          <div class="portlet">
             <h5 i18n:translate="field_definition">Field definition</h5>
-            <div class="body">
+            <div class="portletBody">
 
           <form action="schema_update" method="post"
                 tal:define="field python: here.schema_getSchema(fieldset)[request['field']]">

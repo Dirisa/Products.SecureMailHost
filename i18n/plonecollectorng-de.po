@@ -678,3 +678,6 @@ msgstr "Status"
 
 msgid "topic"
 msgstr "Topic"
+
+msgid "vocabulary"
+msgstr "Vokabular (Benutzen Sie Key|Value für Key-Value Paare oder 'method:METHODENNAME')"
