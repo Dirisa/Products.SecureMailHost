@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.34 2003/09/30 15:10:23 ajung Exp $
+$Id: Issue.py,v 1.35 2003/10/03 09:16:26 ajung Exp $
 """
 
 import sys, os
@@ -25,6 +25,13 @@ from Transcript import Transcript
 from WatchList import WatchList
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import util
+
+
+class IssueRelationship:
+    
+    def __init__(self, issue_url, comment):
+        self.issue_url = issue_url
+        self.comment = comment
 
 
 class PloneIssueNG(OrderedBaseFolder, WatchList):
@@ -211,7 +218,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         if not reference.comment:
             raise ValueError('References must have a comment')
 
-        self.addReference(issue, reference.comment)
+        self.addReference(issue, IssueRelationship(issue.absolute_url(1), reference.comment))
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')
@@ -220,7 +227,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             (using Graphviz) 
         """
         from Products.PloneCollectorNG import graphviz
-
         graphs, nodes, edges = graphviz.build_tree(self, {}, [], [])
         vizfile = graphviz.build_graphviz(graphs, nodes, edges)
         
