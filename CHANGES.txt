@@ -1,5 +1,17 @@
-0.6.0 (unstable)
+0.6.0
 
+rc1
+	- fixed deleteFolder() implementation and added some security checking
+
+	- added 'ignore_readonly' field to enable optional forced deletion of 
+	  read-only files
+  
+	- added basic detection of file delete permission setting to deleteFile()
+	  to prevent deletion of read-only files
+  
+	- added ability to bulk generate MD5 checksum metadata for existing files
+
+	- added ability to bulk verify file current vs metadata MD5 checksums
 
 beta1
 	- listFolderContents() now uses _createProxy()

@@ -56,8 +56,10 @@ about feature requests and/or to volunteer to help!!!
 - i18n not complete.
 
 - various problems with filenames containing spaces
-  (not an issue on Mac OSX; need to quantify this)
-    
+    * eg, such files will be accessible directly via
+      Plone, but not when a proxy server is put on to
+      the front-end of Plone
+          
     * eg, MD5 generation fails on such files
   
 - sorting by file size is munged (doesnt recognize KB/MB/GB suffix)
@@ -70,9 +72,9 @@ about feature requests and/or to volunteer to help!!!
 
 
 ----------------------------------
-  BEFORE RELEASE 0.60
+  BEFORE RELEASE 0.70
 ----------------------------------
-- graceful handling of OS 'permission denied' situations
+- graceful handling of all OS 'permission denied' situations
 
 - resolve any problems wrt filenames containing spaces
 
@@ -85,11 +87,11 @@ about feature requests and/or to volunteer to help!!!
 
 - improve the unit testing for catalog action
 
-- add metadata support for folders
- 
 - sorting by file size is munged (doesnt recognize KB/MB/GB suffix)
  
 - ???
+
+- file/folder packing
 
 ----------------------------------
   BEFORE 1.0 FINAL
@@ -122,8 +124,6 @@ might be something to put as a "caveat" in the README file.
 
 - ability to configure # of items listed
 
-- comments for folders
-
 - move file and/or folder 
 
 - unpacking support for package types other than .zip (eg .tgz) file types
@@ -133,10 +133,6 @@ might be something to put as a "caveat" in the README file.
 - edit all metadata 
 
 - ability to bulk apply metadata settings (eg, comments) to a group of files
-
-- ability to bulk generate MD5 checksum metadata for existing files
-
-- ability to bulk verify current file MD5 checksum against metadata MD5 value
 
 - ability to copy files from PLFNG and paste them elsewhere in the site 
   (as regular Plone Files)
