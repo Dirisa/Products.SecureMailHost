@@ -19,11 +19,10 @@
    <tal:def tal:define="global quoted_followup python: here.pcng_text_followup(request['timestamp'])" />
   </tal:if>
     
-  <form method="post" action="issue_followup">
-    <fieldset
-         tal:define="assignees here/assigned_to;
-                     show_actions python: 1">
-      <legend><span i18n:translate="issue_followup">Issue Followup</span> #<span tal:content="python: len(here) + 1"/></legend>
+  <div id="pcng_issue_followup"
+       tal:define="assignees here/assigned_to;
+                   show_actions python: 1">
+    <form method="post" action="issue_followup">
 
       <div class="row">
         <div class="label" i18n:translate="comment">Comment</div>
@@ -38,13 +37,12 @@
       <div class="row">
         <div class="label">&nbsp;</div>
         <div class="field">
-          <input class="context" type="submit" value="Save" i18n:attributes="value" class="standalone"/>
+          <input class="context" type="submit" value="Submit followup" i18n:attributes="value" class="standalone"/>
           <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
         </div>
       </div> <!-- End row -->
-
-    </fieldset> 
-  </form>
+    </form>
+  </div>
 </div>
 </body>
 </html>

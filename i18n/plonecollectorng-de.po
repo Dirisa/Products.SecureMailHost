@@ -969,4 +969,7 @@ msgstr "Keine Dateien vorhanden"
 msgid "no_references"
 msgstr "Keine Referenzen vorhanden"
 
+msgid "Submit followup"
+msgstr "Antwort senden"
+
 
