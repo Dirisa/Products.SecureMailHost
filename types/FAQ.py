@@ -65,7 +65,7 @@ class HelpCenterFAQ(BaseContent):
 
     actions = ({'id': 'view',
                 'name': 'View',
-                'action': 'faq_view',
+                'action': 'string:${object_url}/faq_view',
                 'permissions': (CMFCorePermissions.View,)
                 },)
 
