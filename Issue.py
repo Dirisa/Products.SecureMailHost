@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.60 2003/11/02 12:01:20 ajung Exp $
+$Id: Issue.py,v 1.61 2003/11/02 20:02:57 ajung Exp $
 """
 
 import sys, os
@@ -219,6 +219,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """
 
         for k in parameters.keys():
+            if  k in ('id',):
+                raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
             field = self.Schema()[k]
             field.storage.set(k, self, v)
