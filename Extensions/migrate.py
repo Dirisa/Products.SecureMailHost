@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.12 2003/11/08 10:32:01 ajung Exp $
+$Id: migrate.py,v 1.13 2003/11/09 13:47:51 ajung Exp $
 """
 
 
@@ -42,7 +42,7 @@ class record:
         return self._k
 
 
-def migrate_trackers(self, url_from='/trackers', url_to='/plone1'):
+def migrate_trackers(self, url_from='/trackers', url_to='/plone'):
     tracker_root = self.restrictedTraverse(url_from)
     plone_root = self.restrictedTraverse(url_to)
 
@@ -114,7 +114,6 @@ def migrate_memberdata(source, dest):
 
 def migrate_tracker(tracker, dest):
 
-    if tracker.getId() != 'BugTracker': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
