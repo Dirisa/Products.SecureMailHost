@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.118 2004/02/16 15:29:02 ajung Exp $
+$Id: Collector.py,v 1.119 2004/02/19 15:01:18 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -64,6 +64,11 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         {'id': 'pcng_schema_editor',
         'name': 'Issue schema',
         'action': 'pcng_schema_editor',
+        'permissions': (ManageCollector,)
+        },
+        {'id': 'pcng_topics_users',
+        'name': 'Topics-Users',
+        'action': 'pcng_topics_user',
         'permissions': (ManageCollector,)
         },
         {'id': 'pcng_notifications',
@@ -377,6 +382,31 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         return [ (id, idx.meta_type) 
                  for id, idx in getToolByName(self, CollectorCatalog)._catalog.indexes.items()
                  if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
+
+    ######################################################################
+    # Topic-user mapping
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'set_topics_user')    
+    def set_topics_user(self, d):
+        """Set the topics-user mapping. 'd' maps topic ids to a sequence
+           of userIds
+        """
+
+        self._topic_user = OOBTree()
+        for k in d.keys():
+            self._topic_user[k] = getattr(d, k)
+
+    security.declareProtected(View, 'get_topics_user')    
+    def get_topics_user(self, ):
+        """Return the topic-user mapping """
+        if not hasattr(self, '_topic_user'):
+            self._topic_user = OOBTree()
+
+        d = {}
+        for k,v in self._topic_user.items():
+            d[k] = v
+        return d
 
     ######################################################################
     # Maintainance
