@@ -13,7 +13,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.3 $"[11:-2]
+__version__ = "$Revision: 1.4 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -163,7 +163,7 @@ def setupPcng_issue_workflow(wf):
     tdef.setProperties(title="""""",
                        new_state_id="""pending""",
                        trigger_type=0,
-                       script_name="""""",
+                       script_name="""send_notifications""",
                        after_script_name="""""",
                        actbox_name="""pending""",
                        actbox_url="""""",
