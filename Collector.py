@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.90 2003/12/12 09:24:33 ajung Exp $
+$Id: Collector.py,v 1.91 2003/12/12 10:02:27 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -21,7 +21,7 @@ from Products.CMFCore.CMFCorePermissions import *
 
 from Transcript import Transcript
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
-from config import IssueWorkflowName
+from config import IssueWorkflowName, CollectorCatalog
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
@@ -129,7 +129,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def setup_collector_catalog(self, RESPONSE=None):
         """Create and situate properly configured collector catalog."""
 
-        try: self.manage_delObjects('pcng_catalog')
+        try: self.manage_delObjects(CollectorCatalog)
         except: pass
         
         catalog = PloneCollectorNGCatalog()
@@ -238,6 +238,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._reporters = reporters
         self._supporters = supporters
         self._adjust_staff_roles()
+        self._adjust_participation_mode()
 
         util.redirect(RESPONSE, 'pcng_staff', 
                       self.translate('changes_saved', 'Your changes have been saved'))
@@ -469,7 +470,7 @@ except ImportError:
 class PloneCollectorNGCatalog(CatalogTool):
     """ catalog for collector issues """
 
-    id = 'pcng_catalog'
+    id = CollectorCatalog
     meta_type = 'PloneCollectorNG Catalog'
     portal_type = 'PloneCollectorNG Catalog'
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.102 2003/12/12 07:41:01 ajung Exp $
+$Id: Issue.py,v 1.103 2003/12/12 10:02:27 ajung Exp $
 """
 
 import sys, os, time
@@ -24,7 +24,7 @@ from Products.Archetypes.utils import OrderedDict
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
-from config import IssueWorkflowName
+from config import IssueWorkflowName, CollectorCatalog
 from Transcript import Transcript
 from WatchList import WatchList
 from Translateable import Translateable
@@ -379,7 +379,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def reindexObject(self, idxs=None):
         """ reindex issue """
 
-        self.pcng_catalog.indexObject(self)  # reindex with collector catalog
+        getattr(self, CollectorCatalog).indexObject(self)  # reindex with collector catalog
 
         from Products.Archetypes.config import TOOL_NAME
         at = getToolByName(self, TOOL_NAME , None)
@@ -391,9 +391,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
 
-        self.pcng_catalog.unindexObject(self)  # reindex with collector catalog
+        getattr(self, CollectorCatalog).unindexObject(self)  # reindex with collector catalog
 
-        catalogs = [getattr(self, 'pcng_catalog')]
+        catalogs = [getattr(self, CollectorCatalog)]
 
         from Products.Archetypes.config import TOOL_NAME
         at = getToolByName(self, TOOL_NAME , None)
