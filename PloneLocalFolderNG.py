@@ -1265,7 +1265,7 @@ class PloneLocalFolderNG(BaseContent):
               '/plfng_view?portal_status_message=' + msg)
             return 0
         # then, check that file unpacking will not violate any quota-limits
-        elif self.quota_aware:
+        elif self.quota_maxbytes != 0:
             # traverse up the acquisition tree looking for first container with
             # a non-zero 'quota_maxbytes' attribute.  If such a container is
             # found, find out the total number of bytes used by the contents of
@@ -1282,17 +1282,28 @@ class PloneLocalFolderNG(BaseContent):
                      usedBytes = determine_bytes_usage(parent)
                      break
 
-            try:
-               unpackedSize = int(getMetadataElement(FSpackedFile,
-                                                     section="ARCHIVEINFO",
-                                                     option="unpacked_size"))
-            except:
+            unpackedSizeStr = getMetadataElement(FSpackedFile,
+                                                    section="ARCHIVEINFO",
+                                                    option="unpacked_size")
+            if unpackedSizeStr:
+               try:
+                  unpackedSize = int(unpackedSizeStr.split('.')[0])
+               except:
+                  unpackedSize = 0
+            else:
                try:
                   setZipInfoMetadata(FSpackedFile)
-                  unpackedSize = int(getMetadataElement(FSpackedFile,
-                                                        section="ARCHIVEINFO",
-                                                        option="unpacked_size")
-                                                        )
+                  unpackedSizeStr = getMetadataElement(FSpackedFile,
+                                                       section="ARCHIVEINFO",
+                                                       option="unpacked_size")
+                  try:
+                  	unpackedSize = int(unpackedSizeStr.split('.')[0])
+                  except:
+                  	unpackedSize = 0
+
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                  #"unpackFile() :: unpackedSize=%d" % unpackedSize )
+
                except:
                   msg = 'file could not be unpacked (not a valid file?!).'
                   RESPONSE.redirect(REQUEST['URL1']+\
