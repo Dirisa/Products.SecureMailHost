@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.9 2003/09/19 14:51:54 ajung Exp $
+$Id: issue_schema.py,v 1.10 2003/09/21 12:55:02 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -25,6 +25,12 @@ VOCAB_IMPORTANCE = DisplayList((
   ('high', 'High'),
   ('critical', 'Critical'),
 ))
+
+VOCAB_SECURITY_RELATED = DisplayList((
+  (0, 'No'),
+  (1, 'Yes'),
+))
+
 
 schema = OrderedSchema((
     StringField('id',
@@ -82,6 +88,18 @@ schema = OrderedSchema((
                                        label_msgid='label_importance',
                                        i18n_domain='plonecollectorng'),
                 ),
+
+    IntegerField('security_related',
+                required=1,
+                searchable=1,
+                schemata='issuedata',
+                vocabulary=VOCAB_SECURITY_RELATED,
+                widget=SelectionWidget(format='select',
+                                       label_msgid="label_security_related",
+                                       label='Security related',
+                                       i18n_domain="plone"),
+                ),
+
 
     StringField('progress_hours_estimated',
                 schemata='progress',

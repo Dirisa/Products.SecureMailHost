@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.21 2003/09/21 11:22:50 ajung Exp $
+$Id: Issue.py,v 1.22 2003/09/21 12:55:02 ajung Exp $
 """
 
 import sys
@@ -75,7 +75,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
-        self.security_related = 0
         self._assignees = []
         self._references = ReferencesManager()
         self._transcript = Transcript()
@@ -121,7 +120,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
         # perform workflow action
         if not action in ('comment', ):
-
             if action != 'request' and not action in self.validActions():
                 raise Unauthorized('Invalid action: %s' % action)
 
