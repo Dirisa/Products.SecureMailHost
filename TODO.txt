@@ -8,15 +8,55 @@ General:
 - Search needs to be hooked up! It should allow searching on all the different
   types. (limi)
 
-- Notify! People need to be notified when somebody adds a comment to their item,
-  so they can maintain and refine. The PloneHelpCenter concept will not work 
-  without this, IMHO. (limi)
-
 - Make it easier to choose which subcomponents get installed. For
   example, put a simple textual list in config.py of the folderish
   products, and have types/init.py, Install.py, and
   HelpCenter.py/__init__ respect this. Easier for other people who
   want to use product but might not want all parts.
+
+Workflow - specification (by limi, trying to capture the most important things :)
+
+- The main Plone Help Center *Content* workflow has the following states:
+
+  - In-progress [Only Owner + Managers can View and Edit]
+  
+  - Pending [Owner can read but not edit, Managers/Reviewers approve]
+  
+  - Published [Everyone can view, Owner/Managers/Reviewers can Edit]
+
+- Workflow mapping - This is the mapping to the different types:
+
+  Plone Workflow -- PloneHelpCenter, 
+                    FAQFolder, HowtoFolder, TutorialFolder, 
+                    ErrorRefFolder, HelpLinkFolder, Glossary
+                    
+  Help Center Workflow -- FAQ, Howto, Tutorial,
+                          ErrorReference, HelpLink, Definition
+                          
+  Not workflowed -- TutorialPage, Attachments
+
+- Permissions:
+
+  - Members can add FAQ, Howto, Tutorial, ErrorRef, HelpLink, Definition
+  
+  - They are in-progress by default, if they want to cooperate on these, they
+    will need to assign local roles.
+    
+  - Owners are allowed to edit their docs while published. Requiring them to 
+    retract content to update or fix, and then approve again is painful.
+    Since the piece of documentation has already been approved by then, it's
+    "proven" that it was good enough when it started, it doesn't need to be
+    re-verified, in my opinion. Feel free to point out why I'm wrong. :)
+    
+  - Any logged in Member can add a new FAQ, Howto, Tutorial, ErrorRef, HelpLink
+    and Definition, but only the owners of those objects can add the sub-objects
+    like TutorialPages and Attachments.
+  
+
+- Notify! People need to be notified when somebody adds a comment to their item,
+  so they can maintain and refine. The PloneHelpCenter concept will not work 
+  without this, IMHO. (limi)
+
 
 I18n:
 
