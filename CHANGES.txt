@@ -1,3 +1,7 @@
+0.3:
+
+  - comment for uploaded files are now displayed
+
 0.2
 
   - add traversal support
