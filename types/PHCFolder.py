@@ -73,7 +73,6 @@ class PHCFolder:
                 sections[s]=1
             if len(sections) == max_sections:
                 break
-        return sections.keys()
-
+        return [ s for s in self.getSectionsVocab() if sections.has_key(s) ]
 
 
