@@ -13,7 +13,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -202,4 +202,4 @@ addWorkflowFactory(createPcng_issue_workflow,
                    id='pcng_issue_workflow',
                    title='pcng_issue_workflow')
 
-print 'registered'
+
