@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.29 2004/02/12 13:43:39 ajung Exp $
+$Id: Translateable.py,v 1.30 2004/02/13 08:09:53 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -58,8 +58,12 @@ class Translateable:
     security.declarePublic('translate')
     def translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
         """ ATT: this code is subject to change """
-
+        
         pts = self._getPTS()
+
+        # Workaround for mega-kaputt context.REQUEST which turns out to be
+        # not to be a REQUEST-like object but some unknown acquisition shit.
+        if isinstance(self.REQUEST, StringType): pts = None
 
         if pts is None:
             r = self._interpolate(text, kw)
