@@ -1,3 +1,7 @@
+<metal:block metal:define-macro="field_quoted">
+  <span metal:use-macro="python: here.widget(request.get('fieldname'), mode='view', use_label=1)"/>
+</metal:block>
+
 <metal:block metal:define-macro="field_shortview">
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
@@ -61,10 +65,9 @@
 
 
 <fieldset metal:define-macro="issue_uploads">
-    <legend i18n:translate="legend_uploads">Uploads</legend>
-
-        <div class="row" tal:repeat="item here/objectValues">
-          <div class="label">
+  <legend i18n:translate="legend_uploads">Uploads</legend>
+    <ul>
+        <li tal:repeat="item here/objectValues">
             <span tal:define="icon item/getIcon|item/icon|nothing">
 
               <span tal:condition="icon">
@@ -87,12 +90,12 @@
                  tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
             </span>
              <span tal:replace="item/description"> DESCRIPTION</span>
-          </div>
 
-        </div> <!-- End row -->
 
-        <span i18n:translate="issue_artifacts_table_no_uploads_available"
-              tal:condition="not: here/objectValues">No uploads available</span>
+      </li> <!-- End row -->
+    <ul>
+  <span i18n:translate="issue_artifacts_table_no_uploads_available"
+        tal:condition="not: here/objectValues">No uploads available</span>
 
 </fieldset> <!-- End group -->
 
