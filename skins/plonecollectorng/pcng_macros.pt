@@ -262,13 +262,16 @@
           <div style="float: left; margin: 5pt">
             <span class="label" i18n:translate="" tal:content="python: item[0]" />
             <br>
-            <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')">
+            <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
+                    tal:define="displaylist python: here.pcng_vocabulary_values(item[0])">
+
               <select multiple size="5" 
                       tal:attributes="name python: '%s:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
                 <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
-                  <option i18n:translate="" tal:attributes="value entry;
+                  <option i18n:translate="" 
+                          tal:attributes="value entry;
                                           selected python: request.get(item[0],'')==entry" 
-                         tal:content="entry" />
+                          tal:content="python: displaylist.get(entry, entry)" />
                 </tal:loop>
               </select>
             </tal:if>
