@@ -14,26 +14,6 @@ def install(self):
                  PROJECTNAME)
 
     install_subskin(self, out, GLOBALS)
-                                                                                                        
-    filename = 'pcng_issue_workflow.zexp'
-    src_path = self.getPhysicalRoot().Control_Panel.Products.PloneCollectorNG.home
-    import_dir = os.path.join(INSTANCE_HOME, 'import')
-    src_file =  open(os.path.join(src_path, 'import', filename), 'rb')
-    if not os.path.exists(import_dir): os.makedirs(import_dir)
-    dest_file = open(os.path.join(import_dir, filename), 'wb')
-    dest_file.write(src_file.read())
-    src_file.close(); dest_file.close()
-
-    workflow_tool = getToolByName(self, 'portal_workflow')
-    try:
-        workflow_tool.manage_importObject(filename)
-    except: pass
-
-    os.unlink(os.path.join(import_dir, filename))
-    try:
-        workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
-    except: pass
-    print >> out, "Added 'pcng_issue_workflow' workflow"
 
     # add some new properties to memberdatatool
     memberdata_tool = getToolByName(self, 'portal_memberdata')
