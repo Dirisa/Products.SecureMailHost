@@ -19,9 +19,13 @@ def install(self):
     memberdata_tool = getToolByName(self, 'portal_memberdata')
 
     for key,default, tpe  in (
-               ('pcng_company', '', 'string') , ('pcng_position', '', 'string') , 
-               ('pcng_city', '', 'string') , ('pcng_substitute', [] , 'lines'),
-               ('pcng_address', '', 'string') , ('pcng_fax', '', 'string') , 
+               ('pcng_company', '', 'string') , 
+               ('pcng_position', '', 'string') , 
+               ('pcng_city', '', 'string') , 
+               ('pcng_substitute', [] , 'lines'),
+               ('pcng_address', '', 'string') , 
+               ('pcng_fax', '', 'string') , 
+               ('pcng_email_submission_permission','no', 'string'),
                ('pcng_send_emails','yes', 'string'),
                ('pcng_send_attachments','no', 'string'),
                ('pcng_position_searchform','bottom', 'string'),
