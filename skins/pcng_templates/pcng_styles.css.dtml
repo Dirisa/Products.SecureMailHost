@@ -155,6 +155,10 @@ div #pcng_uploads_edit{
     float: left;
 }
 
+div #pcng_searchform{
+    margin-top: 1em;
+}
+
 .portlet li #pcng_actions {
     padding: 2em;
 }

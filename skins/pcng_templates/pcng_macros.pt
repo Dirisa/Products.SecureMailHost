@@ -163,154 +163,139 @@
 </div>    
 
 
-<tal:macro metal:define-macro="search_issues_form" i18n:domain="plonecollectorng"
+<tal:macro metal:define-macro="search_issues_form" i18n:domain="plonecollectorng">
+  <div>
+  <form action="pcng_view" method="GET" name="search_form">
+    <input type="hidden" name="advanced_search" value="1">
 
- tal:define="advanced python: int(int(request.get('advanced_search', 0)) == 1 or member.getProperty('pcng_default_searchform') == 'advanced')">
-
-
-  <div style="float: left">
-    <a href="pcng_view?advanced_search=1" tal:condition="not: advanced"><span i18n:translate="advanced_search">Advanced search</span></a>
-  </div>
-
-  <div style="float: left">
-  <br>
-  <form action="pcng_view" method="GET" name="search_form" tal:condition="advanced">
-    <div style="float: left">
-
-      <input type="hidden" name="advanced_search" value="1">
-
-      <div>
-        <tal:loop tal:repeat="item here/getIndexes" >
-          <div style="float: left; margin: 5pt">
+    <div id="pcng_searchform">
+        <div tal:repeat="item here/getIndexes" style="float: left; margin-right: 5pt">
             <span id="label" i18n:translate="" tal:content="python: item[0]" />
-            <br>
-            <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
-                    tal:define="displaylist python: here.pcng_vocabulary_values(item[0])">
+            <div>
+              <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
+                      tal:define="displaylist python: here.pcng_vocabulary_values(item[0])">
 
-              <select multiple size="5" 
-                      tal:attributes="name python: '%s:list:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
-                <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
-                  <option i18n:translate="" 
-                          tal:attributes="value entry;
-                                          SELECTED python: entry in request.get(item[0],[])" 
-                          tal:content="python: displaylist.get(entry, entry)" />
-                </tal:loop>
-              </select>
-            </tal:if>
+                <select multiple size="5" 
+                        tal:attributes="name python: '%s:list:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
+                  <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
+                    <option i18n:translate="" 
+                            tal:attributes="value entry;
+                                            SELECTED python: entry in request.get(item[0],[])" 
+                            tal:content="python: displaylist.get(entry, entry)" />
+                  </tal:loop>
+                </select>
+              </tal:if>
+            </div>
 
             <tal:if tal:condition="python: item[1].find('TextIndex') > -1">
               <input type="text" tal:attributes="name python: item[0]" value="" size="30">
             </tal:if>
           </div>
-        </tal:loop>
-        <div style="float: right"></div>
+        <div style="clear: both">&nbsp;</div> 
+    </div>
+
+    <div id="pcng_searchform">
+      <span id="label" i18n:translate="fulltextsearch">Fulltext search</span>
+      <div>
+        <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
       </div>
     </div>
 
-
-    <div style="float: left">
+    <div id="pcng_searchform">
+      <span id="label" i18n:translate="search_by_date">Search by date</span>
       <div>
-        <span id="label" i18n:translate="fulltextsearch">Fulltext search</span>
-        <br/>
-        <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
+          <select name="datefield">
+            <option i18n:translate=""
+                    tal:repeat="item python: (
+                          ('last_action', 'Last change'),
+                          ('progress_deadline', 'Deadline'),
+                          ('created', 'Created'))"
+                    tal:attributes="value python: item[0];
+                                    selected python: request.get('datefield', 'created') == item[0]"
+                       tal:content="python: item[1]" />
+          </select>
+          <select name="datefield_direction">
+            <option i18n:translate=""
+                    tal:repeat="item python: (
+                          ('since', 'since'),
+                          ('until', 'until'))"
+                    tal:attributes="value python: item[0];
+                                    selected python: request.get('datefield_direction', 'since') == item[0]"
+                       tal:content="python: item[1]" />
+          </select>
+          <input type="text" name="datefield_value" size="12"
+                 tal:attributes="value python: request.get('datefield_value', '')">
+          <span i18n:translate="days_or_date">Days or date</span>
       </div>
+    </div>
+
+    <div id="pcng_searchform">
+      <span id="label" align="left" i18n:translate="sorting">Sorting</span>
 
       <div>
-        <span id="label" i18n:translate="search_by_date">Search by date</span>
-        <br/>
-        <select name="datefield">
+        <select name="sort_on" size="1">
           <option i18n:translate=""
                   tal:repeat="item python: (
-                        ('last_action', 'Last change'),
-                        ('progress_deadline', 'Deadline'),
-                        ('created', 'Created'))"
-                  tal:attributes="value python: item[0];
-                                  selected python: request.get('datefield', 'created') == item[0]"
-                     tal:content="python: item[1]" />
-        </select>
-        <select name="datefield_direction">
+                        ('getId','Issue'),
+                        ('creation_date','Date'),
+                        ('progress_deadline','Deadline'),
+                        ('Creator','Submitter'),
+                        ('progress','Progress'),
+                        ('classification','Classification'),
+                        ('status','Status'),
+                        ('Title','Title') ,
+                        ('topic','Topic'),
+                        ('importance','Importance')
+                        )"
+                   tal:attributes="value python: item[0];
+                                   selected python: request.get('sort_on', 'getId') == item[0]"
+                   tal:content="python: item[1]" />
+        </select> 
+
+        <select name="sort_direction" size="1">
           <option i18n:translate=""
                   tal:repeat="item python: (
-                        ('since', 'since'),
-                        ('until', 'until'))"
-                  tal:attributes="value python: item[0];
-                                  selected python: request.get('datefield_direction', 'since') == item[0]"
-                     tal:content="python: item[1]" />
-        </select>
-        <input type="text" name="datefield_value" size="12"
-               tal:attributes="value python: request.get('datefield_value', '')">
-        <span i18n:translate="days_or_date">Days or date</span>
+                        ('desc','Desc'),
+                        ('asc','Asc'),
+                        )"
+                   tal:attributes="value python: item[0];
+                                   selected python: request.get('sort_direction', 'desc') == item[0]"
+                   tal:content="python: item[1]" />
+        </select> 
       </div>
+  </div>
 
+  <div id="pcng_searchform">
+      <span id="label" i18n:translate="hits_per_page">Hits per page</span>
       <div>
-        <span id="label" align="left" i18n:translate="sorting">Sorting</span>
-
-        <div>
-          <select name="sort_on" size="1">
-            <option i18n:translate=""
-                    tal:repeat="item python: (
-                          ('getId','Issue'),
-                          ('creation_date','Date'),
-                          ('progress_deadline','Deadline'),
-                          ('Creator','Submitter'),
-                          ('progress','Progress'),
-                          ('classification','Classification'),
-                          ('status','Status'),
-                          ('Title','Title') ,
-                          ('topic','Topic'),
-                          ('importance','Importance')
-                          )"
-                     tal:attributes="value python: item[0];
-                                     selected python: request.get('sort_on', 'getId') == item[0]"
-                     tal:content="python: item[1]" />
-          </select> 
-
-          <select name="sort_direction" size="1">
-            <option i18n:translate=""
-                    tal:repeat="item python: (
-                          ('desc','Desc'),
-                          ('asc','Asc'),
-                          )"
-                     tal:attributes="value python: item[0];
-                                     selected python: request.get('sort_direction', 'desc') == item[0]"
-                     tal:content="python: item[1]" />
-          </select> 
-        </div>
-            
-        <span id="label" i18n:translate="hits_per_page">Hits per page</span>
-
-        <div>
-          <select name="batchsize:int" size="1">
-            <option i18n:translate=""
-                    tal:repeat="item python: (
-                          (10,10),
-                          (25,25),
-                          (50,50),
-                          (100,100),
-                          (250,250),
-                          (500,500)
-                          )"
-                     tal:attributes="value python: item[0];
-                                     selected python: request.get('batchsize', 10) == item[0]"
-                     tal:content="python: item[1]" />
-          </select> 
-        </div>
-
+        <select name="batchsize:int" size="1">
+          <option i18n:translate=""
+                  tal:repeat="item python: (
+                        (10,10),
+                        (25,25),
+                        (50,50),
+                        (100,100),
+                        (250,250),
+                        (500,500)
+                        )"
+                   tal:attributes="value python: item[0];
+                                   selected python: request.get('batchsize', 10) == item[0]"
+                   tal:content="python: item[1]" />
+        </select> 
       </div>
-      <br>
-      <div style="float: left">
+
+      <div id="pcng_searchform">
         <input type="submit" value="Search" i18n:attributes="value" class="standalone">
       </div>
     </div>
 
+
   </form>
   </div>
-
-  <div style="float: left">
-    <tal:if tal:condition="advanced">
-      <hr style="width: 100%">
-      <div metal:use-macro="here/pcng_macros/macros/issue_statistics" />  
-    </tal:if>
+ 
+  <div id="pcng_searchform">
+    <hr style="width: 100%">
+    <div metal:use-macro="here/pcng_macros/macros/issue_statistics" />  
   </div>
 </tal:macro>
 
