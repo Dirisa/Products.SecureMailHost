@@ -5,11 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+$Id: Issue.py,v 1.4 2003/09/07 17:50:36 ajung Exp $
 """
 
 from AccessControl import getSecurityManager, ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import BaseFolder, registerType
 
 from Transcript import Transcript, TranscriptEntry
@@ -112,6 +113,24 @@ class Issue(BaseFolder):
             if RESPONSE is not None:
                 RESPONSE.redirect('pcng_issue_references?portal_status_message=Nothing%20to%20be%20uploaded')
 
+    ######################################################################
+    # Misc
+    ######################################################################
+
+    def post_validate(self, REQUEST, errors):
+        """ Hook to perform post-validation actions. We use this
+            to reindex the issue.
+        """
+        self.reindexObject()
+
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
+    def reindexObject(self):
+        catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
+        for c in catalogs: c.indexObject(self)
+
+    def updateSchema(self, schema):
+        """ update the schema """
+        self.schema = schema
 
 registerType(Issue)
 
