@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.14 2003/11/09 14:47:58 ajung Exp $
+$Id: migrate.py,v 1.15 2003/11/10 08:49:16 ajung Exp $
 """
 
 
@@ -50,13 +50,13 @@ def migrate_trackers(self, url_from='/trackers', url_to='/plone'):
     # ATT: using migrate_acl_users() might *OVERRIDE* exisiting
     # user accounts on the destation site. BE WARNED !!!!!!
 
-    # migrate_acl_users(tracker_root, plone_root)
+    #  migrate_acl_users(tracker_root, plone_root)
 
     # Remove the comment below to migrate the portal_memberdata.
     # ATT: using migrate_memberdata() might *OVERRIDE* exisiting
     # settings on the destation site. BE WARNED !!!!!!
 
-    # migrate_memberdata(tracker_root, plone_root)
+    #  migrate_memberdata(tracker_root, plone_root)
    
     trackers = tracker_root.objectValues('CMF CollectorNG')
     for tracker in trackers:
@@ -316,7 +316,8 @@ def migrate_issue(issue, collector):
                                                 created=ts,
                                                 user=entry.getUser())   
 
-                if change.getField() == 'Assignees':
+                if change.getField().lower().find('zugewiesen') > -1 or \
+                   change.getField().lower().find('assigned') > -1:
                     for u in change.getRemoved():
                         if u in tr_assignees: tr_assignees.remove(u)
                     for u in change.getAdded():
@@ -345,7 +346,7 @@ def migrate_issue(issue, collector):
         assignees = tr_assignees
     else:
         assignees = issue.assigned_to()
-    
+   
     if new_state.lower() != old_state.lower():
 
         wftool = collector.portal_workflow  # evil
