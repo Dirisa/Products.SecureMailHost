@@ -1,0 +1,52 @@
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+<metal:block metal:fill-slot="head_slot">
+  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+</metal:block>
+<div metal:fill-slot="main">	  
+
+  <metal:block tal:define="action string: Topic-Staff mapping">
+    <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+  </metal:block>
+
+  <form action="pcng_set_topics_user" method="post">
+    <table class="listing" 
+           tal:define="users python: here.getTrackerUsers(staff_only=1);
+                       topic_user here/get_topics_user">
+      <tr>
+        <th i18n:translate="topic">Topic</th>
+        <th i18n:translate="staff_members">Staff members</th>
+      </tr>
+
+      <tr tal:repeat="topic here/pcng_get_topics">
+        <td> 
+          <span tal:content="topic" />
+        </td>
+        <td>
+          <tal:loop tal:repeat="user users">
+            <input type="checkbox" tal:attributes="name string:topics.$topic:record:list;
+                                                   CHECKED python: user.get('username', None) in topic_user.get(topic, []);
+                                                   value user/username"> 
+            <span tal:content="user/username" /> 
+          </tal:loop>
+        </td>
+      </tr>
+    </table>
+
+    <div class="row">
+      <div class="label">&nbsp;</div>
+      <div class="field">
+        <input class="context" type="submit" value="Save" i18n:attributes="value" class="standalone"/>
+        <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
+      </div>
+    </div> <!-- End row -->
+
+  </form>
+</div>
+</body>
+</html>
