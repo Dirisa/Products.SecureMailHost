@@ -1,0 +1,1 @@
+<span tal:define="dummy python: request.RESPONSE.redirect('pcng_issue_view?mode=simple')" />
