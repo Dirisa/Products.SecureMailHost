@@ -65,6 +65,7 @@ def install(self):
                ('pcng_company', '', 'string') , ('pcng_position', '', 'string') , 
                ('pcng_city', '', 'string') , ('pcng_substitute', [] , 'lines'),
                ('pcng_address', '', 'string') , ('pcng_fax', '', 'string') , 
+               ('pcng_send_emails','yes', 'string'),
                ('pcng_send_attachments','no', 'string'),
                ('pcng_phone', '', 'string') ):
         try:
