@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.44 2004/07/22 19:55:05 ajung Exp $
+$Id: pdfwriter.py,v 1.45 2004/07/23 06:42:13 ajung Exp $
 """
 
 import os, cStringIO, tempfile
@@ -267,9 +267,6 @@ def pdfwriter(collector, ids):
                 definition('<b>%s:</b>' % translate('comment', 'Comment', as_unicode=1))
                 pre(break_longlines(comment.getComment()))
             n+=1
-
-        print l
-
 
         ##################################################################
         # references
