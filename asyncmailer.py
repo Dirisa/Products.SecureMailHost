@@ -1,103 +1,18 @@
 """
 """
+from config import WAIT_TIME, MAX_ERRORS, TEMP_ERRORS, DB_FILE
+
 import os, sys
 import threading
 import time
-import smtplib
 import anydbm
-from smtplib import SMTP
 import socket
 import cPickle as pickle
 from types import IntType
 import traceback
 
-from Globals import INSTANCE_HOME
 from zLOG import LOG, INFO, PROBLEM
 
-WAIT_TIME = 10
-MAX_ERRORS = 5
-TEMP_ERRORS = (smtplib.SMTPConnectError, )
-# XXX MAX_UID_LOOP = 10000
-DB_FILE = os.path.join(INSTANCE_HOME, 'var', 'securemail_queue.db')
-
-def sendmail(mail):
-    """Sends an email
-    """
-    mfrom, mto, message = mail.getMail()
-    # server settings
-    host     = mail.getServer('host')
-    port     = mail.getServer('port')
-    userid   = mail.getServer('userid')
-    password = mail.getServer('password')
-    print userid, password
-    
-    # connect
-    smtpserver = SMTP(host, port)
-    #if debug:
-    #    smtpserver.set_debuglevel(1)
-    smtpserver.ehlo()
-    if smtpserver.has_extn('starttls'):
-        smtpserver.starttls()
-        smtpserver.ehlo()
-    if smtpserver.does_esmtp:
-        if userid:
-            smtpserver.login(userid, password)
-        else:
-            if userid:  #indicate error here to prevent inadvertent use of spam relay
-                raise MailHostError,"Host does NOT support ESMTP, but username/password provided"
-    smtpserver.sendmail(mfrom, mto, message)
-    smtpserver.quit()
-
-class Mail:
-    """A email object which knows how to send itself
-    """
-
-    def __init__(self, mfrom, mto, message, server):
-        """
-        """
-        self.mfrom = mfrom
-        self.mto = mto
-        self.message = message
-        assert(server.get('host', None))
-        assert(server.get('port', None))
-        self.server = server
-        self.errors = 0
-        self.id = None
-        
-    def setId(self, id):
-        """Set the unique id of the email
-        """
-        self.id = id
-        
-    def getId(self):
-        """Get unique id
-        """
-        return self.id
-    
-    def incError(self):
-        """Increase the error counter
-        """
-        self.errors+=1
-
-    def getErrors(self):
-        """Get the error counter
-        """
-        return self.errors
-        
-    def getMail(self):
-        """Get email for sending
-        
-        (mfrom, mto, mailbody)
-        """
-        return (self.mfrom, self.mto, self.message)
-    
-    def getServer(self, key, default=None):
-        """Get server configuration for sending
-        
-        host, port
-        optional: userid, pass 
-        """
-        return self.server.get(key, default)
 
 class MailStorage:
     """Stores Email objects in a queue.
@@ -105,7 +20,7 @@ class MailStorage:
     For safty reasons the emails are pickled on the file system in a seperate db
     to recover them after a zope crash or shutdown.
     
-    put(email)          - adds an email to the queue
+    queue(email)        - adds an email to the queue
     get(id)             - gets an email from the queue by id
     remove(email_or_id) - removes an email from the queue
     
@@ -117,41 +32,41 @@ class MailStorage:
         if not os.path.isfile(DB_FILE):
             db = anydbm.open(DB_FILE, 'c')
             db.close()
-        self.queue = anydbm.open(DB_FILE, 'w') # write
-        self.lock = threading.Lock()
-        self.pickle_cache = {}
+        self._queue = anydbm.open(DB_FILE, 'w') # write
+        self._lock = threading.Lock()
+        self._pickle_cache = {}
     
-    def send(self, mail):
+    def queue(self, mail):
         """Sends an email to the queue
         """
         id = self.mkID()
         mail.setId(id)
         try:
-            self.lock.acquire()
+            self._lock.acquire()
             # store mail in pickle cache
-            self.pickle_cache[id] = mail
+            self._pickle_cache[id] = mail
             # store mail in queue
             dump = pickle.dumps(mail)
-            self.queue[id] = dump
+            self._queue[id] = dump
             self.sync()
         finally:
-            self.lock.release()
+            self._lock.release()
         
     def get(self, id):
         """Get a mail by id
         """
         try:
-            self.lock.acquire()
-            if id not in self.queue:
+            self._lock.acquire()
+            if id not in self._queue:
                 raise KeyError, id
-            mail = self.pickle_cache.get(id, None)
+            mail = self._pickle_cache.get(id, None)
             if not mail:
-                dump = self.queue[id]
+                dump = self._queue[id]
                 mail = pickle.loads(dump)
-                self.pickle_cache[id] = mail
+                self._pickle_cache[id] = mail
             return mail
         finally:
-            self.lock.release()
+            self._lock.release()
 
     def remove(self, mail_or_id):
         """Removes an email from the queue
@@ -161,22 +76,22 @@ class MailStorage:
         else:
             id = mail_or_id.getId()
         try:
-            self.lock.acquire()
-            del self.queue[id]
+            self._lock.acquire()
+            del self._queue[id]
             try:
-                del self.pickle_cache[id]
+                del self._pickle_cache[id]
             except KeyError:
                 pass
             self.sync()
         finally:
-            self.lock.release()
+            self._lock.release()
    
     def sync(self):
         """syncs the DB in the fs
         
         MUST be called within an acquired lock!
         """
-        sync = getattr(self.queue, 'sync', None)
+        sync = getattr(self._queue, 'sync', None)
         if sync:
             sync()
     
@@ -188,7 +103,7 @@ class MailStorage:
         while True:
             ts = time.time()
             id = '%s-%s-%i' % (ts, host, count)
-            if id not in self.queue:
+            if id not in self._queue:
                 break
             else:
                 count+=1
@@ -197,7 +112,7 @@ class MailStorage:
     def list(self):
         """
         """
-        return self.queue.keys()
+        return self._queue.keys()
     
 
 mailQueue = MailStorage()
@@ -208,8 +123,8 @@ class MailerThread(threading.Thread):
     
     def __init__(self):
         threading.Thread.__init__(self, name='asyncmail')
-        self.event = threading.Event()
-        self.running = True
+        self._event = threading.Event()
+        self._running = True
         
     def stop(self):
         """Stop the thread
@@ -217,26 +132,26 @@ class MailerThread(threading.Thread):
         Required for unit tests
         """
         LOG('SecureMailHost', INFO, 'Stopping mailer thread')
-        if not self.running:
-            self.running = False
-            self.event.set()
+        if not self._running:
+            self._running = False
+            self._event.set()
         
     def run(self):
         """Main runner
         """
         # XXX
         # wrapped because of some strange problems with threading and zope
-        try:
-            self.run2()
-        except:
-            pass
+        #try:
+        self.run2()
+        #except:
+        #    pass
     
     def run2(self):
         """
         """
         global mailQueue
         while True:
-            if not self.running:
+            if not self._running:
                 return
 
             LOG('SecureMailHost', INFO, 'threading')
@@ -250,22 +165,22 @@ class MailerThread(threading.Thread):
                     continue
                 # trying to send
                 try:
-                    sendmail(mail)
-                except TEMP_ERRORS:
+                    mail.send()
+                except TEMP_ERRORS, msg:
                     # XXX log
-                    LOG('SecureMailHost', PROBLEM, 'Temp error %s' %
-                        ''.join(traceback.format_tb(sys.exc_traceback))
+                    LOG('SecureMailHost', PROBLEM, 'Temp error %s\n%s' %
+                        (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
                     )
-                except:
-                    LOG('SecureMailHost', PROBLEM, 'Fatal error %s' %
-                        ''.join(traceback.format_tb(sys.exc_traceback))
+                except Exception, msg:
+                    LOG('SecureMailHost', PROBLEM, 'Fatal error %s\n%s' %
+                        (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
                     )
                     mail.incError()
                 else:
                     mailQueue.remove(mail)
             else:
                 # queue currently empty - waiting
-                self.event.wait(WAIT_TIME)
+                self._event.wait(WAIT_TIME)
 
 
 mailThread = MailerThread()

@@ -15,19 +15,14 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.5 2004/05/17 09:43:43 tiran Exp $
+$Id: SecureMailHost.py,v 1.6 2004/05/17 12:00:28 tiran Exp $
 """
 
-X_MAILER = 'Zope/SecureMailHost'
-BAD_HEADERS = ()
+from config import BAD_HEADERS
 
 from types import StringType, TupleType, ListType
 from copy import deepcopy
-from random import randint
-import socket
 
-from smtplib import SMTP
-#import base64
 import email.Message
 import email.MIMEText
 
@@ -43,7 +38,8 @@ from Products.MailHost.MailHost import MailHostError, MailBase
 class SMTPError(Exception):
     pass
 
-from asyncmailer import Mail, mailQueue
+from Products.SecureMailHost.mail import Mail
+from Products.SecureMailHost.asyncmailer import mailQueue
 
 EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
@@ -61,7 +57,7 @@ manage_addMailHostForm=DTMLFile('www/addMailHost_form', globals())
 def manage_addMailHost( self, id, title='', smtp_host='localhost'
                       , smtp_port=25
                       , smtp_userid=None, smtp_pass=None
-                      , timeout=1.0, REQUEST=None ):
+                      , REQUEST=None ):
     ' add a MailHost into the system '
     ob = SecureMailHost( id, title, smtp_host, smtp_port, smtp_userid, smtp_pass )
     self._setObject( id, ob )
@@ -80,8 +76,6 @@ class SecureMailBase(MailBase):
     manage_main._setName('manage_main')
     index_html=None
     security = ClassSecurityInfo()
-
-    timeout=1.0
 
     def __init__( self, id, title='', smtp_host='localhost', smtp_port=25, smtp_userid='', smtp_pass='' ):
         """Initialize a new MailHost instance
@@ -110,12 +104,10 @@ class SecureMailBase(MailBase):
         self.smtp_port = int(smtp_port)
         if smtp_userid:
             self._smtp_userid = smtp_userid
-            #self._smtp_userid64 = base64.encodestring(smtp_userid)
         else:
             self._smtp_userid = None
         if smtp_pass:
             self._smtp_pass = smtp_pass
-            #self._smtp_pass64 = base64.encodestring(smtp_pass)
         else:
             self._smtp_pass = None
 
@@ -188,16 +180,6 @@ class SecureMailBase(MailBase):
         self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
                               Subject=subject, Cc = mcc, Bcc = mbcc)
 
-        # set additional headers
-        if 'Date' not in kwargs:
-            kwargs['Date'] = DateTime().rfc822()
-        if 'X-Mailer' not in kwargs:
-            kwargs['X-Mailer'] = X_MAILER
-        if 'Message-Id' not in kwargs:
-            date = DateTime().strftime('%Y%m%d%H%M%S')
-            rand = randint(100000, 999999)
-            host = socket.gethostname()
-            kwargs['Message-Id'] = '<%s.%d@%s>' % (date, rand, host)
         for bad in BAD_HEADERS:
             if bad in kwargs:
                 raise MailHostError, 'Header %s is forbidden' % bad
@@ -207,7 +189,7 @@ class SecureMailBase(MailBase):
         if debug:
             return (mfrom, mto, msg)
         else:
-            self._send(mfrom, mto, msg.as_string())
+            self._send(mfrom, mto, msg)
 
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
         """Set the headers of the email.Message based instance
@@ -225,33 +207,20 @@ class SecureMailBase(MailBase):
     def __SYNC_send( self, mfrom, mto, messageText, debug = False):
         """Send the message
         """
-        smtpserver = SMTP( self.smtp_host, int(self.smtp_port) )
-        if debug:
-            smtpserver.set_debuglevel(1)
-        smtpserver.ehlo()
-        if smtpserver.has_extn('starttls'):
-            smtpserver.starttls()
-            smtpserver.ehlo()
-        if smtpserver.does_esmtp:
-            if self._smtp_userid:
-                smtpserver.login(self._smtp_userid, self._smtp_pass)
-        else:
-            if self._smtp_userid:  #indicate error here to prevent inadvertent use of spam relay
-                raise MailHostError,"Host does NOT support ESMTP, but username/password provided"
-        smtpserver.sendmail( mfrom, mto, messageText )
-        smtpserver.quit()
+        mail = Mail(mfrom, mto, messageText,
+                    smtp_host=self.smtp_host, smtp_port=self.smtp_port,
+                    userid=self._smtp_userid, password=self._smtp_pass
+                   )
+        mail.send()
 
     def __ASYNC_send( self, mfrom, mto, messageText, debug = False):
         """Send the message
         """
-        server = {
-            'host'     : self.smtp_host,
-            'port'     : self.smtp_port,
-            'userid'   : self._smtp_userid,
-            'password' : self._smtp_pass
-            }
-        mail = Mail(mfrom, mto, messageText, server)
-        mailQueue.send(mail)
+        mail = Mail(mfrom, mto, messageText,
+                    smtp_host=self.smtp_host, smtp_port=self.smtp_port,
+                    userid=self._smtp_userid, password=self._smtp_pass
+                   )
+        mailQueue.queue(mail)
 
     _send = __ASYNC_send
 

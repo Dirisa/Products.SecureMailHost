@@ -17,6 +17,7 @@ $Id:
 
 import SecureMailHost
 import asyncmailer
+import mail
 
 def initialize(context):
     context.registerClass(
