@@ -305,6 +305,12 @@ msgstr "Wartung"
 msgid "number_issues"
 msgstr "Anzahl Tickets"
 
+msgid "number_references"
+msgstr "#&nbsp;Ref"
+
+msgid "number_Dateien"
+msgstr "#&nbsp;Dateien"
+
 msgid "reindex_all_issues"
 msgstr "Alle Tickets reindexieren"
 
