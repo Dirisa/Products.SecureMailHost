@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.11 2004/05/08 16:09:02 ajung Exp $
+$Id: PCNGSchema.py,v 1.12 2004/06/03 04:03:18 ajung Exp $
 """
 
 from types import FileType
@@ -105,6 +105,13 @@ class PCNGSchemata:
     def signature(self):
         from md5 import md5
         return md5(self.toString()).digest()
+
+    def has_key(self, name):
+        return self._fields.has_key(name)
+
+    security.declareProtected(View, 'keys')
+    def keys(self):
+        return self._names
 
 InitializeClass(PCNGSchemata)
 
