@@ -35,6 +35,13 @@ class PHCFolder:
             return self.getSections_vocab()
         else:
             return list()
+            
+    def getImportanceVocab(self):
+        """Get importance vocabulary."""
+        if hasattr(self,'getImportance_vocab'):
+            return self.getImportance_vocab()
+        else:
+            return list()
 
     def Versions(self):
         """Method to display the versions in a nicer way."""

@@ -17,7 +17,7 @@ except ImportError:
 ImportanceSchema = Schema((
     StringField('importance',
                required=1,
-               default=IMPORTANCE_DEFAULT,
+               default='getImportanceDefault',
                index='KeywordIndex:schema',
                vocabulary='getImportanceVocab',
                widget=SelectionWidget(
@@ -154,6 +154,10 @@ HCFolderSchema = BaseFolderSchema.copy ()
 del HCSchema['contributors']
 del HCFolderSchema['contributors']
 
+del HCSchema['rights']
+del HCFolderSchema['rights']
+
+
 #################################################################
 # The type definitions
 #################################################################
@@ -241,6 +245,57 @@ HCRootSchema = BaseFolderSchema + Schema((
             i18n_domain = "plonehelpcenter",
             ),
         ),
+
+    LinesField('currentVersions',
+        required=1,
+        multiValued=1,
+        vocabulary='getVersions_vocab',
+        widget=MultiSelectionWidget(
+            description_msgid="phc_current_versions_helpcenter",
+            description="Readers will be informed when content relates to versions not in this list, as it may be outdated.",
+            label="Current versions",
+	    label_msgid="phc_label_current_versions_helpcenter",
+            i18n_domain = "plonehelpcenter",
+            ),
+        ),
+
+
+    LinesField('importance_vocab',
+        required=1,
+        default=IMPORTANCE_VOCAB,
+        widget=LinesWidget(description_msgid="phc_importance_helpcenter",
+            description="Importance ratings content may have.",
+            label="Importance",
+	    label_msgid="phc_label_importance_helpcenter",
+            i18n_domain = "plonehelpcenter",
+            ),
+        ),
+        
+    StringField('defaultImportance',
+        required=1,
+        default=IMPORTANCE_DEFAULT,
+        vocabulary='getImportance_vocab',
+        widget=SelectionWidget(
+            description_msgid="phc_default_importance_helpcenter",
+            description="Default importance rating for new content.",
+            label="Default importance",
+	    label_msgid="phc_label_default_importance_helpcenter",
+            i18n_domain = "plonehelpcenter",
+            ),
+        ),
+
+        
+    TextField('rights',
+            accessor="Rights",
+            widget=TextAreaWidget(
+                label='Copyright',
+                description="Copyright info for all content in the helpcenter",
+                label_msgid="phc_label_copyrights_helpcenter",
+                description_msgid="phc_copyrights_helpcenter",
+                i18n_domain="plone"
+                ))
+            ,
+
     ))
 
 #######

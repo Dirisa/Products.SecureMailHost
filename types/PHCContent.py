@@ -44,24 +44,49 @@ class PHCContent (HistoryAwareMixin):
     __implements__ = (HistoryAwareMixin.__implements__,)
     actions = () + HistoryAwareMixin.actions
 
+    security.declareProtected (CMFCorePermissions.View, 'getImportanceVocab')
     def getImportanceVocab(self):
-        """Get version vocabulary"""
-        return IMPORTANCE_VOCAB
+        """Get importance vocabulary"""
+        return self.aq_parent.getImportanceVocab ()
 
+    security.declareProtected (CMFCorePermissions.View, 'getVersionsVocab')
     def getVersionsVocab(self):
         """Get version vocabulary"""
         return self.aq_parent.getVersionsVocab()
     
+    security.declareProtected (CMFCorePermissions.View, 'getSectionsVocab')
     def getSectionsVocab(self):
         """Get sections vocabulary"""
         return self.aq_parent.getSectionsVocab()
 
+    security.declareProtected (CMFCorePermissions.View, 'Versions')
     def Versions(self):
         """method to display the versions in a nicer way
         """
 
         return ", ".join(getattr(self, 'versions', []))
     
+    security.declareProtected (CMFCorePermissions.View, 'isOutdated')
+    def isOutdated(self):
+        """Check the current versions of the PHC root container against the
+        versions of this item. If the version of this item is not in the list
+        of current versions, return 1, else return 0
+        """
+        
+        myVersions = getattr(self, 'versions', [])
+        
+        # Acquire current versions
+        currentVersions = self.getCurrentVersions ()
+        
+        for v in myVersions:
+            if v in currentVersions:
+                # Not outdated - we match one of the current versions
+                return 0
+                
+        # Outdated - we didn't match anything
+        return 1
+        
+    security.declareProtected (CMFCorePermissions.View, 'getReferencedItems') 
     def getReferencedItems(self):
         """method to fetch the referenced items in context of
            config and permissions

@@ -1,5 +1,21 @@
 PloneHelpCenter - remaining issues
 
+===================================
+PloneSoftwareCenter considerations:
+===================================
+
+ - Test carefully that all the methods/fields found on the PHC root and used
+    as vocabs for contained objects are found in PSC as well, or that they
+    are only optionally used.
+    
+        - DC metadata 'rights' override (will get acquired from Project anyway)
+        - Versions vocab (exists), current versions (does not)
+        - Importance vocab, default importance (not currently present)
+        
+        -> A possible solution is to modify the vocab methods which get
+            acquired from PHCFolder.py to return sensible defaults if the
+            parent doesn't exist.
+
 =================
 Template changes:
 =================
@@ -9,25 +25,26 @@ Template changes:
  - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
 
+        -> Should be able to use the macro from folder_listing.pt
+
  - The folder listing templates need to show only *published* items, regardless
     of what the user is permitted to see. Managers and reviewers should also
     see pending (but not in-progress or obsolete) items, styled in a different
     colour (this styling already exists)
-
-====================
-Versions management:
-====================
-
- - Add a way to set the "current" version(s) of the release - this way, we
-    can automatically display a portalMessage box on content that says:
-    "This content is only relevant to Plone 1.0. The current version is
-     Plone 2.0. Make sure you are using the correct version before
-     following the instructions given here."
+    
+        -> There is a states parameter to getItems() which will help
+    
+ - Need to expose current version, possibly outdated content much clearer.
+    
+        -> isOutdated() in PHCContent.py will tell you if an item is outdated.
+    
+ - Update views to hide or highlight isOutdated() == 1 content. May wish to
+    roll this into getItems() in PHCContent.py *and* Glossary.py, with an
+    optional parameter to show/hide outdated content if we want to hide, not
+    highlight outdated items.
  
-  - Nice to have: A way to set the default view help-center-wide 
-    (Example, let's say we just want to show Plone 2.0 elements 
-     in the listings). Probably want to be able to choose more than one
-     version, and provide some view to older content!
+ - Need to expose importance more clearly in content views. Currently, it's
+    discretely tucked away at the bottom.
 
 ===================================
 Workflow changes/permission issues:
@@ -54,8 +71,10 @@ Schema/class changes:
 =====================
 
  - Definitions (in Glossary) need to be able to have links to other
-    definitions. There seems to be currently-disabled generic reference fields
-    on PHC content. Should we just enable this?
+    definitions. 
+    
+        -> There seems to be currently-disabled generic reference fields
+            on PHC content. Should we just enable this?
 
  - HistoryAware mixin should be enabled for all types. Done, but some fields
     don't get history, since they are metadata-only (e.g. glossary definitions),
@@ -63,21 +82,18 @@ Schema/class changes:
     fields, and provide secondary accessors, or turn of the history mixin.
 
   - Add LinguaPlone support to the types
-    - The LinguaPlone import statement
-    - Declare relevant fields as language-independent
+    
+        -> The LinguaPlone import statement
+        -> Declare relevant fields as language-independent
     
  - Integrate with ATRatings, so that we can have ratings on content
-
- - The DC metadata "Rights" attribute needs to be set PHC-wide at the root
-    level. Content objects should use this. We can achieve this by taking
-    'rights' out of the schema, and ovveride the DC standard accessor to have
-    it acquire it from the PHC root. On Plone.org, we don't want to let people
-    override this site-wide default, but ideally, we'd have a switch in the 
-    root PHC object where it could be allowed back in the schema.
     
- - Importance vocabulary could be made dynamic, in the same way that "versions"
-    is currently.
+ - Ideally, we'd have a switch for content to get individual 'rights' DC
+    metadata attributes (with the Rights() method as accessor) on content.
     
+        -> Could be a config.py setting, or better yet, a boolean field on the
+            root container.
+        
  - Instructional video should use ExternalStorage for video files
  
  - glossary_view template should use a catalogue search to show definitions.
