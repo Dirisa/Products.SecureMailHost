@@ -5,11 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.5 2003/10/11 19:28:30 ajung Exp $
+$Id: notifications.py,v 1.6 2003/10/11 20:46:49 ajung Exp $
 """
 
 import sys
-from cStringIO import StringIO
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
@@ -24,7 +23,7 @@ import util
 def notify(issue):
     """ notification handling """
 
-    collector = issue.aq_parent
+    collector = issue._getCollector()
     if collector.email_notifications == 'none': return
 
     recipients = recipients4issue(issue)
@@ -35,7 +34,7 @@ def notify(issue):
 def recipients4issue(issue):
     """ determine the list of recipients for this issue """
 
-    collector = issue.aq_parent
+    collector = issue._getCollector()
     r = {'submitter' : {'email': issue.contact_email}}
     for uid in collector._managers: r[uid] = {}   # all managers
 
@@ -67,10 +66,11 @@ def enrich_recipients(issue, recipients):
 
     return r
 
+
 def send_notifications(recipients, issue):
     """ send out notifications through email """
 
-    collector = issue.aq_parent
+    collector = issue._getCollector()
     dest_emails = [ v['email'] for v in recipients.values() if util.isValidEmailAddress(v.get('email','')) ]
 
     outer = MIMEMultipart()
@@ -86,11 +86,9 @@ def send_notifications(recipients, issue):
     outer.attach(MIMEText(body, _charset=encoding))
 
     mh = getattr(collector, 'MailHost') 
-    print outer.as_string()
+    
     try:
         mh._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
         LOG('PloneCollectorNG', ERROR, 'MailHost.send() failed', error=sys.exc_info())
-
-
 
