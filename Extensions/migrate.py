@@ -1,6 +1,15 @@
-""" Migration script for CMFCollectorNG to PloneCollectorNG """
+"""
+PloneCollectorNG - A Plone-based bugtracking system
 
-from OFS.Folder import manage_addFolder
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: migrate.py,v 1.3 2003/11/04 19:35:27 ajung Exp $
+"""
+
+"""Migration script for CMFCollectorNG to PloneCollectorNG"""
+
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
 
@@ -19,18 +28,12 @@ class record:
     def keys(self):
         return self._k
 
-def migrate_trackers(self):
-    self = self.restrictedTraverse('/plone1')
-    root = self.restrictedTraverse('/trackers')
 
-    try: self.manage_delObjects(DEST_ID)
-    except: pass
+def migrate_trackers(self, url_from='/trackers', url_to='/plone1')):
+    tracker_root = self.restrictedTraverse(url_from)
+    plone_root = self.restrictedTraverse(url_to)
 
-    manage_addFolder(self, DEST_ID, DEST_ID)
-    dest = self[DEST_ID]
-
-    trackers = root.objectValues('CMF CollectorNG')
-
+    trackers = tracker_root.objectValues('CMF CollectorNG')
     for tracker in trackers:
         migrate_tracker(tracker, dest)
 
@@ -42,12 +45,14 @@ def migrate_tracker(tracker, dest):
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
+    try: dest.manage_delObjects(tracker.getId())
+    except: pass
+
     collector = PloneCollectorNG(tracker.getId())
     dest._setObject(tracker.getId(), collector)
-
     collector = dest[tracker.getId()]
-    issues = tracker.objectValues('CMF CollectorNG Issue')
 
+    issues = tracker.objectValues('CMF CollectorNG Issue')
     for issue in issues:
         migrate_issue(issue, collector)
 
