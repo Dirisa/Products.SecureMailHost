@@ -1,0 +1,27 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+  <div metal:fill-slot="main">	  
+    <table width="100%">
+      <tr>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/issue_references" />
+        </td>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/issue_uploads" />
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/add_references" />
+        </td>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/add_uploads" />
+        </td>
+      </tr>
+  </div>
+</body>
+</html>

@@ -13,11 +13,7 @@
 	    <span metal:use-macro="python: here.widget(field.getName(), mode='view')"/>
 	  </div>
 
-      <ul>
-        <li tal:repeat="issue here/objectValues">
-          <a tal:attributes="href issue/absolute_url" tal:content="string: ${issue/id} ${issue/title_or_id}" />
-        </li>
-      </ul>
+
       </div>
     </div>
   </body>
