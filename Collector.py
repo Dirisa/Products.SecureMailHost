@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.97 2003/12/19 19:53:24 ajung Exp $
+$Id: Collector.py,v 1.98 2003/12/25 12:19:59 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -135,6 +135,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
+        self._transcript.addComment('Catalog recreated')
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('catalog_recreated', 'Catalog recreated'))
 
@@ -391,6 +392,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ reindex all issues """
 
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
+        self._transcript.addComment('Issues reindexed')
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('issues_reindexed', 'Issues reindexed'))
 
@@ -404,6 +406,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def resetNumberIssues(self, RESPONSE=None):
         """ reset number of issues """
         self._num_issues = 0
+        self._transcript.addComment('Number of issues reset to 0')
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('number_issues_reseted', 'Issue number reseted to 0'))
 
@@ -416,6 +419,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
+        self._transcript.addComment('Issue schemas reseted')
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.translate('issues_updated', 'Issues updated'))
@@ -436,6 +440,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             except:
                 field.storage.set(field.getName(), self, field.default)
 
+        self._transcript.addComment('Collector schema updated')
         util.redirect(RESPONSE, 'pcng_maintenance',
                           self.translate('collector_schema_updated', 'Collector schema updated'))
 
@@ -452,6 +457,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if issue.UID() is None:
                 RC.registerObject(issue)
       
+        self._transcript.addComment('Issue UIDs reregistered')
         util.redirect(RESPONSE, 'pcng_maintenance',
                           self.translate('uids_recreated', 'UIDs recreated'))
 
