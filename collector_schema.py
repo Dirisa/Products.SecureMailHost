@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.50 2004/05/14 17:21:02 ajung Exp $
+$Id: collector_schema.py,v 1.51 2004/05/20 15:05:37 ajung Exp $
 """
 
 
@@ -69,8 +69,10 @@ VOC_WATCHLIST = DisplayList((
 ))
 
 VOC_PORTLET_USAGE = DisplayList((
-  ('keep', 'Inherit settings for left slots from Plone'),
-  ('override', 'Override Plones settings for left slots'),
+  ('plone-left', 'Use left slot, keep plone settings'),
+  ('left', 'Use left slot, override plone settings'),
+  ('plone-right', 'Use right slot, keep plone settings'),
+  ('right', 'Use right slot, override plone settings'),
 ))
 
 

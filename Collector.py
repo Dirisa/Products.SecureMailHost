@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.182 2004/05/20 14:37:45 ajung Exp $
+$Id: Collector.py,v 1.183 2004/05/20 15:05:37 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -849,16 +849,33 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     def left_slots(self):
         pu = self.getPortlet_usage() 
-        if not hasattr(self, '_v_left_slots') or getattr(self, '_v_portlet_usage','') != pu:
-            if pu == 'keep': 
-                self._v_left_slots = list(self.aq_parent.left_slots)
-            else:
+        if not hasattr(self, '_v_left_slots'):
+            if pu == 'left': 
                 self._v_left_slots = []                                                   
-            self._v_portlet_usage = pu
-            self._v_left_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
+            else:
+                self._v_left_slots = list(self.aq_parent.left_slots)
+            if pu.endswith('left'):
+                self._v_left_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
             self._v_left_slots = tuple(self._v_left_slots)
+            try: del self._v_right_slots
+            except: pass
         return self._v_left_slots
     left_slots = ComputedAttribute(left_slots, 1)
+
+    def right_slots(self):
+        pu = self.getPortlet_usage() 
+        if not hasattr(self, '_v_right_slots'):
+            if pu == 'right': 
+                self._v_right_slots = []                                                   
+            else:
+                self._v_right_slots = list(self.aq_parent.right_slots)
+            if pu.endswith('right'):
+                self._v_right_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
+            self._v_right_slots = tuple(self._v_right_slots)
+            try: del self._v_left_slots
+            except: pass
+        return self._v_right_slots
+    right_slots = ComputedAttribute(right_slots, 1)
 
 registerType(PloneCollectorNG)
 
