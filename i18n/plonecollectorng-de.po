@@ -729,7 +729,7 @@ msgid "my_saved_searches"
 msgstr "Meine gespeicherte Suchen"
 
 msgid "no_references"
-msgstr "Keine Refererenzen"
+msgstr "Keine Referenzen"
 
 msgid "Submit"
 msgstr "Abschicken"
