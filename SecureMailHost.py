@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.16 2004/05/24 16:54:53 longsleep Exp $
+$Id: SecureMailHost.py,v 1.17 2004/05/25 08:56:16 fobmagog Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -21,6 +21,7 @@ from types import StringType, TupleType, ListType
 from copy import deepcopy
 
 import email.Message
+import email.Header
 import email.MIMEText
 import email
 
@@ -198,7 +199,7 @@ class SecureMailBase(MailBase):
 
         # set important headers
         self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
-                              Subject=subject, Cc = mcc, Bcc = mbcc)
+                              Subject=str(email.Header.Header(subject, charset)), Cc = mcc, Bcc = mbcc)
 
         for bad in BAD_HEADERS:
             if bad in kwargs:
@@ -216,7 +217,7 @@ class SecureMailBase(MailBase):
         """
         for key, val in kwargs.items():
             del msg[key] # save - email.Message won't raise a KeyError
-            if not val:
+            if skipEmpty and not val:
                 continue
             msg[key] = val
         return msg
