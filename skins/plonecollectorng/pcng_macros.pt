@@ -1,15 +1,19 @@
 <metal:block metal:define-macro="collector_headline">
 
   <div class="collector_headline" tal:condition="python: here.meta_type=='PloneCollectorNG'" >
-    <span tal:content="here/title_or_id" />
-    <span tal:condition="here/description"  tal:content="string:(${here/description})" />
-    <span class="collector_headline_right" tal:condition="action|nothing" tal:content="action" />
+    <div>
+      Collector: <span tal:content="here/title_or_id" />
+      <span tal:condition="here/description"  tal:content="string:(${here/description})" />
+    </div>
+    <div class="collector_headline_right" tal:condition="action|nothing" tal:content="action" />
   </div>
 
   <div class="collector_headline" tal:condition="python: here.meta_type=='PloneIssueNG'" >
-    (<span tal:content="python: here.aq_parent.title_or_id()" />):
-    <span tal:content="here/title_or_id" />
-    <span class="collector_headline_right" tal:condition="action|nothing" tal:content="action" />
+    <div>
+      Collector: <span tal:content="python: here.aq_parent.title_or_id()" />
+      <br>Issue <span tal:content="string:#${here/getId}: ${here/Title}" />
+    </div>
+    <div tal:condition="action|nothing" tal:content="action" />
   </div>
 
 </metal:block>

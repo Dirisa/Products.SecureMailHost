@@ -13,9 +13,8 @@ div.collector_headline {
     padding: 0.5em;
 }
 
-span.collector_headline_right {
-    text-align: right;
-    width: 100%;
+div.collector_headline_right {
+    text-align: left;
 }
 
 div.transcriptheader {
