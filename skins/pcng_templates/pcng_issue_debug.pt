@@ -48,6 +48,15 @@
         </tr>
 
       </table>
+
+      <h3>Misc.</h3>
+      <ul>
+        <li>
+          <a tal:attributes="href string:pcng_remove_issue?id=${here/getId}">
+            <span i18n:translate="remove_this_issue">Remove this issue</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </body>
 </html>
