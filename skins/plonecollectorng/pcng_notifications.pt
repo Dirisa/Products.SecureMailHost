@@ -33,9 +33,9 @@
           <div class="label">&nbsp;</div>
           <div class="field">
             <input type="submit" class="context" value="Save"
-                   i18n:attributes="value" />
+                   i18n:attributes="value"  class="standalone"/>
             <input type="reset" class="context" value="Reset"
-                   i18n:attributes="value" />
+                   i18n:attributes="value"  class="standalone"/>
           </div>
         </div> <!-- End row -->
   

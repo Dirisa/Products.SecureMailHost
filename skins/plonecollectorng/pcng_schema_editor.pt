@@ -49,7 +49,7 @@
               <hr/>
               <div class="row"> 
                 <input type="text" name="fieldset" value="" size="15">
-                <input type="submit" value=" Add new schemata" >
+                <input type="submit" value=" Add new schemata"  class="standalone">
                 <br>
                 <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}">Delete </a> |
                 <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}">Move up</a> |
@@ -193,7 +193,7 @@
 
             <tr>
               <td> 
-                <input type="submit" value=" Save changes">
+                <input type="submit" value=" Save changes" class="standalone">
               </td> 
             </tr>
 
@@ -212,7 +212,7 @@
 
             <tr>
               <td colspan="2"> 
-                <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field ">
+                <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
               </td>
             </tr>
             </table>

@@ -38,9 +38,9 @@
           </div>
         </div>
 
-        <input type="submit" value=" Save changes " i18n:attributes="value">
+        <input type="submit" value=" Save changes " i18n:attributes="value" class="standalone">
         &nbsp; &nbsp;
-        <input type="reset"  value=" Reset "        i18n:attributes="value">
+        <input type="reset"  value=" Reset "        i18n:attributes="value" class="standalone">
       </div>
     </form>			   
   </div>

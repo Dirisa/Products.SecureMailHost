@@ -131,7 +131,7 @@
   <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
     <span i18n:translate="jump_to_ticket">Jump to issue number </span> 
     <input type="text" name="issuenumber" size="5" /> &nbsp;
-    <input type="submit" value=" Jump " i18n:attributes="value" />
+    <input type="submit" value=" Jump " i18n:attributes="value" class="standalone"/>
   </form>
         
   <form action="pcng_view" method="post"  name="search_form">
@@ -258,7 +258,7 @@
 
       <tr>
         <td colspan="2">
-          <input type="submit" value=" Search ">
+          <input type="submit" value=" Search " class="standalone">
         </td>
       </tr>
     
