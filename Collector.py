@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.132 2004/03/08 17:47:42 ajung Exp $
+$Id: Collector.py,v 1.133 2004/03/08 18:25:41 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -773,7 +773,6 @@ class PloneCollectorNGCatalog(CatalogTool):
 
     def manage_afterClone(self, item):
         self.reindex_issues()
-        print 'reindexing'
 
     def enumerateColumns( self ):
         """Return field names of data to be cached on query results."""
