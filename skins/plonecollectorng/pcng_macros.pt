@@ -75,7 +75,6 @@
      </table>
     </div>
     
-    
     <span metal:define-macro="transcript_plain">
       <div tal:repeat="entry here/transcript"> 
         
