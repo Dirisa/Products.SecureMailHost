@@ -485,11 +485,11 @@ msgstr "新規バグ報告の修正期限日数"
 msgid "Enter a value for Automatic deadline in days for new issues."
 msgstr "新規に追加したバグ報告の修正期限を自動設定します。"
 
-msgid "label_watchlist"
-msgstr ""
+#msgid "label_watchlist"
+#msgstr ""
 
-msgid "Enter a value for Watchlist (Subscription to an issue)."
-msgstr ""
+#msgid "Enter a value for Watchlist (Subscription to an issue)."
+#msgstr ""
 
 msgid "collectordata"
 msgstr "バグトラッキングシステムの詳細"
@@ -509,24 +509,4 @@ msgstr "電子メールでの通知の方法"
 msgid "label_notification_language"
 msgstr "通知するときの言語"
 
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
-
-msgid ""
-msgstr ""
 
