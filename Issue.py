@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.119 2004/01/22 19:59:22 ajung Exp $
+$Id: Issue.py,v 1.120 2004/01/30 09:57:02 ajung Exp $
 """
 
 import sys, os, time
@@ -539,7 +539,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         schema = self.Schema()
 
         for k in request.form.keys():
-            if not schema.has_key(k): continue
+            if not schema.hasField(k): continue
             field = schema[k]
 
             widget = field.widget
