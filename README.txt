@@ -15,10 +15,23 @@ Requirements:
      file types).  See DEPENDENCIES.txt for more information.
      
     (optional) System utilities for optional file unzip'ing and MD5 checksum
-      generation. So far, this product has only been tested with the following 
+      generation. Note: python provides built-in support for both md5 generation
+      and unzip functionality, and the official 0.60 release of PLNFG will 
+      not require these external utilities.  FYI, native python MD5 support 
+      has already been added to the CVS baseline, with now optional support for
+      external MD5 system utilities (mainly because the glue code was already
+      written for it!, but possibly for performance reasons).  Speaking of 
+      performance, for small files, my informal benchmarking shows
+      that the python md5 module is approx 2x faster than the md5deep utility.
+      Rock on, python team!!!!  For medium-sized files (~100MB), performance 
+      for both was about the same. For larger files (550MB was the only one I 
+      tested), md5deep was about 30% faster.
+      
+      So far, this product has only been tested with the following 
       utilities:
         - unzip/zipinfo: UnZip v5.50 by Info-ZIP (http://www.info-zip.org/) 
         - md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
+      
       See DEPENDENCIES.txt for more information.
       
     (optional) mxmCounter (http://www.mxm.dk/products/public/mxmCounter)

@@ -1,3 +1,17 @@
+0.60 (unstable)
+
+  - MD5 support improvements:
+
+     * eliminated requirement for external MD5 checksum generation utility.
+       (PLFNG now optionally supports external MD5 utilities such as MD5Deep)
+
+     * added validator to verify proper functioning of optional external MD5
+       generator when configured for use with a PLFNG instance.
+
+     * file metadata view/edit page (plfng_editMetadata.pt) now supports
+       on-demand checking and/or setting/updating of MD5 metadatum
+
+
 0.50 (released)
 
   - added TextIndexNG2-based portal catalog indexing of PLFNG contents
