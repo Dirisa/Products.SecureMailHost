@@ -1,11 +1,9 @@
 from Products.CMFCore.utils import getToolByName,manage_addTool
 from Products.CMFCore.DirectoryView import addDirectoryViews
 from Products.ExternalMethod.ExternalMethod import ExternalMethod
-
-
 from Products.Archetypes.Extensions.utils import installTypes
 from Products.Archetypes import listTypes
-from Products.PloneFormMailer import PROJECTNAME,product_globals
+from Products.PloneFormMailer import PROJECTNAME, GLOBALS
 
 from StringIO import StringIO
 import sys
@@ -144,9 +142,9 @@ def install(self):
                  PROJECTNAME)
 
     print >> out, "Successfully installed %s." % PROJECTNAME
-    sr = PloneSkinRegistrar('skins', product_globals)
+    sr = PloneSkinRegistrar('skins', GLOBALS)
     print >> out,sr.install(self)
-    #sr = PloneSkinRegistrar('skins', product_globals)
+    #sr = PloneSkinRegistrar('skins', GLOBALS)
     print >> out,sr.install(self,position='custom',mode='after',layerName=PROJECTNAME+'_public')
 
     #register folderish classes in use_folder_contents
