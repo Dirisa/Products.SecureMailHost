@@ -60,13 +60,14 @@ s+='%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), cont
 
 nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
+nl('%s: %s' % (TR('created_by', 'Created by'), context.Creator()))
 nl('-'*75 + '\n') 
 
 nl(context.Translate('label_description', 'Description') + ":")
 nl('-'*40)
 nl(context.wrap_text(context.Description()))
-
 nl()
+
 
 # Comments
 n = 0
@@ -80,15 +81,15 @@ for event in events:
     nl('-'*75)
     nl(context.pcng_format_event(event, 'plain'))
     n+=1; nl()
+nl()
+
 
 # metadata
-nl()
 nl(TR('metadata', 'Metadata'))    
 nl('-'*75 + '\n') 
 events = context.getTranscript().getEvents()
 events = [e for e in events  if e.getType() not in ('comment', 'upload', 'reference')]
 for event in events:
-
     date = event.getCreated()
     date = context.toLocalizedTime(DateTime.DateTime(date), long_format=1)
     type = event.getType()
@@ -103,6 +104,7 @@ for event in events:
     nl(s)
 nl()
 
+
 # references
 if context.haveATReferences():
     events = context.getTranscript().getEvents(types=('references'))
@@ -113,6 +115,7 @@ if context.haveATReferences():
             text = context.pcng_format_event(event, 'plain')
             nl('   -> http://%s/%s' % (context.aq_parent.canonical_hostname, text))
         nl()
+
 
 # Uploads
 events = context.getTranscript().getEvents(types=('upload'))
