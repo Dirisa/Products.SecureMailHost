@@ -6,6 +6,9 @@ General:
   this document.
 
 - Bug: Howtos seem to not pick up the 'versions' defined in the Help Center.
+
+- Bug: Contents tab is visible to normal Members (at least on plone.org)
+       - it shouldn't be.
   
 - HistoryAware mix-in - PHC types should have a history attached, so we can
   mount a non-packable storage on plone.org that will keep all the change
