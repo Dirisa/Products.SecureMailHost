@@ -57,12 +57,14 @@ if len(query) == 0:
 if debug: print query
 results = list(context.pcng_catalog.searchResults(query))
 
+if sort_on: results.sort(query_sort)
+if debug: return printed
 
+# Save result in session
 try:
     lst = [ (b.getURL(), b.getId, b.Title) for b in results]
     R.SESSION['pcng_searchresults'] = lst
 except:
     pass
-if sort_on: results.sort(query_sort)
-if debug: return printed
+
 return results
