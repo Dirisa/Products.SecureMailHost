@@ -32,10 +32,13 @@ nl('='*79)
 nl('')
 
 s= '%s: #%s: %s, ' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding))
-s+='%s: %s, ' % (TR('topic', 'Topic'),context.topic)
+s+='%s: %s, ' % (TR('topic', 'Topic'), context.topic)
+
+vocab = context.pcng_vocabulary_values('importance')
 s+='%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 
-                               TR('importance','Importance'), TR(context.importance, context.importance), 
+                               TR('importance','Importance'), TR(context.importance, vocab[str(context.importance)]), 
                                TR('classification', 'Classification'), context.classification)
+
 nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
