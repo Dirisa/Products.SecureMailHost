@@ -48,7 +48,7 @@
                 <br>
                 <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}">Delete </a> |
                 <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}">Move up</a> |
-                <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}">Move down</a>
+                <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}">Move down</a> 
               </div>
             </form>
           </div>
@@ -197,7 +197,11 @@
               <td colspan="2"> 
                 <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete </a> |
                 <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}">Move up</a> |
-                <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}">Move down</a> 
+                <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}">Move down</a> |
+                Move to
+                <a tal:repeat="fieldset fieldsets"
+                   tal:attributes="href string:schema_field_to_fieldset?fieldset=${fieldset}&name=${field/getName}"
+                   tal:content="fieldset" />
               </td> 
             </tr>
 
