@@ -59,17 +59,6 @@ def getMetadataElement(filename,section,option):
          #the file %s.' % (section,option,filename)
    else:
       return None
-# --------------------------------------------------------------------
-security.declarePublic('getMetadataElements')
-def getMetadataElements(filename,section):
-   metadataFileName = filename+".metadata"
-   try:
-      metadataFileParser = ConfigParser()
-      metadataFileParser.read(metadataFileName)
-      return metadataFileParser.items(section,option)
-   except:
-      return None    
-
 
 # --------------------------------------------------------------------
 security.declareProtected(ModifyPortalContent, 'getZipInfo')

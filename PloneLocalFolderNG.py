@@ -177,7 +177,7 @@ schema = BaseSchema +  Schema((
                 ),
     StringField('filetypes_not_to_catalog',
                 write_permission=CMFCorePermissions.ManagePortal,
-                default='image/,video/,audio/',
+                default='image/,video/,audio/,/zip,/x-tar',
                 widget=StringWidget(label='filetypes for catalog action to skip',
                                     description='this comma-separated list of \
                                     (partial) mimetype phrases is used by the \
@@ -636,14 +636,25 @@ class PloneLocalFolderNG(BaseContent):
             proxy.setIconPath(iconPath)
             proxy.setMimeType(item_mime_type)
 
-        GENERAL_MD = getMetadataElements(fullpath, 'GENERAL') or {}
-        proxy.setComment(GENERAL_MD.get('comment',''))
-        proxy.setLanguage(GENERAL_MD.get('language','natural'))
-        proxy.setRevision(GENERAL_MD.get('revision',''))
-        proxy.setTitle(GENERAL_MD.get('title',''))
+        try:
+             proxy.setComment(getMetadataElement(fullpath,
+                                                 section="GENERAL",
+                                                 option="comment"))
+        except:
+             proxy.setComment('')
+        try:
+             proxy.setTitle(getMetadataElement(fullpath,
+                                               section="GENERAL",
+                                               option="title"))
+        except:
+             proxy.setTitle('')
 
-        DIAGNOSTICS_MD = getMetadataElements(fullpath, 'DIAGNOSTICS') or {}
-        proxy.setChecksum(GENERAL_MD.get('md5',''))
+        try:
+             proxy.setChecksum(getMetadataElement(fullpath,
+                                                  section="DIAGNOSTICS",
+                                                  option="md5"))
+        except:
+             proxy.setChecksum('')
 
         return proxy.__of__(self)
 
