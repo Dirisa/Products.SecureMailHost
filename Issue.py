@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.199 2004/07/01 17:02:22 ajung Exp $
+$Id: Issue.py,v 1.200 2004/07/02 05:53:58 ajung Exp $
 """
 
 import os, time, random 
@@ -299,6 +299,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.haveATReferences():
             issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
             self.deleteReference(issue)
+            self._transcript.addComment(TR('reference_removed', 'Reference removed: %s' % issue_url))
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('reference_deleted', 'Reference has been deleted'))
         else:
@@ -417,6 +418,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def upload_remove(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
+        self._transcript.addComment(TR('upload_removed', 'Removed: %s' % id))
         util.redirect(RESPONSE, 'pcng_issue_uploads', 
                      self.Translate('upload_removed', 'File has been removed'))
 
@@ -690,12 +692,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def left_slots(self):
         pu = self.getPortlet_usage() 
+        pa = self.getPortlet_actions() 
         if not hasattr(self, '_v_left_slots'):
-            if pu == 'left': 
+            if pu == 'override': 
                 self._v_left_slots = []
             else:
                 self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
-            if pu.endswith('left'):
+            if pa == 'left':
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_right_slots
             except: pass
@@ -706,12 +709,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def right_slots(self):
         pu = self.getPortlet_usage() 
+        pa = self.getPortlet_actions() 
         if not hasattr(self, '_v_right_slots'):
-            if pu == 'right': 
+            if pu == 'override': 
                 self._v_right_slots = []
             else:
                 self._v_right_slots = list(self._getCollector().aq_parent.right_slots)
-            if pu.endswith('right'):
+            if pu == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_left_slots
             except: pass

@@ -91,11 +91,11 @@ msgstr "Alle Plone Slots löschen"
 msgid "Use Plone settings"
 msgstr "Plone Einstellungen übernehmen"
 
-msgid "Keep left Plone slot, clear right"
-msgstr "Linken Slot beibehalten, rechten Slot löschen"
+msgid "Keep Plone settings"
+msgstr "Plone Einstellungen beibehalten"
 
-msgid "Clear left Plone slot, keep right"
-msgstr "Linken Slot löschen, rechten Slot beibehalten"
+msgid "Override Plone settings"
+msgstr "Plone Einstellungen ignorieren"
 
 msgid "Plone slots"
 msgstr "Plone Slots"
@@ -157,4 +157,5 @@ msgstr "Im rechten Portlet Slot"
 msgid "Inside issue main view"
 msgstr "Innerhalb der Ticket Hauptanzeige"
 
-
+msgid "Position of action portlets"
+msgstr "Position des Aktionsportlets"

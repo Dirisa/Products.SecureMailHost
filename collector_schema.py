@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.55 2004/07/01 14:05:48 ajung Exp $
+$Id: collector_schema.py,v 1.56 2004/07/02 05:53:58 ajung Exp $
 """
 
 
@@ -69,10 +69,13 @@ VOC_WATCHLIST = DisplayList((
 ))
 
 VOC_PORTLET_USAGE = DisplayList((
-  ('plone-left', 'Use left slot, keep plone settings'),
-  ('left', 'Use left slot, override plone settings'),
-  ('plone-right', 'Use right slot, keep plone settings'),
-  ('right', 'Use right slot, override plone settings'),
+  ('keep', 'Keep Plone settings'),
+  ('override', 'Override Plone settings'),
+))
+
+VOC_PORTLET_ACTIONS = DisplayList((
+  ('left', 'Left portlet slot'),
+  ('right', 'Right portlet slot'),
 ))
 
 VOC_PORTLET_ISSUEDATA = DisplayList((
@@ -232,9 +235,20 @@ schema = BaseSchema + Schema((
                                        label='Portlet usage',
                                        label_msgid='label_portlet_usage',
                                        i18n_domain='plonecollectorng'),
-                default='plone-left',
+                default='override',
                 schemata='Look and Feel'
                 ),
+
+    StringField('portlet_actions',
+                vocabulary=VOC_PORTLET_ACTIONS,
+                widget=SelectionWidget(format='select', 
+                                       label='Position of action portlets',
+                                       label_msgid='label_portlet_action_position',
+                                       i18n_domain='plonecollectorng'),
+                default='left',
+                schemata='Look and Feel'
+                ),
+
     StringField('portlet_issuedata',
                 vocabulary=VOC_PORTLET_ISSUEDATA,
                 widget=SelectionWidget(format='select', 
@@ -244,6 +258,7 @@ schema = BaseSchema + Schema((
                 default='inline',
                 schemata='Look and Feel'
                 ),
+
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
                 widget=SelectionWidget(format='select', 
@@ -253,6 +268,7 @@ schema = BaseSchema + Schema((
                 default='staff',
                 schemata='Permissions',
                 ),
+
     StringField('view_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
                 widget=SelectionWidget(format='select', 
@@ -262,6 +278,7 @@ schema = BaseSchema + Schema((
                 default='staff',
                 schemata='Permissions',
                 ),
+
     StringField('owner_view_mode',
                 vocabulary=VOC_OWNER_VIEW_MODE,
                 widget=SelectionWidget(format='select', 

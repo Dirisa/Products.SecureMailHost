@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.194 2004/06/25 07:30:43 ajung Exp $
+$Id: Collector.py,v 1.195 2004/07/02 05:53:48 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -862,12 +862,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     def left_slots(self):
         pu = self.getPortlet_usage() 
+        pa = self.getPortlet_actions()
+
         if not hasattr(self, '_v_left_slots'):
-            if pu == 'left': 
+            if pu == 'override': 
                 self._v_left_slots = []                                                   
             else:
                 self._v_left_slots = list(self.aq_parent.left_slots)
-            if pu.endswith('left'):
+            if pa == 'left':
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
             self._v_left_slots = tuple(self._v_left_slots)
             try: del self._v_right_slots
@@ -877,12 +879,13 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     def right_slots(self):
         pu = self.getPortlet_usage() 
+        pa = self.getPortlet_actions()
         if not hasattr(self, '_v_right_slots'):
-            if pu == 'right': 
+            if pu == 'override': 
                 self._v_right_slots = []                                                   
             else:
                 self._v_right_slots = list(self.aq_parent.right_slots)
-            if pu.endswith('right'):
+            if pa == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
             self._v_right_slots = tuple(self._v_right_slots)
             try: del self._v_left_slots
