@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.26 2004/05/29 15:24:00 ajung Exp $
+$Id: Transcript.py,v 1.27 2004/05/29 16:31:41 ajung Exp $
 """
 
 import time 
@@ -93,6 +93,7 @@ class Transcript(Persistent, Implicit):
 
     security.declareProtected(View, 'addComment')
     def addComment(self, comment, text_format='plain', user=None, created=None, hidden=0):
+
         if not isinstance(comment, UnicodeType):
             raise TypeError('comment must be unicode')
         event = TranscriptEvent('comment', comment=comment, 
@@ -144,20 +145,22 @@ class Transcript(Persistent, Implicit):
         self.add(event)
 
     security.declareProtected(View, 'getEvents')
-    def getEvents(self, reverse=1):
+    def getEvents(self, reverse=1, show_hidden=0):
         """ return all events sorted by timestamp in reverse order """
         lst = list(self._items.values())
         lst.sort(lambda x,y:  cmp(x.created, y.created))
+        if not show_hidden:
+            lst = [e for e in lst if getattr(e, 'hidden', 0) == 0]
         if reverse: lst.reverse()
         return lst
     
     security.declareProtected(View, 'getEventsGrouped')
-    def getEventsGrouped(self, reverse=1):
+    def getEventsGrouped(self, reverse=1, show_hidden=0):
         """ return all events grouped by their timestamp """
 
         last_ts = 0; last_user = None
         result = []
-        for event in self.getEvents(reverse=0):
+        for event in self.getEvents(reverse=0, show_hidden=show_hidden):
             if event.getUser() != last_user or event.getTimestamp() - last_ts > 60  or event.getType() in ('comment', ):
                 # new event
                 result.append([])
@@ -176,14 +179,22 @@ class Transcript(Persistent, Implicit):
                 for k,v in kw.items():
                     setattr(event, k, v)
 
-    security.declareProtected(EditCollectorIssue, 'deleteEntry')
+    security.declareProtected(ManageCollector, 'deleteEntry')
     def deleteEntry(self, timestamp):
         """ Delete an entry given by its timestamp """
         
         for k,v in self._items.items():
-            print k,timestamp
             if str(k) == str(timestamp):
                 del self._items[k]
+                break
+
+    security.declareProtected(ManageCollector, 'hideEntry')
+    def hideEntry(self, timestamp):
+        """ set hidden flag for entry """
+        
+        for k,v in self._items.items():
+            if str(k) == str(timestamp):
+                self._items[k].hidden = 1
                 break
 
     security.declareProtected(ManageCollector, 'migrateUnicode')
