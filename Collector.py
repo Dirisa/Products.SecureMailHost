@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.171 2004/05/02 16:58:54 ajung Exp $
+$Id: Collector.py,v 1.172 2004/05/09 08:00:02 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -398,9 +398,20 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     security.declareProtected(AddCollectorIssue, 'redirect_create_object')
     def redirect_create_object(self, RESPONSE=None):
-        """ create a new issue """
+        """ Create a new issue as temporary object inside a temporary folder to
+            avoid unfilled issues. We do no longer support portal_factory because
+            it raises more problems than it solves.
+        """
+            
+        from Products.TemporaryFolder.TemporaryFolder import constructTemporaryFolder
+        if not hasattr(self, 'temp'):
+            constructTemporaryFolder(self, 'temp')
+        temp = getattr(self, 'temp')            
         id = '%s_%f' % (self.Translate('new_issue', 'NewIssue'), time.time() * random.random())
-        RESPONSE.redirect(self.absolute_url() + "/createObject?type_name=PloneIssueNG&id=%s" % id)
+        issue = PloneIssueNG(id)
+        temp._setObject(id, issue)
+        issue = issue.__of__(temp)
+        RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
 
     security.declareProtected(AddCollectorIssue, 'add_issue')
     def add_issue(self, RESPONSE=None):
@@ -929,7 +940,7 @@ def modify_fti(fti):
         if a['id'] in ('view', 'syndication','references','metadata', 'edit', 'localroles'):
             a['visible'] = 0
     fti['filter_content_types'] = 1
-    fti['allowed_content_types'] = ['PloneIssueNG']
+    fti['allowed_content_types'] = ['PloneIssueNG', 'Temporary Folder']
     fti['icon'] = 'collector_icon.gif'
     return fti
 
