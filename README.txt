@@ -81,6 +81,8 @@ Features:
   * encryption: import a public key or get it from keyserver, 
     if not in current keyring
 
+  * cover form translation by some better method.
+
   Future ideas ...
 
   * seperate Formulator-Integration and Mailer in two products
