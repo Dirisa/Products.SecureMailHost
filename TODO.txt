@@ -12,12 +12,6 @@ FAQ/FAQFolder:
 
 TUTORIAL TYPE
 
-- This type needs to be created
-
-- It's essentially a folderish object with three allowed subtypes: File, Image and Page
-
-- Image and File are the normal content types
-
 - It's for creating multi-page articles
 
 - Tutorial consists of TutorialPages
@@ -25,18 +19,6 @@ TUTORIAL TYPE
 - Tutorial is an OrderedFolder
 
 - Tutorial will need template logic to display previous/next according to ordering of TutorialPages
-
-- TutorialPage is a simple type with 
-
-  - Short Name
-
-  - Title
-
-  - Description
-
-  - Body text
-
-
 
 
 GENERAL:
