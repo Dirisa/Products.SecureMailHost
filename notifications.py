@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.23 2004/03/18 16:06:52 ajung Exp $
+$Id: notifications.py,v 1.24 2004/03/19 06:52:57 ajung Exp $
 """
 
 import sys
@@ -88,7 +88,9 @@ def _send_notifications(recipients, issue, send_attachments=0):
     dest_emails = [ v['email'] for v in recipients.values()     
                                if util.isValidEmailAddress(v.get('email','')) and
                                   v.get('send_emails','yes').lower() == 'yes']
-    if not dest_emails: return  # No recipients???
+    # No recipients???
+    if not dest_emails: return  
+    # don't send notifications for half-filled issues
     if not issue.Title() or issue.Title().find('PloneIssueNG') > -1: return 
 
     outer = MIMEMultipart()
@@ -111,7 +113,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
     MH = getattr(collector, 'MailHost') 
     
     try:
-        LOG('plongcollectorng', INFO, 'recipients: %s' % dest_emails)
+        LOG('plongcollectorng', INFO, 'recipients for %s: %s' % (issue.absolute_url(1), dest_emails))
         MH._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
         LOG('plonecollectorng', ERROR, 'MailHost.send() failed', error=sys.exc_info())
