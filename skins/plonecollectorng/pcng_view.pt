@@ -3,7 +3,8 @@
       lang="en-US"
       metal:use-macro="here/main_template/macros/master">
   <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main" 
+         tal:define="search_form_position python: 'top'">
 
     <!-- defaults for status: Pending+Accepted -->    
     <metal:block tal:condition="python: request.has_key('status') == 0">
@@ -11,12 +12,24 @@
     </metal:block>   
 
 	<h1 tal:content="here/title_or_id" />
-      <div class="group"><span class="legend">Issue overview</span>
-        <div metal:use-macro="here/pcng_macros/macros/show_issues" />
-      </div>
-      <div class="group"><span class="legend">Search form</span>
-        <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
-      </div>
+
+      <metal:block tal:condition="python: search_form_position == 'top'">
+        <div class="group"><span class="legend">Search form</span>
+          <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
+        </div>
+        <div class="group"><span class="legend">Issue overview</span>
+          <div metal:use-macro="here/pcng_macros/macros/show_issues" />
+        </div>
+      </metal:block>
+
+      <metal:block tal:condition="python: search_form_position == 'bottom'">
+        <div class="group"><span class="legend">Issue overview</span>
+          <div metal:use-macro="here/pcng_macros/macros/show_issues" />
+        </div>
+        <div class="group"><span class="legend">Search form</span>
+          <div metal:use-macro="here/pcng_macros/macros/search_issues_form" />
+        </div>
+      </metal:block>
     </div>
   </body>
 </html>
