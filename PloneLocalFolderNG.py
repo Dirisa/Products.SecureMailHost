@@ -217,7 +217,7 @@ class PloneLocalFolderNG(BaseContent):
         rel_dir = '/'.join(REQUEST.get('_e', []))
         destpath = os.path.join(self.folder, rel_dir)
         
-        filename = os.path.join(destpath, upload.filename)
+        filename = os.path.join(destpath, os.path.basename(upload.filename))
         open(filename, 'w').write(upload.read())
         if comment:
             open(filename + '.metadata', 'w').write(comment)
