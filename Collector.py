@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.80 2003/11/28 10:47:16 ajung Exp $
+$Id: Collector.py,v 1.81 2003/11/28 11:47:38 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -24,7 +24,6 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
-from OrderedSchema import OrderedSchema
 from Translateable import Translateable
 import collector_schema 
 import issue_schema
@@ -429,19 +428,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     ######################################################################
     # Some Archetypes madness
     ######################################################################
-
-#    def Schemata(self):
-#        """ we need to override Schemata() to provide support
-#            for ordered fields.
-#        """
-#
-#        schemata = OrderedDict()
-#        for f in self.schema.fields():
-#            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
-#            sub.addField(f)
-#            schemata[f.schemata] = sub
-#        return schemata
-#
 
     def getSchemataFields(self, name):
         print self.schema.getSchemataFields(name)

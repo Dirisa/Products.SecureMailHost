@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.89 2003/11/28 07:32:33 ajung Exp $
+$Id: Issue.py,v 1.90 2003/11/28 11:47:08 ajung Exp $
 """
 
 import sys, os, time
@@ -27,7 +27,6 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
 from WatchList import WatchList
-from OrderedSchema import OrderedSchema
 from Translateable import Translateable
 import util, notifications
 
@@ -118,7 +117,6 @@ class PloneIssueNG(Base, WatchList, Translateable):
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
         Base.manage_afterAdd(self, item, container)
-        schema = self.Schema()
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
@@ -467,19 +465,6 @@ class PloneIssueNG(Base, WatchList, Translateable):
     ######################################################################
     # Some Archetypes madness
     ######################################################################
-
-    def Schemata(self):
-        """ we need to override Schemata() to provide support
-            for ordered fields.
-        """
-
-        schemata = OrderedDict()
-        for f in self.Schema().fields():
-            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
-            sub.addField(f)
-            schemata[f.schemata] = sub
-
-        return schemata
 
     ######################################################################
     # Presentation related stuff
