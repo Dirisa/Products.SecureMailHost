@@ -375,7 +375,7 @@ msgid "classification"
 msgstr "Klassifizierung"
 
 msgid "Creator"
-msgstr "Erzeuger"
+msgstr "Ersteller"
 
 msgid "Title"
 msgstr "Titel"
