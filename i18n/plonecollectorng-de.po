@@ -105,7 +105,7 @@ msgstr "Status"
 msgid "assigned_to"
 msgstr "Zugewiesen an"
 
-msgid "uploads"
+msgid "Uploads"
 msgstr "Hochgeladene Dateien"
 
 msgid "transcript"
@@ -130,6 +130,9 @@ msgid "legend_references"
 msgstr "Referenzen auf andere Tickets"
 
 msgid "references"
+msgstr "Referenzen"
+
+msgid "References"
 msgstr "Referenzen"
 
 msgid "referenced_by"
@@ -287,7 +290,7 @@ msgstr "Einfache Ansicht"
 msgid "Full view"
 msgstr "Vollansicht"
 
-msgid "Full view with images"
+msgid "View with images"
 msgstr "Vollansicht mit Bildern"
 
 msgid "Maintenance"
@@ -396,7 +399,10 @@ msgid "fulltextsearch"
 msgstr "Volltextsuche"
 
 msgid "followups"
-msgstr "Followups"
+msgstr "Antworten"
+
+msgid "Followup"
+msgstr "Antworten"
 
 msgid "importance"
 msgstr "Wichtigkeit"
@@ -938,6 +944,25 @@ msgstr "seit"
 
 msgid "days_or_date"
 msgstr "Tage oder Datum"
+
+msgid "New issue"
+msgstr "Neues Ticket"
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "Add issue"
+msgstr "Neues Ticket"
+
+msgid "Reports"
+msgstr "Auswertungen"
+
+msgid "collector_actions"
+msgstr "Tracker Aktionen"
+
+msgid "issue_actions"
+msgstr "Ticket Aktionen"
+
 
 msgid "followup_heading"
 msgstr "Angelegt von $user am $date"
