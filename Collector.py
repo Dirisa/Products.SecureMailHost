@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.207 2004/09/17 14:15:21 ajung Exp $
+$Id: Collector.py,v 1.208 2004/09/17 15:22:42 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -563,8 +563,8 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.Translate('number_issues_reseted', 'Issue number reseted to 0'))
 
-    security.declareProtected(ManageCollector, 'update_schema_for_issues')
-    def update_schema_for_issues(self, return_to=None, REQUEST=None, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'update_all_schemas')
+    def update_all_schemas(self, return_to=None, REQUEST=None, RESPONSE=None):
         """ update stored issue schema for all issues """
 
         schema = self.atse_getSchema()
