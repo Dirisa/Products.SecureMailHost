@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the MIT Public License
 
-$Id: Transcript.py,v 1.2 2003/09/06 06:36:00 ajung Exp $
+$Id: Transcript.py,v 1.3 2003/09/06 11:50:08 ajung Exp $
 """
 
 from types import StringType, ListType, TupleType
@@ -31,6 +31,7 @@ class Transcript(Persistent):
         if len(entry) > 0:
             entry.setNumber(len(self) + 1)
             self._items.insert(0, entry)
+            self._p_changed = 1
 
     security.declarePublic('addTranscriptChangeEvent')
     def addTranscriptChangeEvent(self, field, old, new):

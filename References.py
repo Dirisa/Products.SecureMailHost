@@ -16,6 +16,7 @@ class ReferencesManager(Persistent):
     security.declarePublic('add')
     def add(self, ref):
         self._references.insert(0, ref)
+        self._p_changed = 1
             
     def __len__(self): return len(self._references)
 
