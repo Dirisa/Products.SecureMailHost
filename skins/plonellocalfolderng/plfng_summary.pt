@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plone"
+      metal:use-macro="here/main_template/macros/master">
+
+<body>
+
+
+<div metal:fill-slot="main"
+     tal:define="folderfilter python:request.get('folderfilter', '');
+                 global decodedFilter python:here.decodeFolderFilter(folderfilter);
+                 global filterValues decodedFilter;
+                 global filter decodedFilter;
+                 standalone python:1;
+                 folder_contents python:here.getContents(REQUEST=request);
+                 mtool mtool|here/portal_membership;
+                 myfolder python:here.absolute_url()==mtool.getHomeUrl();">
+
+    <div>
+                <div tal:define="folder_props  python:here.getProperties(REQUEST=request);
+                               total_size    python:folder_props.get('size',0);
+                               total_folders python:folder_props.get('folders',0);
+                               total_files   python:folder_props.get('files',0);">
+                               
+			           <br>
+			           <b>size = </b>
+			           <span tal:content="total_size">
+			             size
+			           </span> (bytes)
+			           <br><br>
+			           <b>folders = </b>
+			           <span tal:content="total_folders">
+			             folders
+			           </span>
+			           <br><br>
+			           <b>files = </b>
+			           <span tal:content="total_files">
+			             files
+			           </span>
+			           <br><br>
+                </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
