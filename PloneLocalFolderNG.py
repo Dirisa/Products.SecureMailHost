@@ -18,8 +18,8 @@ schema = BaseSchema +  Schema((
                 ),
     ))
 
-
 class TypeInfo(SimpleItem):
+    """ fake TypeInfo class to make CMF happy """
 
     __allow_acces_to_unprotected_subobjects__ = 1
 
@@ -46,6 +46,7 @@ InitializeClass(TypeInfo)
 
 
 class FileProxy(FSObject):
+    """A fake File proxy class """
 
     security = ClassSecurityInfo()
     meta_type = 'PloneLocalFolderFileProxy'
@@ -105,9 +106,7 @@ InitializeClass(FileProxy)
 
 
 class PloneLocalFolderNG(BaseContent):
-    """This is a sample article, it has an overridden view for show,
-    but this is purely optional
-    """
+    """ PloneLocalFolderNG """
 
     schema = schema
 
@@ -119,19 +118,19 @@ class PloneLocalFolderNG(BaseContent):
         },)
 
 
-    def viewfile(self, REQUEST):
+    def showFile(self, destpath, REQUEST, RESPONSE):
         """ view file """
 
-        fullname = os.path.join(self.folder, REQUEST['viewfile'])
-        mi = self.mimetypes_registry.classify(data=None, filename=fullname)
-        REQUEST.RESPONSE.setHeader('content-type', mi.normalized())
-        REQUEST.RESPONSE.setHeader('content-length', str(os.stat(fullname)[6]))
-#        REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(REQUEST['viewfile']))
-        fp = open(fullname)
+        mi = self.mimetypes_registry.classify(data=None, filename=destpath)
+        RESPONSE.setHeader('content-type', mi.normalized())
+        RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
+        if REQUEST.get('action', '') == 'download':
+            REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(destpath))
+        fp = open(destpath)
         while 1:
             data = fp.read(32768)
             if data:    
-                REQUEST.RESPONSE.write(data)
+                RESPONSE.write(data)
             else:
                 break
         fp.close()
@@ -139,18 +138,13 @@ class PloneLocalFolderNG(BaseContent):
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
 
-        if REQUEST.has_key('viewfile'):
-            return self.viewfile(REQUEST)
-    
-        if REQUEST.has_key('showdir'):
-            show_dir = REQUEST['showdir']
-            if show_dir.startswith('/') or show_dir.find('..') > -1:
-                raise ValueError('illegal directory: %s' % show_dir)
-            destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
-            if not destfolder.startswith(self.folder):
-                raise ValueError('illegal directory: %s' % show_dir)
-        else:
-            destfolder = self.folder
+        show_dir = '/'.join(REQUEST['_e'])
+        
+        if show_dir.startswith('/') or show_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % show_dir)
+        destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
+        if not destfolder.startswith(self.folder):
+            raise ValueError('illegal directory: %s' % show_dir)
 
     
         rel_dir = destfolder.replace(self.folder, '')
@@ -162,20 +156,21 @@ class PloneLocalFolderNG(BaseContent):
             fullname = os.path.join(destfolder, f)
             P = FileProxy(f, fullname, f)
             mi = self.mimetypes_registry.classify(data=None, filename=f)
-            P.setMimeType(mi.normalized())
 
             if os.path.isdir(fullname):
                 P.setIconPath('folder_icon.gif')
-                P.setAbsoluteURL(self.absolute_url() + '?showdir=' + quote(os.path.join(rel_dir, f)))
+                P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+                P.setMimeType('directory')
             else:
                 P.setIconPath(mi.icon_path)
-                P.setAbsoluteURL(self.absolute_url() + '?viewfile=' + quote(os.path.join(rel_dir, f)))
+                P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+                P.setMimeType(mi.normalized())
             l.append(P) 
 
         return l
 
 
-    def breadcrumbs(self, instance, REQUEST=None):
+    def breadcrumbs(self, instance): 
         """ breadcrumbs """
 
         l = []
@@ -185,10 +180,32 @@ class PloneLocalFolderNG(BaseContent):
             l.append((d,'/'+'/'.join(sofar)))
 
         sofar = []
-        for d in instance.REQUEST.get('showdir','').split('/'):
+        for d in instance.REQUEST['_e']:
             sofar.append(d)
-            l.append((d,'%s?showdir=%s' % (instance.absolute_url(), '/'.join(sofar))))
+            l.append( (d, '%s/%s/plfng_view' % (instance.absolute_url(), '/'.join(sofar))) )
         return l
+
+    def __call__(self, REQUEST, RESPONSE, *args, **kw):
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
+
+        if os.path.isfile(destpath):
+            return self.showFile(destpath, REQUEST, RESPONSE)
+        else:
+            RESPONSE.redirect('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view'))
+            
+    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+        if not REQUEST.has_key('_e'): 
+            REQUEST['_e'] = []
+
+        destpath = os.path.join(self.folder, '/'.join(REQUEST['_e']), name)
+        if os.path.exists(destpath): 
+            REQUEST['_e'].append(name)
+            return self
+        else:
+            try: return getattr(self, name)
+            except AttributeError: pass
+            REQUEST.RESPONSE.notFoundError(name)
 
 
 def modify_fti(fti):
