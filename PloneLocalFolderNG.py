@@ -901,6 +901,13 @@ class PloneLocalFolderNG(BaseContent):
                   filesCataloged = filesCataloged + 1
         return filesCataloged, filesNotCataloged            
 
+    security.declarePublic('allowedContentTypes')
+    def allowedContentTypes( self ):
+        """
+            List type info objects for types which can be added in
+            this folder.
+        """
+        return []
 
 def _getFolderProperties(fullfoldername):
    bytesInFolder = 0
