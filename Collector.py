@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.33 2003/09/23 12:44:49 ajung Exp $
+$Id: Collector.py,v 1.34 2003/09/23 18:35:38 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -346,17 +346,8 @@ class PloneCollectorNGCatalog(CatalogTool):
         standard = CatalogTool.enumerateIndexes(self)
         custom = (('status', 'FieldIndex'),
                   ('topic', 'FieldIndex'),
-                  ('subtopic', 'FieldIndex'),
-                  ('classification', 'FieldIndex'),
-                  ('importance', 'FieldIndex'),
-                  ('security_related', 'FieldIndex'),
-                  ('confidential', 'FieldIndex'),
-                  ('submitter_id', 'FieldIndex'),
-                  ('submitter_email', 'FieldIndex'),
-                  ('version_info', 'TextIndex'),
                   ('assigned_to', 'KeywordIndex'),
-                  ('deadline', 'FieldIndex'),
-                  ('progress', 'FieldIndex'),
+                  ('progress_deadline', 'FieldIndex'),
                   ('getId', 'FieldIndex'),
                   )
         custom = tuple([col for col in custom if col not in standard])
@@ -365,9 +356,8 @@ class PloneCollectorNGCatalog(CatalogTool):
     def enumerateColumns( self ):
         """Return field names of data to be cached on query results."""
         standard = CatalogTool.enumerateColumns(self)
-        custom = ('id', 'status', 'submitter_id', 'topic', 'subtopic', 'classification',
-                  'importance', 'security_related', 'confidential', 'version_info',
-                  'assigned_to', 'deadline', 'progress', 'getId',
+        custom = ('id', 'status', 'topic', 'classification',
+                  'importance', 'assigned_to', 'progress_deadline', 'getId',
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
