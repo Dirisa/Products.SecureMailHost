@@ -8,4 +8,4 @@ context.getTranscript().addComment(u'migrated to 1.2.0')
 for issue in context.objectValues('PloneIssueNG'):
     issue.migrate_schema()
 context.reindex_issues()
-return 'done'
+context.REQUEST.RESPONSE.redirect('pcng_view')
