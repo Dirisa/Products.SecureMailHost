@@ -60,10 +60,36 @@
 			
 			<fieldset>
 				<legend>DIAGNOSTICS:</legend>
-				<b>md5 = </b><span tal:content="md5">
-					md5
-				</span>
-				<br>
+				<table>
+				<tr>
+				<td nowrap="nowrap">
+					<b>md5 = </b><span tal:content="python:test(md5,md5,'unknown')">md5</span>
+				</td>
+				<td>
+					<div tal:condition="md5">
+					  <form tal:attributes="action string:${request/URL1}/updateFileMetadatum" method="post">
+				      <input type="hidden" name="section" value="DIAGNOSTICS"/>
+					   <input type="hidden" name="option" value="md5"/>
+					   <input type="hidden" name="mode" value="testonly"/>
+				      <input type="submit" value="test" >
+			        </form>
+			      </div>  
+		      </td>
+		      <td>
+		      <form tal:attributes="action string:${request/URL1}/updateFileMetadatum" method="post">
+			      <input type="hidden" name="section" value="DIAGNOSTICS"/>
+				   <input type="hidden" name="option" value="md5"/>
+				   <input type="hidden" name="mode" value="update"/>
+			      <div tal:condition="md5">
+			        <input type="submit" value="update" >
+			      </div>
+			      <div tal:condition="not:md5">
+			        <input type="submit" value="set" >
+			      </div>    
+		      </form>
+		      </td>
+		      </tr>
+		      </table>
 			</fieldset>	
 			<fieldset>	
 				<legend>ARCHIVEINFO:</legend>
