@@ -93,8 +93,7 @@
             <input type="hidden" name="fielddata.name:record:string" 
                    tal:attributes="value request/field|nothing" />
             <input type="hidden" name="fielddata.schemata:record:string"    
-                   tal:attributes="value request/fieldset|nothing" />
-
+                   tal:attributes="value fieldset" />
 
             <div class="row">
               <div class="label" i18n:translate="name">Name</div>

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.42 2003/12/02 17:56:54 ajung Exp $
+$Id: SchemaEditor.py,v 1.43 2003/12/03 19:15:42 ajung Exp $
 """
 
 import copy, re
@@ -79,7 +79,13 @@ class SchemaEditor:
             raise TypeError(self.translate('atse_empty_name', 'Empty ID given'))
 
         if name in self._ms.getSchemataNames():
-            raise ValueError(self.translate('atse_exists', 'Schemata "$schemata" already exists', schemata=name))
+            raise ValueError(self.translate('atse_exists', 
+                             'Schemata "$schemata" already exists', schemata=name))
+
+        if not id_regex.match(name):
+            raise ValueError(self.translate('atse_invalid_id_for_schemata', 
+                             '"$schemata" is an invalid ID for a schemata', schemata=name))
+
         self._ms.addSchemata(name)
         self._p_changed = 1
 
@@ -229,10 +235,20 @@ class SchemaEditor:
 
         D['required'] = FD.get('required', 0)
 
-        f = field(FD.name, **D)
-        oldfield = self._ms[FD.name]
-        f._index = oldfield._index
-        self._ms[FD.name] = f
+        newfield = field(FD.name, **D)
+
+        # ATT: The following lines stink like dead fish.
+        # Here we are trying to replace a field in place. This code
+        # should better go into Archetypes core.
+
+        oldfields = self._ms.fields()
+        for i in range(len(oldfields)):
+            if oldfields[i].getName() == newfield.getName():
+                oldfields[i] = newfield
+
+        for f in oldfields: self._ms.delField(f.getName())
+        for f in oldfields: self._ms.addField(f)
+        
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
@@ -312,5 +328,11 @@ class SchemaEditor:
             if k == v: l.append(k)
             else: l.append('%s|%s' % (k,v))
         return '\n'.join(l)
+
+    def _dump_schema(self):
+        """ only for debugging """
+        for schemata in self._ms.getSchemataNames():
+            print '%s: %s' % (schemata, ', '.join([f.getName() for f in  self._ms.getSchemataFields(schemata)]))
+
 
 InitializeClass(SchemaEditor)
