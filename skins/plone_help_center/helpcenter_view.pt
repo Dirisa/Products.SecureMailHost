@@ -67,7 +67,7 @@
                     in
                     
                       <select name="phc_selection">
-                        <option value="all">All documentation</option>
+                        <option value="all">Entire documentation area</option>
                         <option value="faq">FAQs</option>
                         <option value="howto">How-tos</option>
                         <option value="tutorial">Tutorials</option>

@@ -70,7 +70,7 @@ class HelpCenter(OrderedBaseFolder):
 
         if 'error' not in self.objectIds():
             self.invokeFactory('HelpCenterErrorReferenceFolder','error')
-            self['error'].setTitle('Error Reference')
+            self['error'].setTitle('Error References')
             self['error'].setDescription('Error reference section.')
 
         if 'link' not in self.objectIds():
@@ -80,7 +80,7 @@ class HelpCenter(OrderedBaseFolder):
 
         if 'glossary' not in self.objectIds():
             self.invokeFactory('HelpCenterGlossary','glossary')
-            self['glossary'].setTitle('Glossary')
+            self['glossary'].setTitle('Glossary Definitions')
             self['glossary'].setDescription('Glossary of terms.')
 
 registerType(HelpCenter, PROJECTNAME)
