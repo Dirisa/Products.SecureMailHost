@@ -23,6 +23,18 @@
     list-style-image: url(&dtml-portal_url;/faq_icon.gif);
 }
 
+.tutorialAbout {
+    float: right;
+    background-color: &dtml-globalBackgroundColor;;
+    border-color: &dtml-globalBorderColor;;
+    border-width: &dtml-borderWidth;;
+    border-style: &dtml-borderStyle;;
+    font-size: &dtml-fontSmallSize;;
+    margin: 0.5em 0 0.5em 0.5em;
+    padding: 1em;
+    width: 12em;
+}
+
 .portletHalfWidth {
     width: 45%; 
     float: left; 

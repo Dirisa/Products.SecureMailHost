@@ -1,6 +1,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
       metal:use-macro="here/main_template/macros/master">
+
+<head>
+    <metal:css fill-slot="css_slot">
+    <style type="text/css" media="all"
+           tal:content="string: @import url($portal_url/helpcenter.css);"></style>
+    </metal:css>
+
+    <metal:override fill-slot="column_two_slot" />
+
+</head>
+
 <body>
 
 <div metal:fill-slot="main">
@@ -8,7 +19,7 @@
     <div metal:define-macro="main"
          tal:define="len_text python:len(here.getBody());
                      sibl python:here.contentValues('HelpCenterTutorialPage');
-                     pos python:here.getObjectPosition(here.getId())">
+                     pos python:here.aq_inner.aq_parent.getObjectPosition(here.getId())">
       
         <h1 class="documentFirstHeading">
             <img tal:replace="structure here/howto_icon.gif" />
@@ -19,54 +30,75 @@
             Document actions (print, sendto etc)
         </div>
 
-        <div><!-- XXX: Clean up markup -->
-            <a tal:define="prev python:pos != 0 and sibl[pos-1]"
-               tal:condition="python:prev"
-               tal:attributes="href prev/absolute_url"
-               tal:content="prev/title_or_id"
-               href="">
-                Previous Item
-	    </a>
-            <a tal:define="next python:pos &lt; len(sibl)-1 and sibl[pos+1]"
-               tal:condition="python:next"
-               tal:attributes="href next/absolute_url"
-               tal:content="next/title_or_id"
-               href="">
-                Next Item
-	    </a>
-	</div>
-
-        <form method="get" action="redirect_to">
-            <select name="dest">
-                <option i18n:translate="label_select">Select</option>
+        <form style="float: right; margin-top: 1em; clear: right;"
+              method="get" action="redirect_to">
+            <select name="dest"
+                    tabindex="3">
+                <option i18n:translate="label_select">Page Index</option>
                 <option tal:repeat="s python:[s for s in sibl if s!=here]"
                         tal:content="s/title_or_id"
                         tal:attributes="value s/getId">
                     Some Page
-		</option>
-	    </select>
+                </option>
+            </select>
             <input class="standalone"
                    type="submit"
-                   value="Go to"
+                   value="Go"
                    tabindex=""
                    i18n:translate="value"
-                   tal:attributes="tabindex tabindex/next|nothing" />
-	</form>
-    
+                   tabindex="4" />
+        </form>
+
         <div class="documentDescription"
              tal:content="here/Description">
             description
         </div>
   
-        <p tal:condition="not: len_text"
+        <p class="discreet"
+           tal:condition="python: not len_text and is_editable"
            i18n:translate="no_body_text">
             This item does not have any body text, click the edit tab to change it.
         </p>
     
+        <div class="tutorialAbout"
+             tal:define="portrait python: mtool.getPersonalPortrait(here.Creator);">
+        
+            <div style="text-align: center;">
+                <img src=""
+                     alt=""
+                     class="portraitPhoto"
+                     width="75"
+                     height="100"
+                     tal:attributes="src portrait/absolute_url" />
+            </div>
+                    
+            <div tal:content="container/Description">
+            Tutorial Description
+            </div>
+        </div>
+
         <div id="bodyContent">
             <div tal:replace="structure python:here.getBody()" />
         </div>
     
+        <div class="listingBar">
+            <a class="listingNext"
+               tal:define="next python:pos &lt; len(sibl)-1 and sibl[pos+1]"
+               tal:condition="python:next"
+               tal:attributes="href next/absolute_url"
+               tabindex="1"
+               href="">
+               Next: <span tal:replace="next/title_or_id" /> <img tal:replace="structure here/arrowRight.gif" /></a>
+            <a class="listingPrevious"
+               tal:define="prev python:pos != 0 and sibl[pos-1]"
+               tal:condition="python:prev"
+               tal:attributes="href prev/absolute_url"
+               tabindex="1"
+               href="">
+               <img tal:replace="structure here/arrowLeft.gif" /> Previous: <span tal:replace="prev/title_or_id" /></a>
+               &nbsp;
+        </div>
+
         <div metal:use-macro="here/document_byline/macros/byline">
           Get the byline - contains details about author and modification date.
         </div>    
