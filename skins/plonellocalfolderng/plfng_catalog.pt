@@ -11,42 +11,37 @@
     <div tal:define="folder_props  python:here.getProperties(REQUEST=request);
                      total_size    python:folder_props.get('size',0);
                      total_folders python:folder_props.get('folders',0);
-                     total_files   python:folder_props.get('files',0);">
+                     total_files   python:folder_props.get('files',0);
+                     filetypesNotToCatalog here/filetypes_not_to_catalog">
        <br>
-       <b># files contained in this folder = </b>
+       <b>total # files with legal id's contained by this folder = </b>
        <span tal:content="total_files">
          files
-       </span> (
+       </span>
+       <br><br>
+       <b>total # bytes for these files = </b>
        <span tal:content="total_size">
          size
-       </span> bytes)
+       </span>
+       <br><br>
+       <b>filetypes not to catalog = </b>
+       <span tal:content="filetypesNotToCatalog">
+         size
+       </span>
        <br><br>
        
        <fieldset tal:condition="python:action!='catalog_now'">
 		 <legend>Catalog Folder Contents:</legend>
-		 	<br>
-		 	Note: This implementation is <b>NOT</b> complete!!! Use at your own risk!!!
-		 	<br>
-		 	<br>
 		 	This functionality depends on the TextIndexNG2 product and the proper 
-		 	configuration of the ZCatalog (ie, 'portal catalog') instance.
-		 	Specific documentation will be available shortly.
-		 	<br>
-		 	<br>
-		 	This 'catalog folder contents' action utilizes the TextIndexNG2 product 
-		 	to perform full text index cataloging of the files contained by the
-		 	PLFNG instance.  <u>Why catalog</u>? cataloging allows ZCatalog searches of 
-		 	the text contents of the files contained/proxy'd by PLFNG instance(s).
-		 	<u>Why use TextIndexNG2</u>? TextIndexNG2 appears to be a fast and
-		 	extensible product to quickly extract and catalog the text contents of
-		 	a variety of file types such as .html, .pdf, .ppt, .doc, etc.  It provides,
-		 	out of the box, text extract/conversion for some file types (eg, html), 
-		 	and relies on external system utilities (eg, wvWare, pdftotext, etc) for
-		 	other file types.
+		 	configuration of the ZCatalog (ie, 'portal catalog') instance.  Refer 
+		 	to the README.txt for specific information on using TextIndexNG2 with
+		 	this product.
 		 	<br>
 		 	<br>
          <center>
-	        <a class="button" tal:attributes="href string:${request/URL1}/plfng_catalog?action=catalog_now">Catalog Contents</a>
+	         <code>
+	           <a class="button" tal:attributes="href string:${request/URL1}/plfng_catalog?action=catalog_now">Catalog Contents Now</a>
+	         </code>
   	      </center>
 
 	    </fieldset>
@@ -54,10 +49,17 @@
        <div tal:condition="python:action=='catalog_now'"
             tal:define="startTime python:DateTime();">
           <div tal:define="filesCataloged python:here.catalogContents();
-        							 stopTime python:DateTime();
-        							 elapsedTime python:(stopTime-startTime)*86400.0;">
-           <b># files cataloged,skipped = </b>
+        							filesNotCataloged python:total_files - filesCataloged; 
+        							stopTime python:DateTime();
+        							elapsedTime python:(stopTime-startTime)*86400.0;">
+           <hr>
+           <b>total # files cataloged = </b>
            <span tal:content="filesCataloged">
+             files
+           </span>
+           <br><br>
+           <b>total # files NOT cataloged = </b>
+           <span tal:content="filesNotCataloged">
              files
            </span>
            <br><br>

@@ -14,7 +14,9 @@
                  standalone python:1;
                  folder_contents python:here.listFolderContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
-                 myfolder python:here.absolute_url()==mtool.getHomeUrl();">
+                 myfolder python:here.absolute_url()==mtool.getHomeUrl();
+                 hiddenFolderSuffixes here/hidden_folder_suffixes;
+                 hiddenFolderNames here/hidden_folder_names">
 
     <div>
                 <div tal:define="folder_props  python:here.getProperties(REQUEST=request);
@@ -36,6 +38,16 @@
 			           <b>files = </b>
 			           <span tal:content="total_files">
 			             files
+			           </span>
+			           <br><br>
+			           <b>hiddenFolderSuffixes = </b>
+			           <span tal:content="hiddenFolderSuffixes">
+			             hiddenFolderSuffixes
+			           </span>
+			           <br><br>
+			           <b>hiddenFolderNames = </b>
+			           <span tal:content="hiddenFolderNames">
+			             hiddenFolderNames
 			           </span>
 			           <br><br>
                 </div>

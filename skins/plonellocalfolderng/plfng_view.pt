@@ -16,8 +16,8 @@
                  folder_contents python:here.listFolderContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();
-                 requireUploadMD5 python:here.requireUploadMD5();
-                 fileUnpackingAllowed python:here.fileUnpackingAllowed();
+                 uploadMD5Required here/require_MD5_with_upload;
+                 fileUnpackingAllowed here/allow_file_unpacking;
                  errors python:request.get('errors', {})">
  
  <metal:block tal:condition="python:valid_folder==1">
@@ -201,14 +201,14 @@
 	<legend>Upload File:</legend>
 
     <div>
-         <form tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
+         <form tal:attributes="action string:${request/URL1}/HTMLFormUploadFile" method="post" enctype="multipart/form-data">
         
         <table width="100%">
           <tr>
 	          <td width="50%" valign="top">
 		          File: <span class="fieldRequired" title="Required">(Required)</span><br>
 		          <input type="file" name="upload">
-		          <div tal:condition="requireUploadMD5">
+		          <div tal:condition="uploadMD5Required">
 		             MD5 Checksum: <span class="fieldRequired" title="Required">(Required)</span>
 		          </div>
 		       </td>
@@ -221,7 +221,7 @@
 		       <td>
 					 <div class="field" 
 					 	tal:define="error errors/clientMD5|nothing"
-					 	tal:condition="requireUploadMD5"
+					 	tal:condition="uploadMD5Required"
 					   tal:attributes="class python:test(error, 'field error', 'field')">
 					   
 					   <label i18n:translate="label_clientMD5">client MD5</label>
