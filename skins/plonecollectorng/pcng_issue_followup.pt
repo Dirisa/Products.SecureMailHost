@@ -1,0 +1,48 @@
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+<div metal:fill-slot="main">	  
+
+  <form method="post" action="issue_followup">
+    <div class="group"><span class="legend">Issue Followup</span>
+      <table class="listing" 
+             tal:define="assignees here/getAssignees">
+        <tr>
+          <th i18n:translate="Comment">Comment</th>
+          <td>
+            <textarea name="comment" cols="80" rows="10"></textarea>
+          </td>
+       </tr>
+       <tr>
+         <th i18n:translate="Assigned to">Assigned to</th>
+         <td>
+           <select name="assignees:list" size="7" multiple>
+             <span tal:content=" python: here.getTrackerUsers(staff_only=1)"/>
+             <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
+               <option tal:content="string: ${u/fullname} (${u/username})"
+                       tal:attributes="value u/username;
+                                       selected python: u['username'] in assignees" 
+                />
+             </span>
+           </select>
+         </td>
+       </tr>
+      </table>
+
+      <div class="row">
+        <div class="label">&nbsp;</div>
+        <div class="field">
+          <input class="context" type="submit" value=" Save " i18n:attributes="value"/>
+          <input class="context" type="reset" value=" Reset " i18n:attributes="value"/>
+        </div>
+      </div> <!-- End row -->
+
+    </div> <!-- End group -->
+  </form>
+</div>
+</body>
+</html>
