@@ -37,6 +37,10 @@
            </a> 
         </div> 
 
+        <div class="ticket_stats" tal:condition="not: collector/view_permission">
+        &nbsp;
+        </div>
+
       </div>
     </div>
   </body>
