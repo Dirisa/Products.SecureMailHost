@@ -27,8 +27,8 @@ site_encoding = context.getSiteEncoding()
 
 nl('%s: #%s: %s' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding)))
 nl('%s: %s' % (TR('topic', 'Topic'),context.topic))
-nl('%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), context.status(), 
-                               TR('importance','Importance'), context.importance, 
+nl('%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 
+                               TR('importance','Importance'), TR(context.importance, context.importance), 
                                TR('classification', 'Classification'), context.classification))
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
