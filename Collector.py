@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.195 2004/07/02 05:53:48 ajung Exp $
+$Id: Collector.py,v 1.196 2004/07/18 18:11:27 bcsaller Exp $
 """
 
 import base64, time, random, md5, os
@@ -33,7 +33,7 @@ from SchemaEditor import SchemaEditor
 from Translateable import Translateable
 from workflows import VOC_WORKFLOWS
 import notifications
-import collector_schema 
+import collector_schema
 import issue_schema
 import util
 
@@ -94,12 +94,12 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def __init__(self, oid, **kwargs):
         Base.__init__(self, oid, **kwargs)
         self.initializeArchetype()
-        self.atse_init(issue_schema.schema)   # initialize SchemaEditor 
+        self.atse_init(issue_schema.schema)   # initialize SchemaEditor
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
 
-        # setup roles 
+        # setup roles
         username = util.getUserName()
         for role in ('Manager', 'TrackerAdmin', 'Owner'):
             util.addLocalRole(self, username, role)
@@ -108,7 +108,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ post creation (or post renaming) actions """
         Base.manage_afterAdd(self, item, container)
 
-        if getattr(self, '_already_created', 0) == 0:    
+        if getattr(self, '_already_created', 0) == 0:
             # Upon creation we need to add the transcript
             self._transcript = Transcript()
             self._transcript.addComment(u'Tracker created')
@@ -122,7 +122,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self.setup_tools()
 
         # Archestypes uses hardcoded factory-settings for 'immediate_view'
-        # that don't not meet our requirements to jump into the 'view' 
+        # that don't not meet our requirements to jump into the 'view'
         # from the navigation tree instead into 'edit'. So we tweak
         # 'immediate_view' a bit.
 
@@ -134,7 +134,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         self._transcript.setEncoding(self.getSiteEncoding())
         self.createToken()
-        
+
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
         self.unindexObject()
@@ -148,7 +148,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self.getTranscript().addComment(u'Tool setup')
 
         if RESPONSE:
-            util.redirect(RESPONSE, 'pcng_maintenance', 
+            util.redirect(RESPONSE, 'pcng_maintenance',
                           self.Translate('tools_recreated', 'Tools recreated'))
 
     def _setup_catalog(self):
@@ -176,7 +176,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         wf_tool = getToolByName(self, CollectorWorkflow)
         # Get the workflow ID from the instance
         wf_id = self.getField('collector_workflow').get(self)
-        wf_type = VOC_WORKFLOWS.getValue(wf_id) 
+        wf_type = VOC_WORKFLOWS.getValue(wf_id)
         wf_tool.manage_addWorkflow(id=wf_id, workflow_type=wf_id)
 
         # Assign PythonScript for workflows
@@ -188,7 +188,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             except: pass
             wf_tool[wf_id].scripts._setObject(id, script)
             getattr(wf_tool[wf_id].scripts, id)._proxy_roles = ('Manager', )
-            
+
         wf_tool.setChainForPortalTypes(('PloneIssueNG',), wf_id)
 
     def pre_validate(self, REQUEST, errors):
@@ -228,16 +228,16 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def getReporters(self): return self._reporters
 
     security.declareProtected(View, 'getTrackerUsers')
-    def getTrackerUsers(self, staff_only=0, unassigned_only=0, with_groups=0):   
+    def getTrackerUsers(self, staff_only=0, unassigned_only=0, with_groups=0):
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
             informations for the presentation.
         """
 
         membership_tool = getToolByName(self, 'portal_membership', None)
-        
+
         staff = self._managers + self._supporters + self._reporters
-      
+
         all_names = []
         folder = self
         running = 1
@@ -270,7 +270,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if member:
                 d['fullname'] = member.getProperty('fullname')
                 d['email'] = member.getProperty('email')
-            
+
             if name in self._reporters: d['role'] = 'Reporter'
             if name in self._supporters: d['role'] = 'Supporter'
             if name in self._managers: d['role'] = 'TrackerAdmin'
@@ -301,7 +301,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._adjust_staff_roles()
         self._adjust_participation_mode()
 
-        util.redirect(RESPONSE, 'pcng_staff', 
+        util.redirect(RESPONSE, 'pcng_staff',
                       self.Translate('changes_saved', 'Your changes have been saved'))
 
     def _adjust_staff_roles(self):
@@ -321,7 +321,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         if self.participation_mode == 'authenticated':
             add_roles = ('Authenticated', )
         elif self.participation_mode == 'anyone':
-            add_roles = ('Authenticated', 'Anonymous')  
+            add_roles = ('Authenticated', 'Anonymous')
         else:
             add_roles = ()
 
@@ -330,7 +330,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self.manage_permission(AddCollectorIssue, roles=target_roles+add_roles, acquire=0)
         self.manage_permission(AddPortalContent, roles=target_roles+add_roles, acquire=0)
 
-        # AddCollectorIssueFollowup 
+        # AddCollectorIssueFollowup
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Owner')
         self.manage_permission(AddCollectorIssueFollowup, roles=target_roles+add_roles, acquire=0)
 
@@ -359,7 +359,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def set_notification_emails(self, notifications, RESPONSE=None):
         """ set the email addresses for notifications when a workflow
             state changes.
-            
+
             'notifications' -- record where the keys are the names of the
                         states and the values are lists of email addresses
         """
@@ -369,13 +369,13 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             emails = [e.strip() for e in emails if e.strip()]
             for email in emails:
                 if not util.isValidEmailAddress(email):
-                    raise ValueError(self.Translate('invalid_email_address', 
+                    raise ValueError(self.Translate('invalid_email_address',
                                                     'Invalid email address: $email', email=email))
 
             self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
-        util.redirect(RESPONSE, 'pcng_view', 
+        util.redirect(RESPONSE, 'pcng_view',
                       self.Translate('changes_saved', 'Your changes have been saved'))
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
@@ -400,7 +400,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'get_current_issue_number')
     def get_current_issue_number(self):
         """ return a new issue number"""
-        return self._num_issues 
+        return self._num_issues
 
     security.declareProtected(ManageCollector, 'set_current_issue_number')
     def set_current_issue_number(self, num):
@@ -413,11 +413,11 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             avoid unfilled issues. We do no longer support portal_factory because
             it raises more problems than it solves.
         """
-            
+
         from Products.TemporaryFolder.TemporaryFolder import constructTemporaryFolder
         if not hasattr(self, 'temp'):
             constructTemporaryFolder(self, 'temp')
-        temp = getattr(self, 'temp')            
+        temp = getattr(self, 'temp')
         id = '%s_%f' % (self.Translate('new_issue', 'NewIssue'), time.time() * random.random())
         issue = PloneIssueNG(id)
         temp._setObject(id, issue)
@@ -427,7 +427,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         temp.manage_delObjects(pending)
         # if more than 50 issues in memory, remove the first 25
         if len(temp.objectIds()) > 50:
-            pending = temp.objectValues('PloneIssueNG') 
+            pending = temp.objectValues('PloneIssueNG')
             pending.sort(lambda x,y: cmp(x.bobobase_modification_time(), y.bobobase_modification_time()))
             temp.manage_delObjects([o.getId() for o in pending[:25]])
         RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
@@ -450,7 +450,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self.invokeFactory('PloneIssueNG', id)
         issue = self._getOb(id)
         issue.post_creation_actions()
-        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
+        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit",
                       portal_status_message=self.Translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')
         if RESPONSE is None:
@@ -476,8 +476,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'getIndexes')
     def getIndexes(self):
         """ return a sequence of tuples (indexId, indexType)"""
-        
-        return [ (id, idx.meta_type) 
+
+        return [ (id, idx.meta_type)
                  for id, idx in getToolByName(self, CollectorCatalog)._catalog.indexes.items()
                  if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
 
@@ -485,9 +485,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     # Topic-user mapping
     ######################################################################
 
-    security.declareProtected(ManageCollector, 'set_topic_users')    
+    security.declareProtected(ManageCollector, 'set_topic_users')
     def set_topic_users(self, topic, users):
-        """Set the topics-user mapping for 'topic' where 'users' is a list 
+        """Set the topics-user mapping for 'topic' where 'users' is a list
            of user IDs.
         """
 
@@ -495,7 +495,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             self._topic_user = OOBTree()
         self._topic_user[topic] = users
 
-    security.declareProtected(View, 'get_topics_user')    
+    security.declareProtected(View, 'get_topics_user')
     def get_topics_user(self):
         """Return the topic-user mapping """
         if not hasattr(self, '_topic_user'):
@@ -510,8 +510,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     # GroupUserFolder
     ######################################################################
 
-    security.declareProtected(View, 'get_gruf_groups')    
-    def get_gruf_groups(self):  
+    security.declareProtected(View, 'get_gruf_groups')
+    def get_gruf_groups(self):
         """ return list of GRUF group IDs """
 
         GT = getToolByName(self, 'portal_groups', None)
@@ -534,7 +534,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
         self._transcript.addComment(u'Issues reindexed')
-        util.redirect(RESPONSE, 'pcng_maintenance', 
+        util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('issues_reindexed', 'Issues reindexed'))
 
     security.declareProtected(View, 'getNumberIssues')
@@ -550,7 +550,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ reset number of issues """
         self._num_issues = 0
         self._transcript.addComment(u'Number of issues reset to 0')
-        util.redirect(RESPONSE, 'pcng_maintenance', 
+        util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('number_issues_reseted', 'Issue number reseted to 0'))
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
@@ -563,7 +563,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 issue._v_schema = None
 
         self._transcript.addComment(u'Issue schemas reseted')
-        
+
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.Translate('issues_updated', 'Issues updated'))
@@ -577,14 +577,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             current schema and update attributes accordingly.
         """
         from Globals import PersistentMapping
-    
+
         if not hasattr(self, '_md'):
             self._md = PersistentMapping()
 
         for field in self.Schema().fields():
 
             try:
-                value = field.get(self)  
+                value = field.get(self)
             except ConflictError:
                 pass
             except:
@@ -610,7 +610,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for issue in self.objectValues('PloneIssueNG'):
             if issue.UID() is None:
                 RC.registerObject(issue)
-      
+
         self._transcript.addComment(u'Issue UIDs reregistered')
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('uids_recreated', 'UIDs recreated'))
@@ -624,7 +624,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._transcript.addComment(u'Issue workflows migrated')
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('issue_workflow_histories_migrated', 'Issue workflow histories migrated'))
-      
+
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, ids, RESPONSE):
@@ -642,13 +642,13 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ check if Reportlab is installed """
         have_rl = getattr(self, '_v_have_rl', None)
         if have_rl is None:
-            try: 
+            try:
                 import reportlab
-                self._v_have_rl = 1 
+                self._v_have_rl = 1
             except ImportError:
                 self._v_have_rl = 0
             have_rl = self._v_have_rl
-        return have_rl 
+        return have_rl
 
     security.declareProtected(View, 'haveATReferences')
     def haveATReferences(self):
@@ -667,7 +667,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'get_size')
     def get_size(self):
         """ hook for 'folder_contents' view """
-        return 0 
+        return 0
 
     ######################################################################
     # Issue submission through email
@@ -691,14 +691,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 RESPONSE.write(msg)
             else:
                 raise ValueError(msg)
-    
+
         class record:
 
             def __init__(self):
                 self._k = []
 
             def set(self, k, v):
-                if not k in self._k:                   
+                if not k in self._k:
                     self._k.append(k)
                 setattr(self, k, v)
 
@@ -759,14 +759,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             # attachments
             for node in DOM.getElementsByTagName('attachment'):
                 cn = node.childNodes[0]
-                xmldata = cn.data 
+                xmldata = cn.data
                 imgdata = base64.decodestring(xmldata)
-                issue.upload_file(imgdata, 
-                                  srcname=node.getAttribute('filename'), 
+                issue.upload_file(imgdata,
+                                  srcname=node.getAttribute('filename'),
                                   mimetype=node.getAttribute('mimetype'),
                                   notify=0)
 
-            if R.description: 
+            if R.description:
                 issue.getTranscript().addComment(R.description, user=member_id)
 
         issue._last_action = 'Comment'
@@ -782,10 +782,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if member_email:
                 if email.lower().strip() == member_email.lower().strip():
                     return member
-        return None  
+        return None
 
     def _is_allowed_to_post(self, userid):
-        """ Return 0|1 in case 'userid' is permitted to submit 
+        """ Return 0|1 in case 'userid' is permitted to submit
             submissions through email.
         """
 
@@ -841,34 +841,36 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     ######################################################################
     # Misc
     ######################################################################
-                
+
     def String2DateTime(self, datestr):
         """ Try to convert a date string to a DateTime instance. """
 
         for fmt in (self.portal_properties.site_properties.localTimeFormat, '%d.%m.%Y', '%d-%m-%Y'):
             try:
                 return DateTime('%d/%d/%d' % (time.strptime(datestr, fmt))[:3])
-            except ValueError:                                                                   
+            except ValueError:
                 pass
 
         try:
             return DateTime(datestr)
         except:
-            raise ValueError('Unsupported date format: %s' % datestr)       
+            raise ValueError('Unsupported date format: %s' % datestr)
 
     ######################################################################
     # Slots handling
     ######################################################################
 
     def left_slots(self):
-        pu = self.getPortlet_usage() 
+        pu = self.getPortlet_usage()
         pa = self.getPortlet_actions()
-
         if not hasattr(self, '_v_left_slots'):
-            if pu == 'override': 
-                self._v_left_slots = []                                                   
+            if pu == 'override':
+                self._v_left_slots = []
             else:
-                self._v_left_slots = list(self.aq_parent.left_slots)
+                slots = getattr(self.aq_parent, 'left_slots', [])
+                if callable(slots):
+                    slots = slots()
+                self._v_left_slots = list(slots)
             if pa == 'left':
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
             self._v_left_slots = tuple(self._v_left_slots)
@@ -878,12 +880,17 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
-        pu = self.getPortlet_usage() 
+        pu = self.getPortlet_usage()
         pa = self.getPortlet_actions()
         if not hasattr(self, '_v_right_slots'):
-            if pu == 'override': 
-                self._v_right_slots = []                                                   
+            if pu == 'override':
+                self._v_right_slots = []
             else:
+                slots = getattr(self.aq_parent, 'right_slots', [])
+                if callable(slots):
+                    slots = slots()
+                self._v_right_slots = list(slots)
+
                 self._v_right_slots = list(self.aq_parent.right_slots)
             if pa == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
@@ -974,15 +981,15 @@ class PloneCollectorNGCatalog(CatalogTool):
         """Return field names of data to be cached on query results."""
 
         if not hasattr(self, 'aq_parent'): return  []  # only through manage_afterAdd()
-        
+
         custom = ('Description', 'Title', 'Creator', 'created', 'modified',
                   'id', 'status', 'topic', 'classification',
-                  'importance', 'assigned_to', 'progress_deadline', 
+                  'importance', 'assigned_to', 'progress_deadline',
                   'progress_percent_done', 'getId', 'numberFollowups',
                   'last_action', 'numberUploads', 'numberReferences'
                   )
         return custom
-    
+
     def searchResults(self, REQUEST=None, **kw):
         """ Bypass searchResults() of the CatalogTool """
         return self._catalog.searchResults(*(REQUEST,), **kw)
