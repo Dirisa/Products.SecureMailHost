@@ -1,5 +1,5 @@
 """
-$Id: PSCImprovementProposalFolder.py,v 1.3 2005/03/11 17:43:31 optilude Exp $
+$Id: PSCImprovementProposalFolder.py,v 1.4 2005/03/12 01:52:01 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -10,17 +10,7 @@ from Products.Archetypes.public import registerType
 from Products.Archetypes.public import OrderedBaseFolder
 
 from Products.PloneSoftwareCenter.config import PROJECTNAME
-from Products.PloneSoftwareCenter.utils import folder_modify_fti
 from Products.PloneSoftwareCenter.content.schemata import PSCImprovementProposalFolderSchema
-
-def modify_fti(fti):
-    folder_modify_fti(fti, allowed=('PSCImprovementProposal',))
-
-    #Set view action to improvementproposal_listing
-    for a in fti['actions']:
-        if a['id'] == 'view':
-            a['action'] = 'string:${object_url}/psc_roadmap'
-            break
 
 
 class PSCImprovementProposalFolder(OrderedBaseFolder):
@@ -33,6 +23,10 @@ class PSCImprovementProposalFolder(OrderedBaseFolder):
     immediate_view = default_view = 'psc_roadmap'
     schema = PSCImprovementProposalFolderSchema
 
+    global_allow = 0
+    filter_content_types = 1
+    allowed_content_types = ('PSCImprovementProposal',)
+
     security = ClassSecurityInfo()
 
     typeDescMsgId = 'description_edit_improvementproposalcontainer'
@@ -42,6 +36,27 @@ class PSCImprovementProposalFolder(OrderedBaseFolder):
                        'specific ones.')
 
     actions = (
+        {
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/psc_roadmap',
+            'permissions': (CMFCorePermissions.View,),
+        },
+        {
+        
+            'id' : 'edit',
+            'name' : 'Edit',
+            'action' : 'string:${object_url}/base_edit',
+            'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+            'visible' : 0,
+        },
+        {
+            'id' : 'metadata',
+            'name' : 'Properties',
+            'action' : 'string:${object_url}/base_metadata',
+            'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+            'visible' : 0,
+        },
         {
             'id': 'sharing',
             'name': 'Sharing',

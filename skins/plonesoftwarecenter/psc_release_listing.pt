@@ -13,7 +13,7 @@
 
         <div class="discreet">
             <span i18n:translate="description_no_available_releases">
-                There are no available releases in this project yet.
+                No releases found.
             </span>
             <span tal:condition="is_editable"
                   i18n:translate="description_use_add_menu_to_add_releases">

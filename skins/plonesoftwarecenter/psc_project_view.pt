@@ -194,6 +194,17 @@
                     </a>
                 </li>
 
+                <li tal:repeat="resource here/getAdditionalContainedResources">
+                    <img tal:attributes="src resource/getIcon" 
+                         alt="" />
+                    <a href=""
+                       class="link-plain"
+                       tal:attributes="href resource/getId"
+                       tal:content="resource/Title">
+                    Additional resource
+                    </a>
+                </li>
+    
             </ul>
 
 

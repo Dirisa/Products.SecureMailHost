@@ -1,5 +1,5 @@
 """
-$Id: PSCReleaseFolder.py,v 1.5 2005/03/11 17:43:31 optilude Exp $
+$Id: PSCReleaseFolder.py,v 1.6 2005/03/12 01:52:01 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -35,6 +35,21 @@ class PSCReleaseFolder(OrderedBaseFolder):
             'name': 'View',
             'action': 'string:${object_url}/psc_releasefolder_view',
             'permissions': (CMFCorePermissions.View,),
+        },
+        {
+        
+            'id' : 'edit',
+            'name' : 'Edit',
+            'action' : 'string:${object_url}/base_edit',
+            'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+            'visible' : 0,
+        },
+        {
+            'id' : 'metadata',
+            'name' : 'Properties',
+            'action' : 'string:${object_url}/base_metadata',
+            'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+            'visible' : 0,
         },
         {
             'id': 'sharing',

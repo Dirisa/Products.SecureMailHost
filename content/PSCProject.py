@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.14 2005/03/11 17:43:31 optilude Exp $
+$Id: PSCProject.py,v 1.15 2005/03/12 01:52:01 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -180,6 +180,17 @@ class PSCProject(OrderedBaseFolder):
         else:
             return res[0].getObject()
 
+    security.declareProtected(CMFCorePermissions.View, 'getAdditionalContainedResources')
+    def getAdditionalContainedResources(self, ignore=('PSCReleaseFolder', 
+                                            'PSCImprovementProposalFolder',)):
+        """
+        Get any contained resources (objects) not of the types in the list of
+        ignored types passed in. This essentially allows access to contained
+        help-center items, collectors etc.
+        """
+        return [o for o in self.folderlistingFolderContents() \
+                    if o.portal_type not in ignore]
+
     security.declareProtected(CMFCorePermissions.View, 'getNotAddableTypes')
     def getNotAddableTypes(self):
         """Hide the release container types if it already exists.
@@ -199,7 +210,7 @@ class PSCProject(OrderedBaseFolder):
             PSCImprovementProposalFolder: 'improvement'
             PSCReleaseFolder: 'release'
             HelpCenterFAQFolder: 'faq'
-            HelpCenterHowToFolder: 'howto'
+            HelpCenterHowToFolder: 'how-to'
             HelpCenterTutorialFolder: 'tutorial'
             HelpCenterErrorReferenceFolder: 'error'
             HelpCenterLinkFolder: 'link'
@@ -214,7 +225,7 @@ class PSCProject(OrderedBaseFolder):
             'PSCImprovementProposalFolder': config.IMPROVEMENTS_ID,
             'PSCReleaseFolder': config.RELEASES_ID,
             'HelpCenterFAQFolder': 'faq',
-            'HelpCenterHowToFolder': 'howto',
+            'HelpCenterHowToFolder': 'how-to',
             'HelpCenterTutorialFolder': 'tutorial',
             'HelpCenterErrorReferenceFolder': 'error',
             'HelpCenterLinkFolder': 'link',
