@@ -24,7 +24,7 @@ class PHCFolder:
 
     def getVersionsVocab(self):
         """Get version vocabulary"""
-        if hasattr(self,'getVersionsv_vocab'):
+        if hasattr(self,'getVersions_vocab'):
             return self.getVersions_vocab()
         else:
             return list()

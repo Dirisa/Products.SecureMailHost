@@ -63,6 +63,20 @@ VersionsSchema = Schema((
 		      ),
                ),
     ))
+# what versions should there be? (for enclosing folders, not indiv items!)
+VersionsVocabSchema = Schema((
+    LinesField('versions_vocab',
+               default=['0.1'],
+               widget=LinesWidget(
+                   label="Versions",
+                   description="Define the available versions for these items.",
+		   description_msgid = "phc_versions_vocab",
+		   label_msgid = "phc_label_versions-vocab",               
+                   i18n_domain="plonehelpcenter",
+                   rows=6)
+               ),
+    ))
+
 
 # what sections should this item appear in?
 SectionsSchema = Schema((
