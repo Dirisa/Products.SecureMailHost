@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.16 2004/04/17 12:32:05 ajung Exp $
+$Id: smtp2pcng.py,v 1.17 2004/04/19 09:59:50 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
@@ -52,7 +52,7 @@ for loc in CFG_LOCATIONS:
     if not os.path.exists(cfg_name):
         LOG.warn('No configuration file %s found' % cfg_name)
     else:
-        LOG.info('Reading configuration file %s ' % cfg_name)
+        LOG.debug('Reading configuration file %s ' % cfg_name)
         files.append(cfg_name)
 
 if not files:
@@ -153,8 +153,6 @@ def parse_mail(options):
             if mo:
                 R.collector_abr = mo.group(1)
                 R.issue_id = mo.group(2)
-            else:
-                raise RuntimeError('Subject could not be parsed properly')
 
         if ct in ('text/plain',):
             R.body = unicode(part.get_payload(decode=1), encoding).encode('utf-8')
