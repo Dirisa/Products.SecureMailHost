@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.16 2003/11/10 12:25:31 ajung Exp $
+$Id: migrate.py,v 1.17 2003/11/10 12:39:49 ajung Exp $
 """
 
 
@@ -113,6 +113,7 @@ def migrate_memberdata(source, dest):
 
 
 def migrate_tracker(tracker, dest):
+
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -273,6 +274,7 @@ def migrate_issue(issue, collector):
 
     new_issue.setParameters(P)
     new_issue.creation_date = issue.creation_date
+    new_issue.modification_date = issue.modification_date
 
     # Owner
     new_owner = collector.acl_users.getUser(issue.getOwner().getUserName())
