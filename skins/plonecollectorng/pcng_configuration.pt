@@ -16,28 +16,35 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
-      <fieldset>
-        <legend i18n:translate="configuration">Configuration</legend>
+      <h1 i18n:translate="collector_configuration">Collector Configuration</h1>
 
-        <ul>
-          <li>
-            <a href="pcng_base_edit"><span i18n:translate="base_configuration">Base configuration</span></a>
-          </li>
-          <li>
-            <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
-          </li>
-          <li>
-            <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema editor</span></a>
-          </li>
-          <li>
-            <a href="pcng_topics_groups"><span i18n:translate="topic_groups">Topic group</span></a>
-          </li>
-          <li>
-            <a href="pcng_notifications"><span i18n:translate="notifications">Email notifications</span></a>
-          </li>
-        </ul>
-
-      </fieldset>
+      <ul>
+        <li tal:define="schema here/Schema;
+                        schemata_names  schema/getSchemataNames; 
+                        schemata_names python: [s for s in schemata_names if s not in ('default', 'metadata')]">
+          <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
+          <tal:loop repeat="set schemata_names">
+            <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
+               <span i18n:translate="" tal:content="set" /></a>
+            <span tal:condition="not: repeat/set/end"> &bull;</span>
+          </tal:loop>                                         
+        </li>
+        <li>
+          <a href="pcng_base_edit"><span i18n:translate="base_configuration">Base configuration</span></a>
+        </li>
+        <li>
+          <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
+        </li>
+        <li>
+          <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema Editor</span></a>
+        </li>
+        <li>
+          <a href="pcng_topics_groups"><span i18n:translate="topic_groups">Topic-groups configuration</span></a>
+        </li>
+        <li>
+          <a href="pcng_notifications"><span i18n:translate="notifications">Email notifications</span></a>
+        </li>
+      </ul>
 
     </div>
   </body>
