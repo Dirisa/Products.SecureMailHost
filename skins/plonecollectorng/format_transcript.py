@@ -22,6 +22,8 @@ l = []
 # Determine site encoding
 site_encoding = context.getSiteEncoding()
 
+schema = context.Schema()
+
 nl('='*79)
 nl('= %s' % context.Translate('dont_remove_information_below', "Don't remove this information block if replying to this message"))
 for line in context.getEncryptedInformations().strip().split('\n'):
@@ -38,6 +40,12 @@ nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
 
+nl(context.Translate('description', 'Description') + ":")
+nl('-'*40)
+nl(context.wrap_text(context.Description()))
+
+nl('')
+
 n = 0
 groups = context.getTranscript().getEventsGrouped()
 for group in groups:
@@ -49,7 +57,8 @@ for group in groups:
     for ev in group:
        if ev.type == 'action': action = ev.action
         
-    nl('#%d %s %s (%s) ----------------------------' % (len(groups)-n, TR(action, action), datestr, uid)) 
+    nl('#%d %s %s (%s)' % (len(groups)-n, TR(action, action), datestr, uid)) 
+    nl('-'*75)
 
     for ev in group:
 
