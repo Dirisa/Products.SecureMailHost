@@ -11,6 +11,16 @@ Requirements:
     risk. A quick test showed that it seems to run without problems under
     Plone 1.0.5.
 
+  Optional packages:
+
+   - Reportlab (www.reportlab.org) - required for PDF output
+  
+   - PIL (Python Imaging Library) required to include uploaded images
+     in the PDF output
+
+   - Graphviz (www.graphivz.org) to produced dependency tree for 
+     issue references
+
 
 ATTENTION TO USERS of Plone 2.0 beta 3:
 
