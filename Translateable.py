@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.27 2004/02/11 11:12:04 ajung Exp $
+$Id: Translateable.py,v 1.28 2004/02/12 10:13:17 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -65,6 +65,7 @@ class Translateable:
         """ ATT: this code is subject to change """
 
         pts = self._getPTS()
+
         if pts is None:
             r = self._interpolate(text, kw)
             if as_unicode:
@@ -81,8 +82,6 @@ class Translateable:
                            mapping=kw,  
                            default=text,
                            target_language=target_language)
-        
-
         if not v: 
             v = self._unicode(text)
         if isinstance(v, StringType):
