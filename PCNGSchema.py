@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.10 2004/05/04 07:45:51 ajung Exp $
+$Id: PCNGSchema.py,v 1.11 2004/05/08 16:09:02 ajung Exp $
 """
 
 from types import FileType
@@ -362,6 +362,8 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                     if res:
                         errors[name] = res
                         error = 1
+                except AttributeError: 
+                    pass
                 except Exception, E:
                     log_exc()
                     errors[name] = E
