@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notification_policies.py,v 1.4 2003/10/13 19:09:05 ajung Exp $
+$Id: notification_policies.py,v 1.5 2003/10/22 13:55:07 ajung Exp $
 """
 
 """ 
@@ -30,6 +30,11 @@ class BasePolicy:
         # all watchers 
         for email in issue.wl_getWatchers():
             self.r[email] = {'email': issue.contact_email}
+
+        # special notifications based on the state
+        for email in self.collector.getNotificationsForState(issue.status()):
+            print email
+            self.r[email] = {'email': email}
 
         # all managers
         for uid in self.collector._managers: 
@@ -61,7 +66,7 @@ class AssignedSupportersNotificationPolicy(BasePolicy):
     """ Submitter, assigned supporters and tracker administrators """
 
     def getRecipients(self):
-        for uid in issue.assigned_to(): self.r[uid] = {}        # all assignees
+        for uid in self.issue.assigned_to(): self.r[uid] = {}        # all assignees
         return self.r
 
 
