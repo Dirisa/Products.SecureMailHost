@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.1 2003/11/28 07:32:33 ajung Exp $
+$Id: Base.py,v 1.2 2003/11/28 09:33:14 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -17,7 +17,7 @@ class Base(BaseBTreeFolder):
     def SchemataNames(self):
         """ return ordered list of schemata names """
         return [n for n in self.schema.getSchemataNames() if not n in ('default', 'metadata')]
- 
+
     def base_edit(self, RESPONSE):
         """ redirect to our own edit method """
         RESPONSE.redirect('pcng_base_edit')
