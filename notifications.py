@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.16 2003/11/07 16:22:24 ajung Exp $
+$Id: notifications.py,v 1.17 2003/11/21 08:27:19 ajung Exp $
 """
 
 import sys
@@ -52,7 +52,7 @@ def enrich_recipients(issue, recipients):
 def latest_upload(issue):
     """ return the latest uploaded object """
     objs = issue.objectValues()
-    objs.sort(lambda x,y: cmp(x.bobobase_modification_time, y.bobobase_modification_time))
+    objs.sort(lambda x,y: cmp(x.bobobase_modification_time(), y.bobobase_modification_time()))
     return objs[0]
 
 
