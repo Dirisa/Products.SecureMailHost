@@ -1,5 +1,10 @@
 0.6.0 (unstable)
 
+alpha4
+  - relocated FileProxy class to its own file
+  - relocated main cataloging logic to catalogFSContent() util.py method
+    to facilitate non-web invokation
+
 alpha3
   - added and using checkValidId() method to prevent illegal filenames 
     from being listed, uploaded or unzipped into PLFNG containers.  
