@@ -10,8 +10,9 @@ from Products.Archetypes.public import BaseFolder, registerType
 from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
+from Issue import Issue
+import collector_schema, issue_schema
 import util
-import collector_schema
 
 class Collector(BaseFolder):
     """ PloneCollectorNG """
@@ -24,10 +25,10 @@ class Collector(BaseFolder):
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
-        {'id': 'history',
-        'name': 'History',
-        'action': 'pcng_history',
-        'permissions': (ManageCollector,)
+        {'id': 'addissue',
+        'name': 'Add issue',
+        'action': 'add_issue',
+        'permissions': (AddCollectorIssue,)
         },
         {'id': 'staff',
         'name': 'Staff',
@@ -51,10 +52,12 @@ class Collector(BaseFolder):
 
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
+        self._num_issues = 0
+        self._issue_schema = issue_schema.schema
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
-        self.transcript = Transcript()
         self._setup_collector_catalog()
+        self.transcript = Transcript()
         self.transcript.addComment('Tracker created')
 
         # setup roles 
@@ -208,6 +211,16 @@ class Collector(BaseFolder):
         states = getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
         states.sort()
         return states
+
+    def add_issue(self, RESPONSE=None):
+        """ create a new issue """
+        self._num_issues += 1
+        id = str(self._num_issues)
+        issue = Issue(id, id, schema = self._issue_schema)
+        issue = issue.__of__(self)
+        self._setObject(id, issue)
+        if RESPONSE is not None: 
+            RESPONSE.redirect(self.absolute_url() + "/" + id + "/base_edit")
 
 
 registerType(Collector)
