@@ -1,2 +1,5 @@
 [default]
 title=Collector overview
+
+[security]
+View=0:Authenticated

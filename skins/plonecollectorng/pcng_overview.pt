@@ -13,26 +13,30 @@
     <div metal:fill-slot="main" >
       <h1 i18n:translate="collector_overview">Collector overview</h1>
 
-      <div tal:repeat="collector python: sequence.sort(here.portal_catalog(meta_type='PloneCollectorNG', 
-                                                                           review_state='published'), (('getId', 'nocase'),))">
+      <br/>
+
+      <div tal:repeat="collector here/pcng_get_collectors" >
 
         <h2 class="tracker_overview">
-          <a tal:attributes="href string:${collector/getURL}/pcng_view">
-            <span tal:content="collector/getId" />
-            <span tal:condition="collector/Title" tal:content="string:(${collector/Title})" />
+          <a tal:attributes="href string:${collector/url}/pcng_view">
+            <span tal:content="collector/id" />
+            <span tal:condition="collector/title" tal:content="string:(${collector/title})" />
           </a>
+          <span class="no_access" tal:condition="not: collector/view_permission" i18n:translate="no_access">(no access)</span>
         </h2>
 
-        <div class="ticket_stats" tal:define="stats python: collector.getObject().pcng_collector_stats()"> 
+        <div class="ticket_stats" tal:condition="collector/view_permission"
+                                  tal:define="stats collector/stats">
            <span i18n:translate="total_issues">Total issues</span>: <span tal:content="python: stats[0]"/> -
            <span i18n:translate="open_issues">Open issues</span>: <span tal:content="python: stats[1]"/> -
-           <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=submitted">
+           <a tal:attributes="href string:${collector/url}/pcng_view?filter=submitted">
              <span i18n:translate="issues_submitted_by_me">My submitted issues</span>: <span tal:content="python: stats[2]"/> 
            </a> -
-           <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=assigned">
+           <a tal:attributes="href string:${collector/url}/pcng_view?filter=assigned">
              <span i18n:translate="issues_assigned_to_me">Issues assigned to me</span>: <span tal:content="python: stats[3]"/> 
            </a> 
         </div> 
+
       </div>
     </div>
   </body>
