@@ -1,11 +1,7 @@
 Remaining to do:
 
-Bug:
-
-- If you have a Tutorial page that is published, and the next Tutorial
-  page is in-progress, you don't have permission to view the next page.
-
 General:
+==================================
 
 - PHC needs a Comment workflow! Priority #1, explained near the bottom of 
   this document.
@@ -211,62 +207,27 @@ Saving content as PDF:
   (syntax is called PML) that is rendered to PDF using reportlabs platypus 
   layout-engine. http://www.zope.org/Members/jack-e/CMFReportTool
 
-
-DONE:
-
-- Consider having an "Important" marker on entries, to mark the most
-  common ones visually with a red (!) marker in the overview/listing.
-
-  - I think we can/should generalize this more: add a ImportanceVocab
+- Importance: I think we can/should generalize this more: add a ImportanceVocab
     list to help center for list of importance raitings, ie,
     ('Important','Normal') Then folder skins can just sort based on
     the order that things are listed in the importance ratings, and
     add the red bang to the top-level ones. This gives us more
     flexibility for future importance ratings. [Joel]
 
-  - I have added an importance field to all the content schema.  The vocabulary
-    is defined in config.py.  [Geoff]
+- Integrate with the ATRatings tool
 
-- We should have an extra attribute that has additional words that are
-  indexed along with the content - for example in a howto about
-  VerboseSecurity, it would make sense to have:
+=======
+UI work
+=======
 
-  - Verbose Security
+Tutorial:
 
-  - Insufficient Privileges (the Plone Error Message)
+- Needs "This tutorial has no pages yet - use the Add menu to add Tutorial Pages and Files/Images. "
 
-  - Debugging security problems
+- Page Pulldown needs:
+  - Numbers (0. for Index)
+  - needs to show the existing page (selected)
+  - needs label ("index")
 
-  - etc...
+- Needs "All pages" choice that renders all the pages for printing or similar
 
-  - I have added a related_keywords field to all the content schemata.  The
-    contents get indexed along with the rest of the item's searchable text. 
-    [Geoff]
-
-- Integrate with the ratings tool
-
-  - Being developed as a separate product.
-
-- Add simple Glossary type, with Glossary entries (already added by limi)
-
-  - I admit that it's 50% because we have 5 and not 6 different
-    types now, which makes everything asymmetrical. ;)
-
-  - I still think it could be useful though - say; define what an
-    action is, have an Archetypes section with stuff like
-    Schema, Schemata, they are referencable from other docs.
-    Makes a nice print-out for newbies too. :)
-
-  - Simple container folder, like the others - with Sections
-
-  - Super-simple object that is essentially a definition list
-
-  - No item-level rendering is really necessary, but anchors are
-    important. Everything can probably be on one page if anchors
-    are included, and visible as bookmarkable links.
-
-  - Advanced-level functionality (pie-in-the-sky) is automatic 
-    parsing of abbr tags to look in the glossary for entries.
-    (not realistic at this stage, just a fun thought :) - lots
-    of academic institutions would like something like this, with
-    proper integration in Kupu it could be killer functionality. :)

@@ -57,22 +57,35 @@ def install(self):
     print >> out, 'Installed helpcenter_workflow.'
     print >> out, 'Installed helpcenterfolder_workflow.'
     
-    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ','HelpCenterHowTo','HelpCenterLink'
-                                            ,'HelpCenterTutorial','HelpCenterTutorialPage'
-                                            ,'HelpCenterErrorReference','HelpCenterDefinition'], chain='helpcenter_workflow')
+    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ'
+                                            ,'HelpCenterHowTo'
+                                            ,'HelpCenterLink'
+                                            ,'HelpCenterTutorial'
+                                            ,'HelpCenterErrorReference'
+                                            ,'HelpCenterDefinition'], chain='helpcenter_workflow')
     print >> out, 'Set helpcenter_workflow as default for help center content types.'
 
-    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQFolder','HelpCenterHowToFolder',
-                                             'HelpCenterLinkFolder','HelpCenterTutorialFolder',
-                                             'HelpCenterErrorReferenceFolder',
-                                             'HelpCenterGlossary'], chain='helpcenterfolder_workflow')
+    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQFolder'
+                                            ,'HelpCenterHowToFolder'
+                                            ,'HelpCenterLinkFolder'
+                                            ,'HelpCenterTutorialFolder'
+                                            ,'HelpCenterErrorReferenceFolder'
+                                            ,'HelpCenterGlossary'], chain='helpcenterfolder_workflow')
     print >> out, 'Set helpcenterfolder_workflow as default for help center folder types.'
+
+    # Remove workflow from Tutorial Pages, code from ZWiki, can probably be simpler ~limi 
+    cbt = wf_tool._chains_by_type
+    if cbt is None:
+        cbt = PersistentMapping()
+    cbt['HelpCenterTutorialPage'] = []
+    wf_tool._chains_by_type = cbt
+    print >> out, 'Set no workflow as default for Help Center TutorialPages.'
+
 
     fc_tool = getToolByName(self, 'portal_form_controller')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterHowTo', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterFAQ', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorial', None, 'traverse_to', 'string:edit_reminder')
-    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorialPage', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterLink', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterErrorReference', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterDefinition', None, 'traverse_to', 'string:edit_reminder')
@@ -80,12 +93,18 @@ def install(self):
 
     # make new types use portal_factory
     ft = getToolByName(self, 'portal_factory')    portal_factory_types = ft.getFactoryTypes().keys()    for t in ['HelpCenter'
-             ,'HelpCenterGlossary', 'HelpCenterDefinition'
-             ,'HelpCenterErrorReference', 'HelpCenterErrorReferenceFolder'
-             ,'HelpCenterFAQ', 'HelpCenterFAQFolder'
-             ,'HelpCenterHowTo', 'HelpCenterHowToFolder'
-             ,'HelpCenterLink', 'HelpCenterLinkFolder'
-             ,'HelpCenterTutorial', 'HelpCenterTutorialFolder'
+             ,'HelpCenterGlossary'
+             ,'HelpCenterDefinition'
+             ,'HelpCenterErrorReference'
+             ,'HelpCenterErrorReferenceFolder'
+             ,'HelpCenterFAQ'
+             ,'HelpCenterFAQFolder'
+             ,'HelpCenterHowTo'
+             ,'HelpCenterHowToFolder'
+             ,'HelpCenterLink'
+             ,'HelpCenterLinkFolder'
+             ,'HelpCenterTutorial'
+             ,'HelpCenterTutorialFolder'
              ,'HelpCenterTutorialPage']:
 
         if t not in portal_factory_types:            portal_factory_types.append(t)    ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)    print >> out, 'New types use portal_factory'

@@ -2,6 +2,14 @@ History of significant changes for PloneHelpCenter:
 
    (name of developer listed in brackets)
 
+    - Removed Help Center workflow from TutorialPages for now. They should
+      probably just have a simple in-progress/finished marker workflow that
+      doesn't really affect permissions, but just whether they are listed
+      or not in the index/page navigation. Had to remove it because of permission
+      problems right now (if any pages are not published in a Tutorial, you get
+      permission denied on the entire Tutorial).
+      [limi]
+
 PloneHelpCenter 0.2
 
     - Added Help Center portlet, this will aggregate published entries
