@@ -108,12 +108,13 @@
           </a>
         </h2>
         <div class="pcng_issueview_metadata">
-         Status: <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
-         Topic: <span tal:replace="issue/topic" /> -
-         Importance: <span tal:replace="issue/importance" />
+         <b>Status:</b> <span tal:replace="python: here.pcng_format_status(issue.status)" /> - 
+         <b>Topic:</b> <span tal:replace="issue/topic" /> -
+         <b>Importance:</b> <span tal:replace="issue/importance" /> -
+         <b>Assigned:</b> <span tal:replace="python: ', '.join(issue.assigned_to)" />
         </div>
         <div class="pcng_issueview_description" 
-             tal:content="python: here.shorten_string(issue.Description)" />
+             tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
         Submitted by <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" />
@@ -134,9 +135,7 @@
   </form>
         
   <form action="pcng_view" method="post"  name="search_form">
-          
     <table>
-            
       <tr>
         <th align="center" i18n:translate="heading_status"> Status </th>
         <th align="center" i18n:translate="heading_requester">Requester</th>
