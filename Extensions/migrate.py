@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.23 2004/01/20 09:54:07 ajung Exp $
+$Id: migrate.py,v 1.24 2004/01/20 13:46:00 ajung Exp $
 """
 
 
@@ -137,7 +137,7 @@ def migrate_memberdata(source, dest):
 
         
         D = {'pcng_company' : member.getProperty('submitter_company'),
-             'fullname' : member.getProperty('submitter_name'),
+             'fullname' : cmf2plone(member.getProperty('submitter_name')),
              'email' : email,
              'pcng_position' : member.getProperty('submitter_position'),
              'pcng_city' : member.getProperty('submitter_city'),
