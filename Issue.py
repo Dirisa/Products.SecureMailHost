@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.17 2003/09/19 06:13:22 ajung Exp $
+$Id: Issue.py,v 1.18 2003/09/20 12:42:10 ajung Exp $
 """
 
 import sys
@@ -38,15 +38,20 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         'action': 'pcng_issue_followup',
         'permissions': (AddCollectorIssueFollowup,)
         },
+        {'id': 'edit',
+        'name': 'Edit',
+        'action': 'pcng_base_edit',
+        'permissions': (AddCollectorIssueFollowup,)
+        },
         {'id': 'history',
         'name': 'History',
         'action': 'pcng_issue_history',
-        'permissions': (AddCollectorIssue,)
+        'permissions': (CMFCorePermissions.View,)
         },
         {'id': 'issue_references',
         'name': 'References & Uploads',
         'action': 'pcng_issue_references',
-        'permissions': (AddCollectorIssue,)
+        'permissions': (AddCollectorIssueFollowup,)
         },
         {'id': 'issue_add_issue',
         'name': 'Add Issue',
