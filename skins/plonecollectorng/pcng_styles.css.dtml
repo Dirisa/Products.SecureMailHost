@@ -19,8 +19,7 @@ div.collector_headline {
 }
 
 div.headline_action {
-    float: right;
-    font-size: 80%;
+    font-size: 100%;
 }
 
 div.issue_view_navigation {
