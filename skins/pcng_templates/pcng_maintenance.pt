@@ -1,0 +1,67 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+
+  <metal:block metal:fill-slot="head_slot">
+    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+  </metal:block>
+
+  <div metal:fill-slot="main">	  
+
+    <metal:block tal:define="action string: Maintenance">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
+    <a href=""
+       class="link-parent"
+       tal:attributes="href string:pcng_configuration"
+       i18n:translate="label_up_to_configuration ">
+    Up to PloneCollectorNG configuration preferences
+    </a>
+
+    <ul>
+      <li>
+        <span i18n:translate="number_issues">Number issues</span>: <span tal:replace="here/getNumberIssues" /> 
+      </li>
+      <li>
+        <span i18n:translate="schema_base_class">Schema base class</span>: <span tal:replace="here/atse_schema_baseclass" />
+      </li>
+      <li>
+        <a href="reindex_issues"><span i18n:translate="reindex_all_issues">Reindex all issues</span></a> 
+        <div class="formHelp" i18n:translate="help_reindex_issues">You need to reindex all issues after renaming or moving a collector instance</div>
+      </li>
+      <li>
+        <a href="update_schema_for_issues?return_to=pcng_maintenance"><span i18n:translate="update_schema_for_all_issues">Update schema for all issues</span></a> 
+        <div class="formHelp" i18n:translate="help_update_schema_for_issues">After changing the schema all issues must be notified of the change</div>
+      </li>
+      <li>
+        <a href="update_collector_schema"><span i18n:translate="update_collector_schema">Update Collector schema</span></a> 
+        <div class="formHelp" i18n:translate="help_update_collector_schema">This is sometimes necessary after an upgrade of PloneCollectorNG</div>
+      </li>
+      <li>
+        <a href="setup_tools"><span i18n:translate="setup_tools">Recreate catalog and workflow tool</span></a> 
+        <div class="formHelp" i18n:translate="help_setup_collector_catalog">This is sometimes necessary after an upgrade of PloneCollectorNG or when the catalog setup changed. You must also recreate the catalog if you have checked "Create index" for a field.</div>
+      </li>
+      <li>
+        <a href="migrate_issue_workflow_histories"><span i18n:translate="migrate_issue_workflow_histories">Migrate workflow histories of all issues</span></a> 
+        <div class="formHelp" i18n:translate="help_migrate_issue_workflow_histories">The migration of all issue workflow histories is necessary after upgrading from V 1.X to 1.2 or higher </div>
+      </li>
+      <li>
+        <a href="pcng_incomplete_issues"><span i18n:translate="show_incomplete_issues">Show incomplete issues</span></a> 
+        <div class="formHelp" i18n:translate="help_incomplete_issues">Shows you all unfilled issues and gives you a "fast-link" to reject issues (it pre-defines the followup text and the followup state)</div>
+      </li>
+      <li tal:condition="here/haveATReferences">
+        <a href="register_issue_uids"><span i18n:translate="recreate_uids_imported_issues">Recreate UIDs for imported issues</span></a> 
+        <div class="formHelp" i18n:translate="help_register_issue_uids">Use this with care <b>and only</b> if you have imported a collector instance into a new site either through cut/paste or Zope's import/export functionality.</div>
+      </li>
+      <li>
+        <a href="pcng_mailform"><span i18n:translate="send_email_to_staff">Send an email to all staff members</span></a> 
+        <div class="formHelp" i18n:translate="help_send_email_to_staff">A simple to form to send an email to all staff members</div>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>                                          

@@ -1,0 +1,49 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plonecollectorng">
+<head>
+  <title i18n:translate="title_issue_selection">Issue selection</title>
+  <link rel="stylesheet" href="plone.css" type="text/css">
+</head>
+<body>
+<html>
+
+<div class="ticket_selection">
+
+  <script language="javascript">
+  function do_submit(ticket) {
+      window.opener.document.myform['reference.ticketnumber:record:string'].value = ticket;
+      window.close();
+  }
+  </script>
+
+  <form method="post" action="" name="myform" onSubmit="javascript:do_submit()">
+
+    <table class="listing"  border="0">
+      <tr>
+        <th colspan="2" tal:content="string: Collector: ${here/title_or_id}" />
+      </tr>
+
+      <tr>
+        <th>Issue #</th>
+        <th>Title</th>
+      </tr>
+
+
+      <tr tal:repeat="ticket python: here.pcng_catalog(meta_type='PloneIssueNG', sort_on='created')">
+        <th style="text-align: right">
+          <a tal:content="ticket/getId"
+             tal:attributes="href python: 'javascript:do_submit(%s)' % ticket.getId" />
+        </th>
+        <th style="text-align: left" wrap>
+            <a tal:content="python: here.shorten_string(ticket.Title, maxlength=50)" 
+               tal:attributes="href python: 'javascript:do_submit(%s)' % ticket.getId" />
+        </th> 
+      </tr>
+
+    </table>
+  </form>
+</div>
+</body>
+</html>
+

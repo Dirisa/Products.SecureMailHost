@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en-US"
+      lang="en-US"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<metal:block fill-slot="javascript_head_slot">
+<tal:block define="macro here/archetypes_custom_js/macros/javascript_head | nothing"
+	   condition="macro">
+  <metal:block use-macro="macro" />
+</tal:block>
+</metal:block>
+
+<body>
+
+  <metal:block metal:fill-slot="head_slot">
+    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+  </metal:block>
+
+  <div metal:fill-slot="main">
+    <div metal:define-macro="main"
+     tal:define="errors options/state/getErrors|nothing;
+     Iterator python:modules['Products.Archetypes'].IndexIterator;
+     tabindex python:Iterator();
+     schema here/Schema;
+     schemata_names  schema/getSchemataNames; 
+     schemata_names python: [s for s in schemata_names if s not in ('default', 'metadata')];   
+     default_fieldset python: schemata_names[0];
+     fieldset request/fieldset|options/fieldset|default_fieldset;"
+     tal:omit-tag="">
+     
+     
+    <!-- headline -->
+    <metal:block tal:define="action string: Edit">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
+
+    <form name="edit_form" method="post" enctype="multipart/form-data"
+          tal:attributes="action python:here.absolute_url()+'/'+template.id" >
+
+<!--
+<div tal:condition="errors" class="error">
+<div tal:repeat="error errors/keys">
+<strong tal:content="error">
+  Field
+</strong>:<span tal:replace="python:errors[error]" />
+</div>
+</div>
+-->
+
+      <tal:fields repeat="field python: here.Schema().getSchemataFields(fieldset)">
+        <metal:fieldMacro use-macro="python: here.widget(field.getName(), mode='edit')"/>
+      </tal:fields>
+
+      <input type="hidden" name="form.submitted" value="1" />
+      <input type="hidden" name="fieldset" value="default" tal:attributes="value fieldset" />
+
+
+      <!-- Show assignees box for fresh issues -->
+
+      <div tal:condition="python: here.meta_type == 'PloneIssueNG' and here.getField('title').get(here) == ''"
+           tal:define="assignees here/assigned_to|nothing">
+        <div metal:use-macro="here/issue_macros/macros/followup_table" />
+        <input type="hidden" name="assign_ticket" value="1">
+      </div>
+
+      <div class="field">
+        <label>&nbsp;</label>
+
+        <input class="context"
+               tabindex=""
+               type="submit"
+               name="form_submit"
+               i18n:attributes="value"
+               value="Save"
+               tal:attributes="tabindex tabindex/next;" />
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main">
+
+      <!-- The evil in person -->
+      <tal:call> 
+        <span tal:define="dummy here/setDefaults" />
+      </tal:call>
+
+      <!-- set the view mode based on the collector preferences -->
+
+      <metal:block tal:condition="not: request/mode|nothing">
+        <metal:block tal:define="global mode python: member.getProperty('pcng_default_view') or 'simple'" />
+      </metal:block>
+      <metal:block tal:condition="request/mode|nothing">
+        <metal:block tal:define="global mode request/mode" />
+      </metal:block>
+
+      <metal:block tal:define="action string: View">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <div style="clear: both"
+           tal:define="canEdit python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here);
+                       canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+
+        <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames()">
+          <tal:if  tal:condition="python: schemata_name not in ('default',) "> 
+            <div class="portlet" id="pcng_metadata"
+                     tal:define="schemata python:here.atse_getSchemata(schemata_name);
+                                 fields python: test(schemata_name=='issuedata', 
+                                                [f for f in schemata.fields() if not f.getName() in ('title', 'description', 'solution')], 
+                                                schemata.fields())">
+              <h5>
+                <span i18n:translate="" tal:content="schemata_name" />
+                <a tal:condition="canEdit" tal:attributes="href string:pcng_base_edit?fieldset=${schemata_name}"><img src="edit.gif" title="Edit" i18n:attributes="title"/></a>
+              </h5>
+              <div class="portletBody">
+                <div metal:use-macro="here/issue_macros/macros/view_schemata_as_div" />
+
+                  <tal:if tal:condition="python: schemata_name == 'issuedata'" >
+                    <span class="schemata_label" i18n:translate="status">Status</span>: 
+                    <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
+                    <br>
+                    <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: 
+                    <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+                  </tal:if>
+              </div>
+            </div>
+          </tal:if>
+        </tal:loop>
+
+        <div class="portlet"  id="pcng_metadata" tal:define="references here/getForwardReferences">
+          <h5>
+            <span i18n:translate="references">References</span>
+            <a tal:condition="canFollowup" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
+            <metal:loop tal:repeat="ref references">
+              <a tal:define="target ref/getTargetObject"
+                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              <span tal:condition="not: repeat/ref/end">&bull;</span>   
+            </metal:loop>
+            <span tal:condition="not: references" i18n:translate="no_references">No references</span>
+          </div>
+        </div>
+
+        <div class="portlet" id="pcng_metadata" tal:define="uploads here/objectValues">
+          <h5>
+            <span i18n:translate="Uploads">Uploads</span>
+            <a tal:condition="canFollowup" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
+            <ul>
+              <li tal:repeat="item uploads">
+                <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
+                <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
+                <a tal:attributes="href item/absolute_url">
+                  <span  tal:content="item/getId" 
+                         tal:attributes="title python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
+                </a>
+              </li>
+            </ul>
+            <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
+          </div>
+        </div>
+
+        <div class="portlet" id="pcng_metadata">
+          <h5>
+            <span i18n:translate="actions">Actions</span>
+          </h5>
+          <div class="portletBody"
+               tal:define="mode request/mode|string:simple">
+              <a href="redirect_create_object"><span i18n:translate="new_issue">New Issue</span></a>
+              <br>
+              <a href="pcng_issue_followup"><span i18n:translate="followup">Followup</span></a>
+              <br>
+              <a href="pcng_issue_references"><span i18n:translate="references">Referenzen</span></a>
+              <br>
+              <a href="pcng_issue_uploads"><span i18n:translate="uploads">Uploads</span></a>
+              <br>
+              <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
+                <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
+                <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
+              </a> 
+              <br>
+              <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
+               <em tal:condition="choosen" i18n:translate=">fullview_with_images">Full view with images</em> 
+                <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
+              </a> 
+              <br>
+              <a tal:condition="here/haveReportlab" href="asPDF">
+                 <img src="pdflogo.gif" border="0" title="PDF">
+              </a>
+          </div>
+        </div>
+
+       </div>
+
+
+      <div style="clear: both"  id="issue_description_solution"
+           tal:define="schema python: here.atse_getSchemata('issuedata')">
+        <tal:def tal:define="field python: schema['description']" >
+          <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
+            <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <pre class="issue_metadata"
+                 tal:content="python: here.format_pre('description')" />
+          </div>
+        </tal:def>
+
+        <tal:def tal:define="field python: schema['solution']" >
+          <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
+            <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <pre class="issue_metadata">
+              <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+            </pre>
+          </div>
+        </tal:def>
+      </div>
+
+      <div id="issue_transcript">
+        <span class="schemata_label" i18n:translate="transcript">Transcript</span>
+        <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
+      </div>
+
+
+      <fieldset tal:condition="python: mode == 'full'" >
+        <legend i18n:translate="images">Images</legend>
+        <div tal:repeat="image python: here.objectValues(('Portal Image',))">
+          <span tal:content="image/getId" />:<br/>
+          <img tal:attributes="src image/absolute_url">
+          <br/>
+        </div>
+      </fieldset>
+
+      <metal:block tal:condition="python: mode=='full'" >
+        <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
+      </metal:block>
+
+      <div class="documentByLine">
+      PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Andreas Jung</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+
+/* <dtml-with stylesheet_properties> (do not remove this :) */
+
+span.label {
+    font-weight: bold;
+}
+
+div.border {
+    border: 1; solid black;
+
+}
+
+div.collector_headline {
+    background:  #dcdcff;
+    font-size: 120%;
+    font-weight: bold;
+    margin: 5px;
+    padding: 0.5em;
+}
+
+div #pcng_headline {
+    margin-bottom: 3em;
+}
+
+div.issue_view_navigation {
+    text-align: right;
+    font-size: 80%;
+}
+
+div.body {
+    padding: 0.5em;
+}
+
+div.collector_headline_right {
+    text-align: left;
+}
+
+div #motd {
+    background: #cccccc;
+    padding: 0.2em;
+    font-weight: bold;
+}
+
+div.issue_metadata {
+    background: #eeeeee;
+    padding: 0.2em;
+}
+
+div #transcriptheader {
+    background: #dddddd;
+    font-size: 120%;
+    margin-top: 1em;
+}
+
+div #transcriptevent {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+
+div.pcng_issueview_metadata,div.pcng_issueview_legend {
+    margin-left: 15px;
+}
+
+div.pcng_issueview_description {
+    background: #dddddd;
+    margin-left: 15px;
+}
+
+pre.collector_description{
+    background: #eeeeee;
+}
+
+div #ticket_stats {
+    text-align: right;
+}
+
+th.staff {
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+a.schemata_legend {
+    text-transform: capitalize;
+}
+
+a.selected {
+    font-weight: bold;
+    font-size: 120%;
+}
+
+fieldset {
+    padding: 0.5em;
+    margin: 0.25em;
+}
+
+span.schemata_label {
+    font-weight: bold;
+}
+
+h2.tracker_overview {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+div.portletBody {
+    padding: 0.5em;
+}
+
+span.no_access {
+    color: red;
+    font-size: 90%;
+}
+
+pre {
+    padding: 0.2em;
+}
+
+span.selected {
+    font-weight: bold;
+}
+
+span #headline_action {
+   font-size: 90%;
+}
+
+div#metadata {
+    float: left;
+    padding-right: 2em;
+}
+
+/*
+ Portlets
+*/
+
+div #pcng_metadata {
+    float: left;
+    vertical-align: top;
+    margin-right: 1em;
+}
+
+// pcng_issue_view
+
+div #issue_description_solution {
+    clear: both;
+    margin-top: 2em;
+}
+
+div #issue_transcript{
+    clear: both;
+    margin-top: 2em;
+}
+
+div.left{
+    float: left;
+}
+
+div.right {
+    float: right;
+}
+
+div #pcng_references_show {
+    float: right;
+}
+
+div #pcng_references_edit{
+    float: left;
+}
+
+div #pcng_uploads_show {
+    float: right;
+}
+
+div #pcng_uploads_edit{
+    float: left;
+}
+
+.portlet li #pcng_actions {
+    padding: 2em;
+}
+
+
+/* </dtml-with> */
