@@ -6,6 +6,9 @@
 
 mstool = context.portal_membership
 
+if len(query_id.strip()) == 0:
+    raise ValueError('Name too short')
+
 if mstool.isAnonymousUser(): 
     msg = context.Translate('unknown_user', 'Unknown user')
     context.REQUEST.RESPONSE.redirect('pcng_view?portal_status_message=%s' % msg)
