@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.21 2003/11/15 10:09:49 ajung Exp $
+$Id: collector_schema.py,v 1.22 2003/11/28 07:32:33 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
 from Products.Archetypes.public import DisplayList
-from Products.Archetypes.public import StringField, TextField, IntegerField
+from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
@@ -60,6 +60,9 @@ schema = OrderedSchema((
                                     label='Title',
                                     i18n_domain="plone"),
                 ),
+
+    DateTimeField('effectiveDate', schemata='metadata'),
+    DateTimeField('expirationDate', schemata='metadata'),
 
     StringField('description',
                 required=1,

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: OrderedSchema.py,v 1.7 2003/11/08 18:47:13 ajung Exp $
+$Id: OrderedSchema.py,v 1.8 2003/11/28 07:32:33 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -56,23 +56,3 @@ class OrderedSchema(Schema):
 
 InitializeClass(OrderedSchema)
 
-
-class OrderedBaseFolder(BaseBTreeFolder):
-    """ Base class for a folder using an OrderedSchema """
-
-    def getSchemaNames(self):
-        """ return ordered list of schema names """
-        lst = []
-        for k in self.schema._ordered_keys:
-            field = self.Schema()[k]
-            if not field.schemata in lst:
-                if not field in ('default', 'metadata'):
-                    lst.append(field.schemata)
-        return lst
-
-    def base_edit(self, RESPONSE):
-        """ blabla """
-        RESPONSE.redirect('pcng_base_edit')
-    
-
-InitializeClass(OrderedBaseFolder)

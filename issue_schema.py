@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.23 2003/11/15 01:56:09 zopezen Exp $
+$Id: issue_schema.py,v 1.24 2003/11/28 07:32:33 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -60,6 +60,9 @@ schema = OrderedSchema((
                                     description_msgid="help_title",
                                     i18n_domain="plone"),
                 ),
+
+    StringField('subject', schemata='metadata'),
+
     StringField('description',
                 required=1,
                 searchable=1,

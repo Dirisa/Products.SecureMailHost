@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.88 2003/11/24 09:11:45 ajung Exp $
+$Id: Issue.py,v 1.89 2003/11/28 07:32:33 ajung Exp $
 """
 
 import sys, os, time
@@ -19,6 +19,7 @@ from DateTime import DateTime
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Schema import Schemata
+from Base import Base
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 
@@ -26,7 +27,7 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
 from WatchList import WatchList
-from OrderedSchema import OrderedBaseFolder, OrderedSchema
+from OrderedSchema import OrderedSchema
 from Translateable import Translateable
 import util, notifications
 
@@ -63,7 +64,7 @@ class IssueRelationship(Persistent):
 InitializeClass(IssueRelationship)
 
 
-class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
+class PloneIssueNG(Base, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = ({
@@ -107,7 +108,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     security = ClassSecurityInfo()
 
     def __init__(self, id):
-        OrderedBaseFolder.__init__(self, id) 
+        Base.__init__(self, id) 
         self.wl_init()
         self.id = id
         self.title = id
@@ -116,7 +117,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
-        OrderedBaseFolder.manage_afterAdd(self, item, container)
+        Base.manage_afterAdd(self, item, container)
         schema = self.Schema()
 
         # added member preferences as defaults to the issue
@@ -167,7 +168,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
         schema = getattr(self, '_v_schema', None)
         if schema is None:
-            self._v_schema = self.aq_parent.schema_getWholeSchema()
+            self._v_schema = self.aq_parent.atse_getSchema()
 
             # Check if we need to update our own properties
             for field in self._v_schema.fields():

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.77 2003/11/26 10:11:24 ajung Exp $
+$Id: Collector.py,v 1.78 2003/11/28 07:32:33 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -13,9 +13,9 @@ from Acquisition import aq_base
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
-from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
+from Base import Base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 
@@ -24,13 +24,13 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
-from OrderedSchema import OrderedBaseFolder, OrderedSchema
+from OrderedSchema import OrderedSchema
 from Translateable import Translateable
 import collector_schema 
 import issue_schema
 import util
 
-class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
+class PloneCollectorNG(Base, SchemaEditor, Translateable):
     """ PloneCollectorNG """
 
     schema = collector_schema.schema
@@ -88,9 +88,9 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     security = ClassSecurityInfo()
 
     def __init__(self, oid, **kwargs):
-        OrderedBaseFolder.__init__(self, oid, **kwargs)
+        Base.__init__(self, oid, **kwargs)
         self.initializeArchetype()
-        self.schema_init(issue_schema.schema)
+        self.atse_init(issue_schema.schema)
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
@@ -344,7 +344,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
 
     def reindexObject(self, idxs=None):
         """ hook for reindexing the object """
-        OrderedBaseFolder.reindexObject(self)
+        Base.reindexObject(self)
         self._adjust_view_mode()           # can we hook this somewhere else?
         self._adjust_participation_mode()
 
@@ -430,26 +430,21 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     # Some Archetypes madness
     ######################################################################
 
-    def Schemata(self):
-        """ we need to override Schemata() to provide support
-            for ordered fields.
-        """
-
-        schemata = OrderedDict()
-        for f in self.schema.fields():
-            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
-            sub.addField(f)
-            schemata[f.schemata] = sub
-        return schemata
-
+#    def Schemata(self):
+#        """ we need to override Schemata() to provide support
+#            for ordered fields.
+#        """
+#
+#        schemata = OrderedDict()
+#        for f in self.schema.fields():
+#            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
+#            sub.addField(f)
+#            schemata[f.schemata] = sub
+#        return schemata
+#
     def SchemataNames(self):
         """ return ordered list of schemata names """
-
-        names = []
-        for f in self.schema.fields():
-            if not f.schemata in names and f.schemata != 'default':
-                names.append(f.schemata)
-        return names
+        return [n for n in self.schema.getSchemataNames() if not n in ('default', 'metadata')]
 
 registerType(PloneCollectorNG)
 

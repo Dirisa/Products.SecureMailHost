@@ -22,27 +22,26 @@
                    tabindex python:Iterator()"
            tal:omit-tag="">
 
-      <h1 i18n:translate="heading_edit_item">
-        <span i18n:translate="edit">Edit</span>
-          <span i18n:name="itemtype">
-              <span i18n:translate=""
-                    tal:content="here/archetype_name"
-                    tal:omit-tag="">Item type</span>
-          </span>
-      </h1>
+      <metal:block tal:define="action string: Full edit">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
 
      <form 
 	    name="edit_form"
 	    method="post"
 	    enctype="multipart/form-data"
         tal:attributes="action python:here.portal_form_url(template.id)" >
-<!--
+
+errors:
  	<div tal:condition="errors" class="error">
           <div tal:repeat="error errors/keys">
            <strong tal:content="error">Field</strong>: <span tal:replace="python:errors[error]" />
 	  </div>
 	</div>
--->
+
+        <input type="hidden" name="data:int" value="1">
+        <input type="hidden" name="metadata:int" value="0">
+
         <metal:block tal:repeat="name python: here.schema_getNames()">
           <fieldset tal:condition="python: name not in ('default',)" 
                     tal:define="schema python: here.schema_getSchema(name)">

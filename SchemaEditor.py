@@ -5,19 +5,19 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.32 2003/11/24 13:30:15 ajung Exp $
+$Id: SchemaEditor.py,v 1.33 2003/11/28 07:32:33 ajung Exp $
 """
 
-import operator
+import operator, copy
 from types import StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
-from BTrees.OOBTree import OOBTree
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
+from Products.Archetypes.Schema import Schema
 
 import util
 from config import ManageCollector
@@ -31,94 +31,99 @@ class SchemaEditor:
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(ManageCollector, 'schema_init')
-    def schema_init(self, schema):
-        self._schemata_names = []    # list of schemata names
-        self._schemas = OOBTree()  # map schemata name to schemata
+    security.declareProtected(ManageCollector, 'atse_init')
+    def atse_init(self, schema):
+        self._ms = copy.copy(schema)     # ms=managed schema
 
-        for field in schema.fields():
-            if not field.schemata in self._schemata_names:
-                self._schemata_names.append(field.schemata)
-                self._schemas[field.schemata] = OrderedSchema()
-            self._schemas[field.schemata].addField(field)
-
-    security.declareProtected(View, 'schema_getWholeSchema')
-    def schema_getWholeSchema(self):
+    security.declareProtected(View, 'atse_getSchema')
+    def atse_getSchema(self):
         """ return the concatenation of all schemas """       
-        l = [self._schemas[name] for name in self._schemata_names]
-        s = reduce(operator.__add__, l) 
-        for field in s.fields():
+
+        for field in self._ms.fields():
             if field.mutator is None:
                 field.mutator = 'archetypes_mutator'
             if field.edit_accessor is None:
                 field.edit_accessor = 'archetypes_accessor'
             if field.accessor is None:
                 field.accessor = 'archetypes_accessor'
+        return self._ms
+
+    security.declareProtected(View, 'atse_getSchemataNames')
+    def atse_getSchemataNames(self):
+        """ return names of all schematas """
+        return self._ms.getSchemataNames()
+
+    security.declareProtected(View, 'atse_getSchemata')
+    def atse_getSchemata(self, name):
+        """ return a schemata given by its name """
+        s = Schema()
+        for f in self._ms.getSchemataFields(name):
+            s.addField(f)
         return s
 
-    security.declareProtected(View, 'schema_getNames')
-    def schema_getNames(self):
-        """ return names of all schematas """
-        return self._schemata_names
+    ######################################################################
+    # Add/remove schematas
+    ######################################################################
 
-    security.declareProtected(View, 'schema_getSchema')
-    def schema_getSchema(self, name):
-        """ return a schema given by its name """
-        return self._schemas[name]
+    security.declareProtected(ManageCollector, 'atse_addSchemata')
+    def atse_addSchemata(self, name, RESPONSE=None):
+        """ add a new schemata """
+        if not name:
+            raise TypeError(self.translate('atse_empty_name', 'Empty ID given'))
 
-    security.declareProtected(ManageCollector, 'schema_newSchema')
-    def schema_newSchema(self, fieldset, RESPONSE=None):
-        """ add a new schema """
-        if not fieldset:
-            raise TypeError(self.translate('schema_empty_name', 'Empty ID given'))
-
-        if fieldset in self._schemata_names:
-            raise ValueError(self.translate('schema_exists', 'Schemata "$schema" already exists', schema=fieldset))
-        self._schemata_names.append(fieldset)
-        self._schemas[fieldset] = OrderedSchema()
+        if name in self._ms.getSchemataNames():
+            raise ValueError(self.translate('atse_exists', 'Schemata "$schemata" already exists', schemata=name))
+        self._ms.addSchemata(name)
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_added', 'Schema added'), fieldset=fieldset)
+                      self.translate('atse_added', 'Schemata added'), schemata=name)
 
-    security.declareProtected(ManageCollector, 'schema_delSchema')
-    def schema_delSchema(self, fieldset, RESPONSE=None):
-        """ delete a schema """
-        self._schemata_names.remove(fieldset)
-        del self._schemas[fieldset]
+    security.declareProtected(ManageCollector, 'atse_delSchemata')
+    def atse_delSchemata(self, name, RESPONSE=None):
+        """ delete a schemata """
+        self._ms.delSchemata(name)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_deleted', 'Schema deleted'), fieldset=self._schemata_names[0])
+                      self.translate('atse_deleted', 'Schemata deleted'), schemata=self._ms.getSchemataNames()[0])
 
-    security.declareProtected(ManageCollector, 'schema_del_field')
-    def schema_del_field(self, fieldset, name, RESPONSE=None):
-        """ remove a field from a fieldset """
+    ######################################################################
+    # Field manipulation
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'atse_delField')
+    def atse_delField(self, name, RESPONSE=None):
+        """ remove a field from a schemata"""
 
         if name in UNDELETEABLE_FIELDS:
-            raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted because it is protected from deletion', name=name))
-            
-        schema = self._schemas[fieldset]
-        new_schema = OrderedSchema()
-        for f in schema.fields():
-            if f.getName() != name:
-                new_schema.addField(f)
-		
-        self._schemas[fieldset] = new_schema 
-	
-        util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_field_deleted', 'Field deleted'), fieldset=fieldset)
+            raise ValueError(self.translate('atse_feld_not_deleteable',
+                                            'field "$name" can not be deleted because it is protected from deletion',   
+                                            name=name))
 
-    security.declareProtected(ManageCollector, 'schema_update')
-    def schema_update(self, fielddata,  REQUEST, RESPONSE=None):
+        old_schemata = self._ms[name].schemata
+        self._ms.delField(name)    
+
+        if old_schemata in self._ms.getSchemataNames():
+            return_schemata = old_schemata
+        else:
+            return_schemata = self._ms.getSchemataNames()[0]
+	
+        self._p_changed = 1
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('atse_field_deleted', 'Field deleted'), fieldset=return_schemata)
+
+
+    security.declareProtected(ManageCollector, 'atse_update')
+    def atse_update(self, fielddata,  REQUEST, RESPONSE=None):
         """ update a single field"""
 
         R = REQUEST.form
         FD = fielddata
 
         ## ATT: this should go into a dedicated method
-        if R.has_key('schema_add_field'):
+        if R.has_key('atse_add_field'):
             if not R['name']:
-                raise ValueError(self.translate('schema_empty_field_name', 'Field name is empty'))
+                raise ValueError(self.translate('atse_empty_field_name', 'Field name is empty'))
         
             fieldset = FD.schemata    
             fields = self._schemas[fieldset].fields()
@@ -129,7 +134,7 @@ class SchemaEditor:
                 schema.addField(f)
             self._schemas[fieldset] = schema
             util.redirect(RESPONSE, 'pcng_schema_editor', 
-                          self.translate('schema_field_added', 'Field added'), fieldset=fieldset, field=R['name'])
+                          self.translate('atse_field_added', 'Field added'), fieldset=fieldset, field=R['name'])
             return            
 
         if   FD.type == 'StringField':     field = StringField
@@ -139,7 +144,7 @@ class SchemaEditor:
         elif FD.type == 'BooleanField':    field = BooleanField
         elif FD.type == 'LinesField':      field = LinesField
         elif FD.type == 'DateTimeField':   field = DateTimeField
-        else: raise TypeError(self.translate('schema_unknown_field', 'unknown field type: $field', field=FD.field))
+        else: raise TypeError(self.translate('atse_unknown_field', 'unknown field type: $field', field=FD.field))
 
         D = {}    # dict to be passed to the field constructor
         D['default'] = FD.get('default', '')
@@ -164,7 +169,7 @@ class SchemaEditor:
         elif FD.widget == 'Password':    widget = PasswordWidget()
         elif FD.widget == 'Lines':       widget = LinesWidget()
         elif FD.widget == 'Visual':      widget = VisualWidget()
-        else: raise ValueError(self.translate('schema_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
+        else: raise ValueError(self.translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
         if hasattr(widget, 'size'):
             widget.size = FD.widgetsize
@@ -231,83 +236,62 @@ class SchemaEditor:
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
                       fieldset=FD.schemata, field=FD.name)
 
-    security.declareProtected(ManageCollector, 'schema_moveLeft')
-    def schema_moveLeft(self, fieldset, RESPONSE=None):
+    ######################################################################
+    # Moving schematas and fields
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'atse_schemataMoveLeft')
+    def atse_schemataMoveLeft(self, name, RESPONSE=None):
         """ move a schemata to the left"""
-        pos = self._schemata_names.index(fieldset)
-        if pos > 0:
-            self._schemata_names.remove(fieldset)
-            self._schemata_names.insert(pos-1, fieldset)
+        self._ms.moveSchemata(name, -1)
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_moved_left', 'Schemata moved to left'), fieldset=fieldset)
+                      self.translate('atse_moved_left', 'Schemata moved to left'), schemata=name)
 
-    security.declareProtected(ManageCollector, 'schema_moveRight')
-    def schema_moveRight(self, fieldset, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'atse_schemataMoveRight')
+    def atse_schemataMoveRight(self, name, RESPONSE=None):
         """ move a schemata to the right"""
-        pos = self._schemata_names.index(fieldset)
-        if pos < len(self._schemata_names):
-            self._schemata_names.remove(fieldset)
-            self._schemata_names.insert(pos+1, fieldset)
+        self._ms.moveSchemata(name, 1)
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_moved_right', 'Schemata moved to right'), fieldset=fieldset)
+                      self.translate('atse_moved_right', 'Schemata moved to right'), schemata=name)
 
-    security.declareProtected(ManageCollector, 'schema_field_up')
-    def schema_field_up(self, fieldset, name, RESPONSE=None):
-        """ move a field of schemata up """
-
-        fields = self._schemas[fieldset].fields()
-        for i in range(len(fields)):
-            field = fields[i]
-            if field.getName() == name and i>0:
-                del fields[i]
-                fields.insert(i-1,field)
-                break
-
-        schema = OrderedSchema()
-        for field in fields:
-            schema.addField(field)
-
-        self._schemas[fieldset] = schema
+    security.declareProtected(ManageCollector, 'atse_fieldMoveLeft')
+    def atse_fieldMoveLeft(self, name, RESPONSE=None):
+        """ move a field of schemata to the left"""
+        self._ms.moveField(name, -1)
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_field_moved_up', 'Field moved up'), fieldset=fieldset, field=name)
+                      self.translate('atse_field_moved_up', 'Field moved up'), schemata=self._ms[name].schemata, field=name)
 
-    security.declareProtected(ManageCollector, 'schema_field_down')
-    def schema_field_down(self, fieldset, name, RESPONSE=None):
-        """ move a field of schemata down """
-
-        fields = self._schemas[fieldset].fields()
-        for i in range(len(fields)):
-            field = fields[i]
-            if field.getName() == name and i < len(fields):
-                del fields[i]
-                fields.insert(i+1,field)
-                break
-
-        schema = OrderedSchema()
-        for field in fields:
-            schema.addField(field)
-
-        self._schemas[fieldset] = schema
+    security.declareProtected(ManageCollector, 'atse_fieldMoveRight')
+    def atse_fieldMoveRight(self, name, RESPONSE=None):
+        """ move a field of schemata down to the right"""
+        self._ms.moveField(name, 1)
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_field_moved_down', 'Field moved down'), fieldset=fieldset, field=name)
+                      self.translate('atse_field_moved_down', 'Field moved down'), schemata=self._ms[name].schemata, field=name)
 
-    security.declareProtected(ManageCollector, 'schema_field_to_fieldset')
-    def schema_field_to_fieldset(self, fieldset, name, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'atse_changeSchemataForField')
+    def atse_changeSchemataForField(self, name, schemata_name, RESPONSE=None):
         """ move a field from the current fieldset to another one """
-
-        field = self.schema_getWholeSchema()[name]
-        del self._schemas[field.schemata][name]
-        self._schemas[fieldset].addField(field)
+        self._ms.changeSchemataForField(name, schemata_name)
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('schema_field_moved', 'Field moved to other fieldset'), fieldset=fieldset, field=name)
+                      self.translate('atse_field_moved', 'Field moved to other fieldset'), fieldset=schemata_name, field=name)
 
-    security.declareProtected(ManageCollector, 'schema_get_fieldtype')
-    def schema_get_fieldtype(self, field):
+
+    ######################################################################
+    # Hook for UI
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'atse_getFieldType')
+    def atse_getFieldType(self, field):
         """ return the type of a field """
         return field.__class__.__name__
     
-    security.declareProtected(ManageCollector, 'schema_format_vocabulary')
-    def schema_format_vocabulary(self, field):
+    security.declareProtected(ManageCollector, 'atse_formatVocabulary')
+    def atse_formatVocabulary(self, field):
         """ format the DisplayList of a field to be display
             within a textarea.
         """
