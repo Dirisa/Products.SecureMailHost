@@ -14,13 +14,13 @@ from Products.PloneHelpCenter.config import *
 schema = BaseFolderSchema + Schema((
     TextField('description',
                 widget=TextAreaWidget(description_msgid="desc_folder",
-                                      description="Description for the How-to Container.",
+                                      description="Description for the Tutorial Container.",
                                       label_msgid="label_folder",
                                       label="Description",
                                       i18n_domain = "plonehelpcenter",
                                       rows=6)),
     LinesField('sections',
-                widget=LinesWidget(description="Define the available sections a How-to can be assigned to.",
+                widget=LinesWidget(description="Define the available sections a Tutorial can be assigned to.",
                                             label="Sections",
                                             i18n_domain = "plonehelpcenter",
                                             rows=6)),
@@ -28,18 +28,18 @@ schema = BaseFolderSchema + Schema((
 
 
 
-class HelpCenterHowToFolder(BaseFolder):
+class HelpCenterTutorialFolder(BaseFolder):
     """A simple folderish archetype"""
 
-    content_icon = 'topic_icon.gif'
+    content_icon = 'tutorial_icon.gif'
 
     schema = schema
-    archetype_name = 'How-to Container'
-    meta_type = 'HelpCenterHowToFolder'
+    archetype_name = 'Tutorial Container'
+    meta_type = 'HelpCenterTutorialFolder'
     global_allow = 0
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterHowTo', )
+    allowed_content_types = ('HelpCenterTutorial', )
     
     security = ClassSecurityInfo()
     
-registerType(HelpCenterHowToFolder, PROJECTNAME)
+registerType(HelpCenterTutorialFolder, PROJECTNAME)

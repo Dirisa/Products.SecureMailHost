@@ -5,3 +5,5 @@ import FAQ
 
 import HowToFolder
 import HowTo
+
+import TutorialFolder

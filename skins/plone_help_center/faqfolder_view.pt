@@ -11,8 +11,23 @@
                          pss python:modules['Products.PythonScripts.standard']; 
                          full request/full|nothing">
 
-            <p style="discreet" tal:condition="python: req_section or not full">[ <a tal:attributes="href python:'%s?full=1' % here.absolute_url()"> View entire FAQ in full </a>]</p>
-            <p style="discreet" tal:condition="python: full and not req_section">[ <a tal:attributes="href python:'%s' % here.absolute_url()">View table of contents</a> ]</p>
+        <h1 tal:content="here/Title">
+        Folder Title
+        </h1>
+        
+        <div class="documentDescription"
+             tal:content="here/Description">
+        Description.
+        </div>
+
+        <p style="discreet" tal:condition="python: req_section or not full">
+        [ <a tal:attributes="href python:'%s?full=1' % here.absolute_url()"> View entire FAQ in full </a>]
+        </p>
+        
+        <p style="discreet" tal:condition="python: full and not req_section">
+        [ <a tal:attributes="href python:'%s' % here.absolute_url()">View table of contents</a> ]
+        </p>
+        
             <div tal:condition="request/form/section |nothing">
                 <a href=""
                     class="link-parent"

@@ -37,7 +37,7 @@ class HelpCenter(BaseFolder):
     archetype_name = 'Help Center'
     meta_type = 'HelpCenter'
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder', )
+    allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder', 'HelpCenterTutorialFolder')
     
     security = ClassSecurityInfo()
     
@@ -53,5 +53,8 @@ class HelpCenter(BaseFolder):
         self['howto'].setTitle('How-tos')
         self['howto'].setDescription('Step-by-step instructions.')
 
+        self.invokeFactory('HelpCenterTutorialFolder','tutorial')
+        self['tutorial'].setTitle('Tutorials')
+        self['tutorial'].setDescription('Detailed tutorials.')
     
 registerType(HelpCenter, PROJECTNAME)
