@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.33 2003/11/28 07:32:33 ajung Exp $
+$Id: SchemaEditor.py,v 1.34 2003/11/28 10:46:37 ajung Exp $
 """
 
 import operator, copy
@@ -21,7 +21,6 @@ from Products.Archetypes.Schema import Schema
 
 import util
 from config import ManageCollector
-from OrderedSchema import OrderedSchema
 
 UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
@@ -110,7 +109,7 @@ class SchemaEditor:
 	
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_deleted', 'Field deleted'), fieldset=return_schemata)
+                      self.translate('atse_field_deleted', 'Field deleted'), schemata=return_schemata)
 
 
     security.declareProtected(ManageCollector, 'atse_update')
@@ -121,20 +120,16 @@ class SchemaEditor:
         FD = fielddata
 
         ## ATT: this should go into a dedicated method
-        if R.has_key('atse_add_field'):
+        if R.has_key('add_field'):
             if not R['name']:
                 raise ValueError(self.translate('atse_empty_field_name', 'Field name is empty'))
         
             fieldset = FD.schemata    
-            fields = self._schemas[fieldset].fields()
-	    
-            fields.append(StringField(R['name'], schemata=fieldset, widget=StringWidget))
-            schema = OrderedSchema()
-            for f in fields:
-                schema.addField(f)
-            self._schemas[fieldset] = schema
+            field = StringField(R['name'], schemata=fieldset, widget=StringWidget)
+            self._ms.addField(field)
+            self._p_changed = 1
             util.redirect(RESPONSE, 'pcng_schema_editor', 
-                          self.translate('atse_field_added', 'Field added'), fieldset=fieldset, field=R['name'])
+                          self.translate('atse_field_added', 'Field added'), schemata=fieldset, field=R['name'])
             return            
 
         if   FD.type == 'StringField':     field = StringField
@@ -220,21 +215,13 @@ class SchemaEditor:
         D['accessor'] = 'archetypes_accessor'
         D['edit_accessor'] = 'archetypes_accessor'
 
-        field = field(FD.name, **D)
-
-        # build new schemata
-        schema = self._schemas[FD.schemata]
-        new_schema = OrderedSchema()
-        for f in schema.fields():
-            if f.getName() == FD.name:
-                new_schema.addField(field)
-            else:
-                new_schema.addField(f)
-
-        self._schemas[FD.schemata] = new_schema # and replace old one
-        
+        f = field(FD.name, **D)
+        oldfield = self._ms[FD.name]
+        f._index = oldfield._index
+        self._ms[FD.name] = f
+ 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
-                      fieldset=FD.schemata, field=FD.name)
+                      schemata=FD.schemata, field=FD.name)
 
     ######################################################################
     # Moving schematas and fields
@@ -278,12 +265,19 @@ class SchemaEditor:
         self._ms.changeSchemataForField(name, schemata_name)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_moved', 'Field moved to other fieldset'), fieldset=schemata_name, field=name)
+                      self.translate('atse_field_moved', 'Field moved to other fieldset'), schemata=schemata_name, field=name)
 
 
     ######################################################################
     # Hook for UI
     ######################################################################
+
+
+    security.declareProtected(ManageCollector, 'atse_getField')
+    def atse_getField(self, name):
+        """ return a field by its name """
+        return self._ms[name]
+    
 
     security.declareProtected(ManageCollector, 'atse_getFieldType')
     def atse_getFieldType(self, field):
