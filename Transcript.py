@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.23 2004/01/17 17:48:33 ajung Exp $
+$Id: Transcript.py,v 1.24 2004/05/14 11:10:18 ajung Exp $
 """
 
 import time 
@@ -18,7 +18,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 
 import util
-from config import ManageCollector
+from config import ManageCollector, EditCollectorIssue
 
 class TranscriptEvent(Persistent, Implicit):
     
@@ -167,6 +167,15 @@ class Transcript(Persistent, Implicit):
 
         if reverse: result.reverse()
         return result
+
+    security.declareProtected(EditCollectorIssue, 'modifyEntry')
+    def modifyEntry(self, timestamp, **kw):
+        """ modify an entry given by its timestamp """
+        for event in self.getEvents():
+            if str(event.getTimestamp()) == str(timestamp):
+                for k,v in kw.items():
+                    setattr(event, k, v)
+                print 'modifiziert'                
 
     security.declareProtected(ManageCollector, 'migrateUnicode')
     def migrateUnicode(self):
