@@ -32,16 +32,6 @@ site_encoding = context.getSiteEncoding()
 
 schema = context.Schema()
 
-nl('-'*79)
-nl(context.Translate('add_comment_above', 'Add your comment above and keep the information block below'))
-nl('-'*79)
-nl()
-nl('='*79)
-nl('= %s' % context.Translate('dont_remove_information_below', "Don't remove this information block if replying to this message"))
-for line in context.getEncryptedInformations().strip().split('\n'):
-    nl('=> %s' % line)
-nl('='*79)
-nl()
 
 s= '%s: #%s: %s, ' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding))
 s+='%s: %s, ' % (TR('topic', 'Topic'), context.topic)

@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.26 2004/04/13 17:52:18 ajung Exp $
+$Id: notifications.py,v 1.27 2004/04/14 18:13:17 ajung Exp $
 """
 
-import sys
+import sys, time
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
@@ -99,7 +99,15 @@ def _send_notifications(recipients, issue, send_attachments=0):
     subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.collector_abbreviation), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue._last_action,issue._last_action))
     outer['Subject'] = Header(subject, encoding)
-    outer['Message-ID'] = email.Utils.make_msgid()
+
+    # encrypt url 
+    token = issue.getToken()
+    text = issue.absolute_url(1)
+    encrypted_text = util.encrypt(text, token)
+    encoded_text = ''.join([hex(ord(c))[2:] for c in encrypted_text])
+    msg_id = '<%s::%s@pcng.org>' % (encoded_text, time.time())
+
+    outer['Message-ID'] = msg_id
     outer['Reply-To'] = collector.collector_email
     body = issue.format_transcript(collector.notification_language)
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
@@ -110,6 +118,8 @@ def _send_notifications(recipients, issue, send_attachments=0):
         obj = latest_upload(issue)
         if obj.meta_type in('Portal Image',):
             outer.attach(MIMEImage(str(obj.data))) 
+
+    print outer.as_string()
         
     MH = getattr(collector, 'MailHost') 
     
