@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.11 2003/11/18 10:15:16 ajung Exp $
+$Id: pdfwriter.py,v 1.12 2003/11/18 14:35:22 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -132,14 +132,14 @@ def pdfwriter(collector, ids):
                 image = PIL_Image.open(fname)
                 width, height= image.size
                 ratio = width*1.0 / height
-
+                
                 max = 5*inch
-                if ratio > 1.0:
+                if ratio >  1.0:
                     width = max
-                    height = max / ratio
+                    height = width / ratio
                 else:
                     height = max
-                    width = max / ratio
+                    width = height * ratio
 
                 Elements.append(Image(fname, width, height))
 
