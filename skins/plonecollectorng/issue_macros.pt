@@ -96,8 +96,8 @@ function show_tickets() {
     }
 
     tracker = el.options[selected].value;
-    url = tracker + "/tickets_selection"; 
-    win = open(url, "tickets", "width=600, height=800, scrollbars=yes");
+    url = tracker + "/pcng_issue_selection"; 
+    win = open(url, "tickets", "width=500, height=600, scrollbars=yes");
 }
 
 </script>
@@ -105,7 +105,7 @@ function show_tickets() {
   <div class="group">
 
     <span class="legend" i18n:translate="legend_new_reference_to_issue">New reference to other issue</span>
-    <form method="post" action="add_reference">
+    <form method="post" action="add_reference" name="myform">
 
       <div class="row">
         <div class="label" i18n:translate="add_references_table_collector">
