@@ -14,6 +14,14 @@ class FileProxy(FSObject):
 
     security = ClassSecurityInfo()
     meta_type = 'PloneLocalFolderFileProxy'
+    language  = 'neutral'
+
+    def setLanguage(self, language='neutral'):
+        self.language = language
+
+    security.declarePublic('Language')
+    def Language(self):
+        return self.language
 
     def setMimeType(self, mt):
         self.mime_type = mt
@@ -26,7 +34,7 @@ class FileProxy(FSObject):
 
     def setComment(self, comment):
         self.comment = comment
-    
+
     def setTitle(self, title):
         self.title = title
 
@@ -58,7 +66,7 @@ class FileProxy(FSObject):
 
     def _readFile(self, *args, **kw):
         """ read the file """
-    
+
     security.declarePublic('getIcon')
     def getIcon(self, arg=None):
         """ icon """
@@ -82,9 +90,9 @@ class FileProxy(FSObject):
            size = os.stat(self._filepath)[6]
            return size
         except: return ''
-        
+
     def txng_get(self, attr):
-        """ TextIndexNG support method that returns the source 
+        """ TextIndexNG support method that returns the source
         (file body contents), mime type and encoding type of the file """
 
         if attr[0] in ('PrincipiaSearchSource', 'SearchableText'):
@@ -93,17 +101,17 @@ class FileProxy(FSObject):
            try: source = file.read()
            finally: file.close()
            return source, self.mime_type, self.encoding
-        
+
         elif attr[0] == 'id':
            source = self.id
            return source, self.mime_type, self.encoding
-        
+
         else:
            return None
-           
+
     def Description( self ):
         """ return an empty string as the description for the item """
-        return ''             
+        return ''
 
 InitializeClass(FileProxy)
 
@@ -116,7 +124,7 @@ class TypeInfo(SimpleItem):
     security = ClassSecurityInfo()
     security.declareObjectPublic()
     security.setDefaultAccess('allow')
-    
+
     immediate_view = 'view'
 
     def setMimeType(self, mt):
