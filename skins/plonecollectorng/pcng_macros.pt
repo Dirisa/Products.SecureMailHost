@@ -5,7 +5,10 @@
       Collector: <a tal:attributes="href here/absolute_url" tal:content="here/title_or_id" />
       <span tal:condition="here/description"  tal:content="string:(${here/description})" />
     </div>
-    <div style="font-size: 70%" class="collector_headline_right" tal:condition="action|nothing" i18n:translate="" tal:content="action" />
+    <div style="font-size: 70%; " tal:condition="action|nothing"> 
+      <span i18n:translate="" tal:content="string:${action}" />
+      (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
+    </div>
   </div>
 
   <div class="collector_headline" tal:condition="python: here.meta_type=='PloneIssueNG'" >
@@ -13,7 +16,10 @@
       Collector: <a tal:attributes="href python: here.aq_parent.absolute_url()" tal:content="python: here.aq_parent.title_or_id()" />:
       <span tal:content="string:#${here/getId}: ${here/Title}" />
     </div>
-    <div style="font-size: 70%; " tal:condition="action|nothing" i18n:translate="" tal:content="action" />
+    <div style="font-size: 70%; " tal:condition="action|nothing"> 
+      <span i18n:translate="" tal:content="string:${action}" />
+      (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
+    </div>
   </div>
 
 </metal:block>
