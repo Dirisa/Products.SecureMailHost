@@ -108,3 +108,12 @@ msgstr "Finnisch"
 
 msgid "Dutch"
 msgstr "Holländisch"
+
+msgid "Portlet usage"
+msgstr "Verwendung von Portlets" 
+
+msgid "Inherit settings for left slots from Plone"
+msgstr "Einstellungen für Slots links von Plone verwenden" 
+
+msgid "Override Plones settings for left slots"
+msgstr "Einstellung für links Slots von Plone überschreiben"
