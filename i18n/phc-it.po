@@ -1,23 +1,11 @@
-#- Removed msgids:
-#
-#- Added msgids:
-#  description_errorref_no_visible_items_add_paste label_add_item
-# label_select "Select all items" listingheader_title listingheader_size
-# listingheader_modified listingheader_status listingheader_order
-# time_expired "Move item up" "Move item down" text_search Search
-# accesskeys-search description_howto_no_visible_items_add_paste
-# heading_search_results description_no_results_found
-# search_results_advanced search_results_advanced_link
-# batch_x_items_matching_your_criteria
-# "RSS feed of these search results" "RSS Feed"
-# label_relevance_percentage Relevance results_by_author
-#- Added msgids by merging file None:
-#
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2004-12-17 14:57+0100\n"
+"PO-Revision-Date: 2004-12-20 10:00+0100\n"
 "Last-Translator: Mirto Silvio Busico <m.busico@ieee.org>\n"
 "Language-Team: Italian Language Team <m.busico@ieee.org>\n"
 "MIME-Version: 1.0\n"
@@ -168,7 +156,7 @@ msgstr "per ${author} , ${date}"
 #. </p>
 #: ./phc_search.pt
 msgid "search_results_advanced"
-msgstr "Non hai trovato quello che cercavi? Prova l' ${advanced_search} per termini di ricerca più precisi."
+msgstr "Non hai trovato quello che cercavi? Prova la ${advanced_search} per termini di ricerca più precisi."
 
 #. <a href="" i18n:translate="search_results_advanced_link" tal:attributes="href string:$portal_url/search_form">
 #. </a>
@@ -188,4 +176,172 @@ msgstr "Ricerca"
 #: ./errorreference_attachments.pt
 msgid "time_expired"
 msgstr "scaduto"
+
+
+# MSB start mofification
+
+#: ./portlet_helpcenter.pt
+#. <a class="portletMore" href="" i18n:translate="box_morelink" tal:attributes="href center/absolute_url;                                    title center/Description;">
+#.                     More
+#.  <tal:center replace="center/Title">
+#.   Documentation
+#.  </tal:center>
+#. </a>
+msgid "box_morelink"
+msgstr "Ulteriore <tal:center replace=\"center/Title\">Documentation</tal:center>"
+#: ./errorreference_attachments.pt
+#. <option i18n:translate="label_document" tal:attributes="value ctype/getId" tal:content="ctype/Title" tal:define="Id ctype/getId" value="Document">
+#.  Document
+#. </option>
+msgid "label_document"
+msgstr "Documento"
+#: ./tutorialpage_view.pt
+#. <option i18n:translate="label_select" value="">
+#.  Page Index
+#. </option>
+## 1 more: ./tutorialpage_view.pt
+#: ./errorreference_view.pt
+#. <p i18n:translate="no_body_text" tal:condition="not: len_text">
+#.             This item does not have any body text, click the edit tab to change it.
+#. </p>
+#: ./tutorialpage_view.pt
+#. <p class="discreet" i18n:translate="no_body_text" tal:condition="python: not len_text and is_editable">
+#.             This item does not have any body text, click the edit tab to change it.
+## 1 more: ./tutorialpage_view.pt
+msgid "no_body_text"
+msgstr "Questo elemento non ha un corpo del terto, Fai click su modifica per cambiarlo."
+#: ./portlet_helpcenter.pt
+#. <h5 i18n:translate="portlet_header_recent_docs">
+#.  Recent documentation
+#. </h5>
+msgid "portlet_header_recent_docs"
+msgstr "Documentazione recente"
+
+#: ./tutorialpage_view.pt
+#. <input class="standalone" i18n:translate="value" tabindex="4" type="submit" value="Go"/>
+msgid "value"
+msgstr "valore"
+
+#: ./helpcenter_view.pt
+#. <legend i18n:translate="phc_doc_search">
+#.  Documentation search
+#. </legend>
+msgid "phc_doc_search"
+msgstr "Ricerca nella documentazione"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_full_area">
+#.  Entire documentation area
+#. </span>
+msgid "phc_full_area"
+msgstr "Tutta l'area della documentazione"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_faq">
+#.  FAQs
+#. </span>
+msgid "phc_faq"
+msgstr "Domande frequenti (FAQ)"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_howto">
+#.  How-tos
+#. </span>
+msgid "phc_howto"
+msgstr "Come fare (How to)"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_tutorial">
+#.  Tutorials
+#. </span>
+msgid "phc_tutorial"
+msgstr "Vademecum"
+
+
+#: ./helpcenter_view.pt
+#. <label class="hiddenStructure" for="searchGadget" i18n:translate="text_search">
+#.  Search
+#. </label>
+msgid "text_search"
+msgstr "Ricerca testuale"
+
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_rss_all">
+#.  RSS feed for all documentation types
+#. </span>
+msgid "phc_rss_all"
+msgstr "Semi RSS per tutti i tipi di documentazione"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_contrib_use">
+#.  Instructions on how to contribute to and use this resource
+#. </span>
+msgid "phc_contrib_use"
+msgstr "Istruzioni su come contribuire ed utilizzare questa risorsa"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_latest">
+#.  Latest
+#. </span>
+msgid "phc_latest"
+msgstr "Gli ultimi documenti di tipo"
+
+#: ./helpcenter_view.pt
+#. <p class="discreet" i18n:translate="phc_nolist">
+#.               There are no contained help center object types.
+#. </p>
+msgid "phc_nolist"
+msgstr "Non sono contenuti oggetti di questo tipo."
+
+#: ./helpcenter_view.pt
+#. <p class="discreet" i18n:translate="phc_nopublished">
+#.               There are contained help center object types, but none are
+#.               viewable because of their permission settings.
+#. </p>
+msgid "phc_nopublished"
+msgstr "Sono contenuti oggetti di questo tipo, ma nessuno è visibile a causa dei permessi di accesso."
+
+msgid "latest_FAQs"
+msgstr "Le ultime Domande Frequenti (FAQ)"
+
+msgid "latest_How-tos"
+msgstr "Gli ultimi Come fare (How-to)"
+
+msgid "latest_Tutorials"
+msgstr "Gli ultimi Vademecum"
+
+msgid "latest_Links"
+msgstr "Gli ultimi Collegamenti"
+
+msgid "latest_Error References"
+msgstr "Gli ultimi Riferimenti errati"
+
+msgid "latest_Glossary Definitions"
+msgstr "Le ultime definizioni del glossario"
+
+
+msgid "All_FAQs"
+msgstr "Tutte le Domande Frequenti (FAQ)"
+
+msgid "All_How-tos"
+msgstr "Tutti i Come fare (How-to)"
+
+msgid "All_Tutorials"
+msgstr "Tutti i Vademecum"
+
+msgid "All_Links"
+msgstr "Tutti i Collegamenti"
+
+msgid "All_Error References"
+msgstr "Tutti i Riferimenti errati"
+
+msgid "All_Glossary Definitions"
+msgstr "Tutte le definizioni del glossario"
+
+# MSB end mofification
 

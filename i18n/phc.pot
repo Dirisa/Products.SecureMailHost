@@ -234,6 +234,160 @@ msgstr "Search"
 msgid "time_expired"
 msgstr "expired"
 
+# MSB start mofification
+
+#: ./portlet_helpcenter.pt
+#. <a class="portletMore" href="" i18n:translate="box_morelink" tal:attributes="href center/absolute_url;                                    title center/Description;">
+#.                     More
+#.  <tal:center replace="center/Title">
+#.   Documentation
+#.  </tal:center>
+#. </a>
+msgid "box_morelink"
+msgstr "More <tal:center replace=\"center/Title\">Documentation</tal:center>"
+#: ./errorreference_attachments.pt
+#. <option i18n:translate="label_document" tal:attributes="value ctype/getId" tal:content="ctype/Title" tal:define="Id ctype/getId" value="Document">
+#.  Document
+#. </option>
+msgid "label_document"
+msgstr "Document"
+#: ./tutorialpage_view.pt
+#. <option i18n:translate="label_select" value="">
+#.  Page Index
+#. </option>
+## 1 more: ./tutorialpage_view.pt
+#: ./errorreference_view.pt
+#. <p i18n:translate="no_body_text" tal:condition="not: len_text">
+#.             This item does not have any body text, click the edit tab to change it.
+#. </p>
+#: ./tutorialpage_view.pt
+#. <p class="discreet" i18n:translate="no_body_text" tal:condition="python: not len_text and is_editable">
+#.             This item does not have any body text, click the edit tab to change it.
+#. </p>
+## 1 more: ./tutorialpage_view.pt
+msgid "no_body_text"
+msgstr "This item does not have any body text, click the edit tab to change it."
+
+
+#: ./helpcenter_view.pt
+#. <legend i18n:translate="phc_doc_search">
+#.  Documentation search
+#. </legend>
+msgid "phc_doc_search"
+msgstr "Documentation search"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_full_area">
+#.  Entire documentation area
+#. </span>
+msgid "phc_full_area"
+msgstr "Entire documentation area"
+
+#: ./portlet_helpcenter.pt
+#. <h5 i18n:translate="portlet_header_recent_docs">
+#.  Recent documentation
+#. </h5>
+msgid "portlet_header_recent_docs"
+msgstr "Recent documentation"
+
+#: ./tutorialpage_view.pt
+#. <input class="standalone" i18n:translate="value" tabindex="4" type="submit" value="Go"/>
+msgid "value"
+msgstr "valore"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_faq">
+#.  FAQs
+#. </span>
+msgid "phc_faq"
+msgstr "FAQs"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_howto">
+#.  How-tos
+#. </span>
+msgid "phc_howto"
+msgstr "How-tos"
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_tutorial">
+#.  Tutorials
+#. </span>
+msgid "phc_tutorial"
+msgstr "Tutorials"
+
+#: ./helpcenter_view.pt
+#. <label class="hiddenStructure" for="searchGadget" i18n:translate="text_search">
+#.  Search
+#. </label>
+msgid "text_search"
+msgstr "Search"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_rss_all">
+#.  RSS feed for all documentation types
+#. </span>
+msgid "phc_rss_all"
+msgstr "RSS feed for all documentation types"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_contrib_use">
+#.  Instructions on how to contribute to and use this resource
+#. </span>
+msgid "phc_contrib_use"
+msgstr "Instructions on how to contribute to and use this resource"
+
+
+#: ./helpcenter_view.pt
+#. <span i18n:translate="phc_latest">
+#.  Latest
+#. </span>
+msgid "phc_latest"
+msgstr "Latest"
+
+
+#: ./helpcenter_view.pt
+#. <p class="discreet" i18n:translate="phc_nolist">
+#.               There are no contained help center object types.
+#. </p>
+msgid "phc_nolist"
+msgstr "There are no contained help center object types."
+
+
+#: ./helpcenter_view.pt
+#. <p class="discreet" i18n:translate="phc_nopublished">
+#.               There are contained help center object types, but none are
+#.               viewable because of their permission settings.
+#. </p>
+msgid "phc_nopublished"
+msgstr "There are contained help center object types, but none are viewable because of their permission settings."
+
+
+msgid "All_FAQs"
+msgstr "All FAQs"
+
+msgid "All_How-tos"
+msgstr "All How-tos"
+
+msgid "All_Tutorials"
+msgstr "All Tutorials"
+
+msgid "All_Links"
+msgstr "All Links"
+
+msgid "All_Error References"
+msgstr "All Error References"
+
+msgid "All_Glossary Definitions"
+msgstr "All Glossary Definitions"
+
+
+# MSB end mofification
+
+
 #- Removed msgids:
 # 
 

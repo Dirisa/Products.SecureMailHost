@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plone">
+      i18n:domain="plonehelpcenter">
       
 <head>
     <metal:css fill-slot="css_slot">
@@ -39,7 +39,7 @@
                    
                 <fieldset style="float: right;">
                     
-                    <legend>Documentation search</legend>
+                    <legend i18n:translate="phc_doc_search">Documentation search</legend>
                     
                     <label for="searchGadget" class="hiddenStructure" i18n:translate="text_search">Search</label>
                     <input name="SearchableText"
@@ -67,10 +67,10 @@
                     in
                     
                       <select name="phc_selection">
-                        <option value="all">Entire documentation area</option>
-                        <option value="faq">FAQs</option>
-                        <option value="howto">How-tos</option>
-                        <option value="tutorial">Tutorials</option>
+                        <option value="all"><span i18n:translate="phc_full_area">Entire documentation area</span></option>
+                        <option value="faq"><span i18n:translate="phc_faq">FAQs</span></option>
+                        <option value="howto"><span i18n:translate="phc_howto">How-tos</span></option>
+                        <option value="tutorial"><span i18n:translate="phc_tutorial">Tutorials</span></option>
                     </select>
                 </fieldset>
             </form>
@@ -83,14 +83,15 @@
             <p>
             <img tal:attributes="src string:$portal_url/rss.gif" />
             <a tal:attributes="href python:here.getSyndicationURL(portal_url, my_path,
-            subtypes)" title="RSS feed for all documentation types"> RSS feed for all documentation types
+            subtypes)" title="RSS feed for all documentation types">
+	    <span i18n:translate="phc_rss_all">RSS feed for all documentation types</span>
             </a>
             </p>
 
             <p>
             <img tal:attributes="src string:$portal_url/helpcenter_icon.gif" />
             <a href="helpcenter_help">
-                Instructions on how to contribute to and use this resource
+            <span i18n:translate="phc_contrib_use">Instructions on how to contribute to and use this resource</span>
             </a>
             </p>
 
@@ -109,11 +110,14 @@
                                                                    sort_order='reverse', 
                                                                    sort_limit=5)[:5]">
 
-                    <div class="portlet portletThirdWidth">
+                    <div class="portlet portletThirdWidth"
+		    	tal:define="mylatest string:latest_${help_type/Title}">
                         <h6>
                         <a tal:attributes="href help_type/getURL;
                                            title help_type/Description|nothing;">
-                        Latest <span tal:replace="help_type/Title">[type]</span>
+				<span i18n:translate="">
+				<span tal:replace="mylatest">LATEST DOCS</span>
+				</span>
                         </a>
                         </h6>
 
@@ -132,11 +136,15 @@
                             </div>
                             </tal:list>
                         
-                            <div class="portletContent odd">
-                                <a class="portletMore"
-                                   tal:attributes="href help_type/getURL" 
-                                   tal:content="structure string: All ${help_type/Title}&#8230;"
-                                   >All FAQs</a>
+                            <div class="portletContent odd"
+			    	tal:define="myall string:All_${help_type/Title}">
+				<a class="portletMore"
+				   tal:attributes="href help_type/getURL;
+                                           title help_type/Description|nothing;"> 
+                                   <span i18n:translate="">
+				   	<span tal:replace="myall">ALL DOCS</span>
+				   </span>
+				   </a>
                             </div>
                           </div>
                         </div>
@@ -147,13 +155,13 @@
             </tal:listings>
             <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes)">
               <!-- or at least none that this person has the rights to see -->
-              <p class="discreet">
+              <p class="discreet" i18n:translate="phc_nolist">
               There are no contained help center object types.
               </p>
             </tal:nolist>
             <tal:nopublished tal:condition="python: not help_types and here.contentValues(subtypes)">
               <!--- this user has perms to see the contained types, except that particular state(s) are required -->
-              <p class="discreet">
+              <p class="discreet" i18n:translate="phc_nopublished">
               There are contained help center object types, but none are 
               viewable because of their permission settings.
               </p>
