@@ -22,32 +22,39 @@
           <th i18n:translate="Managers">Collector Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
-       </tr>
-       <span tal:repeat="user here/getTrackerUsers" >
+        </tr>
 
-       <tr class="odd" tal:attributes="class python:test(repeat['user'].even(), 'even', 'odd')">
-
-         <td tal:content="user/username" />
-         <td tal:content="user/fullname|nothing" />
-         <td tal:content="user/email|nothing" />
-         <td style="text-align: center">
-           <input type="checkbox" name="managers:list:string" 
-                  tal:attributes="value user/username;
-                                  checked python: user['username'] in managers" />
-         </td>
-         <td style="text-align: center">
-           <input type="checkbox" name="supporters:list:string" 
-                  tal:attributes="value user/username;
-                                  checked python: user['username'] in supporters" />
-         </td>
-         <td style="text-align: center">
-           <input type="checkbox" name="reporters:list:string" 
-                  tal:attributes="value user/username;
-                                  checked python: user['username'] in reporters" />
-         </td>
-           
-       </tr>
-       </span>
+        <span tal:repeat="item python: (('Assigned', here.getTrackerUsers(staff_only=1)),
+                                        ('Unassigned', here.getTrackerUsers(unassigned_only=1)))">
+          <span tal:define="headline python: item[0]; users python: item[1]" >
+            <tr>
+              <th class="staff" colspan="6" tal:content="headline" />
+            </tr>
+            <span tal:repeat="user users" >
+          
+              <tr class="odd" tal:attributes="class python:test(repeat['user'].even(), 'even', 'odd')">
+                <td tal:content="user/username" />
+                <td tal:content="user/fullname|nothing" />
+                <td tal:content="user/email|nothing" />
+                <td style="text-align: center">
+                  <input type="checkbox" name="managers:list:string" 
+                         tal:attributes="value user/username;
+                                         checked python: user['username'] in managers" />
+                </td>
+                <td style="text-align: center">
+                  <input type="checkbox" name="supporters:list:string" 
+                         tal:attributes="value user/username;
+                                         checked python: user['username'] in supporters" />
+                </td>
+                <td style="text-align: center">
+                  <input type="checkbox" name="reporters:list:string" 
+                         tal:attributes="value user/username;
+                                         checked python: user['username'] in reporters" />
+                </td>
+              </tr>
+            </span>
+          </span>
+        </span>
        <tr> <td colspan="6"><hr></td></tr>
        <tr>
          <td colspan="6">

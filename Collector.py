@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.51 2003/10/26 15:55:08 ajung Exp $
+$Id: Collector.py,v 1.52 2003/11/01 15:45:29 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -156,7 +156,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     def getReporters(self): return self._reporters
 
     security.declareProtected(CMFCorePermissions.View, 'getTrackerUsers')
-    def getTrackerUsers(self, staff_only=0):   
+    def getTrackerUsers(self, staff_only=0, unassigned_only=0):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
             informations for the presentation.
@@ -164,7 +164,10 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
 
         l = []
         membership_tool = getToolByName(self, 'portal_membership', None)
-        names = self._managers + self._supporters + self._reporters
+        
+        staff = self._managers + self._supporters + self._reporters
+        names = staff[:]
+
         if not staff_only:
             folder = self
             running = 1
@@ -191,8 +194,13 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             if name in self._supporters: d['roles'].append('Supporter')
             if name in self._reporters: d['roles'].append('Reporter')
             l.append(d)
-
-        return l
+        
+        if staff_only:
+            return [item for item in l if item['username'] in staff]
+        elif unassigned_only:
+            return [item for item in l if item['username'] not in staff]
+        else:
+            return l
 
     security.declareProtected(ManageCollector, 'set_staff')
     def set_staff(self, reporters=[], managers=[], supporters=[], RESPONSE=None):

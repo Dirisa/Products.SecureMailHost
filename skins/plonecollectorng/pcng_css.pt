@@ -6,10 +6,15 @@ span.label {
 }
 
 div.transcriptheader {
-background: #dddddd;
-font-size: 120%;
+    background: #dddddd;
+    font-size: 120%;
 }
 
+th.staff {
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+}
 
 </style>
 </metal:block>
