@@ -12,7 +12,7 @@
                  global filterValues decodedFilter;
                  global filter decodedFilter;
                  standalone python:1;
-                 folder_contents python:here.getFolderContents(contentFilter=filter, suppressHiddenFiles=1);
+                 folder_contents python:here.getContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();">
     <form name="folderContentsForm"
@@ -101,9 +101,7 @@
                         tal:attributes="class python:test(oddrow, 'even', 'odd')" >
 
                         <td tal:define="action python:item_typeinfo.immediate_view;
-                                        url python:test(item_typeinfo.getId() in use_folder_contents,
-                                                        item.absolute_url()+'/folder_contents',
-                                                        item.absolute_url()+'/'+action);">
+                                        url item/absolute_url;">
 
                             <a href="#" tal:attributes="href url">
 

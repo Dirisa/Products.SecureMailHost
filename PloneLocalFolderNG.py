@@ -42,9 +42,8 @@ class TypeInfo(SimpleItem):
         """ None """
         return self.mime_type
 
-
-
 InitializeClass(TypeInfo)
+
 
 class FileProxy(FSObject):
 
@@ -57,6 +56,13 @@ class FileProxy(FSObject):
     def setIconPath(self, icon_path):
         self.icon_path = icon_path
 
+    def setAbsoluteURL(self, url):
+        self.url = url
+
+    security.declarePublic('absolute_url')
+    def absolute_url(self):
+        """ return url """
+        return self.url
 
     security.declarePublic('title_or_id')
     def title_or_id(self):
@@ -106,15 +112,52 @@ class PloneLocalFolderNG(BaseFolder):
         'permissions': (View,)
         },)
 
-    def listFolderContents(self, contentFilter=None, suppressHiddenFiles=None):
+    def viewfile(self, REQUEST):
+        """ view file """
+
+        fullname = os.path.join(self.folder, REQUEST['viewfile'])
+        mi = self.mimetypes_registry.classify(data=None, filename=fullname)
+        
+        data = open(fullname).read()
+
+        REQUEST.RESPONSE.setHeader('content-type', mi.normalized())
+        REQUEST.RESPONSE.setHeader('content-length', str(len(data)))
+        REQUEST.RESPONSE.write(data)
+
+    def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
 
+        if REQUEST.has_key('viewfile'):
+            return self.viewfile(REQUEST)
+    
+        if REQUEST.has_key('showdir'):
+            show_dir = REQUEST['showdir']
+            if show_dir.startswith('/') or show_dir.find('..') > -1:
+                raise ValueError('illegal directory: %s' % show_dir)
+            destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
+            if not destfolder.startswith(self.folder):
+                raise ValueError('illegal directory: %s' % show_dir)
+            
+        else:
+            destfolder = self.folder
+
+        rel_dir = destfolder.replace(self.folder, '')
+        if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
+
         l = []
-        for f in os.listdir(self.folder):
-            P = FileProxy(f, os.path.join(self.folder, f), f)
+        for f in os.listdir(destfolder):
+
+            fullname = os.path.join(destfolder, f)
+            P = FileProxy(f, fullname, f)
             mi = self.mimetypes_registry.classify(data=None, filename=f)
             P.setMimeType(mi.normalized())
-            P.setIconPath(mi.icon_path)
+
+            if os.path.isdir(fullname):
+                P.setIconPath('folder_icon.gif')
+                P.setAbsoluteURL(self.absolute_url() + '?showdir=' + os.path.join(rel_dir, f))
+            else:
+                P.setIconPath(mi.icon_path)
+                P.setAbsoluteURL(self.absolute_url() + '?viewfile=' + os.path.join(rel_dir, f))
             l.append(P) 
 
         return l
