@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.62 2004/09/22 21:02:42 ajung Exp $
+$Id: collector_schema.py,v 1.63 2004/09/23 07:47:27 ajung Exp $
 """
 
 
@@ -327,6 +327,6 @@ schema = BaseSchema + Schema((
                                    label_msgid='label_followup_phrases',
                                    i18n_domain='plonecollectorng'),
                 default=readLinesFromDisk('phrases.txt'),
-                schemata='phrases'
+                schemata='Phrases'
                 ),
     ))
