@@ -143,6 +143,9 @@ msgstr "Assign to"
 msgid "assigned"
 msgstr "assigned"
 
+msgid "unassigned"
+msgstr "unassigned"
+
 msgid "assigned_to"
 msgstr "assigned to"
 
