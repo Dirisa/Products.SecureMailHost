@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.68 2003/11/10 17:55:49 ajung Exp $
+$Id: Collector.py,v 1.69 2003/11/10 20:10:39 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -93,7 +93,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
-        self._setup_collector_catalog()
+        self.setup_collector_catalog()
 
         # setup roles 
         username = util.getUserName()
@@ -115,11 +115,18 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
         
-    def _setup_collector_catalog(self):
+    security.declareProtected(ManageCollector, 'setup_collector_catalog')
+    def setup_collector_catalog(self, RESPONSE=None):
         """Create and situate properly configured collector catalog."""
+
+        try: self.manage_delObjects('pcng_catalog')
+        except: pass
+        
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
+        util.redirect(RESPONSE, 'pcng_maintainance', 
+                      self.translate('catalog_recreated', 'Catalog recreated'))
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
@@ -348,7 +355,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     security.declareProtected(View, 'getNumberIssues')
     def getNumberIssues(self):
         """ return the number of issues """
-        return len(self.objectIds('PloneIssueNG'))
+        return len(self.objectIds(('PloneIssueNG',)))
     __len__ = getNumberIssues
 
     security.declareProtected(ManageCollector, 'resetNumberIssues')
@@ -363,7 +370,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         """ update stored issue schema for all issues """
 
         schema = self.schema_getWholeSchema()
-        for issue in self.objectValues('PloneIssueNG'):
+        for issue in self.objectValues(('PloneIssueNG',)):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
