@@ -116,224 +116,211 @@ msgstr "You were removed from the watchlist"
 
 
 
-#msgid "Email"
-#msgstr ""
-#
-#msgid "Managers"
-#msgstr ""
-#
-#msgid "Name"
-#msgstr ""
-#
-#msgid "Reporter"
-#msgstr ""
-#
-#msgid "Supporter"
-#msgstr ""
-#
-#msgid "UserID"
-#msgstr ""
-#
-#msgid "add_artifacts_table_comment"
-#msgstr ""
-#
-#msgid "add_references_table_collector"
-#msgstr ""
-#
-#msgid "add_references_table_comment"
-#msgstr ""
-#
-#msgid "add_references_table_issue_number"
-#msgstr ""
-#
-#msgid "added"
-#msgstr ""
-#
-#msgid "assign_to"
-#msgstr ""
-#
-#msgid "assigned"
-#msgstr ""
-#
-#msgid "assigned_to"
-#msgstr ""
-#
-#msgid "collector_notifications"
-#msgstr ""
-#
-#msgid "collector_overview"
-#msgstr ""
-#
-#msgid "comment"
-#msgstr ""
-#
-#msgid "days_ago"
-#msgstr ""
-#
-#msgid "dependency_graph"
-#msgstr ""
-#
-#msgid "edit"
-#msgstr ""
-#
-#msgid "email_address"
-#msgstr ""
-#
-#msgid "fieldsets"
-#msgstr ""
-#
-#msgid "followups"
-#msgstr ""
-#
-#msgid "fulltextsearch"
-#msgstr ""
-#
-#msgid "heading_assigned"
-#msgstr ""
-#
-#msgid "heading_edit_item"
-#msgstr ""
-#
-#msgid "heading_requester"
-#msgstr ""
-#
-#msgid "heading_status"
-#msgstr ""
-#
-#msgid "importance"
-#msgstr ""
-#
-#msgid "issue_artifacts_table_deletion_link"
-#msgstr ""
-#
-#msgid "issue_artifacts_table_info_link"
-#msgstr ""
-#
-#msgid "issue_artifacts_table_no_uploads_available"
-#msgstr ""
-#
-#msgid "issue_followup"
-#msgstr ""
-#
-#msgid "issue_reference"
-#msgstr ""
-#
-#msgid "jump_to_ticket"
-#msgstr ""
-#
-#msgid "legend_artifacts_upload"
-#msgstr ""
-#
-#msgid "legend_new_reference_to_issue"
-#msgstr ""
-#
-#msgid "legend_references"
-#msgstr ""
-#
-#msgid "legend_search_form"
-#msgstr ""
-#
-#msgid "legend_uploads"
-#msgstr ""
-#
-#msgid "legend_watchlist"
-#msgstr ""
-#
-#msgid "legendd_dependeny_tree"
-#msgstr ""
-#
-#msgid "modified"
-#msgstr ""
-#
-#msgid "my_created_issued"
-#msgstr ""
-#
-#msgid "no_issues_found"
-#msgstr ""
-#
-#msgid "notification_mode_disabled"
-#msgstr ""
-#
-#msgid "number_issues"
-#msgstr ""
-#
-#msgid "open_issues"
-#msgstr ""
-#
-#msgid "preferences"
-#msgstr ""
-#
-#msgid "recreate_collector_catalog"
-#msgstr ""
-#
-#msgid "referenced_by"
-#msgstr ""
-#
-#msgid "references"
-#msgstr ""
-#
-#msgid "reindex_all_issues"
-#msgstr ""
-#
-#msgid "removed"
-#msgstr ""
-#
-#msgid "send_attachments"
-#msgstr ""
-#
-#msgid "send_emails"
-#msgstr ""
-#
-#msgid "sorting"
-#msgstr ""
-#
-#msgid "status"
-#msgstr ""
-#
-#msgid "submitted_by"
-#msgstr ""
-#
-#msgid "title_issue_selection"
-#msgstr ""
-#
-#msgid "topic"
-#msgstr ""
-#
-#msgid "total_issues"
-#msgstr ""
-#
-#msgid "transcript"
-#msgstr ""
-#
-#msgid "transcript_changes"
-#msgstr ""
-#
-#msgid "transcript_time"
-#msgstr ""
-#
-#msgid "transcript_user"
-#msgstr ""
-#
-#msgid "update_collector_schema"
-#msgstr ""
-#
-#msgid "update_schema_for_all_issues"
-#msgstr ""
-#
-#msgid "uploaded_file"
-#msgstr ""
-#
-#msgid "uploads"
-#msgstr ""
-#
-#msgid "value"
-#msgstr ""
-#
-#msgid "watchlist_subscribe"
-#msgstr ""
-#
-#msgid "watchlist_unsubscribe"
-#msgstr ""
-#
-#msgid "workflow_action_current_state"
-#msgstr ""
+msgid "Email"
+msgstr "EMail"
+
+msgid "Managers"
+msgstr "Managers"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Reporter"
+msgstr "Reporter"
+
+msgid "Supporter"
+msgstr "Supporter"
+
+msgid "UserID"
+msgstr "User ID"
+
+msgid "added"
+msgstr "added"
+
+msgid "assign_to"
+msgstr "Assign to"
+
+msgid "assigned"
+msgstr "assigned"
+
+msgid "assigned_to"
+msgstr "assigned to"
+
+msgid "collector_notifications"
+msgstr "Collector notifications"
+
+msgid "collector_overview"
+msgstr "Collector overview"
+
+msgid "comment"
+msgstr "Comment"
+
+msgid "days_ago"
+msgstr "days ago"
+
+msgid "dependency_graph"
+msgstr "Dependency graph"
+
+msgid "edit"
+msgstr "Edit"
+
+msgid "email_address"
+msgstr "EMail address"
+
+msgid "fieldsets"
+msgstr "Fieldsets"
+
+msgid "followups"
+msgstr "Followups"
+
+msgid "fulltextsearch"
+msgstr "Fulltext search"
+
+msgid "heading_assigned"
+msgstr "Assigned "
+
+
+msgid "heading_requester"
+msgstr "Requester"
+
+msgid "heading_status"
+msgstr "Status"
+
+msgid "importance"
+msgstr "Importance"
+
+msgid "issue_artifacts_table_deletion_link"
+msgstr "Delete"
+
+msgid "issue_artifacts_table_info_link"
+msgstr "Info"
+
+msgid "issue_artifacts_table_no_uploads_available"
+msgstr "No uploads available"
+
+msgid "issue_followup"
+msgstr "Issue followup"
+
+msgid "issue_reference"
+msgstr "Issue reference"
+
+msgid "jump_to_ticket"
+msgstr "Jump to ticket"
+
+msgid "legend_artifacts_upload"
+msgstr "Uploads"
+
+msgid "legend_new_reference_to_issue"
+msgstr "New references "
+
+msgid "legend_references"
+msgstr "References"
+
+
+msgid "legend_search_form"
+msgstr "Search form"
+
+msgid "legend_uploads"
+msgstr "Uploads"
+
+msgid "legend_watchlist"
+msgstr "Watchlist"
+
+msgid "legendd_dependeny_tree"
+msgstr "Dependency tree"
+
+msgid "modified"
+msgstr "Modified"
+
+msgid "my_created_issued"
+msgstr "Issues created by me"
+
+msgid "no_issues_found"
+msgstr "No issues found"
+
+msgid "notification_mode_disabled"
+msgstr "Noficiation mode disabled"
+
+msgid "number_issues"
+msgstr "Number issues"
+
+msgid "open_issues"
+msgstr "Open issues"
+
+msgid "preferences"
+msgstr "Preferences"
+
+msgid "recreate_collector_catalog"
+msgstr "Recreate collector catalog"
+
+msgid "referenced_by"
+msgstr "Referenced by"
+
+msgid "references"
+msgstr "References"
+
+msgid "reindex_all_issues"
+msgstr "Reindex all issues"
+
+msgid "removed"
+msgstr "Removed"
+
+msgid "send_attachments"
+msgstr "Send attachments"
+
+msgid "send_emails"
+msgstr "Send emails"
+
+msgid "sorting"
+msgstr "Sorting"
+
+msgid "status"
+msgstr "Status"
+
+msgid "submitted_by"
+msgstr "Submitted by"
+
+msgid "title_issue_selection"
+msgstr "Issue selection"
+
+msgid "topic"
+msgstr "Topic"
+
+msgid "total_issues"
+msgstr "Total issues"
+
+msgid "transcript"
+msgstr "Transcript"
+
+msgid "transcript_changes"
+msgstr "Transcript changes"
+
+msgid "transcript_time"
+msgstr "Transcript time"
+
+msgid "transcript_user"
+msgstr "Transcript user"
+
+msgid "update_collector_schema"
+msgstr "Update collector schema"
+
+msgid "update_schema_for_all_issues"
+msgstr "Update schema for all issues"
+
+msgid "uploaded_file"
+msgstr "Uploaded file"
+
+msgid "uploads"
+msgstr "Uploads"
+
+msgid "value"
+msgstr "Value"
+
+msgid "watchlist_subscribe"
+msgstr "Subscribe to watchlist"
+
+msgid "watchlist_unsubscribe"
+msgstr "Unsubscribe from watchlist"
+
+msgid "workflow_action_current_state"
+msgstr "Current workflow state"
