@@ -10,7 +10,7 @@ GLOBALS = globals()
 
 DEFAULT_CONTENT_TYPES = {
     'default_output_type': 'text/html',
-    'default_content_type': 'text/plain',
+    'default_content_type': 'text/html',
     'allowable_content_types': ('text/plain',
                                 'text/restructured',
                                 'text/html',

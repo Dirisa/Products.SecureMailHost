@@ -74,7 +74,7 @@
             Answer
           </div>
 
-          <p tal:condition="faq/getVersions" 
+          <p tal:condition="faq/versions" 
           class="discreet">
           This FAQ applies to: 
           <span tal:condition="faq/versions"

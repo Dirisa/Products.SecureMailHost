@@ -17,12 +17,14 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
                     tal:define="my_path python: '/'.join(here.getPhysicalPath());
-                                subtypes python:{'HelpCenterFAQFolder':'HelpCenterFAQ',
-                                       'HelpCenterTutorialFolder':'HelpCenterTutorial',
-                                       'HelpCenterLinkFolder':'HelpCenterLink',
-                                       'HelpCenterErrorReferenceFolder':'HelpCenterErrorReference',
-                                       'HelpCenterHowToFolder':'HelpCenterHowTo',
-                                       'HelpCenterGlossary':'HelpCenterDefinition'}">
+                    subtypes_tuples python:(
+                                     ('HelpCenterFAQFolder','HelpCenterFAQ'),
+                                     ('HelpCenterHowToFolder','HelpCenterHowTo'),
+                                     ('HelpCenterTutorialFolder','HelpCenterTutorial'),
+                                     ('HelpCenterLinkFolder','HelpCenterLink'),
+                                     ('HelpCenterErrorReferenceFolder','HelpCenterErrorReference'),
+                                     ('HelpCenterGlossary','HelpCenterDefinition'));
+                    subtypes python: [ t[0] for t in subtypes_tuples ]">
             <h1 tal:content="here/title_or_id" class="documentFirstHeading">
               Title or id
             </h1>
@@ -85,7 +87,7 @@
         
             <p>
             <img tal:attributes="src string:$portal_url/rss.gif" />
-            <a tal:attributes="href python:portal_url + '/search_rss?sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
+            <a tal:attributes="href python:portal_url + '/search_rss?sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes ]))" title="RSS feed for all documentation types">
                 RSS feed for all documentation types
             </a>
             </p>
@@ -99,9 +101,10 @@
 
             <div class="visualClear"></div>
             
-            <tal:defs define="help_types python: here.portal_catalog(portal_type=subtypes.keys(), path=my_path)">
-              <tal:listings repeat="help_type help_types">
-                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=subtypes[help_type.portal_type], path=folder_path)">
+            <tal:defs define="help_types python: here.portal_catalog(portal_type=subtypes, path=my_path)">
+              <tal:listings repeat="help_type_tuple subtypes_tuples">
+                <div tal:define="help_type python:[ c for c in help_types if c.portal_type==help_type_tuple[0] ][0]" tal:condition="help_type">
+                  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=help_type_tuple[1], path=folder_path)">
 
                     <div class="portlet portletThirdWidth">
                         <h6>
@@ -132,16 +135,18 @@
                                    tal:content="structure string: More ${help_type/Title}&#8230;"
                                    >More FAQs</a>
                             </div>
+                          </div>
                         </div>
 
                     </div>
                 </div>
+                        <div class="visualClear" tal:condition="python: repeat['help_type_tuple'].number() % 3 == 0" />
             </tal:listings>
-            <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes.keys())">
+            <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes)">
               <!-- or at least none that this person has the rights to see -->
               <p class="discreet">There are no contained help center object types.</p>
             </tal:nolist>
-            <tal:nopublished tal:condition="python: not help_types and here.contentValues(subtypes.keys())">
+            <tal:nopublished tal:condition="python: not help_types and here.contentValues(subtypes)">
               <!--- this user has perms to see the contained types, except that particular state(s) are required -->
               <p class="discreet">There are contained help center object types, but none will are viewable because of their state.</p>
             </tal:nopublished>

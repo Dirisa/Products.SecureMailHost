@@ -35,7 +35,7 @@
               method="get" action="redirect_to">
             <select name="dest"
                     tabindex="3">
-                <option i18n:translate="label_select">Page Index</option>
+                <option value="" i18n:translate="label_select">Page Index</option>
                 <option tal:repeat="s python:[s for s in sibl if s!=here]"
                         tal:content="s/title_or_id"
                         tal:attributes="value s/getId">
@@ -90,16 +90,17 @@
             <div tal:replace="structure python:here.getBody()" />
         </div>
     
-        <div class="listingBar">
+        <div class="listingBar" tal:condition="python: next or prev"
+	      tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1];
+               prev python:pos != 0 and sibl[pos-1]"
+               >
             <a class="listingNext"
-	      tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1]"
                tal:condition="python:next"
                tal:attributes="href next/absolute_url"
                tabindex="1"
                href="">
                Next: <span tal:replace="next/title_or_id" /> <img tal:replace="structure here/arrowRight.gif" /></a>
             <a class="listingPrevious"
-               tal:define="prev python:pos != 0 and sibl[pos-1]"
                tal:condition="python:prev"
                tal:attributes="href prev/absolute_url"
                tabindex="1"
