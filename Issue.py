@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.206 2004/07/15 17:37:38 ajung Exp $
+$Id: Issue.py,v 1.207 2004/07/18 19:44:43 bcsaller Exp $
 """
 
-import os, time, random 
+import os, time, random
 from urllib import unquote, quote
 from types import StringType, UnicodeType
 
@@ -125,7 +125,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     archetype_name = 'PCNG Issue'
 
     def __init__(self, id):
-        Base.__init__(self, id) 
+        Base.__init__(self, id)
         from issue_schema import schema
         self.schema = PCNGSchemaNonPersistent(schema.fields())
         self.wl_init()
@@ -158,7 +158,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'setDefaults')
     def setDefaults(self):
         """ Set some default value based on the member data. This method
-            is called from pcng_issue_view *each*. We are using this rude 
+            is called from pcng_issue_view *each*. We are using this rude
             way to ensure that the defaults are set once and after the creation
             of the instance. Using portal_factory + Archetypes seems to have bad
             side effects since the setDefaults() of AT was called after the objects
@@ -180,16 +180,16 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                     ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
                                     ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
-                    if name in fieldnames:                
+                    if name in fieldnames:
                         self.getField(name).set(self, member.getProperty(name1))
             else:
                 name = 'contact_name'
                 self.getField(name).set(self, util.getUserName())
 
             # pre-allocate the deadline property
-            self.progress_deadline = DateTime() + self.deadline_tickets        
+            self.progress_deadline = DateTime() + self.deadline_tickets
             self._defaults_initialized = 1
-                                                
+
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
         self.unindexObject()
@@ -207,13 +207,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         # added users group assignees_group
         assignees.extend(getUsersForGroups(self, assignees_group))
-        
+
         if not util.lists_eq(assignees, old_assignees):
             self._transcript.addChange('assignees', old_assignees, assignees)
             assignees_changed = 1
 
-        if comment: self._transcript.addComment(unicode(comment, self.getSiteEncoding()), text_format)  
-        if action == 'comment' and assignees_changed: 
+        if comment: self._transcript.addComment(unicode(comment, self.getSiteEncoding()), text_format)
+        if action == 'comment' and assignees_changed:
             if 'assign' in self.validActions():
                 action = 'assign'
             else:
@@ -223,7 +223,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._last_action = action
         if not action in ('comment', ):
             if action != 'request' and not action in self.validActions():
-                raise RuntimeError(self.Translate('invalid_action', 
+                raise RuntimeError(self.Translate('invalid_action',
                                                   'Invalid action: %(action)s', action=action))
 
             self._v_old_status = self.status()
@@ -239,7 +239,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         # Notification is triggered by the workflow. Since comments do not trigger
         # a workflow action we must trigger the notification on our own.
         if action in ('comment',): notifications.notify(self)
-        util.redirect(RESPONSE, 'pcng_issue_view', 
+        util.redirect(RESPONSE, 'pcng_issue_view',
                       self.Translate('followup_submitted', 'Followup submitted'))
 
     security.declareProtected(View, 'lastAction')
@@ -255,7 +255,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         except: return None
 
     ######################################################################
-    # Archetypes callbacks 
+    # Archetypes callbacks
     ######################################################################
 
     security.declareProtected(AddCollectorIssue, 'setParameters')
@@ -300,7 +300,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
             self.deleteReference(issue)
             self._transcript.addComment(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1))
-            util.redirect(RESPONSE, 'pcng_issue_references', 
+            util.redirect(RESPONSE, 'pcng_issue_references',
                           self.Translate('reference_deleted', 'Reference has been deleted'))
         else:
             raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
@@ -322,12 +322,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
-                                                   issue_url=issue.absolute_url(1), 
+                                                   issue_url=issue.absolute_url(1),
                                                    collector_title=tracker.getId(),
                                                    comment=reference.comment)
             self.getTranscript().addReference(tracker.getId(), issue.getId(), unicode(reference.comment, self.getSiteEncoding()))
             self.reindexObject()
-            util.redirect(RESPONSE, 'pcng_issue_references', 
+            util.redirect(RESPONSE, 'pcng_issue_references',
                           self.Translate('reference_stored', 'Reference has been stored'))
         else:
             raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
@@ -342,7 +342,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             return [r for r in tool.getReferences(self) if r.getTargetObject()]
         else:
             return ()
-        
+
     security.declareProtected(View, 'getBackReferences')
     def getBackReferences(self):
         """ AT forward references """
@@ -358,11 +358,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Wrapper for reference.getTargetObject() """
 
         return ref.getTargetObject()
- 
+
     security.declareProtected(View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
         """ create graphical representation of the references tree
-            (using Graphviz) 
+            (using Graphviz)
         """
         from Products.PloneCollectorNG import graphviz
         data = graphviz.build_tree2(self, format)
@@ -373,7 +373,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         RESPONSE.write(data)
 
     ######################################################################
-    # File uploads 
+    # File uploads
     ######################################################################
 
     security.declareProtected(AddCollectorIssueFollowup, 'upload_file')
@@ -410,13 +410,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             self._transcript.addUpload(file_id, comment)
 
             self._last_action = 'Upload'
-            if notify: 
+            if notify:
                 notifications.notify(self)
 
-            util.redirect(RESPONSE, 'pcng_issue_uploads', 
+            util.redirect(RESPONSE, 'pcng_issue_uploads',
                           self.Translate('file_uploaded', 'File base been uploaded'))
         else:
-            util.redirect(RESPONSE, 'pcng_issue_uploads', 
+            util.redirect(RESPONSE, 'pcng_issue_uploads',
                           self.Translate('nothing_for_upload', 'Nothing to be uploaded'))
 
     security.declareProtected(ManageCollector, 'remove_upload')
@@ -424,7 +424,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
         self._transcript.addComment(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1))
-        util.redirect(RESPONSE, 'pcng_issue_uploads', 
+        util.redirect(RESPONSE, 'pcng_issue_uploads',
                      self.Translate('upload_removed', 'File has been removed'))
 
 
@@ -439,7 +439,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         while 1:
             if parent.meta_type != 'PloneCollectorNG':
                 parent = parent.aq_parent
-            else: 
+            else:
                 break
         return parent
 
@@ -481,15 +481,15 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         return self.pcng_issue_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
 
     base_view = view
-    
+
     security.declareProtected(View, 'Creator')
     def Creator(self):
         """ creator """
-        return getattr(self,'_creator', None) or self.getOwner().getId()                
+        return getattr(self,'_creator', None) or self.getOwner().getId()
 
     ######################################################################
     # Catalog stuff
-    # 
+    #
     # In V 1.0 and below we used to reindex the issue with the collector
     # catalog and the portal catalog. Starting V 1.0.1 we use only the
     # portal catalog until we have ifixedthe problem with the migration code
@@ -510,7 +510,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         catalogs = at.getCatalogsByType(self.meta_type) or []
         catalogs = [c for c in catalogs if c.getId() not in ('portal_catalog', )]
         if not catalogs:
-            LOG('plonecollectorng', ERROR, 'getCatalogsByType() returned no usable catalogs') 
+            LOG('plonecollectorng', ERROR, 'getCatalogsByType() returned no usable catalogs')
         return catalogs
 
     security.declareProtected(ModifyPortalContent, 'reindexObject')
@@ -531,7 +531,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._get_catalog().unindexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
-                
+
     security.declareProtected(View, 'SearchableText')
     def SearchableText(self):
         """ return all indexable texts """
@@ -580,7 +580,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Produce a PDF for issue"""
         import pdfwriter
 
-        pdf = pdfwriter.pdfwriter(self._getCollector(), [self.getId()]) 
+        pdf = pdfwriter.pdfwriter(self._getCollector(), [self.getId()])
         RESPONSE.setHeader('content-type', 'application/pdf')
         RESPONSE.setHeader('content-length', str(len(pdf)))
         RESPONSE.setHeader('content-disposition', 'attachment; filename=issue_%s_%s.pdf' % (self._getCollector().getId(), self.getId()))
@@ -598,7 +598,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             users = list(wftool.getInfoFor(self, 'assigned_to', ()) or ())
             if sorted: users.sort()
             return users
-        else:   
+        else:
             return ()
 
     security.declareProtected(View, 'status')
@@ -620,7 +620,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         return []
 
     security.declareProtected(View, 'getWorkflowHistory')
-    def getWorkflowHistory(self):                     
+    def getWorkflowHistory(self):
         """ return the workflow history """
         d = {}
         for wf in self.workflow_history.keys():
@@ -633,7 +633,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.workflow_history.has_key(old_id):
             d = self.workflow_history[old_id]
             self.workflow_history[self.collector_workflow] = d
-            del self.workflow_history[old_id]                                                   
+            del self.workflow_history[old_id]
 
     security.declareProtected(View, 'send_notifications')
     def send_notifications(self):
@@ -643,7 +643,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if old_status and old_status != self.status():
             self._transcript.addChange('status', old_status, self.status())
 
-        if self.getNotification_policy() != 'NoneNotificationPolicy': 
+        if self.getNotification_policy() != 'NoneNotificationPolicy':
             notifications.notify(self)
 
     ######################################################################
@@ -674,7 +674,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'get_size')
     def get_size(self):
         """ hook for 'folder_contents' view """
-        return 0 
+        return 0
 
     security.declareProtected(View, 'isPersistent')
     def isPersistent(self):
@@ -700,13 +700,16 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     ######################################################################
 
     def left_slots(self):
-        pu = self.getPortlet_usage() 
-        pa = self.getPortlet_actions() 
+        pu = self.getPortlet_usage()
+        pa = self.getPortlet_actions()
         if not hasattr(aq_base(self), '_v_left_slots'):
-            if pu == 'override': 
+            if pu == 'override':
                 self._v_left_slots = []
             else:
-                self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
+                slots = getattr(self._getCollector().aq_parent, 'left_slots', [])
+                if callable(slots):
+                    slots = slots()
+                self._v_left_slots = list(slots)
             if pa == 'left':
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_right_slots
@@ -714,16 +717,19 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if self.getPortlet_issuedata() == 'left' and self.isPersistent():
                 self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_left_slots)
-    left_slots = ComputedAttribute(left_slots, 1)
+    #left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
-        pu = self.getPortlet_usage() 
-        pa = self.getPortlet_actions() 
+        pu = self.getPortlet_usage()
+        pa = self.getPortlet_actions()
         if not hasattr(aq_base(self), '_v_right_slots'):
-            if pu == 'override': 
+            if pu == 'override':
                 self._v_right_slots = []
             else:
-                self._v_right_slots = list(self._getCollector().aq_parent.right_slots)
+                slots = getattr(self._getCollector().aq_parent, 'right_slots', [])
+                if callable(slots):
+                    slots = slots()
+                self._v_right_slots = list(slots)
             if pa == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_left_slots
@@ -732,7 +738,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if self.getPortlet_issuedata() == 'right' and self.isPersistent():
                 self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_right_slots)
-    right_slots = ComputedAttribute(right_slots, 1)
+    #right_slots = ComputedAttribute(right_slots, 1)
 
     security.declareProtected(View, 'pcng_search_form')
     def pcng_search_form(self, RESPONSE):
@@ -743,7 +749,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def pcng_ticket_browser(self, RESPONSE):
         """ redirect """
         RESPONSE.redirect(self._getCollector().absolute_url() + '/pcng_view')
-    
+
     security.declareProtected(View, 'createObject')
     def createObject(self, RESPONSE):
         """ redirect """
