@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.185 2004/06/12 08:47:14 ajung Exp $
+$Id: Issue.py,v 1.186 2004/06/16 05:33:25 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -439,6 +439,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
         """
+
         field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
@@ -446,12 +447,15 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             old = self.getField(name).get(self)
             self._transcript.addChange(name, old, new)
 
+
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this
             to reindex the issue.
         """
+
         self.notifyModified() # notify DublinCore
         self.send_notifications()
+
 
     def __len__(self):
         """ return the number of transcript events """
@@ -533,7 +537,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             pass
 
         for field in self.Schema().fields():
-            v = getattr(self, field.getName())   # retrieve value directly as unicode
+            v = getattr(self, field.getName(), u'')   # retrieve value directly as unicode
             if v:
                 if callable(v): v = v()
                 if isinstance(v, UnicodeType):
