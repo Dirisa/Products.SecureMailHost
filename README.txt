@@ -12,6 +12,9 @@ Installation:
 
     See INSTALL.txt
 
+    Attention: Archetypes 1.0.1 is MANDATORY. Archetypes 1.2
+    is NOT YET SUPPORTED.
+
 Contact:
 
     Andreas Jung, andreas@andreas-jung.com  
