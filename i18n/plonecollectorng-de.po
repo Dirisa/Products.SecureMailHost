@@ -1085,3 +1085,6 @@ msgstr "Gruppen Teilnehmer"
 
 msgid "Waiting (confirmation)"
 msgstr "Warten auf Bestätigung"
+
+msgid "references_to_other_issues"
+msgstr "Referenzen auf andere Tickets"
