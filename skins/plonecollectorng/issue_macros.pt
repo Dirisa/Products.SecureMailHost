@@ -1,5 +1,9 @@
 <span metal:define-macro="field_shortview">
- <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="python: here.getParameter(field.getName())" /> &nbsp;
+  <metal:block tal:define="value python: here.getParameter(field.getName())">
+    <metal:block tal:condition="value">
+     <span class="label" tal:content="python: field.widget.Label(here)" />:&nbsp;<span tal:content="value"/>
+    </metal:block>
+  </metal:block>
 </span>
 
 <!-- Issue related macros -->
