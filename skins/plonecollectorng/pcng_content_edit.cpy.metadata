@@ -5,5 +5,5 @@ title = Edit content
 #validators = validate_base
 
 [actions]
-action.success = traverse_to_action:string:view
-action.failure = traverse_to_action:string:base_edit
+action.success = redirect_to_action:string:view
+action.failure = traverse_to_action:string:base_edit1
