@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.9 2003/11/17 16:46:08 ajung Exp $
+$Id: pdfwriter.py,v 1.10 2003/11/17 18:32:51 ajung Exp $
 """
 
-import os, sys, cStringIO, tempfile, textwrap
+import os, sys, cStringIO, tempfile
+from textwrap import wrap, fill
 
 try:
     from PIL import Image as PIL_Image
@@ -16,12 +17,12 @@ try:
 except ImportError: have_pil = 0
 
 from DateTime import DateTime
+from DocumentTemplate.html_quote import html_quote
 
 from reportlab.platypus import *
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.lib.units import inch
-
 
 styles = getSampleStyleSheet()
 
@@ -32,8 +33,8 @@ def myLaterPages(canvas, doc):
     canvas.saveState()
     canvas.setStrokeColorRGB(1,0,0)
     canvas.setLineWidth(5)
-    canvas.line(66,45,66,PAGE_HEIGHT-45)
-    canvas.line(66,PAGE_HEIGHT-70, 555, PAGE_HEIGHT-70)
+    canvas.line(50,45,50,PAGE_HEIGHT-45)
+    canvas.line(50,PAGE_HEIGHT-70, 555, PAGE_HEIGHT-70)
     canvas.setFont('Helvetica-Bold',15)
     canvas.drawString(inch, PAGE_HEIGHT-62, doc.collector_title)
     canvas.setFont('Helvetica',11)
@@ -46,18 +47,19 @@ myFirstPage = myLaterPages
 Elements = []
 
 HeaderStyle = styles["Heading3"] 
-HeaderStyle.defaults['fontName'] = 'Helvetica'
+HeaderStyle.fontName = 'Helvetica'
+HeaderStyle.spaceBefore = 3
+HeaderStyle.spaceAfter = 1
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
-    txt = '<font face="helvetica">%s</font>' % txt
     p = XPreformatted(txt, style)
     Elements.append(p)
 
 ParaStyle = styles["Normal"]
-ParaStyle.defaults['fontName'] = 'Helvetica'
+ParaStyle.fontName = 'Helvetica'
+ParaStyle.leftIndent = 18
 
 def p(txt):
-    txt = '<font face="helvetica">%s</font>' % txt
     return header(txt, style=ParaStyle, sep=0.0)
 
 PreStyle = styles["Code"]
@@ -67,9 +69,12 @@ def pre(txt):
     Elements.append(p)
 
 DefStyle = styles["Definition"]
+DefStyle.leftIndent = 18
+DefStyle.fontName = 'Helvetica'
+DefStyle.spaceBefore = 3
+DefStyle.spaceAfter = 1
 
 def definition(txt):
-    txt = '<font face="helvetica">%s</font>' % txt
     p = XPreformatted(txt, DefStyle)
     Elements.append(p)
 
@@ -84,11 +89,11 @@ def pdfwriter(collector, ids):
         header('Issue #%s' % issue.title_or_id())
 
         header("Description")
-        definition(issue.description)
+        definition(html_quote(issue.description))
 
         if issue.solution:
             header("Solution")
-            definition(issue.solution)
+            definition(html_quote(issue.solution))
 
         for name in issue.schema_getNames():
             if name in ('default', 'metadata'): continue
@@ -153,25 +158,21 @@ def pdfwriter(collector, ids):
 
             for ev in group:
                 if ev.type == 'comment':
-                    l.append('<b>Comment:</b>\n%s' % ev.comment)
+                    l.append(fill('<b>Comment:</b>\n%s' % html_quote(ev.comment)))
                     pass
                 elif ev.type == 'change':
-                    l.append('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
+                    l.append(fill('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
-                    l.append('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed))
+                    l.append(fill('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed)))
                 elif ev.type == 'reference':
-                    l.append('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment))
+                    l.append(fill('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
                     s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
-                    l.append(s)
+                    l.append(fill(s))
 
-            l1 = []
-            for x in l:
-                l1.extend(textwrap.wrap(x)) 
-            
-            definition(textwrap.fill('\n'.join(l), 80))
+            definition('\n'.join(l))
 
             n+=1
         Elements.append(PageBreak())
