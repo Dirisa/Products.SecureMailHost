@@ -31,7 +31,15 @@ l = []
 site_encoding = context.getSiteEncoding()
 
 schema = context.Schema()
+mode = context.getIssue_email_submission()
 
+if mode != 'disabled':
+    nl('='*80)
+    nl(TR('followup_help1', 'If you reply to this notification email, please do not include this text in the'))
+    nl(TR('followup_help2', 'reply.  In addition you must attach the attached file "pcng.key" in your reply.'))
+    nl(TR('followup_help3', 'Otherwise your reply can not be processed. Thank you.'))
+    nl('='*80)
+    nl()    
 
 s= '%s: #%s: %s, ' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding))
 s+='%s: %s, ' % (TR('topic', 'Topic'), context.topic)
