@@ -6,13 +6,25 @@ General:
   a FAQ differs from a howto, differs from a Tutorial etc.
 
 - Search needs to be hooked up! It should allow searching on all the different
-  types. (limi)
+  types. Almost done, it doesn't search the Glossary at the moment, it seems.
+  (limi)
 
 - Make it easier to choose which subcomponents get installed. For
   example, put a simple textual list in config.py of the folderish
   products, and have types/init.py, Install.py, and
   HelpCenter.py/__init__ respect this. Easier for other people who
   want to use product but might not want all parts.
+
+- There is something wrong with the permissions somehow - items that
+  are "in-progress" are visible in the listings - they do not show
+  up on the main page, though. The correct behaviour is that it should
+  not show up for people who don't have the permission to see them
+  (ie. Anon, Member) until they are published. "In-progress" and 
+  "Pending" should both only be visible to Owner, Manager and in the
+  case of "Pending" - also to the Reviewer role.
+
+- Description should be required, the listings make very little sense
+  without this.
 
 Workflow - specification (by limi, trying to capture the most important things :)
 
