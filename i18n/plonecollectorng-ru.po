@@ -1032,6 +1032,9 @@ msgstr "Следующее"
 msgid "label_up_to_collector"
 msgstr "Метка для Сборника"
 
+msgid "label_up_to_configuration"
+msgstr "Метка для параметров"
+
 msgid "creator"
 msgstr "Создатель"
 
