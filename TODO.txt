@@ -18,9 +18,10 @@ Template changes:
     of what the user is permitted to see. Managers and reviewers should also
     see pending (but not in-progress or obsolete) items, styled in a different
     colour (this styling already exists)
-    (JIM)
+
     
         -> There is a states parameter to getItems() which will help
+        -> Mostly done...still getting the styling applied on all templates.
     
  - Need to expose current version, possibly outdated content much clearer.
     
@@ -49,7 +50,9 @@ Workflow changes/permission issues:
     progress would be good.
     
  - Owners should be able to edit content in the 'published' state to make
-    updates easier.  (TOM, adding unit tests)
+    updates easier.  
+
+        -> Works for HowTos...need to add more tests to testWorkflow.
     
  - Owners should be able to mark their own content obsolete
  
@@ -107,7 +110,7 @@ Schema/class changes:
     getSections. We should probably also fix the templates to use brains,
     not objects.
 
- - I seem to be unable to change the ownership of a Tutorial Page with 
+ - I seem to be unable to change the ownership of a Tutorial Page or an FAQ with 
     portal.plone_utils.changeOwnershipOf( aPage, anId, 1 )
     Is that a bug?
 
