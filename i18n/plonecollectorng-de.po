@@ -1008,4 +1008,7 @@ msgstr "Ersteller"
 msgid "created_at"
 msgstr "Erstellt am"
 
+msgid "Won't fix"
+msgstr "Wird nicht gelöst"
+
 
