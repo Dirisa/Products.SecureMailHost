@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.48 2004/05/10 19:14:25 ajung Exp $
+$Id: collector_schema.py,v 1.49 2004/05/14 17:15:46 ajung Exp $
 """
 
 
@@ -114,24 +114,7 @@ schema = BaseSchema + Schema((
                                      i18n_domain='plonecollectorng'),
                 schemata='E-Mail',
                 ),
-    StringField('participation_mode',
-                vocabulary=VOC_PARTICIPATION_MODE,
-                widget=SelectionWidget(format='select', 
-                                       label='Participation mode (who can file issues)',
-                                       label_msgid='label_participation_mode',
-                                       i18n_domain='plonecollectorng'),
-                default='staff',
-                schemata='collectordata',
-                ),
-    StringField('view_mode',
-                vocabulary=VOC_PARTICIPATION_MODE,
-                widget=SelectionWidget(format='select', 
-                                       label='View mode (who can view issues)',
-                                       label_msgid='label_view_mode',
-                                       i18n_domain='plonecollectorng'),
-                default='staff',
-                schemata='collectordata',
-                ),
+
     IntegerField('deadline_tickets',
                 default=14,
                 widget=StringWidget(label='Automatic deadline in days for new issues',
@@ -238,5 +221,23 @@ schema = BaseSchema + Schema((
                                        i18n_domain='plonecollectorng'),
                 default='keep',
                 schemata='Look and Feel'
+                ),
+    StringField('participation_mode',
+                vocabulary=VOC_PARTICIPATION_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='Participation mode (who can file issues)',
+                                       label_msgid='label_participation_mode',
+                                       i18n_domain='plonecollectorng'),
+                default='staff',
+                schemata='permissions',
+                ),
+    StringField('view_mode',
+                vocabulary=VOC_PARTICIPATION_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='View mode (who can view issues)',
+                                       label_msgid='label_view_mode',
+                                       i18n_domain='plonecollectorng'),
+                default='staff',
+                schemata='permissions',
                 ),
     ))
