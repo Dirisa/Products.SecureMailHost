@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.123 2004/02/11 14:43:37 ajung Exp $
+$Id: Issue.py,v 1.124 2004/02/16 17:27:00 ajung Exp $
 """
 
 import sys, os, time
@@ -547,6 +547,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             mutator(result[0], **result[1])
 
         self.reindexObject()
+
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """ hook for 'folder_contents' view """
+        return 0 
 
 registerType(PloneIssueNG)
 
