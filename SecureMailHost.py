@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.21 2005/01/27 07:05:38 panjunyong Exp $
+$Id: SecureMailHost.py,v 1.22 2005/01/27 07:21:07 panjunyong Exp $
 """
 
 try:
@@ -239,16 +239,15 @@ class SecureMailBase(MailBase):
         else:
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
-        mfrom = mfrom and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mfrom)
-        mto = mfrom and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mto)
-        mcc = mcc and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mcc)
-        mbcc = mbcc and EMAIL_ADDRESSES_RE.sub(mailaddress_transform, mbcc)
+        mfrom = encodeHeaderAddress(mfrom, charset)
+        mto = encodeHeaderAddress(mto, charset)
+        mcc = encodeHeaderAddress(mcc, charset)
+        mbcc = encodeHeaderAddress(mbcc, charset)
 
         # set important headers
-        self.setHeaderOf(msg, skipEmpty=True, 
-                 From=encodeHeaderAddress(mfrom), To=encodeHeaderAddress(mto),
+        self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
                  Subject=str(email.Header.Header(subject, charset)), 
-                 Cc=encodeHeaderAddress(mcc), Bcc=encodeHeaderAddress(mbcc))
+                 Cc=mcc, Bcc=mbcc)
 
         for bad in BAD_HEADERS:
             if bad in kwargs:
