@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.22 2004/02/08 13:28:11 ajung Exp $
+$Id: Translateable.py,v 1.23 2004/02/08 13:31:56 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -41,11 +41,7 @@ class Translateable:
             except:
                 self._v_have_pts = None
 
-        try:
-            self._v_have_pts.translate
-            return self._v_have_pts
-        except:
-            return None
+        return self._v_have_pts
 
     def _getPloneEncoding(self):
         """ return the site encoding of Plone """
@@ -70,11 +66,6 @@ class Translateable:
                     return unicode(r, self._getPloneEncoding())
             else: 
                 return r
-
-        # Using the as_unicode parameter requires the lastest PTS version
-        # from the CVS. In generell we retrieve the translations from PTS
-        # always as unicode and convert it back to the Plone site encoding
-        # if necessary
 
         v = pts.utranslate(domain=i18n_domain, 
                             msgid=msgid, 
