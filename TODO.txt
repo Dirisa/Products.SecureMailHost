@@ -27,13 +27,15 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   KNOWN ISSUES
 ----------------------------------
-- there is no handling of OS 'permission denied' situations.
+- bug #1006379: there is only limited handling of OS 
+  'permission denied' situations
 
+- bug #1003808: PLFNG doesnt work with Chinese
+
+- bug #1001789: Unpickable error (not reproducable yet)
+ 
 - subfolders of a PLFNG instance do not appear in the
   navtree or global path bar 
-
-- file names beginning with underscore characters
-  are listed but cannot be accessed (due to a Plone constraint)
 
 - validation issues wrt 'backup_folder' field
   (field is optional unless fileBackup_enabled is set;
@@ -55,14 +57,18 @@ about feature requests and/or to volunteer to help!!!
 
 - i18n not complete.
 
-- bug #1003808: PLFNG doesnt work with Chinese 
-
 - various problems with filenames containing spaces
   (not an issue on Mac OSX; need to quantify this)
     
     * eg, MD5 generation fails on such files
   
 - sorting by file size is munged (doesnt recognize KB/MB/GB suffix)
+
+- PLFNG is currently a bit hard to automate and operate from external
+  code, as most of its methods assume they're being called from the web
+  and require a REQUEST variable.
+
+- files are not automatically cataloged when uploaded or unpacked
 
 
 ----------------------------------
@@ -82,8 +88,6 @@ about feature requests and/or to volunteer to help!!!
 - improve the unit testing for catalog action
 
 - add metadata support for folders
- 
-- add ability to hide files (e.g. 'dot' files like .DS_Store on OSX) 
  
 - sorting by file size is munged (doesnt recognize KB/MB/GB suffix)
  
@@ -121,8 +125,6 @@ might be something to put as a "caveat" in the README file.
 - ability to configure # of items listed
 
 - comments for folders
-
-- ability to hide files (e.g. 'dot' files like .DS_Store on OSX)
 
 - move file and/or folder 
 

@@ -1,13 +1,22 @@
 0.6.0 (unstable)
 
+alpha3
+  - added and using checkValidId() method to prevent illegal filenames 
+    from being listed, uploaded or unzipped into PLFNG containers.  
+    
+  - added configurable 'hide filter' for both files and folders to
+    listFolderContents() method
+
+  - added basic try/except handling for os.listdir() calls
+    that throw permission denied exceptions by the OS.
+    (per collective bug #1006379, #1005502)
+  
 alpha2
   - unzip support improvements
      * eliminated requirement for external unzip utility.
        
      * added backup support for existing files that get
        overwritten by unzip action
-  -        
-
 
 alpha1
   - MD5 support improvements:
