@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.52 2004/05/22 11:16:03 ajung Exp $
+$Id: collector_schema.py,v 1.53 2004/05/23 11:08:17 ajung Exp $
 """
 
 
@@ -84,7 +84,7 @@ schema = BaseSchema + Schema((
                 accessor="getId",
                 mutator="setId",
                 default=None,
-                schemata='collectordata',
+                schemata='main',
                 widget=IdWidget(label_msgid="label_name",
                                 description_msgid="help_name",
                                 i18n_domain="plone"),
@@ -95,7 +95,7 @@ schema = BaseSchema + Schema((
                 searchable=1,
                 default='',
                 accessor='Title',
-                schemata='collectordata',
+                schemata='main',
                 widget=StringWidget(label_msgid="label_title",
                                     description_msgid="help_title",
                                     label='Title',
@@ -108,7 +108,7 @@ schema = BaseSchema + Schema((
     StringField('description',
                 required=1,
                 searchable=1,
-                schemata='collectordata',
+                schemata='main',
                 widget=TextAreaWidget(label='Description',
                                       label_msgid='label_description',
                                       i18n_domain='plonecollectorng'),
@@ -127,7 +127,7 @@ schema = BaseSchema + Schema((
                 widget=StringWidget(label='Automatic deadline in days for new issues',
                                     label_msgid='label_deadline_tickets',
                                     i18n_domain='plonecollectorng'),
-                schemata='collectordata',
+                schemata='main',
                 ),
     StringField('collector_workflow',
                 vocabulary=VOC_WORKFLOWS,
@@ -136,7 +136,7 @@ schema = BaseSchema + Schema((
                                        label='Workflow',
                                        label_msgid='label_workflow',
                                        i18n_domain='plonecollectorng'),
-                schemata='collectordata'
+                schemata='main'
                 ),
     StringField('collector_email',
                 searchable=0,
@@ -158,7 +158,7 @@ schema = BaseSchema + Schema((
                 default='disabled',
                 vocabulary=VOC_ISSUE_EMAIL_SUBMISSION(),
                 widget=SelectionWidget(format='select',
-                                    label='Issue submissions through email)',
+                                    label='Issue submissions through email',
                                     label_msgid='label_issue_email_submission',
                                     i18n_domain='plonecollectorng'),
                 schemata='E-Mail',
@@ -197,7 +197,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_watchlist',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
-                schemata='collectordata'
+                schemata='main'
                 ),
 
     StringField('references_mode',
@@ -207,7 +207,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_references',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
-                schemata='collectordata'
+                schemata='main'
                 ),
 
     StringField('uploads_mode',
@@ -217,7 +217,7 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_file_image_uploads',
                                        i18n_domain='plonecollectorng'),
                 default='enabled',
-                schemata='collectordata'
+                schemata='main'
                 ),
 
     StringField('portlet_usage',
