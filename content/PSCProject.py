@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.5 2005/03/05 01:35:21 optilude Exp $
+$Id: PSCProject.py,v 1.6 2005/03/05 04:48:33 optilude Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -224,7 +224,7 @@ class PSCProject(OrderedBaseFolder):
         catalog = getToolByName (self, 'portal_catalog')
         
         releases = catalog.searchResults (portal_type = 'PSCRelease',
-                                          path = self.getPhysicalPath ())
+                                          path = '/'.join(self.getPhysicalPath ()))
                                          
         return [r.getId for r in releases if r]
 
