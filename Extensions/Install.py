@@ -2,11 +2,16 @@ from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.PloneHelpCenter.config import *
 from Products.CMFCore.utils import getToolByName
+from Products.PloneHelpCenter.Extensions import HCWorkflow 
 
 from StringIO import StringIO
 
 def registerNavigationTreeSettings(self, out):
-    data = ['HelpCenterHowTo','HelpCenterTutorial']
+    """Make the folderish content types not appear in navigation tree.
+    We don't want users to think of the HowTo as a folder, even though
+    technically, it is."""
+
+    data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference']
     pp=getToolByName(self,'portal_properties')
     p = getattr(pp , 'navtree_properties', None)
     mdntl = list(p.getProperty('metaTypesNotToList', []))
@@ -28,14 +33,38 @@ def install(self):
     install_subskin(self, out, GLOBALS)
 
     #register the folderish items in portal_properties/site_properties
-    site_props = getToolByName(self, 'portal_properties').site_properties
-    use_folder_tabs = site_props.getProperty('use_folder_tabs', None)
-    if not 'HelpCenterFAQFolder' in use_folder_tabs:
-        site_props._updateProperty('use_folder_tabs', tuple(use_folder_tabs) +
-	                               ('HelpCenterFAQFolder',))
-        print >> out, "Added HelpCenterFAQFolder to portal_properties/site_properties/use_folder_tabs"
+    #appears that Archetypes takes care of this for us.
+    #site_props = getToolByName(self, 'portal_properties').site_properties
+    #use_folder_tabs = site_props.getProperty('use_folder_tabs', None)
+    #if not 'HelpCenterFAQFolder' in use_folder_tabs:
+    #    site_props._updateProperty('use_folder_tabs', tuple(use_folder_tabs) + ('HelpCenterFAQFolder',))
+    # print >> out, "Added HelpCenterFAQFolder to portal_properties/site_properties/use_folder_tabs"
 
     registerNavigationTreeSettings(self, out)
+
+    HCWorkflow.install()
+    wf_tool = getToolByName(self, 'portal_workflow')
+
+    if not 'helpcenter_workflow' in wf_tool.objectIds():
+        wf_tool.manage_addWorkflow('helpcenter_workflow (Workflow for Help Center.)',
+                                   'helpcenter_workflow')
+    wf_tool.updateRoleMappings()
+
+    print >> out, 'Installed helpcenter_workflow.'
+    
+    wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ','HelpCenterHowTo','HelpCenterLink'
+                                            ,'HelpCenterTutorial','HelpCenterTutorialPage'
+                                            ,'HelpCenterErrorReference'], chain='helpcenter_workflow')
+    print >> out, 'Set helpcenter_workflow as default for help center content types.'
+
+    fc_tool = getToolByName(self, 'portal_form_controller')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterHowTo', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterFAQ', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorial', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorialPage', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterLink', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterErrorReference', None, 'traverse_to', 'string:edit_reminder')
+    print >> out, 'Set reminder to publish message hack on objects.'
 
     print >> out, "Successfully installed %s." % PROJECTNAME
     return out.getvalue()

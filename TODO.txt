@@ -1,26 +1,26 @@
-FAQ/FAQFolder:
+General:
 
-- We should have a def getFAQItemsBySection(section) instead of the ugly code in the template
+- Include help templates that explain what the different parts do, how
+  a FAQ differs from a howto, differs from a Tutorial etc.
 
-- We should have a separate template for the Expanded Section view - the way it is now, it gets messy real quick. 'faq_section_view?SomeSection' or similar. This will also allow us to have the correct h2/h3 level.
+- Consider having an "Important" marker on entries, to mark the most
+  common ones visually with a red (!) marker in the overview/listing.
 
-- Included help templates that explain what the different parts do, how a FAQ differs from a howto, differs from a Tutorial etc.
-
-- Consider having an "Important" marker on entries, to mark the most common ones visually with a red (!) marker in the overview/listing.
-
-TUTORIAL TYPE
-
-- It's for creating multi-page articles
-
-- tutorialpage_view.pt needs markup cleaning (look for XXX)
-
-- What do we want for tutorial_view.pt ?
-
-GENERAL:
+  - I think we can/should generalize this more: add a ImportanceVocab
+    list to help center for list of importance raitings, ie,
+    ('Important','Normal') Then folder skins can just sort based on
+    the order that things are listed in the importance ratings, and
+    add the red bang to the top-level ones. This gives us more
+    flexibility for future importance ratings. [Joel]
 
 - Everything has to use portal_factory
 
-- We should have an extra attribute that has additional words that are indexed along with the content - for example in a howto about VerboseSecurity, it would make sense to have:
+  - Add a "USE_PORTAL_FACTORY" in config.py and change Install.py to
+    install things into PF.
+
+- We should have an extra attribute that has additional words that are
+  indexed along with the content - for example in a howto about
+  VerboseSecurity, it would make sense to have:
 
   - Verbose Security
 
@@ -30,48 +30,45 @@ GENERAL:
 
   - etc...
 
-- **DONE** All content types should be Discussable 
+- Integrate with the ratings tool
 
-- i18n support
+  - Being developed as a separate product.
 
-- Allow HelpLinks (do we need a special type?), and have a listing with them.
+- Make it easier to choose which subcomponents get installed. For
+  example, put a simple textual list in config.py of the folderish
+  products, and have types/init.py, Install.py, and
+  HelpCenter.py/__init__ respect this. Easier for other people who
+  want to use product but might not want all parts.
 
-To do
+Permissions:
 
-  - Create folderish containers for everything, adding templates.
+- Right now, both container-folders (ie FAQFolder) and contentishy
+  things (ie FAQ) both use AddPortalContent and the same workflow.
+  So users can both add FAQs and add FAQFolders, which is wrong.
+  We can either change them into two workflows or add a new permission
+  to separate out adding a help-content type. Joel votes for the 
+  latter.
 
-  - Add proper workflows with notifications
+I18n:
 
-  - Implement the ratings tool
+- Some initial stuff has been put into to many types, but not always
+  consistently. Can someone very familiar with i18n step up here?
 
-- Maybe create an "ErrorReference" content object? I got an error like: checkSelected() got an unexpected keyword argument 'contenttypes' - which was a known bug with PCNG. Would be nice to have a location to collect common ones, and have them searchable - and a place to refer newbies to when they figure something out. :)
+
+Versions:
+
+- Add UI to folder screens to only show content for selected versions.
+  Alllows Plone 1.0 people,for example, to see only stuff pertaining
+  to them.
 
 
-WORKFLOWS & PERMISSIONS:
+Unit tests:
 
-- Any logged in user should be able to add a FAQ/HowTo/Tutorial
+- We need some!
 
-- The content is not visible or searchable to anybody else than the Reviewers/Managers before it is Published
 
-- There is no 'visible state', available states are:
+UI:
 
-  - Private
-
-  - Pending
-
-  - Published
-
-  - Obsolete
-
-- Transitions should be pretty self-explanatory:
-
-  - User creates content object (state=private)
-
-  - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu (state="pending")
-
-  - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes. (state="published")
-
-  - Ideally, every time someone adds a comment to an item, the owner of it gets a mail containing the comment + content URL.
-
-  - The Obsolete state is for later, when the ratings tool can push something into an obsolete status if 3 or more people have marked the content wrong/obsolete. The Owner should then get a mail about it.
+- Create icons for the folderish types (FAQFolder, etc.) that combine a folder
+  with the FAQ icon.
 

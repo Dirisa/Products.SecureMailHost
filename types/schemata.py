@@ -3,32 +3,64 @@ from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.Marshall import PrimaryFieldMarshaller
 from Products.PloneHelpCenter.config import *
 
-VersionSchema = Schema((
+#############################################################################################
+# Common components to Help Types schemas
+
+# what versions does this item support?
+VersionsSchema = Schema((
     LinesField('versions',
                # accessor='Versions',
                index='KeywordIndex',
-               vocabulary='_get_versions_vocab',
+               vocabulary='getVersionsVocab',
+               accessor="Versions",
                widget=MultiSelectionWidget(
                        label='Versions',
-                       description='Versions of Product that apply to this FAQ question '
+                       description='Versions of product that apply to this item '
                                    '(leave blank if not version-specific)',
                       ),
                ),
     ))
 
+# what sections should this item appear in?
+SectionsSchema = Schema((
+    LinesField('sections',
+               multiValued=1,
+               required=1,
+               vocabulary='getSectionsVocab', # we acquire this from HelpCenter
+               enforceVocabulary=1,
+               widget=MultiSelectionWidget(
+                   label='Sections',
+                   description='Section(s) that this item should appear in.',),
+               ),
+    ))
+
+# what sections should there be? (for enclosing folders, not indiv items!)
+SectionsVocabSchema = Schema((
+    LinesField('sections_vocab',
+               default=['General'],
+               widget=LinesWidget(
+                   label="Sections",
+                   description="Define the available sections for classifying these items.",
+                   i18n_domain="plonehelpcenter",
+                   rows=6)
+               ),
+    ))
+
 # non folderish Help Center Base schemata
 HCSchema = BaseSchema
-HCSchemaWithVersion = HCSchema + VersionSchema
 
 # folderish Help Center Base schemata
 HCFolderSchema = BaseFolderSchema
-HCFolderSchemaWithVersion = HCFolderSchema + VersionSchema
+
+
+#############################################################################################
+# Actual types
 
 ###
-# FAQ
+# FAQ 
 ###
 
-FAQSchema = HCSchemaWithVersion + Schema((
+FAQSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
@@ -43,26 +75,16 @@ FAQSchema = HCSchemaWithVersion + Schema((
                  i18n_domain = "plonehelpcenter")
     ),
     TextField('answer',
-              required=1,
+              required=0,
               searchable=1,
               widget=TextAreaWidget(
-    description_msgid = "desc_answer",
-    label_msgid = "label_answer",
-    i18n_domain = "plonehelpcenter",
-    rows=10),
+                  description_msgid = "desc_answer",
+                  label_msgid = "label_answer",
+                  i18n_domain = "plonehelpcenter",
+                  rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
-    LinesField('sections',
-               multiValued=1,
-               required=1,
-               vocabulary='_get_sections_vocab', # we acquire this from
-                                                 # FAQFolder
-               enforceVocabulary=1,
-               widget=MultiSelectionWidget(
-    label='Sections',
-    description='Section(s) of the FAQ that this question should appear in.',),
-               ),
-    ))
+    )) + VersionsSchema + SectionsSchema
 
 ###
 # FAQ Folder
@@ -82,21 +104,13 @@ FAQFolderSchema = HCFolderSchema + Schema((
     rows=6)
               ),
 
-    LinesField('sections',
-               default=['General'],
-               widget=LinesWidget(
-    label="Sections",
-    description="Define the available sections a FAQ can be assigned to.",
-    i18n_domain="plonehelpcenter",
-    rows=6)
-               ),
-    ))
+    )) + SectionsVocabSchema
 
 ###
 # Help Center base folder
 ###
 
-HCRootSchema = HCFolderSchemaWithVersion + Schema((
+HCRootSchema = BaseFolderSchema + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
@@ -106,14 +120,30 @@ HCRootSchema = HCFolderSchemaWithVersion + Schema((
                                     label_msgid="label_description",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
-                                    rows=6)),
+                                    rows=6),
+              ),
+
+    LinesField('versions_vocab',
+        required=1,
+        widget=LinesWidget(
+            description="Versions that items in help can refer to.",
+            label="Versions"
+            ),
+        ),
     ))
 
 ###
 # Howto
 ###
 
-HowToSchema = HCFolderSchemaWithVersion + Schema((
+HowToSchema = HCFolderSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(),
+    ),
     TextField('body',
               searchable=1,
               required=1,
@@ -128,22 +158,11 @@ HowToSchema = HCFolderSchemaWithVersion + Schema((
 
               **DEFAULT_CONTENT_TYPES
               ),
-    LinesField('sections',
-               multiValued=1,
-               required=1,
-               vocabulary='_get_sections_vocab',
-               enforceVocabulary=1,
-               widget=MultiSelectionWidget(
-    label='Sections',
-    label_msgid='label_howto_sections',
-    description='Section(s) that this How-to should appear in.',),
-    description_msgid='desc_howto_sections',
-    i18n_domain = "plonehelpcenter",
-               )),
+              ),
 
     marshall=PrimaryFieldMarshaller(),
 
- )
+ ) + VersionsSchema + SectionsSchema
 
 ###
 # HowToFolder
@@ -160,46 +179,27 @@ HowToFolderSchema = HCFolderSchema + Schema((
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
-    LinesField('sections',
-               default=['General'],
-               widget=LinesWidget(
-    label="Sections",
-    description="Define the available sections a How-to can be assigned to.",
-    i18n_domain="plonehelpcenter",
-    rows=6)
-               ),
-    ))
+    )) + SectionsVocabSchema
 
 ###
 # Tutorial
 ###
 
-TutorialSchema = HCSchemaWithVersion + Schema((
+TutorialSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
-                 description = 'A summary of the tutorial -  aims and scope. Will be displayed on every page of the tutorial.',
+                 description = 'A summary of the tutorial--aims and scope. Will be displayed on every page of the tutorial.',
                  description_msgid = "help_tutorial_summary",
                  label = "Tutorial Description",
                  label_msgid = "label_tutorial_description",
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
-    ),
-
-    LinesField('sections',
-               multiValued=1,
-               required=1,
-               vocabulary='_get_sections_vocab', # we acquire this from
-                                                 # FAQFolder
-               enforceVocabulary=1,
-               widget=MultiSelectionWidget(
-    label='Sections',
-    description='Section(s) of the tutorials listing that this should appear in.',),
-               ),
-))
+              ),
+    ))  + VersionsSchema + SectionsSchema
 
 ###
 # TutorialFolder
@@ -211,20 +211,12 @@ TutorialFolderSchema = HCFolderSchema + Schema((
               accessor="Description",
               storage=MetadataStorage(),
               widget=TextAreaWidget(description_msgid="desc_folder",
-                                    description="Description for the Tutorial Container.",
+                                    description="Description for the tutorials section.",
                                     label_msgid="label_folder",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
-    LinesField('sections',
-               default=['General'],
-               widget=LinesWidget(
-    label="Sections",
-    description="Define the available sections a How-to can be assigned to.",
-    i18n_domain="plonehelpcenter",
-    rows=6)
-               ),
-    ))
+    )) + SectionsVocabSchema
 
 ###
 # TutorialPage
@@ -237,24 +229,121 @@ TutorialPageSchema = HCSchema + Schema((
               accessor="Description",
               storage=MetadataStorage(),
               widget = TextAreaWidget(
-    description = "Enter a brief description",
-    description_msgid = "help_description",
-    label = "Description",
-    label_msgid = "label_description",
-    rows = 5,
-    i18n_domain = "plone")),
+                  description = "Enter a brief description",
+                  description_msgid = "help_description",
+                  label = "Description",
+                  label_msgid = "label_description",
+                  rows = 5,
+                  i18n_domain = "plone")),
 
+              TextField('body',
+                  required = 1,
+                  searchable = 1,
+                  primary = 1,
+
+                  widget = RichWidget(
+                      description = "The body text.",
+                      description_msgid = "help_body_text",
+                      label = "Body text",
+                      label_msgid = "label_body_text",
+                      rows = 25,
+                      i18n_domain = "plone"),
+                  **DEFAULT_CONTENT_TYPES
+                  ))
+              )
+
+###
+# ErrorReference
+###
+
+ErrorReferenceSchema = HCFolderSchema + Schema((
+    TextField('description',
+        default='',
+        searchable=1,
+        accessor="Description",
+        storage=MetadataStorage(),
+        widget = TextAreaWidget(),
+        ),
     TextField('body',
-              required = 1,
-              searchable = 1,
-              primary = 1,
+        searchable=1,
+        required=1,
+        primary=1,
+        widget=RichWidget(description_msgid='desc_errorref_body',
+            description='Explanation of the error.',
+            label_msgid='body',
+            label='Body',
+            i18n_domain = "plonehelpcenter",
+            rows=25,
+            ),
 
-              widget = RichWidget(
-    description = "The body text.",
-    description_msgid = "help_body_text",
-    label = "Body text",
-    label_msgid = "label_body_text",
-    rows = 25,
-    i18n_domain = "plone"),
-    **DEFAULT_CONTENT_TYPES))
-                             )
+        **DEFAULT_CONTENT_TYPES
+        ),
+        ),
+
+    marshall=PrimaryFieldMarshaller(),
+
+    ) + VersionsSchema + SectionsSchema
+
+###
+# ErrorReferenceFolder
+###
+
+ErrorReferenceFolderSchema = HCFolderSchema + Schema((
+    TextField('description',
+        searchable=1,
+        accessor="Description",
+        storage=MetadataStorage(),
+        widget=TextAreaWidget(description_msgid="desc_folder",
+            description="Description for the Error Reference Container.",
+            label_msgid="label_folder",
+            label="Description",
+            i18n_domain = "plonehelpcenter",
+            rows=6)),
+        )) + SectionsVocabSchema
+
+###
+# Link
+###
+
+LinkSchema = HCFolderSchema + Schema((
+    TextField('description',
+        default='',
+        searchable=1,
+        accessor="Description",
+        storage=MetadataStorage(),
+        widget = TextAreaWidget(),
+        ),
+    StringField('url',
+        searchable=1,
+        required=1,
+        primary=1,
+        widget=StringWidget(description_msgid='desc_link_url',
+            description='Web address',
+            label_msgid='url',
+            label='URL',
+            i18ndomain='link',
+            ),
+        ),
+    ),
+
+    marshall=PrimaryFieldMarshaller(),
+
+    ) + VersionsSchema + SectionsSchema
+
+###
+# LinkFolder
+###
+
+LinkFolderSchema = HCFolderSchema + Schema((
+    TextField('description',
+        searchable=1,
+        accessor="Description",
+        storage=MetadataStorage(),
+        widget=TextAreaWidget(description_msgid="desc_folder",
+            description="Description for the Link Container.",
+            label_msgid="label_folder",
+            label="Description",
+            i18n_domain = "plonehelpcenter",
+            rows=6)),
+        )) + SectionsVocabSchema
+

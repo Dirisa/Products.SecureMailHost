@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
+<head>
+  <metal:css fill-slot="css_slot">
+    <style type="text/css" media="all"
+      tal:content="string: @import url($portal_url/helpcenter.css);"></style>
+  </metal:css>
+</head>
+
+<body>
+  <div metal:fill-slot="main">
+    <div metal:define-macro="body" 
+      tal:define="section request/section; 
+      faqpath python: '/'.join(here.getPhysicalPath()); 
+      pss python:modules['Products.PythonScripts.standard']; ">
+
+
+      <h1 tal:content="here/Title" class="documentFirstHeading">
+        Folder Title
+      </h1>
+
+      <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+      </div>
+
+      <tal:entirefaq>
+        <a class="link-expand"
+          tal:attributes="href python:'%s?full=1' % here_url">View entire FAQ in full</a>
+      </tal:entirefaq>
+
+      <tal:toc>
+        <a class="link-parent"
+          tal:attributes="href here_url">Up to table of contents</a>
+      </tal:toc>
+
+      <div class="documentDescription"
+        tal:content="here/Description">
+        Description.
+      </div>
+
+      <h2 tal:content="section">Section Heading</h2>
+
+      <div class="faqMarker" tal:repeat="faq python: here.getItemsBySection(section=section)">
+
+        <h3>
+          <img tal:replace="structure here/faq_icon.gif" />
+          <span tal:replace="faq/Title">Question</span>
+        </h3>
+
+        <p tal:condition="faq/Description"
+        tal:content="structure faq/Description">
+        Full Question
+        </p>
+
+        <div tal:content="structure faq/getAnswer">
+          Answer
+        </div>
+
+        <p tal:condition="faq/getVersions" 
+        class="discreet">
+        This FAQ applies to: 
+        <span tal:condition="faq/versions"
+          metal:use-macro="python:faq.widget('versions')">
+          Versions
+        </span>
+
+        <span tal:condition="not: faq/versions">
+          Any version.
+        </span>
+        </p>
+      </div>
+    </div>
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+  </div>
+</body>
+
+</html>

@@ -2,20 +2,18 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-from schemata import HowToSchema
+from schemata import ErrorReferenceSchema
 from PHCContent import PHCContent
 
 
-class HelpCenterHowTo(PHCContent,BaseFolder):
-    """This is a howto document content object, to which you can attach images and
-    files.
-    """
+class HelpCenterErrorReference(PHCContent,BaseFolder):
+    """This is an error reference object, meant to hold documentation about error messages""" 
 
-    content_icon = 'howto_icon.gif'
+    content_icon = 'errorref_icon.gif'
 
-    schema = HowToSchema
-    archetype_name = 'How-to'
-    meta_type = 'HelpCenterHowTo'
+    schema = ErrorReferenceSchema
+    archetype_name = 'Error Reference'
+    meta_type = 'HelpCenterErrorReference'
     global_allow = 0
     filter_content_types = 1
     allow_discussion = IS_DISCUSSABLE
@@ -24,7 +22,7 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
     actions = ({
         'id': 'view',
         'name': 'View',
-        'action': 'string:${object_url}/howto_view',
+        'action': 'string:${object_url}/errorreference_view',
         'permissions': (CMFCorePermissions.View,)
         },
         {
@@ -36,4 +34,9 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
         
         )
 
-registerType(HelpCenterHowTo, PROJECTNAME)
+    security = ClassSecurityInfo()
+    
+    security.declareProtected(CMFCorePermissions.View,'Versions')
+    #
+
+registerType(HelpCenterErrorReference, PROJECTNAME)

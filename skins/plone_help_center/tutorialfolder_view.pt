@@ -1,66 +1,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-    lang="en"
-    metal:use-macro="here/main_template/macros/master"
-    i18n:domain="plonehelpcenter">
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
 
-<head>
+  <head>
     <metal:css fill-slot="css_slot">
-    <style type="text/css" media="all"
-           tal:content="string: @import url($portal_url/helpcenter.css);"></style>
+      <style type="text/css" media="all"
+        tal:content="string: @import url($portal_url/helpcenter.css);"></style>
     </metal:css>
-</head>
+  </head>
 
-<body>
+  <body>
     <div metal:fill-slot="main">
-        <div metal:define-macro="body" 
-             tal:define="req_section request/section|nothing; 
-                         faqpath python: '/'.join(here.getPhysicalPath()); 
-                         pss python:modules['Products.PythonScripts.standard']; 
-                         full request/full|nothing">
 
-        <h1 tal:content="here/Title">
+      <h1 tal:content="here/Title" class="documentFirstHeading">
         Folder Title
-        </h1>
-        
-        <div tal:condition="request/form/section |nothing">
-            <a href=""
-                class="link-parent"
-                tal:define="parent_url here/absolute_url"
-                tal:condition="python: req_section"
-                tal:attributes="href parent_url"
-                i18n:translate="go_to_parent_url">
-                Up one level
-            </a>
-        </div>
+      </h1>
 
-        <div class="documentDescription"
-             tal:content="here/Description">
+      <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+      </div>
+
+      <div class="documentDescription"
+        tal:content="here/Description">
         Description.
-        </div>
-        
-        <div tal:define="sections python:test(req_section,[req_section],here.sections);
-                         objects python:here.objectValues();" 
-             tal:repeat="section sections">
- 
-            <h2 tal:content="section">Section Heading</h2>
- 
-            <tal:section condition="python: not full and not req_section">
-                <a class="link-expand"
-                   tal:attributes="href python:'%s?full=1&section=%s' % (here.absolute_url(), pss.url_quote(section) )">
-                View section in full</a> 
-            </tal:section>
- 
-            <ul class="faqMarker"
-                tal:condition="not: full">
-                <li tal:repeat="tut python: [o for o in objects if o.portal_type=='HelpCenterTutorial' and section in o.getSections()]">
-                <a href="" tal:content="tut/Title"
-		  tal:attributes="href tut/absolute_url">FAQ Question</a>
-                </li>
-            </ul>
+      </div>
 
-        </div>
-        </div>
+      <div tal:repeat="section here/getSectionsToList">
+
+        <h2 tal:content="section">Section Heading</h2>
+
+        <ul>
+
+          <li tal:repeat="tutorial python:here.getItemsBySection(section=section)">
+          <a href="" tal:content="tutorial/Title"
+            tal:attributes="href tutorial/absolute_url">HowTo</a>
+          <span tal:replace="tutorial/Description">[descrip]</span>
+          </li>
+          
+        </ul>
+      </div>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
     </div>
-</body>
+    </div>
+  </body>
 
 </html>

@@ -19,6 +19,8 @@
                     tal:define="my_path python: '/'.join(here.getPhysicalPath());
                                 subtypes python:{'HelpCenterFAQFolder':'HelpCenterFAQ',
                                        'HelpCenterTutorialFolder':'HelpCenterTutorial',
+                                       'HelpCenterLinkFolder':'HelpCenterLink',
+                                       'HelpCenterErrorReferenceFolder':'HelpCenterErrorReference',
                                        'HelpCenterHowToFolder':'HelpCenterHowTo'}">
             <h1 tal:content="here/title_or_id" class="documentFirstHeading">
               Title or id
@@ -35,12 +37,13 @@
         
             <p>
             RSS feed for all documentation types: 
-            <a tal:attributes="href python:portal_url + '/search_rss?review_state=published&sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
+            <a tal:attributes="href python:portal_url + '/search_rss?sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
             <img tal:attributes="src string:$portal_url/rss.gif"></a>
             </p>
 
-            <tal:listings repeat="help_type python: here.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
-                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
+            <tal:defs define="help_types python: here.portal_catalog(portal_type=subtypes.keys(), path=my_path)">
+              <tal:listings repeat="help_type help_types">
+                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=subtypes[help_type.portal_type], path=folder_path)">
 
                     <div class="portlet portletThirdWidth">
                         <h6>
@@ -76,6 +79,15 @@
                     </div>
                 </div>
             </tal:listings>
+            <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes.keys())">
+              <!-- or at least none that this person has the rights to see -->
+              <p class="discreet">There are no contained help center object types.</p>
+            </tal:nolist>
+            <tal:nopublished tal:condition="python: not help_types and here.contentValues(subtypes.keys())">
+              <!--- this user has perms to see the contained types, except that particular state(s) are required -->
+              <p class="discreet">There are contained help center object types, but none will are viewable because of their state.</p>
+            </tal:nopublished>
+            </tal:defs>
 
         <div class="visualClear"></div>
       

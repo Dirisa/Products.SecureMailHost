@@ -18,8 +18,9 @@
 
     <div metal:define-macro="main"
          tal:define="len_text python:len(here.getBody());
-                     sibl python:here.contentValues('HelpCenterTutorialPage');
-                     pos python:here.aq_inner.aq_parent.getObjectPosition(here.getId())">
+	 sibl here/getPages;
+		     num_sibl python:len(sibl);
+		     pos python:here.getPagePosition(here);">
       
         <h1 class="documentFirstHeading">
             <img tal:replace="structure here/howto_icon.gif" />
@@ -73,7 +74,7 @@
             </div>
                   
             <p tal:content="python: mtool.getMemberById(here.Creator()).getProperty('fullname')"
-               tal:on-error="nothing">
+               tal:on-error="here/Creator">
             Full name
             </p>
                     
@@ -82,7 +83,7 @@
             </div>
             
             <div>
-            Page XX of YY.
+	      Page <span tal:replace="python:pos+1">5</span> of <span tal:replace="python:num_sibl">10</span>.
             </div>
         </div>
 
@@ -92,7 +93,7 @@
     
         <div class="listingBar">
             <a class="listingNext"
-               tal:define="next python:pos &lt; len(sibl)-1 and sibl[pos+1]"
+	      tal:define="next python:pos &lt; num_sibl-1 and sibl[pos+1]"
                tal:condition="python:next"
                tal:attributes="href next/absolute_url"
                tabindex="1"

@@ -14,3 +14,5 @@ DEFAULT_CONTENT_TYPES = {
                                 'text/html',
                                 'text/structured',)
     }
+
+IS_DISCUSSABLE=1

@@ -2,7 +2,7 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-from schemata import HCSchemaWithVersion as HCSchema
+from schemata import HCSchema as HCSchema
 
 class PHCContent:
     """A simple  mixin class to provide contentish functions
@@ -21,22 +21,16 @@ class PHCContent:
 
     security = ClassSecurityInfo()
 
-    def _get_versions_vocab(self):
-        return self.aq_parent._get_versions_vocab()
+    def getVersionsVocab(self):
+        """Get version vocabulary"""
+        return self.aq_parent.getVersionsVocab()
     
-    def _get_sections_vocab(self):
-        return self.aq_parent._get_sections_vocab()
+    def getSectionsVocab(self):
+        """Get sections vocabulary"""
+        return self.aq_parent.getSectionsVocab()
 
     def Versions(self):
         """method to display the versions in a nicer way
         """
 
-        # XXX is this really necessary? the widget supports this, doesn't it? ~limi
-        result=""
-        for version in self.versions:
-            if result:
-                result=result+", "+ version
-            else:
-                result=version
-        return result
-
+        return ", ".join(self.versions)

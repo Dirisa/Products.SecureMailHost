@@ -17,12 +17,13 @@ class HelpCenterFAQ(PHCContent,BaseContent):
     archetype_name = 'FAQ'
     meta_type = 'HelpCenterFAQ'
     global_allow = 0
-    allow_discussion = 1
+    allow_discussion = IS_DISCUSSABLE
 
     actions = ({'id': 'view',
                 'name': 'View',
                 'action': 'string:${object_url}/faq_view',
                 'permissions': (CMFCorePermissions.View,)
                 },)
+
 
 registerType(HelpCenterFAQ, PROJECTNAME)

@@ -32,10 +32,10 @@
 
         <ul>
 
-          <li tal:repeat="howto python:here.getItemsBySection(section=section)">
-          <a href="" tal:content="howto/Title"
-            tal:attributes="href howto/absolute_url">HowTo</a>
-          <span tal:replace="howto/Description">[descrip]</span>
+          <li tal:repeat="errorref python:here.getItemsBySection(section=section)">
+          <a href="" tal:content="errorref/Title"
+            tal:attributes="href errorref/absolute_url">HowTo</a>
+          <span tal:replace="errorref/Description">[descrip]</span>
           </li>
           
         </ul>

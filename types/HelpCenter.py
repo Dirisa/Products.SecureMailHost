@@ -32,7 +32,11 @@ class HelpCenter(BaseFolder):
     archetype_name = 'Help Center'
     meta_type = 'HelpCenter'
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder', 'HelpCenterTutorialFolder')
+    allowed_content_types = ( 'HelpCenterFAQFolder'
+                            , 'HelpCenterHowToFolder'
+                            , 'HelpCenterTutorialFolder'
+                            , 'HelpCenterLinkFolder'
+                            , 'HelpCenterErrorReferenceFolder' )
 
     security = ClassSecurityInfo()
 
@@ -43,9 +47,6 @@ class HelpCenter(BaseFolder):
         'permissions' : (CMFCorePermissions.View,)
          },
          )
-
-    def _get_versions_vocab(self):
-        return self.versions
 
     def initializeArchetype(self, **kwargs):
         # prepopulate folder
@@ -62,5 +63,13 @@ class HelpCenter(BaseFolder):
         self.invokeFactory('HelpCenterTutorialFolder','tutorial')
         self['tutorial'].setTitle('Tutorials')
         self['tutorial'].setDescription('Detailed tutorials.')
+
+        self.invokeFactory('HelpCenterErrorReferenceFolder','error')
+        self['error'].setTitle('Error Reference')
+        self['error'].setDescription('Reference reference section.')
+
+        self.invokeFactory('HelpCenterLinkFolder','link')
+        self['link'].setTitle('Links')
+        self['link'].setDescription('Links section.')
 
 registerType(HelpCenter, PROJECTNAME)

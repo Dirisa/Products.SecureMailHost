@@ -1,55 +1,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-    lang="en"
-    metal:use-macro="here/main_template/macros/master"
-    i18n:domain="plonehelpcenter">
- 
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="plonehelpcenter">
+
 <body>
-    <div metal:fill-slot="main"
-         tal:define="faq nocall:faq|here">
-         
-        <div metal:define-macro="faq">
-        
-            <tal:vars define="w python:here.widget;">
-    
-                <h2>
-                <img tal:replace="structure here/faq_icon.gif" />
-                <span tal:replace="faq/Title">Question</span>
-                </h2>
-                
-                <a href=""
-                    class="link-parent visualNoPrint"
-                    tal:condition="not: request/full|nothing"
-                    tal:define="parent_url python:here.navigationParent(here, template.getId())"
-                    tal:attributes="href parent_url">
-                    Up to Table of Contents
-                </a>
+  <div metal:fill-slot="main">
 
-                <div class="documentDescription"
-                     tal:condition="faq/Description"
-                     tal:content="structure faq/Description">
-                Full Question
-                </div>
-                   
-                <div tal:content="structure faq/getAnswer">
-                Answer
-                </div>
-        
-                <p tal:condition="faq/getVersions" 
-                   class="discreet">
-                    This FAQ applies to: 
-                    <span tal:condition="faq/versions"
-                          metal:use-macro="python:faq.widget('versions')">
-                    Versions
-                    </span>
-    
-                    <span tal:condition="not: faq/versions">
-                    Any version.
-                    </span>
-                </p>
-    
-            </tal:vars>
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
 
-        </div>
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+      Document actions (print, sendto etc)
     </div>
+
+    <a href=""
+      class="link-parent visualNoPrint"
+      tal:condition="not: request/full|nothing"
+      tal:define="parent_url python:here.navigationParent(here, template.getId())"
+      tal:attributes="href parent_url">
+      Up to Table of Contents
+    </a>
+
+    <div class="documentDescription"
+      tal:condition="here/Description"
+      tal:content="structure here/Description">
+      Full Question
+    </div>
+
+    <div tal:content="structure here/getAnswer|string:(This question has not yet been answered.)">
+      Answer
+    </div>
+
+    <p tal:condition="here/getVersionsVocab" tal:define="versions here/Versions" class="discreet">
+    This faq applies to:
+    <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>
+    <span tal:condition="not: versions">Any version</span>
+    </p>
+
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+  </div>
 </body>
 </html>

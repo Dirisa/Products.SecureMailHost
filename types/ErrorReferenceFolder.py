@@ -10,30 +10,31 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-from schemata import TutorialFolderSchema
+from schemata import ErrorReferenceFolderSchema
 from PHCFolder import PHCFolder
 
-class HelpCenterTutorialFolder(PHCFolder,BaseFolder):
+
+
+class HelpCenterErrorReferenceFolder(PHCFolder,BaseFolder):
     """A simple folderish archetype"""
 
-    content_icon = 'tutorial_icon.gif'
+    content_icon = 'errorref_icon.gif'
 
-    schema = TutorialFolderSchema
-    archetype_name = 'Tutorial Area'
-    meta_type = 'HelpCenterTutorialFolder'
+    schema = ErrorReferenceFolderSchema
+    archetype_name = 'Error Reference Area'
+    meta_type = 'HelpCenterErrorReferenceFolder'
     global_allow = 0
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterTutorial', )
+    allowed_content_types = ('HelpCenterErrorReference', )
     
     security = ClassSecurityInfo()
     
     actions = ({
         'id'          : 'view',
         'name'        : 'View',
-        'action'      : 'string:${object_url}/tutorialfolder_view',
+        'action'      : 'string:${object_url}/errorreferencefolder_view',
         'permissions' : (CMFCorePermissions.View,)
          },
          )
 
-
-registerType(HelpCenterTutorialFolder, PROJECTNAME)
+registerType(HelpCenterErrorReferenceFolder, PROJECTNAME)
