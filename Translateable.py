@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.12 2004/01/16 15:46:29 ajung Exp $
+$Id: Translateable.py,v 1.13 2004/01/21 11:58:36 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -36,6 +36,13 @@ class Translateable:
         except:
             return None
 
+    def _getPloneEncoding(self):
+        """ return the site encoding of Plone """
+        encoding = getattr(self, '_v_site_encoding', None)
+        if encoding is None:
+            self._v_site_encoding = self.portal_properties.site_properties.default_charset
+        return self._v_site_encoding    
+
 
     security.declarePublic('translate')
     def translate(self, msgid, text, target_language=None, as_unicode=0,**kw):
@@ -45,18 +52,21 @@ class Translateable:
         if pts is None:
             return self._interpolate(text, kw)
 
-        # using the as_unicode parameter requires the lastest PTS version
-        # from the CVS
+        # Using the as_unicode parameter requires the lastest PTS version
+        # from the CVS. In generell we retrieve the translations from PTS
+        # always as unicode and convert it back to the Plone site encoding
+        # if necessary
 
-        ret = pts.translate(domain=i18n_domain, 
+        v = pts.translate(domain=i18n_domain, 
                             msgid=msgid, 
                             context=self,
                             mapping=kw,  
                             default=text,
                             target_language=target_language,
-                            as_unicode=as_unicode)
-        return ret
+                            as_unicode=1)
 
+        if as_unicode: return v
+        else: return v.encode(self._getPloneEncoding())
 
     security.declarePublic('getLanguages')
     def getLanguages(self):
