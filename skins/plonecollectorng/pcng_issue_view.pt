@@ -30,7 +30,8 @@
       </metal:block>
 
       <div style="clear: both"
-           tal:define="canEdit python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here)">
+           tal:define="canEdit python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here);
+                       canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
 
         <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames()">
           <tal:if  tal:condition="python: schemata_name not in ('default',) "> 
@@ -61,7 +62,7 @@
         <div class="portlet"  id="pcng_metadata" tal:define="references here/getForwardReferences">
           <h5>
             <span i18n:translate="references">References</span>
-            <a tal:condition="canEdit" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
+            <a tal:condition="canFollowup" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
           </h5>
           <div class="portletBody">
             <metal:loop tal:repeat="ref references">
@@ -76,7 +77,7 @@
         <div class="portlet" id="pcng_metadata" tal:define="uploads here/objectValues">
           <h5>
             <span i18n:translate="Uploads">Uploads</span>
-            <a tal:condition="canEdit" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+            <a tal:condition="canFollowup" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
           </h5>
           <div class="portletBody">
             <ul>
