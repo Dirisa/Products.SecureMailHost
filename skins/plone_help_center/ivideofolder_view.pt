@@ -45,12 +45,6 @@
                             Click to enlarge
                         </span>
                     </a>
-                    <div class="discreet">
-                        <strong>Duration:</strong>
-                        <span tal:content="video/duration" tal:condition="video/duration | nothing">
-                              Duration
-                        </span>
-                    </div>
                 </div>
                 <img tal:replace="structure here/movie_icon.gif" />
                 <a href="" tal:content="video/Title"
@@ -60,6 +54,17 @@
             </dt>
             
             <dd tal:content="video/Description">Description</dd>
+            <div class="discreet" tal:define="getObjSize nocall:portal/getObjSize">
+                <strong>Duration:</strong>
+                <span tal:content="video/duration" tal:condition="video/duration | nothing">
+                      Duration
+                </span> minutes
+                <br />
+                <strong>Size:</strong>
+                <span tal:content="python:getObjSize(video)" tal:condition="video/video_file | nothing">
+                      Size
+                </span>
+            </div>
           </tal:video>
         </dl>
 
