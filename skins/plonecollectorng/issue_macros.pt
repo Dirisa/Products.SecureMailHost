@@ -8,7 +8,7 @@
 
     <ul>
       <li tal:repeat="ref references">
-        <a tal:attributes="href python: getattr(here,ref.getTracker()).absolute_url() + '/' + ref.getTicketNumber()" tal:content="string: ${ref/getTracker} #${ref/getTicketNumber} "/>
+        <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
         (<span tal:replace="ref/getComment"/>)
       </li>
     </ul>
@@ -96,8 +96,8 @@
         <div class="field">
           <select name="reference.tracker:record:string">
             <option value="" />
-            <metal:block tal:repeat="tracker python:here.superValues(('Collector',))">
-              <option tal:attributes="value tracker/getId;
+            <metal:block tal:repeat="tracker python:here.superValues(('PloneCollectorNG',))">
+              <option tal:attributes="value python: '/' + tracker.absolute_url(1);
                                       selected python: tracker.getId()==here.aq_parent.getId()"
                       tal:content="string: ${tracker/getId} (${tracker/title})" />
 
