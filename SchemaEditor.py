@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.3 2003/09/07 07:58:24 ajung Exp $
+$Id: SchemaEditor.py,v 1.4 2003/09/07 10:05:06 ajung Exp $
 """
 
 import operator
@@ -52,12 +52,14 @@ class SchemaEditor:
 
     def newSchema(self, name, RESPONSE=None):
         """ add a new schema """
+        if name in self._schema_names:
+            raise ValueError('Schemata "%s" already exists' % name)
         self._schema_names.append(name)
-        self._schemas[name] = None
+        self._schemas[name] = Schema(name)
         self._p_changed = 1
 
         if RESPONSE is not None:
-            RESPONSE.redirect('pcng_schema_editor?portal_status_message=Schema%20added')
+            RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Schema%%20added' % name)
 
     def delSchema(self, name, RESPONSE=None):
         """ delete a schema """
@@ -92,6 +94,20 @@ class SchemaEditor:
             elif d.widget == 'Radio': D['widget'] = SelectionWidget
             elif d.widget == 'Textarea': D['widget'] = TextAreaWidget
 
+            if d.widget in ('Radio', 'Select'):
+
+                vocab = d.get('vocabulary', [])
+                l = []
+                for line in vocab:
+                    line = line.strip()
+                    if line.find('|') == -1:
+                        k = v = line
+                    else:
+                        k,v = line.split('|', 1)
+                    l.append( (k,v))
+
+                D['vocabulary'] = DisplayList(l)
+
             D['required'] = d.get('required', 0)
             schema.addField(field(name, **D))
 
@@ -101,3 +117,17 @@ class SchemaEditor:
         if RESPONSE is not None:
             RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Schema changed' % fieldset)
 
+    def schema_get_fieldtype(self, field):
+        """ return the type of a field """
+        return field.__class__.__name__
+    
+    def schema_format_vocabulary(self, field):
+        """ format the DisplayList of a field to be display
+            within a textarea.
+        """
+        l = []
+        for k in field.vocabulary:
+            v = field.vocabulary.getValue(k)
+            if k == v: l.append(k)
+            else: l.append('%s|%s' % (k,v))
+        return '\n'.join(l)

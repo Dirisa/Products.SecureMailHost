@@ -14,16 +14,24 @@
                    fieldsets python:[key for key in here.getSchemaNames() if key != 'metadata'];"
            tal:omit-tag="">
        <div tal:condition="fieldsets">  <!-- Navigation -->
-         <tal:block repeat="set fieldsets">
-           <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
-             <b>[<span tal:content="set" />]</b>
-           </div>
-           <div tal:condition="python: set != fieldset" tal:omit-tag="">
-             <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}">
-                [<span tal:content="set" />]</a>
-           </div>
-         </tal:block>
+         <form action="newSchema" method="post">
+           <tal:block repeat="set fieldsets">
+             <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
+               <b>[<span tal:content="set" />]</b>
+             </div>
+             <div tal:condition="python: set != fieldset" tal:omit-tag="">
+               <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}">
+                  [<span tal:content="set" />]</a>
+
+             </div>
+           </tal:block>
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <input type="text" name="name" value="" size="10">
+           <input type="submit" value=" Add schemata " >
+         </form>
+
        </div>  <!-- EOF Navigation -->
+
      <form action="schema_update" method="post">
        <input type="hidden" name="fieldset" tal:attributes="value fieldset">
        <table class="listing">
@@ -42,17 +50,27 @@
           <td valign="top">
             <select tal:attributes="name string:${field/getName}.field:record:string">
               <span tal:repeat="item python: ('StringField', 'IntegerField')">
-                <option tal:attributes="value item"
+                <option tal:attributes="value item;
+                                        selected python: item==here.schema_get_filetype(field)"
                         tal:content="item" />
               </span>
             </select>
-           </td>
+          </td>
+
           <td valign="top">
             <select tal:attributes="name string:${field/getName}.widget:record:string">
-              <span tal:repeat="item python: ('String', 'Select', 'Radio', 'Textarea')">
-                <option tal:attributes="value item"
-                        tal:content="item" />
-              </span>
+              <option value="String" 
+                      tal:content="string:String"
+                      tal:attributes="selected python: field.getWidgetName()=='StringWidget'" />
+              <option value="Textarea" 
+                      tal:content="string:Textarea"
+                      tal:attributes="selected python: field.getWidgetName()=='TextAreaWidget'" />
+              <option value="Radio" 
+                      tal:content="string:Radio"
+                      tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='flex'"/>
+              <option value="Select" 
+                      tal:content="string:Select"
+                      tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
             </select>
            </td>
           <td valign="top">
@@ -61,7 +79,10 @@
            </td>
           <td valign="top">
             <textarea cols="40" rows="3"
-                   tal:attributes="name string:${field/getName}.vocabulary:record:lines"> </textarea>
+                   tal:condition="python: field.getWidgetName()=='SelectionWidget'"
+                   tal:attributes="name string:${field/getName}.vocabulary:record:lines"
+                   tal:content="python: here.schema_format_vocabulary(field)"
+             ></textarea>
            </td>
           <td valign="top">
             <input type="text" value="" size="20" 
@@ -87,7 +108,7 @@
              <input type="submit" value=" Save ">
            </td>
            <td colspan="2">
-             <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this fieldset</a>
+             <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this schemata</a>
            </td>
        </table>
     </form>
