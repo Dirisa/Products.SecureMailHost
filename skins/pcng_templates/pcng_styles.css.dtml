@@ -224,4 +224,14 @@ div.pcng_action {
 }
 
 
+/* followup */
+
+div.private pre{
+    background: #55ffaa;
+}
+
+div.public pre{
+    background: #55ffdd;
+}
+
 /* </dtml-with> */

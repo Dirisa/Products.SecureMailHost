@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.221 2004/09/24 14:44:17 ajung Exp $
+$Id: Issue.py,v 1.222 2004/09/24 16:45:56 ajung Exp $
 """
 
 import os, time, random
@@ -457,7 +457,8 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
             if not name in field_names: continue
             new = REQUEST.get(name, None)
             old = self.getField(name).get(self)
-            self.getTranscript().add(ChangeEvent(name, old, new))
+            if repr(old) != repr(new):
+                self.getTranscript().add(ChangeEvent(name, old, new))
 
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this

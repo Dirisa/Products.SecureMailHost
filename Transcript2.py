@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript2.py,v 1.3 2004/09/24 14:44:18 ajung Exp $
+$Id: Transcript2.py,v 1.4 2004/09/24 16:45:56 ajung Exp $
 """
 
 import time, random 
@@ -32,7 +32,10 @@ class BaseEvent(SimpleItem):
         if not state in allowed_states:
             raise ValueError('Unknown state: %s' % state)
         self._creator = getSecurityManager().getUser().getUserName()
-        self._user = user 
+        if user:
+            self._user = user 
+        else:
+            self._user = self._creator
         self._state = state
         self._newTimestamp()
 
@@ -180,13 +183,15 @@ class Transcript2(SimpleItem):
         self._items[event.getCreated()] = event
 
     security.declareProtected(View, 'getEvents')
-    def getEvents(self, reverse=1, show_only=()):
+    def getEvents(self, reverse=1, types=(), show_only=()):
         """ return all events sorted by timestamp in reverse order. 'show_only' is 
             a sequence of allowed states to be returned 
          """
         lst = list(self._items.values())
         if show_only:
             lst = [e for e in lst  if e.getState() in show_only]
+        if types:
+            lst = [e for e in lst  if e.getType() in types]
         lst.sort(lambda x,y:  cmp(x.getCreated(), y.getCreated()))
         if reverse: lst.reverse()
         return lst

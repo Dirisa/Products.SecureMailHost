@@ -69,7 +69,7 @@
     
 <div metal:define-macro="transcript_comments" i18n:domain="plonecollectorng">
 
-  <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents() if e.getType() == 'comment'];
+  <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents(types=['comment'], show_only=('private', 'public'))];
                     num_events python: len(events)">
 
     <span tal:condition="not: events" i18n:translate="no_entries">No entries</span>
@@ -77,11 +77,14 @@
     <tal:loop tal:repeat="event events" >
       <div id="transcriptheader">
         #<span tal:content="python: num_events - repeat['event'].index" />:
-         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />)
+         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />) 
+         (<span i18:translate="" tal:content="event/getState"/>)
       </div>
 
       <div id="transcriptevent">
-        <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+        <div tal:attributes="class event/getState">
+          <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+        </div>
         <div>
           <div class="right" tal:condition="python: event.getType() == 'comment'" id="pcng_transcript_actions">
             <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
@@ -111,9 +114,12 @@
   <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents() if e.getType() not in ('comment', 'action')];
                        num_events python: len(events)">
 
+    <span tal:condition="not: events" i18n:translate="no_entries">No entries</span>
+
     <table class="listing">
-      <tr>
+      <tr tal:condition="events">
         <th i18n:translate="date">Date</th>
+        <th i18n:translate="user">User</th>
         <th i18n:translate="event_type">Event type</th>
         <th i18n:translate="field">Field</th>
         <th i18n:translate="changes">Changes</th>
@@ -121,7 +127,10 @@
 
       <tr tal:repeat="event events">
         <td>
-         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />)
+         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> 
+        </td>
+        <td>
+          <span i18n:translate="" tal:content="event/getUser" />
         </td>
         <td>
           <span i18n:translate="" tal:content="event/getType" />
