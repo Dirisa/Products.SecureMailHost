@@ -69,7 +69,7 @@ class PHCFolder:
         max_sections = len(self.sections_vocab)
 
         for o in self.getItems(states):
-            for s in o.sections:
+            for s in o.getSections():
                 sections[s]=1
             if len(sections) == max_sections:
                 break
