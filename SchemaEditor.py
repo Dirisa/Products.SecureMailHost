@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.12 2003/09/13 13:08:21 ajung Exp $
+$Id: SchemaEditor.py,v 1.13 2003/09/14 11:42:13 ajung Exp $
 """
 
 import operator
@@ -29,19 +29,19 @@ class SchemaEditor:
 
     security.declareProtected(ManageCollector, 'schema_init')
     def schema_init(self, schema):
-        self._schema_names = []    # list of schemata names
+        self._schemata_names = []    # list of schemata names
         self._schemas = OOBTree()  # map schemata name to schemata
 
         for field in schema.fields():
-            if not field.schemata in self._schema_names:
-                self._schema_names.append(field.schemata)
+            if not field.schemata in self._schemata_names:
+                self._schemata_names.append(field.schemata)
                 self._schemas[field.schemata] = OrderedSchema()
             self._schemas[field.schemata].addField(field)
 
-    security.declareProtected(ManageCollector, 'getWholeSchema')
-    def getWholeSchema(self):
+    security.declareProtected(ManageCollector, 'schema_getWholeSchema')
+    def schema_getWholeSchema(self):
         """ return the concatenation of all schemas """       
-        l = [self._schemas[name] for name in self._schema_names]
+        l = [self._schemas[name] for name in self._schemata_names]
         s = reduce(operator.__add__, l) 
         for field in s.fields():
             if field.mutator is None:
@@ -52,33 +52,33 @@ class SchemaEditor:
                 field.accessor = 'archetypes_accessor'
         return s
 
-    security.declareProtected(ManageCollector, 'getSchemaNames')
+    security.declareProtected(ManageCollector, 'schema_getNames')
     def schema_getNames(self):
         """ return names of all schematas """
-        return self._schema_names
+        return self._schemata_names
 
-    security.declareProtected(ManageCollector, 'getSchema')
-    def getSchema(self, name):
+    security.declareProtected(ManageCollector, 'schema_getSchema')
+    def schema_getSchema(self, name):
         """ return a schema given by its name """
         return self._schemas[name]
 
-    security.declareProtected(ManageCollector, 'newSchema')
-    def newSchema(self, fieldset, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'schema_newSchema')
+    def schema_newSchema(self, fieldset, RESPONSE=None):
         """ add a new schema """
-        if fieldset in self._schema_names:
+        if fieldset in self._schemata_names:
             raise ValueError('Schemata "%s" already exists' % fieldset)
-        self._schema_names.append(fieldset)
+        self._schemata_names.append(fieldset)
         self._schemas[fieldset] = OrderedSchema()
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema added', fieldset=fieldset)
 
-    security.declareProtected(ManageCollector, 'delSchema')
-    def delSchema(self, fieldset, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'schema_delSchema')
+    def schema_delSchema(self, fieldset, RESPONSE=None):
         """ delete a schema """
-        self._schema_names.remove(fieldset)
+        self._schemata_names.remove(fieldset)
         del self._schemas[fieldset]
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted')
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted', fieldset=self._schemata_names[0])
 
     security.declareProtected(ManageCollector, 'schema_del_field')
     def schema_del_field(self, fieldset, name, RESPONSE=None):
@@ -164,6 +164,24 @@ class SchemaEditor:
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema changed', fieldset=fieldset)
 
+    security.declareProtected(ManageCollector, 'schema_moveLeft')
+    def schema_moveLeft(self, fieldset, RESPONSE=None):
+        """ move a schemata to the left"""
+        pos = self._schemata_names.index(fieldset)
+        if pos > 0:
+            self._schemata_names.remove(fieldset)
+            self._schemata_names.insert(pos-1, fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schemata moved to left', fieldset=fieldset)
+
+    security.declareProtected(ManageCollector, 'schema_moveRight')
+    def schema_moveRight(self, fieldset, RESPONSE=None):
+        """ move a schemata to the right"""
+        pos = self._schemata_names.index(fieldset)
+        if pos < len(self._schemata_names):
+            self._schemata_names.remove(fieldset)
+            self._schemata_names.insert(pos+1, fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schemata moved to right ', fieldset=fieldset)
+
     security.declareProtected(ManageCollector, 'schema_get_fieldtype')
     def schema_get_fieldtype(self, field):
         """ return the type of a field """
@@ -181,3 +199,4 @@ class SchemaEditor:
             else: l.append('%s|%s' % (k,v))
         return '\n'.join(l)
 
+InitializeClass(SchemaEditor)

@@ -14,7 +14,7 @@
                    fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];"
            tal:omit-tag="">
        <div tal:condition="fieldsets">  <!-- Navigation -->
-         <form action="newSchema" method="post">
+         <form action="schema_newSchema" method="post">
            <tal:block repeat="set fieldsets">
              <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
                <b>[<span tal:content="set" />]</b>
@@ -29,7 +29,11 @@
            <input type="text" name="fieldset" value="" size="10">
            <input type="submit" value=" Add schemata " >
            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-           <a tal:attributes="href string:delSchema?fieldset=${fieldset}">Delete this schemata</a>
+           <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}">Delete this schemata</a>
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}">Move left</a>
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}">Move right</a>
          </form>
 
        </div>  <!-- EOF Navigation -->
@@ -48,7 +52,7 @@
            <th>Visible</th>
            <th>Action</th>
          </tr>
-         <tr tal:repeat="field python: here.getSchema(fieldset).fields()" >
+         <tr tal:repeat="field python: here.schema_getSchema(fieldset).fields()" >
           <th tal:content="field/getName" />
           <td valign="top">
             <select tal:attributes="name string:${field/getName}.field:record:string">

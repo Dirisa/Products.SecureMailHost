@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.27 2003/09/13 13:08:20 ajung Exp $
+$Id: Collector.py,v 1.28 2003/09/14 11:42:13 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -258,7 +258,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         """ create a new issue """
         self._num_issues += 1
         id = str(self._num_issues)
-        issue = PloneIssueNG(id, '', self.getWholeSchema())
+        issue = PloneIssueNG(id, '', self.schema_getWholeSchema())
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
