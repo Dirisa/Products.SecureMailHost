@@ -121,7 +121,7 @@
             <tal:loop  
                       tal:define="searches python: member.getProperty('pcng_saved_searches');
                                   searches python: test(searches , searches, ())" 
-                      tal:repeat="saved_search python: [s for s in here.pcng_member_property(member, 'pcng_saved_searches', ()) if s.startswith(url)]" >
+                      tal:repeat="saved_search python: [s for s in (here.pcng_member_property(member, 'pcng_saved_searches', ()) or ()) if s.startswith(url)]" >
               <option tal:content="python: saved_search.split('::', 2)[1]" 
                       tal:attributes="value python: saved_search.split('::', 2)[2]"
                   />
