@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.31 2004/01/20 13:39:31 ajung Exp $
+$Id: pdfwriter.py,v 1.32 2004/01/21 09:26:41 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -120,9 +120,9 @@ DefStyle.fontName = NORMAL_FONT
 DefStyle.spaceBefore = 3
 DefStyle.spaceAfter = 1
 
-def definition(txt):
+def definition(txt, style=DefStyle):
     assert isinstance(txt, UnicodeType)
-    p = XPreformatted(utf8(txt), DefStyle)
+    p = XPreformatted(utf8(txt), style)
     Elements.append(p)
 
 
@@ -139,6 +139,8 @@ def pdfwriter(collector, ids):
 
     def getFieldValue(issue, field):
         v = issue.Schema()[field].get(issue)
+        if isinstance(v, StringType) or isinstance(v, UnicodeType):
+            v = v.replace(chr(13), '')
         if isinstance(v, StringType):
             return unicode(v, collector.getSiteEncoding())
         return v
@@ -149,14 +151,18 @@ def pdfwriter(collector, ids):
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
-        header(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), break_longlines(issue.title)), as_unicode=1))
+        header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1)))
 
         header(translate('label_description', 'Description', as_unicode=1))
-        definition(html_quote(getFieldValue(issue, 'description')))
+        definition(html_quote(getFieldValue(issue, 'description')), PreStyle)
 
         if issue.solution:
             header(translate('label_solution', 'Solution', as_unicode=1))
             definition(html_quote(getFieldValue(issue, 'solution')))
+
+        ##################################################################
+        # Schematas + Metadata
+        ##################################################################
 
         for name in issue.atse_getSchemataNames():
             if name in ('default', 'metadata'): continue
@@ -182,6 +188,10 @@ def pdfwriter(collector, ids):
             if s:
                 header(translate(name, name.capitalize(), as_unicode=1))
                 definition(dowrap(s))
+
+        ##################################################################
+        # Images
+        ##################################################################
 
         for img in issue.objectValues('Portal Image'):
 
@@ -215,8 +225,12 @@ def pdfwriter(collector, ids):
 
             Elements.append(Spacer(100, 0.2*inch))
 
-        header(translate('transcript', 'Transcript', as_unicode=1))
 
+        ##################################################################
+        # Transcript
+        ##################################################################
+
+        header(translate('transcript', 'Transcript', as_unicode=1))
         n = 1
 
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
@@ -248,7 +262,11 @@ def pdfwriter(collector, ids):
                 pre(break_longlines(comment))
             n+=1
 
+
+        ##################################################################
         # references
+        ##################################################################
+
         fw_refs = issue.getForwardReferences()
         if fw_refs:
             header(translate('references', 'References', as_unicode=1))
