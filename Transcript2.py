@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript2.py,v 1.4 2004/09/24 16:45:56 ajung Exp $
+$Id: Transcript2.py,v 1.5 2004/09/24 17:17:20 ajung Exp $
 """
 
 import time, random 
@@ -183,7 +183,7 @@ class Transcript2(SimpleItem):
         self._items[event.getCreated()] = event
 
     security.declareProtected(View, 'getEvents')
-    def getEvents(self, reverse=1, types=(), show_only=()):
+    def getEvents(self, reverse=True, types=(), show_only=()):
         """ return all events sorted by timestamp in reverse order. 'show_only' is 
             a sequence of allowed states to be returned 
          """
@@ -197,12 +197,12 @@ class Transcript2(SimpleItem):
         return lst
     
     security.declareProtected(View, 'getEventsGrouped')
-    def getEventsGrouped(self, reverse=1, show_only=()):
+    def getEventsGrouped(self, reverse=True, types=(), show_only=()):
         """ return all events grouped by their timestamp """
 
         last_ts = 0; last_user = None
         result = []
-        for event in self.getEvents(0, show_only):
+        for event in self.getEvents(False, types, show_only):
             if event.getUser() != last_user or event.getCreated() - last_ts > 60  or event.getType() in ('comment', ):
                 # new event
                 result.append([])
