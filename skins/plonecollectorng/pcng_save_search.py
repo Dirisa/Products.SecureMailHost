@@ -13,6 +13,8 @@ if mstool.isAnonymousUser():
 
 member = mstool.getAuthenticatedMember()
 saved_searches = member.getProperty('pcng_saved_searches', [])
+if not same_type(saved_searches, []):
+    raise RuntimeError('Strange pcng_saved_searches returned: %s' % str(saved_searches))
 
 for search in saved_searches:
     if search.startswith(query_id + '::'):
