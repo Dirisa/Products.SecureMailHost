@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.197 2004/06/30 18:34:19 ajung Exp $
+$Id: Issue.py,v 1.198 2004/07/01 14:16:32 ajung Exp $
 """
 
 import os, time, random 
-from urllib import unquote
+from urllib import unquote, quote
 from types import StringType, UnicodeType
 
 from Globals import PersistentMapping
@@ -217,7 +217,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if 'assign' in self.validActions():
                 action = 'assign'
             else:
-                raise RuntimeError(self.Translate('transition_required', 'You must perform a workflow transition when changing the assignees'))
+                return RESPONSE.redirect('pcng_issue_followup?comment=%s&portal_status_message=%s' % (quote(comment), quote(self.Translate('transition_required', 'You must perform a workflow transition when changing the assignees'))))
 
         # perform workflow action
         self._last_action = action
