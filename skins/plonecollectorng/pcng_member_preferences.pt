@@ -77,6 +77,20 @@
         </div>
 
         <div class="row">
+          <div class="label" i18n:translate="open_issue_in_new_window" >Open issues in a new window</div>
+          <div class="field">
+            <select name="pcng_issue_in_new_window:int">
+              <option tal:repeat="item python: ((0, 'No'), (1, 'Yes'))"
+                      tal:content="python: item[1]"
+                      i18n:translate=""
+                      tal:attributes="value python: item[0];
+                                      selected python: member.getProperty('pcng_issue_in_new_window') == item[0]"
+              />
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="label" i18n:translate="default_searchform" >Default search form</div>
           <div class="field">
             <select name="pcng_default_searchform">

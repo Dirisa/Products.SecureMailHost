@@ -47,6 +47,7 @@ def install(self):
                ('pcng_position_searchform','bottom', 'string'),
                ('pcng_default_searchform','simple', 'string'),
                ('pcng_hits_per_page', 15 , 'int'),
+               ('pcng_issue_in_new_window', 0 , 'int'),
                ('pcng_saved_searches', [] , 'lines'),
                ('pcng_default_view', 'simple', 'string'),
                ('pcng_phone', '', 'string') ):

@@ -827,3 +827,6 @@ msgstr "Aktualisieren"
 
 msgid "invalid_id_for_schemata"
 msgstr "$schemata ist eine ungültige ID für ein Schemata"
+
+msgid "open_issue_in_new_window"
+msgstr "Tickets aus Trefferliste in neuem Fenster öffnen"
