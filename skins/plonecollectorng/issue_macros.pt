@@ -71,11 +71,9 @@
             <span tal:define="icon item/getIcon|item/icon|nothing">
 
               <span tal:condition="icon">
-                <a href="" tal:attributes="href item/absolute_url">
-                  <img src="" alt="" border="0"
-                       tal:attributes="src python: here.portal_url() + '/' + icon;
-                                       alt item/Type|nothing" />
-                </a>
+                <img src="" alt="" border="0"
+                     tal:attributes="src python: here.portal_url() + '/' + icon;
+                                     alt item/Type|nothing" />
               </span>
               <a href="ITEM URL"
                  tal:attributes="href item/absolute_url"
