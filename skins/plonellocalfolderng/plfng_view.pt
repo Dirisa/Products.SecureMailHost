@@ -12,12 +12,15 @@
                  global filterValues decodedFilter;
                  global filter decodedFilter;
                  standalone python:1;
+                 valid_folder python:here.validFolder(REQUEST=request);
                  folder_contents python:here.getContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();
                  requireUploadMD5 python:here.requireUploadMD5();
                  fileUnpackingAllowed python:here.fileUnpackingAllowed();
                  errors python:request.get('errors', {})">
+ 
+ <metal:block tal:condition="python:valid_folder==1">
 
     <div>
         <form name="folderContentsForm"
@@ -239,6 +242,13 @@
     </div>
     
     </fieldset>
+  </metal:block>
+  
+  <metal:block tal:condition="python: valid_folder==0">
+     <p i18n:translate="description_no_visible_items_press_add">
+      This folder is not accessible.  Please report this problem to the portal administrator!!
+     </p>
+  </metal:block>
 
 </div>
 
