@@ -47,6 +47,10 @@ General:
 - Obsolete state has non-obvious name for the transition to pull it back into
   play.
 
+- A portlet to show content that hasn't been modified in 6 months - so we can go 
+  in and see if it's still relevant. We'll just hit save if it is, this is a
+  simple way of making sure content is reviewed periodically.
+
 - A way to set PHC-wide default Rights attribute - on plone.org we want 
   everything to be under the same license, for example. Maybe look at
   PloneCC which is a product to add Creative Commons licenses.
