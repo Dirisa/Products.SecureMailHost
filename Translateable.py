@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.35 2004/07/01 11:18:43 ajung Exp $
+$Id: Translateable.py,v 1.36 2004/07/01 13:20:30 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -15,11 +15,11 @@ from AccessControl import ClassSecurityInfo
 
 try:
     from Products.PlacelessTranslationService import getTranslationService
-    have_pts = 1
 except ImportError:
     from zLOG import LOG, WARNING
-    LOG('plonecollectorng', WARNING, 'PlacelessTranslationService not found..using EN as default language')
-    have_pts = 0
+    LOG('plonecollectorng', WARNING, 'PlacelessTranslationService not found (required for running PloneCollectorNG')
+    import os
+    os._exit(1)
 
 from config import i18n_domain
 
@@ -27,15 +27,6 @@ class Translateable:
     """ Mix-in class to provide i18n support for FS-based code """
 
     security = ClassSecurityInfo()
-
-    def _getPTS(self):
-        """ return PTS instance """
-        if not have_pts: return None
-
-        try:
-            return getTranslationService()
-        except:
-            return None
 
     def _getPloneEncoding(self):
         """ return the site encoding of Plone """
@@ -58,9 +49,9 @@ class Translateable:
 
     security.declarePublic('translate')
     def Translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
-        """ ATT: this code is subject to change """
+        """ utranslate() wrapper """
         
-        pts = self._getPTS()
+        pts = self.getTranslationService()
 
         # Workaround for mega-kaputt context.REQUEST which turns out to be
         # not a REQUEST-like object but some unknown acquisition shit.
@@ -95,11 +86,8 @@ class Translateable:
     security.declarePublic('getLanguages')
     def getLanguages(self):
         """ return the languages """
-        pts = self._getPTS()
-        if pts:
-            return pts.getLanguages(i18n_domain)
-        else:
-            return []
+        pts = self.getTranslationService()
+        return pts.getLanguages(i18n_domain)
 
     def _interpolate(self, text, mapping):
         """ convert a string containing vars for interpolation ('$var')
