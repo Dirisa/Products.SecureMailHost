@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.133 2004/03/01 18:13:34 ajung Exp $
+$Id: Issue.py,v 1.134 2004/03/02 11:20:23 ajung Exp $
 """
 
 import sys, os, time
@@ -519,9 +519,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'validActions')
     def validActions(self):
         """ return valid transitions for issue 'pcng_issue_workflow' """
-        pa = getToolByName(self, 'portal_actions', None)
-        allactions = pa.listFilteredActionsFor(self)
-        return [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
+        wftool = getToolByName(self, CollectorWorkflow)
+        actions = wftool.getTransitionsFor(self)
+        return [entry['name'] for entry in actions]
 
     security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):                     
