@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: references.py,v 1.3 2003/09/30 11:59:48 ajung Exp $
+$Id: references.py,v 1.4 2003/09/30 12:37:35 ajung Exp $
 """
 
 ##########################################################################
@@ -26,10 +26,10 @@ def issue2id(issue):
 
 def collector2id(collector):
     """ convert an collector to an ID """
-    url = unquote(collector.absolute_url(1))
-    url = url.replace('/', '_')
-    url = url.replace(' ', '_')
-    return url
+    id = unquote(collector.absolute_url(1))
+    id = id.replace('/', '_')
+    id = id.replace(' ', '_')
+    return (id, collector.title_or_id()) 
 
 
 class Node:
@@ -91,15 +91,15 @@ def build_graphviz(graphs, nodes, edges):
     fp = open(fname, 'w')
     print >>fp, 'digraph G {'
     for graph in graphs.keys():
-        print >>fp, '\tsubgraph %s {' % graph
+        print >>fp, '\tsubgraph cluster_%s {' % graph[0]
 
         for e in edges:
-            if e.src.id.startswith(graph) and e.dest.id.startswith(graph):
+            if e.src.id.startswith(graph[0]) and e.dest.id.startswith(graph[0]):
                 print >>fp, '\t\t%s -> %s;' % (e.src.id, e.dest.id)
-            elif e.src.id.startswith(graph):
+            elif e.src.id.startswith(graph[0]):
                     external_edges.append( e )
 
-        print >>fp, '\t\tlabel="%s";' % graph
+        print >>fp, '\t\tlabel="%s";' % graph[1]
         print >>fp, '\t}\n'
 
     for e in external_edges:
