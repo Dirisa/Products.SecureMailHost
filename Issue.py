@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.193 2004/06/27 06:48:13 ajung Exp $
+$Id: Issue.py,v 1.194 2004/06/28 10:48:53 ajung Exp $
 """
 
 import os, time, random 
@@ -213,7 +213,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             assignees_changed = 1
 
         if comment: self._transcript.addComment(unicode(comment, self.getSiteEncoding()), text_format)  
-        if action == 'comment' and assignees_changed: action = 'assign'
+        if action == 'comment' and assignees_changed: 
+            if 'assign' in self.validActions():
+                action = 'assign'
+            else:
+                raise RuntimeError(self.Translate('transition_required', 'You must perform a workflow transition when changing the assignees'))
 
         # perform workflow action
         self._last_action = action
