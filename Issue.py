@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.142 2004/03/17 19:33:12 ajung Exp $
+$Id: Issue.py,v 1.143 2004/03/17 20:49:27 ajung Exp $
 """
 
 import sys, os, time
@@ -27,7 +27,7 @@ from zLOG import LOG, ERROR
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
-from config import IssueWorkflowName, CollectorCatalog, CollectorWorkflow
+from config import CollectorCatalog, CollectorWorkflow
 from group_assignment_policies import getUsersForGroups
 from Transcript import Transcript
 from WatchList import WatchList

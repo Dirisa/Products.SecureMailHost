@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.19 2004/03/02 07:31:31 ajung Exp $
+$Id: config.py,v 1.20 2004/03/17 20:49:27 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -17,7 +17,6 @@ SKINS_DIR = 'skins'
 GLOBALS = globals()
 
 #
-IssueWorkflowName = 'pcng_issue_workflow'
 CollectorCatalog = 'pcng_catalog'
 CollectorWorkflow = 'pcng_workflow'
 i18n_domain = 'plonecollectorng'

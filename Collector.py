@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.139 2004/03/17 19:33:12 ajung Exp $
+$Id: Collector.py,v 1.140 2004/03/17 20:49:27 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -26,7 +26,7 @@ from Products.PythonScripts.PythonScript import PythonScript
 from Transcript import Transcript
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
-from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
+from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
@@ -404,7 +404,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def issue_states(self):
         """ return a list of all related issue workflow states """
         wftool = getToolByName(self, CollectorWorkflow)
-        states = wftool[IssueWorkflowName].states._mapping.keys()
+        states = wftool[self.collector_workflow].states._mapping.keys()
         states.sort()
         return states
 
