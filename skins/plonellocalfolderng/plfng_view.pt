@@ -168,7 +168,7 @@
 	                                  tal:attributes="href string:${item/absolute_url}?action=deleteFile">Delete</a>
 	                              <a tal:condition="python:member.has_permission('Delete objects', here) and item_typeinfo.Title()=='directory'"
 	                                  tal:attributes="href string:${item/absolute_url}?action=deleteFolder">Delete</a>
-	                              <a tal:condition="python:member.has_permission('Manage portal', here)"
+	                              <a tal:condition="python:member.has_permission('Modify portal content', here) and item_typeinfo.Title()!='directory'"
 	                                  tal:attributes="href string:${item/absolute_url}?action=editMetadata">Metadata</a>        
 	                           </div>       
                             </td>
