@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.14 2003/09/07 07:12:27 ajung Exp $
+$Id: Collector.py,v 1.15 2003/09/07 10:24:27 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -67,7 +67,7 @@ class Collector(BaseFolder, SchemaEditor):
 
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
-        self.schema_init()
+        self.schema_init(issue_schema.schema)
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()

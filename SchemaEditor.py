@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.4 2003/09/07 10:05:06 ajung Exp $
+$Id: SchemaEditor.py,v 1.5 2003/09/07 10:24:27 ajung Exp $
 """
 
 import operator
@@ -16,8 +16,6 @@ from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget
 
-import issue_schema 
-
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
 
@@ -26,21 +24,20 @@ class SchemaEditor:
         self.schema_init()
         print 'done'
 
-    def getWholeSchema(self):
-        """ return the concatenation of all schemas """       
-        l = [self._schemas[name] for name in self._schema_names]
-        return reduce(operator.__add__, l) 
-
-    def schema_init(self):
-
+    def schema_init(self, schema):
         self._schema_names = []    # list of schemata names
         self._schemas = OOBTree()  # map schemata name to schemata
 
-        for field in issue_schema.schema.fields():
+        for field in schema.fields():
             if not field.schemata in self._schema_names:
                 self._schema_names.append(field.schemata)
                 self._schemas[field.schemata] = Schema(field.schemata)
             self._schemas[field.schemata].addField(field)
+
+    def getWholeSchema(self):
+        """ return the concatenation of all schemas """       
+        l = [self._schemas[name] for name in self._schema_names]
+        return reduce(operator.__add__, l) 
 
     def getSchemaNames(self):
         """ return names of all schematas """
