@@ -174,4 +174,21 @@ class PloneLocalFolderNG(BaseFolder):
 
         return l
 
+
+    def breadcrumbs(self, instance, REQUEST=None):
+        """ breadcrumbs """
+
+        l = []
+        sofar = []
+        for d in instance.absolute_url(1).split('/'):
+            sofar.append(d)
+            l.append((d,'/'+'/'.join(sofar)))
+
+        sofar = []
+        for d in instance.REQUEST.get('showdir','').split('/'):
+            sofar.append(d)
+            l.append((d,'%s?showdir=%s' % (instance.absolute_url(), '/'.join(sofar))))
+        return l
+
+
 registerType(PloneLocalFolderNG, PROJECTNAME)
