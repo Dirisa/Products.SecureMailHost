@@ -22,13 +22,14 @@ l = []
 # Determine site encoding
 site_encoding = context.getSiteEncoding()
 
-nl('*=*=*=*=*=*=*=*=*=* TOKEN: %s *=*=*=*=*=*=*=*=*=*=*' % context.getToken())
+#nl('*=*=*=*=*=*=*=*=*=* TOKEN: %s *=*=*=*=*=*=*=*=*=*=*' % context.getToken())
 
-nl('%s: #%s: %s' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding)))
-nl('%s: %s' % (TR('topic', 'Topic'),context.topic))
-nl('%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 
+s= '%s: #%s: %s, ' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding))
+s+='%s: %s, ' % (TR('topic', 'Topic'),context.topic)
+s+='%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 
                                TR('importance','Importance'), TR(context.importance, context.importance), 
-                               TR('classification', 'Classification'), context.classification))
+                               TR('classification', 'Classification'), context.classification)
+nl(s)
 nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
 
