@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.117 2004/01/20 13:54:37 ajung Exp $
+$Id: Issue.py,v 1.118 2004/01/21 17:18:48 ajung Exp $
 """
 
 import sys, os, time
@@ -164,6 +164,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
         self._last_action = action
+        self.reindexObject()
         # Notification is triggered by the workflow. Since comments do not trigger
         # a workflow action we must trigger the notification on our own.
         if action in ('comment',): notifications.notify(self)
@@ -174,6 +175,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def lastAction(self):
         """ return the latest action done """
         return self._last_action
+
+    security.declarePublic('last_action')
+    def last_action(self):
+        """ return timestamp of last action """
+
+        try: return self.getTranscript().getEvents()[0].getTimestamp()
+        except: return None
 
     ######################################################################
     # Archetypes callbacks 
@@ -434,7 +442,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                     l.append(v.encode(encoding))
                 else:
                     l.append(str(v))
-
         return ' '.join(l)
 
     ######################################################################
@@ -453,6 +460,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'title_or_id')
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
+        return '%s: %s' % (self.getId(), self.Title())
         s =  '%s: %s' % (self.getId(), self.Title())
         # Kick characters > 127 to avoid problems with Plone's navigation tree
         # This workaround really sucks but I have no better solution until now
