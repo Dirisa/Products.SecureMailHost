@@ -3,25 +3,18 @@ Remaining to do:
 General:
 
 - IMPORTANT: Currently, Members cannot add entries out-of-the-box. At the
-  moment, you have to manually give Members the 'Add portal content'
-  permission. We need to fix this, ideally have three workflow states
-  for the Help Center:
+  moment, it seems like this is due to a bug in portal_factory discovered
+  by Kapil. http://plone.org/collector/3570
   
-    - read-only (only managers/owners can add content)
-    
-    - members-only (Members can add content)
-    
-    - open-for-all (Even anonymous can add content)
-  
-  Of course, the other workflow policies stay, so even if you select that anon
-  can add content, it's still invisible until approved.
-
 - We should probably let the TutorialPages not have any workflow at all, 
   I assume if you don't have permission to access/search the containing
   folder, you won't have it for the items contained in the folder either?
   Can anybody with a bit more workflow knowledge tell me if this is correct,
   and if it will work? Then the TutorialFolder state would control access to
   the whole thing, including pages/images - which is what we want.
+  
+- Tutorial needs inline explanation if you have an empty Tutorial, like
+  ArchPackage does - only shows up if you have editing perms.
 
 - The view templates for listings (howto, tutorial, faq etc - all of them)
   should only display *published* items, even if you have the permissions
