@@ -1,12 +1,17 @@
-- There is a security problem when trying to view a FAQ section
+FAQ/FAQFolder:
 
-- The FAQ folder lists all FAQs in every section - it shouldn't do that. :)
+- We should have a def getFAQItemsBySection(section) instead of the ugly code in the template
+
+- We should have a separate template for the Expanded Section view - the way it is now, it gets messy real quick. 'faq_section_view?SomeSection' or similar. This will also allow us to have the correct h2/h3 level.
+
+- We should use Description for the full Question attribute in FAQ.py, not a dedicated attribute.
+
+
+GENERAL:
 
 - We should populate the Sections attribute with 'General' so there is a section available at all times.
 
 - We should use Keywords (DublinCore Subject) for the Sections, and restrict the usage to only being the ones defined in the folder (is this possible?)
-
-- We should use Description for the full Question attribute in FAQ.py, not a dedicated attribute.
 
 - We should have an extra attribute that has additional words that are indexed along with the content - for example in a howto about VerboseSecurity, it would make sense to have:
 
@@ -20,30 +25,32 @@
 
 - All content types should be Discussable
 
-- Workflows & Permissions
 
-  - Any logged in user should be able to add a FAQ/HowTo/Tutorial
+WORKFLOWS & PERMISSIONS:
 
-  - The content is not visible or searchable to anybody else than the Reviewers/Managers before it is Published
+- Any logged in user should be able to add a FAQ/HowTo/Tutorial
 
-  - There is no 'visible state', available states are:
+- The content is not visible or searchable to anybody else than the Reviewers/Managers before it is Published
 
-    - Private
+- There is no 'visible state', available states are:
 
-    - Pending
+  - Private
 
-    - Published
+  - Pending
 
-    - Obsolete
+  - Published
 
-  - Transitions should be pretty self-explanatory:
+  - Obsolete
 
-    - User creates content object (state=private)
+- Transitions should be pretty self-explanatory:
 
-    - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu (state="pending")
+  - User creates content object (state=private)
 
-    - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes. (state="published")
+  - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu (state="pending")
 
-    - Ideally, every time someone adds a comment to an item, the owner of it gets a mail containing the comment + content URL.
+  - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes. (state="published")
 
-    - The Obsolete state is for later, when the ratings tool can push something into an obsolete status if 3 or more people have marked the content wrong/obsolete. The Owner should then get a mail about it.
+  - Ideally, every time someone adds a comment to an item, the owner of it gets a mail containing the comment + content URL.
+
+  - The Obsolete state is for later, when the ratings tool can push something into an obsolete status if 3 or more people have marked the content wrong/obsolete. The Owner should then get a mail about it.
+

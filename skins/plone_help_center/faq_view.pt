@@ -4,10 +4,10 @@
     i18n:domain="plonehelpcenter">
  
 <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="faq nocall:faq|context">
          
-        <div metal:define-macro="faq"
-             tal:define="faq python: context;">
+        <div metal:define-macro="faq">
         
             <tal:vars define="w python:context.widget;">
     

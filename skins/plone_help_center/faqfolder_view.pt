@@ -48,33 +48,32 @@
         Description.
         </div>
         
-        <div tal:define="sections python:test(req_section,[req_section],here.sections)" 
+        <div tal:define="sections python:test(req_section,[req_section],here.sections);
+                         objects python:context.objectValues();" 
              tal:repeat="section sections">
-
+ 
             <h2 tal:content="section">Section Heading</h2>
-
+ 
             <tal:section condition="python: not full and not req_section">
                 <a class="link-expand"
-                   tal:attributes="href python:'%s?full=1&section=%s' % ( here.absolute_url(), pss.url_quote(section) )">
+                   tal:attributes="href python:'%s?full=1&section=%s' % (here.absolute_url(), pss.url_quote(section) )">
                 View section in full</a> 
             </tal:section>
-
+ 
             <ul tal:condition="not: full">
-                <li tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
-                <a href="" tal:content="entry/Title"
-                    tal:attributes="href entry/getURL">FAQ Question</a>
+                <li tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]">
+                <a href="" tal:content="faq/Title"
+                    tal:attributes="href faq/absolute_url">FAQ Question</a>
                 </li>
             </ul>
             <div tal:condition="full" 
-                 tal:repeat="faq python: here.portal_catalog(portal_type='HelpCenterFAQ', 
-                                                             getSections=section, 
-                                                             path=faqpath)">
-            
+                 tal:define="values python: here.objectValues()"
+                 tal:repeat="faq python: [o for o in objects if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]">
+                                         <tal:comment replace="nothing">The above invocation should really be a method on the class - def getFaqItemsBySection(section)</tal:comment>
                 <metal:faq metal:use-macro="here/faq_view/macros/faq" />
-            
+ 
             </div>
         </div>
-
         </div>
     </div>
 </body>

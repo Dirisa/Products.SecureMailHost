@@ -57,5 +57,8 @@ class HelpCenterFAQFolder(BaseFolder):
 
     def _get_sections_vocab(self):
         return self.sections
+        
+    def getFaqItemsBySection(section):	
+        return [o for o in self.objectValues() if o.portal_type=='HelpCenterFAQ' and section in o.Sections()]
     
 registerType(HelpCenterFAQFolder, PROJECTNAME)
