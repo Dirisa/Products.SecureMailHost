@@ -11,7 +11,8 @@
 </head>
 
 <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
       Folder Title
@@ -43,7 +44,9 @@
             <dt>
                 <img tal:replace="structure here/errorref_icon.gif" />
                 <a href="" tal:content="errorref/Title"
-                tal:attributes="href errorref/absolute_url">Error</a>
+                   tal:define="review_state python:getInfoFor(errorref, 'review_state', None)"
+                   tal:attributes="href errorref/absolute_url;
+                                   class string:state-$review_state">Error</a>
             </dt>
             
             <dd tal:content="errorref/Description">Description</dd>

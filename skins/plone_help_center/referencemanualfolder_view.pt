@@ -11,7 +11,8 @@
   </head>
 
   <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
 
       <h1 tal:content="here/Title" class="documentFirstHeading">
         Folder Title
@@ -43,9 +44,10 @@
             
             <dt>
                 <img tal:replace="structure here/referencemanual_icon.gif" />
-                <a href="" 
-                   tal:content="referencemanual/Title"
-                   tal:attributes="href referencemanual/absolute_url">Reference Manual</a>
+                <a href="" tal:content="referencemanual/Title"
+                   tal:define="review_state python:getInfoFor(referencemanual, 'review_state', None)"
+                   tal:attributes="href referencemanual/absolute_url;
+                                   class string:state-$review_state">Reference Manual</a>
             </dt>
             
             <dd tal:content="referencemanual/Description">Description</dd>

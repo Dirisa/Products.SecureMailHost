@@ -11,7 +11,8 @@
   </head>
 
 <body>
-  <div metal:fill-slot="main">
+  <div metal:fill-slot="main"
+       tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
     <div metal:define-macro="body" 
       tal:define="faqpath python: '/'.join(here.getPhysicalPath()); 
       pss python:modules['Products.PythonScripts.standard']; 
@@ -66,7 +67,11 @@
                                              ['published']
                                            )
                                          )">
-            <a tal:attributes="href faq/absolute_url" tal:content="faq/Title"></a></li>
+            <a href="" tal:content="faq/Title" 
+               tal:define="review_state python:getInfoFor(faq, 'review_state', None)"
+               tal:attributes="href faq/absolute_url;
+                               class string:state-$review_state">FAQ</a></li>
+
           </ol>
 
         </tal:section>

@@ -11,7 +11,8 @@
   </head>
 
   <body>
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor">
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
     Folder Title
@@ -42,7 +43,9 @@
                                          )">
             <dt>
                 <a href="" tal:content="link/Title"
-                   tal:attributes="href link/absolute_url">HowTo</a>
+                   tal:define="review_state python:getInfoFor(link, 'review_state', None)"
+                   tal:attributes="href link/absolute_url;
+                                   class string:state-$review_state">HelpLink</a>
             </dt>
 
             <dd tal:content="link/Description">Description</dd>
