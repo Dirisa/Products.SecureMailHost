@@ -5,8 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: WatchList.py,v 1.1 2003/09/08 04:04:45 ajung Exp $
+$Id: WatchList.py,v 1.2 2003/09/08 04:38:42 ajung Exp $
 """
+
+from Globals import InitializeClass
 
 class WatchList:
     """ mix-in class for watchlist handling """
