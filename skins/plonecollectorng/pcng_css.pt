@@ -1,0 +1,5 @@
+<metal:block metal:define-macro="stylesheet" >
+<style type="text/css">
+
+</style>
+</metal:block>
