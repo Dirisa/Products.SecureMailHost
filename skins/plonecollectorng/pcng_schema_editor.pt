@@ -92,7 +92,7 @@
                       tal:attributes="selected python: field.getWidgetName()=='MultiSelectionWidget' "/>
               <option value="Keywords" 
                       tal:content="string:Keywords"
-                      tal:attributes="selected python: field.getWidgetName()=='KeywordsWidget' "/>
+                      tal:attributes="selected python: field.getWidgetName()=='KeywordWidget' "/>
               <option value="Richtext" 
                       tal:content="string:Richtext"
                       tal:attributes="selected python: field.getWidgetName()=='RichWidget' "/>
