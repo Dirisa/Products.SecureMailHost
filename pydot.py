@@ -20,7 +20,7 @@ __author__ = 'Ero Carrera'
 __version__ = '0.9.4'
 __license__ = 'MIT'
 
-import os, tempfile, copy
+import os, tempfile
 
 def graph_from_edges(edge_list, node_prefix='', directed=False):
 	"""Creates a basic graph out of an edge list.

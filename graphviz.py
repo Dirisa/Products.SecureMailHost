@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.14 2004/06/30 16:12:02 ajung Exp $
+$Id: graphviz.py,v 1.15 2004/07/05 19:12:19 ajung Exp $
 """
 
 ##########################################################################
@@ -16,7 +16,6 @@ $Id: graphviz.py,v 1.14 2004/06/30 16:12:02 ajung Exp $
 ##########################################################################
 
 import os, pydot, tempfile
-from urllib import unquote
 
 MAX_DEPTH = 5
 
