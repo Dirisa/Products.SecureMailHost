@@ -7,7 +7,7 @@ import DateTime
 
 # Wrapper for translate()
 def TR(id, default):
-    return context.translate(id, default, language)
+    return context.translate(id, default, language, as_unicode=1)
 
 # convert string to unicode and append to list
 def nl(text=''):
@@ -25,12 +25,12 @@ l = []
 # Determine site encoding
 site_encoding = context.getSiteEncoding()
 
-nl('%s: #%s: %s' % (TR('issue', 'Issue'), context.getId(), context.Title()))
+nl('%s: #%s: %s' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding)))
 nl('%s: %s' % (TR('topic', 'Topic'),context.topic))
 nl('%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), context.status(), 
                                TR('importance','Importance'), context.importance, 
                                TR('classification', 'Classification'), context.classification))
-nl('%s URL: http://%s/%s' % (TR('issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
+nl('%s URL: http://%s/%s' % (TR('Issue', 'Issue'), context.aq_parent.canonical_hostname, context.absolute_url(1)))
 nl('-'*75 + '\n') 
 
 n = 0
@@ -42,7 +42,7 @@ for group in groups:
     # Find action in current group
     action = ''
     for ev in group:
-        if ev.type == 'action': action = ev.action
+       if ev.type == 'action': action = ev.action
         
     nl('#%d %s %s (%s) ----------------------------' % (len(groups)-n, action, datestr, uid)) 
 
