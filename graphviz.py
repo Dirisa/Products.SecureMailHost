@@ -3,9 +3,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
-Published under the Zope Public License
+License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.5 2003/10/08 16:19:35 ajung Exp $
+$Id: graphviz.py,v 1.6 2003/11/01 17:03:25 ajung Exp $
 """
 
 ##########################################################################

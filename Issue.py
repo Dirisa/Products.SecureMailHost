@@ -3,9 +3,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
-Published under the Zope Public License
+License: see LICENSE.txt
 
-$Id: Issue.py,v 1.55 2003/10/26 14:48:57 ajung Exp $
+$Id: Issue.py,v 1.56 2003/11/01 17:03:25 ajung Exp $
 """
 
 import sys, os
@@ -118,14 +118,13 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         self._transcript.addComment('Issue created')
 
     def Schema(self):
-        """ Return our schema (through acquisition....uuuuuh. We override
-            the Archetypes implementation because the schema for issue is 
+        """ Return our schema (through acquisition....uuuuuh). We override
+            the Archetypes implementation because the schema for Issue is 
             maintained as attribute of the parent collector instance.
         """
         
-        # Schema seems to be called during the construction phase
-        # when there is not acquisition context. So we return the
-        # schema itself.
+        # Schema seems to be called during the construction phase when there is
+        # not acquisition context. So we return the schema itself.
 
         if not hasattr(self, 'aq_parent'): return self.schema
 

@@ -3,9 +3,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
-Published under the Zope Public License
+License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.25 2003/10/26 15:07:08 ajung Exp $
+$Id: SchemaEditor.py,v 1.26 2003/11/01 17:03:26 ajung Exp $
 """
 
 import operator

@@ -3,9 +3,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
-Published under the Zope Public License
+License: see LICENSE.txt
 
-$Id: notifications.py,v 1.13 2003/10/26 14:48:57 ajung Exp $
+$Id: notifications.py,v 1.14 2003/11/01 17:03:25 ajung Exp $
 """
 
 import sys
