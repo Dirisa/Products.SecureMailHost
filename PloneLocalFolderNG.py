@@ -47,8 +47,15 @@ except ImportError:
     zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
     mxmCounter = None
 
+
+tempFSpath = os.path.join(INSTANCE_HOME,'Products','PloneLocalFolderNG','tests','SamplesFiles')+os.path.sep
+if not os.path.exists(tempFSpath):
+	tempFSpath = os.path.join(SOFTWARE_HOME,'Products','PloneLocalFolderNG','tests','SamplesFiles')+os.path.sep
+
+
 schema = BaseSchema +  Schema((
     StringField('folder',
+                default=tempFSpath,
                 validators=("isValidExistingFolderPath",),
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=1,
@@ -529,6 +536,9 @@ class PloneLocalFolderNG(BaseContent):
     def _getFSBasePath(self):
         """ returns the base File System path of the item. """
 
+        if self.folder == '':
+           self.folder = tempFSpath
+        
         if self.folder == '':
            request = self.REQUEST
            msg = 'local directory field of PLFNG instance not set!'
