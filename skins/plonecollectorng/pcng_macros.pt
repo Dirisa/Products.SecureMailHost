@@ -141,6 +141,7 @@
 
         
   <form action="pcng_view" method="post"  name="search_form" tal:condition="request/advanced_search|nothing">
+    <input type="hidden" name="advanced_search" value="1">
     <table>
       <tr>
         <th align="center" i18n:translate="heading_status"> Status </th>
