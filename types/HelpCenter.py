@@ -16,32 +16,13 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-
-schema = BaseFolderSchema + Schema((
-
-    TextField('description',
-              searchable=1,
-              accessor="Description",
-              storage=MetadataStorage(),
-              widget=TextAreaWidget(description_msgid="desc_helpcenter",
-                                    description="Description for the Help Center.",
-                                    label_msgid="label_description",
-                                    label="Description",
-                                    i18n_domain = "plonehelpcenter",
-                                    rows=6)),
-
-    LinesField('versions',
-                widget=LinesWidget(description="The available versions of the product, one version on each line.",
-                                            label="Versions",
-                                            i18n_domain = "plonehelpcenter",
-                                            rows=6)),
-    ))
+from schemata import HelpCenterSchema
 
 
 
 class HelpCenter(BaseFolder):
     """A simple folderish archetype"""
-    schema = schema
+    schema = HelpCenterSchema
 
 
     actions = ({

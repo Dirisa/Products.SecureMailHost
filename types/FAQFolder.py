@@ -9,31 +9,7 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-
-schema = BaseFolderSchema + Schema((
-    TextField('description',
-              searchable=1,
-              accessor="Description",
-              storage=MetadataStorage(),
-              widget=TextAreaWidget(
-    description="Description of the FAQ Container.",
-    description_msgid="desc_folder",
-    label_msgid="label_folder",
-    label="Description",
-    i18n_domain = "plonehelpcenter",
-    rows=6)
-              ),
-    
-    LinesField('sections',
-               default=['General'],
-               widget=LinesWidget(
-    label="Sections",
-    description="Define the available sections a FAQ can be assigned to.",
-    i18n_domain="plonehelpcenter",
-    rows=6)
-               ),
-    ))
- 
+from schemata import FAQFolderSchema
 
 class HelpCenterFAQFolder(BaseFolder):
     """A simple folderish archetype"""
@@ -43,7 +19,7 @@ class HelpCenterFAQFolder(BaseFolder):
 
     content_icon = 'faq_icon.gif'
 
-    schema = schema
+    schema = FAQFolderSchema
     archetype_name = 'FAQ Area'
     meta_type = 'HelpCenterFAQFolder'
     global_allow = 0
