@@ -1,0 +1,10 @@
+PloneFormMailer FAQ - Frequently Asked Questions:
+
+-----------------------------------------------------------------------
+How can I send an additional e-mail to the address in the e-mail field?
+-----------------------------------------------------------------------
+Got to tab 'edit' -> sub-tab 'Mail Header' and fill in one of the cc 
+or bcc lines:
+python:request.get('email')
+
+

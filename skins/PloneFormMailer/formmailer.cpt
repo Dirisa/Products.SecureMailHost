@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us"
+      lang="en-us"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+        
+    <body>
+
+        <div metal:fill-slot="main"
+             tal:define="form here/form;
+                         title python: test(form.title, form.title, 'unknown');
+                         method python:form.method; 
+                         enc python:form.enctype;
+                         fname string:${title}_form; 
+                         tid template/id;
+                         tabindex python:Iterator()" 
+        >
+
+            <h1 tal:content="here/title_or_id" class="documentFirstHeading">
+              Title or id
+            </h1>
+
+            <div tal:condition="python:here.isTransformable('form_pre')"
+                 tal:content="structure python:here.getForm_pre()">
+                Prepended text.
+            </div>
+                                              
+            <form action=""
+                  tal:define="errors options/state/getErrors;
+                              groups form/get_groups"
+                  tal:attributes="id form/name;
+                                  method form/method;
+                                  enctype form/enctype">
+
+                <tal:repeat tal:repeat="group groups" >
+                <fieldset tal:omit-tag="python:group=='Default'">
+ 
+                    <legend tal:content="group" 
+                            tal:condition="python:group!='Default'"
+                            i18n:translate="">
+                        Legend
+                    </legend>
+                        
+                    <tal:repeat define="fields python:form.get_fields_in_group(group)"
+                                repeat="field fields">
+                
+                        <div class="field"
+                             tal:condition="not:field/hidden"
+                             tal:define="field_id field/id;
+                                         error python:errors.get(field_id, None)"
+                             tal:attributes="class python:test(error,
+                                                               'field error', 'field')">
+                                       
+                            <label tal:content="field/title"
+                                   i18n:translate="">Label</label>
+                
+                            <span tal:condition="field/is_required"
+                                  class="fieldRequired"
+                                  title="Required"
+                                  i18n:attributes="title"
+                                  i18n:translate="label_required">(Required)</span>
+                
+                            <div class="formHelp"
+                                 tal:define="desc python:field['description']"
+                                 tal:content="desc"
+                                 i18n:translate="">Help</div>
+                
+                            <div tal:content="error"
+                                 i18n:translate="">
+                                Validation error output
+                            </div>
+                                
+                            <div tal:define="input python:field.render(REQUEST=request)"
+                                 tal:replace="structure input"
+                                 tal:attributes="tabindex tabindex/next;">
+                            </div>
+                
+                        </div>
+
+                        <div tal:condition="field/hidden"
+                             tal:define="input python:field.render(REQUEST=request)"
+                             tal:replace="structure input">
+                        </div>
+                        
+                    </tal:repeat>
+                </fieldset>
+                </tal:repeat>
+
+                <div class="formControls">
+                    <input tal:repeat="button python:here.getButtons()"                           
+                           tal:attributes="value python:button[0] or 'submit';
+                                           name  python:button[1] or button[0];
+                                           type  python:button[2] or 'submit';
+                                           class python:button[3] or 'context';
+                                           tabindex tabindex/next;"
+                           class="context"/> 
+                </div>
+            
+                <input type="hidden" name="form.submitted" value="1" />
+                <input type="hidden" name="uf_formid" tal:attributes="value form/id" />
+            
+            </form>
+
+            <div tal:condition="python:here.isTransformable('form_post')"
+                 tal:content="structure python:here.getForm_post()">
+                Appended text.
+            </div>
+                
+       </div>
+    </body>
+</html>
