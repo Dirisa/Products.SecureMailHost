@@ -401,6 +401,106 @@ class PloneLocalFolderNG(BaseContent):
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: !!! path bad for: %s" %destfolder )
             return 0
 
+    def _createProxy(self, id, **kw):
+        """ handle the details, nassty """
+        from os.path import join, dirname, exists
+        destination = kw['destination']
+        proxy_type = kw.get('type', 'content')
+        properties = kw.get('properties', None)
+        rel_dir = kw['rel_dir']
+
+        fullpath = join(destination, id)
+        foldername = dirname(fullpath)
+        mi = self.mimetypes_registry.classify(data=None, filename=id.lower())
+
+        proxy = FileProxy(id, filepath=fullpath, fullname=fullpath, 
+                          properties=properties)
+        proxy.setAbsoluteURL('%s/%s' % (self.absolute_url(), join(rel_dir,id)))
+
+        if proxy_type == 'folder':
+            proxy.setIconPath('folder_icon.gif')
+            proxy.setMimeType('folder')
+        else:
+            proxy.setIconPath(mi.icon_path)
+            proxy.setMimeType(mi.normalized())
+
+        GENERAL_MD = getMetadataElements(fullpath, 'GENERAL') or {}
+        proxy.setComment(GENERAL_MD.get('comment',''))
+        proxy.setTitle(GENERAL_MD.get('title',''))
+        proxy.setLanguage(GENERAL_MD.get('language','natural'))
+
+        return proxy.__of__(self)
+         
+    def _getAttribute(self, attrname):
+        """ method will return a list """
+        attr = getattr(self, attrname, None)
+        if attr is not None:
+            return attr.split(',')
+        return []
+    
+    security.declareProtected('View', 'contentValues')
+    def contentValues(self, spec=None, filter=None, sort_on=None,
+                      reverse=0):
+        """ CMFPlone.PloneFolder.PloneFolder.contentValues """
+        filteredFileList = []
+        filteredFolderList = []
+        REQUEST = self.REQUEST
+
+        portal = getToolByName(self, 'portal_url')
+        mime_registry = getToolByName(portal, 'mimetypes_registry')
+
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
+        show_dir = '/'.join(REQUEST.get('_e', []))
+        trimmedFolderBasePath = os.path.normpath(self.folder)
+
+        #XXX smacks of some sort of data object
+        filePrefixesSkip = self._getAttribute('hidden_file_prefixes')
+        fileSuffixesSkip = self._getAttribute('hidden_file_suffixes')
+        fileNamesSkip = self._getAttribute('hidden_file_names')
+        folderPrefixesSkip = self._getAttribute('hidden_folder_prefixes')
+        folderSuffixesSkip = self._getAttribute('hidden_folder_suffixes')
+        folderNamesSkip = self._getAttribute('hidden_folder_names')
+
+        trimmedFolderBasePath = os.path.normpath(self.folder)
+
+
+        if show_dir.startswith('/') or show_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % show_dir)
+
+        destfolder = os.path.join(trimmedFolderBasePath, show_dir)
+        if not destfolder.startswith(trimmedFolderBasePath):
+            raise ValueError('illegal directory: %s' % show_dir)
+
+        rel_dir = destfolder.replace(self.folder, '')
+        if rel_dir.startswith('/'): 
+            rel_dir = rel_dir[1:]
+
+        #XXX smacking lips
+        filteredFileList, filteredFolderList = getFilteredFSItems(
+                             FSfullPath=destfolder,
+                             skipInvalidIds=1,
+                             mimetypesTool=mime_registry,
+                             filetypePhrasesSkipList=[],
+                             filePrefixesSkipList=filePrefixesSkip,
+                             fileSuffixesSkipList=fileSuffixesSkip,
+                             fileNamesSkipList=fileNamesSkip,
+                             folderPrefixesSkipList=folderPrefixesSkip,
+                             folderSuffixesSkipList=folderSuffixesSkip,
+                             folderNamesSkipList=folderNamesSkip)
+
+        proxies = []
+        for file in filteredFileList:
+            _proxy = self._createProxy(file, rel_dir=rel_dir, destination=destpath)
+            proxies.append(_proxy)
+
+        for folder in filteredFolderList:
+            _proxy = self._createProxy(folder, rel_dir=rel_dir, destination=destpath)
+            proxies.append(_proxy)
+
+        return proxies
+
+
     security.declareProtected('View', 'listFolderContents')
     def listFolderContents(self,  spec=None, contentFilter=None, suppressHiddenFiles=0, REQUEST=None, RESPONSE=None):
         """ list content of local filesystem """
