@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.133 2004/03/08 18:25:41 ajung Exp $
+$Id: Collector.py,v 1.134 2004/03/08 20:03:00 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -153,7 +153,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance', 
-                          self.translate('tools_recreated', 'Tools recreated'))
+                          self.Translate('tools_recreated', 'Tools recreated'))
 
     def _setup_catalog(self):
         """ setup catalog tool """
@@ -308,7 +308,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._adjust_participation_mode()
 
         util.redirect(RESPONSE, 'pcng_staff', 
-                      self.translate('changes_saved', 'Your changes have been saved'))
+                      self.Translate('changes_saved', 'Your changes have been saved'))
 
     def _adjust_staff_roles(self):
         """ Adjust local-role assignments to track staff roster settings.
@@ -374,14 +374,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             emails = [e.strip() for e in emails if e.strip()]
             for email in emails:
                 if not util.isValidEmailAddress(email):
-                    raise ValueError(self.translate('invalid_email_address', 
+                    raise ValueError(self.Translate('invalid_email_address', 
                                                     'Invalid email address: $email', email=email))
 
             self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
         util.redirect(RESPONSE, 'pcng_view', 
-                      self.translate('changes_saved', 'Your changes have been saved'))
+                      self.Translate('changes_saved', 'Your changes have been saved'))
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
@@ -415,7 +415,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         issue =  self._getOb(id)
         issue.post_creation_actions()
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
-                      portal_status_message=self.translate('new_issue_created', 'New issue created'),
+                      portal_status_message=self.Translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')
         if RESPONSE is None:
             return id
@@ -492,7 +492,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
         self._transcript.addComment(u'Issues reindexed')
         util.redirect(RESPONSE, 'pcng_maintenance', 
-                      self.translate('issues_reindexed', 'Issues reindexed'))
+                      self.Translate('issues_reindexed', 'Issues reindexed'))
 
     security.declareProtected(View, 'getNumberIssues')
     def getNumberIssues(self):
@@ -506,7 +506,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._num_issues = 0
         self._transcript.addComment(u'Number of issues reset to 0')
         util.redirect(RESPONSE, 'pcng_maintenance', 
-                      self.translate('number_issues_reseted', 'Issue number reseted to 0'))
+                      self.Translate('number_issues_reseted', 'Issue number reseted to 0'))
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
     def update_schema_for_issues(self, return_to=None, REQUEST=None, RESPONSE=None):
@@ -521,10 +521,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         
         if return_to:
             util.redirect(RESPONSE, return_to,
-                          self.translate('issues_updated', 'Issues updated'))
+                          self.Translate('issues_updated', 'Issues updated'))
         else:
             util.redirect(RESPONSE, 'pcng_schema_editor',
-                          self.translate('issues_updated', 'Issues updated'))
+                          self.Translate('issues_updated', 'Issues updated'))
 
     security.declareProtected(ManageCollector, 'update_collector_schema')
     def update_collector_schema(self, RESPONSE=None):
@@ -547,7 +547,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._transcript.setEncoding(self.getSiteEncoding())
         self._transcript.addComment(u'Collector schema updated')
         util.redirect(RESPONSE, 'pcng_maintenance',
-                          self.translate('collector_schema_updated', 'Collector schema updated'))
+                          self.Translate('collector_schema_updated', 'Collector schema updated'))
 
     security.declareProtected(ManageCollector, 'register_issue_uids')
     def register_issue_uids(self, RESPONSE=None):
@@ -564,7 +564,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
       
         self._transcript.addComment(u'Issue UIDs reregistered')
         util.redirect(RESPONSE, 'pcng_maintenance',
-                          self.translate('uids_recreated', 'UIDs recreated'))
+                          self.Translate('uids_recreated', 'UIDs recreated'))
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, ids, RESPONSE):

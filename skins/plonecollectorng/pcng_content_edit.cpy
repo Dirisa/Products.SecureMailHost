@@ -52,7 +52,7 @@ if REQUEST.get('assign_ticket', None) == '1':
         new_context.issue_followup(action='accept', assignees=assignees)
 
 
-portal_status_message = REQUEST.get('portal_status_message', new_context.translate('changes_saved', 'Content changes saved'))
+portal_status_message = REQUEST.get('portal_status_message', new_context.Translate('changes_saved', 'Content changes saved'))
 return state.set(status='success',\
                  context=new_context,\
                  portal_status_message=portal_status_message)

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.31 2004/02/13 08:15:01 ajung Exp $
+$Id: Translateable.py,v 1.32 2004/03/08 20:03:02 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -56,7 +56,7 @@ class Translateable:
                     pass
 
     security.declarePublic('translate')
-    def translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
+    def Translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
         """ ATT: this code is subject to change """
         
         pts = self._getPTS()

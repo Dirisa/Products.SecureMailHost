@@ -7,7 +7,7 @@
 mstool = context.portal_membership
 
 if mstool.isAnonymousUser(): 
-    msg = context.translate('unknown_user', 'Unknown user')
+    msg = context.Translate('unknown_user', 'Unknown user')
     context.REQUEST.RESPONSE.redirect('pcng_view?portal_status_message=%s' % msg)
     return
 
@@ -17,12 +17,12 @@ if saved_searches is (): saved_searches = []
 
 for search in saved_searches:
     if search.startswith(query_id + '::'):
-        raise ValueError(context.translate('id_already_in_use', 'ID already in use: $id', id=query_id))
+        raise ValueError(context.Translate('id_already_in_use', 'ID already in use: $id', id=query_id))
 
 saved_searches.append('%s::%s::%s' % (context.absolute_url(1), query_id, query))
 member.setProperties({'pcng_saved_searches' : saved_searches})
 
 
-msg = context.translate('search_saved', 'Search saved')
+msg = context.Translate('search_saved', 'Search saved')
 context.REQUEST.RESPONSE.redirect('pcng_view?portal_status_message=%s' % msg)
 

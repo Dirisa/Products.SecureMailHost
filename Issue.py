@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.134 2004/03/02 11:20:23 ajung Exp $
+$Id: Issue.py,v 1.135 2004/03/08 20:03:00 ajung Exp $
 """
 
 import sys, os, time
@@ -157,7 +157,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         # perform workflow action
         if not action in ('comment', ):
             if action != 'request' and not action in self.validActions():
-                raise Unauthorized(self.translate('invalid_action', 
+                raise Unauthorized(self.Translate('invalid_action', 
                                                   'Invalid action: %(action)s', action=action))
 
             old_status = self.status()
@@ -177,7 +177,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         # a workflow action we must trigger the notification on our own.
         if action in ('comment',): notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 
-                      self.translate('followup_submitted', 'Followup submitted'))
+                      self.Translate('followup_submitted', 'Followup submitted'))
 
     security.declareProtected(View, 'lastAction')
     def lastAction(self):
@@ -204,7 +204,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         schema = self.Schema()
         for k in parameters.keys():                                                          #
             if  k in ('id',):
-                raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
+                raise ValueError(self.Translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
             field = schema[k]
             field.set(self, v)
@@ -236,7 +236,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
         self.deleteReference(issue)
         util.redirect(RESPONSE, 'pcng_issue_references', 
-                      self.translate('reference_deleted', 'Reference has been deleted'))
+                      self.Translate('reference_deleted', 'Reference has been deleted'))
 
     security.declareProtected(AddCollectorIssueFollowup, 'add_reference')
     def add_reference(self, reference, RESPONSE=None):
@@ -245,14 +245,14 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         tracker_url = unquote(reference.tracker)
         tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
         if not tracker:
-            raise ValueError(self.translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
+            raise ValueError(self.Translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
-            raise ValueError(self.translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
+            raise ValueError(self.Translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
         issue = tracker._getOb(reference.ticketnumber)
 
         if not reference.comment:
-            raise ValueError(self.translate('reference_no_comment', 'References must have a comment'))
+            raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
 
         self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                issue_url=issue.absolute_url(1), 
@@ -260,7 +260,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                                comment=reference.comment)
 
         util.redirect(RESPONSE, 'pcng_issue_references', 
-                      self.translate('reference_stored', 'Reference has been stored'))
+                      self.Translate('reference_stored', 'Reference has been stored'))
 
 
     security.declareProtected(View, 'getForwardReferences')
@@ -295,7 +295,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         elif format in ('cmap',):
             graphviz.viz2map(vizfile, format, RESPONSE)
         else:
-            raise RuntimeError(self.translate('unknown_format', 'unknown format "$format"', format=format))
+            raise RuntimeError(self.Translate('unknown_format', 'unknown format "$format"', format=format))
 
     ######################################################################
     # File uploads 
@@ -333,17 +333,17 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             notifications.notify(self)
 
             util.redirect(RESPONSE, 'pcng_issue_references', 
-                          self.translate('file_uploaded', 'File base been uploaded'))
+                          self.Translate('file_uploaded', 'File base been uploaded'))
         else:
             util.redirect(RESPONSE, 'pcng_issue_references', 
-                          self.translate('nothing_for_upload', 'Nothing to be uploaded'))
+                          self.Translate('nothing_for_upload', 'Nothing to be uploaded'))
 
     security.declareProtected(ManageCollector, 'upload_remove')
     def upload_remove(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
         util.redirect(RESPONSE, 'pcng_issue_references', 
-                     self.translate('upload_removed', 'File has been removed'))
+                     self.Translate('upload_removed', 'File has been removed'))
 
 
     ######################################################################

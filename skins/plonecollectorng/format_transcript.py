@@ -8,7 +8,7 @@ from textwrap import wrap
 
 # Wrapper for translate()
 def TR(id, default):
-    return context.translate(id, default, language, as_unicode=1)
+    return context.Translate(id, default, language, as_unicode=1)
 
 # convert string to unicode and append to list
 def nl(text=''):

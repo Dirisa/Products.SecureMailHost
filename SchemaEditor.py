@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.53 2004/02/18 19:23:13 dtremea Exp $
+$Id: SchemaEditor.py,v 1.54 2004/03/08 20:03:01 ajung Exp $
 """
 
 import copy, re
@@ -77,32 +77,32 @@ class SchemaEditor:
     def atse_addSchemata(self, name, RESPONSE=None):
         """ add a new schemata """
         if not name:
-            raise TypeError(self.translate('atse_empty_name', 'Empty ID given'))
+            raise TypeError(self.Translate('atse_empty_name', 'Empty ID given'))
 
         if name in self._ms.getSchemataNames():
-            raise ValueError(self.translate('atse_exists', 
+            raise ValueError(self.Translate('atse_exists', 
                              'Schemata "$schemata" already exists', schemata=name))
 
         if not id_regex.match(name):
-            raise ValueError(self.translate('atse_invalid_id_for_schemata', 
+            raise ValueError(self.Translate('atse_invalid_id_for_schemata', 
                              '"$schemata" is an invalid ID for a schemata', schemata=name))
 
         self._ms.addSchemata(name)
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_added', 'Schemata added'), schemata=name)
+                      self.Translate('atse_added', 'Schemata added'), schemata=name)
 
     security.declareProtected(ManageCollector, 'atse_delSchemata')
     def atse_delSchemata(self, name, RESPONSE=None):
         """ delete a schemata """
 
         if len(self._ms.getSchemataNames()) == 2: # default is hidden
-            raise RuntimeError(self.translate('atse_can_not_remove_last_schema', 'Can not remove the last schema'))
+            raise RuntimeError(self.Translate('atse_can_not_remove_last_schema', 'Can not remove the last schema'))
         self._ms.delSchemata(name)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_deleted', 'Schemata deleted'), schemata=self._ms.getSchemataNames()[0])
+                      self.Translate('atse_deleted', 'Schemata deleted'), schemata=self._ms.getSchemataNames()[0])
 
     ######################################################################
     # Field manipulation
@@ -113,7 +113,7 @@ class SchemaEditor:
         """ remove a field from a schemata"""
 
         if name in UNDELETEABLE_FIELDS:
-            raise ValueError(self.translate('atse_field_not_deleteable',
+            raise ValueError(self.Translate('atse_field_not_deleteable',
                                             'field "$name" can not be deleted because it is protected from deletion',   
                                             name=name))
 
@@ -127,7 +127,7 @@ class SchemaEditor:
 	
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_deleted', 'Field deleted'), schemata=return_schemata)
+                      self.Translate('atse_field_deleted', 'Field deleted'), schemata=return_schemata)
 
 
     security.declareProtected(ManageCollector, 'atse_update')
@@ -140,15 +140,15 @@ class SchemaEditor:
         ## ATT: this should go into a dedicated method
         if R.has_key('add_field'):
             if not R['name']:
-                raise ValueError(self.translate('atse_empty_field_name', 
+                raise ValueError(self.Translate('atse_empty_field_name', 
                                  'Field name is empty'))
 
             if not id_regex.match(R['name']):
-                raise ValueError(self.translate('atse_not_a_valid_id', 
+                raise ValueError(self.Translate('atse_not_a_valid_id', 
                                  '"$id" is not a valid ID', id=R['name']))
 
             if R['name'] in [f.getName() for f in self._ms.fields()]:
-                raise ValueError(self.translate('atse_field_already_exists', 
+                raise ValueError(self.Translate('atse_field_already_exists', 
                                  '"$id" exists already', id=R['name']))
 
             fieldset = FD.schemata    
@@ -156,7 +156,7 @@ class SchemaEditor:
             self._ms.addField(field)
             self._p_changed = 1
             util.redirect(RESPONSE, 'pcng_schema_editor', 
-                          self.translate('atse_field_added', 'Field added'), schemata=fieldset, field=R['name'])
+                          self.Translate('atse_field_added', 'Field added'), schemata=fieldset, field=R['name'])
             return            
 
         if   FD.type == 'StringField':     field = StringField
@@ -166,7 +166,7 @@ class SchemaEditor:
         elif FD.type == 'BooleanField':    field = BooleanField
         elif FD.type == 'LinesField':      field = LinesField
         elif FD.type == 'DateTimeField':   field = DateTimeField
-        else: raise TypeError(self.translate('atse_unknown_field', 'unknown field type: $field', field=FD.field))
+        else: raise TypeError(self.Translate('atse_unknown_field', 'unknown field type: $field', field=FD.field))
 
         D = {}    # dict to be passed to the field constructor
         D['default'] = FD.get('default', '')
@@ -192,7 +192,7 @@ class SchemaEditor:
         elif FD.widget == 'Integer':     widget = IntegerWidget()
         elif FD.widget == 'Decimal':     widget = DecimalWidget()
         elif FD.widget == 'Reference':   widget = ReferenceWidget()
-        else: raise ValueError(self.translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
+        else: raise ValueError(self.Translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
         if FD.has_key('widgetsize'):
             widget.size = FD.widgetsize
@@ -247,7 +247,7 @@ class SchemaEditor:
         self._ms._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_changed', 'Field changed'), 
+                      self.Translate('atse_field_changed', 'Field changed'), 
                       schemata=FD.schemata, field=FD.name)
 
     ######################################################################
@@ -260,7 +260,7 @@ class SchemaEditor:
         self._ms.moveSchemata(name, -1)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_moved_left', 'Schemata moved to left'), schemata=name)
+                      self.Translate('atse_moved_left', 'Schemata moved to left'), schemata=name)
 
     security.declareProtected(ManageCollector, 'atse_schemataMoveRight')
     def atse_schemataMoveRight(self, name, RESPONSE=None):
@@ -268,7 +268,7 @@ class SchemaEditor:
         self._ms.moveSchemata(name, 1)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_moved_right', 'Schemata moved to right'), schemata=name)
+                      self.Translate('atse_moved_right', 'Schemata moved to right'), schemata=name)
 
     security.declareProtected(ManageCollector, 'atse_fieldMoveLeft')
     def atse_fieldMoveLeft(self, name, RESPONSE=None):
@@ -276,7 +276,7 @@ class SchemaEditor:
         self._ms.moveField(name, -1)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_moved_up', 'Field moved up'), schemata=self._ms[name].schemata, field=name)
+                      self.Translate('atse_field_moved_up', 'Field moved up'), schemata=self._ms[name].schemata, field=name)
 
     security.declareProtected(ManageCollector, 'atse_fieldMoveRight')
     def atse_fieldMoveRight(self, name, RESPONSE=None):
@@ -284,7 +284,7 @@ class SchemaEditor:
         self._ms.moveField(name, 1)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_moved_down', 'Field moved down'), schemata=self._ms[name].schemata, field=name)
+                      self.Translate('atse_field_moved_down', 'Field moved down'), schemata=self._ms[name].schemata, field=name)
 
     security.declareProtected(ManageCollector, 'atse_changeSchemataForField')
     def atse_changeSchemataForField(self, name, schemata_name, RESPONSE=None):
@@ -292,7 +292,7 @@ class SchemaEditor:
         self._ms.changeSchemataForField(name, schemata_name)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
-                      self.translate('atse_field_moved', 'Field moved to other fieldset'), schemata=schemata_name, field=name)
+                      self.Translate('atse_field_moved', 'Field moved to other fieldset'), schemata=schemata_name, field=name)
 
 
     ######################################################################

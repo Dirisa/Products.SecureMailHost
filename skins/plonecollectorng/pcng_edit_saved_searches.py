@@ -5,7 +5,7 @@
 mstool = context.portal_membership
 
 if mstool.isAnonymousUser(): 
-    msg = context.translate('unknown_user', 'Unknown user')
+    msg = context.Translate('unknown_user', 'Unknown user')
     context.REQUEST.RESPONSE.redirect('pcng_view?portal_status_message=%s' % msg)
     return
 
@@ -18,6 +18,6 @@ if context.REQUEST.has_key('delete'):
 
 member.setProperties({'pcng_saved_searches' : saved_searches})
 
-msg = context.translate('changes_saved', 'Changes saved')
+msg = context.Translate('changes_saved', 'Changes saved')
 context.REQUEST.RESPONSE.redirect('pcng_member_preferences?portal_status_message=%s' % msg)
 

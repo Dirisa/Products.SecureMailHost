@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.36 2004/02/12 11:36:26 ajung Exp $
+$Id: pdfwriter.py,v 1.37 2004/03/08 20:03:02 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -74,7 +74,7 @@ def myLaterPages(canvas, doc):
     canvas.setFont(NORMAL_FONT,15)
     canvas.drawString(inch, PAGE_HEIGHT-62, utf8(doc.collector_title))
     canvas.setFont(NORMAL_FONT,11)
-    canvas.drawString(inch, 0.75 * inch, doc.collector.translate('page_number', "Page $num", num=doc.page))
+    canvas.drawString(inch, 0.75 * inch, doc.collector.Translate('page_number', "Page $num", num=doc.page))
     canvas.drawString(450, 0.75 * inch, doc.collector.toLocalizedTime(DateTime(), long_format=1))
     canvas.restoreState()
 
@@ -145,7 +145,7 @@ def pdfwriter(collector, ids):
             return unicode(v, collector.getSiteEncoding())
         return v
 
-    translate = collector.translate
+    translate = collector.Translate
 
     tempfiles = []
 
