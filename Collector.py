@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.185 2004/05/24 19:33:35 ajung Exp $
+$Id: Collector.py,v 1.186 2004/05/26 18:56:24 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -418,6 +418,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         issue = PloneIssueNG(id)
         temp._setObject(id, issue)
         issue = issue.__of__(temp)
+        # remove pending issues
+        pending = [issue.getId() for issue in temp.objectValues('PloneIssueNG') if DateTime() - issue.bobobase_modification_time() > 2*3600]
+        temp.manage_delObjects(pending)
         RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
 
 
