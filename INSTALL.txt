@@ -1,7 +1,8 @@
 Requirements:
 
   - Zope 2.6+, Plone 2.0 (1.X untested), Archetypes 1.0.X (Archetypes 1.1 and
-    1.2 are not tested and *not* supported at this time)
+    1.2 are not tested and *not* supported at this time. Also see Archetypes
+    section below)
  
   - The 'email' package of Python *must* be available. Either use Python 2.2.3
     for running Zope or get the 'email' package from Python 2.2.3 and install
@@ -12,9 +13,9 @@ Requirements:
     Plone 1.0.5.
 
     WARNING: future versions of PloneCollectorNG might use advanced features
-    of Plone 2.0 that are not backward compatible with Plone 1.X
-    installations. There will be absolutely *NO* support to migrate your 
-    PloneCollectorNG installation from Plone 1 to Plone 2.
+    of Plone 2.0 that are not backward compatible with Plone 1.X installations.
+    There will be absolutely *NO* support to migrate your PloneCollectorNG
+    installation from Plone 1 to Plone 2.
 
 
   Optional packages:
@@ -81,3 +82,30 @@ Internationalization support:
       the next PloneCollectorNG release
 
     o restart Zope and enjoy :-) 
+
+
+Support for Archetypes 1.2:
+  
+    PCNG 1.0 has been designed for AT 1.0 only. Although a *very rough* test
+    with AT 1.2 shows that PCNG 1.0 seem to work with AT 1.2 with the
+    following changes:
+
+     - add the following lines to the collector_schema.py file (this
+       should allow you to use the "Browse" functionality for issues):
+
+        
+        DateTimeField('expirationDate',
+                    schemata='metadata',
+                    ),
+
+     - go to the "Schema Editor" and add two new fields "subject" and
+       "language" to the 'issuedata' schemata. Then update the schema for all
+       issues and restart Zope.
+
+    This changes will be incorporated into a later PCNG release (very likely
+    1.0.1). Use AT 1.2 with PCNG 1.0.0 at YOUR OWN RISK.  I don't not gurantee
+    that the changes above work or do not break in a later release.
+
+
+    
+
