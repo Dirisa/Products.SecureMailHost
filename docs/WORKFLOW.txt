@@ -1,0 +1,5 @@
+PCNG uses the workflow component of Plone (DCWorkflow) to implement 
+its own workflow for issues (pcng_issue_workflow).
+
+The complete workflow is shown in docs/workflow.gif.
+
