@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.34 2004/04/21 13:02:03 ajung Exp $
+$Id: notifications.py,v 1.35 2004/04/21 13:10:09 ajung Exp $
 """
 
 import sys, time
@@ -121,11 +121,14 @@ def _send_notifications(recipients, issue, send_attachments=0):
         keyfile.add_header('content-disposition', "attachment; filename=pcng.key")
         outer.attach(keyfile)
 
-    MH = getattr(collector, 'MailHost') 
-    
-    try:
-        LOG('plongcollectorng', INFO, 'recipients for %s: %s' % (issue.absolute_url(1), dest_emails))
-        MH._send(collector.collector_email, dest_emails, outer.as_string())
-    except: 
-        LOG('plonecollectorng', ERROR, 'MailHost.send() failed', error=sys.exc_info())
+    if hasattr(collector, 'MailHost'):
+        MH = getattr(collector, 'MailHost') 
+        
+        try:
+            LOG('plongcollectorng', INFO, 'recipients for %s: %s' % (issue.absolute_url(1), dest_emails))
+            MH._send(collector.collector_email, dest_emails, outer.as_string())
+        except: 
+            LOG('plonecollectorng', ERROR, 'MailHost.send() failed', error=sys.exc_info())
+    else:
+        LOG('plonecollectorng', ERROR, 'MailHost not found')
 
