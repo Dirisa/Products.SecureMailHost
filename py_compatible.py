@@ -15,6 +15,12 @@
 
 Installs email package from 2.3.4
 """
+try:
+    True
+except NameError:
+    True=1
+    False=0
+
 import sys
 import os
 from zLOG import LOG, INFO, PROBLEM
@@ -29,9 +35,9 @@ email_path = '%s/email-%s' % (basepath, EMAIL_PACKAGE)
 try:
     import email
 except ImportError:
-    HAS_EMAIL = 0
+    HAS_EMAIL = False
 else:
-    HAS_EMAIL = 1
+    HAS_EMAIL = True
 
 if not HAS_EMAIL:
     if os.path.isdir(email_path):
