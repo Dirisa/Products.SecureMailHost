@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.154 2004/04/06 15:06:07 ajung Exp $
+$Id: Collector.py,v 1.155 2004/04/06 16:59:18 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -632,7 +632,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                       self.Translate('uids_recreated', 'UIDs recreated'))
 
 
-    security.declareProtected(ManageCollector, 'migrate_issue_workflow')
+    security.declareProtected(ManageCollector, 'migrate_issue_workflow_histories')
     def migrate_issue_workflow_histories(self, RESPONSE=None):
         """ Migrate workflow histories of all issues to new workflow id """
         for issue in self.objectValues('PloneIssueNG'):
