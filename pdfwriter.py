@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.22 2004/01/15 12:31:17 ajung Exp $
+$Id: pdfwriter.py,v 1.23 2004/01/15 12:50:47 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -103,6 +103,7 @@ def p(txt):
     return header(txt, style=ParaStyle, sep=0.0)
 
 PreStyle = styles["Code"]
+PreStyle.fontName = 'NFont'
 
 def pre(txt):
     p = Preformatted(utf8(txt), PreStyle)
@@ -210,7 +211,8 @@ def pdfwriter(collector, ids):
 
             for ev in group:
                 if ev.type == 'comment':
-                    comment = '<b>%s:</b>\n%s' % (translate('comment', 'Comment'), html_quote(ev.comment))
+                    print repr(ev.comment), type(ev.comment)
+                    comment = html_quote(ev.comment)
                 elif ev.type == 'change':
                     l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed'), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
@@ -224,7 +226,9 @@ def pdfwriter(collector, ids):
                     l.append(dowrap(s))
 
             definition('\n'.join(l))
-            if comment: pre(break_longlines(comment))
+            if comment: 
+                definition('<b>%s</b>' % translate('comment', 'Comment'))
+                pre(break_longlines(comment))
             n+=1
 
         # references
