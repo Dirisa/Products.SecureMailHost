@@ -20,14 +20,20 @@ import os
 from zLOG import LOG, INFO, PROBLEM
 from Globals import SOFTWARE_HOME
 
-MINIMAL_PYTHON_VERSION = (2, 3, 3) # tuple of ints
 MINIMAL_EMAIL_VERSION = '2.5.4' # string
 EMAIL_PACKAGE = '2.5.5' # string
 
 basepath = os.path.dirname(os.path.abspath(__file__))
 email_path = '%s/email-%s' % (basepath, EMAIL_PACKAGE)
 
-if sys.version_info < MINIMAL_PYTHON_VERSION:
+try:
+    import email
+except ImportError:
+    HAS_EMAIL = 0
+else:
+    HAS_EMAIL = 1
+
+if not HAS_EMAIL:
     if os.path.isdir(email_path):
         # insert email package into python's search path
         # index 3: after zope's pathes but before python
