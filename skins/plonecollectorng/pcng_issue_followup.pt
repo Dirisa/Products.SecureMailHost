@@ -9,7 +9,7 @@
 
   <form method="post" action="issue_followup">
     <div class="group"
-         tal:define="assignees here/getAssignees">
+         tal:define="assignees here/assigned_to">
       <span class="legend">Issue Followup #<span tal:content="python: len(here) + 1"/></span>
 
       <div class="row">
