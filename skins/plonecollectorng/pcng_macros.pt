@@ -40,8 +40,14 @@
 
       <metal:block tal:repeat="event events">
         <div class="transcriptevent">
-          <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')"> kommentar
-          </pre>
+          <tal:if tal:condition="python: event.getType()=='comment'">
+            <pre tal:content="python: event.getValue('comment')"> kommentar</pre>
+            <div style="text-align: right" >
+              <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
+                <span i18n:translate="followup_with_quote">Followup (with quoting this comment)</span>
+              </a>
+            </div>
+          </tal:if>
 
           <span tal:condition="python: event.getType()=='change'">
            <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" <b>-></b> 

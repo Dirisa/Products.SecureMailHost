@@ -14,6 +14,10 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
   </metal:block>
 
+  <tal:if tal:condition="request/timestamp">
+   <tal:def tal:define="global quoted_followup python: here.pcng_text_followup(request['timestamp'])" />
+  </tal:if>
+    
   <form method="post" action="issue_followup">
     <fieldset
          tal:define="assignees here/assigned_to">
@@ -23,7 +27,7 @@
         <div class="label" i18n:translate="comment">Comment</div>
         <div class="field">
           <textarea name="comment" cols="80" rows="10" 
-                    tal:content="request/comment|nothing"></textarea>
+                    tal:content="request/comment|quoted_followup|nothing"></textarea>
         </div>
       </div>
 
