@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.21 2004/01/02 12:55:22 ajung Exp $
+$Id: pdfwriter.py,v 1.22 2004/01/15 12:31:17 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
+from types import UnicodeType
 from textwrap import fill
 from zLOG import WARNING, LOG
    
@@ -24,13 +25,35 @@ from DocumentTemplate.html_quote import html_quote
 
 from reportlab.platypus import *
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.rl_config import defaultPageSize
-from reportlab.lib.units import inch
+from reportlab import rl_config 
+from reportlab.lib.units import inch                              
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.fonts import addMapping
 
 styles = getSampleStyleSheet()
 
 MAX_IMAGE_SIZE = 5*inch
-PAGE_HEIGHT = defaultPageSize[1]
+PAGE_HEIGHT = rl_config.defaultPageSize[1]
+
+
+# Settup custom fonts for UTF8 handling
+rl_config.warnOnMissingFontGlyphs = 0
+rl_config.TTFSearchPath= list(rl_config.TTFSearchPath) + [ os.path.join(os.path.dirname(__file__), 'ttffonts') ]
+pdfmetrics.registerFont(TTFont('NFont', 'rina.ttf'))
+
+#addMapping('NFont', 0, 0, 'NFont')
+#addMapping('NFont', 0, 1, 'NFont')
+#addMapping('NFont', 1, 0, 'NFont')
+#addMapping('NFont', 1, 1, 'NFont')
+
+SITE_ENCODING = 'n/a'
+
+def utf8(text):
+    if isinstance(text, UnicodeType):
+        return text.encode('utf-8')
+    else:
+        return unicode(text, SITE_ENCODING).encode('utf-8')
 
 def dowrap(text):
     return fill(text, 100)
@@ -52,9 +75,9 @@ def myLaterPages(canvas, doc):
     canvas.setLineWidth(5)
     canvas.line(50,45,50,PAGE_HEIGHT-45)
     canvas.line(50,PAGE_HEIGHT-70, 555, PAGE_HEIGHT-70)
-    canvas.setFont('Helvetica-Bold',15)
-    canvas.drawString(inch, PAGE_HEIGHT-62, doc.collector_title)
-    canvas.setFont('Helvetica',11)
+    canvas.setFont('NFont',15)
+    canvas.drawString(inch, PAGE_HEIGHT-62, utf8(doc.collector_title))
+    canvas.setFont('NFont',11)
     canvas.drawString(inch, 0.75 * inch, "Page %d" % doc.page)
     canvas.drawString(450, 0.75 * inch, doc.collector.toLocalizedTime(DateTime(), long_format=1))
     canvas.restoreState()
@@ -64,16 +87,16 @@ myFirstPage = myLaterPages
 Elements = []
 
 HeaderStyle = styles["Heading3"] 
-HeaderStyle.fontName = 'Helvetica-Bold'
+HeaderStyle.fontName = 'NFont'
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
-    p = XPreformatted(txt, style)
+    p = XPreformatted(utf8(txt), style)
     Elements.append(p)
 
 ParaStyle = styles["Normal"]
-ParaStyle.fontName = 'Helvetica'
+ParaStyle.fontName = 'NFont'
 ParaStyle.leftIndent = 18
 
 def p(txt):
@@ -82,21 +105,24 @@ def p(txt):
 PreStyle = styles["Code"]
 
 def pre(txt):
-    p = Preformatted(txt, PreStyle)
+    p = Preformatted(utf8(txt), PreStyle)
     Elements.append(p)
 
 DefStyle = styles["Definition"]
 DefStyle.leftIndent = 18
-DefStyle.fontName = 'Helvetica'
+DefStyle.fontName = 'NFont'
 DefStyle.spaceBefore = 3
 DefStyle.spaceAfter = 1
 
 def definition(txt):
-    p = XPreformatted(txt, DefStyle)
+    p = XPreformatted(utf8(txt), DefStyle)
     Elements.append(p)
 
 
 def pdfwriter(collector, ids):
+    global SITE_ENCODING
+
+    SITE_ENCODING = collector.getSiteEncoding()
 
     translate = collector.translate
 
@@ -104,8 +130,7 @@ def pdfwriter(collector, ids):
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
-
-        header(translate('issue_number', 'Issue #$id', id=issue.title_or_id()))
+        header(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.Title())))
 
         header(translate('label_description', 'Description'))
         definition(html_quote(issue.description))
