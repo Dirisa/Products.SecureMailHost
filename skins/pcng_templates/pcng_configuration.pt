@@ -25,7 +25,7 @@
                <span i18n:translate="" tal:content="set" /></a>
             <span tal:condition="not: repeat/set/end"> &bull;</span>
           </tal:loop>                                         
-          <div class="formHelp" i18n:translate="help_staff_configuration">Misc. configuration options</div>
+          <div class="formHelp" i18n:translate="help_configuration">Misc. configuration options</div>
         </li>
         <li>
           <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
@@ -33,7 +33,7 @@
         </li>
         <li>
           <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema Editor</span></a>
-          <div class="formHelp" i18n:translate="help_schema_editor">The schema editor allows you to edit the what fields belong to an issue, their types, their grouping and their internal represenation through the web.</div>
+          <div class="formHelp" i18n:translate="help_schema_editor">The schema editor allows you to edit the what fields belong to an issue, their types, their grouping and their internal representation through the web.</div>
         </li>
         <li>
           <a href="pcng_topics_user"><span i18n:translate="Topic-Staff mapping">Topic-groups configuration</span></a>
