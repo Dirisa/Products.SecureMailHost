@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.225 2004/09/27 16:53:49 ajung Exp $
+$Id: Issue.py,v 1.226 2004/09/29 05:35:16 ajung Exp $
 """
 
 import os, time, random
@@ -145,6 +145,12 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
             wf = getToolByName(self, CollectorWorkflow, None)
             if wf:
                 wf.notifyCreated(self)
+
+        # Hook for 3rd-party post-creation operations
+        try:
+            self.pcng_issue_after_creation()
+        except: 
+            pass
 
     security.declareProtected(View, 'Schema')
     def Schema(self):
