@@ -546,3 +546,12 @@ msgstr "hinzu"
 msgid "removed"
 msgstr "entfernt"
 
+msgid "open_issues"
+msgstr "Offene Tickets"
+
+msgid "total_issues"
+msgstr "Tickets gesamt"
+
+msgid "collector_overview"
+msgstr "Bugtracker Übersicht"
+
