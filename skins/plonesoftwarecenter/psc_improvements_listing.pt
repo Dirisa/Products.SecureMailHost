@@ -28,6 +28,7 @@
     <p tal:condition="plips">
     If you want to see the feature proposals displayed according to what release
     they are assigned to, go to the
+    <img tal:replace="structure here/improvementproposal_icon.gif" />
     <a href="psc_roadmap">Roadmap page</a>.
     </p>
 

@@ -139,7 +139,7 @@
                     <img tal:replace="structure here/improvementproposal_icon.gif" />
                     <a i18n:translate="label_show_upcoming_releases"
                        tal:attributes="href python:here.getRoadmapFolder().absolute_url()">
-                       Show upcoming releases&hellip;</a>
+                       Show Roadmap&hellip;</a>
                 </p>
 
             </div>

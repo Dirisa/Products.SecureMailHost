@@ -60,6 +60,7 @@
 
     <p tal:condition="plips">
     If you want to see all the feature proposals available, go to the 
+    <img tal:replace="structure here/improvementproposal_icon.gif" />
     <a href="psc_improvements_listing">Improvement Proposal listing</a>.
     </p>
     

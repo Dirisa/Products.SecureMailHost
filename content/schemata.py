@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.10 2005/03/11 03:13:40 limi Exp $
+$Id: schemata.py,v 1.11 2005/03/11 18:42:45 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -732,7 +732,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             description='The complete release text.',
             description_msgid='help_release_body_text',
             i18n_domain='archpackage',
-            rows=25,
+            rows=15,
         ),
     ),
 
@@ -749,7 +749,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
             description='A detailed log of what has changed since the previous release.',
             description_msgid='help_release_changelog',
             i18n_domain='archpackage',
-            rows=25,
+            rows=10,
         ),
     ),
 
@@ -765,12 +765,44 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         ),
     ),
 
+    StringField('releaseManagerContact',
+        required=0,
+        searchable=0,
+        widget=StringWidget(
+            label='Release Manager Contact E-mail',
+            label_msgid='help_release_relmgr_label',
+            description='Contact e-mail for Release Manager.',
+            description_msgid='help_release_relmgr_email',
+            i18n_domain='archpackage',
+        ),
+    ),
+
     DateTimeField('expectedReleaseDate',
         required=0,
         searchable=0,
         widget=CalendarWidget(
             label='Expected Release Date',
             label_msgid='help_release_expected_date_label',
+            i18n_domain='archpackage',
+        ),
+    ),
+
+    DateTimeField('featureFreezeDate',
+        required=0,
+        searchable=0,
+        widget=CalendarWidget(
+            label='Date after which no new features can added to the release',
+            label_msgid='help_release_feature_freeze_date_label',
+            i18n_domain='archpackage',
+        ),
+    ),
+
+    DateTimeField('improvementProposalFreezeDate',
+        required=0,
+        searchable=0,
+        widget=CalendarWidget(
+            label='Date after which no more Improvement Proposals can be associated with the release',
+            label_msgid='help_release_improvement_proposal_freeze_date_label',
             i18n_domain='archpackage',
         ),
     ),
