@@ -41,7 +41,8 @@
 
     <!-- navigation -->
 
-    <div>
+    <div class="issue_view_navigation"
+          tal:condition="python: here.meta_type == 'PloneIssueNG'">
       <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
       <tal:block repeat="set schemata_names">
         <div tal:condition="python: set == fieldset" tal:omit-tag="">
