@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.158 2004/04/21 17:23:52 ajung Exp $
+$Id: Issue.py,v 1.159 2004/04/23 16:11:33 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -431,7 +431,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def _get_catalog(self):
         """ return collector catalog """
-        return getattr(self, CollectorCatalog)
+        return getToolByName(self, CollectorCatalog)
 
     def _get_archetypes_catalogs(self):
         """ return catalogs that are maintainted by Archetypes """
