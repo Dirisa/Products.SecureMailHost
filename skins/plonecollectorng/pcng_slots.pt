@@ -24,18 +24,32 @@
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
     <h5 i18n:translate="last_search_results">Last search results</h5>
-    <div class="portletBody">
+    <div class="portletBody"
+         tal:define="my_id here/getId;
+                     results python: request.SESSION.get('pcng_searchresults', []);
+                     issue_ids python: [i[1] for i in results]">
+   
+      <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'" >
+        <tal:def tal:define=" issue_index python: issue_ids.index(here.getId())">
+  
+          <a tal:condition="python: issue_index > 0"
+             tal:attributes="href python: results[issue_index-1][0]">Previous</a>
+          <a tal:condition="python: issue_index < len(results) "
+             tal:attributes="href python: results[issue_index+1][0]">Next</a>
+        </tal:def>
+      </tal:if>
+
       <ul>
-        <li tal:repeat="item python: request.SESSION.get('pcng_searchresults', [])">
-           <a tal:attributes="href python: item[0]">
-             <span tal:replace="python: '%s - %s' % (item[1],item[2])" />
-           </a>
+        <li tal:repeat="item results">
+          <a tal:attributes="href python: item[0]">
+            <span tal:attributes="class python: test(item[1]==my_id, 'selected', '')"
+                  tal:content="python: '%s - %s' % (item[1],item[2])" />
+          </a>
         </li>        
       </ul>
     </div>
   </div>
 </div>
-
 
 <!-- Collector metadata -->
 <div metal:define-macro="collector_metadata">
@@ -68,5 +82,4 @@
 </div>
 
 </body>
-
 </html>
