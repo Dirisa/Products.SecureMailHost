@@ -1004,6 +1004,10 @@ msgstr "Eine Ebene höher zum Bugtracker"
 msgid "label_up_to_configuration"
 msgstr "Eine Ebene höher zur Konfiguration"
 
+msgid "label_up_to_preferences"
+msgstr "Eine Ebene höher zu den Voreinstellungen"
+
+
 msgid "creator"
 msgstr "Ersteller"
 
@@ -1048,3 +1052,9 @@ msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Ema
 
 msgid "help_maintenance"
 msgstr "Verschiedene weitere Optionen zur Wartung dieser PloneCollectorNG Instanz"
+
+msgid "legend_member_details"
+msgstr "Teilnehmer Details"
+
+msgid "description_my_preferences"
+msgstr "Ihre persönlichen Bugtracker Einstellungen"

@@ -141,3 +141,6 @@ msgstr "Überprüfung der Emailadressen eingehener Tickets via Email"
 
 msgid "Issues are private to the issue owner and staff"
 msgstr "Tickets sind sichtbar für den Ticket Einsteller und Mitarbeiter"
+
+msgid "PloneCollectorNG member preferences"
+msgstr "Bugtracker Teilnehmer Voreinstellungen"
