@@ -316,6 +316,15 @@ function show_tickets() {
     <div class="left">
       <tal:if tal:condition="here/isPersistent">
         <span class="label" 
+              i18n:translate="Followup_status"> Followup status</span>
+        <br/>
+        <select name="status">
+           <option value="internal" i18:translate="status_internal" SELECTED>Internal</option>
+           <option value="public" i18:translate="status_public">Public</option>
+        </select>
+        <br/>
+        <br/>
+        <span class="label" 
               i18n:translate="followup_phrases"> Followup phrases</span>
         <br/>
         <select name="phrases">
