@@ -5,11 +5,15 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: group_assignment_policies.py,v 1.1 2004/02/23 16:59:36 ajung Exp $
+$Id: group_assignment_policies.py,v 1.2 2004/02/23 17:49:05 ajung Exp $
 """
 
 """ 
-Handle groups assignements
+Handle groups assignment
+
+Issues can be assigned to a group where the group is either a GRUF group
+or PloneCollectorNG topic group. Currently we implement only a simple
+assignment policy where all members of a group are assigned to an issue.
 """
 
 def usersForTopicGroup(context, group):
@@ -39,5 +43,4 @@ def getUsersForGroups(context, groups):
             lst.extend(usersForTopicGroup(context, group))        
         if group in gruf_groups:
             lst.extend(usersForGrufGroup(context, group))        
-
     return lst        
