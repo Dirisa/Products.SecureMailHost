@@ -23,9 +23,7 @@
         <span class="legend">Progress</span>
         <div class="row">
           <metal:block tal:repeat="field python: here.schema_getSchema('progress').fields()">
-            <b class="label" tal:content="python: field.widget.Label(request)" />:
-            <span class="field"
-                  tal:replace="python: getattr(here, field.getName())"/>
+            <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=1)" />
           </metal:block>
         </div> 
       </div>
@@ -35,9 +33,7 @@
         <span class="legend">Contact</span>
         <div class="row">
           <metal:block tal:repeat="field python: here.schema_getSchema('contact').fields()">
-            <b class="label" tal:content="python: field.widget.Label(request)" />:
-            <span class="field"
-                  tal:replace="python: getattr(here, field.getName())"/>
+            <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=1)" />
           </metal:block>
         </div> 
       </div>
