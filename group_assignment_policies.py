@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: group_assignment_policies.py,v 1.3 2004/02/24 12:08:35 ajung Exp $
+$Id: group_assignment_policies.py,v 1.4 2004/02/24 15:40:14 ajung Exp $
 """
 
 """ 
@@ -20,9 +20,11 @@ def usersForTopicGroup(context, group):
     return list(context.get_topics_user()[group])
 
 def usersForGrufGroup(context, group):
+
+    tracker_staff = [u['username'] for u in context.getTrackerUsers(staff_only=1)]
     try:
         group = context.portal_groups.getGroupById(group)
-        return [m.getUserName() for m in group.getGroupMembers()]
+        return [m.getUserName() for m in group.getGroupMembers() if m.getUserName() in tracker_staff]
     except:
         return ()
 
