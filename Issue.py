@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.19 2003/09/20 15:14:38 ajung Exp $
+$Id: Issue.py,v 1.20 2003/09/20 17:35:13 ajung Exp $
 """
 
 import sys
@@ -106,16 +106,23 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     # Followups
     ######################################################################
 
-    def issue_followup(self, comment='', assignees=[], RESPONSE=None):
+    def issue_followup(self, action, comment='', assignees=[], RESPONSE=None):
         """ issue followup handling """
-        self._transcript.addChange('assignees', self._assignees, assignees)
-        self._assignees = assignees 
+
+        # action for changes in assignment
+        if not util.lists_eq(assignees, self._assignees):
+            self._transcript.addChange('assignees', self._assignees, assignees)
+            self._assignees = assignees 
+
         if comment: self._transcript.addComment(comment)
-        wf = getToolByName(self, 'portal_workflow')
-        wf.doActionFor(self, 'assign',
-                       comment=comment,
-                       username=util.getUserName(),
-                       assignees = assignees)
+
+        # perform workflow action
+        if not action in ('comment', ):
+            wf = getToolByName(self, 'portal_workflow')
+            wf.doActionFor(self, action,
+                           comment=comment,
+                           username=util.getUserName(),
+                           assignees=assignees)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
 
     ######################################################################
