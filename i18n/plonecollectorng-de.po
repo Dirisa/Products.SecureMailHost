@@ -53,6 +53,10 @@ msgstr "Reporter"
 msgid "Supporter"
 msgstr "Unterstützer" 
 
+msgid "Authenticated"
+msgstr "Authentifiziert" 
+
+
 msgid "unassigned"
 msgstr "nicht zugewiesen"
 

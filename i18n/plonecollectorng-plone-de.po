@@ -37,3 +37,5 @@ msgstr "Teilnehmer Voreinstellungen"
 msgid "References &amp; Uploads"
 msgstr "Referenzen &amp; Uploads"
 
+msgid "My collector preferences"
+msgstr "Meine Tracker Einstellungen"
