@@ -237,7 +237,10 @@ function show_tickets() {
   <table tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter')">
     <tr>
       <th>
-        <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to </span>
+        <span tal:condition="allow_assign" i18n:translate="assign_to_user"> Assign to users</span>
+      </th>
+      <th>
+        <span tal:condition="allow_assign" i18n:translate="assign_to_group"> Assign to group</span>
       </th>
       <th>&nbsp;</th>
       <th tal:condition="show_actions|nothing"> 
@@ -257,7 +260,16 @@ function show_tickets() {
           </span>
         </select>
       </td>
-      <td width="200"> </td>
+      <td valign="top">
+        <select tal:condition="allow_assign" name="assignees_group:list" size="7" multiple>
+          <tal:loop tal:repeat="item python: here.get_topics_user().keys()">
+            <option tal:content="python: item"
+                    tal:attributes="value python: item"
+             />
+          </tal:loop>
+        </select>
+      </td>
+      <td width="100"> </td>
 
       <td valign="top" tal:condition="show_actions|nothing" 
                        tal:define="actions here/validActions">
