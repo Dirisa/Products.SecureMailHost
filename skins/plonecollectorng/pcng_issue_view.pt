@@ -55,7 +55,6 @@
           </a> 
           <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
         </div>
-
       </fieldset>
 
       <fieldset tal:define="fieldset python: 'issuedata'">
@@ -81,10 +80,11 @@
         <div style="float: right; width: 70%; vertical-align: top;">
           <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
             <metal:block tal:condition="python: field.getName() in ('title', 'description', 'solution')">
-               <div class="row" tal:condition="python: getattr(here, field.getName())" >
+              <div class="row" tal:condition="python: getattr(here, field.getName())" >
                 <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-                <br>
-                <pre class="plain" tal:content="python: here.getParameter(field.getName())" />
+                <div class="issue_metadata">
+                    <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+                </div>
               </div>
             </metal:block> 
           </metal:block> 
