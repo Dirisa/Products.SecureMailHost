@@ -21,7 +21,9 @@ Requirements:
 
    - PlacelessTranslationService - PTS
      (http://savannah.nongnu.org/projects/opental -- 
-      you need a late version from the CVS)
+      you need an up-to-date version from the OpenTAL CVS. The checkout
+     instructions are explained on the OpenTAL project page if you click
+     on the CVS link)
 
    - Reportlab (www.reportlab.org) - required for PDF output
   
@@ -46,12 +48,34 @@ Installation:
   "Add/remove products" and select "PloneCollectorNG" to be installed. That's
   it. 
 
+Upgrading:
+
+  - If you upgrade from a previous version it is strongly recommended to
+    to follow the installation notes above (remove PloneCollectorNG
+    and re-install it using "Plone Setup")
+
+  - You *MUST* run the unicode migration for *every* PloneCollectorNG
+    instance if you are upgrading from versions before 1.1.0 beta3.  To
+    perform the unicode migration you must call the "migrateUnicode" method 
+    on all collector instances (as Manager or TrackerAdmin):
+
+      http://host:port/plonesite/trackers/MyBugTracker/migrateUnicode.
+
+    This method will convert the collector's transcript to unicode. 
+
+    Once again: THIS STEP IS MANDATORY. Do not file any bug report 
+    concerning UnicodeDecodeErrors without having performed this unicode 
+    migration. They will be ignored or answered with a "RTFM".
+
+    Before upgrading ***YOU SHOULD PERFORM A BACKUP OF YOUR Data.fs FILE***
+ 
+
 Internationalization support:
 
   - Requires the installation of PlacelessTranslationService (Localizer
     /TranslationService might work too, no support)
 
-  - included language catalogs: DE, FI, NL
+  - included language catalogs: DE, FI, NL, CS
 
   - to translate the catalog to another language:
 
