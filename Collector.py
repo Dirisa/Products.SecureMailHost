@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.115 2004/02/11 14:38:48 ajung Exp $
+$Id: Collector.py,v 1.116 2004/02/13 13:02:11 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -140,8 +140,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
-        util.redirect(RESPONSE, 'pcng_maintenance', 
-                      self.translate('catalog_recreated', 'Catalog recreated'))
+
+        if RESPONSE:
+            util.redirect(RESPONSE, 'pcng_maintenance', 
+                          self.translate('catalog_recreated', 'Catalog recreated'))
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
