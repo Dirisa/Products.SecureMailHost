@@ -591,6 +591,7 @@ class PloneLocalFolderNG(BaseContent):
         #    raise NotImplementedError, "PLFNG objects can only be created and viewed through the Plone interface."
         else:
            rel_dir = '/'.join(REQUEST.get('_e', []))
+
            if not rel_dir:
                # We are being visited directly. Redirect to
                # plfng_view here to avoid infinite redirection below.
@@ -616,6 +617,12 @@ class PloneLocalFolderNG(BaseContent):
                    RESPONSE.redirect(dest)
                else:
                   return self.showFile(destpath, REQUEST, RESPONSE)
+           elif os.path.isdir(destpath):
+               # Visiting a folder directly may also cause
+               # infinite redirection.
+               dest = make_url(self, rel_dir, 'plfng_view')
+               RESPONSE.redirect(dest)
+               return
            else:
                if hasattr(self, "default_page") and self.default_page:
                    FSDefaultPageFullPath = os.path.join(destpath, self.default_page)
