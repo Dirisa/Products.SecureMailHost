@@ -1,5 +1,22 @@
 0.6.0 (unstable)
 
+alpha8
+	- view() method added in response to SF bug #1020213
+	  (good catch, Marcel!)
+	  
+	- use zpublisher iterator to stream files back instead of manually doing it
+	  (kudos, Alan!)  
+	
+	- all lines in PloneLocalFolderNG.py are now <= 80 characters long
+	  (thx for the needed prompt, Alan!)
+	
+	- contentValues() method added by Alan Runyan for Kupu support
+	
+	- some unit tests were added by Alan Runyan
+	
+	- added language = 'neutral' metadata to support LinguaPlone
+	  (kudos, Radim)
+
 alpha7
   - small bugfix in catalogFSContent()
   
