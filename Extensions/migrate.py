@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.8 2003/11/06 10:02:57 ajung Exp $
+$Id: migrate.py,v 1.9 2003/11/06 11:52:15 ajung Exp $
 """
 
 
@@ -55,8 +55,8 @@ def migrate_trackers(self, url_from='/trackers', url_to='/plone1'):
     # ATT: using migrate_memberdata() might *OVERRIDE* exisiting
     # settings on the destation site. BE WARNED !!!!!!
 
-    #  migrate_memberdata(tracker_root, plone_root)
-
+    # migrate_memberdata(tracker_root, plone_root)
+   
     trackers = tracker_root.objectValues('CMF CollectorNG')
     for tracker in trackers:
         migrate_tracker(tracker, plone_root)
@@ -86,6 +86,7 @@ def migrate_memberdata(source, dest):
         member = source_ms.getMemberById(id)
             
         dest_member = dest_ms.getMemberById(id)
+
         if dest_member is None:
             LOG('pcngmigration', ERROR, 'memberdata for "%s" not migrated' % id)
             continue
@@ -94,17 +95,21 @@ def migrate_memberdata(source, dest):
         if not email:
             LOG('pcngmigration', WARNING, 'no email for "%s" found...faking it' % id)
             email = 'dummy@nospam.com'
+
         
-        dest_member.setProperties(properties=None,
-                pcng_company=member.getProperty('submitter_company'),
-                fullname=member.getProperty('submitter_name'),
-                email=email,
-                pcng_position=member.getProperty('submitter_position'),
-                pcng_city=member.getProperty('submitter_city'),
-                pcng_address=member.getProperty('submitter_address'),
-                pcng_fax=member.getProperty('submitter_fax'),
-                pcng_phone=member.getProperty('submitter_phone'),
-                pcng_send_attachments=member.getProperty('submitter_send_attachments'))
+        D = {'pcng_company' : member.getProperty('submitter_company'),
+             'fullname' : member.getProperty('submitter_name'),
+             'email' : email,
+             'pcng_position' : member.getProperty('submitter_position'),
+             'pcng_city' : member.getProperty('submitter_city'),
+             'pcng_address' : member.getProperty('submitter_address'),
+             'pcng_fax' : member.getProperty('submitter_fax'),
+             'pcng_phone' : member.getProperty('submitter_phone'),
+             'pcng_send_attachments' : member.getProperty('submitter_send_attachments')
+            }
+
+        dest_member.setMemberProperties(D)
+
 
 def migrate_tracker(tracker, dest):
 
