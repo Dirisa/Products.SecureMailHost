@@ -63,6 +63,8 @@ class HelpCenterHowTo(BaseFolder):
     files.
     """
 
+    content_icon = 'topic_icon.gif'
+
     schema = schema
     archetype_name = 'How-to'
     meta_type = 'HelpCenterHowTo'

@@ -46,6 +46,9 @@ default_output_type = 'text/html',
 
 class HelpCenterFAQ(BaseContent):
     """A simple archetype"""
+
+    content_icon = 'discussionitem_icon.gif'
+
     schema = schema
     archetype_name = 'FAQ'
     meta_type = 'HelpCenterFAQ'

@@ -30,6 +30,9 @@ schema = BaseFolderSchema + Schema((
 
 class HelpCenterHowToFolder(BaseFolder):
     """A simple folderish archetype"""
+
+    content_icon = 'topic_icon.gif'
+
     schema = schema
     archetype_name = 'How-to Container'
     meta_type = 'HelpCenterHowToFolder'

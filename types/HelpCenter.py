@@ -29,6 +29,9 @@ schema = BaseFolderSchema + Schema((
 class HelpCenter(BaseFolder):
     """A simple folderish archetype"""
     schema = schema
+
+    content_icon = 'book_icon.gif'
+
     archetype_name = 'Help Center'
     meta_type = 'HelpCenter'
     filter_content_types = 1
