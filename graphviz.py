@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.11 2004/06/29 13:51:45 ajung Exp $
+$Id: graphviz.py,v 1.12 2004/06/29 13:55:15 ajung Exp $
 """
 
 ##########################################################################
@@ -18,13 +18,17 @@ $Id: graphviz.py,v 1.11 2004/06/29 13:51:45 ajung Exp $
 import os, pydot, tempfile
 from urllib import unquote
 
-def build_graph(node, graph, visited):
+MAX_DEPTH = 5
+
+def build_graph(node, graph, visited, depth=0):
 
     def fmt(node):
         print type('%s %s' % (node.getId(), node.Title()))
         s = '%s %s' % (node.getId(), node.Title())
         s = unicode(s, node.getSiteEncoding(), 'ignore').encode('iso-8859-15', 'ignore')
         return s
+
+    if depth > MAX_DEPTH: return
 
     if not node.absolute_url(1) in visited:
         visited.append(node.absolute_url(1))
@@ -35,7 +39,7 @@ def build_graph(node, graph, visited):
         e = pydot.Edge(fmt(source), fmt(target), label=ref.comment)
         graph.add_edge(e)
         if not target.absolute_url(1) in visited:
-            build_graph(target, graph, visited)
+            build_graph(target, graph, visited, depth+1)
 
 
 def build_tree2(issue, format):
