@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.174 2004/05/20 15:12:42 ajung Exp $
+$Id: Issue.py,v 1.175 2004/05/22 11:24:52 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -134,6 +134,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self.id = id
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
+
+        from Globals import PersistentMapping
+        self._md = PersistentMapping()
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
@@ -636,8 +639,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         schema = self.Schema()
 
         for k in request.form.keys():
-            if not schema.hasField(k): continue
-            field = schema[k]
+            field = self.getField(k)
+            if not field: continue
 
             widget = field.widget
             result = widget.process_form(self, field, request.form, empty_marker=_marker)
