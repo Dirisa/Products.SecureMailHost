@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.211 2004/09/19 09:25:12 ajung Exp $
+$Id: Collector.py,v 1.212 2004/09/21 13:12:07 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -448,6 +448,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         tempfolder.manage_delObjects([issue.getId()])
         issue = getattr(self, new_id)
         issue = issue.__of__(self)
+        issue.reindexObject()
         return issue
 
     security.declareProtected(AddCollectorIssue, 'add_issue')
