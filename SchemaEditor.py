@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.64 2004/07/22 19:55:05 ajung Exp $
+$Id: SchemaEditor.py,v 1.65 2004/07/23 10:51:52 ajung Exp $
 """
 
 import re
@@ -26,17 +26,11 @@ from config import ManageCollector
 
 UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
-
 id_regex = re.compile('^[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$')
+allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/ ().,:;#+*=&%$§!'
 
 def remove_unallowed_chars(s):
-    allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/ ().,:;#+*=&%$§!'
-    l = []
-    for c in s:
-        if c in allowed:
-            l.append(c)
-    return ''.join(l)
-
+    return ''.join([c  for c in s  if c in allowed])
 
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
