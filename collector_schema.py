@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.32 2004/02/18 19:21:34 dtremea Exp $
+$Id: collector_schema.py,v 1.33 2004/03/02 12:09:13 ajung Exp $
 """
 
 
@@ -16,6 +16,7 @@ from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
 from PCNGSchema import PCNGSchema as Schema
 from notification_policies import VOC_NOTIFICATION_POLICIES
+from workflows import VOC_WORKFLOWS
 
 VOC_NOTIFICATION_LANGUAGES = DisplayList((
   ('en', 'English'),
@@ -108,6 +109,15 @@ schema = Schema((
                                     i18n_domain='plonecollectorng'),
                 schemata='collectordata',
                 ),
+    StringField('collector_workflow',
+                vocabulary=VOC_WORKFLOWS,
+                default='pcng_issue_workflow',
+                widget=SelectionWidget(format='select', 
+                                       label='Workflow',
+                                       label_msgid='label_workflow',
+                                       i18n_domain='plonecollectorng'),
+                schemata='collectordata'
+                ),
     StringField('collector_email',
                 searchable=0,
                 default='root@localhost',
@@ -141,6 +151,7 @@ schema = Schema((
                                        i18n_domain='plonecollectorng'),
                 schemata='E-Mail'
                 ),
+
     StringField('watchlist_mode',
                 vocabulary=VOC_WATCHLIST,
                 widget=SelectionWidget(format='select', 
