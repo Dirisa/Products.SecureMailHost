@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.194 2004/06/28 10:48:53 ajung Exp $
+$Id: Issue.py,v 1.195 2004/06/29 17:18:58 ajung Exp $
 """
 
 import os, time, random 
@@ -324,7 +324,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                                    issue_url=issue.absolute_url(1), 
                                                    collector_title=tracker.getId(),
                                                    comment=reference.comment)
-
+            self.reindexObject()
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('reference_stored', 'Reference has been stored'))
         else:
