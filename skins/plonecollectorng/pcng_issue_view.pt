@@ -105,11 +105,12 @@
       <metal:block tal:omit-tag="" tal:define="uploads here/objectValues" >
         <fieldset tal:condition="uploads">
           <legend i18n:translate="uploads">Uploads</legend>
-        <div>
-            <metal:block tal:repeat="item uploads">
-              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>&nbsp;&bull;
-            </metal:block>
-        </div>
+            <div>
+                <metal:block tal:repeat="item uploads">
+                  <a tal:attributes="href item/absolute_url" tal:content="item/getId"/> 
+                    <span tal:condition="not: repeat/item/end">&bull;</span>   
+                </metal:block>
+            </div>
         </fieldset>
       </metal:block>
 
