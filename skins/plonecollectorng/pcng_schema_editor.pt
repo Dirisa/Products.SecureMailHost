@@ -5,7 +5,7 @@
 
 <body>
   <div metal:fill-slot="main">
-    <h1 i18n:translate="heading_edit_schema">Edit schema</h1>
+    <h1 i18n:translate="heading_edit_schema">Schema editor</h1>
 
     <table border="1"
            td tal:define="default_fieldset python: here.schema_getNames()[0];
@@ -17,20 +17,20 @@
       </tr>
 
       <tr>
-        <td>
+        <td valign="top">
           <div tal:condition="fieldsets">  <!-- Navigation -->
             <form action="schema_newSchema" method="post">
               <tal:block repeat="set fieldsets">
                 <div tal:condition="python: set == fieldset">
-                  <b tal:content="set" />
+                  <b tal:content="string: schemata::${set}" />
                   <ul>
                     <metal:block tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
                       <li> 
                         <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
                           <b tal:condition="python: field.getName() == request.get('field')"
-                             tal:content="field/getName" />
+                             tal:content="string: field::${field/getName}" />
                           <span tal:condition="not: python: field.getName() == request.get('field')"
-                             tal:content="field/getName" />
+                             tal:content="string: field::${field/getName}" />
                         </a>
                       </li>
                     </metal:block>
@@ -38,13 +38,13 @@
                 </div>
                 <div tal:condition="python: set != fieldset">
                   <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}"
-                     tal:content="set" />
+                     tal:content="string: schemata::${set}" />
                 </div>
               </tal:block>
               <hr/>
               <div class="row"> 
                 <input type="text" name="fieldset" value="" size="15">
-                <input type="submit" value=" Add " >
+                <input type="submit" value=" Add new schemata" >
                 <br>
                 <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}">Delete </a> |
                 <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}">Move up</a> |
@@ -58,17 +58,22 @@
 
           <form action="schema_update" method="post"
                 tal:define="field python: here.schema_getSchema(fieldset)[request['field']]">
-            <input type="hidden" name="field.name:record:string" 
+            <input type="hidden" name="fielddata.name:record:string" 
                    tal:attributes="value request/field|nothing" />
-            <input type="hidden" name="field.schemata:record:string"    
+            <input type="hidden" name="fielddata.schemata:record:string"    
                    tal:attributes="value request/fieldset|nothing" />
 
             <table border="0">
 
             <tr>
+              <th>Name</th>
+              <td tal:content="field/getName" />
+            </tr>
+
+            <tr>
               <th>Type</th>
               <td>
-                <select tal:attributes="name string:${field/getName}.field:record:string">
+                <select name="fielddata.type:record:string">
                   <span tal:repeat="item python: ('StringField', 'IntegerField', 'FloatField', 'FixedPointField', 'LinesField', 'DateTimeField', 'BooleanField')">
                     <option tal:attributes="value item;
                                             selected python: item==here.schema_get_fieldtype(field)"
@@ -81,7 +86,7 @@
             <tr>
               <th>Widget</th>
               <td>
-                <select name="field.widget:record:string">
+                <select name="fielddata.widget:record:string">
                   <option value="String" 
                           tal:content="string:String"
                           tal:attributes="selected python: field.getWidgetName()=='StringWidget'" />
@@ -94,6 +99,9 @@
                   <option value="Select" 
                           tal:content="string:Select"
                           tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
+                  <option value="Flex" 
+                          tal:content="string:flexible Selection"
+                          tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='flex'"/>
                   <option value="Lines" 
                           tal:content="string:Lines"
                           tal:attributes="selected python: field.getWidgetName()=='LinesWidget' "/>
@@ -125,7 +133,8 @@
             <tr>
               <th>Size</th>
               <td>
-                <input type="text" value="20" size="2" name="field.widgetsize:record:int"/>
+                <input type="text" value="20" size="10" name="fielddata.widgetsize:record:string"/>
+                (Use "ROWSxCOLS" for Textarea or Line widgets)
               </td>
             </tr>
 
@@ -133,7 +142,7 @@
               <th>Vocabulary</th>
               <td>
                 <textarea cols="60" rows="6"
-                       name="field.vocabulary:record:lines"
+                       name="fielddata.vocabulary:record:lines"
                        tal:condition="python: field.getWidgetName()=='SelectionWidget'"
                        tal:content="python: here.schema_format_vocabulary(field)"
                  ></textarea>
@@ -143,9 +152,18 @@
             <tr>
               <th>Default</th>
               <td>
-                <input type="text" value="" size="20" 
-                       name="field.default:record:string"
+                <input type="text" value="" size="40" 
+                       name="fielddata.default:record:string"
                        tal:attributes="value field/getDefault"/>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Label</th>
+              <td>
+                <input type="text" value="" size="40" 
+                       name="fielddata.label:record:string"
+                       tal:attributes="value python: field.widget.label"/>
               </td>
             </tr>
 
@@ -153,16 +171,17 @@
               <th>Required</th>
               <td>
                 <input type="checkbox" value="1" 
-                       name="field.required:record:int"
+                       name="fielddata.required:record:int"
                        tal:attributes="checked field/required"/>
               </td>
             </tr>
 
             <tr>
-              <th>Visible</th>
+              <th>Invisible</th>
               <td> 
                 <input type="checkbox" value="1" 
-                       name="field.visible:record:int" />
+                       name="fielddata.invisible:record:int" 
+                       tal:attributes="checked python: field.widget.visible == 0"/>
 
               </td>
             </tr>

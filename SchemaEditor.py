@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.15 2003/09/18 19:25:59 ajung Exp $
+$Id: SchemaEditor.py,v 1.16 2003/09/19 14:53:52 ajung Exp $
 """
 
 import operator
@@ -78,6 +78,7 @@ class SchemaEditor:
         """ delete a schema """
         self._schemata_names.remove(fieldset)
         del self._schemas[fieldset]
+        self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted', fieldset=self._schemata_names[0])
 
     security.declareProtected(ManageCollector, 'schema_del_field')
@@ -87,13 +88,15 @@ class SchemaEditor:
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field deleted', fieldset=fieldset)
 
     security.declareProtected(ManageCollector, 'schema_update')
-    def schema_update(self, REQUEST, RESPONSE=None):
-        """ update a schema schema """
+    def schema_update(self, fielddata,  REQUEST, RESPONSE=None):
+        """ update a single field"""
 
         R = REQUEST.form
-        fieldset = R['fieldset'] 
+        FD = fielddata
 
+        ## ATT: this should go into a dedicated method
         if R.has_key('schema_add_field'):
+            fieldset = FD.schemata    
             fields = self._schemas[fieldset].fields()
             fields.append(StringField(R['name'], schemata=fieldset, widget=StringWidget))
             schema = OrderedSchema()
@@ -101,71 +104,96 @@ class SchemaEditor:
                 schema.addField(f)
             self._schemas[fieldset] = schema
 
-            util.redirect(RESPONSE, 'pcng_schema_editor', 'Field added', fieldset=fieldset)
+            util.redirect(RESPONSE, 'pcng_schema_editor', 'Field added', fieldset=fieldset, field=R['name'])
             return            
 
-        schema = OrderedSchema()
-        fieldnames = [name for name in R.keys()  if not isinstance(R[name], str) ]
-        fieldnames.sort(lambda a,b,R=R: cmp(R[a].order, R[b].order))
+        if   FD.type == 'StringField':     field = StringField
+        elif FD.type == 'IntegerField':    field = IntegerField
+        elif FD.type == 'FloatField':      field = FloatField
+        elif FD.type == 'FixedPointField': field = FixedPointField
+        elif FD.type == 'BooleanField':    field = BooleanField
+        elif FD.type == 'LinesField':      field = LinesField
+        elif FD.type == 'DateTimeField':   field = DateTimeField
+        else: raise TypeError('unknown field type: %s' % FD.field)
 
-        for name in fieldnames:
-            d =  R[name]
-
-            if d.field == 'StringField':       field = StringField
-            elif d.field == 'IntegerField':    field = IntegerField
-            elif d.field == 'FloatField':      field = FloatField
-            elif d.field == 'FixedPointField': field = FixedPointField
-            elif d.field == 'BooleanField':    field = BooleanField
-            elif d.field == 'LinesField':      field = LinesField
-            elif d.field == 'DateTimeField':   field = DateTimeField
-            else: raise TypeError('unknown field type: %s' % d.field)
-
-            D = {}
-            D['default'] = d.get('default', '')
-            D['schemata'] = fieldset
+        D = {}    # dict to be passed to the field constructor
+        D['default'] = FD.get('default', '')
+        D['schemata'] = FD.schemata
          
-            visible = d.get('visible', 1)
-            if d.widget == 'String':        widget = StringWidget(visible=visible)
-            elif d.widget == 'Select':      widget = SelectionWidget(format='select', visible=visible)
-            elif d.widget == 'Radio':       widget = SelectionWidget(format='radio', visible=visible)
-            elif d.widget == 'Textarea':    widget = TextAreaWidget(visible=visible)
-            elif d.widget == 'Calendar':    widget = CalendarWidget(visible=visible)
-            elif d.widget == 'Boolean':     widget = BooleanWidget(visible=visible)
-            elif d.widget == 'MultiSelect': widget = MultiSelectionWidget(visible=visible)
-            elif d.widget == 'Keywords':    widget = KeywordWidget(visible=visible)
-            elif d.widget == 'Richtext':    widget = RichWidget(visible=visible)
-            elif d.widget == 'Password':    widget = PasswordWidget(visible=visible)
-            elif d.widget == 'Lines':       widget = LinesWidget(visible=visible)
-            elif d.widget == 'Visual':      widget = VisualWidget(visible=visible)
+        if FD.get('invisible', 0) == 0:
+            visible = 1
+        else:
+            visible = 0
+
+        # build widget
+        if   FD.widget == 'String':      widget = StringWidget()
+        elif FD.widget == 'Select':      widget = SelectionWidget(format='select')
+        elif FD.widget == 'Flex':        widget = SelectionWidget(format='flex')
+        elif FD.widget == 'Radio':       widget = SelectionWidget(format='radio')
+        elif FD.widget == 'Textarea':    widget = TextAreaWidget()
+        elif FD.widget == 'Calendar':    widget = CalendarWidget()
+        elif FD.widget == 'Boolean':     widget = BooleanWidget()
+        elif FD.widget == 'MultiSelect': widget = MultiSelectionWidget()
+        elif FD.widget == 'Keywords':    widget = KeywordWidget()
+        elif FD.widget == 'Richtext':    widget = RichWidget()
+        elif FD.widget == 'Password':    widget = PasswordWidget()
+        elif FD.widget == 'Lines':       widget = LinesWidget()
+        elif FD.widget == 'Visual':      widget = VisualWidget()
+        else: raise ValueError('unknown widget type: %s' % d.widget)
+
+        if hasattr(widget, 'size'):
+            widget.size = FD.widgetsize
+        elif hasattr(widget, 'rows'):
+            if FD.widgetsize.find('x') == -1:
+                rows = FD.widgetsize
+                cols = 80
             else:
-                raise ValueError('unknown widget type: %s' % d.widget)
+                rows, cols = FD.widgetsize.split('x')
+                widget.rows = int(rows)
+                widget.cols = int(cols)
 
-            if d.widget in ('Radio', 'Select'):
+        widget.visible = visible
+        widget.label = FD.label
+        widget.label_msgid = 'label_' + FD.label
+        widget.i18n_domain = 'plonecollectorng'
 
-                vocab = d.get('vocabulary', [])
-                l = []
-                for line in vocab:
-                    line = line.strip()
-                    if not line: continue
-                    if line.find('|') == -1:
-                        k = v = line
-                    else:
-                        k,v = line.split('|', 1)
-                    l.append( (k,v))
+        D['widget'] = widget
 
-                D['vocabulary'] = DisplayList(l)
+        # build DisplayList instance for SelectionWidgets
+        if FD.widget in ('Radio', 'Select'):
+            vocab = FD.get('vocabulary', [])
+            l = []
+            for line in vocab:
+                line = line.strip()
+                if not line: continue
+                if line.find('|') == -1:
+                    k = v = line
+                else:
+                    k,v = line.split('|', 1)
+                l.append( (k,v))
 
-            D['required'] = d.get('required', 0)
-            D['widget'] = widget
-            D['mutator'] = 'archetypes_mutator'
-            D['accessor'] = 'archetypes_accessor'
-            D['edit_accessor'] = 'archetypes_accessor'
+            D['vocabulary'] = DisplayList(l)
 
-            schema.addField(field(name, **D))
+        D['required'] = FD.get('required', 0)
+        D['mutator'] = 'archetypes_mutator'
+        D['accessor'] = 'archetypes_accessor'
+        D['edit_accessor'] = 'archetypes_accessor'
 
-        self._schemas[fieldset] = schema
+        field = field(FD.name, **D)
 
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema changed', fieldset=fieldset)
+        # build new schemata
+        schema = self._schemas[FD.schemata]
+        new_schema = OrderedSchema()
+        for f in schema.fields():
+            if f.getName() == FD.name:
+                new_schema.addField(field)
+            else:
+                new_schema.addField(f)
+
+        self._schemas[FD.schemata] = new_schema # and replace old one
+        
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
+                      fieldset=FD.schemata, field=FD.name)
 
     security.declareProtected(ManageCollector, 'schema_moveLeft')
     def schema_moveLeft(self, fieldset, RESPONSE=None):
