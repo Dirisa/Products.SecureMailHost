@@ -20,6 +20,7 @@ schema = BaseFolderSchema + Schema((
                                       i18n_domain = "plonehelpcenter",
                                       rows=6)),
     LinesField('sections',
+                default=['General'],
                 widget=LinesWidget(description="Define the available sections a Tutorial can be assigned to.",
                                             label="Sections",
                                             i18n_domain = "plonehelpcenter",

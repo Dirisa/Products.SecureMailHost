@@ -19,9 +19,9 @@ schema = BaseFolderSchema + Schema((
                                       i18n_domain = "plonehelpcenter",
                                       rows=6)),
     LinesField('sections',
+                default=['General'],
                 widget=LinesWidget(description="Define the available sections a FAQ can be assigned to.",
                                             label="Sections",
-                                            default="General",
                                             i18n_domain = "plonehelpcenter",
                                             rows=6)),
     ))

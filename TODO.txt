@@ -9,8 +9,6 @@ FAQ/FAQFolder:
 
 GENERAL:
 
-- We should populate the Sections attribute with 'General' so there is a section available at all times.
-
 - We should use Keywords (DublinCore Subject) for the Sections, and restrict the usage to only being the ones defined in the folder (is this possible?)
 
 - We should have an extra attribute that has additional words that are indexed along with the content - for example in a howto about VerboseSecurity, it would make sense to have:
