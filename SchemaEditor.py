@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.54 2004/03/08 20:03:01 ajung Exp $
+$Id: SchemaEditor.py,v 1.55 2004/03/20 13:14:42 ajung Exp $
 """
 
 import copy, re
@@ -17,7 +17,7 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.Archetypes.public import DisplayList, Schema
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
-from PCNGSchema import PCNGSchema 
+from PCNGSchema import PCNGSchemaNonPersistent
 
 import util
 from config import ManageCollector
@@ -45,7 +45,7 @@ class SchemaEditor:
         from OrderedSchema import OrderedSchema
 
         if not hasattr(self, '_ms'):
-            schema = PCNGSchema()
+            schema = PCNGSchemaNonPersistent()
             for name in self._schemata_names:
                 for f in self._schemas[name].fields():
                     schema.addField(f)
@@ -64,7 +64,7 @@ class SchemaEditor:
     security.declareProtected(View, 'atse_getSchemata')
     def atse_getSchemata(self, name):
         """ return a schemata given by its name """
-        s = PCNGSchema()
+        s = PCNGSchemaNonPersistent()
         for f in self._ms.getSchemataFields(name):
             s.addField(f)
         return s
@@ -335,7 +335,7 @@ class SchemaEditor:
         """ migrate to PCNGSchema """
 
         old_schema = self._ms.copy()
-        self._ms = PCNGSchema()
+        self._ms = PCNGSchemaNonPersistent()
         for schemata_name in old_schema.getSchemataNames():
             for field in old_schema.getSchemataFields(schemata_name):
                 self._ms.addField(field)
