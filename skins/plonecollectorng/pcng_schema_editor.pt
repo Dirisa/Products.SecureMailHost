@@ -28,6 +28,8 @@
            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
            <input type="text" name="name" value="" size="10">
            <input type="submit" value=" Add schemata " >
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this schemata</a>
          </form>
 
        </div>  <!-- EOF Navigation -->
@@ -50,7 +52,7 @@
           <th tal:content="field/getName" />
           <td valign="top">
             <select tal:attributes="name string:${field/getName}.field:record:string">
-              <span tal:repeat="item python: ('StringField', 'IntegerField')">
+              <span tal:repeat="item python: ('StringField', 'IntegerField', 'FloatField', 'FixedPointField', 'LinesField', 'DateTimeField', 'BooleanField')">
                 <option tal:attributes="value item;
                                         selected python: item==here.schema_get_fieldtype(field)"
                         tal:content="item" />
@@ -103,20 +105,23 @@
                                    value repeat/field/index"/>
            </td>
           <td valign="top">
-            <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete field</a>
+            <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete</a>
           </td>
          </tr>
  
          <tr> 
            <td colspan="1">
-             <input type="submit" value=" Save ">
+             <input type="submit" value=" Save changes ">
            </td>
+         </tr>
+         <tr>
+           <td>&nbsp;</td> 
            <td colspan="5">
              <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field ">
            </td>
-           <td colspan="2">
-             <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this schemata</a>
+           <td colspan="3">
            </td>
+        </tr>
        </table>
     </form>
      </div>
