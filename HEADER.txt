@@ -1,0 +1,16 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
+
+License: see LICENSE.txt
+
+$Id: HEADER.txt,v 1.1 2004/11/12 15:44:33 ajung Exp $
+"""
+
