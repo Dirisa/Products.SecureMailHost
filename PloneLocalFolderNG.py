@@ -238,6 +238,23 @@ class PloneLocalFolderNG(BaseContent):
             open(filename + '.metadata', 'wb').write(comment)
         REQUEST.RESPONSE.redirect('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view'))
 
+    security.declareProtected(ModifyPortalContent, 'create_directory')
+    def create_directory(self, dirname, REQUEST):
+        """ upload a file """
+
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir, dirname)
+        print destpath
+        if os.path.exists(destpath):
+            raise ValueError('Directory %s already exists' % dirname)
+
+        try:
+            os.makedirs(destpath)    # try..except to avoid exposing the realword path
+        except:
+            raise RuntimeError('Directory could not be created')
+        
+        url = '/' + os.path.join(self.absolute_url(1), rel_dir, dirname) + '/plfng_view?portal_status_message=Directory created'
+        REQUEST.RESPONSE.redirect(url)
 
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)

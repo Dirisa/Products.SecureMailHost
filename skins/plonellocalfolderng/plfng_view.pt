@@ -15,167 +15,186 @@
                  folder_contents python:here.getContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();">
-    <form name="folderContentsForm"
-          method="post"
-          action="folder_object"
-          tal:attributes="action here/absolute_url"
-          tal:define="b_start python:request.get('b_start', 0);
-                      results folder_contents;
-                      Batch python:modules['Products.CMFPlone'].Batch;
-                      batch python:Batch(results, 100, int(b_start), orphan=0);">
 
-            <h1 tal:condition="myfolder">
-            <img tal:replace="structure here/folder.gif" />
-            <span i18n:translate="heading_my_folder" tal:omit-tag="">My Folder</span>
-            </h1>
+    <div>
+        <form name="folderContentsForm"
+              method="post"
+              action="folder_object"
+              tal:attributes="action here/absolute_url"
+              tal:define="b_start python:request.get('b_start', 0);
+                          results folder_contents;
+                          Batch python:modules['Products.CMFPlone'].Batch;
+                          batch python:Batch(results, 100, int(b_start), orphan=0);">
 
-            <h1 tal:condition="not:myfolder">
-              <img tal:replace="structure here/folder.gif" />
-              <span tal:content="here/plfng_translatedpath" />
-            </h1>
+                <h1 tal:condition="myfolder">
+                <img tal:replace="structure here/folder.gif" />
+                <span i18n:translate="heading_my_folder" tal:omit-tag="">My Folder</span>
+                </h1>
 
-            <metal:block tal:condition="not: folder_contents">
-            <p i18n:translate="description_no_visible_items_press_add">
-            This folder has no visible items. To add content, press the 'Add New Item' button,
-            or paste content from another location.
-            </p>
-            </metal:block>
+                <h1 tal:condition="not:myfolder">
+                  <img tal:replace="structure here/folder.gif" />
+                  <span tal:content="here/plfng_translatedpath" />
+                </h1>
 
-            <p tal:condition="myfolder"
-                  i18n:translate="description_contains_items_by">
-            Contains the items created and collected by <tal:block content="python:user.getUserName()" i18n:name="name">User</tal:block>
-            </p>
+                <metal:block tal:condition="not: folder_contents">
+                <p i18n:translate="description_no_visible_items_press_add">
+                This folder has no visible items. To add content, press the 'Add New Item' button,
+                or paste content from another location.
+                </p>
+                </metal:block>
 
-            <p tal:content="structure here/Description"
-               tal:condition="not:myfolder">
-               description
-            </p>
+                <p tal:condition="myfolder"
+                      i18n:translate="description_contains_items_by">
+                Contains the items created and collected by <tal:block content="python:user.getUserName()" i18n:name="name">User</tal:block>
+                </p>
 
-            <!-- Navigation -->
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
-            <metal:block define-macro="folder_listing"
-                         tal:define="locked portal_object/lock_icon.gif;
-                                     pencil_icon portal_object/edit.gif;
-                                     use_folder_contents site_properties/use_folder_contents;
-                                     filterOut here/getNotAddableTypes;
-                                     filterValues decodedFilter/keys | nothing;
-                                     types python:here.sortObjects(here.allowedContentTypes());
-                                     no_types python:len(types);
-                                     filterTypes python:test( filterValues==nothing, types, here.filterTypes(filter));
-                                     isExpired nocall:here/isExpired;
-                                     toPortalTime nocall:here/toPortalTime;
-                                     getObjSize nocall:here/getObjSize;
-                                     lock_tool here/portal_lock|nothing;
-				     getInfoFor python:wtool.getInfoFor;
-                                     iface_tool here/portal_interface;
-                                     orderable_iface string:Products.CMFPlone.interfaces.OrderedContainer.IOrderedContainer;
-                                     isOrderable python:iface_tool.objectImplements(here, orderable_iface);
-                                     nosortclass python:test(isOrderable, 'nosort', '')">
+                <p tal:content="structure here/Description"
+                   tal:condition="not:myfolder">
+                   description
+                </p>
 
-            <table id="sortable"
-                   class="listing"
-                   summary="Content listing"
-                   cellpadding="0" cellspacing="0">
+                <!-- Navigation -->
+                <div metal:use-macro="here/batch_macros/macros/navigation" />
+                <metal:block define-macro="folder_listing"
+                             tal:define="locked portal_object/lock_icon.gif;
+                                         pencil_icon portal_object/edit.gif;
+                                         use_folder_contents site_properties/use_folder_contents;
+                                         filterOut here/getNotAddableTypes;
+                                         filterValues decodedFilter/keys | nothing;
+                                         types python:here.sortObjects(here.allowedContentTypes());
+                                         no_types python:len(types);
+                                         filterTypes python:test( filterValues==nothing, types, here.filterTypes(filter));
+                                         isExpired nocall:here/isExpired;
+                                         toPortalTime nocall:here/toPortalTime;
+                                         getObjSize nocall:here/getObjSize;
+                                         lock_tool here/portal_lock|nothing;
+                         getInfoFor python:wtool.getInfoFor;
+                                         iface_tool here/portal_interface;
+                                         orderable_iface string:Products.CMFPlone.interfaces.OrderedContainer.IOrderedContainer;
+                                         isOrderable python:iface_tool.objectImplements(here, orderable_iface);
+                                         nosortclass python:test(isOrderable, 'nosort', '')">
 
-                <thead>
+                <table id="sortable"
+                       class="listing"
+                       summary="Content listing"
+                       cellpadding="0" cellspacing="0">
+
+                    <thead>
+
+                        <metal:block tal:condition="folder_contents|not:standalone|nothing">
+                        <tr>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_title">Title</span>&nbsp;</th>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_type">Type</span>&nbsp;</th>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_size">Size</span>&nbsp;</th>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_modified">Modified</span>&nbsp;</th>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_comment">Comment</span>&nbsp;</th>
+                            <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
+                            i18n:translate="listingheader_action">Action</span>&nbsp;</th>
+                        </tr>
+                        </metal:block>
+                    </thead>
 
                     <metal:block tal:condition="folder_contents|not:standalone|nothing">
-                    <tr>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_title">Title</span>&nbsp;</th>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_type">Type</span>&nbsp;</th>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_size">Size</span>&nbsp;</th>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_modified">Modified</span>&nbsp;</th>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_comment">Comment</span>&nbsp;</th>
-                        <th tal:attributes="class python:nosortclass">&nbsp;<span tal:omit-tag=""
-                        i18n:translate="listingheader_action">Action</span>&nbsp;</th>
-                    </tr>
+                    <tbody>
+                    <metal:block tal:repeat="item batch">
+                        <tr tal:define="oddrow repeat/item/odd;
+                                        item_typeinfo item/getTypeInfo"
+                            tal:attributes="class python:test(oddrow, 'even', 'odd')" >
+
+                            <td tal:define="action python:item_typeinfo.immediate_view;
+                                            url item/absolute_url;">
+
+                                <a href="#" tal:attributes="href url">
+
+                                    <img tal:define="icon python:item.getIcon(1); iconObject python:getattr(here,icon)"
+                                         tal:attributes="src string:$portal_url/$icon; alt iconObject/title_or_id"
+                                    />&nbsp;<span tal:replace="item/title_or_id">Title</span>
+                                </a>
+                                <tal:block tal:condition="python:site_properties.ext_editor and item_typeinfo.getActionById('external_edit',None)">
+
+                                <a href="absolute_url/external_edit"
+                                   tal:attributes="href string:${item/absolute_url}/external_edit">
+                                   <img tal:replace="structure python:pencil_icon.tag(title='Edit with External Editor')" />
+                                 </a>
+
+                                </tal:block>
+
+                                <img tal:define="lockable python:hasattr(item, 'wl_isLocked')"
+                                     tal:condition="python:(lockable and item.wl_isLocked()) or (lock_tool and lock_tool.isLockedOut(item))"
+                                     tal:replace="structure python:locked.tag(title='Locked')" />
+
+                            </td>
+
+                            <td i18n:translate="" tal:content="python:item_typeinfo.Title()">
+                            folder
+                            </td>
+
+                            <td tal:define="size python:getObjSize(item)"
+                                tal:content="structure python:test(size, size, '&nbsp;')">
+                            size
+                            </td>
+
+                            <td tal:content="python:toPortalTime(item.ModificationDate())">
+                            08/19/2001 03:01 AM
+                            </td>
+
+                            <td tal:content="item/getComment" />
+
+                            <td> 
+                              <a tal:condition="python: getObjSize(item)"
+                                  tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
+                            </td>
+                        </tr>
+
                     </metal:block>
-                </thead>
+                    </tbody>
+                    </metal:block>
 
-                <metal:block tal:condition="folder_contents|not:standalone|nothing">
-                <tbody>
-                <metal:block tal:repeat="item batch">
-                    <tr tal:define="oddrow repeat/item/odd;
-                                    item_typeinfo item/getTypeInfo"
-                        tal:attributes="class python:test(oddrow, 'even', 'odd')" >
+                </table>
 
-                        <td tal:define="action python:item_typeinfo.immediate_view;
-                                        url item/absolute_url;">
-
-                            <a href="#" tal:attributes="href url">
-
-                                <img tal:define="icon python:item.getIcon(1); iconObject python:getattr(here,icon)"
-                                     tal:attributes="src string:$portal_url/$icon; alt iconObject/title_or_id"
-                                />&nbsp;<span tal:replace="item/title_or_id">Title</span>
-                            </a>
-                            <tal:block tal:condition="python:site_properties.ext_editor and item_typeinfo.getActionById('external_edit',None)">
-
-                            <a href="absolute_url/external_edit"
-                               tal:attributes="href string:${item/absolute_url}/external_edit">
-                               <img tal:replace="structure python:pencil_icon.tag(title='Edit with External Editor')" />
-                             </a>
-
-                            </tal:block>
-
-                            <img tal:define="lockable python:hasattr(item, 'wl_isLocked')"
-                                 tal:condition="python:(lockable and item.wl_isLocked()) or (lock_tool and lock_tool.isLockedOut(item))"
-                                 tal:replace="structure python:locked.tag(title='Locked')" />
-
-                        </td>
-
-                        <td i18n:translate="" tal:content="python:item_typeinfo.Title()">
-                        folder
-                        </td>
-
-                        <td tal:define="size python:getObjSize(item)"
-                            tal:content="structure python:test(size, size, '&nbsp;')">
-                        size
-                        </td>
-
-                        <td tal:content="python:toPortalTime(item.ModificationDate())">
-                        08/19/2001 03:01 AM
-                        </td>
-
-                        <td tal:content="item/getComment" />
-
-                        <td> 
-                          <a tal:condition="python: getObjSize(item)"
-                              tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
-                        </td>
-                    </tr>
-
-                </metal:block>
-                </tbody>
+                <table>
+                  <tr>
+                    <td>
+                    </td>
+                  </tr>
+                </table>
                 </metal:block>
 
-            </table>
+                <!-- Navigation -->
+                <div metal:use-macro="here/batch_macros/macros/navigation" />
+        </form>
+    </div>
 
-            <table>
-              <tr>
-                <td>
-                </td>
-              </tr>
-            </table>
-            </metal:block>
+    <div>
+        <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
+              tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
+          File:
+          <input type="file" name="upload">
+          <br>
+          Comment:
+          <textarea name="comment" cols="60" rows="3"></textarea>
+          <br>
+          <input type="submit" value="Upload file" >
+        </form>
+    </div>
 
-            <!-- Navigation -->
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
-    </form>
-    <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
-          tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
-      File:
-      <input type="file" name="upload">
-      <br>
-      Comment:
-      <textarea name="comment" cols="60" rows="3"></textarea>
-      <br>
-      <input type="submit" value="Upload file" >
-    </form>
+    <br/>
+
+    <div>
+        <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
+              tal:attributes="action string:${request/URL1}/create_directory" method="post">
+          Directory name:
+          <input type="text" name="dirname" size="30">
+          &nbsp;
+          <input type="submit" value="Create directory" >
+        </form>
+    </div>
+
 </div>
 
 </body>
