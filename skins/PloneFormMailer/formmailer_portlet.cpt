@@ -1,9 +1,9 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
-      i18n:domain="plone">
+      i18n:domain="pfm">
 <body>
 <div metal:define-macro="portlet"
-       i18n:domain="plone"
+       i18n:domain="pfm"
        tal:omit-tag="" >
     <div class="portlet" 
          id="portlet-formmailer"
@@ -49,6 +49,7 @@
                                 <span tal:condition="field/is_required"
                                       class="fieldRequired"
                                       title="Required"
+				      i18n:domain="plone"
                                       i18n:attributes="title"
                                       i18n:translate="label_required">(Required)</span>
                     
@@ -57,7 +58,8 @@
                                      tal:content="desc"
                                      i18n:translate="">Help</div>
                                                         
-                                <div tal:define="input python:field.render(REQUEST=request)"
+                                <div tal:define="initvalue python:test(field.id in ['email','fullname'],member.getProperty(field.id, ''),''); 
+				                 input python:field.render(REQUEST=request, value = initvalue )"
                                      tal:replace="structure input"
                                      tal:attributes="tabindex tabindex/next;">
                                 </div>
