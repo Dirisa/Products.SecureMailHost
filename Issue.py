@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.175 2004/05/22 11:24:52 ajung Exp $
+$Id: Issue.py,v 1.176 2004/05/23 11:08:53 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -319,8 +319,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
-#            import pdb
-#            pdb.set_trace()
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                    issue_url=issue.absolute_url(1), 
                                                    collector_title=tracker.getId(),

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.183 2004/05/20 15:05:37 ajung Exp $
+$Id: Collector.py,v 1.184 2004/05/23 11:08:53 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -322,18 +322,18 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             add_roles = ()
 
         # AddCollectorIssue
-        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
-        self.manage_permission(EditCollectorIssue, roles=target_roles, acquire=0)
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Owner')
         self.manage_permission(AddCollectorIssue, roles=target_roles+add_roles, acquire=0)
         self.manage_permission(AddPortalContent, roles=target_roles+add_roles, acquire=0)
 
         # AddCollectorIssueFollowup 
-        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Owner')
         self.manage_permission(AddCollectorIssueFollowup, roles=target_roles+add_roles, acquire=0)
 
         # ModifyPortalContent
-        target_roles = ('Supporter','TrackerAdmin','Manager', 'Owner')
+        target_roles = ('Supporter','TrackerAdmin', 'Manager', 'Owner')
         self.manage_permission(ModifyPortalContent, roles=target_roles+add_roles, acquire=0)
+        self.manage_permission(EditCollectorIssue, roles=target_roles, acquire=0)
 
     def _adjust_view_mode(self):
         """Set role privileges according to view mode."""
