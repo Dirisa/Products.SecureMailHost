@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.20 2003/09/09 12:21:06 ajung Exp $
+$Id: Collector.py,v 1.21 2003/09/10 04:32:00 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -15,17 +15,18 @@ from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
 from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import BaseFolder, registerType
+from Products.CMFCore.utils import getToolByName
 
 from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
-from Issue import Issue
+from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 import collector_schema 
 import issue_schema
 import util
 
-class Collector(BaseFolder, SchemaEditor):
+class PloneCollectorNG(BaseFolder, SchemaEditor):
     """ PloneCollectorNG """
 
     schema = collector_schema.schema
@@ -108,6 +109,7 @@ class Collector(BaseFolder, SchemaEditor):
 
         self._transcript.add(te)
 
+
     ######################################################################
     # Transcript
     ######################################################################
@@ -131,21 +133,31 @@ class Collector(BaseFolder, SchemaEditor):
     def getReporters(self): return self._reporters
 
     security.declareProtected(ManageCollector, 'getTrackerUsers')
-    def getTrackerUsers(self):   
+    def getTrackerUsers(self, staff_only=False):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
             informations for the presentation.
         """
 
         l = []
-        names = self._managers + self._supporters + self._reporters + self.acl_users.getUserNames()
+        membership_tool = getToolByName(self, 'portal_membership', None)
+        names = self._managers + self._supporters + self._reporters
+        if not staff_only:
+            names += self.acl_users.getUserNames()
+
         for name in util.remove_dupes(names):
-            d = {}
-            d['username'] = name; d['roles'] = []
+            member = membership_tool.getMemberById(name)
+            d = { 'username':name, 'roles':[], 'fullname':'', 'email':''}
+
+            if member:
+                d['fullname'] = member.getProperty('fullname')
+                d['email'] = member.getProperty('email')
+            
             if name in self._managers: d['roles'].append('TrackerAdmin')
             if name in self._supporters: d['roles'].append('Supporter')
             if name in self._reporters: d['roles'].append('Reporter')
             l.append(d)
+
         return l
 
     security.declareProtected(ManageCollector, 'set_staff')
@@ -241,7 +253,7 @@ class Collector(BaseFolder, SchemaEditor):
         """ create a new issue """
         self._num_issues += 1
         id = str(self._num_issues)
-        issue = Issue(id, '', self.getWholeSchema())
+        issue = PloneIssueNG(id, '', self.getWholeSchema())
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
@@ -254,7 +266,7 @@ class Collector(BaseFolder, SchemaEditor):
     security.declareProtected(CMFCorePermissions.View, 'getNumberIssues')
     def getNumberIssues(self):
         """ return the number of issues """
-        return len(self.objectIds('Issue'))
+        return len(self.objectIds('PloneIssueNG'))
     __len__ = getNumberIssues
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
@@ -262,7 +274,7 @@ class Collector(BaseFolder, SchemaEditor):
         """ update stored issue schema for all issues """
 
         schema = self.getWholeSchema()
-        for issue in self.objectValues('Issue'):
+        for issue in self.objectValues('PloneIssueNG'):
             issue.updateSchema(schema)
 
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues updated')
@@ -270,11 +282,11 @@ class Collector(BaseFolder, SchemaEditor):
     security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
         """ reindex all issues """
-        for issue in self.objectValues('Issue'):
+        for issue in self.objectValues('PloneIssueNG'):
             issue.reindexObject()
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
 
-registerType(Collector)
+registerType(PloneCollectorNG)
 
 
 class PloneCollectorNGCatalog(CatalogTool):

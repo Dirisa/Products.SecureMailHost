@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.10 2003/09/09 19:10:03 ajung Exp $
+$Id: Issue.py,v 1.11 2003/09/10 04:32:00 ajung Exp $
 """
 import sys
 
@@ -21,7 +21,7 @@ from References import Reference, ReferencesManager
 from WatchList import WatchList
 import util
 
-class Issue(BaseFolder, WatchList):
+class PloneIssueNG(BaseFolder, WatchList):
     """ PloneCollectorNG """
 
     actions = ({
@@ -61,10 +61,37 @@ class Issue(BaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
+        self._assignees = []
         self._references = ReferencesManager()
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
+
+    def manage_afterAdd(self, item, container):
+        """ perform post-creation actions """
+        BaseFolder.manage_afterAdd(self, item, container)
+
+        # add email/fullname to the contact properties of the issue
+        member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
+        if member:
+            name = 'contact_name'
+            self.Schema()[name].storage.set(name, self, member.getProperty('fullname'))
+            name = 'contact_email'
+            self.Schema()[name].storage.set(name, self, member.getProperty('email'))
+
                                                 
+    ######################################################################
+    # Followups
+    ######################################################################
+
+    def issue_followup(self, comment='', assignees=[], RESPONSE=None):
+        """ issue followup handling """
+        te = TranscriptEntry()
+        te.addChange('assignees', self._assignees, assignees)
+        self._assignees = assignees 
+        if comment: te.addComment(comment)
+        self._transcript.add(te)
+        util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
+
     ######################################################################
     # Archetypes callbacks 
     ######################################################################
@@ -167,6 +194,11 @@ class Issue(BaseFolder, WatchList):
     # Misc
     ######################################################################
 
+    security.declareProtected(CMFCorePermissions.View, 'getAssignees')
+    def getAssignees(self):
+        """ return list of assigned usernames """
+        return self._assignees
+
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
@@ -204,5 +236,5 @@ class Issue(BaseFolder, WatchList):
 
 
 
-registerType(Issue)
+registerType(PloneIssueNG)
 
