@@ -15,6 +15,13 @@ def install(self):
 
     install_subskin(self, out, GLOBALS)
 
+    # remove Plone's default workflow from PloneIssueNG
+    workflow_tool = getToolByName(self, 'portal_workflow')
+    try:
+        workflow_tool.setChainForPortalTypes(('PloneIssueNG',), '')    
+    except: pass
+    print >> out, "Added 'pcng_issue_workflow' workflow"
+
     # add some new properties to memberdatatool
     memberdata_tool = getToolByName(self, 'portal_memberdata')
 
