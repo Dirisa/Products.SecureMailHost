@@ -13,6 +13,10 @@
     <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
   </metal:block>
 
+  <tal:if tal:condition="not: python: 'TrackerAdmin' in member.getRolesInContext(here)">
+    <span tal:define="dummy python: request.RESPONSE.redirect(context.absolute_url() + '?portal_status_message=No permission')" />
+  </tal:if>
+
   <form action="pcng_mailaction" method="post">
     <div class="row">
       <div class="label">Subject</div>
