@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.22 2004/01/17 10:50:10 ajung Exp $
+$Id: Transcript.py,v 1.23 2004/01/17 17:48:33 ajung Exp $
 """
 
 import time 
@@ -18,6 +18,7 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 
 import util
+from config import ManageCollector
 
 class TranscriptEvent(Persistent, Implicit):
     
@@ -54,6 +55,7 @@ class TranscriptEvent(Persistent, Implicit):
     security.declarePublic('getUser')
     def getUser(self):
         return self.user
+
 
 InitializeClass(TranscriptEvent) 
 
@@ -165,6 +167,16 @@ class Transcript(Persistent, Implicit):
 
         if reverse: result.reverse()
         return result
+
+    security.declareProtected(ManageCollector, 'migrateUnicode')
+    def migrateUnicode(self):
+        """ migrate all events to unicode """
+        for ev in self.getEvents():
+            for k,v in ev.__dict__.items():
+                if k in ('created', 'user', 'type'): continue
+                if isinstance(v, StringType):
+                    setattr(ev, k, self.conv(v))
+    
     
 InitializeClass(Transcript)
 
