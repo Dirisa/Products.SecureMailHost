@@ -28,6 +28,8 @@ import socket
 from DateTime import DateTime
 from random import randint
 
+from interfaces import IMail
+
 from zLOG import LOG, INFO, PROBLEM
 from Products.MailHost.MailHost import MailHostError
 
@@ -41,6 +43,8 @@ class Mail:
     smtp_port - SMTP server port
     **kwargs  - additional keywords like userid, password and forceTLS
     """
+    
+    __implements__ = IMail
 
     def __init__(self, mfrom, mto, message, 
                  smtp_host='localhost', smtp_port=25,

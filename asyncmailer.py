@@ -46,7 +46,7 @@ class MailerThread(WorkerThread):
             if mail.getErrors() > MAX_ERRORS:
                 LOG('SecureMailHost', PROBLEM, 'Max errors for mail %s. '
                     'Canceling delivery!' % mail.info())
-                mailQueue.remove(mail)
+                del mailQueue[id]
                 continue
             # trying to send
             try:
@@ -62,7 +62,7 @@ class MailerThread(WorkerThread):
                 mail.incError()
             else:
                 LOG('SecureMailHost', INFO, 'Mail sended: %s' % mail.info())
-                mailQueue.remove(mail)
+                del mailQueue[id]
 
     def stop(self):
         LOG('SecureMailHost', INFO, 'Stopping mailer thread')
