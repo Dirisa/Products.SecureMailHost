@@ -1,0 +1,3 @@
+#interface definitions for PloneSecurityInjector
+
+

@@ -1,0 +1,9 @@
+Requirements:
+
+	- PloneSecurityInjectorWorkflow
+	- Not at this moment a real rependency but it also works with CMFMember and TeamSpace. So feel free to test it. 
+	  Try to get a stable version of them.
+	- plone 2.0.3 or later you also can use it in earlear version but then you have to remove actionicon 
+	  an controlpanel stuff
+	 
+Please use Quickinstaller for installation

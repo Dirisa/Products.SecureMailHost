@@ -1,0 +1,6 @@
+[validators]
+validators = validate_acquisition_status_modify
+ 
+[actions]
+action.failure=traverse_to:string:acquisition_status_history
+action.success=redirect_to_action:string:view
