@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.24 2004/01/20 13:46:00 ajung Exp $
+$Id: migrate.py,v 1.25 2004/01/23 05:25:31 ajung Exp $
 """
 
 
@@ -136,12 +136,12 @@ def migrate_memberdata(source, dest):
             email = 'dummy@nospam.com'
 
         
-        D = {'pcng_company' : member.getProperty('submitter_company'),
+        D = {'pcng_company' : cmf2plone(member.getProperty('submitter_company')),
              'fullname' : cmf2plone(member.getProperty('submitter_name')),
              'email' : email,
-             'pcng_position' : member.getProperty('submitter_position'),
-             'pcng_city' : member.getProperty('submitter_city'),
-             'pcng_address' : member.getProperty('submitter_address'),
+             'pcng_position' : cmf2plone(member.getProperty('submitter_position')),
+             'pcng_city' : cmf2plone(member.getProperty('submitter_city')),
+             'pcng_address' : cmf2plone(member.getProperty('submitter_address')),
              'pcng_fax' : member.getProperty('submitter_fax'),
              'pcng_phone' : member.getProperty('submitter_phone'),
              'pcng_send_attachments' : member.getProperty('submitter_send_attachments')
@@ -303,12 +303,6 @@ def migrate_issue(issue, collector):
     collector.invokeFactory('PloneIssueNG', issue.getId())
     new_issue = collector._getOb(issue.getId())
 
-#    from Products.PloneCollectorNG.Issue import PloneIssueNG
-#
-#    new_issue = PloneIssueNG(issue.getId())
-#    collector._setObject( issue.getId(),new_issue)
-#    new_issue = getattr(collector, new_issue.getId())
-
     P = record()
     P.set('title', cmf2plone(issue.title))
     P.set('description',  cmf2plone(issue.description))
@@ -334,8 +328,8 @@ def migrate_issue(issue, collector):
 
     # Owner
     new_owner = collector.acl_users.getUser(issue.getOwner().getUserName())
-    new_issue.changeOwnership(new_owner)
-    
+    new_issue.changeOwnership(new_owner)                                   
+
     # Migrate uploads
     
     ids = issue.objectIds()
