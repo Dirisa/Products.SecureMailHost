@@ -16,7 +16,7 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
-      <div style="text-align: right" >
+      <div class="headline_action">
         <form method="get" action="pcng_issue_view_recent">
         <span i18n:translate="issues_last_n_days">Issues changed during the last </span>
           <select name="days:int">

@@ -18,6 +18,11 @@ div.collector_headline {
     padding: 0.5em;
 }
 
+div.headline_action {
+    float: right;
+    font-size: 80%;
+}
+
 div.issue_view_navigation {
     text-align: right;
     font-size: 80%;
