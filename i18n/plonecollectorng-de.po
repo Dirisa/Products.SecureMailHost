@@ -101,7 +101,7 @@ msgid "assigned_to"
 msgstr "Zugewiesen an"
 
 msgid "uploads"
-msgstr "Uploads"
+msgstr "Hochgeladene Dateien"
 
 msgid "transcript"
 msgstr "Ticketverlauf"
@@ -142,6 +142,9 @@ msgstr "Kommentar"
 msgid "Save"
 msgstr "Speichern"
 
+msgid "save"
+msgstr "Speichern"
+
 msgid "Reset"
 msgstr "Zurücksetzen"
 
@@ -169,16 +172,31 @@ msgstr "Aktion"
 
 msgid "pending"
 msgstr "Wartend"
-#
-#msgid ""
-#msgstr ""
-#
-#msgid ""
-#msgstr ""
-#
-#msgid ""
-#msgstr ""
-#
-#msgid ""
-#msgstr ""
-#
+
+
+msgid "issue_artifacts_table_info_link"
+msgstr "Info"
+
+msgid "issue_artifacts_table_deletion_link"
+msgstr "Löschen"
+
+msgid "legend_artifacts_upload"
+msgstr "Upload"
+
+msgid "add_artifacts_table_comment"
+msgstr "Kommentar"
+
+msgid "legend_new_reference_to_issue"
+msgstr "Referenz zu neuem Ticket"
+
+msgid "add_references_table_collector"
+msgstr "Collector"
+
+msgid "add_references_table_issue_number"
+msgstr "Ticket #"
+
+msgid "Select"
+msgstr "Auswählen"
+
+msgid "add_references_table_comment"
+msgstr "Kommentar"

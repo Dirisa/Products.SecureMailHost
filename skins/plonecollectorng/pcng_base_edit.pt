@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plone">
+      i18n:domain="plonecollectorng">
 
 <metal:block fill-slot="javascript_head_slot">
 <tal:block define="macro here/archetypes_custom_js/macros/javascript_head | nothing" tal:condition="macro">
@@ -35,12 +35,13 @@
         <span i18n:translate="fieldsets">Fieldsets</span>: 
        <tal:block repeat="set fieldsets">
          <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
-           <b>[<span tal:content="set" />]</b>
+           <b i18n:translate="" tal:content="set" />
          </div>
          <div tal:condition="python: set != fieldset" tal:omit-tag="">
            <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_base_edit?fieldset=${set}">
-              [<span tal:content="set" />]</a>
+              <span i18n:translate="" tal:content="set" /></a>
          </div>
+        <span tal:condition="not: repeat/set/end"> &bull;</span>
        </tal:block>
      </div>
 
