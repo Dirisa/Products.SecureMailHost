@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.16 2003/09/13 13:08:21 ajung Exp $
+$Id: Issue.py,v 1.17 2003/09/19 06:13:22 ajung Exp $
 """
 
 import sys
@@ -14,13 +14,14 @@ from AccessControl import  ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
+from Products.Archetypes.utils import OrderedDict
 
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
 from References import Reference, ReferencesManager
 from WatchList import WatchList
-from OrderedSchema import OrderedBaseFolder
+from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import util
 
 class PloneIssueNG(OrderedBaseFolder, WatchList):
@@ -213,9 +214,9 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """
         self.reindexObject()
 
-    def add_issue(self, RESPONSE):
-        """ redirect to parent """
-        return self.aq_parent.add_issue(RESPONSE=RESPONSE)
+    def __len__(self):
+        """ return the number of transcript events """
+        return len(self._transcript)
 
     ######################################################################
     # Catalog stuff
@@ -242,13 +243,36 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
         return ' '.join(l)
 
+    ######################################################################
+    # Callbacks for parent collector instance
+    ######################################################################
+
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'updateSchema')
     def updateSchema(self, schema):
-        """ update the schema """
+        """ Update the schema. Called from the PloneCollectorNG instance
+            to update all schemas of all childs since the schema is an
+            instance attribute and not a class attribute.
+        """
         self.schema = schema
 
-    def __len__(self):
-        return len(self._transcript)
+    def add_issue(self, RESPONSE):
+        """ redirect to parent """
+        return self.aq_parent.add_issue(RESPONSE=RESPONSE)
+
+    ######################################################################
+    # Some Archetypes madness
+    ######################################################################
+
+    def Schemata(self):
+        """ we need to override Schemata() to provide support
+            for ordered fields.
+        """
+
+        schemata = OrderedDict()
+        for f in self.schema.fields():
+            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
+            sub.addField(f)
+            schemata[f.schemata] = sub
+        return schemata
 
 registerType(PloneIssueNG)
-

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: OrderedSchema.py,v 1.3 2003/09/18 19:25:59 ajung Exp $
+$Id: OrderedSchema.py,v 1.4 2003/09/19 06:13:22 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -35,7 +35,24 @@ class OrderedSchema(Schema):
         fields.sort(lambda x,y,k=self._ordered_keys: cmp(k.index(x.getName()), k.index(y.getName())))
         return fields
 
+    def __add__(self, other):
+        c = OrderedSchema()
+        #We can't use update and keep the order so we do it manually
+        for field in self.fields():
+            c.addField(field)
+        for field in other.fields():
+            c.addField(field)
 
+        #XXX This should also merge properties (last write wins)
+        c._layers = self._layers.copy()
+        c._layers.update(other._layers)
+        return c
+
+    def copy(self):
+        c = OrderedSchema()
+        for field in self.fields():
+            c.addField(field.copy())
+        return c
 
 InitializeClass(OrderedSchema)
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.30 2003/09/18 19:25:59 ajung Exp $
+$Id: Collector.py,v 1.31 2003/09/19 06:13:22 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -294,16 +294,21 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
             issue.reindexObject()
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
 
-   
+    ######################################################################
+    # Some Archetypes madness
+    ######################################################################
+
     def Schemata(self):
-        """ return the schemata""" 
+        """ we need to override Schemata() to provide support
+            for ordered fields.
+        """
+
         schemata = OrderedDict()
         for f in self.schema.fields():
             sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
             sub.addField(f)
             schemata[f.schemata] = sub
         return schemata
-
 
 registerType(PloneCollectorNG)
 
