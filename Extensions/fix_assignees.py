@@ -7,5 +7,5 @@ def fix(self):
             if ev.getType()=='incrementalchange' and ev.getValue('field')=='Assignees':
                 people = ev.getValue('added')
                 print people
-                issue.issue_followup('assign', 'created by migraiton tool', assignees=people)
+                issue.issue_followup('assign', 'created by migration tool', assignees=people)
     return 'done'
