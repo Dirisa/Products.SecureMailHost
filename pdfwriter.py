@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.14 2003/11/28 13:50:09 ajung Exp $
+$Id: pdfwriter.py,v 1.15 2003/12/09 09:17:01 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -84,18 +84,20 @@ def definition(txt):
 
 def pdfwriter(collector, ids):
 
+    translate = collector.translate
+
     tempfiles = []
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
 
-        header('Issue #%s' % issue.title_or_id())
+        header(translate('issue_number', 'Issue #$id', id=issue.title_or_id()))
 
-        header("Description")
+        header(translate('label_description', 'Description'))
         definition(html_quote(issue.description))
 
         if issue.solution:
-            header("Solution")
+            header(translate('label_solution', 'Solution'))
             definition(html_quote(issue.solution))
 
         for name in issue.atse_getSchemataNames():
@@ -119,8 +121,8 @@ def pdfwriter(collector, ids):
 
             s = (', '.join(l)).strip()
             if s:
-                header(name.capitalize())
-                definition(s)
+                header(translate(name, name.capitalize()))
+                definition(dowrap(s))
 
         for img in issue.objectValues('Portal Image'):
 
@@ -150,29 +152,29 @@ def pdfwriter(collector, ids):
 
             Elements.append(Spacer(100, 0.2*inch))
 
-        header('Transcript')
+        header(translate('transcript', 'Transcript'))
 
         groups = issue.getTranscript().getEventsGrouped(reverse=0)
         n = 1
         for group in groups:
             datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
             uid = group[0].user
-            header('#%d %s %s (%s)' % (n, issue.lastAction().capitalize(), datestr, uid)) 
+            header('#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
 
             l = []
 
             for ev in group:
                 if ev.type == 'comment':
-                    l.append(dowrap('<b>Comment:</b>\n%s' % html_quote(ev.comment)))
+                    l.append(dowrap('<b>%s:</b>\n%s' % (translate('comment', 'Comment'), html_quote(ev.comment))))
                     pass
                 elif ev.type == 'change':
-                    l.append(dowrap('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new)))
+                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed'), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
-                    l.append(dowrap('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed)))
+                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate('changed', 'Changed'), ev.field, translate('added', 'added'), ev.added, translate('removed', 'removed'), ev.removed)))
                 elif ev.type == 'reference':
-                    l.append(dowrap('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment)))
+                    l.append(dowrap('<b>%s:</b> %s: %s/%s (%s)' % (translate('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
-                    s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
+                    s = '<b>%s:</b> %s/%s ' % (trasnalte('upload', 'Upload'), issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
                     l.append(dowrap(s))
@@ -185,7 +187,7 @@ def pdfwriter(collector, ids):
     IO = cStringIO.StringIO()
     doc = SimpleDocTemplate(IO)
     doc.collector = collector
-    doc.collector_title = 'Collector: %s' % collector.title_or_id()
+    doc.collector_title = translate('collector_id', 'Collector: $id', id=collector.title_or_id())
     doc.build(Elements,onFirstPage=myFirstPage, onLaterPages=myLaterPages)
 
     for f in tempfiles:
