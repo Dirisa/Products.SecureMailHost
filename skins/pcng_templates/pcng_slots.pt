@@ -135,14 +135,18 @@
   <div class="portlet" tal:define="references here/getForwardReferences">
     <h5>
       <span i18n:translate="references">References</span>
-      <a tal:condition="canFollowup" href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
+      <a tal:condition="canFollowup" href="pcng_issue_references">
+        <img src="edit.gif" title="Create new references" i18n:attributes="title"/>
+      </a>
     </h5>
     <div class="portletBody">
-      <metal:loop tal:repeat="ref references">
-        <a tal:define="target ref/getTargetObject"
-           tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-        <span tal:condition="not: repeat/ref/end">&bull;</span>   
-      </metal:loop>
+      <ul>
+        <li tal:repeat="ref references">
+          <a tal:define="target ref/getTargetObject"
+             tal:attributes="href target/absolute_url" 
+             tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+        </li>
+      </ul>
       <span tal:condition="not: references" i18n:translate="no_references">No references</span>
     </div>
   </div>
@@ -154,7 +158,9 @@
   <div class="portlet" tal:define="uploads here/objectValues">
     <h5>
       <span i18n:translate="Uploads">Uploads</span>
-      <a tal:condition="canFollowup" href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+      <a tal:condition="canFollowup" href="pcng_issue_uploads">
+        <img src="edit.gif" title="Upload file" i18n:attributes="title"/>
+      </a>
     </h5>
     <div class="portletBody">
       <ul>
