@@ -255,77 +255,82 @@ function show_tickets() {
 
 <tal:macro metal:define-macro="followup_table" i18n:domain="plonecollectorng">
 
-  <table tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter');
+  <div tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter');
                      topics python: here.get_topics_user().keys();
                      gruf_groups here/get_gruf_groups" >
-    <tr>
-      <th>
-        <span tal:condition="allow_assign" i18n:translate="assign_to_users"> Assign to users</span>
-      </th>
-      <th tal:condition="topics" width="20">
-        &nbsp;
-      </th>
-      <th tal:condition="python: topics or gruf_groups">
-        <span tal:condition="allow_assign" i18n:translate="assign_to_group"> Assign to group</span>
-      </th>
-      <th>&nbsp;</th>
-      <th tal:condition="show_actions|nothing"> 
-        <span i18n:translate="action">Action</span>
-        (<span i18n:translate="workflow_action_current_state">Current state</span>:
-         <span i18n:translate="" tal:content="here/status" />)</th>
-      <th>&nbsp;</th>
-      <th>
-        <span i18n:translate="followup_phrases"> Followup phrases</span>
-      </th>
-    </tr>
 
-    <tr> 
-      <td valign="top">
-        <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
-          <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
-            <option tal:content="string: ${u/fullname} (${u/username}, ${u/role})"
-                    tal:attributes="value u/username;
-                                    selected python: u['username'] in assignees" 
-             />
-          </span>
-        </select>
-      </td>
-      <td tal:condition="topics" width="20">
-        &nbsp;
-      </td>
-      <td valign="top" tal:condition="python: topics or gruf_groups">
+    <div class="left">
+      <span class="label"
+            tal:condition="allow_assign" 
+            i18n:translate="assign_to_users"> Assign to users</span>
+      <br/>
+      <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
+        <option tal:repeat="u python: here.getTrackerUsers(staff_only=1)"
+                tal:content="string: ${u/fullname} (${u/username}, ${u/role})"
+                tal:attributes="value u/username;
+                                selected python: u['username'] in assignees" />
+      </select>
+    </div>
+
+    <div class="left">
+      <tal:if tal:condition="python: topics or gruf_groups">
+        <span class="label" 
+              tal:condition="allow_assign" 
+              i18n:translate="assign_to_group"> Assign to group</span>
+        <br/>
+
+
         <select tal:condition="allow_assign" name="assignees_group:list" size="7" multiple>
-          <option tal:repeat="topic topics" tal:content="string:$topic (TG)" tal:attributes="value topic" />
-          <option tal:repeat="group gruf_groups" tal:content="string:$group (GRUF)" tal:attributes="value group" />
-        </select>
-      </td>
-      <td width="100"> </td>
+          <option tal:repeat="topic topics" 
+                  tal:content="string:$topic (TG)" 
+                  tal:attributes="value topic" />
+          <option tal:repeat="group gruf_groups" 
+                  tal:content="string:$group (GRUF)" 
+                  tal:attributes="value group" />
+          </select>
+      </tal:if>
+    </div>
 
-      <td valign="top" tal:condition="show_actions|nothing" 
+    <div class="left"  tal:condition="show_actions|nothing" 
                        tal:define="actions here/validActions">
-        <input class="required" type="radio" name="action" value="comment" checked>
-          <span i18n:translate="comment">Comment</span>
-        <tal:loop tal:repeat="action actions">
-          <br><input type="radio" name="action" 
-                     tal:attributes="value action;
-                                     CHECKED python: request.get('state','') == action"/>
-          <span i18n:translate="" tal:content="python: here.pcng_format_status(action)" />
-        </tal:loop>
-      </td>
+      <tal:if tal:condition="show_actions|nothing"> 
+        <span class="label" 
+              i18n:translate="action">Action</span>
+        (<span class="label" 
+               i18n:translate="workflow_action_current_state">Current state</span>:
+         <span i18n:translate="" 
+               tal:content="here/status" />)
+      </tal:if>
+      <br/>
 
-      <td width="100"> </td>
+      <input class="required" type="radio" name="action" value="comment" checked>
+      <span i18n:translate="comment">Comment</span>
+      <tal:loop tal:repeat="action actions">
+        <br><input type="radio" name="action" 
+                   tal:attributes="value action;
+                                   CHECKED python: request.get('state','') == action"/>
+        <span i18n:translate="" tal:content="python: here.pcng_format_status(action)" />
+      </tal:loop>
+    </div>
 
-      <td valign="top">
+    <div class="left">
+      <tal:if tal:condition="here/isPersistent">
+        <span class="label" 
+              i18n:translate="followup_phrases"> Followup phrases</span>
+        <br/>
         <select name="phrases">
            <option tal:repeat="phrase python: here.getPhrases()"
-                   tal:content="phrase"
+                   tal:content="python: here.shorten_string1(phrase)"
                    tal:attributes="value phrase"/>
         </select>
         <br/>
         <input class="context" type="button" onclick="followup_phrase()" value="Use this phrase" i18n:attributes="value" />
-      </td>
-    </tr>
-  </table>
+      </tal:if>
+    </div>
+
+    <div class="clear"> </div>
+
+  </div>
 </tal:macro>
 
 <tal:macro metal:define-macro="issue_shortview" i18n:domain="plonecollectorng">
