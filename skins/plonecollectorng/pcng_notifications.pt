@@ -4,9 +4,42 @@
       i18n:domain="plonecollectorng">
 
 <body>
-
   <div metal:fill-slot="main">	  
+    <form action="set_notification_emails" method="post">
+      <div class="group">
+        <span class="legend" i18n:translate="collector_notifications">Collector notifications</span>
+        <table class="listing" >
+          <tr>
+            <th i18n:translate="heading_state">State</th>
+            <th i18n:translate="heading_email_address">Email addresses</th>
+          </tr>
+    
+          <tr tal:define="states here/issue_states;
+                             stateslen python: len(states)"
+                 tal:repeat="itemnum python: range((stateslen))">
+            <th i18n:translate=""
+                tal:content="python: states[itemnum]" />
+            <td>
+              <textarea rows="2" cols="45" 
+                        tal:attributes="name python: 'notifications.%s:record:lines' % states[itemnum]"
+                        tal:content="python: '\n'.join(here.getNotificationsForState(states[itemnum]))"
+              ></textarea>
+            </td>
+          </tr>
+        </table>
+    
+        <div class="row">
+          <div class="label">&nbsp;</div>
+          <div class="field">
+            <input type="submit" class="context" value="Save"
+                   i18n:attributes="value" />
+            <input type="reset" class="context" value="Reset"
+                   i18n:attributes="value" />
+          </div>
+        </div> <!-- End row -->
+  
+      </div> <!-- End group -->
+    </form>
   </div>
-
 </body>
 </html>
