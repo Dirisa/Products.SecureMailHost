@@ -11,22 +11,13 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language-code: de\n"
-"Language-name: Deutsch\n"
+"Language-code: en\n"
+"Language-name: English\n"
 "Preferred-encodings: utf-8 latin1\n"
 "Domain: plonecollectorng\n"
 
-msgid "History"
-msgstr "Historie"
+msgid "changes_saved"
+msgstr "Your changes have been saved"
 
-msgid "Name"
-msgstr "Name"
-
-msgid "label_solution"
-msgstr "Lösung"
-
-msgid "label_description"
-msgstr "Beschreibung"
-
-msgid "label_topic"
+msgid "Description"
 msgstr "Thema"
