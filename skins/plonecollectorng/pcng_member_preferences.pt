@@ -124,7 +124,7 @@
     </fieldset>
 
     <fieldset>
-      <legend i18n:translate="saved_searched">Saved searches</legend>
+      <legend i18n:translate="saved_searches">Saved searches</legend>
       <form method="post" action="pcng_edit_saved_searches">
         <select name="query_id" size="3">
           <tal:loop tal:repeat="saved_search python: member.getProperty('pcng_saved_searches') " >
@@ -135,7 +135,7 @@
           </tal:loop>
         </select>
         <br> <br>
-        <input type="submit" value=" Delete " name="delete" class="standalone">
+        <input type="submit" value="Delete" name="delete" class="standalone" i18n:attributes="value">
       </form>			   
     </fieldset>
   </div>

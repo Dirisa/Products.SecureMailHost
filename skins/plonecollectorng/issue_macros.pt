@@ -126,7 +126,7 @@
 
        <div class="row">
         <div class="field">
-          <input type="submit" value=" Upload " class="standalone">
+          <input type="submit" value="Upload" class="standalone" i18n:attributes="value">
         </div>
        </div> <!-- End row -->
   </form>
@@ -194,7 +194,7 @@ function show_tickets() {
 
       <div class="row">
         <div class="field">
-          <input type="submit" value=" Submit " class="standalone">
+          <input type="submit" value="Submit" class="standalone" i18n:attributes="value">
         </div>
       </div> <!-- End row -->
     </form>
@@ -222,7 +222,7 @@ function show_tickets() {
       <form tal:attributes="action string:${here/absolute_url}/wl_addWatcher">
         <span i18n:translate="email_address">E-Mail address</span>:        
         <input type="text" size="30" name="email" > &nbsp;
-        <input type="submit" value=" Subscribe to this issue " class="standalone">
+        <input type="submit" value="Subscribe to this issue" class="standalone" i18n:attributes="value">>
       </form>
     </metal:block>
   </fieldset>

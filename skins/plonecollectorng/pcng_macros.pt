@@ -201,7 +201,7 @@
 
         </tal:loop>
       </select>
-      <input type="submit" value=" Search " />
+      <input type="submit" value="Search" i18n:attributes="value" class="standalone"/>
     </form>    
   </div>
 
