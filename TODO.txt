@@ -1,7 +1,49 @@
+Remaining to do:
+
 General:
 
 - Include help templates that explain what the different parts do, how
   a FAQ differs from a howto, differs from a Tutorial etc.
+
+- Search needs to be hooked up! It should allow searching on all the different
+  types. (limi)
+
+- Notify! People need to be notified when somebody adds a comment to their item,
+  so they can maintain and refine. The PloneHelpCenter concept will not work 
+  without this, IMHO. (limi)
+
+- Make it easier to choose which subcomponents get installed. For
+  example, put a simple textual list in config.py of the folderish
+  products, and have types/init.py, Install.py, and
+  HelpCenter.py/__init__ respect this. Easier for other people who
+  want to use product but might not want all parts.
+
+I18n:
+
+- Some initial stuff has been put into to many types, but not always
+  consistently. Can someone very familiar with i18n step up here?
+
+
+Versions:
+
+- Add UI to folder screens to only show content for selected versions.
+  Alllows Plone 1.0 people,for example, to see only stuff pertaining
+  to them. (limi)
+
+- Also need a way to set the default view help-center-wide 
+  (Example, let's say we just want to show Plone 2.0 elements 
+   in the listings) (limi)
+
+
+Unit tests:
+
+- We need some!
+
+
+
+
+
+DONE:
 
 - Consider having an "Important" marker on entries, to mark the most
   common ones visually with a red (!) marker in the overview/listing.
@@ -36,12 +78,6 @@ General:
 
   - Being developed as a separate product.
 
-- Make it easier to choose which subcomponents get installed. For
-  example, put a simple textual list in config.py of the folderish
-  products, and have types/init.py, Install.py, and
-  HelpCenter.py/__init__ respect this. Easier for other people who
-  want to use product but might not want all parts.
-
 - Add simple Glossary type, with Glossary entries (already added by limi)
 
   - I admit that it's 50% because we have 5 and not 6 different
@@ -65,31 +101,3 @@ General:
     (not realistic at this stage, just a fun thought :) - lots
     of academic institutions would like something like this, with
     proper integration in Kupu it could be killer functionality. :)
-
-I18n:
-
-- Some initial stuff has been put into to many types, but not always
-  consistently. Can someone very familiar with i18n step up here?
-
-
-Versions:
-
-- Add UI to folder screens to only show content for selected versions.
-  Alllows Plone 1.0 people,for example, to see only stuff pertaining
-  to them.
-
-- Also need a way to set the default view help-center-wide 
-  (Example, let's say we just want to show Plone 2.0 elements 
-   in the listings) (limi)
-
-
-Unit tests:
-
-- We need some!
-
-
-UI:
-
-- Create icons for the folderish types (FAQFolder, etc.) that combine a folder
-  with the FAQ icon.
-
