@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.101 2003/12/08 18:17:40 ajung Exp $
+$Id: Issue.py,v 1.102 2003/12/12 07:41:01 ajung Exp $
 """
 
 import sys, os, time
@@ -205,6 +205,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # References handling
     ######################################################################
 
+    security.declareProtected(ManageCollector, 'delete_reference')
     def delete_reference(self, issue_url, RESPONSE=None):
         """ delete a reference given by its position """
 
@@ -213,6 +214,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         util.redirect(RESPONSE, 'pcng_issue_references', 
                       self.translate('reference_deleted', 'Reference has been deleted'))
 
+    security.declareProtected(AddCollectorIssueFollowup, 'add_reference')
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
 
@@ -275,6 +277,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # File uploads 
     ######################################################################
 
+    security.declareProtected(AddCollectorIssueFollowup, 'upload_file')
     def upload_file(self, uploaded_file=None, comment='', RESPONSE=None):
         """ Upload a file """
 
@@ -399,6 +402,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if c.getId() in 'portal_catalog': continue
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
                 
+    security.declareProtected(View, 'SearchableText')
     def SearchableText(self):
         """ return all indexable texts """
 
@@ -414,6 +418,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # Callbacks for parent collector instance
     ######################################################################
 
+    security.declareProtected(AddCollectorIssue, 'add_issue')
     def add_issue(self, RESPONSE):
         """ redirect to parent """
         return self._getCollector().add_issue(RESPONSE=RESPONSE)
@@ -422,6 +427,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # Presentation related stuff
     ######################################################################
 
+    security.declareProtected(View, 'title_or_id')
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
         return '%s: %s' %  (self.getId(), self.Title())
