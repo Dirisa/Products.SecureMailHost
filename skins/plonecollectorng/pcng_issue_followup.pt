@@ -14,7 +14,7 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
   </metal:block>
 
-  <tal:if tal:condition="request/timestamp">
+  <tal:if tal:condition="request/timestamp|nothing">
    <tal:def tal:define="global quoted_followup python: here.pcng_text_followup(request['timestamp'])" />
   </tal:if>
     
