@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.14 2004/02/11 17:06:15 ajung Exp $
+$Id: __init__.py,v 1.15 2004/02/23 17:06:54 ajung Exp $
 """
 
 import os, sys
@@ -51,3 +51,4 @@ def initialize(context):
 
 from Products.PythonScripts.Utility import allow_module
 allow_module('textwrap')
+allow_module('group_assignment_policies')

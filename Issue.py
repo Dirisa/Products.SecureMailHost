@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.125 2004/02/23 12:44:26 ajung Exp $
+$Id: Issue.py,v 1.126 2004/02/23 17:06:54 ajung Exp $
 """
 
 import sys, os, time
@@ -30,6 +30,7 @@ from zLOG import LOG, ERROR
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName, CollectorCatalog
+from group_assignment_policies import getUsersForGroups
 from Transcript import Transcript
 from WatchList import WatchList
 from Translateable import Translateable
@@ -144,9 +145,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         assignees_changed = 0
 
         # added users group assignees_group
-        topics_users = self.get_topics_user()
-        for group in assignees_group:
-            assignees.extend(list(topics_users[group]))
+        assignees.extend(getUsersForGroups(self, assignees_group))
         
         if not util.lists_eq(assignees, old_assignees):
             self._transcript.addChange('assignees', old_assignees, assignees)
