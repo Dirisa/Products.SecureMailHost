@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.200 2004/07/02 05:53:58 ajung Exp $
+$Id: Issue.py,v 1.201 2004/07/02 10:01:03 ajung Exp $
 """
 
 import os, time, random 
@@ -299,7 +299,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.haveATReferences():
             issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
             self.deleteReference(issue)
-            self._transcript.addComment(TR('reference_removed', 'Reference removed: %s' % issue_url))
+            self._transcript.addComment(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1))
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('reference_deleted', 'Reference has been deleted'))
         else:
@@ -414,11 +414,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             util.redirect(RESPONSE, 'pcng_issue_uploads', 
                           self.Translate('nothing_for_upload', 'Nothing to be uploaded'))
 
-    security.declareProtected(ManageCollector, 'upload_remove')
-    def upload_remove(self, id, RESPONSE):
+    security.declareProtected(ManageCollector, 'remove_upload')
+    def remove_upload(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
-        self._transcript.addComment(TR('upload_removed', 'Removed: %s' % id))
+        self._transcript.addComment(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1))
         util.redirect(RESPONSE, 'pcng_issue_uploads', 
                      self.Translate('upload_removed', 'File has been removed'))
 
