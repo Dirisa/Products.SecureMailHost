@@ -1,3 +1,12 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: fix_workflow_histories.py,v 1.2 2004/06/29 13:08:33 ajung Exp $
+"""
 
 def fix_workflow_histories(self, old_wf='pcng_issue_workflow (PloneCollectorNG default workflow)'):
     """ Migrate the workflow history of all issues from the default workflow

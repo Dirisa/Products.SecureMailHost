@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: Install.py,v 1.19 2004/06/29 13:08:33 ajung Exp $
+"""
+
 from StringIO import StringIO
 
 from Products.Archetypes.public import listTypes

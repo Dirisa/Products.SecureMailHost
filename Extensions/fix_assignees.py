@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: fix_assignees.py,v 1.3 2004/06/29 13:08:33 ajung Exp $
+"""
+
 def fix(self):
     wftool = self.portal_workflow  # evil
     for issue in self.objectValues('PloneIssueNG'):
