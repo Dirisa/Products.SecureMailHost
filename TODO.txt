@@ -1,4 +1,4 @@
-PloneSoftwareCenter - Remaining issues
+PloneSoftwareCenter - Remaining issues before 1.0
 
 Developer claiming item/comments is in [brackets].
 

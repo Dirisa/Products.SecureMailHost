@@ -24,7 +24,7 @@
         Document actions (print, sendto etc)
     </div>
 
-    <div class="portlet" 
+    <div class="portlet"
          style="margin-left: 0.5em; width: 40%; float: right; clear: right;"
          tal:condition="here/getUpcomingReleases">
         <h6>Upcoming Releases</h6>
@@ -58,7 +58,7 @@
     the relevant project information has been entered.
     </p>        
 
-    <p>
+    <p tal:condition="plips">
     If you want to see all the feature proposals available, go to the 
     <a href="psc_improvements_listing">Improvement Proposal listing</a>.
     </p>

@@ -18,14 +18,14 @@
            states python: here.portal_catalog.uniqueValuesFor('review_state');
            ">
 
-    <h1>Improvement Proposal Overview</h1>
+    <h1>Improvement Proposal overview for <span tal:replace="here/aq_parent/Title" /></h1>
 
     <div class="documentDescription">
     An overview of the available Improvement Proposals. Members of the project
     can add new improvement proposals.
     </div>
 
-    <p>
+    <p tal:condition="plips">
     If you want to see the feature proposals displayed according to what release
     they are assigned to, go to the
     <a href="psc_roadmap">Roadmap page</a>.
