@@ -47,8 +47,10 @@ General:
 - Obsolete state has non-obvious name for the transition to pull it back into
   play.
 
-Ã- A way to set PHC-wide default Rights attribute - on plone.org we want 
-  everything to be under the same license, for example.
+- A way to set PHC-wide default Rights attribute - on plone.org we want 
+  everything to be under the same license, for example. Maybe look at
+  PloneCC which is a product to add Creative Commons licenses.
+  http://woss.name/software/PloneCC/
 
 - Definitions (in Glossary) need to be able to have Rich Text - the way it is
   now, it can't have links to other definitions. The Description attribute 
@@ -169,8 +171,22 @@ Unit tests:
 
 - We need some!
 
+Saving content as PDF:
 
+- It should be possible to save the longer content (howtos, tutorials)
+  as a PDF file for easier archival and printing. A small PDF icon
+  can be placed next to the email/print icons, and when clicked on
+  generates a PDF version of the page, minus all the navigation.
+  We could perhaps use the plonePrint.css to generate a nice looking PDF.
 
+  Joel Burton reports good success with htmldoc for converting well-formed HTML 
+  to decent PDFs. 
+
+  Another possibility is to use CMFReportTool by Ulrich Eck <ueck@net-labs.de>,
+  which can serve dynamically generated PDF-Documents for every content-object 
+  of your CMF/Plone-Site. It uses PageTemplates to generate a XML-Document 
+  (syntax is called PML) that is rendered to PDF using reportlabs platypus 
+  layout-engine. http://www.zope.org/Members/jack-e/CMFReportTool
 
 
 DONE:
