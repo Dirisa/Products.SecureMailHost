@@ -1,4 +1,4 @@
-0.5 (unreleased)
+0.50 RC3 (unreleased)
 
   - added TextIndexNG2-based portal catalog indexing of PLFNG contents
      - including configurable ability to specify file types NOT to index
@@ -37,7 +37,7 @@
   
   - added optional support for archiving old revisions of files
    (eg, place copy of file into a backup folder when file
-    when a new revision of an existing file is uploaded)
+    when a new revision of an existing file is uploaded, or when a file is deleted)
 
 
 0.4
