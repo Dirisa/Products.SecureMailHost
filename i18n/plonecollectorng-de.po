@@ -446,3 +446,94 @@ msgstr "Feld Definition"
 
 msgid "Save changes"
 msgstr "Änderungen speichern"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "invalid_email_address" 
+msgstr "Ungültige Email Adresse"
+
+msgid "issues_updated" 
+msgstr "Tickets wurden aktualisiert"
+
+msgid "issues_reindexed" 
+msgstr "Tickets wurden reindexiert"
+
+msgid "invalid_action" 
+msgstr "Ungültige Aktion"
+
+msgid "followup_submitted" 
+msgstr "Followup eingestellt"
+
+msgid "reference_deleted"
+msgstr "Referenz wurde gelöscht"
+
+msgid "no_tracker" 
+msgstr "Collector exisitiert nicht: $tracker_url" 
+
+msgid "reference_stored" 
+msgstr "Referenz wurde gespeichert"
+
+msgid "unknown_format" 
+msgstr "unbekanntes Format: $format"
+
+msgid "file_uploaded" 
+msgstr "Datei wurde hochgeladen"
+
+msgid "nothing_for_upload" 
+msgstr "Es wurde nichts zum Hochladen gefunden"
+
+msgid "upload_removed" 
+msgstr "Datei wurde entfernt"
+
+msgid "schema_exists" 
+msgstr "Schemata $schema existiert bereits" 
+
+msgid "schema_added" 
+msgstr "Schema wurde hinzugefügt" 
+
+msgid "schema_deleted" 
+msgstr "Schema wurde gelöscht" 
+
+msgid "schema_field_deleted" 
+msgstr "Feld wurde gelöscht"
+
+msgid "schema_field_added" 
+msgstr "Feld wurde hinzugefügt" 
+
+msgid "schema_unknown_field" 
+msgstr "Unbekannter Feldtyp: $field" 
+
+msgid "schema_unknown_widget" 
+msgstr "Unbekannter Widgettyp: $widget" 
+
+msgid "schema_moved_left" 
+msgstr "Schemata nach links geschoben" 
+
+msgid "schema_moved_right" 
+msgstr "Schemata nach rechts geschoben"
+
+msgid "schema_field_moved_up" 
+msgstr "Feld nach oben geschoben"
+
+msgid "schema_field_moved_down" 
+msgstr "Feld nach unten geschoben" 
+
+msgid "schema_field_moved" 
+msgstr "Feld wurde in anderes Schemata bewegt" 
+
+msgid "email_already_registered" 
+msgstr "Email Adresse $email bereits registriert"
+
+msgid "watchlist_added" 
+msgstr "Sie wurden zur Watchlist hinzugefügt"
+
+msgid "email_not_registered" 
+msgstr "Email Adresse $email nicht registriert" 
+
+msgid "watchlist_removed" 
+msgstr "Sie wurden von der Watchlist entfernt"
+
+
+
+
