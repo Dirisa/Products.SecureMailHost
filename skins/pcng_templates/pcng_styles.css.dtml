@@ -103,6 +103,10 @@ div #metadata {
     padding-right: 2em;
 }
 
+div#pcng_transcript_actions {
+    font-size: 85%;
+}
+
 /*
  Portlets
 */

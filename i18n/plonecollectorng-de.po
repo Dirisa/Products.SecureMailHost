@@ -815,7 +815,7 @@ msgstr "Bugtracker $id"
 msgid "date_on"
 msgstr "am"
 
-msgid "followup_with_quote"
+msgid "Followup (with quoting this comment)"
 msgstr "Antworten (diesen Kommentar zitieren)"
 
 msgid "no_access"
@@ -1019,3 +1019,9 @@ msgstr "Wird nicht gelöst"
 
 msgid "Create reference"
 msgstr "Referenz anlegen"
+
+msgid "Edit this entry"
+msgstr "Eintrag bearbeiten"
+
+msgid "Edit transcript entry"
+msgstr "Eintrag bearbeiten"

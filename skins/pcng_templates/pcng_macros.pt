@@ -61,9 +61,13 @@
         <div id="transcriptevent">
           <tal:if tal:condition="python: event.getType()=='comment'">
             <pre tal:content="python: here.wrap_text(event.getValue('comment'), 80)"> comment </pre>
-            <div style="text-align: right" >
+            <div class="right" id="pcng_transcript_actions">
               <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
-                <span i18n:translate="followup_with_quote">Followup (with quoting this comment)</span>
+                <img src="arrowRightmost.gif" title="Followup (with quoting this comment)" i18n:attributes="title">
+              </a>
+              <a tal:condition="python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here)"
+                 tal:attributes="href string:pcng_issue_transcript_edit?timestamp:float=${event/getTimestamp}">
+                 <img src="edit.gif" title="Edit this entry" i18n:attributes="title">
               </a>
             </div>
           </tal:if>
