@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.165 2004/04/19 08:19:19 ajung Exp $
+$Id: Collector.py,v 1.166 2004/04/19 09:36:16 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -731,7 +731,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         elif R.issue_id:
             issue = getattr(self, R.issue_id, None)
             if not issue:
-                msg = 'No such issue with id %s' % R.issue_id
+                msg = 'No such issue with id "%s"' % R.issue_id
                 return response(RESPONSE, 404, msg)
 
             comment = R.description + '\n\n' + self.Translate('untrusted_submission', 'Untrusted issue submission: no verification possible')
@@ -745,8 +745,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             issue.post_creation_actions()
             issue.setParameters(R)
             issue.changeOwnership(member)
-            transcript = issue.getTranscript()
-            transcript.addComment(u'Issue submitted through email')
 
             # attachments
             for node in DOM.getElementsByTagName('attachment'):
@@ -758,8 +756,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                                   mimetype=node.getAttribute('mimetype'),
                                   notify=0)
 
-            if R.description: transcript.addComment(R.description)
+            if R.description: 
+                issue.getTranscript().addComment(R.description, user=member_id)
 
+        issue._last_action = 'Comment'
         issue.reindexObject()
         notifications.notify(issue)
         RESPONSE.write(issue.absolute_url())
