@@ -26,16 +26,18 @@
         </div>
       </div>
 
-      <table>
+      <table tal:define="allow_assign  python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter')">
         <tr>
-          <th i18n:translate="assign_to"> Assign to </th>
+          <th>
+            <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to  </span>
+          </th>
           <th>&nbsp;</th>
           <th> <span i18n:translate="workflow_action_current_state">Action (Current state</span>: <span tal:content="here/status" />)</th>
         </tr>
     
         <tr>
           <td valign="top">
-            <select name="assignees:list" size="7" multiple>
+            <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
               <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
                 <option tal:content="string: ${u/fullname} (${u/username})"
                         tal:attributes="value u/username;

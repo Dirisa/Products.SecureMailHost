@@ -4,7 +4,7 @@
 from AccessControl import getSecurityManager
 
 user = getSecurityManager().getUser()
-roles = user.getRolesInContext(context)
+roles = user.getRolesInContext(context.aq_parent)
 
 for role in ('TrackerAdmin', 'Supporter', 'Reporter', 'Authenticated', 'Anonymous'):
     if role in roles:
