@@ -13,8 +13,8 @@
 	        <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=1)"/>
         </div> 
 
-        <span class="label">Status: </span><span class="field" tal:content="here/status" />
-        <span class="label">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+        <b>Status: </b><span class="field" tal:content="python: here.pcng_format_status(here.status())" />
+        <b>Assigned to: </b><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
       </div>
 
 
