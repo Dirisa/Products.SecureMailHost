@@ -722,5 +722,48 @@ msgstr "Gli ultimi Video"
 msgid "All_video"
 msgstr "Tutti i Video"
 
+#: HelpCenter.py
+msgid "phc_faq_title"
+msgstr "Domade Frequenti (FAQ)"
+
+msgid "phc_faq_description"
+msgstr "Domande poste frequentemente"
+
+msgid "phc_howto_title"
+msgstr "Ricette"
+
+msgid "phc_howto_description"
+msgstr "Istruzioni passo passo."
+
+msgid "phc_tutorial_title"
+msgstr "Guide"
+
+msgid "phc_tutorial_description"
+msgstr "Guide dettagliate."
+
+msgid "phc_video_title"
+msgstr "Filmati"
+
+msgid "phc_video_description"
+msgstr "Filmati didattici."
+
+msgid "phc_errorreference_title"
+msgstr "Decodifica Errori"
+
+msgid "phc_errorreference_description"
+msgstr "Sezione della decodifica degli errori."
+
+msgid "phc_links_title"
+msgstr "Collegamenti"
+
+msgid "phc_links_description"
+msgstr "Sezione dei collegamenti."
+
+msgid "phc_glossary_title"
+msgstr "Glossario"
+
+msgid "phc_glossary_description"
+msgstr "Termini del glossario."
+
 # MSB end mofification
 

@@ -56,37 +56,79 @@ class HelpCenter(OrderedBaseFolder):
 
         if 'faq' not in self.objectIds():
             self.invokeFactory('HelpCenterFAQFolder','faq')
-            self['faq'].setTitle('FAQs')
-            self['faq'].setDescription('Frequently Asked Questions.')
+            self['faq'].setTitle(self.translate(
+					msgid='phc_faq_title',
+					domain='plonehelpcenter',
+					default='FAQs'))
+            self['faq'].setDescription(self.translate(
+					msgid='phc_faq_description',
+					domain='plonehelpcenter',
+					default='Frequently Asked Questions'))
 
         if 'howto' not in self.objectIds():
             self.invokeFactory('HelpCenterHowToFolder','howto')
-            self['howto'].setTitle('How-tos')
-            self['howto'].setDescription('Step-by-step instructions.')
+            self['howto'].setTitle(self.translate(
+					msgid='phc_howto_title',
+					domain='plonehelpcenter',
+					default='How-tos'))
+            self['howto'].setDescription(self.translate(
+					msgid='phc_howto_description',
+					domain='plonehelpcenter',
+					default='Step-by-step instructions.'))
 
         if 'tutorial' not in self.objectIds():
             self.invokeFactory('HelpCenterTutorialFolder','tutorial')
-            self['tutorial'].setTitle('Tutorials')
-            self['tutorial'].setDescription('Detailed tutorials.')
+            self['tutorial'].setTitle(self.translate(
+					msgid='phc_tutorial_title',
+					domain='plonehelpcenter',
+					default='Tutorials'))
+            self['tutorial'].setDescription(self.translate(
+					msgid='phc_tutorial_description',
+					domain='plonehelpcenter',
+					default='Detailed tutorials.'))
 
         if 'video' not in self.objectIds():
             self.invokeFactory('HelpCenterInstructionalVideoFolder','video')
-            self['video'].setTitle('Videos')
-            self['video'].setDescription('Instructional videos.')
+            self['video'].setTitle(self.translate(
+					msgid='phc_video_title',
+					domain='plonehelpcenter',
+					default='Videos'))
+            self['video'].setDescription(self.translate(
+					msgid='phc_video_description',
+					domain='plonehelpcenter',
+					default='Instructional videos.'))
 
         if 'error' not in self.objectIds():
             self.invokeFactory('HelpCenterErrorReferenceFolder','error')
-            self['error'].setTitle('Error References')
-            self['error'].setDescription('Error reference section.')
+            self['error'].setTitle(self.translate(
+					msgid='phc_errorreference_title',
+					domain='plonehelpcenter',
+					default='Error References'))
+            self['error'].setDescription(self.translate(
+					msgid='phc_errorreference_description',
+					domain='plonehelpcenter',
+					default='Error reference section.'))
 
         if 'link' not in self.objectIds():
             self.invokeFactory('HelpCenterLinkFolder','link')
-            self['link'].setTitle('Links')
-            self['link'].setDescription('Links section.')
+            self['link'].setTitle(self.translate(
+					msgid='phc_links_title',
+					domain='plonehelpcenter',
+					default='Links'))
+            self['link'].setDescription(self.translate(
+					msgid='phc_links_description',
+					domain='plonehelpcenter',
+					default='Links section.'))
 
         if 'glossary' not in self.objectIds():
             self.invokeFactory('HelpCenterGlossary','glossary')
-            self['glossary'].setTitle('Glossary Definitions')
-            self['glossary'].setDescription('Glossary of terms.')
+            self['glossary'].setTitle(self.translate(
+					msgid='phc_glossary_title',
+					domain='plonehelpcenter',
+					default='Glossary Definitions'))
+            self['glossary'].setDescription(self.translate(
+					msgid='phc_glossary_description',
+					domain='plonehelpcenter',
+					default='Glossary of terms.'))
 
 registerType(HelpCenter, PROJECTNAME)

@@ -765,6 +765,50 @@ msgstr "latest Video"
 msgid "All_video"
 msgstr "All Video"
 
+#: HelpCenter.py
+msgid "phc_faq_title"
+msgstr "FAQs"
+
+msgid "phc_faq_description"
+msgstr "Frequently Asked Questions"
+
+msgid "phc_howto_title"
+msgstr "How-tos"
+
+msgid "phc_howto_description"
+msgstr "Step-by-step instructions."
+
+msgid "phc_tutorial_title"
+msgstr "Tutorials"
+
+msgid "phc_tutorial_description"
+msgstr "Detailed tutorials."
+
+msgid "phc_video_title"
+msgstr "Videos"
+
+msgid "phc_video_description"
+msgstr "Instructional videos."
+
+msgid "phc_errorreference_title"
+msgstr "Error References"
+
+msgid "phc_errorreference_description"
+msgstr "Error reference section."
+
+msgid "phc_links_title"
+msgstr "Links"
+
+msgid "phc_links_description"
+msgstr "Links section."
+
+msgid "phc_glossary_title"
+msgstr "Glossary Definitions"
+
+msgid "phc_glossary_description"
+msgstr "Glossary of terms."
+
+
 # MSB end mofification
 
 
