@@ -69,7 +69,6 @@
 
   <body>
     <metal:fill fill-slot="main">
-    <span tal:content="default_fieldset" />
 
     <!-- headline -->
     <metal:block tal:define="action string: Edit">
