@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.35 2004/01/22 19:59:22 ajung Exp $
+$Id: pdfwriter.py,v 1.36 2004/02/12 11:36:26 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -104,9 +104,9 @@ ParaStyle.leftIndent = 18
 def p(txt):
     return header(txt, style=ParaStyle, sep=0.0)
 
-
 PreStyle = styles["Code"]
 PreStyle.fontName = NORMAL_FONT
+PreStyle.leftIndent = 18
 
 def pre(txt):
     assert isinstance(txt, UnicodeType)
@@ -158,7 +158,7 @@ def pdfwriter(collector, ids):
 
         if issue.solution:
             header(translate('label_solution', 'Solution', as_unicode=1))
-            definition(html_quote(getFieldValue(issue, 'solution')))
+            definition(html_quote(getFieldValue(issue, 'solution')), PreStyle)
 
 
         s = '%s: %s, %s: %s' % (translate('status', 'Status', as_unicode=1), translate(issue.status(), issue.status(), as_unicode=1),
