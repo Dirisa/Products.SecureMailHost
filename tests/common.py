@@ -5,11 +5,13 @@ from Products.PloneClipboard.Extensions.Install import install
 
 from Products.Archetypes.Extensions.Install import install as installAT
 
+product_dependencies = ['Archetypes', 'PortalTransforms', 'generator',
+                        'validation', 'MimetypesRegistry', 'ReferenceFolder',
+                        PROJECTNAME]
+
 def installProducts():
-    ZopeTestCase.installProduct('Archetypes')
-    ZopeTestCase.installProduct('PortalTransforms')    
-    ZopeTestCase.installProduct('ReferenceFolder')
-    ZopeTestCase.installProduct(PROJECTNAME)
+    for product in product_dependencies:
+        ZopeTestCase.installProduct(product)
 
 def installWithinPortal(portal):
     installAT(portal, include_demo=1)

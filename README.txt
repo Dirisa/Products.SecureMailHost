@@ -5,7 +5,7 @@ PloneClipboard
 Dependencies
 ------------
 PloneClipboard requires
-    * Archetypes 1.3,
+    * Archetypes from release-1_3-branch,
     * Plone >= 2.0,
     * ReferenceFolder (not released).
 

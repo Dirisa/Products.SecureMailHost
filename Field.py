@@ -21,7 +21,7 @@
 """
 Validator and Widget for use with ReferenceField.
 
-$Id: Field.py,v 1.2 2004/05/21 14:49:12 dpunktnpunkt Exp $
+$Id: Field.py,v 1.3 2004/06/04 17:16:52 dpunktnpunkt Exp $
 """
 
 from Products.CMFCore.utils import getToolByName
@@ -84,6 +84,14 @@ class ReferenceClipboardWidget(TypesWidget):
 
     def getTitles(self, instance, field):
         objs = field.get(instance)
+
+        # cope with multi valued vs single valued return type
+        if not field.multiValued:
+            if objs is None:
+                return []
+            else:
+                objs = objs,
+        
         return [o.title_or_id() for o in objs]
 
 class ReferenceClipboardValidator:
