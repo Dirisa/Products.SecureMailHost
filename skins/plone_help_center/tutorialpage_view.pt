@@ -45,7 +45,6 @@
             <input class="standalone"
                    type="submit"
                    value="Go"
-                   tabindex=""
                    i18n:translate="value"
                    tabindex="4" />
         </form>
