@@ -139,7 +139,8 @@
                         08/19/2001 03:01 AM
                         </td>
                         <td> 
-                          <a tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
+                          <a tal:condition="python: getObjSize(item)"
+                              tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
                         </td>
 
                     </tr>

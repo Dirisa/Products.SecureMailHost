@@ -97,10 +97,10 @@ class FileProxy(FSObject):
     security.declarePublic('get_size')
     def get_size(self):
         """ None """
-        try:
-            return os.stat(self._filepath)[6]
-        except:
-            return ''
+        if os.path.isdir(self._filepath): return ''
+
+        try: return os.stat(self._filepath)[6]
+        except: return ''
 
 InitializeClass(FileProxy)
 
