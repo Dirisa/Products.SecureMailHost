@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.46 2003/10/19 12:55:45 ajung Exp $
+$Id: Collector.py,v 1.47 2003/10/19 13:32:15 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -209,7 +209,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._supporters = supporters
         self._adjust_staff_roles()
 
-        util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
+        util.redirect(RESPONSE, 'pcng_view', self.translate('changes_saved', 'Your changes have been saved'))
 
     def _adjust_staff_roles(self):
         """ Adjust local-role assignments to track staff roster settings.
@@ -271,7 +271,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
-        util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
+        util.redirect(RESPONSE, 'pcng_view', self.translate('changes_saved', 'Your changes have been saved'))
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
@@ -348,9 +348,6 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             schemata[f.schemata] = sub
         return schemata
 
-    def test(self):
-        """ some test """
-        return self.translate('label_description', 'this is a test')
 
 registerType(PloneCollectorNG)
 
