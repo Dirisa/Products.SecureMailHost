@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.41 2004/04/18 16:42:41 ajung Exp $
+$Id: collector_schema.py,v 1.42 2004/04/21 12:45:05 ajung Exp $
 """
 
 
@@ -42,7 +42,7 @@ VOC_ISSUE_EMAIL_SUBMISSION = DisplayList((
 VOC_ISSUE_EMAIL_VERIFICATION = DisplayList((
   ('disabled', 'Disabled'),
   ('enabled', 'Enabled'),
-  ('paranoid', 'Paranoid mode (reserved for later mode)'),
+  ('paranoid', 'Paranoid mode (reserved for later use)'),
 ))
 
 
