@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.30 2004/02/13 08:09:53 ajung Exp $
+$Id: Translateable.py,v 1.31 2004/02/13 08:15:01 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -62,7 +62,7 @@ class Translateable:
         pts = self._getPTS()
 
         # Workaround for mega-kaputt context.REQUEST which turns out to be
-        # not to be a REQUEST-like object but some unknown acquisition shit.
+        # not a REQUEST-like object but some unknown acquisition shit.
         if isinstance(self.REQUEST, StringType): pts = None
 
         if pts is None:
