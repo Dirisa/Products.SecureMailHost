@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.19 2004/05/26 16:26:26 ajung Exp $
+$Id: __init__.py,v 1.20 2004/05/26 16:43:06 ajung Exp $
 """
 
 import os, sys
@@ -50,33 +50,4 @@ from Products.PythonScripts.Utility import allow_module
 allow_module('textwrap')
 allow_module('group_assignment_policies')
 allow_module('base64')
-
-##########################################################################
-# Monkeypatch CMFCore.FSMetadata to ensure that security settings in
-# ,metadata files are treated correct
-##########################################################################
-
-def _securityParser(self, data):
-    """ A specific parser for security lines
-
-    Security lines must be of the format
-
-    (0|1):Role[,Role...]
-
-    Where 0|1 is the acquire permission setting
-    and Role is the roles for this permission
-    eg: 1:Manager or 0:Manager,Anonymous
-    """
-    if data.find(':') < 1:
-        raise ValueError, "The security declaration of file " + \
-              "%r is in the wrong format" % self._filename
-
-    acquire, roles = data.split(':')
-    roles = [r.strip() for r in roles.split(',') if r.strip()]
-    return (int(acquire), roles)
-
-from Products.CMFCore.FSMetadata import FSMetadata
-FSMetadata._securityParser = _securityParser
-from zLOG import LOG, INFO
-LOG('plonecollectorng', INFO, 'FSMetadata._securityParser() has been patched for security reasons')
 
