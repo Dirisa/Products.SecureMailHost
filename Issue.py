@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.224 2004/09/26 13:30:56 ajung Exp $
+$Id: Issue.py,v 1.225 2004/09/27 16:53:49 ajung Exp $
 """
 
 import os, time, random
@@ -673,44 +673,34 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     ######################################################################
 
     def left_slots(self):
-        pu = self.getPortlet_usage()
-        pa = self.getPortlet_actions()
-        if not hasattr(aq_base(self), '_v_left_slots'):
-            if pu == 'override':
-                self._v_left_slots = []
-            else:
-                slots = getattr(self._getCollector().aq_parent, 'left_slots', [])
-                if callable(slots):
-                    slots = slots()
-                self._v_left_slots = list(slots)
-            if pa == 'left':
-                self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
-            try: del self._v_right_slots
-            except: pass
-            if self.getPortlet_issuedata() == 'left' and self.isPersistent():
-                self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
-        return tuple(self._v_left_slots)
+        slots_left = list(self.getPortlets_left())
+        if 'Plone' in slots_left: 
+            slots_left.remove('Plone')
+            slots = getattr(self._getCollector().aq_parent, 'left_slots', [])
+            if callable(slots): slots = slots()
+            slots = list(slots)
+        else:
+            slots = []
+        slots.append('here/pcng_portlet_macros/macros/pcng_issue_portlet')
+        if self.isPersistent():
+            slots.extend(slots_left)
+        return slots
+
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
-        pu = self.getPortlet_usage()
-        pa = self.getPortlet_actions()
-        if not hasattr(aq_base(self), '_v_right_slots'):
-            if pu == 'override':
-                self._v_right_slots = []
-            else:
-                slots = getattr(self._getCollector().aq_parent, 'right_slots', [])
-                if callable(slots):
-                    slots = slots()
-                self._v_right_slots = list(slots)
-            if pa == 'right':
-                self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
-            try: del self._v_left_slots
-            except: pass
+        slots_right = list(self.getPortlets_right())
+        if 'Plone' in slots_right: 
+            slots_right.remove('Plone')
+            slots = getattr(self._getCollector().aq_parent, 'right_slots', [])
+            if callable(slots): slots = slots()
+            slots = list(slots)
+        else:
+            slots = []
+        if self.isPersistent():
+            slots.extend(slots_right)
+        return slots
 
-            if self.getPortlet_issuedata() == 'right' and self.isPersistent():
-                self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
-        return tuple(self._v_right_slots)
     right_slots = ComputedAttribute(right_slots, 1)
 
     security.declareProtected(View, 'pcng_search_form')

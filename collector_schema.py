@@ -5,14 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.64 2004/09/23 07:51:48 ajung Exp $
+$Id: collector_schema.py,v 1.65 2004/09/27 16:53:50 ajung Exp $
 """
 
 
 from Products.Archetypes.public import DisplayList, BaseSchema, Schema
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField, LinesField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget, MultiSelectionWidget
-from Products.Archetypes.public import RichWidget, IdWidget, StringWidget, LinesWidget
+from Products.Archetypes.public import RichWidget, IdWidget, StringWidget, LinesWidget, InAndOutWidget
 
 from notification_policies import VOC_NOTIFICATION_POLICIES
 from workflows import VOC_WORKFLOWS
@@ -28,7 +28,6 @@ VOC_NOTIFICATION_LANGUAGES = DisplayList((
   ('nl', 'Dutch'),
   ('pt-br', 'Portuguese/Brazil'),
   ('ru', 'Russian'),
-  
 ))
 
 VOC_PARTICIPATION_MODE = DisplayList((
@@ -94,6 +93,15 @@ VOC_USED_PORTLETS = DisplayList((
   ('references', 'References'),
   ('search', 'Search'),
   ('searchresults', 'Search results'),
+))
+
+VOC_PORTLETS = DisplayList((
+  ('Plone', 'Plone portlets'),
+  ('here/pcng_portlet_macros/macros/pcng_issue_portlet', 'Issue actions'),
+  ('here/pcng_portlet_macros/macros/pcng_issue_uploads', 'Uploads'),
+  ('here/pcng_portlet_macros/macros/pcng_issue_references', 'References'),
+  ('here/pcng_portlet_macros/macros/pcng_search_portlet', 'Search'),
+  ('here/pcng_portlet_macros/macros/pcng_searchresults', 'Search results'),
 ))
 
 
@@ -241,26 +249,6 @@ schema = BaseSchema + Schema((
                 schemata='Main'
                 ),
 
-    StringField('portlet_usage',
-                vocabulary=VOC_PORTLET_USAGE,
-                widget=SelectionWidget(format='select', 
-                                       label='Portlet usage',
-                                       label_msgid='label_portlet_usage',
-                                       i18n_domain='plonecollectorng'),
-                default='override',
-                schemata='Look and Feel'
-                ),
-
-    StringField('portlet_actions',
-                vocabulary=VOC_PORTLET_ACTIONS,
-                widget=SelectionWidget(format='select', 
-                                       label='Position of action portlets',
-                                       label_msgid='label_portlet_action_position',
-                                       i18n_domain='plonecollectorng'),
-                default='left',
-                schemata='Look and Feel'
-                ),
-
     StringField('portlet_issuedata',
                 vocabulary=VOC_PORTLET_ISSUEDATA,
                 widget=SelectionWidget(format='select', 
@@ -271,16 +259,25 @@ schema = BaseSchema + Schema((
                 schemata='Look and Feel'
                 ),
 
-    LinesField('used_portlets',
-                vocabulary=VOC_USED_PORTLETS,
-                widget=MultiSelectionWidget(format='select', 
-                                       size=5,
-                                       label='Portlets to be used',
-                                       label_msgid='label_to_be_used',
-                                       i18n_domain='plonecollectorng'),
-                default=['search'],
+    LinesField('portlets_left',
+                vocabulary=VOC_PORTLETS,
+                widget=InAndOutWidget(size=5,
+                                      label='Issue portlets left side',
+                                      label_msgid='label_portlet_issues_left',
+                                      i18n_domain='plonecollectorng'),
+                default=['Plone', 'here/pcng_portlet_macros/macros/pcng_issue_portlet'],
                 schemata='Look and Feel'
                 ),
+
+    LinesField('portlets_right',
+                vocabulary=VOC_PORTLETS,
+                widget=InAndOutWidget(size=5,
+                                      label='Issue portlets right side',
+                                      label_msgid='label_portlet_issues_right',
+                                      i18n_domain='plonecollectorng'),
+                schemata='Look and Feel'
+                ),
+
 
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
