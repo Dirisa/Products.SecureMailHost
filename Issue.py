@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.188 2004/06/21 20:13:01 ajung Exp $
+$Id: Issue.py,v 1.189 2004/06/23 07:13:17 ajung Exp $
 """
 
 import os, time, random 
@@ -610,7 +610,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):                     
         """ return the workflow history """
-        return self.workflow_history.get(self.collector_workflow, ())  # acquire name from parent
+        d = {}
+        for wf in self.workflow_history.keys():
+            d[wf] = self.workflow_history[wf]
+        return d
 
     def _migrate_workflow_history(self):
         """ migrate a workflow history to a custom workflow """
@@ -618,7 +621,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.workflow_history.has_key(old_id):
             d = self.workflow_history[old_id]
             self.workflow_history[self.collector_workflow] = d
-            del self.workflow_history[old_id]
+            del self.workflow_history[old_id]                                                   
 
     security.declareProtected(View, 'send_notifications')
     def send_notifications(self):
