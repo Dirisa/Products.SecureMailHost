@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main" 
+         tal:define="search_form_position python: member.getProperty('pcng_position_searchform', 'bottom')">
+
+      <metal:block tal:define="action string: Configuration">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <fieldset>
+        <legend i18n:translate="configuration">Configuration</legend>
+
+        <ul>
+          <li>
+            <a href="pcng_base_edit"><span i18n:translate="base_configuration">Base configuration</span></a>
+          </li>
+          <li>
+            <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
+          </li>
+          <li>
+            <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema editor</span></a>
+          </li>
+          <li>
+            <a href="pcng_topics_groups"><span i18n:translate="topic_groups">Topic group</span></a>
+          </li>
+          <li>
+            <a href="pcng_notifications"><span i18n:translate="notifications">Email notifications</span></a>
+          </li>
+        </ul>
+
+      </fieldset>
+
+    </div>
+  </body>
+</html>

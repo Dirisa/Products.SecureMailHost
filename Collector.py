@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.156 2004/04/08 07:45:31 ajung Exp $
+$Id: Collector.py,v 1.157 2004/04/08 14:31:18 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -48,9 +48,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         'action': 'pcng_view',
         'permissions': (View,)
         },
-        {'id': 'pcng_edit',
-        'name': 'Edit',
-        'action': 'pcng_base_edit',
+        {'id': 'pcng_configuration',
+        'name': 'Configuration',
+        'action': 'pcng_configuration',
         'permissions': (ManageCollector,)
         },
         {'id': 'pcng_addissue',
@@ -58,29 +58,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,)
         },
-        {'id': 'pcng_staff',
-        'name': 'Staff',
-        'action': 'pcng_staff',
-        'permissions': (ManageCollector,)
-        },
         {'id': 'pcng_history',
         'name': 'History',
         'action': 'pcng_history',
-        'permissions': (ManageCollector,)
-        },
-        {'id': 'pcng_schema_editor',
-        'name': 'Issue schema',
-        'action': 'pcng_schema_editor',
-        'permissions': (ManageCollector,)
-        },
-        {'id': 'pcng_topics_users',
-        'name': 'Topics-Users',
-        'action': 'pcng_topics_user',
-        'permissions': (ManageCollector,)
-        },
-        {'id': 'pcng_notifications',
-        'name': 'Notifications',
-        'action': 'pcng_notifications',
         'permissions': (ManageCollector,)
         },
         {'id': 'pcng_maintenance',
