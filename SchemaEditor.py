@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.52 2004/02/07 11:46:26 ajung Exp $
+$Id: SchemaEditor.py,v 1.53 2004/02/18 19:23:13 dtremea Exp $
 """
 
 import copy, re
@@ -113,7 +113,7 @@ class SchemaEditor:
         """ remove a field from a schemata"""
 
         if name in UNDELETEABLE_FIELDS:
-            raise ValueError(self.translate('atse_feld_not_deleteable',
+            raise ValueError(self.translate('atse_field_not_deleteable',
                                             'field "$name" can not be deleted because it is protected from deletion',   
                                             name=name))
 
@@ -246,7 +246,8 @@ class SchemaEditor:
         self._p_changed = 1
         self._ms._p_changed = 1
 
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
+        util.redirect(RESPONSE, 'pcng_schema_editor', 
+                      self.translate('atse_field_changed', 'Field changed'), 
                       schemata=FD.schemata, field=FD.name)
 
     ######################################################################
