@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.88 2003/12/08 18:39:48 ajung Exp $
+$Id: Collector.py,v 1.89 2003/12/12 07:40:36 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -101,14 +101,24 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             util.addLocalRole(self, username, role)
 
     def manage_afterAdd(self, item, container):
-        """ post creation actions """
-        self._transcript = Transcript()
-        self._transcript.addComment('Tracker created')
+        """ post creation (or post renaming) actions """
+
+        if getattr(self, '_already_created', 0) == 0:    
+            # Upon creation we need to add the transcript
+            self._transcript = Transcript()
+            self._transcript.addComment('Tracker created')
+            self._already_created = 1
+
+        else:
+            # manager_afterAdd() is also called when the collector is
+            # renamed. So we reindex the issues automatically
+            self.reindex_issues()
 
         # Archestypes uses hardcoded factory-settings for 'immediate_view'
         # that don't not meet our requirements to jump into the 'view' 
         # from the navigation tree instead into 'edit'. So we tweak
         # 'immediate_view' a bit.
+
         typestool = getToolByName(self, 'portal_types', None)
         ti = typestool.getTypeInfo('PloneIssueNG')
         ti.immediate_view = 'pcng_issue_view'
