@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.114 2004/02/11 14:38:19 ajung Exp $
+$Id: Collector.py,v 1.115 2004/02/11 14:38:48 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -419,7 +419,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 issue._v_schema = None
 
         self._transcript.addComment(u'Issue schemas reseted')
-        print self.translate('issues_updated', 'Issues updated')
+        
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.translate('issues_updated', 'Issues updated'))
