@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.149 2004/04/01 16:45:20 ajung Exp $
+$Id: Issue.py,v 1.150 2004/04/04 09:08:35 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -173,14 +173,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 raise Unauthorized(self.Translate('invalid_action', 
                                                   'Invalid action: %(action)s', action=action))
 
-            old_status = self.status()
+            self._v_old_status = self.status()
             wf = getToolByName(self, CollectorWorkflow)
             wf.doActionFor(self, action,
                            comment=comment,
                            username=util.getUserName(),
                            assignees=assignees)
-            new_status = self.status()
-            self._transcript.addChange('status', old_status, new_status)
+
 
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
@@ -407,6 +406,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         return len(self._transcript.getEventsGrouped())
     numberFollowups = __len__
 
+    def __nonzero__(self): return 1
+
     def pcng_ticket_browser(self, RESPONSE=None):
         """ redirect to ticket browser """
         util.redirect(RESPONSE, self.aq_parent.absolute_url() + '/pcng_view')
@@ -558,6 +559,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'send_notifications')
     def send_notifications(self):
         """ send notifications (triggered by workflow) """
+        # Set the change of the workflow status here
+        old_status = getattr(self, '_v_old_status', None)
+        if old_status and old_status != self.status():
+            self._transcript.addChange('status', old_status, self.status())
         notifications.notify(self)
 
     ######################################################################
