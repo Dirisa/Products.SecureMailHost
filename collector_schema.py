@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.30 2004/01/29 16:41:39 ajung Exp $
+$Id: collector_schema.py,v 1.31 2004/01/30 15:08:31 ajung Exp $
 """
 
 
@@ -45,7 +45,7 @@ schema = Schema((
                 accessor="getId",
                 mutator="setId",
                 default=None,
-                schemata='default',
+                schemata='collectordata',
                 widget=IdWidget(label_msgid="label_name",
                                 description_msgid="help_name",
                                 i18n_domain="plone"),
