@@ -47,8 +47,9 @@ div.issue_metadata {
 }
 
 div.transcriptheader {
-    background: #dddddd;
+    background: #eeeeee;
     font-size: 120%;
+    margin-top: 1em;
 }
 
 div.transcriptevent {
@@ -122,5 +123,33 @@ span.selected {
 span.headline_action {
    font-size: 90%;
 }
+
+div#metadata {
+    float: left;
+    padding-right: 2em;
+}
+
+/*
+ Portlets
+*/
+
+div #pcng_metadata {
+    float: left;
+    vertical-align: top;
+    margin-right: 1em;
+}
+
+// pcng_issue_view
+
+div #issue_description_solution {
+    clear: both;
+    margin-top: 2em;
+}
+
+div #issue_transcript{
+    clear: both;
+    margin-top: 2em;
+}
+
 
 /* </dtml-with> */
