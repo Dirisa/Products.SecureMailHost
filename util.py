@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.18 2004/02/29 10:15:32 ajung Exp $
+$Id: util.py,v 1.19 2004/04/14 19:20:10 ajung Exp $
 """
 
 import urllib
@@ -137,7 +137,13 @@ def safeGetProperty(userobj, property, default=None):
 
 def encrypt(text, key):
     """ AES Encryption """
-    from Crypto.Cipher import AES
+    try:
+        from Crypto.Cipher import AES
+    except ImportError:
+        from zLOG import LOG, ERROR
+        LOG('plonecollectorng', ERROR, 'PyCrypto (www.amk.ca/python/code/crypto) is required')
+        raise
+
     obj = AES.new(key, AES.MODE_ECB)
 
     if len(text) % 16 != 0: # padding
@@ -147,7 +153,13 @@ def encrypt(text, key):
 
 def decrypt(text, key):
     """ AES Decryption """
-    from Crypto.Cipher import AES
+    try:
+        from Crypto.Cipher import AES
+    except ImportError:
+        from zLOG import LOG, ERROR
+        LOG('plonecollectorng', ERROR, 'PyCrypto (www.amk.ca/python/code/crypto) is required')
+        raise
+    
     obj = AES.new(key, AES.MODE_ECB)
     return obj.decrypt(text)
     
