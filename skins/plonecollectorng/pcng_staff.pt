@@ -45,6 +45,17 @@
            
        </tr>
        </span>
+       <tr> <td colspan="6"><hr></td></tr>
+       <tr>
+         <td colspan="6">
+         <b>Collector administors</b> are responsible for the configuration and the
+         maintainance of a collector
+         <br><b>Supporters</b> work on issues. Usually issues are assigned to a supporter
+         in order to resolve the issue.
+         <br><b>Reporter</b> file new issues and have only limited rights on an issue
+         after the issue has been filed.
+         </td>
+       </tr>
       </table>
 
       <div class="row">
