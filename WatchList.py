@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: WatchList.py,v 1.4 2003/10/12 09:38:52 ajung Exp $
+$Id: WatchList.py,v 1.5 2003/10/12 19:05:58 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -26,7 +26,7 @@ class WatchList:
     security.declareProtected(CMFCorePermissions.View, 'wl_getMode')
     def wl_getMode(self):
         """ return watchlist mode """
-        self.watchlist_mode
+        return self.watchlist_mode
 
     security.declareProtected(CMFCorePermissions.View, 'wl_getWatchers')
     def wl_getWatchers(self):
