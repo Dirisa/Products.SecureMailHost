@@ -11,6 +11,7 @@
 	     				  comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
 	                 uploader python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='source');
 	                 revision python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='revision');
+	                 title    python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='title');
 	                 md5      python:here.getFileMetadata(REQUEST=request,section='DIAGNOSTICS',option='md5');
 	                 numUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='num_files');
 	                 sizezUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='unpacked_size');
@@ -37,21 +38,29 @@
 					revision
 				</span>
 				<br>
-				<b>comments = </b>
 	         <form tal:attributes="action string:${request/URL1}/setFileMetadata" method="post">
 		        <table width="100%">
 		          <tr>
 				       <td width="100%" valign="top">
-			             <input type="hidden" name="section" value="GENERAL"/>
-			             <input type="hidden" name="option" value="comment"/>
-			             <textarea name="newvalue" cols="40" rows="2"
-			                       tal:content="comments">
-			             </textarea>
+			             <b>comments</b><br/>
+			             <input type="hidden" name="section:list" value="GENERAL"/>
+                         <input type="hidden" name="option:list" value="comment"/>
+                         <textarea name="newvalue:list" cols="40" rows="2" tal:content="comments">
+                         </textarea>
 			          </td>
 			       </tr>
+                <tr>
+                   <td width="100%" valign="top">
+                      <b>title</b><br/>
+                      <input type="hidden" name="section:list" value="GENERAL"/>
+                      <input type="hidden" name="option:list" value="title"/>
+                      <input type="text"   name="newvalue:list" size="60" maxsize="200"
+                             value="" tal:attributes="value title" />
+                   </td>
+                </tr>
 			       <tr>   
 				      <td>
-		              <center><input type="submit" value="Update Comment" ></center>
+		              <center><input type="submit" value="Update Comments and Title" ></center>
 		            </td>
 		          </tr>
 		        </table>
