@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.4 2003/10/11 19:12:36 ajung Exp $
+$Id: notifications.py,v 1.5 2003/10/11 19:28:30 ajung Exp $
 """
 
 import sys
@@ -80,8 +80,8 @@ def send_notifications(recipients, issue):
     subject = str(Header(subject, 'iso-8859-1'))
     outer['Subject'] = subject
     outer['Message-ID'] = email.Utils.make_msgid()
-    outer['Reply-To'] = collector.collector_email 
-    body, encoding =  issue.format_transcript()   # skin method
+    outer['Reply-To'] = collector.collector_email
+    body, encoding =  eval('issue.%s()' % collector.issue_formatter)   # skin method
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body, _charset=encoding))
 

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.10 2003/10/11 14:54:56 ajung Exp $
+$Id: collector_schema.py,v 1.11 2003/10/11 19:28:30 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -13,6 +13,8 @@ from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
+
+from config import VOC_ISSUE_FORMATTERS
 
 VOC_LIMIT_FOLLOWUPS = DisplayList((
   (1, 'Yes'),
@@ -105,6 +107,11 @@ schema = OrderedSchema((
                 vocabulary=VOC_EMAIL_NOTIFICATIONS,
                 widget=SelectionWidget(format='select', label='E-Mail notifications'),
                 default='none',
+                schemata='E-Mail'
+                ),
+    StringField('issue_formatter',
+                vocabulary=VOC_ISSUE_FORMATTERS,
+                widget=SelectionWidget(format='select', label='Issue formatter'),
                 schemata='E-Mail'
                 ),
     ))

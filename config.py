@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: config.py,v 1.7 2003/10/03 09:00:18 ajung Exp $
+$Id: config.py,v 1.8 2003/10/11 19:28:30 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -30,3 +30,12 @@ setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(AddCollectorIssue, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(AddCollectorIssueFollowup, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(ManageCollector, ('Manager', 'TrackerAdmin'))
+
+# Collector issue formatters for notification emails
+
+from Products.Archetypes.public import DisplayList
+
+VOC_ISSUE_FORMATTERS = DisplayList((
+  ('format_transcript', 'Standard issue formatter (EN)'),
+  ('format_transcript_de', 'Standard issue formatter (DE)'),
+))
