@@ -812,3 +812,15 @@ msgstr "Antworten (diesen Kommentar zitieren)"
 
 msgid "no_access"
 msgstr "Kein Zugriff"
+
+msgid "issues_last_n_days"
+msgstr "Geänderte Tickets der letzten"
+
+msgid "Recent activity"
+msgstr "Letzte Änderungen"
+
+msgid "days"
+msgstr "Tage"
+
+msgid "Refresh"
+msgstr "Aktualisieren"

@@ -79,4 +79,5 @@ msgstr "Standardformatierer (Englisch)"
 msgid "Standard formatter (DE)"
 msgstr "Standardformatierer (Deutsch)"
 
-
+msgid "Your changes have been saved."
+msgstr "Ihre Änderungen wurden gespeichert"
