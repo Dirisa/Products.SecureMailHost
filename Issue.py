@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.128 2004/02/28 10:46:54 ajung Exp $
+$Id: Issue.py,v 1.129 2004/02/28 10:49:20 ajung Exp $
 """
 
 import sys, os, time, random
@@ -566,6 +566,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ManageCollector, 'getToken')
     def getToken(self):
         """ return security token"""
+        if not hasattr(self, '_token'): self.createToken()
         return self._token
 
     security.declareProtected(ManageCollector, 'createToken')
