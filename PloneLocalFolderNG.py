@@ -247,12 +247,20 @@ class PloneLocalFolderNG(BaseContent):
     def getFileRealPath(self, REQUEST):
         """ get the real (file system) path for the file """
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         return os.path.join(self.folder, rel_dir)
 
     security.declareProtected('View', 'getFileMetadata')
     def getFileMetadata(self, REQUEST, section="GENERAL", option="comment"):
         """ get file metadata"""
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         destpath = os.path.join(self.folder, rel_dir)
         #zLOG.LOG('PLFNG', zLOG.INFO , "getFileMetadata() :: \
         #destpath = %s" % destpath)
@@ -270,12 +278,12 @@ class PloneLocalFolderNG(BaseContent):
 
         # if quota_maxbytes for PLFNG instance > 0  :: use its value
 
-        # if quota_maxbytes for PLFNG instance = 0  :: return -1 
+        # if quota_maxbytes for PLFNG instance = 0  :: return -1
         #   (quota limit checking disabled)
 
         # if quota_maxbytes for PLFNG instance < 0 ::
         #   traverse up the acquisition tree looking for first container with
-        #   a non-zero 'quota_maxbytes' attribute.  If such a container is 
+        #   a non-zero 'quota_maxbytes' attribute.  If such a container is
         # found, find out the total number of bytes used by the contents of
         # this container
 
@@ -316,6 +324,10 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: \
         #section=%s option=%s newvalue=%s" % (section, option, newvalue))
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         targetFile = os.path.join(self.folder, rel_dir)
 
         if section and option and newvalue:
@@ -344,6 +356,10 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: \
         #section=%s option=%s newvalue=%s" % (section, option, newvalue))
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         targetFile = os.path.join(self.folder, rel_dir)
 
         if section == 'DIAGNOSTICS' and option == 'md5':
@@ -442,6 +458,9 @@ class PloneLocalFolderNG(BaseContent):
             show_dir = ''
         else:
             show_dir = '/'.join(REQUEST['_e'])
+            # protect against potential '_e' shenanigans
+            if show_dir.startswith('/') or show_dir.find('..') > -1:
+               raise ValueError('illegal directory: %s' % show_dir)
 
         trimmedFolderBasePath = os.path.normpath(self.folder)
 
@@ -449,9 +468,6 @@ class PloneLocalFolderNG(BaseContent):
         #show_dir = %s" % show_dir)
         #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: \
         #trimmedFolderBasePath = %s" % trimmedFolderBasePath)
-
-        if show_dir.startswith('/') or show_dir.find('..') > -1:
-            raise ValueError('illegal directory: %s' % show_dir)
 
         destfolder = os.path.normpath(os.path.join(trimmedFolderBasePath,
                                                    show_dir))
@@ -484,7 +500,7 @@ class PloneLocalFolderNG(BaseContent):
         foldername = dirname(fullpath)
         mi = self.mimetypes_registry.classify(data=None, filename=id.lower())
 
-        proxy = FileProxy(id, filepath=fullpath, fullname=fullpath, 
+        proxy = FileProxy(id, filepath=fullpath, fullname=fullpath,
                           properties=properties)
         proxy.setAbsoluteURL('%s/%s' % (self.absolute_url(), join(rel_dir,id)))
 
@@ -501,14 +517,14 @@ class PloneLocalFolderNG(BaseContent):
         proxy.setLanguage(GENERAL_MD.get('language','natural'))
 
         return proxy.__of__(self)
-         
+
     def _getAttribute(self, attrname):
         """ method will return a list """
         attr = getattr(self, attrname, None)
         if attr is not None:
             return attr.split(',')
         return []
-    
+
     security.declareProtected('View', 'contentValues')
     def contentValues(self, spec=None, filter=None, sort_on=None,
                       reverse=0):
@@ -521,8 +537,15 @@ class PloneLocalFolderNG(BaseContent):
         mime_registry = getToolByName(portal, 'mimetypes_registry')
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
-        destpath = os.path.join(self.folder, rel_dir)
         show_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if show_dir.startswith('/') or show_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % show_dir)
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
+        destpath = os.path.join(self.folder, rel_dir)
+
         trimmedFolderBasePath = os.path.normpath(self.folder)
 
         #XXX smacks of some sort of data object
@@ -536,15 +559,14 @@ class PloneLocalFolderNG(BaseContent):
         trimmedFolderBasePath = os.path.normpath(self.folder)
 
 
-        if show_dir.startswith('/') or show_dir.find('..') > -1:
-            raise ValueError('illegal directory: %s' % show_dir)
+
 
         destfolder = os.path.join(trimmedFolderBasePath, show_dir)
         if not destfolder.startswith(trimmedFolderBasePath):
             raise ValueError('illegal directory: %s' % show_dir)
 
         rel_dir = destfolder.replace(self.folder, '')
-        if rel_dir.startswith('/'): 
+        if rel_dir.startswith('/'):
             rel_dir = rel_dir[1:]
 
         #XXX smacking lips
@@ -602,6 +624,12 @@ class PloneLocalFolderNG(BaseContent):
         else:
             rel_dir = '/'.join(REQUEST.get('_e', []))
             show_dir = '/'.join(REQUEST['_e'])
+            # protect against potential '_e' shenanigans
+            if show_dir.startswith('/') or show_dir.find('..') > -1:
+               raise ValueError('illegal directory: %s' % show_dir)
+            if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+               raise ValueError('illegal directory: %s' % rel_dir)
+
             action = REQUEST.get('action', '')
 
         destpath = os.path.join(self.folder, rel_dir)
@@ -653,9 +681,6 @@ class PloneLocalFolderNG(BaseContent):
 
            trimmedFolderBasePath = os.path.normpath(self.folder)
 
-           if show_dir.startswith('/') or show_dir.find('..') > -1:
-               raise ValueError('illegal directory: %s' % show_dir)
-
            destfolder = os.path.join(trimmedFolderBasePath, show_dir)
 
            if not destfolder.startswith(trimmedFolderBasePath):
@@ -683,7 +708,7 @@ class PloneLocalFolderNG(BaseContent):
                FSfullPathFolderName = os.path.join(destfolder, f)
                P = FileProxy(id=f,
                              filepath=FSfullPathFolderName,
-                             fullname=f, 
+                             fullname=f,
                              properties=None)
 
                P.setIconPath('folder_icon.gif')
@@ -744,7 +769,7 @@ class PloneLocalFolderNG(BaseContent):
                                                       section="GENERAL",
                                                       option="language"))
                    except:
-                     # LinguaPlone TechnicalPreview 900 uses 'neutral' 
+                     # LinguaPlone TechnicalPreview 900 uses 'neutral'
                      # as neutral language code
                      P.setLanguage('neutral')
                else:
@@ -761,7 +786,7 @@ class PloneLocalFolderNG(BaseContent):
     def folderlistingFolderContents(self, spec=None, contentFilter=None,
                                     suppressHiddenFiles=0 ):
         """
-        Calls listFolderContents in protected only by ACI so that 
+        Calls listFolderContents in protected only by ACI so that
         folder_listing can work without the List folder contents permission,
         as in CMFDefault
         """
@@ -802,6 +827,9 @@ class PloneLocalFolderNG(BaseContent):
         #and viewed through the Plone interface."
         else:
            rel_dir = '/'.join(REQUEST.get('_e', []))
+           # protect against potential '_e' shenanigans
+           if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+               raise ValueError('illegal directory: %s' % rel_dir)
 
            if not rel_dir:
                # We are being visited directly. Redirect to
@@ -813,7 +841,7 @@ class PloneLocalFolderNG(BaseContent):
            destpath = os.path.join(self.folder, rel_dir)
 
            if os.path.isfile(destpath):
-               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , 
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO ,
                #          "__call__() :: %s :: isfile()" % destpath)
                if REQUEST.get('action', '') == 'unpack':
                   self.unpackFile(os.path.dirname(rel_dir),
@@ -862,6 +890,11 @@ class PloneLocalFolderNG(BaseContent):
 
         if not REQUEST.has_key('_e'):
             REQUEST['_e'] = []
+        
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
 
         if not hasattr(self, "folder"):
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO ,
@@ -937,7 +970,7 @@ class PloneLocalFolderNG(BaseContent):
         max_allowed_bytes = self.getAvailableQuotaSpace()
         contentLength = 0 # mpg fix this!!!
         if max_allowed_bytes != -1 and contentLength > max_allowed_bytes:
-           # uploaded file rejected as it would result in quota limit 
+           # uploaded file rejected as it would result in quota limit
            # being exceeded
            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: \
            file rejected! CONTENT_LENGTH (%s) + usedBytes(%s) > \
@@ -945,7 +978,7 @@ class PloneLocalFolderNG(BaseContent):
            (contentLength,usedBytes, max_allowed_bytes) )
            return 0
 
-        # if a MD5 checksum was provided, make sure that the 
+        # if a MD5 checksum was provided, make sure that the
         # server-generated MD5 matches it
 
         serverMD5 = None
@@ -1031,6 +1064,10 @@ class PloneLocalFolderNG(BaseContent):
         """ upload a file via HTML form-based file upload mechanism """
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         destpath = os.path.join(self.folder, rel_dir)
         uploadFileBaseName = os.path.basename(upload.filename)
         if self.backup_folder:
@@ -1139,6 +1176,10 @@ class PloneLocalFolderNG(BaseContent):
             return 0
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
+        # protect against potential '_e' shenanigans
+        if rel_dir.startswith('/') or rel_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % rel_dir)
+
         destpath = os.path.join(self.folder, rel_dir, dirname)
         print destpath
         if os.path.exists(destpath):
@@ -1146,7 +1187,7 @@ class PloneLocalFolderNG(BaseContent):
 
         # try..except to avoid exposing the realword path
         try:
-            os.makedirs(destpath)    
+            os.makedirs(destpath)
         except:
             raise RuntimeError('Directory could not be created')
 
@@ -1156,12 +1197,12 @@ class PloneLocalFolderNG(BaseContent):
 
     security.declareProtected('View', 'getProperties')
     def getProperties(self, REQUEST=None):
-        """ get the summary properties for the local filesystem directory 
+        """ get the summary properties for the local filesystem directory
             for this class instance """
 
         trimmedFolderBasePath = os.path.normpath(self.folder)
         show_dir = '/'.join(REQUEST['_e'])
-
+        # protect against potential '_e' shenanigans
         if show_dir.startswith('/') or show_dir.find('..') > -1:
             raise ValueError('illegal directory: %s' % show_dir)
 
@@ -1189,7 +1230,7 @@ class PloneLocalFolderNG(BaseContent):
         # for now, unzip is the only type of unpacking implemented
 
         # 1st, make sure the file is an unpackable type
-        if not self.mimetypes_registry.classify(data=None, 
+        if not self.mimetypes_registry.classify(data=None,
                                                 filename=FSpackedFile.lower())\
                                                 == 'application/zip':
             RESPONSE.redirect(REQUEST['URL1']+\
@@ -1205,7 +1246,7 @@ class PloneLocalFolderNG(BaseContent):
         # then, check that file unpacking will not violate any quota-limits
         elif self.quota_aware:
             # traverse up the acquisition tree looking for first container with
-            # a non-zero 'quota_maxbytes' attribute.  If such a container is 
+            # a non-zero 'quota_maxbytes' attribute.  If such a container is
             # found, find out the total number of bytes used by the contents of
             # this container in order to determine if the addition of the
             # unpacked contents of the file will exceed quota_maxbytes --in
@@ -1221,7 +1262,7 @@ class PloneLocalFolderNG(BaseContent):
                      break
 
             try:
-               unpackedSize = int(getMetadataElement(FSpackedFile, 
+               unpackedSize = int(getMetadataElement(FSpackedFile,
                                                      section="ARCHIVEINFO",
                                                      option="unpacked_size"))
             except:
@@ -1273,12 +1314,12 @@ class PloneLocalFolderNG(BaseContent):
         if not os.path.exists(fileToDelete):
            return 0
         else:
-           # move file to backupFolder if file backup is enabled & 
+           # move file to backupFolder if file backup is enabled &
            # backup_folder path is set
            if self.fileBackup_enabled and self.backup_folder:
                # get revision of existing file (or 1 if rev. metadata missing)
                oldRevisionNumberText = \
-                 getMetadataElement(fileToDelete, 
+                 getMetadataElement(fileToDelete,
                                     section="GENERAL",
                                     option="revision")
                if oldRevisionNumberText:
