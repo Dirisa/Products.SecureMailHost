@@ -212,7 +212,27 @@ class AnyDBMailStorage(MailQueue):
             db.close()
         self._queue = anydbm.open(DB_FILE, 'w') # write
         self._pickle_cache = {}
-    
+
+    def _fastQueue(self, mails):
+        """Fast queue with less checks
+        
+        Used for moving mails from the transaction aware queue to the persistent
+        queue.
+        It assumes that:
+             * mails is a list
+             * all mails are implementing IMail
+             * all mails have an id
+        """
+        assert type(mails) is ListType
+        try:
+            self._lock.acquire()
+            for mail in mails:
+                id = mail.getId()
+                self._queue(id, mail)
+            self.sync()
+        finally:
+            self._lock.release()
+
     def _queue(self, id, mail):
         """Adds one mail to the queue
 
@@ -255,7 +275,10 @@ class AnyDBMailStorage(MailQueue):
         
         MUST be called within an acquired lock!
         """
-        self._queue.sync()
+        # sync is not supported by all databases
+        sync = getattr(self._queue, 'sync', None)
+        if sync is not None:
+            sync()
     
 mailQueue = AnyDBMailStorage()
 
@@ -324,7 +347,7 @@ class TransactionalMailQueue(MailQueue):
         # moving mails from transaction queue to persistent queue
         if self._transaction_voted:
             global mailQueue
-            mailQueue.queue(self.values())
+            mailQueue._fastQueue(self.values())
 
     def tpc_vote(self, transaction):
         """Verify that a data manager can commit the transaction
@@ -349,4 +372,3 @@ class TransactionalMailQueue(MailQueue):
         Sort order isn't important. Returning 1 is fine
         """
         return 1
-
