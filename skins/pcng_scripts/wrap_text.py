@@ -1,10 +1,10 @@
-##parameters=text,cols=80,indent=0
+##parameters=text,cols=80,indent=0, reencode=1
 
 # Wrap and indent text
 
 from textwrap import wrap
 
-if same_type(text, u''):
+if same_type(text, u'') and reencode:
     text = text.encode(context.getSiteEncoding())
 
 lst = []

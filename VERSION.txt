@@ -1,1 +1,1 @@
-PCNG dev.
+1.2.2 (unreleased)

@@ -37,7 +37,7 @@ def writeField(fieldname, v):
         w('\t\t<list>')
         for item in v:
             type, value = convertValue(item)
-            w('\t\t\t<value type="%s">%s</field>' % (type, value))
+            w('\t\t\t<value.getType()="%s">%s</field>' % (type, value))
         w('\t\t</list>')
         w('\t</field>')
     else:
@@ -67,45 +67,11 @@ w('</metadata>')
 
 w('<transcript>')
 for e in context.getTranscript().getEvents():
+    if e.getType() == 'action': continue
 
-    w('\t<entry type="%s" timestamp="%s">' % (e.getType(), DateTime(e.getTimestamp()).ISO()) )
-
-    if e.type == 'comment':
-       type, value = convertValue(e.comment)
-       w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
-
-    elif e.type == 'change':
-        w('<!-- fix me -->')
-        writeField(e.field, e.old)
-        writeField(e.field, e.new)
-
-    elif e.type == 'incrementalchange':
-        w('\t\t<field name="%s">' % repr(e.field))
-#        w('<added>'); vXML(e.added); w('</added>')
-#        w('<removed>'); vXML(e.removed); w('</removed>')
-        w('\t\t</field>')
-
-
-    elif e.type == 'reference':
-       w('\t\t<reference id="%s" collector="%s">' % (e.ticketnum, e.tracker))
-       type, value = convertValue(e.comment)
-       w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
-       w('\t\t</reference>') 
-
-    elif e.type == 'upload':
-        
-        o = getattr(context, e.fileid, None)
-        if o:
-            w('\t\t<upload id="%s" mimetype="%s">' % (o.getId(), o.content_type))
-            w('\t\t\t<data>')
-            w(base64.encodestring(str(o.data)))
-            w('\t\t\t</data>')
-
-        type, value = convertValue(e.comment)
-        w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
-        w('\t\t</upload>')
-
-    w('\t</entry>')
+    w('\t<event type="%s" timestamp="%s">' % (e.getType(), DateTime(e.getTimestamp()).ISO()) )
+    w(context.pcng_format_event(e, 'xml'))
+    w('\t</event>')
 
 w('</transcript>')
     

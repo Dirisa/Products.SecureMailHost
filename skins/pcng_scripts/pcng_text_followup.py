@@ -15,7 +15,7 @@ for ev in context.getTranscript().getEvents():
                                  date=context.toLocalizedTime(DateTime(ev.getTimestamp()), long_format=1), 
                                  user=ev.getUser())
         text += '\n\n'
-        text += quote_text(ev.getValue('comment'))
+        text += quote_text(ev.getComment())
         return text
         
 return timestamp

@@ -44,13 +44,22 @@
 
 
       <h3>Archetypes</h3>
-      <table>
+      <table border="1">
         <tr tal:repeat="field python: here.Schema().fields()">
           <td> 
             <span tal:content="field/getName" />
           </td>
           <td>
             <span tal:content="python: here.getField(field.getName()).get(here)" />
+          </td>
+          <td>
+            <span tal:content="python: field.mode" />
+          </td>
+          <td>
+            <span tal:content="python: field.read_permission" />
+          </td>
+          <td>
+            <span tal:content="python: field.write_permission" />
           </td>
         </tr>
       </table>
@@ -65,9 +74,9 @@
         </li>
       </ul>
 
-
       <h3>XML</h3>
       <pre tal:content="context/pcng_issue_xml" />
+
     </div>
   </body>
 </html>

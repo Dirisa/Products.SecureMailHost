@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.208 2004/07/18 19:45:43 bcsaller Exp $
+$Id: Issue.py,v 1.209 2004/07/22 19:55:05 ajung Exp $
 """
 
 import os, time, random
@@ -28,7 +28,7 @@ from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
 from group_assignment_policies import getUsersForGroups
-from Transcript import Transcript
+from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent
 from WatchList import WatchList
 from Translateable import Translateable
 from PCNGSchema import PCNGSchemaNonPersistent
@@ -131,8 +131,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self.wl_init()
         self.id = id
         self._last_action = 'Created'          # last action from the followup form
-        self._transcript = Transcript()
 
+        self._transcript2 = Transcript2().__of__(self)
         self._md = PersistentMapping()
 
     def manage_afterAdd(self, item, container):
@@ -153,7 +153,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(AddCollectorIssue, 'post_creation_actions')
     def post_creation_actions(self):
         """ perform post-creation actions """
-        self._transcript.setEncoding(self.getSiteEncoding())
+        pass
 
     security.declareProtected(View, 'setDefaults')
     def setDefaults(self):
@@ -198,7 +198,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # Followups
     ######################################################################
 
-    def issue_followup(self, action, comment='', text_format='plain', assignees=[], assignees_group=[], RESPONSE=None):
+    def issue_followup(self, action, comment='', text_format='text/plain', assignees=[], assignees_group=[], RESPONSE=None):
         """ issue followup handling """
 
         # action for changes in assignment
@@ -209,11 +209,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         assignees.extend(getUsersForGroups(self, assignees_group))
 
         if not util.lists_eq(assignees, old_assignees):
-            self._transcript.addChange('assignees', old_assignees, assignees)
+            self.getTranscript().add(ChangeEvent('assignees', old_assignees, assignees))
             assignees_changed = 1
 
-        if comment: self._transcript.addComment(unicode(comment, self.getSiteEncoding()), text_format)
-        if action == 'comment' and assignees_changed:
+        if comment: self.getTranscript().add(CommentEvent(unicode(comment, self.getSiteEncoding()), text_format, public=True))
+        if action == 'comment' and assignees_changed: 
             if 'assign' in self.validActions():
                 action = 'assign'
             else:
@@ -233,7 +233,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                            username=util.getUserName(),
                            assignees=assignees)
 
-        self._transcript.addAction(action)
+        self.getTranscript().add(ActionEvent(action))
         self.notifyModified() # notify DublinCore
         self.reindexObject()
         # Notification is triggered by the workflow. Since comments do not trigger
@@ -286,7 +286,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
-        return self._transcript
+
+        if not  hasattr(aq_base(self), '_transcript2'):
+            self._transcript2 = Transcript2().__of__(self)
+            from convert_transcript import convert2
+            convert2(self._transcript, self._transcript2)
+        return self._transcript2
 
     ######################################################################
     # References handling
@@ -299,8 +304,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         if self.haveATReferences():
             issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
             self.deleteReference(issue)
-            self._transcript.addComment(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1))
-            util.redirect(RESPONSE, 'pcng_issue_references',
+            self.getTranscript().add(CommentEvent(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1), public=False))
+            util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('reference_deleted', 'Reference has been deleted'))
         else:
             raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
@@ -325,7 +330,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                                    issue_url=issue.absolute_url(1),
                                                    collector_title=tracker.getId(),
                                                    comment=reference.comment)
-            self.getTranscript().addReference(tracker.getId(), issue.getId(), unicode(reference.comment, self.getSiteEncoding()))
+            self.getTranscript().add(ReferenceEvent(tracker.getId(), issue.getId(), unicode(reference.comment, self.getSiteEncoding())))
             self.reindexObject()
             util.redirect(RESPONSE, 'pcng_issue_references',
                           self.Translate('reference_stored', 'Reference has been stored'))
@@ -407,7 +412,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             obj.manage_permission(View, acquire=1)
             obj.manage_permission(AccessContentsInformation, acquire=1)
             obj.manage_upload(data)
-            self._transcript.addUpload(file_id, comment)
+            self.getTranscript().add(UploadEvent(file_id, unicode(comment, self.getSiteEncoding())))
 
             self._last_action = 'Upload'
             if notify:
@@ -423,8 +428,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def remove_upload(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
-        self._transcript.addComment(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1))
-        util.redirect(RESPONSE, 'pcng_issue_uploads',
+        self.getTranscript().add(CommentEvent(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1)))
+        util.redirect(RESPONSE, 'pcng_issue_uploads', 
                      self.Translate('upload_removed', 'File has been removed'))
 
 
@@ -453,7 +458,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if not name in field_names: continue
             new = REQUEST.get(name, None)
             old = self.getField(name).get(self)
-            self._transcript.addChange(name, old, new)
+            self.getTranscript().add(ChangeEvent(name, old, new))
 
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this
@@ -467,7 +472,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def __len__(self):
         """ return the number of transcript events """
-        return len(self._transcript.getEventsGrouped())
+        return len(self.getTranscript().getEventsGrouped())
     numberFollowups = __len__
 
     def __nonzero__(self): return 1
@@ -641,9 +646,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         # Set the change of the workflow status here
         old_status = getattr(self, '_v_old_status', None)
         if old_status and old_status != self.status():
-            self._transcript.addChange('status', old_status, self.status())
-
-        if self.getNotification_policy() != 'NoneNotificationPolicy':
+            self.getTranscript().add(ChangeEvent('status', old_status, self.status()))
+            pass
+        if self.getNotification_policy() != 'NoneNotificationPolicy': 
             notifications.notify(self)
 
     ######################################################################

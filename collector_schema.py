@@ -5,13 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.57 2004/07/15 17:37:38 ajung Exp $
+$Id: collector_schema.py,v 1.58 2004/07/22 19:55:05 ajung Exp $
 """
 
 
 from Products.Archetypes.public import DisplayList, BaseSchema
-from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
+from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField, LinesField
+from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget, MultiSelectionWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
 from PCNGSchema import PCNGSchema as Schema
@@ -82,6 +82,13 @@ VOC_PORTLET_ISSUEDATA = DisplayList((
   ('left', 'Left portlet slot'),
   ('right', 'Right portlet slot'),
   ('inline', 'Inside issue main view'),
+))
+
+VOC_USED_PORTLETS = DisplayList((
+  ('uploads', 'Uploads'),
+  ('references', 'References'),
+  ('search', 'Search'),
+  ('searchresults', 'Search results'),
 ))
 
 
@@ -256,6 +263,17 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_portlet_issuedata',
                                        i18n_domain='plonecollectorng'),
                 default='inline',
+                schemata='Look and Feel'
+                ),
+
+    LinesField('used_portlets',
+                vocabulary=VOC_USED_PORTLETS,
+                widget=MultiSelectionWidget(format='select', 
+                                       size=5,
+                                       label='Portlets to be used',
+                                       label_msgid='label_to_be_used',
+                                       i18n_domain='plonecollectorng'),
+                default=['search'],
                 schemata='Look and Feel'
                 ),
 

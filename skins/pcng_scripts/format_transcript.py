@@ -25,7 +25,11 @@ def getValue(fieldname, translate=0):
             return vocab.get(v, v)
 
 # convert string to unicode and append to list
-def nl(text=''):
+def nl(text=None):
+    if text == '': return
+    if text is None: 
+        l.append(u'')
+        return
     if same_type(text, u''):
         l.append(text)
     else:
@@ -62,45 +66,26 @@ nl(context.Translate('label_description', 'Description') + ":")
 nl('-'*40)
 nl(context.wrap_text(context.Description()))
 
-nl('')
+nl()
 
 n = 0
 groups = context.getTranscript().getEventsGrouped()
 for group in groups:
-    datestr = context.toLocalizedTime(DateTime.DateTime(group[0].created), long_format=1)
-    uid = group[0].user
+    datestr = context.toLocalizedTime(DateTime.DateTime(group[0].created()), long_format=1)
+    creator = group[0].Creator()
+    user = group[0].getUser()
 
     # Find action in current group
-    action = ''
-    for ev in group:
-       if ev.type == 'action': action = ev.action
-        
-    nl('#%d %s %s (%s)' % (len(groups)-n, TR(action, action), datestr, uid)) 
+    action = context.pcng_action_from_events(group)
+    nl('#%d %s %s (%s)' % (len(groups)-n, TR(action, action), datestr, creator)) 
     nl('-'*75)
 
     for ev in group:
-
-        if ev.type == 'comment':
-            nl('%s:' % TR('comment', 'Comment'))
-            nl(context.wrap_text(ev.comment,indent=4))
-
-        elif ev.type == 'change':
-            nl(u'%s: %s: "%s" -> "%s"' % (TR('Change', 'Change'), ev.field, ev.old, ev.new))
-
-        elif ev.type == 'incrementalchange':
-            nl(u'%s: %s: %s: %s , %s: %s' % (TR('changed', 'Changed'), ev.field, 
-                                            TR('added', 'Added'), ev.added, 
-                                            TR('removed', 'Removed'), ev.removed))
-        elif ev.type == 'reference':
-            nl('%s: %s/%s - %s' % (TR('reference', 'Reference'), ev.tracker, ev.ticketnum, ev.comment))
-
-        elif ev.type == 'upload':
-            s = '%s: %s ' % (TR('upload', 'Upload'), ev.fileid)
-            if ev.comment:
-                s+= ' (%s)' % ev.comment
-            nl(s)
+        if ev.getType() == 'action': continue
+        nl(context.pcng_format_event(ev, 'plain'))
 
     n+=1; nl()
+
 
 if context.haveATReferences():
     refs = context.getForwardReferences()

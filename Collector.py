@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.198 2004/07/21 10:16:12 ajung Exp $
+$Id: Collector.py,v 1.199 2004/07/22 19:55:05 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -13,17 +13,19 @@ import base64, time, random, md5, os
 from Globals import InitializeClass
 from ComputedAttribute import ComputedAttribute
 from AccessControl import  ClassSecurityInfo
+from Acquisition import aq_base
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
 from ZODB.POSException import ConflictError
 from Products.Archetypes.public import registerType
-from Base import Base
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
+from Base import Base
 from Transcript import Transcript
+from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent, IncrementalChangeEvent
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
@@ -110,8 +112,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         if getattr(self, '_already_created', 0) == 0:
             # Upon creation we need to add the transcript
-            self._transcript = Transcript()
-            self._transcript.addComment(u'Tracker created')
+            self._transcript2 = Transcript().__of__(self)
+            self._transcript2.add(CommentEvent(u'Tracker created'))
             self._already_created = 1
 
         else:
@@ -132,7 +134,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
 
-        self._transcript.setEncoding(self.getSiteEncoding())
         self.createToken()
 
     def manage_beforeDelete(self, item, container):
@@ -145,7 +146,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         self._setup_catalog()
         self._setup_workflow()
-        self.getTranscript().addComment(u'Tool setup')
+        self.getTranscript().add(CommentEvent(u'Tool setup'))
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance',
@@ -203,7 +204,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             old = self.getField(name).get(self)
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
-                    self._transcript.addChange(name, old, new)
+                    self.getTranscript().add(ChangeEvent(name, old, new))
 
     ######################################################################
     # Transcript
@@ -212,7 +213,12 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
-        return self._transcript
+
+        if not hasattr(aq_base(self), '_transcript2'):
+            self._transcript2 = Transcript2().__of__(self)
+            from convert_transcript import convert2
+            convert2(self._transcript, self._transcript2)
+        return self._transcript2
 
     ######################################################################
     # Staff handling
@@ -291,9 +297,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         reporters.sort(); managers.sort(); supporters.sort()
 
-        self._transcript.addIncrementalChange('managers', self._managers, managers)
-        self._transcript.addIncrementalChange('supporters', self._supporters, supporters)
-        self._transcript.addIncrementalChange('reporters', self._reporters, reporters)
+        self.getTranscript().add(IncrementalChangeEvent('managers', self._managers, managers))
+        self.getTranscript().add(IncrementalChangeEvent('supporters', self._supporters, supporters))
+        self.getTranscript().add(IncrementalChangeEvent('reporters', self._reporters, reporters))
 
         self._managers = managers
         self._reporters = reporters
@@ -372,7 +378,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                     raise ValueError(self.Translate('invalid_email_address',
                                                     'Invalid email address: $email', email=email))
 
-            self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
+            self.getTranscript().add(ChangeEvent('notifications', self._notification_emails.get(state, []), emails))
             self._notification_emails[state] = emails
 
         util.redirect(RESPONSE, 'pcng_view',
@@ -533,8 +539,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ reindex all issues """
 
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
-        self._transcript.addComment(u'Issues reindexed')
-        util.redirect(RESPONSE, 'pcng_maintenance',
+        self.getTranscript().add(CommentEvent(u'Issues reindexed'))
+        util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.Translate('issues_reindexed', 'Issues reindexed'))
 
     security.declareProtected(View, 'getNumberIssues')
@@ -549,8 +555,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def resetNumberIssues(self, RESPONSE=None):
         """ reset number of issues """
         self._num_issues = 0
-        self._transcript.addComment(u'Number of issues reset to 0')
-        util.redirect(RESPONSE, 'pcng_maintenance',
+        self.getTranscript().add(CommentEvent(u'Number of issues reset to 0'))
+        util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.Translate('number_issues_reseted', 'Issue number reseted to 0'))
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
@@ -562,8 +568,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
-        self._transcript.addComment(u'Issue schemas reseted')
-
+        self.getTranscript().add(CommentEvent(u'Issue schemas reseted'))
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.Translate('issues_updated', 'Issues updated'))
@@ -593,8 +598,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         # PCNGSchema migration
         self.migrate_schema()
 
-        self._transcript.setEncoding(self.getSiteEncoding())
-        self._transcript.addComment(u'Collector schema updated')
+        self.getTranscript().add(CommentEvent(u'Collector schema updated'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                           self.Translate('collector_schema_updated', 'Collector schema updated'))
 
@@ -610,8 +614,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for issue in self.objectValues('PloneIssueNG'):
             if issue.UID() is None:
                 RC.registerObject(issue)
-
-        self._transcript.addComment(u'Issue UIDs reregistered')
+      
+        self.getTranscript().add(CommentEvent(u'Issue UIDs reregistered'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('uids_recreated', 'UIDs recreated'))
 
@@ -621,7 +625,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ Migrate workflow histories of all issues to new workflow id """
         for issue in self.objectValues('PloneIssueNG'):
             issue._migrate_workflow_history()
-        self._transcript.addComment(u'Issue workflows migrated')
+        self.getTranscript().add(CommentEvent(u'Issue workflows migrated'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('issue_workflow_histories_migrated', 'Issue workflow histories migrated'))
 
@@ -736,7 +740,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 msg = 'No such issue with URL %s' % issue_url
                 return response(RESPONSE, 404, msg)
 
-            issue.getTranscript().addComment(R.description, user=member_id)
+            issue.getTranscript().add(CommentEvent(R.description, user=member_id))
 
         elif R.issue_id:
             issue = getattr(self, R.issue_id, None)
@@ -745,7 +749,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 return response(RESPONSE, 404, msg)
 
             comment = R.description + '\n\n' + self.Translate('untrusted_submission', 'Untrusted issue submission: no verification possible')
-            issue.getTranscript().addComment(comment, user=member_id)
+            issue.getTranscript().add(CommentEvent(comment, user=member_id))
 
         else:
             # New issue
@@ -766,8 +770,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                                   mimetype=node.getAttribute('mimetype'),
                                   notify=0)
 
-            if R.description:
-                issue.getTranscript().addComment(R.description, user=member_id)
+            if R.description: 
+                issue.getTranscript().add(CommentEvent(R.description, user=member_id))
 
         issue._last_action = 'Comment'
         issue.reindexObject()

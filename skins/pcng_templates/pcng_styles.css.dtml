@@ -116,6 +116,10 @@ div#pcng_transcript_actions {
     font-size: 85%;
 }
 
+span#pcng_transcript_key {
+    font-weight: bold;
+}
+
 /*
  Portlets
 */

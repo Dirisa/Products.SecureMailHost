@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.43 2004/07/04 08:46:28 ajung Exp $
+$Id: pdfwriter.py,v 1.44 2004/07/22 19:55:05 ajung Exp $
 """
 
 import os, cStringIO, tempfile
@@ -245,33 +245,30 @@ def pdfwriter(collector, ids):
         n = 1
 
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
-            datestr = issue.toLocalizedTime(DateTime(group[0].created), long_format=1)
-            uid = group[0].user
+            datestr = issue.toLocalizedTime(DateTime(group[0].created()), long_format=1)
+            uid = group[0].getUser()
             header(u'#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize(), as_unicode=1), datestr, uid)) 
 
             l = []
             comment = None
 
             for ev in group:
-                if ev.type == 'comment':
-                    comment = ev.comment
-                elif ev.type == 'change':
-                    l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed', as_unicode=1), ev.field, ev.old, ev.new)))
-                elif ev.type == 'incrementalchange':
-                    l.append(dowrap('<b>%s:</b> %s: %s: %s , %s: %s' % (translate('changed', 'Changed', as_unicode=1), ev.field, translate('added', 'added', as_unicode=1), ev.added, translate('removed', 'removed', as_unicode=1), ev.removed)))
-                elif ev.type == 'reference':
-                    l.append(dowrap('<b>%s:</b>  %s/%s (%s)' % (translate('reference', 'Reference', as_unicode=1), ev.tracker, ev.ticketnum, ev.comment)))
-                elif ev.type == 'upload':
-                    s = '<b>%s:</b> %s/%s ' % (translate('upload', 'Upload', as_unicode=1), issue.absolute_url(), ev.fileid)
-                    if ev.comment:
-                        s+= ' (%s)' % ev.comment
-                    l.append(dowrap(toUnicode(s)))
+                if ev.getType() == 'action': 
+                    continue
+                elif ev.getType() == 'comment':
+                    comment = ev
+                else:
+                    s = issue.pcng_format_event(ev, 'pdf')
+                    l.append(s)
 
             definition(u'\n'.join(l))
+
             if comment: 
-                definition('<b>%s</b>' % translate('comment', 'Comment', as_unicode=1))
-                pre(break_longlines(comment))
+                definition('<b>%s:</b>' % translate('comment', 'Comment', as_unicode=1))
+                pre(break_longlines(comment.getComment()))
             n+=1
+
+        print l
 
 
         ##################################################################
