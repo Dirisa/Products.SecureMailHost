@@ -53,13 +53,16 @@ def setMetadata(filename, section, option, value):
 security.declarePublic('getMetadataElement')
 def getMetadataElement(filename,section,option):
    metadataFileName = filename+".metadata"
-   try:
-      metadataFileParser = ConfigParser()
-      metadataFileParser.read(metadataFileName)
-      return metadataFileParser.get(section,option)
-   except:
-      raise 'Metadata Not Found', 'Could not retrieve metadata %s:%s for the file %s.' % (section,option,filename)
-
+   if os.path.exists(metadataFileName):
+      try:
+         metadataFileParser = ConfigParser()
+         metadataFileParser.read(metadataFileName)
+         return metadataFileParser.get(section,option)
+      except:
+         return None
+         #raise 'Metadata Not Found', 'Could not retrieve metadata %s:%s for the file %s.' % (section,option,filename)
+   else:
+      return None
 # --------------------------------------------------------------------
 security.declarePublic('getMetadataElements')
 def getMetadataElements(filename,section):
@@ -103,8 +106,8 @@ def setZipInfoMetadata(filename):
       raw_output = generate_zipinfo(filename)
       files,space = parseZipInfoOutput(raw_output)
    
-      setMetadata(filename, section="ZIPINFO", option="num_files", value=files)
-      setMetadata(filename, section="ZIPINFO", option="unpacked_size", value=space)
+      setMetadata(filename, section="ARCHIVEINFO", option="num_files", value=files)
+      setMetadata(filename, section="ARCHIVEINFO", option="unpacked_size", value=space)
       return 1
 
    else:
