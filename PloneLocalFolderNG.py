@@ -5,6 +5,7 @@ from string import split,find
 from DateTime.DateTime import DateTime
 from Globals import InitializeClass, Persistent
 from AccessControl import ClassSecurityInfo
+from AccessControl.Permission import Permission
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.FSObject import FSObject
 from Products.Archetypes.public import BaseSchema, Schema
@@ -642,6 +643,10 @@ class PloneLocalFolderNG(BaseContent):
         
         dummyFileProxy = FileProxy("dummy", fullfoldername, "dummy")
         dummyFileProxy.meta_type = "FileProxy"
+        # set View permission for all files to that of the PLFNG object
+        perm = Permission(View,'',self)
+        view_roles = perm.getRoles()
+        dummyFileProxy._View_Permission = view_roles
 
         this_portal = getToolByName(self, 'portal_url')
         catalogTool = getToolByName(this_portal, 'portal_catalog')
