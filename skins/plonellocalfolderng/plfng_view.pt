@@ -13,7 +13,7 @@
                  global filter decodedFilter;
                  standalone python:1;
                  valid_folder python:here.validFolder(REQUEST=request);
-                 folder_contents python:here.getContents(REQUEST=request);
+                 folder_contents python:here.listFolderContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();
                  requireUploadMD5 python:here.requireUploadMD5();
@@ -38,7 +38,10 @@
                 </h1>
 
                 <h1 tal:condition="not:myfolder">
+                  <a href="#" tal:attributes="href string:${here/absolute_url}">
                   <img tal:replace="structure here/folder.gif" />
+                 	 <span tal:content="here/title_or_id" />:
+                 	</a>
                  	<span tal:content="here/plfng_translatedpath" />
                 </h1>
 
@@ -56,6 +59,7 @@
                 <div tal:define="url string:${request/URL2}">
                   <a href="#" tal:attributes="href url" class="link-parent">Up one level</a>
                 </div>
+                
                 <p tal:content="structure here/Description"
                    tal:condition="not:myfolder">
                    description
