@@ -32,11 +32,9 @@
             </div>
         
             <form name="searchform"
-                  style="float: right;"
-                  action="http://search.plone.org/search"
-                   >
+                  action="http://search.plone.org/search">
                    
-                <fieldset>
+                <fieldset style="float: right;">
                     
                     <legend>Documentation search</legend>
                     

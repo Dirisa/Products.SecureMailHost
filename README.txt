@@ -26,6 +26,8 @@ Credits
   Development, User Interface, Project Architecture, Quality Assurance --
   Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
 
+  Development, Assistance -- Christian 'Tiran' Heimes
+
   Original FAQ code -- "Tim Terlegard":mailto:tim@se.linux.org,
   "Edward Muller":mailto:edwardam@interlix.com - further enhancements
   by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad
