@@ -21,6 +21,7 @@
 
 <!-- searchresults -->
 <div metal:define-macro="searchresults">
+
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
     <h5 i18n:translate="last_search_results">Results from last search</h5>
