@@ -3,7 +3,7 @@
 # If a topic contains subtopic e.g. 'XXX/YYY' then only the first part
 # before '/' is used.
 
-vocab = context.atse_getSchema()['topic'].vocabulary
+vocab = context.atse_getSchemaById('PloneIssueNG')['topic'].vocabulary
 
 topics = []
 
