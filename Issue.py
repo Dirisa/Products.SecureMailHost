@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.39 2003/10/11 20:48:21 ajung Exp $
+$Id: Issue.py,v 1.40 2003/10/12 19:33:22 ajung Exp $
 """
 
 import sys, os
@@ -51,11 +51,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         'action': 'pcng_issue_followup',
         'permissions': (AddCollectorIssueFollowup,)
         },
-#        {'id': 'edit',
-#        'name': 'Edit',
-#        'action': 'pcng_base_edit',
-#        'permissions': (AddCollectorIssueFollowup,)
-#        },
+        {'id': 'edit',
+        'name': 'Edit',
+        'action': 'pcng_base_edit',
+        'permissions': (AddCollectorIssueFollowup,)
+        },
         {'id': 'history',
         'name': 'History',
         'action': 'pcng_issue_history',
@@ -295,7 +295,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
     def __len__(self):
         """ return the number of transcript events """
-        return len(self._transcript)
+        return len(self._transcript.getEventsGrouped())
 
     ######################################################################
     # Catalog stuff

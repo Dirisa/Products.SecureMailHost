@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.39 2003/10/06 18:00:28 ajung Exp $
+$Id: Collector.py,v 1.40 2003/10/12 19:33:22 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -40,11 +40,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
-#        {'id': 'edit',
-#        'name': 'Edit',
-#        'action': 'pcng_base_edit',
-#        'permissions': (ManageCollector,)
-#        },
+        {'id': 'edit',
+        'name': 'Edit',
+        'action': 'pcng_base_edit',
+        'permissions': (ManageCollector,)
+        },
         {'id': 'pcng_addissue',
         'name': 'Add issue',
         'action': 'add_issue',
@@ -293,7 +293,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
-        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/base_edit", 
+        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
                       portal_status_message='New issue created',
                       fieldset='issuedata')
 
