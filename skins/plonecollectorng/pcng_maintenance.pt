@@ -35,7 +35,7 @@
         <div class="formHelp" i18n:translate="help_update_collector_schema">This is sometimes necessary after an upgrade of PloneCollectorNG</div>
       </li>
       <li>
-        <a href="setup_collector_catalog"><span i18n:translate="recreate_collector_catalog">Recreate collector catalog</span></a> 
+        <a href="setup_tools"><span i18n:translate="setup_tools">Recreate catalog and workflow tool</span></a> 
         <div class="formHelp" i18n:translate="help_setup_collector_catalog">This is sometimes necessary after an upgrade of PloneCollectorNG or when the catalog setup changed. You must also recreate the catalog if you have checked "Create index" for a field.</div>
       </li>
       <li>
