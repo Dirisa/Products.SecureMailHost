@@ -438,7 +438,7 @@ msgstr "Default"
 msgid "label"
 msgstr "Label"
 
-msgid "add"
+msgid "Add"
 msgstr "Neu"
 
 msgid "field_definition"
