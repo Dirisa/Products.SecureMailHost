@@ -953,6 +953,9 @@ msgstr "Neues Ticket"
 msgid "Reports"
 msgstr "Auswertungen"
 
+msgid "Issue reports"
+msgstr "Ticketauswertungen"
+
 msgid "collector_actions"
 msgstr "Tracker Aktionen"
 
