@@ -41,6 +41,8 @@ Template changes:
  - Documentation search shows only a subset of the content types.  There should 
     be a "search only in" for each of the major PHC content types.
 
+        -> Attempted to fix.  Not tested.
+
 ===================================
 Workflow changes/permission issues:
 ===================================
@@ -52,10 +54,25 @@ Workflow changes/permission issues:
  - Owners should be able to edit content in the 'published' state to make
     updates easier.  
 
-        -> Works for HowTos...need to add more tests to testWorkflow.
-    
+        -> See testWorkflow.py.  Works for six of the content types.  Need to 
+           test video and referenceManual (and create new helpers in PHCTestCase).
+
  - Owners should be able to mark their own content obsolete
  
+        -> See testWorkflow.py.  I changed HCWorkflow.py from 
+           'guard_permissions': 'Review portal content' 
+           to 
+           'guard_expr: 'python: user.has_permission("Review portal content", here) 
+           or user.has_role("Owner", here)' 
+           It appears that owners, reviewers, and managers (who has the review 
+           permission but is not a reviewer) can all mark content as obsolete.  
+           tried 
+           props={'guard_permissions': 'Review portal content', 'guard_roles': 'Owner'} 
+           but that seems to require both the role and the permission; so I changed 
+           the property to a guard_expr. 
+           We still need to test video and referenceManual (and create new helpers 
+           in PHCTestCase).
+
  - Naming of transition from obsolete to in-progress (and other states?) is
     non-obvious and must be changed.
     
@@ -140,9 +157,27 @@ Need testing/unit test work:
  - Need to test Search, ensuring it searches all content types (esp. glossary,
     for where there were problems reported)
     
+        -> Not unit tested yet, but not surprising.  Glossary was not one of 
+           the "search in" selections, and the "Entire documentation area" 
+           search was looking at the HelpCenterGlossary (folderish) items, 
+           not the HelpCenterDefinition content items.  It may now be fixed, 
+           but we definitely need a testSearch or something in the unit tests.
+           Quick functional test didn't show anything broken.
+
+ - When I had a test site with no reference manuals and one definition, I could 
+    do a "Documentation search" using the title of the definition, searching 
+    only in Glossary definitions, and find my definition.  If I selected to 
+    search only in "Reference manuals," then the search still returned my 
+    definition.  If I searched in any of the other subsections, it did not 
+    return my definition.  Need to retest and verify.  Sounds like a bug.
+
  - Need to test RSS feed, especially with foreign characters and UTF-8
  
  - Comment workflow and notification
+
+ - Test that a normal Member with a special right to 'Review portal content' 
+    on one piece of PHC content can mark that content as obsolete in 
+    testWorkflow.py.  I'm not sure how to set that up.
  
  - We need many more unit tests!
   
