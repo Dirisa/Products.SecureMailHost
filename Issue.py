@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.135 2004/03/08 20:03:00 ajung Exp $
+$Id: Issue.py,v 1.136 2004/03/14 16:52:45 ajung Exp $
 """
 
 import sys, os, time
@@ -100,8 +100,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
-            wf = getToolByName(self, CollectorWorkflow)
-            wf.notifyCreated(self)
+            wf = getToolByName(self, CollectorWorkflow, None)
+            if wf:
+                wf.notifyCreated(self)
 
     def post_creation_actions(self):
         """ perform post-creation actions """
@@ -493,10 +494,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'assigned_to')
     def assigned_to(self, sorted=0):
         """ return assigned users according to the workflow """
-        wftool = getToolByName(self, CollectorWorkflow)
-        users = list(wftool.getInfoFor(self, 'assigned_to', ()) or ())
-        if sorted: users.sort()
-        return users
+        wftool = getToolByName(self, CollectorWorkflow, None)
+        if wftool:
+            users = list(wftool.getInfoFor(self, 'assigned_to', ()) or ())
+            if sorted: users.sort()
+            return users
+        else:   
+            return ()
 
     security.declareProtected(View, 'is_assigned')
     def is_assigned(self):
@@ -507,25 +511,33 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'is_confidential')
     def is_confidential(self):
         """ return if the issue is confidential according to the workflow """
-        wftool = getToolByName(self, CollectorWorkflow)
-        return wftool.getInfoFor(self, 'confidential', 0)
+        wftool = getToolByName(self, CollectorWorkflow, None)
+        if wftool:
+            return wftool.getInfoFor(self, 'confidential', 0)
+        return 0
 
     security.declareProtected(View, 'status')
     def status(self):
         """ return workflow state """
-        wftool = getToolByName(self, CollectorWorkflow)
-        return wftool.getInfoFor(self, 'state', 'pending')
+        wftool = getToolByName(self, CollectorWorkflow, None)
+        if wftool:
+            return wftool.getInfoFor(self, 'state', 'pending')
+        else:
+            return 'pending'
 
     security.declareProtected(View, 'validActions')
     def validActions(self):
         """ return valid transitions for issue 'pcng_issue_workflow' """
-        wftool = getToolByName(self, CollectorWorkflow)
-        actions = wftool.getTransitionsFor(self)
-        return [entry['name'] for entry in actions]
+        wftool = getToolByName(self, CollectorWorkflow, None)
+        if wftool:
+            actions = wftool.getTransitionsFor(self)
+            return [entry['name'] for entry in actions]
+        return []
 
     security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):                     
         """ return the workflow history """
+        print self.workflow_history
         return self.workflow_history[IssueWorkflowName]
 
     security.declareProtected(View, 'send_notifications')
