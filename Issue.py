@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.95 2003/12/02 08:52:09 ajung Exp $
+$Id: Issue.py,v 1.96 2003/12/02 11:25:44 ajung Exp $
 """
 
 import sys, os, time
@@ -222,36 +222,6 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
         field = self.Schema()[key]
         try: return field.storage.get(key, self)  # avoid problems with updated schemas
         except: return ''
-
-    def archetypes_mutator(self, v, **kw):
-        """ the Archetypes mutator callback.
-            ATT: we pass the Field instance as kw-arg 'field'
-            This requires a hacked Archetypes.BaseObject.py (lines 366ff)
-        """
-        field = sys._getframe().f_back.f_locals['field']
-        field.storage.set(field.getName(), self, v, **kw)
-
-    def archetypes_accessor(self, *args, **kw):
-        """ this method is a very bad hack since we do intercept
-            the frame to get hold of the corresponding 'field' object
-        """
-
-        # look for the context in the stack
-        _marker = []
-        frame = sys._getframe()
-        context = _marker
-        while context is _marker and frame is not None:
-            context = frame.f_locals.get('econtext', _marker)
-            frame = frame.f_back
-        if context is _marker:
-            return None
-
-        field = context.local_vars['field']
-        try:
-            value = field.storage.get(field.getName(), self, **kw)
-        except:
-            value = None
-        return value 
 
     ######################################################################
     # Transcript
