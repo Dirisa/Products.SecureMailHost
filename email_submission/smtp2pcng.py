@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.12 2004/04/13 14:41:15 ajung Exp $
+$Id: smtp2pcng.py,v 1.13 2004/04/13 18:03:02 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
@@ -21,6 +21,7 @@ import email
 from email.Header import decode_header 
 
 CFG_FILE = '.smtp2pcng.cfg'
+MAX_LENGTH = 32768
 
 # Logger stuff
 LOG = logging.getLogger('myapp')
@@ -76,6 +77,13 @@ def parse_mail(options):
         options.url = config.get(section, 'url')
         options.username = config.get(section, 'username')
         options.password = config.get(section, 'password')
+        if config.has_section('default'):
+            if config.has_option('default', 'maxlength'):
+                options.max_length = int(config.get('default', 'maxlength'))     
+            else:
+                options.max_length = MAX_LENGTH
+
+    print options.max_length
 
     if options.filename is not None:
         LOG.debug('Reading from: %s' % options.filename)
@@ -163,8 +171,6 @@ if __name__ == '__main__':
                       help='Path to configuration file (~/%s)' % CFG_FILE, default='~/%s' % CFG_FILE)
     parser.add_option('-C', '--configuration', dest='configuration', 
                       help='Section from configuration file to be used', default=None)
-    parser.add_option('-m', '--max-length', dest='max_length', 
-                      help='Maximum length of incoming messages in bytes', type='int', default=16384)
     options, args = parser.parse_args()
 
     LOG.info('-'*75)
