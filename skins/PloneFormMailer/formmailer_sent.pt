@@ -1,24 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="ploneformmailer">
-
-<body>
-
-<metal:block fill-slot="main">
-<metal:define define-macro="main">
-
-<h1 tal:content="python:here.getSent_title() or here.title_or_id()" class="documentFirstHeading">
-    Thank you
-</h1>
-
-<span tal:condition="python:here.isTransformable('sent_message')"
-      tal:replace="structure python:here.getSent_message()"/>
-
-</metal:define>
-</metal:block>
-
-</body>
-
+      i18n:domain="pfm">
+  <head><title></title></head>
+  <body>
+    <metal:block fill-slot="main">
+      <metal:define define-macro="main">
+        <h1 tal:content="python:here.getSentTitle() or here.title_or_id()"
+            i18n:translate=""
+            class="documentFirstHeading">
+          Thank you
+        </h1>
+        <span tal:condition="python:here.isTransformable('sent_message')"
+              tal:replace="structure python:here.getSentMessage()"
+              i18n:translate=""
+              />
+      </metal:define>
+    </metal:block>
+  </body>
 </html>

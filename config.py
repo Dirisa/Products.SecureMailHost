@@ -4,7 +4,7 @@
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
 #
-# RCS-ID:       $Id: config.py,v 1.6 2004/10/20 20:17:06 dreamcatcher Exp $
+# RCS-ID:       $Id: config.py,v 1.7 2004/10/20 20:49:48 dreamcatcher Exp $
 # Copyright:    (c) 2004 by jens quadrat, Klein & Partner KEG, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ default_mailtemplate_body = \
                        groups form/get_groups;">
 <html>
 <body>
-<p tal:condition="here/getBody_pre" tal:content="here/getBody_pre" />
+<p tal:condition="here/getBodyPre" tal:content="here/getBodyPre" />
 <p tal:condition="options/prepend" tal:content="options/prepend" />
 
 <tal:block tal:repeat="group groups">
@@ -40,7 +40,7 @@ default_mailtemplate_body = \
 </tal:block>
 
 <p tal:condition="options/append" tal:content="options/append" />
-<p tal:condition="here/getBody_post" tal:content="here/getBody_post" />
+<p tal:condition="here/getBodyPost" tal:content="here/getBodyPost" />
 <pre tal:content="here/getFooter" />
 </body>
 </html>
