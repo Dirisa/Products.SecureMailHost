@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.50 2003/10/20 12:20:39 ajung Exp $
+$Id: Issue.py,v 1.51 2003/10/20 12:53:01 ajung Exp $
 """
 
 import sys, os
@@ -324,6 +324,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         else:
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.translate('nothing_for_upload', 'Nothing to be uploaded'))
+
+    security.declareProtected(ManageCollector, 'upload_remove')
+    def upload_remove(self, id, RESPONSE):
+        """ Remove an uploaded file """
+        self.manage_delObjects([id])
+        util.redirect(RESPONSE, 'pcng_issue_references', 
+                     self.translate('upload_removed', 'File has been removed'))
+
 
     ######################################################################
     # Misc
