@@ -1,3 +1,15 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: WorkflowTool.py,v 1.3 2004/06/29 13:07:25 ajung Exp $
+"""
+
+# This code is in parts taken from Plone
+
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
