@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.15 2003/12/09 09:17:01 ajung Exp $
+$Id: pdfwriter.py,v 1.16 2003/12/14 11:58:08 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
 from textwrap import fill
-
+   
 try:
     from PIL import Image as PIL_Image
     have_pil = 1
@@ -30,6 +30,21 @@ PAGE_HEIGHT = defaultPageSize[1]
 
 def dowrap(text):
     return fill(text, 100)
+
+def break_longlines(text):
+
+    print 'text', text
+
+    l = []
+    for line in text.split('\n'):
+        if len(line) > 100:
+            l.append(dowrap(line))
+        else:
+            l.append(line)
+
+    print l
+
+    return '\n'.join(l)
 
 def myLaterPages(canvas, doc):
     #canvas.drawImage("snkanim.gif", 36, 36)
@@ -154,19 +169,19 @@ def pdfwriter(collector, ids):
 
         header(translate('transcript', 'Transcript'))
 
-        groups = issue.getTranscript().getEventsGrouped(reverse=0)
         n = 1
-        for group in groups:
+
+        for group in issue.getTranscript().getEventsGrouped(reverse=0):
             datestr = issue.toPortalTime(DateTime(group[0].created), long_format=1)
             uid = group[0].user
             header('#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize()), datestr, uid)) 
 
             l = []
+            comment = None
 
             for ev in group:
                 if ev.type == 'comment':
-                    l.append(dowrap('<b>%s:</b>\n%s' % (translate('comment', 'Comment'), html_quote(ev.comment))))
-                    pass
+                    comment = '<b>%s:</b>\n%s' % (translate('comment', 'Comment'), html_quote(ev.comment))
                 elif ev.type == 'change':
                     l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed'), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
@@ -180,8 +195,9 @@ def pdfwriter(collector, ids):
                     l.append(dowrap(s))
 
             definition('\n'.join(l))
-
+            if comment: pre(break_longlines(comment))
             n+=1
+
         Elements.append(PageBreak())
 
     IO = cStringIO.StringIO()
