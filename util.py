@@ -308,7 +308,7 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypes
          skipThisItem = 1
          zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: checkValidId(%s) failed:: %s" % (FSfullPathFileName,checkValidIdResult) )
       for suffix in fileSuffixesSkipList:
-         if item.endswith(suffix): 
+         if fileName.endswith(suffix): 
             skipThisItem = 1
             break
 
