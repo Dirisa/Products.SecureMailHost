@@ -1,62 +1,113 @@
-import time, os, tempfile
-
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch, cm
-from reportlab.lib.pagesizes import A4
-
-#precalculate some basics
-top_margin = A4[1] - inch
-bottom_margin = inch
-left_margin = inch
-right_margin = A4[0] - inch
-frame_width = right_margin - left_margin
 
 
-def drawPageFrame(canv, issue):
+import os, sys, cStringIO, tempfile
 
-    canv.line(left_margin, top_margin, right_margin, top_margin)
-    canv.setFont('Times-Bold',12)
-    canv.drawString(left_margin, top_margin + 2, "Collector: %s -  Issue: %s" % (issue.aq_parent.title_or_id(), issue.title_or_id()))
-    canv.line(left_margin, top_margin, right_margin, top_margin)
+from reportlab.platypus import *
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.rl_config import defaultPageSize
+from reportlab.lib.units import inch
 
-    canv.line(left_margin, bottom_margin, right_margin, bottom_margin)
-    canv.drawCentredString(0.5*A4[0], 0.5 * inch,
-               "Page %d" % canv.getPageNumber())
+PAGE_HEIGHT=defaultPageSize[1]
+styles = getSampleStyleSheet()
+
+
+
+def myFirstPage(canvas, doc):
+    canvas.saveState()
+    #canvas.setStrokeColorRGB(1,0,0)
+    #canvas.setLineWidth(5)
+    #canvas.line(66,72,66,PAGE_HEIGHT-72)
+    canvas.setFont('Times-Bold',16)
+    canvas.drawString(108, PAGE_HEIGHT-108, Title)
+    canvas.setFont('Times-Roman',9)
+    canvas.drawString(inch, 0.75 * inch, "First Page / %s" % pageinfo)
+    canvas.restoreState()
+
+def myLaterPages(canvas, doc):
+    #canvas.drawImage("snkanim.gif", 36, 36)
+    canvas.saveState()
+    #canvas.setStrokeColorRGB(1,0,0)
+    #canvas.setLineWidth(5)
+    #canvas.line(66,72,66,PAGE_HEIGHT-72)
+    canvas.setFont('Times-Roman',9)
+    canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
+    canvas.restoreState()
+
+Elements = []
+
+HeaderStyle = styles["Heading1"] # XXXX
+
+def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.1):
+    s = Spacer(0.1*inch, sep*inch)
+    Elements.append(s)
+    para = klass(txt, style)
+    Elements.append(para)
+
+ParaStyle = styles["Normal"]
+
+def p(txt):
+    return header(txt, style=ParaStyle, sep=0.0)
+
+PreStyle = styles["Code"]
+
+def pre(txt):
+    s = Spacer(0.1*inch, 0.1*inch)
+    Elements.append(s)
+    p = Preformatted(txt, PreStyle)
+    Elements.append(p)
 
 
 def pdfwriter(issue):
-    print 1
-    fname = tempfile.mktemp()
-    print fname
-    started = time.time()
-    canv = canvas.Canvas(fname)
-    canv.setPageCompression(0)
-    drawPageFrame(canv, issue)
 
-    #do some title page stuff
-    canv.setFont("Times-Bold", 12)
-    tx = canv.beginText(left_margin, 10 * inch)
-    tx.textLine('Title: %s' % issue.title)
-    tx.textLine('Description: %s' % issue.description)
-    tx.textLine('Solution: %s' % issue.solution)
+    header('Collector: %s' % issue.aq_parent.title_or_id(), sep=0.1)
+    header('Issue: %s' % issue.title_or_id(), sep=0.1)
+  
+
+    header("")
+
+    header("Description")
+    pre(issue.description)
+
+    if issue.solution:
+        header("Solution")
+        pre(issue.solution)
 
     for name in issue.schema_getNames():
-        if name in ('default', 'metadata'): continue
-        schemata = issue.schema_getSchema(name)
-
-        tx.textLine(name)
         
-        for field in schemata.fields():
-            tx.textLine('%s: %s' % (field.getName(),field.storage.get(field.getName(), issue)))
-        tx.textLine("")
-        
-    canv.drawText(tx)
+        header(name.capitalize())
+        l =[]
 
-    canv.showPage()
+        for field in issue.schema_getSchema(name).fields():
+            if field.getName() in ('description', 'title'): continue
 
-    canv.save()
+            value = issue.getParameter(field.getName())
 
-    data = open(fname).read()
-    os.unlink(fname)
-    return data
+            if hasattr(field, 'vocabulary'):
+                vocab = field.Vocabulary(issue)
+                v = issue.displayValue(vocab, value)
+            else:
+                v = value
+
+            if v:
+                l.append('<b>%s</b>: %s ' % (field.widget.Label(issue), v))
+        p(', '.join(l))
+
+    for img in issue.objectValues('Portal Image'):
+        from PIL import Image as PIL_Image
+        fname = tempfile.mktemp()
+        open(fname, 'w').write(fname)
+        image = PIL_Image.open(fname)
+        width, height= image.size
+        multi = ((height +0.0) / (0.75 * inch))
+        width = int(width / multi)
+        height = int(height / multi)
+        Elements.append(Image(fname, width, height))
+        os.unlink(fname)
+
+
+    IO = cStringIO.StringIO()
+    doc = SimpleDocTemplate(IO)
+    doc.build(Elements)
+
+    return IO.getvalue()
 
