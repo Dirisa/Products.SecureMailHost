@@ -23,19 +23,25 @@
         <th i18n:translate="staff_members">Staff members</th>
       </tr>
 
-      <tr tal:repeat="topic here/pcng_get_topics">
-        <td> 
-          <span tal:content="topic" />
-        </td>
-        <td>
-          <tal:loop tal:repeat="user users">
-            <input type="checkbox" tal:attributes="name string:topics.$topic:record:list;
-                                                   CHECKED python: user.get('username', None) in topic_user.get(topic, []);
-                                                   value user/username"> 
-            <span tal:content="user/username" /> 
-          </tal:loop>
-        </td>
-      </tr>
+      <tal:loop tal:repeat="topic here/pcng_get_topics">
+        <tr>
+          <td valign="top"> 
+            <span tal:content="topic" />
+          </td>
+          <td>
+            <tal:loop tal:repeat="user users">
+              <input type="checkbox" tal:attributes="name string:topics.$topic:record:list;
+                                                     CHECKED python: user.get('username', None) in topic_user.get(topic, []);
+                                                     value user/username"> 
+              <span tal:content="user/username" /> 
+            </tal:loop>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </tal:loop>
+
     </table>
 
     <div class="row">
