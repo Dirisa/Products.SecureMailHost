@@ -44,6 +44,10 @@
         </metal:block>
       </div>
 
+      <div class="group"><span class="legend" i18n:translate="transcript">Transcript</span>
+        <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
+      </div>
+
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <metal:block tal:repeat="image python: here.objectValues('Portal Image')">
           <img tal:attributes="src image/absolute_url">
@@ -60,15 +64,11 @@
         </div>
       </metal:block>
 
+      <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
+
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
         <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
       </metal:block>
-
-      <div class="group"><span class="legend" i18n:translate="transcript">Transcript</span>
-        <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
-      </div>
-
-      <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
 
     </div>
   </body>
