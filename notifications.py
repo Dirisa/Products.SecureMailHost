@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.17 2003/11/21 08:27:19 ajung Exp $
+$Id: notifications.py,v 1.18 2004/01/15 15:11:02 ajung Exp $
 """
 
 import sys
@@ -24,7 +24,6 @@ def notify(issue):
     """ notification handling """
 
     collector = issue._getCollector()
-
     NP = eval('notification_policies.%s(issue)' % collector.notification_policy)
     recipients = NP.getRecipients()
     recipients = enrich_recipients(issue, recipients)
@@ -84,6 +83,7 @@ def send_notifications(recipients, issue):
 def _send_notifications(recipients, issue, send_attachments=0):
     """ create the notification emails """
 
+    encoding = issue.getSiteEncoding()
     collector = issue._getCollector()
     dest_emails = [ v['email'] for v in recipients.values()     
                                if util.isValidEmailAddress(v.get('email','')) and
@@ -93,14 +93,14 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
     outer['To'] = ','.join(dest_emails)
-    subject = '[%s] %s/%s %s "%s"' %  (collector.collector_abbreviation, issue.getId(), len(issue), issue._last_action, issue.Title())
-    subject = str(Header(subject, 'iso-8859-1'))
+    subject = '[%s] %s/%s %s "%s"' %  (str(collector.collector_abbreviation), issue.getId(), len(issue), issue._last_action, issue.title_or_id())
+    subject = str(Header(subject, encoding))
     outer['Subject'] = subject
     outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email
-    body, encoding =  eval('issue.%s()' % collector.issue_formatter)   # skin method
+    body =  eval('issue.%s()' % collector.issue_formatter)   # skin method, unicode returned
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
-    outer.attach(MIMEText(body, _charset=encoding))
+    outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
 
     if send_attachments and  issue.lastAction() == 'Upload':
         # we need to attach the latest Upload to the email
