@@ -18,8 +18,8 @@
         <tal:def tal:define="dummy python: request.set('mode', here.ui_default_issue_view)" />
       </metal:block>
 
-      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="?mode=full">Full view</a>
-      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="?mode=simple">Simple view</a>
+      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="pcng_issue_view?mode=full">Full view</a>
+      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="pcng_issue_view?mode=simple">Simple view</a>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
         <legend><a class="schemata_legend"  
