@@ -272,6 +272,27 @@ class PloneLocalFolderNG(BaseContent):
             except:
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: there was a problem with mxmCounter" )
          
+    security.declareProtected('View', 'validFolder')
+    def validFolder(self,  REQUEST=None):
+        """ dtermine if the requested folder path is legal and exists """
+
+        show_dir = '/'.join(REQUEST['_e'])
+        
+        if show_dir.startswith('/') or show_dir.find('..') > -1:
+            raise ValueError('illegal directory: %s' % show_dir)
+        destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
+        if not destfolder.startswith(self.folder):
+            raise ValueError('illegal directory: %s' % show_dir)
+        
+        zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path = %s" %destfolder )
+        
+        if os.path.exists(destfolder):
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path ok for: %s" %destfolder )
+            return 1
+        else:
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: !!! path bad for: %s" %destfolder )
+            return 0
+        
     security.declareProtected('View', 'getContents')
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
@@ -289,31 +310,34 @@ class PloneLocalFolderNG(BaseContent):
         if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
 
         l = []
-        for f in os.listdir(destfolder):
-            if f.endswith('.metadata'): continue
+        if os.path.exists(destfolder):
+           for f in os.listdir(destfolder):
+               if f.endswith('.metadata'): continue
+   
+               fullname = os.path.join(destfolder, f)
+               P = FileProxy(f, fullname, f)
+               mi = self.mimetypes_registry.classify(data=None, filename=f)
+   
+               if os.path.isdir(fullname):
+                   P.setIconPath('folder_icon.gif')
+                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+                   P.setMimeType('directory')
+               else:
+                   P.setIconPath(mi.icon_path)
+                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+                   P.setMimeType(mi.normalized())
+   
+               if os.path.exists(fullname + '.metadata'):
+                   try:
+                     P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+                   except:
+                     P.setComment('')
+               else:
+                   P.setComment('')
+               l.append(P) 
 
-            fullname = os.path.join(destfolder, f)
-            P = FileProxy(f, fullname, f)
-            mi = self.mimetypes_registry.classify(data=None, filename=f)
-
-            if os.path.isdir(fullname):
-                P.setIconPath('folder_icon.gif')
-                P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                P.setMimeType('directory')
-            else:
-                P.setIconPath(mi.icon_path)
-                P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-                P.setMimeType(mi.normalized())
-
-            if os.path.exists(fullname + '.metadata'):
-                try:
-                  P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
-                except:
-                  P.setComment('')
-            else:
-                P.setComment('')
-            l.append(P) 
-
+        else:
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
         return l
 
     security.declareProtected('View', 'breadcrumbs')
@@ -662,24 +686,26 @@ def _getFolderProperties(fullfoldername):
    bytesInFolder = 0
    folderCount = 0
    fileCount = 0
-   for f in os.listdir(fullfoldername):
-      # don't include the PloneLocalFolderNG special metadata files  
-      if f.endswith('.metadata'): continue
+   if os.path.exists(fullfoldername):
       
-      itemFullName = os.path.join(fullfoldername, f)
-
-      if os.path.isdir(itemFullName): 
-         folderCount = folderCount + 1
-         subfolder_props = _getFolderProperties(itemFullName)
-         bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
-         folderCount = folderCount + subfolder_props.get('folders',0)
-         fileCount = fileCount + subfolder_props.get('files',0)
-      else:
-         fileCount = fileCount + 1     
-         try: file_size = os.stat(itemFullName)[6]
-         except: file_size = 0
-         bytesInFolder = bytesInFolder + file_size
-        
+      for f in os.listdir(fullfoldername):
+         # don't include the PloneLocalFolderNG special metadata files  
+         if f.endswith('.metadata'): continue
+         
+         itemFullName = os.path.join(fullfoldername, f)
+   
+         if os.path.isdir(itemFullName): 
+            folderCount = folderCount + 1
+            subfolder_props = _getFolderProperties(itemFullName)
+            bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
+            folderCount = folderCount + subfolder_props.get('folders',0)
+            fileCount = fileCount + subfolder_props.get('files',0)
+         else:
+            fileCount = fileCount + 1     
+            try: file_size = os.stat(itemFullName)[6]
+            except: file_size = 0
+            bytesInFolder = bytesInFolder + file_size
+           
    folderProps = { }
    folderProps['size'] = bytesInFolder
    folderProps['files'] = fileCount
