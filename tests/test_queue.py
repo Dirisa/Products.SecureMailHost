@@ -30,6 +30,15 @@ class TestMailQueue(ZopeTestCase.ZopeTestCase):
     def test_interface(self):
         verifyObject(IMailQueue, self.obj)
         
+    def test_hasDictMethods(self):
+        obj = self.obj
+        methods = ['__cmp__', '__delitem__', '__getitem__', '__len__', 
+                   '__setitem__', 'clear', 'get', 'has_key',
+                   'items', 'iteritems', 'iterkeys', 'itervalues', 'keys',
+                   'pop', 'popitem', 'setdefault', 'update', 'values']
+        for method in methods:
+            self.failUnless(hasattr(obj, method), '%s is missing' % method)
+        
 tests.append(TestMailQueue)
 
 
