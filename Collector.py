@@ -146,10 +146,18 @@ class Collector(BaseFolder):
             'notifications' -- record where the keys are the names of the
                         states and the values are lists of email addresses
         """
+
         for state in notifications.keys():
             emails = getattr(notifications, state)
-            self._notification_emails = emails
+            self._notification_emails[state] = emails
         self._p_changed = 1
+
+    security.declareProtected(ManageCollector, 'getNotificationsForState')
+    def getNotificationsForState(self, state):
+        """ return a of emails addresses that correspond to
+            the given state.
+        """
+        return self._notification_emails.get(state, [])
 
     security.declareProtected(ManageCollector, 'issue_states')
     def issue_states(self):
