@@ -1,5 +1,10 @@
 import os
-import win32con, win32api
+try:
+    import win32con, win32api
+except ImportError:
+    win32con = None
+    win32api = None
+
 from stat import *
 from sys import platform
 import shutil
@@ -1334,9 +1339,10 @@ class PloneLocalFolderNG(BaseContent):
         elif not fileHasDeletePermission and getattr(self, "ignore_readonly", 0):
            if platform == 'win32':
                try:
-                  win32api.SetFileAttributes(fileToDelete,
-                                             win32con.FILE_ATTRIBUTE_NORMAL)
-                  okToDeleteFile = 1
+                  if win32api and win32con:
+                     win32api.SetFileAttributes(fileToDelete,
+                                                win32con.FILE_ATTRIBUTE_NORMAL)
+                     okToDeleteFile = 1
                except:
                   pass
            else:
