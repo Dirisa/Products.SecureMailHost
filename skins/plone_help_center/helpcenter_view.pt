@@ -34,8 +34,8 @@
             </div>
         
             <form name="searchform"
-                  action="search"
-                  tal:attributes="action string:${portal_url}/search">
+                  action="phc_search"
+                  tal:attributes="action string:${portal_url}/phc_search">
                    
                 <fieldset style="float: right;">
                     
@@ -66,17 +66,11 @@
                     
                     in
                     
-                    <!-- XXX FIXME: This doesn't do anything useful yet -->
-                    <select name="path"
-                            tal:define="path request/form/path|nothing;">
-                      <option value="/plone.org"
-                              tal:attributes="selected python:test(path=='/plone.org', 'selected', nothing)">All documentation</option>
-                      <option value="/plone.org/documentation"
-                              tal:attributes="selected python:test(path=='/plone.org/documentation', 'selected', nothing)">FAQs</option>
-                      <option value="/plone.org/development"
-                              tal:attributes="selected python:test(path=='/plone.org/development', 'selected', nothing)">How-tos</option>
-                      <option tal:condition="python: here.aq_parent != portal_object" 
-                              tal:attributes="value python:'/'.join(here.aq_parent.getPhysicalPath())">Tutorials</option>
+                      <select name="phc_selection">
+                        <option value="all">All documentation</option>
+                        <option value="faq">FAQs</option>
+                        <option value="howto">How-tos</option>
+                        <option value="tutorial">Tutorials</option>
                     </select>
                 </fieldset>
             </form>
