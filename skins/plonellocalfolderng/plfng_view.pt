@@ -14,7 +14,10 @@
                  standalone python:1;
                  folder_contents python:here.getContents(REQUEST=request);
                  mtool mtool|here/portal_membership;
-                 myfolder python:here.absolute_url()==mtool.getHomeUrl();">
+                 myfolder python:here.absolute_url()==mtool.getHomeUrl();
+                 requireUploadMD5 python:here.requireUploadMD5();
+                 fileUnpackingAllowed python:here.fileUnpackingAllowed();
+                 errors python:request.get('errors', {})">
 
     <div>
         <form name="folderContentsForm"
@@ -146,9 +149,13 @@
                             <td tal:content="item/getComment" />
 
                             <td> 
-                              <a tal:condition="python: getObjSize(item)"
-                                  tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
+                              <div tal:condition="python: getObjSize(item)">
+	                              <a tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
+	                              <a tal:condition="python:item_typeinfo.Title() == 'application/zip' and member.has_permission('Modify portal content', here) and fileUnpackingAllowed"
+	                                  tal:attributes="href string:${item/absolute_url}?action=unpack">Unzip</a>
+	                           </div>       
                             </td>
+                            
                         </tr>
 
                     </metal:block>
@@ -170,30 +177,68 @@
         </form>
     </div>
 
+	<fieldset>
+	<legend>Upload File:</legend>
+
     <div>
-        <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
+         <form tal:condition="python: member.has_permission('Modify portal content', here)" 
               tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
-          File:
-          <input type="file" name="upload">
-          <br>
-          Comment:
-          <textarea name="comment" cols="60" rows="3"></textarea>
-          <br>
-          <input type="submit" value="Upload file" >
+        
+        <table width="100%">
+          <tr>
+	          <td width="50%" valign="top">
+		          File: <span class="fieldRequired" title="Required">(Required)</span><br>
+		          <input type="file" name="upload">
+		          <div tal:condition="requireUploadMD5">
+		             MD5 Checksum: <span class="fieldRequired" title="Required">(Required)</span>
+		          </div>
+		       </td>
+		       <td width="50%" valign="top">
+		         Comment (optional):<br>
+	             <textarea name="comment" cols="40" rows="2"></textarea>
+	          </td>
+	       </tr>
+	       <tr>   
+		       <td>
+					 <div class="field" 
+					 	tal:define="error errors/clientMD5|nothing"
+					 	tal:condition="requireUploadMD5"
+					   tal:attributes="class python:test(error, 'field error', 'field')">
+					   
+					   <label i18n:translate="label_clientMD5">client MD5</label>
+					  
+						<div tal:content="error">Validation error output</div>
+		            
+		            <input  type="text" name="clientMD5" size="36">
+		          </div>  
+	          </td>
+	          <td>
+              <center><input type="submit" value="Upload file" ></center>
+            </td>
+          </tr>
+        </table>
+ 
+          
         </form>
     </div>
+    
+    </fieldset>
 
     <br/>
-
+    
+    <fieldset>
+	 <legend>Create Directory:</legend>
     <div>
-        <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
+        <form tal:condition="python: member.has_permission('Modify portal content', here)" 
               tal:attributes="action string:${request/URL1}/create_directory" method="post">
           Directory name:
           <input type="text" name="dirname" size="30">
           &nbsp;
-          <input type="submit" value="Create directory" >
+          <input type="submit" value="Create Directory" >
         </form>
     </div>
+    
+    </fieldset>
 
 </div>
 
