@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: OrderedSchema.py,v 1.4 2003/09/19 06:13:22 ajung Exp $
+$Id: OrderedSchema.py,v 1.5 2003/10/13 15:16:53 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -69,5 +69,10 @@ class OrderedBaseFolder(BaseFolder):
                 if not field in ('default', 'metadata'):
                     lst.append(field.schemata)
         return lst
+
+    def base_edit(self, RESPONSE):
+        """ blabla """
+        RESPONSE.redirect('pcng_base_edit')
+    
 
 InitializeClass(OrderedBaseFolder)
