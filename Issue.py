@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.140 2004/03/17 16:48:58 ajung Exp $
+$Id: Issue.py,v 1.141 2004/03/17 16:54:03 ajung Exp $
 """
 
 import sys, os, time
@@ -109,18 +109,20 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     security.declareProtected(AddCollectorIssue, 'setDefaults')
     def setDefaults(self):
-        """ set some default value based on the member data """
+        """ Set some default value based on the member data. This method
+            is called from pcng_issue_view *each*. We are using this rude 
+            way to ensure that the defaults are set once and after the creation
+            of the instance. Using portal_factory + Archetypes seems to have bad
+            side effects since the setDefaults() of AT was called after the objects
+            manage_afterAdd() method.
+        """
+
         if not hasattr(self, '_defaults_initialized'):
 
             # added member preferences as defaults to the issue
             member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
             schema = self.Schema()
 
-            print '*'*80
-            print 'user', util.getUserName()
-            print 'member', member
-            print self, self.absolute_url()
-            
             if member:
                 fieldnames = [ f.getName() for f in schema.fields() ]
                 for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
@@ -129,7 +131,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                     ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
                     if name in fieldnames:                
-                        print 'setting', name, member.getProperty(name1)
                         schema[name].set(self, member.getProperty(name1))
             else:
                 name = 'contact_name'
