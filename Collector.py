@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.86 2003/11/29 13:12:36 ajung Exp $
+$Id: Collector.py,v 1.87 2003/12/08 18:01:43 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -400,6 +400,20 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         util.redirect(RESPONSE, 'pcng_maintainance',
                           self.translate('collector_schema_updated', 'Collector schema updated'))
 
+    security.declareProtected(ManageCollector, 'register_issue_uids')
+    def register_issue_uids(self, RESPONSE=None):
+        """ Issues imported through a .zexp file don't have UIDs anymore.
+            They must be re-registered with the reference_catalog of AT.
+        """
+
+        from Products.Archetypes.config import REFERENCE_CATALOG
+        RC = getToolByName(self, REFERENCE_CATALOG)
+
+        for issue in self.objectValues('PloneIssueNG'):
+            RC.registerObject(issue)
+      
+        util.redirect(RESPONSE, 'pcng_maintainance',
+                          self.translate('uids_recreated', 'UIDs recreated'))
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, ids, RESPONSE):
