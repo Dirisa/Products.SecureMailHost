@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.65 2004/09/27 16:53:50 ajung Exp $
+$Id: collector_schema.py,v 1.66 2004/09/27 17:42:35 ajung Exp $
 """
 
 
@@ -94,6 +94,12 @@ VOC_USED_PORTLETS = DisplayList((
   ('search', 'Search'),
   ('searchresults', 'Search results'),
 ))
+
+VOC_COLLECTOR_PORTLETS = DisplayList((
+  ('Plone', 'Plone portlets'),
+  ('here/pcng_portlet_macros/macros/pcng_collector_portlet', 'Collector portlet'),
+))
+
 
 VOC_PORTLETS = DisplayList((
   ('Plone', 'Plone portlets'),
@@ -256,6 +262,26 @@ schema = BaseSchema + Schema((
                                        label_msgid='label_portlet_issuedata',
                                        i18n_domain='plonecollectorng'),
                 default='inline',
+                schemata='Look and Feel'
+                ),
+
+    LinesField('collector_portlets_left',
+                vocabulary=VOC_COLLECTOR_PORTLETS,
+                widget=InAndOutWidget(size=5,
+                                      label='Collector portlets left',
+                                      label_msgid='label_collector_portlets_left',
+                                      i18n_domain='plonecollectorng'),
+                default=['Plone', 'here/pcng_portlet_macros/macros/pcng_collector_portlet'],
+                schemata='Look and Feel'
+                ),
+
+    LinesField('collector_portlets_right',
+                vocabulary=VOC_COLLECTOR_PORTLETS,
+                widget=InAndOutWidget(size=5,
+                                      label='Collector portlets right',
+                                      label_msgid='label_collector_portlets right',
+                                      i18n_domain='plonecollectorng'),
+                default=['Plone', 'here/pcng_portlet_macros/macros/pcng_collector_portlet'],
                 schemata='Look and Feel'
                 ),
 

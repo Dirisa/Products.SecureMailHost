@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.215 2004/09/26 13:30:55 ajung Exp $
+$Id: Collector.py,v 1.216 2004/09/27 17:42:34 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -840,41 +840,29 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     ######################################################################
 
     def left_slots(self):
-        pu = self.getPortlet_usage()
-        pa = self.getPortlet_actions()
-        if not hasattr(self, '_v_left_slots'):
-            if pu == 'override':
-                self._v_left_slots = []
-            else:
-                slots = getattr(self.aq_parent, 'left_slots', [])
-                if callable(slots):
-                    slots = slots()
-                self._v_left_slots = list(slots)
-            if pa == 'left':
-                self._v_left_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
-            self._v_left_slots = tuple(self._v_left_slots)
-            try: del self._v_right_slots
-            except: pass
-        return self._v_left_slots
+        slots_left = list(self.getCollector_portlets_left())
+        if 'Plone' in slots_left: 
+            slots_left.remove('Plone')
+            slots = getattr(self.aq_parent, 'left_slots', [])
+            if callable(slots): slots = slots()
+            slots = list(slots)
+        else:
+            slots = []
+        slots.extend(slots_left)
+        return slots
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
-        pu = self.getPortlet_usage()
-        pa = self.getPortlet_actions()
-        if not hasattr(self, '_v_right_slots'):
-            if pu == 'override':
-                self._v_right_slots = []
-            else:
-                slots = getattr(self.aq_parent, 'right_slots', [])
-                if callable(slots):
-                    slots = slots()
-                self._v_right_slots = list(slots)
-            if pa == 'right':
-                self._v_right_slots.append('here/pcng_portlets/macros/pcng_collector_portlets')
-            self._v_right_slots = tuple(self._v_right_slots)
-            try: del self._v_left_slots
-            except: pass
-        return self._v_right_slots
+        slots_right = list(self.getCollector_portlets_right())
+        if 'Plone' in slots_right: 
+            slots_right.remove('Plone')
+            slots = getattr(self.aq_parent, 'right_slots', [])
+            if callable(slots): slots = slots()
+            slots = list(slots)
+        else:
+            slots = []
+        slots.extend(slots_right)
+        return slots
     right_slots = ComputedAttribute(right_slots, 1)
 
     def base_edit(self, RESPONSE=None):
