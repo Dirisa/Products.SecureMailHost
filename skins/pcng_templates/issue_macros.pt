@@ -183,48 +183,44 @@ function show_tickets() {
     <legend i18n:translate="legend_new_reference_to_issue">New reference to other issue</legend>
     <form method="post" action="add_reference" name="myform">
 
-      <div class="row">
-        <div class="label" i18n:translate="add_references_table_collector">
-          Collector
-        </div>
-        <div class="field">
+
+      <div class="left"> 
+        <span id="label" i18n:translate="add_references_table_collector"> Collector </span>
+        <div>
           <select name="reference.tracker:record:string">
             <option value="" />
-            <metal:block tal:repeat="tracker python:here.superValues(('PloneCollectorNG',))">
-              <option tal:attributes="value python: '/'.join(tracker.getPhysicalPath());
-                                      selected python: tracker.getId()==here.aq_parent.getId()"
-                      tal:content="string: ${tracker/getId} (${tracker/title})" />
-
-            </metal:block>
+            <option tal:repeat="tracker python:here.superValues(('PloneCollectorNG',))"
+                    tal:attributes="value python: '/'.join(tracker.getPhysicalPath());
+                                    selected python: tracker.getId()==here.aq_parent.getId()"
+                    tal:content="string: ${tracker/getId} (${tracker/title})" />
           </select>
         </div>
-      </div> <!-- End row -->
+      </div> 
 
-      <div class="row">
-        <div class="label required" i18n:translate="add_references_table_issue_number">Issue #</div>
-        <div class="field">
+      <div class="left">
+        <span id="label" i18n:translate="add_references_table_issue_number">Issue #</span>
+        <div>
           <input type="text" name="reference.ticketnumber:record:string"  value="" size="5" />
-          <input class="context" type="button"  onClick="javascript:show_tickets()" value="Select"
+          <input class="standalone" type="button"  onClick="javascript:show_tickets()" value="Select"
                  i18n:attributes="value" />
         </div>
-      </div> <!-- End row -->
+      </div> 
 
-      <div class="row">
-        <div class="label required" i18n:translate="add_references_table_comment">
-          Comment
-        </div>
-        <div class="field">
+      <div style="clear: both" >
+        <span class="label" i18n:translate="add_references_table_comment"> Comment </span>
+        <div>
           <textarea  name="reference.comment:record:string" cols="60" rows="5"></textarea>
         </div>
-      </div> <!-- End row -->
+      </div> 
 
-      <div class="row">
+      <div>
         <div class="field">
           <input type="submit" value="Submit" class="standalone" i18n:attributes="value">
         </div>
-      </div> <!-- End row -->
+      </div>  
+
     </form>
-  </fieldset> <!-- End group -->
+  </fieldset> 
 </div>  <!-- End macro: add_references_table -->
 
 
