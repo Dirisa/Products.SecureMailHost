@@ -40,15 +40,10 @@
           <td valign="top" tal:define="actions here/validActions">
             <input type="radio" name="action" value="comment" checked>Comment
             <metal:block tal:repeat="item python: (('accept', 'Accept'),
-                                                   ('accept_confidential', 'Accept confidental'),
-                                                   ('unrestrict_accepted', 'Accept unrestricted'),
                                                    ('assign', 'Assign'),
-                                                   ('assign_confidential', 'Assign confidential'),
                                                    ('resolve', 'Resolve'),
                                                    ('reject', 'Reject'),
-                                                   ('restrict_pending', 'Restrict'),
-                                                   ('restrict_accepted', 'Restrict'),
-                                                   ('unrestrict_pending', 'Unrestrict'),
+                                                   ('reaccept', 'Re-Accept'),
                                                    ('resign', 'Resign'),
                                                    ('defer', 'Defer'),
                                                   )

@@ -8,7 +8,7 @@
 
     <!-- defaults for status: Pending+Accepted -->    
     <metal:block tal:condition="python: request.has_key('status') == 0">
-      <span tal:define="dummy python: request.set('status', ['Pending', 'Accepted'])" />
+      <span tal:define="dummy python: request.set('status', ['pending', 'accepted'])" />
     </metal:block>   
 
 	<h1 tal:content="here/title_or_id" />

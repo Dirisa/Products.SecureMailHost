@@ -35,7 +35,7 @@ toQuery('assigned_to')
 
 # Default query
 if len(query) == 0:
-    query['status'] = ('Accepted', 'Pending')
+    query['status'] = ('accepted', 'pending')
 
 if debug:
     print query
