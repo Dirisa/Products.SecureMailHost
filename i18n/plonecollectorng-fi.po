@@ -1,0 +1,723 @@
+# Gettext Message File for PloneCollectorNG.
+# Heimo Laukkanen <huima@huima.net>, 2003
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.0\n"
+"POT-Creation-Date: 2003-11-21 00:00+0300\n"
+"PO-Revision-Date: 2003-12-13 00:00+3000\n"
+"Last-Translator: Heimo Laukkanen<huima@huima.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: fi\n"
+"Language-name: Finnish\n"
+"Preferred-encodings: utf-8 latin1\n"
+"X-Is-Fallback-For: \n"
+"Domain: plonecollectorng\n"
+
+msgid "changes_saved"
+msgstr "Muutokset tallennettu"
+
+msgid "reference_no_comment"
+msgstr "Viitteeseen pitää kirjoittaa kommentit"
+
+msgid "no_ticket"
+msgstr "Tikettiä #$ticketnum ei löydy"
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "label_solution"
+msgstr "Ratkaisu"
+
+msgid "label_description"
+msgstr "Kuvaus"
+
+msgid "label_topic"
+msgstr "Aihe"
+
+msgid "UserID" 
+msgstr "Käyttäjätunnus"
+
+msgid "Managers" 
+msgstr "Administrator"
+
+msgid "Email" 
+msgstr "EMail"
+
+msgid "Reporter" 
+msgstr "Raportoija"
+
+msgid "Supporter"
+msgstr "Tukija" 
+
+msgid "Authenticated"
+msgstr "Authentikoitunut" 
+
+
+msgid "unassigned"
+msgstr "Ei ole määrätty"
+
+msgid "Unassigned"
+msgstr "Ei ole määrätty"
+
+msgid "Assigned"
+msgstr "Määrätty"
+
+msgid "History"
+msgstr "Historia"
+
+msgid "View"
+msgstr "Katso"
+
+msgid "transcript_time"
+msgstr "Aika"
+
+msgid "transcript_user"
+msgstr "Käyttäjä"
+
+msgid "transcript_changes"
+msgstr "Muutokset"
+
+msgid "help_staff"
+msgstr "<b>Administraattori</b> vastaavat collectorin konfiguroinnista ja ylläpidosta<br><b>Tukija</b> työstää tehtyjö tikettejä<br><b>Testeri</b> kirjoittaa uusia tickettejä"
+
+msgid "legend_search_form"
+msgstr "Haku"
+
+msgid "edit_fieldsets"
+msgstr "Schemata"
+
+msgid "simpleview"
+msgstr "Yksinkertainen näkymä"
+
+msgid "fullview"
+msgstr "Koko näkymä"
+
+msgid "fullview_with_images"
+msgstr "Koko näkymä (kuvien kanssa)"
+
+msgid "status"
+msgstr "Tila"
+
+msgid "assigned_to"
+msgstr "Määrätty"
+
+msgid "uploads"
+msgstr "Liitetiedostot"
+
+msgid "transcript"
+msgstr "Tiketin tiedot"
+
+msgid "contact"
+msgstr "Yhteyshenkilö"
+
+msgid "issuedata"
+msgstr "Päivämäärä"
+
+msgid "progress"
+msgstr "Edistyminen"
+
+msgid "deadline"
+msgstr "Deadline"
+
+msgid "legend_references"
+msgstr "Viitteet muihin tiketteihin"
+
+msgid "references"
+msgstr "Viitteet"
+
+msgid "referenced_by"
+msgstr "Viite käyttäjältä"
+
+msgid "dependency_graph"
+msgstr "Riippuvuusgraafi"
+
+msgid "issue_followup"
+msgstr "Ticket Followup"
+
+msgid "assign_to"
+msgstr "Määrätty käyttäjälle"
+
+msgid "comment"
+msgstr "Kommentti"
+
+msgid "Save"
+msgstr "Tallenna"
+
+msgid "save"
+msgstr "Tallenna"
+
+msgid "Reset"
+msgstr "Tyhjennä"
+
+msgid "Accept"
+msgstr "Hyväksy"
+
+msgid "Resolve"
+msgstr "Ratkaise"
+
+msgid "Reject"
+msgstr "Hylkää"
+
+msgid "Resign"
+msgstr "Määrää uudelleen"
+
+msgid "Defer"
+msgstr "Lykkää"
+
+msgid "workflow_action_current_state"
+msgstr "Työvuon tila"
+
+
+msgid "action"
+msgstr "Toiminto"
+
+msgid "pending"
+msgstr "Odottaa"
+
+
+msgid "issue_artifacts_table_info_link"
+msgstr "Info"
+
+msgid "issue_artifacts_table_deletion_link"
+msgstr "Poista"
+
+msgid "legend_artifacts_upload"
+msgstr "Upload"
+
+msgid "add_artifacts_table_comment"
+msgstr "Kommentit"
+
+msgid "legend_new_reference_to_issue"
+msgstr "Viitteet tikettiin"
+
+msgid "add_references_table_collector"
+msgstr "Collector"
+
+msgid "add_references_table_issue_number"
+msgstr "Tiketti #"
+
+msgid "Select"
+msgstr "Valitse"
+
+msgid "add_references_table_comment"
+msgstr "Kommentit"
+
+msgid "collectordata"
+msgstr "Metadata"
+
+msgid "preferences"
+msgstr "Asetukset"
+
+msgid "Company"
+msgstr "Yritys"
+
+msgid "Position"
+msgstr "Asema"
+
+msgid "Address"
+msgstr "Osoite"
+
+msgid "City"
+msgstr "Kaupunki"
+
+msgid "Phone"
+msgstr "Puhelin"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "send_emails"
+msgstr "Emailien lähetys"
+
+msgid "send_attachments"
+msgstr "Lähetä liitetiedostot"
+
+msgid "position_searchform"
+msgstr "Hakulomake aseman mukaan"
+
+msgid "default_searchform"
+msgstr "Tavallinen hakulomake"
+
+msgid "default_issue_view"
+msgstr "Tavallinen tiketti-näkymä"
+
+msgid "hits_per_page"
+msgstr "Sivulatauksia"
+
+msgid " Save changes "
+msgstr "Tallenna muutokset"
+
+msgid " Reset "
+msgstr "Tyhjennä"
+
+msgid "My collectorpreferences"
+msgstr "Minun asetukset"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "Bottom"
+msgstr "Alas"
+
+msgid "Top"
+msgstr "Ylös"
+
+msgid "Simple search form"
+msgstr "Yksinkertainen haku"
+
+msgid "Advanced search form"
+msgstr "Monipuolisempi haku"
+
+msgid "Simple view"
+msgstr "Yksinkertainen näkymä"
+
+msgid "Full view"
+msgstr "Koko näkymä"
+
+msgid "Full view with images"
+msgstr "Koko näkymä kuvien kanssa"
+
+msgid "Maintainance"
+msgstr "Ylläpito"
+
+msgid "number_issues"
+msgstr "Tikettien määrä"
+
+msgid "reindex_all_issues"
+msgstr "Uudelleen indeksoi kaikki tiketit"
+
+msgid "update_schema_for_all_issues"
+msgstr "Päivitä tikettien schema"
+
+msgid "update_collector_schema"
+msgstr "Päivitä collectorin schema"
+
+msgid "recreate_collector_catalog"
+msgstr "Päivitä hakutietokanta"
+
+msgid "Browse issues"
+msgstr "Selaa tikettejä"
+
+msgid "Edit"
+msgstr "Editoi"
+
+msgid "Schema Editor"
+msgstr "Schema Editori"
+
+msgid "Notifications"
+msgstr "Muistutukset"
+
+msgid "jump_to_ticket"
+msgstr "Mene tikettiin"
+
+msgid " Jump "
+msgstr "Mene"
+
+msgid "heading_status"
+msgstr "Status"
+
+msgid "heading_requester"
+msgstr "Raportoija"
+
+msgid "heading_assigned"
+msgstr "Määrätty henkilölle"
+
+msgid "accepted"
+msgstr "Hyväksytty"
+
+msgid "created"
+msgstr "Luotu"
+
+msgid "defered"
+msgstr "Lykätty"
+
+msgid "rejected"
+msgstr "Hyvälly"
+
+msgid "resigned"
+msgstr "Uudelleen määrätty"
+
+msgid "resolved"
+msgstr "Ratkaistu"
+
+msgid "Issue"
+msgstr "Tiketti"
+
+msgid "Date"
+msgstr "Päivämäärä"
+
+msgid "Deadline"
+msgstr "Deadline"
+
+msgid "Submitter"
+msgstr "Lähettäjä"
+
+msgid "Progress"
+msgstr "Edistyminen"
+
+msgid "Classification"
+msgstr "Luokittelu"
+
+msgid "Title"
+msgstr "Otsikko"
+
+msgid "Topic"
+msgstr "Kategoria"
+
+msgid "Importance"
+msgstr "Tärkeys"
+
+msgid "Desc"
+msgstr "pienenvä"
+
+msgid "Asc"
+msgstr "kasvava"
+
+msgid "fulltextsearch"
+msgstr "Tekstihaku"
+
+msgid "followups"
+msgstr "Followups"
+
+msgid "importance"
+msgstr "Tärkeys"
+
+msgid "assigned"
+msgstr "määrätty henkilölle"
+
+msgid "submitted_by"
+msgstr "Lähettäjä"
+
+msgid "last_modified"
+msgstr "Viimeksi muokattu"
+
+msgid "days_ago"
+msgstr "Päivää sitten"
+
+msgid "issues_submitted_by_me"
+msgstr "Lähettämäni tiketit"
+
+msgid "issues_assigned_to_me"
+msgstr "Minulle määrätyt tiketit"
+
+msgid "Search"
+msgstr  "Hae"
+
+msgid "schematas"
+msgstr "Schematas"
+
+msgid "fields"
+msgstr "Kentät"
+
+msgid "maintainance"
+msgstr "Ylläpito"
+
+msgid "name"
+msgstr "Nimi"
+
+msgid "type"
+msgstr "Tyyppi"
+
+msgid "widget"
+msgstr "Widget"
+
+msgid "invisible"
+msgstr "Näkymättömissä"
+
+msgid "required"
+msgstr "Pakollinen"
+
+msgid "size_schema_editor"
+msgstr "Größe (benutzen Sie 'ZEILENxSPALTEN' für Textarea oder Line Widgets)"
+
+msgid "default"
+msgstr "Perusasetus"
+
+msgid "label"
+msgstr "Label"
+
+msgid "Add"
+msgstr "Lisää"
+
+msgid "field_definition"
+msgstr "Kentän määritys"
+
+msgid "Save changes"
+msgstr "Tallenna muutokset"
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "invalid_email_address" 
+msgstr "Toimimaton email-osoite"
+
+msgid "issues_updated" 
+msgstr "Tiketit on päivitetty"
+
+msgid "issues_reindexed" 
+msgstr "Tiketit on uudelleen indeksoitu"
+
+msgid "invalid_action" 
+msgstr "Tunnistamaton toiminto"
+
+msgid "followup_submitted" 
+msgstr "Followup lähetetty"
+
+msgid "reference_deleted"
+msgstr "Viite poistettu"
+
+msgid "no_tracker" 
+msgstr "Collectoria ei löydy: $tracker_url" 
+
+msgid "reference_stored" 
+msgstr "Viite tallennettu"
+
+msgid "unknown_format" 
+msgstr "tuntematon formaatti: $format"
+
+msgid "file_uploaded" 
+msgstr "Tiedosto tallennettu"
+
+msgid "nothing_for_upload" 
+msgstr "Ei löytynyt mitään tallennettavaa"
+
+msgid "upload_removed" 
+msgstr "Tiedosto poistettu"
+
+msgid "schema_exists" 
+msgstr "Schemata $schema on jo olemassa" 
+
+msgid "schema_added" 
+msgstr "Schema lisätty" 
+
+msgid "schema_deleted" 
+msgstr "Schema positettu" 
+
+msgid "schema_field_deleted" 
+msgstr "Kenttä poistettu"
+
+msgid "schema_field_added" 
+msgstr "Kenttä lisätty" 
+
+msgid "schema_unknown_field" 
+msgstr "Tuntematon kenttätyyppi: $field" 
+
+msgid "schema_unknown_widget" 
+msgstr "Tuntematon widget-tyyppi: $widget" 
+
+msgid "schema_moved_left" 
+msgstr "Schema siirretty vasemmalle" 
+
+msgid "schema_moved_right" 
+msgstr "Schema siirretty oikealle"
+
+msgid "schema_field_moved_up" 
+msgstr "Kenttä siirretty ylöspäin"
+
+msgid "schema_field_moved_down" 
+msgstr "Kenttä siirretty alaspäin" 
+
+msgid "schema_field_moved" 
+msgstr "Kenttä siirrettiin toiseen Schemaan" 
+
+msgid "email_already_registered" 
+msgstr "Email-osoite $email on jo rekisteröity"
+
+msgid "watchlist_added" 
+msgstr "Lisätty tarkkailulistalle"
+
+msgid "email_not_registered" 
+msgstr "Email-osoite $email ei ole rekisteröity" 
+
+msgid "watchlist_removed" 
+msgstr "Poistettu tarkkailulistalta"
+
+msgid "collector_notifications"
+msgstr "Muistutukset"
+
+msgid "Staff"
+msgstr "Henkilökunta"
+
+msgid "added"
+msgstr "lisätty"
+
+msgid "removed"
+msgstr "poistettu"
+
+msgid "open_issues"
+msgstr "Avoimet tiketit"
+
+msgid "total_issues"
+msgstr "Tikettejä yhteensä"
+
+msgid "collector_overview"
+msgstr "Bugtrackerin yleistiedot"
+
+msgid "issue_artifacts_table_no_uploads_available"
+msgstr "Ei yhtään liitetiedostoja"
+
+msgid "label_name"
+msgstr "Nimi"
+
+msgid "label_title"
+msgstr "Otsikko"
+
+msgid "label_classification"
+msgstr "Luokittelu"
+
+msgid "label_importance"
+msgstr "Tärkeys"
+
+msgid "label_deadline"
+msgstr "Deadline"
+
+msgid "label_hours_estimated"
+msgstr "Tuntia (arvio)"
+
+msgid "label_hours_needed"
+msgstr "Tuntia (tarvitaan)"
+
+msgid "label_percent_done"
+msgstr "Prosenttia valmiina"
+
+msgid "label_contact_name"
+msgstr "Nimi"
+
+msgid "label_contact_email"
+msgstr "Email"
+
+msgid "label_contact_company"
+msgstr "Yritys"
+
+msgid "label_contact_position"
+msgstr "Asema"
+
+msgid "label_contact_address"
+msgstr "Osoite"
+
+msgid "label_contact_city"
+msgstr "Kaupunki"
+
+msgid "label_contact_phone"
+msgstr "Puhelin"
+
+msgid "label_contact_fax"
+msgstr "Fax"
+
+msgid "label_limit_followups"
+msgstr "Rajoita followuppien määrää"
+
+msgid "label_hostname"
+msgstr "Hostname"
+
+msgid "label_participation_mode"
+msgstr "Berechtigung zur Teilnahme (Einstellen von Tickets)"
+
+msgid "label_view_mode"
+msgstr "Berechtigung zur Ansicht (Ansicht von Tickets)"
+
+msgid "label_deadline_tickets"
+msgstr "Deadline"
+
+msgid "label_collector_abbreviation"
+msgstr "Lyhenne"
+
+msgid "label_email_notification_policy"
+msgstr "Email-muistutus säännöt"
+
+msgid "label_email_issue_formatters"
+msgstr "Formatierer für Ticketbenachrichtigungen"
+
+msgid "label_email_address"
+msgstr "EMail osoite (viestien FROM: ja REPLY-TO: headereihin)"
+
+msgid "label_watchlist"
+msgstr "Tarkkailulista"
+
+msgid "E-Mail"
+msgstr "EMail"
+
+msgid "References and uploads"
+msgstr "Viitteet ja liitetiedostot"
+
+msgid "new_issue_created"
+msgstr "Uusi tiketti luotiin"
+
+msgid "notification_mode_disabled"
+msgstr "Muistutukset ei ole päällä"
+
+msgid "Pending"
+msgstr "Odottaa"
+
+msgid "Created"
+msgstr "Luotu"
+
+msgid "Defered"
+msgstr "Lykätty"
+
+msgid "Rejected"
+msgstr "Hylätyy"
+
+msgid "Accepted"
+msgstr "Hyväksytty"
+
+msgid "Resigned"
+msgstr "Uudelleen määrätty"
+
+msgid "Resolved"
+msgstr "Ratkaistu"
+
+msgid "sorting"
+msgstr "Lajittelu"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "topic"
+msgstr "Aihe"
+
+msgid "vocabulary"
+msgstr "Sanasto (Benutzen Sie Key|Value für Key-Value Paare oder 'method:METHODENNAME')"
+
+msgid "no_issues_found"
+msgstr "Ei öytynyt yhtään tikettejä"
+
+msgid "advanced_search"
+msgstr "Monipuolisempi haku"
+
+msgid "changed"
+msgstr "Muutettu"
+
+msgid "issue_number"
+msgstr "Tiketti nro. #$id"
+
+msgid "show_incomplete_issues"
+msgstr "Avoimia tikettejä"
+
+msgid "recreate_uids_imported_issues"
+msgstr "Luo Archetypes UIDt importoiduille tiketeille "
+
+msgid "Member preferences"
+msgstr "Jäsenten asetukset"
+
+msgid "saved_searches"
+msgstr "Tallennetut haut"
+
+msgid "Delete"
+msgstr "Poista"
+
+msgid "my_saved_searches"
+msgstr "Tallennetut haut"
+
+msgid "no_references"
+msgstr "Ei viitteitä"
+
+msgid "Submit"
+msgstr "Lähetä"
