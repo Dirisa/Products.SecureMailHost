@@ -2,7 +2,7 @@
       xml:lang="en"
       lang="en"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plonehelpcenter">
+      i18n:domain="plonesoftwarecenter">
 
 <head>
     <metal:css fill-slot="css_slot">
