@@ -131,8 +131,7 @@
     <input type="submit" value=" Jump " i18n:attributes="value" />
   </form>
         
-  <form action="pcng_view" method="post"  name="search_form"
-        tal:define="uniquevals python: here.pcng_catalog.uniqueValuesFor">
+  <form action="pcng_view" method="post"  name="search_form">
           
     <table>
             
@@ -160,7 +159,7 @@
           <select name="Creator:list:ignore_empty"      
                   multiple 
                   size="5"
-                  tal:define="values python: sequence.sort(uniquevals('Creator'))">
+                  tal:define="values python: here.pcng_uniquevalsFor('Creator')">
               
             <option tal:repeat="creator values"
                     tal:attributes="value creator;
@@ -173,7 +172,7 @@
           <select name="assigned_to:list:ignore_empty"      
                   multiple 
                   size="5"
-                  tal:define="values python: sequence.sort(uniquevals('assigned_to'))">
+                  tal:define="values python: here.pcng_uniquevalsFor('assigned_to')" >
               
             <option tal:repeat="assignee values"
                     tal:attributes="value assignee;
