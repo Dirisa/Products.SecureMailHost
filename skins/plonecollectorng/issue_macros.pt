@@ -1,0 +1,141 @@
+
+<!-- Issue related macros -->
+
+<div metal:define-macro="issue_references">
+  <div class="group"
+       tal:define="references here/getReferences">
+    <span class="legend" i18n:translate="legend_references">References</span>
+
+    <ul>
+      <li tal:repeat="ref references">
+        <a tal:attributes="href python: getattr(here,ref.getTracker()).absolute_url() + '/' + ref.getTicketNumber()" tal:content="string: ${ref/getTracker} #${ref/getTicketNumber} "/>
+        (<span tal:replace="ref/getComment"/>)
+      </li>
+    </ul>
+
+    <span i18n:translate="issue_references_table_no_references"
+          tal:condition="not: references">No references available</span>
+
+  </div> <!-- End group -->
+</div>  <!-- End macro: issue_references_table -->
+
+
+<div metal:define-macro="issue_uploads">
+  <div class="group">
+    <span class="legend" i18n:translate="legend_uploads">Uploads</span>
+
+        <div class="row" tal:repeat="item here/objectValues">
+          <div class="label">
+            <span tal:define="icon item/getIcon|item/icon|nothing">
+
+              <span tal:condition="icon">
+                <a href="" tal:attributes="href item/absolute_url">
+                  <img src="" alt="" border="0"
+                       tal:attributes="src python: here.portal_url() + '/' + icon;
+                                       alt item/Type|nothing" />
+                </a>
+              </span>
+              <a href="ITEM URL"
+                 tal:attributes="href item/absolute_url"
+                 tal:content="item/id">ITEM ID</a>
+
+              <span tal:replace="python: '(%s, %s)' % (here.toPortalTime(item.created(),long_format=1), item.Creator())" />
+              <a i18n:translate="issue_artifacts_table_info_link"
+                 tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+            </span>
+             <span tal:replace="item/description"> DESCRIPTION</span>
+          </div>
+
+        </div> <!-- End row -->
+
+        <span i18n:translate="issue_artifacts_table_no_uploads_available"
+          tal:condition="not: here/objectValues">No uploads available</span>
+
+  </div> <!-- End group -->
+</div> <!-- End macro: issue_artifacts_table -->
+
+
+
+<div metal:define-macro="add_uploads">
+  <div class="group">
+    <form method="post" action="upload_file" enctype="multipart/form-data">
+      <span class="legend" i18n:translate="legend_artifacts_upload">Upload files or images</span>
+
+      <div class="row">
+          <div class="label">&nbsp;</div>
+          <div class="field"><input type="file" name="uploaded_file" size="60"/></div>
+      </div> <!-- End row -->
+
+       <div class="row">
+        <div class="label" i18n:translate="add_artifacts_table_comment">Comment</div>
+        <div class="field">
+          <textarea name="comment" cols="80" rows="5"></textarea>
+        </div>
+       </div> <!-- End row -->
+
+       <div class="row">
+        <div class="field">
+          <input type="submit" value=" Upload " >
+        </div>
+       </div> <!-- End row -->
+    </form>
+  </div> <!-- End group -->
+
+</div>  <!-- End macro: add_artifacts_excerpt -->
+
+
+<div metal:define-macro="add_references">
+  <div class="group">
+    <span class="legend" i18n:translate="legend_new_reference_to_issue">New reference to other issue</span>
+    <form method="post" action="add_reference">
+
+      <div class="row">
+        <div class="label" i18n:translate="add_references_table_collector">
+          Collector
+        </div>
+        <div class="field">
+          <select name="reference.tracker:record:string">
+            <option value="" />
+            <metal:block tal:repeat="tracker python:here.superValues(('Collector',))">
+              <option tal:attributes="value tracker/getId;
+                                      selected python: tracker.getId()==here.aq_parent.getId()"
+                      tal:content="string: ${tracker/getId} (${tracker/title})" />
+
+            </metal:block>
+          </select>
+        </div>
+      </div> <!-- End row -->
+
+      <div class="row">
+        <div class="label" i18n:translate="add_references_table_issue_number">Issue #</div>
+        <div class="field">
+          <input type="text" name="reference.ticketnumber:record:string"  value="" size="5" />
+        </div>
+      </div> <!-- End row -->
+
+      <div class="row">
+        <div class="label">&nbsp;</div>
+        <div class="field">
+          <input class="context" type="button"  onClick="javascript:show_tickets()" value="Select"
+                 i18n:attributes="value" />
+        </div>
+      </div> <!-- End row -->
+
+      <div class="row">
+        <div class="label" i18n:translate="add_references_table_comment">
+          Comment
+        </div>
+        <div class="field">
+          <textarea  name="reference.comment:record:string" cols="60" rows="5"></textarea>
+        </div>
+      </div> <!-- End row -->
+
+      <div class="row">
+        <div class="field">
+          <input type="submit" value=" Submit " >
+        </div>
+      </div> <!-- End row -->
+    </form>
+  </div> <!-- End group -->
+</div>  <!-- End macro: add_references_table -->
+
