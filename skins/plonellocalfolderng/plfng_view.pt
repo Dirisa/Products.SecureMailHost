@@ -70,7 +70,6 @@
                 <metal:block define-macro="folder_listing"
                              tal:define="locked portal_object/lock_icon.gif;
                                          pencil_icon portal_object/edit.gif;
-                                         use_folder_contents site_properties/use_folder_contents;
                                          filterOut here/getNotAddableTypes;
                                          filterValues decodedFilter/keys | nothing;
                                          types python:here.sortObjects(here.allowedContentTypes());
