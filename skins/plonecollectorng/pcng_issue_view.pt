@@ -25,16 +25,38 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
-      <a tal:condition="python: mode in ('full', 'fullimages')"  href="pcng_issue_view?mode=simple">
-        <span i18n:translate="simpleview">Simple view</span> &bull;
-      </a> 
-      <a tal:condition="python: mode in ('simple', 'fullimages')" href="pcng_issue_view?mode=full">
-        <span i18n:translate="fullview">Full view </span> &bull;
-      </a> 
-      <a tal:condition="python: mode in ('simple', 'full')" href="pcng_issue_view?mode=fullimages">
-        <span i18n:translate="fullview_with_images">Full view with images</span> &bull;
-      </a> 
-      <a href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
+      <fieldset style="border: 0">
+
+        <div style="float: left; width: 50%; vertical-align: top"
+             tal:define="schematas here/Schemata;
+                         schemata_names here/SchemataNames;
+                         default_fieldset python:  schemata_names[0];
+                         fieldset request/fieldset|options/fieldset|default_fieldset;
+                         fieldsets python:[key for key in schemata_names if key != 'metadata' and key != 'default'];" >
+
+          <metal:block tal:condition="python: member.has_permission('ManagePortalContent', here)" >
+            <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
+            <tal:block repeat="set fieldsets">
+              <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_base_edit?fieldset=${set}">
+                 <span tal:content="set" /></a> <span tal:condition="not: repeat/set/end">&bull;</span>
+            </tal:block>
+          </metal:block>
+        </div>
+
+        <div style="float: right; width: 50%; vertical-align: top; text-align: right">
+          <a tal:condition="python: mode in ('full', 'fullimages')"  href="pcng_issue_view?mode=simple">
+            <span i18n:translate="simpleview">Simple view</span> &bull;
+          </a> 
+          <a tal:condition="python: mode in ('simple', 'fullimages')" href="pcng_issue_view?mode=full">
+            <span i18n:translate="fullview">Full view </span> &bull;
+          </a> 
+          <a tal:condition="python: mode in ('simple', 'full')" href="pcng_issue_view?mode=fullimages">
+            <span i18n:translate="fullview_with_images">Full view with images</span> &bull;
+          </a> 
+          <a href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
+        </div>
+
+      </fieldset>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
         <legend><a class="schemata_legend"  
