@@ -21,6 +21,10 @@
                              tid template/id;
                              tabindex python:Iterator()">
                 <div class="portletContent odd">
+                <div tal:condition="python:form.isTransformable('form_pre')"
+                     tal:content="structure python:form.getForm_pre()">
+                     Prepended text.
+                </div>
                 <form tal:define="groups form/get_groups"
                       tal:attributes="action pfm/id;
                                       id form/name;
@@ -49,7 +53,7 @@
                                 <span tal:condition="field/is_required"
                                       class="fieldRequired"
                                       title="Required"
-				      i18n:domain="plone"
+                                      i18n:domain="plone"
                                       i18n:attributes="title"
                                       i18n:translate="label_required">(Required)</span>
                     
@@ -58,8 +62,14 @@
                                      tal:content="desc"
                                      i18n:translate="">Help</div>
                                                         
-                                <div tal:define="initvalue python:test(field.id in ['email','fullname'],member.getProperty(field.id, ''),''); 
-				                 input python:field.render(REQUEST=request, value = initvalue )"
+                                <div tal:condition="python: field.id in ['email',  'fullname']"
+                                     tal:define="initvalue python:test(field.id in ['email',  'fullname'],member.getProperty(field.id, ''),'');
+                                                 input python:field.render(REQUEST=request, value = initvalue )"
+                                     tal:replace="structure input"
+                                     tal:attributes="tabindex tabindex/next;">
+                                </div>
+                                <div tal:condition="python: not field.id in ['email',  'fullname']"
+                                     tal:define="input python:field.render(REQUEST=request)"
                                      tal:replace="structure input"
                                      tal:attributes="tabindex tabindex/next;">
                                 </div>
@@ -90,6 +100,10 @@
                     <input type="hidden" name="uf_formid" tal:attributes="value form/id" />
                 
                 </form>
+                <div tal:condition="python:form.isTransformable('form_post')"
+                     tal:content="structure python:form.getForm_post()">
+                     Appended text
+                </div>
                </div>
             </div>
         </div>
