@@ -36,7 +36,6 @@ schema = BaseSchema +  Schema((
                 validators=("isValidExistingFolderPath",),
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=1,
-                default=INSTANCE_HOME,
                 widget=StringWidget(label='Local directory name')
                 ),
     BooleanField ('require_MD5_with_upload',
@@ -93,6 +92,20 @@ schema = BaseSchema +  Schema((
                         description='This field controls whether or not the displayed title contains the full portal path or not.',
                         ),
                 ),
+    BooleanField ('fileBackup_enabled',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default=0,
+                widget=BooleanWidget(
+                        label='Enable file backup on upload overwrite?',
+                        description='Enable this field to archive files (to the backup-folder path) that will be overwritten by uploaded files.',
+                        ),
+                ),
+    StringField('backup_folder',
+                validators=("isValidExistingFolderPath",),
+                write_permission=CMFCorePermissions.ManagePortal,
+                required=0,
+                widget=StringWidget(label='Local backup directory name')
+                ),            
     ))
 
 
@@ -267,7 +280,7 @@ class PloneLocalFolderNG(BaseContent):
         return metadataText
     
     
-    security.declareProtected(ManagePortal, 'setFileMetadata')
+    security.declareProtected(ModifyPortalContent, 'setFileMetadata')
     def setFileMetadata(self, REQUEST, section, option, newvalue):
         """ set the metadata for the file """
         result = 0
@@ -495,7 +508,10 @@ class PloneLocalFolderNG(BaseContent):
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
         destpath = os.path.join(self.folder, rel_dir)
-        
+        if self.backup_folder:
+            backupdestpath = os.path.join(self.backup_folder, rel_dir)
+        else:
+            backupdestpath = None
         if not upload:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=no file was uploaded!')
             return 0        
@@ -535,28 +551,77 @@ class PloneLocalFolderNG(BaseContent):
                  return 0
         
         filename = os.path.join(destpath, os.path.basename(upload.filename))
-        open(filename, 'wb').write(upload.read())
-        
+        tmpfile = filename + '.plfngtmp'
+        f = open(tmpfile, 'wb')
+        f.write(upload.read())
+        f.close()
         serverMD5 = None
         
-        #set DIAGNOSTICS (md5) metadata
+        # calculate the MD5 for the tmpfile 
         if self.generate_MD5_after_upload:
-            serverMD5 = generate_md5(filename)
-            setMetadata(filename, section="DIAGNOSTICS", option="md5", value=serverMD5)
-        
+            serverMD5 = generate_md5(tmpfile)
+   
         # reject if client-provided MD5 for uploaded file does not match server-generated MD5
         if self.require_MD5_with_upload:
             if not serverMD5:
-               serverMD5 = generate_md5(filename)
-               setMetadata(filename, section="DIAGNOSTICS", option="md5", value=serverMD5)
+               serverMD5 = generate_md5(tmpfile)
             if clientMD5 != serverMD5:
-               os.remove(filename)
-               os.remove(filename+'.metadata')
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file()::MD5 CHECK FAILED...DELETED: %s + associated .metadata file" % filename )
+               os.remove(tmpfile)
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upload_file()::MD5 CHECK FAILED...DELETED: %s" % tmpfile )
                REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file failed MD5 integrity test and was deleted!')
                return 0
+
+
+        if not os.path.exists(filename):    
+            newRevisionNumber = 1 
         
-        #set SOURCE metadata
+        if os.path.exists(filename):    
+            # get revision of existing file (or 1 if revision metadata missing)
+            oldRevisionNumberText = getMetadataElement(filename, section="GENERAL", option="revision")
+            if oldRevisionNumberText:
+                oldRevisionNumber = int(oldRevisionNumberText)
+            else:
+                oldRevisionNumber = 1
+                
+            
+            newRevisionNumber = oldRevisionNumber + 1
+            
+            # backup existing file if file backup is enabled & backup_folder path is set  
+            if self.fileBackup_enabled and self.backup_folder:
+                
+                if not oldRevisionNumberText:
+                    setMetadata(filename, section="GENERAL", option="revision", value=oldRevisionNumber)
+                
+                # move existing file to backup location renamed with trailing rev.#
+                backupFileSuffix = '[' + str(oldRevisionNumber) + ']'
+                backupfilename = os.path.join(backupdestpath, os.path.basename(upload.filename)) + backupFileSuffix
+                shutil.move(filename, backupfilename)
+
+        # rename .plfngtmp file with filename provided by uploader
+        fixedSrcFileName = fixDOSPathName(tmpfile)
+        fixedDstFileName = fixDOSPathName(filename)
+        if os.path.exists(filename): os.remove(filename)
+        os.rename(fixedSrcFileName, fixedDstFileName)
+            
+        # ------------------------- apply metadata ---------------------------------
+        # GENERAL:
+        #	comments - comments on the file
+        #   source   - userId of the source/uploader/provider
+        #   revision - the PLFNG centric revision # of this file
+        # DIAGNOSTICS:
+        #   md5      - md5 checksum generated by the server for the file
+        # ARCHIVEINFO:
+        #   numUnpackedFiles   - # files that the packed file contains
+        #   sizezUnpackedFiles - total # bytes for all of the unpacked files 
+        # CHANGELOG:
+        #   history  - (tbd)
+        # -------------------------------------------------------------------------
+        
+        # GENERAL: 'comments' option
+        if comment:
+            setMetadata(filename, section="GENERAL", option="comment", value=comment)
+
+        # GENERAL: 'source' option
         portal = getToolByName(self, 'portal_url').getPortalObject()
         portal_membership = getToolByName(portal, 'portal_membership')
         if portal_membership.isAnonymousUser():
@@ -565,10 +630,12 @@ class PloneLocalFolderNG(BaseContent):
             creator = portal_membership.getAuthenticatedMember().getId()
         setMetadata(filename, section="GENERAL", option="source", value=creator)
         
-        # set COMMENT metadata
-        if comment:
-            #open(filename + '.metadata', 'wb').write(comment)
-            setMetadata(filename, section="GENERAL", option="comment", value=comment)
+        # GENERAL: 'revision' option
+        setMetadata(filename, section="GENERAL", option="revision", value=newRevisionNumber)
+        
+        # DIAGNOSTICS: 'md5' option
+        if serverMD5:
+            setMetadata(filename, section="DIAGNOSTICS", option="md5", value=serverMD5)
         
         # if .zip file, set ARCHIVEINFO metadata
         if self.mimetypes_registry.classify(data=None, filename=upload.filename) == 'application/zip':
