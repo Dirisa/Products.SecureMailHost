@@ -13,7 +13,7 @@ Installation:
     See INSTALL.txt
 
     Attention: Archetypes 1.3 (CVS HEAD) IS MANDATORY. 
-               Archetypes 1.2.1 is *NOT SUPPORTED*
+               Archetypes 1.2.X is *NOT SUPPORTED*
 
 
 Migration:
