@@ -18,7 +18,7 @@
           <th i18n:translate="UserID">User ID</th>
           <th i18n:translate="Name">Name</th>
           <th i18n:translate="Email">Email</th>
-          <th i18n:translate="Managers">Collector Administrator</th>
+          <th i18n:translate="Managers">Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
         </tr>
