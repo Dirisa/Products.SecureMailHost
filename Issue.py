@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.7 2003/09/09 12:00:41 ajung Exp $
+$Id: Issue.py,v 1.8 2003/09/09 12:21:07 ajung Exp $
 """
 import sys
 
@@ -14,13 +14,12 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import BaseFolder, registerType
 
-from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
+from Transcript import Transcript, TranscriptEntry
 from References import Reference, ReferencesManager
 from WatchList import WatchList
 import util
-
 
 class Issue(BaseFolder, WatchList):
     """ PloneCollectorNG """

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.19 2003/09/09 11:59:30 ajung Exp $
+$Id: Collector.py,v 1.20 2003/09/09 12:21:06 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -227,15 +227,12 @@ class Collector(BaseFolder, SchemaEditor):
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
-        """ return a of emails addresses that correspond to
-            the given state.
-        """
+        """ return a of emails addresses that correspond to the given state.  """
         return self._notification_emails.get(state, [])
 
     security.declareProtected(ManageCollector, 'issue_states')
     def issue_states(self):
         """ return a list of all related issue workflow states """
-
         states = getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
         states.sort()
         return states
@@ -273,12 +270,9 @@ class Collector(BaseFolder, SchemaEditor):
     security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
         """ reindex all issues """
-
         for issue in self.objectValues('Issue'):
             issue.reindexObject()
-
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
-
 
 registerType(Collector)
 
