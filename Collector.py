@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.222 2004/10/10 14:26:09 ajung Exp $
+$Id: Collector.py,v 1.223 2004/10/10 14:58:34 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -22,7 +22,7 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
 from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
-from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow, CollectorTool
+from config import CollectorCatalog, CollectorWorkflow, CollectorTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import UNDELETEABLE_FIELDS, SCHEMA_ID
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
@@ -428,18 +428,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             return self.pcng_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
 
     base_view = view
-
-    ######################################################################
-    # Searchform editor
-    ######################################################################
-
-    security.declareProtected(View, 'getIndexes')
-    def getIndexes(self):
-        """ return a sequence of tuples (indexId, indexType)"""
-
-        return [ (id, idx.meta_type)
-                 for id, idx in getToolByName(self, CollectorCatalog)._catalog.indexes.items()
-                 if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
 
     ######################################################################
     # Topic-user mapping

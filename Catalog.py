@@ -5,15 +5,17 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Catalog.py,v 1.1 2004/10/02 10:12:09 ajung Exp $
+$Id: Catalog.py,v 1.2 2004/10/10 14:58:34 ajung Exp $
 """
 
 
 from Globals import InitializeClass 
+from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from Products.CMFCore.CMFCorePermissions import *
 
-from config import SCHEMA_ID, CollectorCatalog
+from config import SCHEMA_ID, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES 
+
 
 try: import Products.TextIndexNG2; txng_version = 2
 except ImportError:
@@ -27,6 +29,7 @@ class PloneCollectorNGCatalog(CatalogTool):
     id = CollectorCatalog
     meta_type = 'PloneCollectorNG Catalog'
     portal_type = 'PloneCollectorNG Catalog'
+    security = ClassSecurityInfo()
 
     def manage_afterAdd(self, container, item):
         """ recreate catalog """
@@ -104,5 +107,18 @@ class PloneCollectorNGCatalog(CatalogTool):
         return self._catalog.searchResults(*(REQUEST,), **kw)
 
     __call__ = searchResults
+
+
+    security.declareProtected(View, 'getIndexes')
+    def getIndexes(self):
+        """ return a sequence of tuples (indexId, indexType)"""
+        print [ (id, idx.meta_type)
+                 for id, idx in self._catalog.indexes.items()
+                 if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
+
+        return [ (id, idx.meta_type)
+                 for id, idx in self._catalog.indexes.items()
+                 if not id in SEARCHFORM_IGNOREABLE_INDEXES ]
+
 
 InitializeClass(PloneCollectorNGCatalog)

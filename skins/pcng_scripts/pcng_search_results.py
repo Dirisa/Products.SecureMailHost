@@ -29,7 +29,7 @@ def query_sort(a, b):
 # here starts the show
 
 toQuery('SearchableText')
-for idx_id, idx_type in context.getIndexes():
+for idx_id, idx_type in context.pcng_catalog.getIndexes():
     toQuery(idx_id)
 
 # Datefields 

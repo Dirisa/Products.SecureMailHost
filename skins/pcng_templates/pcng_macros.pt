@@ -178,7 +178,7 @@
     <input type="hidden" name="advanced_search" value="1">
 
     <div id="pcng_searchform">
-        <div tal:repeat="item here/getIndexes" style="float: left; margin-right: 5pt">
+        <div tal:repeat="item here/pcng_catalog/getIndexes" style="float: left; margin-right: 5pt">
             <span id="label" i18n:translate="" tal:content="python: item[0]" />
             <div>
               <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')"
