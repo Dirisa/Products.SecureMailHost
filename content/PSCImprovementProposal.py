@@ -1,5 +1,5 @@
 """
-$Id: PSCImprovementProposal.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: PSCImprovementProposal.py,v 1.2 2005/03/05 02:16:43 optilude Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -43,9 +43,9 @@ class PSCImprovementProposal(OrderedBaseFolder):
          )
 
 
-    security.declareProtected (CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                                 'getProposalTypesVocab')
-    def getProposalTypesVocab (self):
+    def getProposalTypesVocab(self):
         """Get the allowed proposal types"""
         
         list = DisplayList ()
@@ -57,5 +57,14 @@ class PSCImprovementProposal(OrderedBaseFolder):
             list.add (type, type)
         
         return list
-
+        
+        
+    security.declareProtected(CMFCorePermissions.View, 'Title')
+    def Title(self):
+        """Return the title as "#${id}: ${title}" - the id is the proposal
+        number, and we want it to be associated with the title when it's
+        displayed.
+        """
+        return "#%s: %s" % (self.getId(), self.getField('title').get(self),)
+        
 registerType(PSCImprovementProposal, PROJECTNAME)
