@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.60 2004/06/18 06:22:13 ajung Exp $
+$Id: SchemaEditor.py,v 1.61 2004/07/05 07:12:40 ajung Exp $
 """
 
 import re
@@ -199,6 +199,8 @@ class SchemaEditor:
         elif FD.widget == 'Integer':     widget = IntegerWidget()
         elif FD.widget == 'Decimal':     widget = DecimalWidget()
         elif FD.widget == 'Reference':   widget = ReferenceWidget()
+        elif FD.widget == 'Picklist':    widget = PicklistWidget()
+        elif FD.widget == 'InAndOut':    widget = InAndOutWidget()
         else: raise ValueError(self.Translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
         if FD.has_key('widgetsize'):
@@ -221,7 +223,8 @@ class SchemaEditor:
         D['widget'] = widget
 
         # build DisplayList instance for SelectionWidgets
-        if FD.widget in ('Radio', 'Select', 'MultiSelect'):
+        if FD.widget in ('Radio', 'Select', 'MultiSelect', 'Flex', 'Picklist',
+                         'InAndOut'):
             vocab = FD.get('vocabulary', [])
 
             # The vocabulary can either be a list of string of 'values'

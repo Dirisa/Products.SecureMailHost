@@ -60,6 +60,12 @@
         <option value="Epoz" 
                 tal:content="string:Epoz"
                 tal:attributes="selected python: widget_name=='EpozWidget' "/>
+        <option value="Picklist"
+                tal:content="string:Picklist MultiSelect"
+                tal:attributes="selected python: widget_name=='PicklistWidget' "/>
+        <option value="InAndOut"
+                tal:content="string:InAndOut MultiSelect"
+                tal:attributes="selected python: widget_name=='InAndOutWidget' "/>
 
         <tal:comment tal:replace="nothing">
             <option value="Image" 

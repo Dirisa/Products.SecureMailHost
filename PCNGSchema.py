@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.14 2004/06/18 06:22:13 ajung Exp $
+$Id: PCNGSchema.py,v 1.15 2004/07/05 07:12:40 ajung Exp $
 """
 
 from types import FileType
@@ -311,7 +311,10 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                     if size == 0:
                         value = None
 
-                if not value:
+                vocab = field.Vocabulary(instance)
+
+                if not value or (vocab and isinstance(value, type(1)) and
+                                 not vocab.getKeysFromIndexes(value)):
                     errors[name] =  translate(
                         'archetypes', 'error_required',
                         {'name': label}, instance,
@@ -328,7 +331,8 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                     # coerce value into a list called values
                     values = value
                     if isinstance(value, type('')) or \
-                           isinstance(value, type(u'')):
+                           isinstance(value, type(u'')) or\
+                           isinstance(value, type(1)):
                         values = [value]
                     elif not (isinstance(value, type((1,))) or \
                               isinstance(value, type([]))):
@@ -336,7 +340,8 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                     vocab = field.Vocabulary(instance)
                     # filter empty
                     values = [instance.unicodeEncode(v)
-                              for v in values if v.strip()]
+                              for v in values if isinstance(value, type(1)) or
+                                                  v.strip()]
                     # extract valid values from vocabulary
                     valids = []
                     for v in vocab:
@@ -348,6 +353,14 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
                     # check field values
                     for val in values:
                         error = 1
+                        if isinstance(value, type(1)):
+                            try:
+                                vocab[value-1]
+                            except IndexError:
+                                pass
+                            else:
+                                error = 0
+                                break
                         for v in valids:
                             if val == v:
                                 error = 0

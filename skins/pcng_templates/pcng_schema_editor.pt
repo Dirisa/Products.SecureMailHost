@@ -62,7 +62,7 @@
               </div>
               <div class="clear"> </div>
 
-              <div tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget')">
+              <div tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget', 'PicklistWidget', 'InAndOutWidget')">
                 <span class="label" i18n:translate="vocabulary">
                   Vocabulary (Use "key|value" for passing key-value pairs 
                   or 'method:&lt;methodname&gt;')
@@ -70,7 +70,7 @@
                 <div> 
                   <textarea cols="60" rows="6"
                          name="fielddata.vocabulary:record:lines"
-                         tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget')"
+                         tal:condition="python: widget_name in ('MultiSelectionWidget', 'SelectionWidget', 'PicklistWidget', 'InAndOutWidget')"
                          tal:content="python: here.atse_formatVocabulary(field)"></textarea>
                 </div>
               </div>
