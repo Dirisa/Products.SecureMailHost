@@ -18,7 +18,7 @@
       <div>
         <ul>
           <li><a href="pcng_report_by_user">
-              <span i18n:translate="report_by_user">Issues report by user</span>
+              <span i18n:translate="open_issues_grouped_by_user">Open issues grouped by user </span>
              </a>
         </ul>
       </div>

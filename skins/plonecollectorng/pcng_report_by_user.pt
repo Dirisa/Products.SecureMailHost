@@ -11,15 +11,21 @@
 
     <div metal:fill-slot="main">
 
-      <metal:block tal:define="action string: Open issues per assignee">
+      <metal:block tal:define="action string: Open issues grouped by user">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
       <dl tal:repeat="user python: here.getTrackerUsers(staff_only=1)" >
-        <dt tal:content="string: ${user/fullname} (${user/username})" />
+        <dt>
+          <a tal:attributes="href string:pcng_view?view=advanced_search=1&status:list=pending&status:list=accepted&assigned_to=${user/username}">
+            <span tal:content="string: ${user/fullname} (${user/username})" />
+          </a>
+        </dt>
         <dd>
           <ul>
-            <li tal:repeat="row python: here.pcng_catalog(assigned_to={'query' : [user['username']]}, sort_on='getId')">
+            <li tal:repeat="row python: here.pcng_catalog(assigned_to={'query' : [user['username']]}, 
+                                                          status={'query' : ('pending', 'accepted')},
+                                                          sort_on='getId')">
               <a tal:attributes="href row/getURL" tal:content="string: ${row/getId}: ${row/Title}" />
                 
             </li>
