@@ -806,3 +806,6 @@ msgstr "Bugtracker $id"
 
 msgid "date_on"
 msgstr "am"
+
+msgid "no_access"
+msgstr "Kein Zugriff"
