@@ -12,6 +12,7 @@ registerDirectory(SKINS_DIR, GLOBALS)
 def initialize(context):
     ##Import Types here to register them
     import Collector
+    import Issue
 
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),
