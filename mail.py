@@ -30,7 +30,7 @@ class Mail:
         self.mto = mto
         # message must be email.Message.Message based
         assert(isinstance(message, email.Message.Message))
-        # Add some import headers
+        # Add some important headers
         if not message.has_key('Date'):
             message['Date'] = DateTime().rfc822()
         if not message.has_key('X-Mailer'):

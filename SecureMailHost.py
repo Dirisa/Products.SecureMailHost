@@ -15,7 +15,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.6 2004/05/17 12:00:28 tiran Exp $
+$Id: SecureMailHost.py,v 1.7 2004/05/17 13:30:39 tiran Exp $
 """
 
 from config import BAD_HEADERS
@@ -186,10 +186,7 @@ class SecureMailBase(MailBase):
         self.setHeaderOf(msg, **kwargs)
 
         # finally send email
-        if debug:
-            return (mfrom, mto, msg)
-        else:
-            self._send(mfrom, mto, msg)
+        return self._send(mfrom, mto, msg, debug=debug)
 
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
         """Set the headers of the email.Message based instance
@@ -204,23 +201,29 @@ class SecureMailBase(MailBase):
         return msg
 
     security.declarePrivate( '_send' )
-    def __SYNC_send( self, mfrom, mto, messageText, debug = False):
+    def __SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
         mail = Mail(mfrom, mto, messageText,
                     smtp_host=self.smtp_host, smtp_port=self.smtp_port,
                     userid=self._smtp_userid, password=self._smtp_pass
                    )
-        mail.send()
+        if debug:
+            return mail
+        else:
+            mail.send()
 
-    def __ASYNC_send( self, mfrom, mto, messageText, debug = False):
+    def __ASYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
         mail = Mail(mfrom, mto, messageText,
                     smtp_host=self.smtp_host, smtp_port=self.smtp_port,
                     userid=self._smtp_userid, password=self._smtp_pass
                    )
-        mailQueue.queue(mail)
+        if debug:
+            return mail
+        else:
+            mailQueue.queue(mail)
 
     _send = __ASYNC_send
 

@@ -9,6 +9,9 @@ if __name__ == '__main__':
 from common import *
 from DateTime import DateTime
 from email.MIMEText import MIMEText
+import email.Message
+from Products.SecureMailHost import mail
+
 
 buergschaft_latin1_in = open('in/buergschaft.txt', 'rb').read()
 buergschaft_utf8_in = unicode(buergschaft_latin1_in, 'latin-1').encode('utf-8')
@@ -35,7 +38,7 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
     mto     = 'to@example.org'
     mcc     = None
     mbcc    = None
-    addHeaders = {}
+    addHeaders = {'Message-Id' : '<1>' }
 
     def afterSetUp(self):
         self.mailhost = SecureMailBase('securemailhost', '')
@@ -51,10 +54,15 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
                       subtype=self.subtype, charset=self.charset,
                       debug=True,
                       **self.addHeaders)
-        mfrom, mto, msg = result
-        msgstr = msg.as_string()
+
+        self.failUnless(isinstance(result, mail.Mail), 'Result is not a mail.Mail instance')
+
+        mfrom, mto, msg = result.mfrom, result.mto, result.message
         self.failUnlessEqual(self.mto, mto)
         self.failUnlessEqual(self.mfrom, mfrom)
+        self.failUnless(isinstance(msg, email.Message.Message), 'message is not a email.Message.Message instance')
+
+        msgstr = msg.as_string()
         self.failUnlessEqual(msgstr, self.out)
 
 tests = []

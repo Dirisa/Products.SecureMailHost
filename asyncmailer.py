@@ -140,11 +140,13 @@ class MailerThread(threading.Thread):
         """Main runner
         """
         # XXX
-        # wrapped because of some strange problems with threading and zope
-        #try:
-        self.run2()
-        #except:
-        #    pass
+        # Wrapped because of some strange problems with threading and zope
+        # After SIGTERM or SIGINT the thread can terminated without throwing
+        # a nasty error message
+        try:
+            self.run2()
+        except:
+            pass
     
     def run2(self):
         """
@@ -154,7 +156,7 @@ class MailerThread(threading.Thread):
             if not self._running:
                 return
 
-            LOG('SecureMailHost', INFO, 'threading')
+            #LOG('SecureMailHost', INFO, 'threading')
 
             for id in mailQueue.list():
                 mail = mailQueue.get(id)
