@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.28 2003/09/27 09:14:08 ajung Exp $
+$Id: Issue.py,v 1.29 2003/09/28 14:03:46 ajung Exp $
 """
 
 import sys
@@ -255,21 +255,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ Hook to perform post-validation actions. We use this
             to reindex the issue.
         """
-
-        # ATT: this is some kind of a hack. If the issue is pending
-        # and the user marks the issue as security related then we
-        # trigger the transition to move the issue to the Pending_
-        # confidential state. In addition we mark the field as
-        # readonly (only through a followup we can switch back from
-        # confidential to non-confidential.
-
-#        if self.status() == 'Pending' and self.security_related:
-#            wf = getToolByName(self, 'portal_workflow')
-#            wf.doActionFor(self, 'restrict_pending_automatic')
-            
-#            if len(self.getWorkflowHistory()) > 2:
-#                self.getField('security_related').mode = 'r'
-
         self.notifyModified() # notify DublinCore
 
     def __len__(self):
@@ -336,7 +321,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
-        return '%s %s' %  (self.getId(), self.Title())
+        return '%s: %s' %  (self.getId(), self.Title())
 
     ######################################################################
     # Callbacks for pcng_issue_workflow
@@ -346,9 +331,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def assigned_to(self, sorted=0):
         """ return assigned users according to the workflow """
         wftool = getToolByName(self, 'portal_workflow')
-        users = wftool.getInfoFor(self, 'assigned_to', ())or ()
-        if sorted:
-            users = list(users); users.sort()
+        users = list(wftool.getInfoFor(self, 'assigned_to', ()) or ())
+        if sorted: users.sort()
         return users
 
     security.declareProtected(CMFCorePermissions.View, 'is_assigned')
@@ -367,7 +351,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def status(self):
         """ return workflow state """
         wftool = getToolByName(self, 'portal_workflow')
-        return wftool.getInfoFor(self, 'state', 'Pending')
+        return wftool.getInfoFor(self, 'state', 'pending')
 
     security.declareProtected(CMFCorePermissions.View, 'validActions')
     def validActions(self):
@@ -379,6 +363,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     security.declareProtected(CMFCorePermissions.View, 'getWorkflowHistory')
     def getWorkflowHistory(self):
         """ return the workflow history """
-        return self.workflow_history['pcng_issue_workflow']
+        return self.workflow_history[IssueWorkflowName]
 
 registerType(PloneIssueNG)
