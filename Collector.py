@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.34 2003/09/23 18:35:38 ajung Exp $
+$Id: Collector.py,v 1.35 2003/09/28 14:05:08 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -17,9 +17,10 @@ from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.CMFCorePermissions import setDefaultRoles
 
 from Transcript import Transcript
-from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
+from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
 from config import IssueWorkflowName
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
@@ -77,7 +78,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         {'id': 'pcng_member_preferences',
         'name': 'Member preferences',
         'action': 'pcng_member_preferences',
-        'permissions': (CMFCorePermissions.View,)
+        'permissions': (CMFCorePermissions.SetOwnProperties,)
         },
         )
 
@@ -112,6 +113,12 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         ti.immediate_view = 'pcng_issue_view'
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
+
+        # create new permissions and pre-assign roles 
+        setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin'))
+        setDefaultRoles(AddCollectorIssue, ('Manager', 'TrackerAdmin'))
+        setDefaultRoles(AddCollectorIssueFollowup, ('Manager', 'TrackerAdmin'))
+        setDefaultRoles(ManageCollector, ('Manager', 'TrackerAdmin'))
         
     def _setup_collector_catalog(self):
         """Create and situate properly configured collector catalog."""
@@ -154,7 +161,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     def getReporters(self): return self._reporters
 
     security.declareProtected(ManageCollector, 'getTrackerUsers')
-    def getTrackerUsers(self, staff_only=False):   
+    def getTrackerUsers(self, staff_only=0):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
             informations for the presentation.
@@ -239,6 +246,21 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
                                roles=target_roles,
                                acquire=0)
 
+    def _adjust_view_mode(self):
+        """Set role privileges according to view mode."""
+
+        target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+
+        print self.participation_mode
+
+        if self.view_mode == 'authenticated':
+            target_roles = target_roles + ('Authenticated', )
+        elif self.view_mode == 'anyone':
+            target_roles = target_roles + ('Authenticated', 'Anonymous')
+
+        print 'adjusting', target_roles
+        self.manage_permission(CMFCorePermissions.View, roles=target_roles, acquire=0)
+
     ######################################################################
     # Notifications
     ######################################################################
@@ -269,7 +291,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         """ return a of emails addresses that correspond to the given state.  """
         return self._notification_emails.get(state, [])
 
-    security.declareProtected(ManageCollector, 'issue_states')
+    security.declareProtected(CMFCorePermissions.View, 'issue_states')
     def issue_states(self):
         """ return a list of all related issue workflow states """
         wftool = getToolByName(self, 'portal_workflow')
@@ -292,6 +314,12 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     ######################################################################
     # Maintainance
     ######################################################################
+
+    def reindexObject(self, idxs=None):
+        """ hook for reindexing the object """
+        OrderedBaseFolder.reindexObject(self)
+        self._adjust_view_mode()           # can we hook this somewhere else?
+        self._adjust_participation_mode()
 
     security.declareProtected(CMFCorePermissions.View, 'getNumberIssues')
     def getNumberIssues(self):
