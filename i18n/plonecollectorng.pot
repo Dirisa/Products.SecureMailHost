@@ -111,3 +111,229 @@ msgstr "Email address $email not registered"
 
 msgid "watchlist_removed" 
 msgstr "You were removed from the watchlist"
+
+
+
+
+
+#msgid "Email"
+#msgstr ""
+#
+#msgid "Managers"
+#msgstr ""
+#
+#msgid "Name"
+#msgstr ""
+#
+#msgid "Reporter"
+#msgstr ""
+#
+#msgid "Supporter"
+#msgstr ""
+#
+#msgid "UserID"
+#msgstr ""
+#
+#msgid "add_artifacts_table_comment"
+#msgstr ""
+#
+#msgid "add_references_table_collector"
+#msgstr ""
+#
+#msgid "add_references_table_comment"
+#msgstr ""
+#
+#msgid "add_references_table_issue_number"
+#msgstr ""
+#
+#msgid "added"
+#msgstr ""
+#
+#msgid "assign_to"
+#msgstr ""
+#
+#msgid "assigned"
+#msgstr ""
+#
+#msgid "assigned_to"
+#msgstr ""
+#
+#msgid "collector_notifications"
+#msgstr ""
+#
+#msgid "collector_overview"
+#msgstr ""
+#
+#msgid "comment"
+#msgstr ""
+#
+#msgid "days_ago"
+#msgstr ""
+#
+#msgid "dependency_graph"
+#msgstr ""
+#
+#msgid "edit"
+#msgstr ""
+#
+#msgid "email_address"
+#msgstr ""
+#
+#msgid "fieldsets"
+#msgstr ""
+#
+#msgid "followups"
+#msgstr ""
+#
+#msgid "fulltextsearch"
+#msgstr ""
+#
+#msgid "heading_assigned"
+#msgstr ""
+#
+#msgid "heading_edit_item"
+#msgstr ""
+#
+#msgid "heading_requester"
+#msgstr ""
+#
+#msgid "heading_status"
+#msgstr ""
+#
+#msgid "importance"
+#msgstr ""
+#
+#msgid "issue_artifacts_table_deletion_link"
+#msgstr ""
+#
+#msgid "issue_artifacts_table_info_link"
+#msgstr ""
+#
+#msgid "issue_artifacts_table_no_uploads_available"
+#msgstr ""
+#
+#msgid "issue_followup"
+#msgstr ""
+#
+#msgid "issue_reference"
+#msgstr ""
+#
+#msgid "jump_to_ticket"
+#msgstr ""
+#
+#msgid "legend_artifacts_upload"
+#msgstr ""
+#
+#msgid "legend_new_reference_to_issue"
+#msgstr ""
+#
+#msgid "legend_references"
+#msgstr ""
+#
+#msgid "legend_search_form"
+#msgstr ""
+#
+#msgid "legend_uploads"
+#msgstr ""
+#
+#msgid "legend_watchlist"
+#msgstr ""
+#
+#msgid "legendd_dependeny_tree"
+#msgstr ""
+#
+#msgid "modified"
+#msgstr ""
+#
+#msgid "my_created_issued"
+#msgstr ""
+#
+#msgid "no_issues_found"
+#msgstr ""
+#
+#msgid "notification_mode_disabled"
+#msgstr ""
+#
+#msgid "number_issues"
+#msgstr ""
+#
+#msgid "open_issues"
+#msgstr ""
+#
+#msgid "preferences"
+#msgstr ""
+#
+#msgid "recreate_collector_catalog"
+#msgstr ""
+#
+#msgid "referenced_by"
+#msgstr ""
+#
+#msgid "references"
+#msgstr ""
+#
+#msgid "reindex_all_issues"
+#msgstr ""
+#
+#msgid "removed"
+#msgstr ""
+#
+#msgid "send_attachments"
+#msgstr ""
+#
+#msgid "send_emails"
+#msgstr ""
+#
+#msgid "sorting"
+#msgstr ""
+#
+#msgid "status"
+#msgstr ""
+#
+#msgid "submitted_by"
+#msgstr ""
+#
+#msgid "title_issue_selection"
+#msgstr ""
+#
+#msgid "topic"
+#msgstr ""
+#
+#msgid "total_issues"
+#msgstr ""
+#
+#msgid "transcript"
+#msgstr ""
+#
+#msgid "transcript_changes"
+#msgstr ""
+#
+#msgid "transcript_time"
+#msgstr ""
+#
+#msgid "transcript_user"
+#msgstr ""
+#
+#msgid "update_collector_schema"
+#msgstr ""
+#
+#msgid "update_schema_for_all_issues"
+#msgstr ""
+#
+#msgid "uploaded_file"
+#msgstr ""
+#
+#msgid "uploads"
+#msgstr ""
+#
+#msgid "value"
+#msgstr ""
+#
+#msgid "watchlist_subscribe"
+#msgstr ""
+#
+#msgid "watchlist_unsubscribe"
+#msgstr ""
+#
+#msgid "workflow_action_current_state"
+#msgstr ""
