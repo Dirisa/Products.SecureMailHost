@@ -57,7 +57,7 @@
                                  tal:repeat="obj objs">
                                  
                                 <img src="" alt="" 
-                                     tal:attributes="src obj/icon"
+                                     tal:attributes="src obj/getIcon"
                                       />
                                 <a href="#" 
                                    tal:attributes="href obj/getURL" 
