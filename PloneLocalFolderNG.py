@@ -466,33 +466,36 @@ class PloneLocalFolderNG(BaseContent):
            
            l = []
            if os.path.exists(destfolder):
-              for f in os.listdir(destfolder):
-                  if f.endswith('.metadata'): continue
-      
-                  fullname = os.path.join(destfolder, f)
-                  P = FileProxy(f, fullname, f)
-                  mi = self.mimetypes_registry.classify(data=None, filename=f)
-   
-                  if os.path.isdir(fullname):
-                      P.setIconPath('folder_icon.gif')
-                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                      P.setMimeType('folder')
-                  else:
-                      P.setIconPath(mi.icon_path)
-                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-                      P.setMimeType(mi.normalized())
-      
-                  if os.path.exists(fullname + '.metadata'):
-                      try:
-                        P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
-                      except:
-                        P.setComment('')
-                  else:
-                      P.setComment('')
-                  l.append(P) 
+              try:
+	              for f in os.listdir(destfolder):
+	                  if f.endswith('.metadata'): continue
+	      
+	                  fullname = os.path.join(destfolder, f)
+	                  P = FileProxy(f, fullname, f)
+	                  mi = self.mimetypes_registry.classify(data=None, filename=f)
+	   
+	                  if os.path.isdir(fullname):
+	                      P.setIconPath('folder_icon.gif')
+	                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+	                      P.setMimeType('folder')
+	                  else:
+	                      P.setIconPath(mi.icon_path)
+	                      P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+	                      P.setMimeType(mi.normalized())
+	      
+	                  if os.path.exists(fullname + '.metadata'):
+	                      try:
+	                        P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+	                      except:
+	                        P.setComment('')
+	                  else:
+	                      P.setComment('')
+	                  l.append(P)
+	           except:
+	              zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: error reading folder (%s) contents" % destfolder )        
    
            else:
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: destfolder not found (%s)" % destfolder )
            return l
 
     security.declareProtected(CMFCorePermissions.AccessContentsInformation,
@@ -937,50 +940,52 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: fullfoldername=%s " % fullfoldername )
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: rel_dir=%s" % rel_dir )
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: portal path=%s" % this_portal.getRelativeContentURL(self) )
-        
-        for f in os.listdir(fullfoldername):
-            # don't include the PloneLocalFolderNG special metadata files  
-            if f.endswith('.metadata'): continue
-      
-            itemFullName = os.path.join(fullfoldername, f)
-
-            if os.path.isdir(itemFullName): 
-                new_rel_dir = os.path.join(rel_dir,f)
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: subdir=%s" % new_rel_dir )
-                subfolderfilesCataloged,subfolderfilesNotCataloged = self.catalogContents(new_rel_dir)
-                filesCataloged = filesCataloged + subfolderfilesCataloged
-                filesNotCataloged = filesNotCataloged + subfolderfilesNotCataloged
-                
-            else:
-                uid = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/' +  os.path.join(rel_dir, f).replace('\\','/'))
-                
-                dummyFileProxy.id = str(f)
-                dummyFileProxy.url = itemFullName
-                dummyFileProxy.encoding = None
-                mi = mimetypesTool.classify(data=None, filename=f)
-                dummyFileProxy.setIconPath(mi.icon_path)
-                dummyFileProxy.mime_type = mi.normalized()
-                
-                # check to see if the mimetype for this file is on the skip list. 
-                # The main reason for this is to avoid having TextIndexNG2 process 
-                # files that we know it doesnt handle, but this could also be useful
-                # for other scenarios.
-                 
-                skipFile = 0
-                for filetypePhrase in filetypePhrasesSkipList:
-                  if dummyFileProxy.mime_type.find(filetypePhrase) >= 0: skipFile=1
-                
-                if skipFile:
-                  filesNotCataloged = filesNotCataloged + 1
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: not cataloging file=%s" % dummyFileProxy.url )
-                else:
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % itemFullName )
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
-                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
-                      
-                  catalogTool.catalog_object( dummyFileProxy, uid )
-                      
-                  filesCataloged = filesCataloged + 1
+        try:
+	        for f in os.listdir(fullfoldername):
+	            # don't include the PloneLocalFolderNG special metadata files  
+	            if f.endswith('.metadata'): continue
+	      
+	            itemFullName = os.path.join(fullfoldername, f)
+	
+	            if os.path.isdir(itemFullName): 
+	                new_rel_dir = os.path.join(rel_dir,f)
+	                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: subdir=%s" % new_rel_dir )
+	                subfolderfilesCataloged,subfolderfilesNotCataloged = self.catalogContents(new_rel_dir)
+	                filesCataloged = filesCataloged + subfolderfilesCataloged
+	                filesNotCataloged = filesNotCataloged + subfolderfilesNotCataloged
+	                
+	            else:
+	                uid = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/' +  os.path.join(rel_dir, f).replace('\\','/'))
+	                
+	                dummyFileProxy.id = str(f)
+	                dummyFileProxy.url = itemFullName
+	                dummyFileProxy.encoding = None
+	                mi = mimetypesTool.classify(data=None, filename=f)
+	                dummyFileProxy.setIconPath(mi.icon_path)
+	                dummyFileProxy.mime_type = mi.normalized()
+	                
+	                # check to see if the mimetype for this file is on the skip list. 
+	                # The main reason for this is to avoid having TextIndexNG2 process 
+	                # files that we know it doesnt handle, but this could also be useful
+	                # for other scenarios.
+	                 
+	                skipFile = 0
+	                for filetypePhrase in filetypePhrasesSkipList:
+	                  if dummyFileProxy.mime_type.find(filetypePhrase) >= 0: skipFile=1
+	                
+	                if skipFile:
+	                  filesNotCataloged = filesNotCataloged + 1
+	                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: not cataloging file=%s" % dummyFileProxy.url )
+	                else:
+	                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % itemFullName )
+	                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
+	                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+	                      
+	                  catalogTool.catalog_object( dummyFileProxy, uid )
+	                      
+	                  filesCataloged = filesCataloged + 1
+	        except:
+	           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() error reading folder (%s) contents" % fullfoldername )          
         return filesCataloged, filesNotCataloged            
 
     security.declarePublic('allowedContentTypes')
@@ -1004,25 +1009,27 @@ def _getFolderProperties(fullfoldername):
    folderCount = 0
    fileCount = 0
    if os.path.exists(fullfoldername):
-      
-      for f in os.listdir(fullfoldername):
-         # don't include the PloneLocalFolderNG special metadata files  
-         if f.endswith('.metadata'): continue
-         
-         itemFullName = os.path.join(fullfoldername, f)
-   
-         if os.path.isdir(itemFullName): 
-            folderCount = folderCount + 1
-            subfolder_props = _getFolderProperties(itemFullName)
-            bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
-            folderCount = folderCount + subfolder_props.get('folders',0)
-            fileCount = fileCount + subfolder_props.get('files',0)
-         else:
-            fileCount = fileCount + 1     
-            try: file_size = os.stat(itemFullName)[6]
-            except: file_size = 0
-            bytesInFolder = bytesInFolder + file_size
-           
+      try:
+	      for f in os.listdir(fullfoldername):
+	         # don't include the PloneLocalFolderNG special metadata files  
+	         if f.endswith('.metadata'): continue
+	         
+	         itemFullName = os.path.join(fullfoldername, f)
+	   
+	         if os.path.isdir(itemFullName): 
+	            folderCount = folderCount + 1
+	            subfolder_props = _getFolderProperties(itemFullName)
+	            bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
+	            folderCount = folderCount + subfolder_props.get('folders',0)
+	            fileCount = fileCount + subfolder_props.get('files',0)
+	         else:
+	            fileCount = fileCount + 1     
+	            try: file_size = os.stat(itemFullName)[6]
+	            except: file_size = 0
+	            bytesInFolder = bytesInFolder + file_size
+      except:
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "_getFolderProperties() :: error reading folder (%s) contents" % fullfoldername )
+     
    folderProps = { }
    folderProps['size'] = bytesInFolder
    folderProps['files'] = fileCount
