@@ -119,3 +119,85 @@
     </div>
   </span>
 </div>    
+
+
+
+<div metal:define-macro="search_issues_form">
+
+  <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">
+    <span i18n:translate="jump_to_ticket">Jump to issue number </span> 
+    <input type="text" name="issuenumber" size="5" /> &nbsp;
+    <input type="submit" value=" Jump " i18n:attributes="value" />
+  </form>
+        
+  <form action="pcng_view" method="post"  name="search_form"
+        tal:define="uniquevals python: here.pcng_catalog.uniqueValuesFor">
+          
+    <table>
+            
+      <tr>
+        <th align="center" i18n:translate="heading_status"> Status </th>
+        <th align="center" i18n:translate="heading_requester">Requester</th>
+        <th align="center" i18n:translate="heading_assigned"> Assigned </th>
+      </tr>
+
+      <tr>
+        <td align="center">
+          <select name="status:list:ignore_empty" 
+                  multiple 
+                  size="5"
+                  tal:define="values here/issue_states">
+            <option tal:repeat="status values"
+                    i18n:translate=""
+                    tal:attributes="value status;
+                                    selected python: status in request.get('status', [])"
+                    tal:content="status" />
+          </select>
+        </td>
+
+        <td align="center">
+          <select name="Creator:list:ignore_empty"      
+                  multiple 
+                  size="5"
+                  tal:define="values python: sequence.sort(uniquevals('Creator'))">
+              
+            <option tal:repeat="creator values"
+                    tal:attributes="value creator;
+                                    selected python: creator in request.get('Creator', [])"
+                    tal:content="creator" />
+          </select>
+        </td>
+
+        <td align="center">
+          <select name="assigned_to:list:ignore_empty"      
+                  multiple 
+                  size="5"
+                  tal:define="values python: sequence.sort(uniquevals('assigned_to'))">
+              
+            <option tal:repeat="assignee values"
+                    tal:attributes="value assignee;
+                                    selected python: assignee in request.get('assigned_to', [])"
+                    tal:content="assignee" />
+          </select>
+        </td>
+
+      </tr>
+ 
+      <tr>
+        <td colspan="4">
+          <span i18n:translate="fulltextsearch">Fulltext search</span>
+          <input type="text" name="fulltext" value="" size="40">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <input type="submit" value=" Search ">
+        </td>
+      </tr>
+    
+
+    </table>
+  </form>
+
+</div>
