@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.10 2003/09/21 14:02:34 ajung Exp $
+$Id: util.py,v 1.11 2003/10/10 16:21:46 ajung Exp $
 """
 
 import urllib
@@ -100,13 +100,40 @@ def lists_eq(l1, l2):
 
 
 def redirect(RESPONSE, dest, msg=None,**kw):
-    from urllib import quote
     
     if RESPONSE is not None:    
         url = dest + "?"
         if msg:
-            url += "portal_status_message=%s&" % quote(msg)
+            url += "portal_status_message=%s&" % urllib.quote(msg)
         if kw:
             url += '&'.join(['%s=%s' % (k, urllib.quote(v)) for k,v in kw.items()])
 
         RESPONSE.redirect(url) 
+
+
+def safeGetProperty(userobj, property, default=None):
+    """Defaulting user.getProperty(), allowing for variant user folders."""
+    try:
+        if not hasattr(userobj, 'getProperty'):
+            return getattr(userobj, property, default)
+        else:
+            return userobj.getProperty(property, default)
+    except:
+        # We can't just itemize the possible candidate exceptions because one
+        # is a string with spaces, which isn't interned and hence object id
+        # won't match.  Sigh.
+        import sys
+        exc = sys.exc_info()[0]
+        if (exc == 'Property not found'
+            or isinstance(exc, TypeError)
+            or isinstance(exc, AttributeError)
+            or isinstance(exc, LookupError)):
+            try:
+                # Some (eg, our old LDAP user folder) support getProperty but
+                # not defaulting:
+                return userobj.getProperty(property)
+            except:
+                return default
+        else:
+            raise
+
