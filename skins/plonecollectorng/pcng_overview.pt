@@ -11,13 +11,25 @@
     <div metal:fill-slot="main" >
       <h1 i18n:translate="collector_overview">Collector overview</h1>
 
-      <div tal:repeat="collector python: sequence.sort(here.portal_catalog.searchResults(meta_type='PloneCollectorNG', review_state='published'), (('getId', 'nocase'),))">
+      <div tal:repeat="collector python: sequence.sort(here.portal_catalog(meta_type='PloneCollectorNG', 
+                                                                           review_state='published'), (('getId', 'nocase'),))">
 
-        <h2><a tal:attributes="href string:${collector/getURL}/pcng_view" 
-               tal:content="string: ${collector/getId} (${collector/Title})"/>
+        <h2>
+          <a tal:attributes="href string:${collector/getURL}/pcng_view">
+            <span tal:content="collector/getId" />
+            <span tal:condition="collector/Title" tal:content="string:(${collector/Title})" />
+          </a>
         </h2>
-        <div class="ticket_stats">
-           <span tal:content="python: collector.getObject().getNumberIssues()"/> <span i18n:translate="issues">issues</span>
+
+        <div class="ticket_stats" tal:define="stats python: collector.getObject().pcng_collector_stats()"> 
+           <span i18n:translate="total_issues">Total issues</span>: <span tal:content="python: stats[0]"/> -
+           <span i18n:translate="open_issues">Open issues</span>: <span tal:content="python: stats[1]"/> -
+           <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=submitted">
+             <span i18n:translate="my_created_issued">My submitted issues</span>: <span tal:content="python: stats[2]"/> 
+           </a> -
+           <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=assigned">
+             <span i18n:translate="my_created_issued">Issues assigned to me</span>: <span tal:content="python: stats[3]"/> 
+           </a> 
         </div> 
       </div>
     </div>
