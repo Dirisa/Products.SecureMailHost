@@ -7,14 +7,14 @@
 
 	<div metal:fill-slot="main"
 	     tal:define="portalPath string:${request/URL1};
-	                 realPath python:here.getFileRealPath(REQUEST=request);
-	     				  comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
-	                 uploader python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='source');
-	                 revision python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='revision');
-	                 title    python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='title');
-	                 md5      python:here.getFileMetadata(REQUEST=request,section='DIAGNOSTICS',option='md5');
-	                 numUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='num_files');
-	                 sizezUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='unpacked_size');
+	                 realPath python:here.getFileRealPath();
+	     				  comments python:here.getFileMetadata(section='GENERAL',option='comment');
+	                 uploader python:here.getFileMetadata(section='GENERAL',option='source');
+	                 revision python:here.getFileMetadata(section='GENERAL',option='revision');
+	                 title    python:here.getFileMetadata(section='GENERAL',option='title');
+	                 md5      python:here.getFileMetadata(section='DIAGNOSTICS',option='md5');
+	                 numUnpackedFiles python:here.getFileMetadata(section='ARCHIVEINFO',option='num_files');
+	                 sizezUnpackedFiles python:here.getFileMetadata(section='ARCHIVEINFO',option='unpacked_size');
 	                 ">
 			<br>
 			<b>file portal path = </b>
