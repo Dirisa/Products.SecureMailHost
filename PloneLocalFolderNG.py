@@ -116,6 +116,7 @@ InitializeClass(FileProxy)
 class PloneLocalFolderNG(BaseContent):
     """ PloneLocalFolderNG """
 
+    content_icon = 'folder_icon.gif'
     schema = schema
     security = ClassSecurityInfo()
 
