@@ -683,6 +683,9 @@ class PloneLocalFolderNG(BaseContent):
     def deleteFile(self, rel_dir, fileToDelete, REQUEST, RESPONSE):
         """ delete the file """
         os.remove(fileToDelete)
+        metadataFileToDelete = fileToDelete + '.metadata'
+        if os.path.exists(metadataFileToDelete):
+            os.remove(metadataFileToDelete)
         RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
         return 1
 
