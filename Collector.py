@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.21 2003/09/10 04:32:00 ajung Exp $
+$Id: Collector.py,v 1.22 2003/09/11 04:13:25 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -17,7 +17,7 @@ from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import BaseFolder, registerType
 from Products.CMFCore.utils import getToolByName
 
-from Transcript import Transcript, TranscriptEntry
+from Transcript import Transcript
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import PloneIssueNG
@@ -80,13 +80,15 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
         self._setup_collector_catalog()
-        self._transcript = Transcript()
-        self._transcript.addComment('Tracker created')
 
         # setup roles 
         username = util.getUserName()
         for role in ('Manager', 'TrackerAdmin', 'Owner'):
             util.add_local_role(self, username, role)
+
+    def manage_afterAdd(self, item, container):
+        self._transcript = Transcript()
+        self._transcript.addComment('Tracker created')
 
     def _setup_collector_catalog(self):
         """Create and situate properly configured collector catalog."""
@@ -99,16 +101,12 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
             hook to log changed properties to the transcript.
         """
 
-        te = TranscriptEntry()
         for name in REQUEST.form.keys():
             new = REQUEST.get(name, None)
             old = getattr(self, name, None)
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
-                    te.addChange(name, old, new)
-
-        self._transcript.add(te)
-
+                    self._transcript.addChange(name, old, new)
 
     ######################################################################
     # Transcript
@@ -166,17 +164,15 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
 
         reporters.sort(); managers.sort(); supporters.sort()
 
-        te = TranscriptEntry()
-        te.addChange('managers', self._managers, managers)
-        te.addChange('supporters', self._supporters, supporters)
-        te.addChange('reporters', self._reporters, reporters)
+        self._transcript.addChange('managers', self._managers, managers)
+        self._transcript.addChange('supporters', self._supporters, supporters)
+        self._transcript.addChange('reporters', self._reporters, reporters)
 
         self._managers = managers
         self._reporters = reporters
         self._supporters = supporters
         self._adjust_staff_roles()
 
-        self._transcript.add(te)
         util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
 
     def _adjust_staff_roles(self):
@@ -222,8 +218,6 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
                         states and the values are lists of email addresses
         """
 
-        te = TranscriptEntry()
-
         for state in notifications.keys():
             emails = getattr(notifications, state)
             emails = [e.strip() for e in emails if e.strip()]
@@ -231,10 +225,9 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
                 if not util.isValidEmailAddress(email):
                     raise ValueError('Invalid email address: %s' % email)
 
-            te.addChange('notifications', self._notification_emails.get(state, []), emails)
+            self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
-        self._transcript.add(te)
         util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
@@ -285,6 +278,7 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
         for issue in self.objectValues('PloneIssueNG'):
             issue.reindexObject()
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
+
 
 registerType(PloneCollectorNG)
 

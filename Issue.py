@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.12 2003/09/10 13:46:52 ajung Exp $
+$Id: Issue.py,v 1.13 2003/09/11 04:13:25 ajung Exp $
 """
 
 import sys
@@ -17,7 +17,7 @@ from Products.Archetypes.public import BaseFolder, registerType
 
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
-from Transcript import Transcript, TranscriptEntry
+from Transcript import Transcript
 from References import Reference, ReferencesManager
 from WatchList import WatchList
 import util
@@ -81,8 +81,6 @@ class PloneIssueNG(BaseFolder, WatchList):
         else:
             name = 'contact_name'
             self.Schema()[name].storage.set(name, self, util.getUserName())
-        
-
                                                 
     ######################################################################
     # Followups
@@ -90,11 +88,9 @@ class PloneIssueNG(BaseFolder, WatchList):
 
     def issue_followup(self, comment='', assignees=[], RESPONSE=None):
         """ issue followup handling """
-        te = TranscriptEntry()
-        te.addChange('assignees', self._assignees, assignees)
+        self._transcript.addChange('assignees', self._assignees, assignees)
         self._assignees = assignees 
-        if comment: te.addComment(comment)
-        self._transcript.add(te)
+        if comment: self._transcript.addComment(comment)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
 
     ######################################################################
@@ -155,7 +151,7 @@ class PloneIssueNG(BaseFolder, WatchList):
         if not reference.comment:
             raise ValueError('References must have a comment')
 
-        tracker = getattr(self, reference.tracker, None)
+        tracker = self.restrictedTraverse(reference.tracker)
         if not tracker:
             raise ValueError('Tracker does not exist: %s' % reference.tracker)
 
@@ -164,10 +160,7 @@ class PloneIssueNG(BaseFolder, WatchList):
 
         ref = Reference(reference.tracker, reference.ticketnumber, reference.comment)
         self._references.add(ref)
- 
-        te = TranscriptEntry()
-        te.addReference(reference.tracker, reference.ticketnumber, reference.comment)
-        self._transcript.add(te)
+        self._transcript.addReference(reference.tracker, reference.ticketnumber, reference.comment)
 
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
@@ -186,10 +179,7 @@ class PloneIssueNG(BaseFolder, WatchList):
             obj.manage_permission(CMFCorePermissions.View, acquire=1)
             obj.manage_permission(CMFCorePermissions.AccessContentsInformation, acquire=1)
             obj.manage_upload(uploaded_file)
-            
-            te = TranscriptEntry()
-            te.addUpload(file_id, comment)
-            self._transcript.add(te)
+            self._transcript.addUpload(file_id, comment)
 
             util.redirect(RESPONSE, 'pcng_issue_references', 'File base been uploaded')
         else:
@@ -209,14 +199,12 @@ class PloneIssueNG(BaseFolder, WatchList):
             hook to log changed properties to the transcript.
         """
 
-        te = TranscriptEntry()
         for name in REQUEST.form.keys():
             new = REQUEST.get(name, None)
             old = getattr(self, name, None)
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
-                    te.addChange(name, old, new)
-        self._transcript.add(te)
+                    self._transcript.addChange(name, old, new)
 
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this
@@ -251,7 +239,6 @@ class PloneIssueNG(BaseFolder, WatchList):
                 if callable(v): v = v()
                 l.append( str(v) )
 
-        l.append(self._transcript.asXML()) # ATT: this should go better
         return ' '.join(l)
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'updateSchema')
@@ -261,7 +248,6 @@ class PloneIssueNG(BaseFolder, WatchList):
 
     def __len__(self):
         return len(self._transcript)
-
 
 registerType(PloneIssueNG)
 
