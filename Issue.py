@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.5 2003/09/08 04:04:45 ajung Exp $
+$Id: Issue.py,v 1.6 2003/09/08 05:08:15 ajung Exp $
 """
 
-from AccessControl import getSecurityManager, ClassSecurityInfo
+from AccessControl import  ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import BaseFolder, registerType
@@ -55,13 +55,23 @@ class Issue(BaseFolder, WatchList):
         self.id = id
         self.title = title 
         self._references = ReferencesManager()
-        self.transcript = Transcript()
-        self.transcript.addComment('Issue created')
+        self._transcript = Transcript()
+        self._transcript.addComment('Issue created')
+
+    ######################################################################
+    # Transcript
+    ######################################################################
+
+    security.declareProtected(CMFCorePermissions.View, 'getTranscript')
+    def getTranscript(self):
+        """ return the Transcript instance """
+        return self._transcript
 
     ######################################################################
     # References handling
     ######################################################################
 
+    security.declareProtected(CMFCorePermissions.View, 'getReferences')
     def getReferences(self):
         """ return a sequences of references """
         return self._references
@@ -84,10 +94,9 @@ class Issue(BaseFolder, WatchList):
  
         te = TranscriptEntry()
         te.addReference(reference.tracker, reference.ticketnumber, reference.comment)
-        self.transcript.add(te)
+        self._transcript.add(te)
 
-        if RESPONSE is not None:
-           RESPONSE.redirect('pcng_issue_references?portal_status_message=Reference%20has%20been%20stored')
+        util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     ######################################################################
     # File uploads 
@@ -107,13 +116,11 @@ class Issue(BaseFolder, WatchList):
             
             te = TranscriptEntry()
             te.addUpload(file_id, comment)
-            self.transcript.add(te)
+            self._transcript.add(te)
 
-            if RESPONSE is not None:
-                RESPONSE.redirect('pcng_issue_references?portal_status_message=File%20has%20been%20uplopaded')
+            util.redirect(RESPONSE, 'pcng_issue_references', 'File base been uploaded')
         else:
-            if RESPONSE is not None:
-                RESPONSE.redirect('pcng_issue_references?portal_status_message=Nothing%20to%20be%20uploaded')
+            util.redirect(RESPONSE, 'pcng_issue_references', 'Nothing to be uploaded')
 
     ######################################################################
     # Misc
@@ -130,6 +137,7 @@ class Issue(BaseFolder, WatchList):
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'updateSchema')
     def updateSchema(self, schema):
         """ update the schema """
         self.schema = schema

@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.17 2003/09/07 17:54:00 ajung Exp $
+$Id: Collector.py,v 1.18 2003/09/08 05:08:15 ajung Exp $
 """
 
 from Globals import InitializeClass
-from AccessControl import getSecurityManager, ClassSecurityInfo
+from AccessControl import  ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
@@ -77,8 +77,8 @@ class Collector(BaseFolder, SchemaEditor):
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
         self._setup_collector_catalog()
-        self.transcript = Transcript()
-        self.transcript.addComment('Tracker created')
+        self._transcript = Transcript()
+        self._transcript.addComment('Tracker created')
 
         # setup roles 
         username = util.getUserName()
@@ -104,7 +104,16 @@ class Collector(BaseFolder, SchemaEditor):
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     te.addChange(name, old, new)
 
-        self.transcript.add(te)
+        self._transcript.add(te)
+
+    ######################################################################
+    # Transcript
+    ######################################################################
+
+    security.declareProtected(CMFCorePermissions.View, 'getTranscript')
+    def getTranscript(self):
+        """ return the Transcript instance """
+        return self._transcript
 
     ######################################################################
     # Staff handling
@@ -153,17 +162,16 @@ class Collector(BaseFolder, SchemaEditor):
         self._supporters = supporters
         self._adjust_staff_roles()
 
-        self.transcript.add(te)
-
-        if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
+        self._transcript.add(te)
+        util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
 
     def _adjust_staff_roles(self):
-        """ A djust local-role assignments to track staff roster settings.
+        """ Adjust local-role assignments to track staff roster settings.
             Ie, ensure: only designated supporters and managers have 'Reviewer'
             local role, only designated managers have 'Manager' local role.
         """
         if not self._managers:
-            self._managers = [getSecurityManager().getUser().getUserName()]
+            self._managers = [util.getUserName()]
         util.users_for_local_role(self, self._managers, 'TrackerAdmin')
         util.users_for_local_role(self, self._supporters, 'Supporter')
         util.users_for_local_role(self, self._reporters, 'Reporter')
@@ -178,6 +186,7 @@ class Collector(BaseFolder, SchemaEditor):
         elif self.participation_mode == 'anyone':
             target_roles = target_roles + ('Authenticated', 'Anonymous')
 
+        # ATT: we need to fix the View permission as well!!!
         self.manage_permission(AddCollectorIssue,
                                roles=target_roles,
                                acquire=0)
@@ -211,8 +220,8 @@ class Collector(BaseFolder, SchemaEditor):
             te.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
-        self.transcript.add(te)
-        if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
+        self._transcript.add(te)
+        util.redirect(RESPONSE, 'pcng_view', 'Your changes has been saved')
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
@@ -237,13 +246,19 @@ class Collector(BaseFolder, SchemaEditor):
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
-        if RESPONSE is not None: 
-            RESPONSE.redirect(self.absolute_url() + "/" + id + "/base_edit")
+        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/base_edit")
 
     ######################################################################
     # Maintainance
     ######################################################################
 
+    security.declareProtected(CMFCorePermissions.View, 'getNumberIssues')
+    def getNumberIssues(self):
+        """ return the number of issues """
+        return len(self.objectIds('Issue'))
+    __len__ = getNumberIssues
+
+    security.declareProtected(ManageCollector, 'update_schema_for_issues')
     def update_schema_for_issues(self, RESPONSE=None):
         """ update stored issue schema for all issues """
 
@@ -251,17 +266,16 @@ class Collector(BaseFolder, SchemaEditor):
         for issue in self.objectValues('Issue'):
             issue.updateSchema(schema)
 
-        if RESPONSE is not None:
-            RESPONSE.redirect('pcng_maintainance?portal_status_message=Issues updated')
+        util.redirect(RESPONSE, 'pcng_maintainance', 'Issues updated')
 
+    security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
         """ reindex all issues """
 
         for issue in self.objectValues('Issue'):
             issue.reindexObject()
 
-        if RESPONSE is not None:
-            RESPONSE.redirect('pcng_maintainance?portal_status_message=Issues reindexed')
+        util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
 
 registerType(Collector)
 

@@ -11,7 +11,7 @@
         <th i18n:translate="transcript_changes">Changes</th>
       </tr>
       
-      <metal:block tal:repeat="entry here/transcript">
+      <metal:block tal:repeat="entry here/getTranscript">
       <tr> 
         <td tal:content="structure python: here.toPortalTime(entry.getTimestamp(), long_format=1)">DATE</td>
         <td tal:content="entry/getUser">USER</td>
@@ -76,7 +76,7 @@
     </div>
     
     <span metal:define-macro="transcript_plain">
-      <div tal:repeat="entry here/transcript"> 
+      <div tal:repeat="entry here/getTranscript"> 
         
         <div class="transcriptheader">
           <a tal:attributes="name entry/getNumber"> </a>
