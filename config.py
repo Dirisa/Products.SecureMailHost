@@ -4,7 +4,7 @@
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
 #
-# RCS-ID:       $Id: config.py,v 1.4 2004/08/30 13:46:43 yenzenz Exp $
+# RCS-ID:       $Id: config.py,v 1.5 2004/10/08 16:57:32 huron_ Exp $
 # Copyright:    (c) 2004 by jens quadrat, Klein & Partner KEG, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -14,7 +14,7 @@ default_mailtemplate_subject = \
 """string:PloneFormMailer"""
 
 default_mailtemplate_body = \
-"""<tal:block i18n:domain="PloneFormMailer" 
+"""<tal:block i18n:domain="pfm" 
            tal:define="form here/form;
                        groups form/get_groups;">
 <html>
@@ -26,7 +26,7 @@ default_mailtemplate_body = \
   <h1 tal:condition="python:group!='Default'" tal:content="group" />
   <dl>
     <tal:block tal:repeat="field python:form.get_fields_in_group(group)">
-        <dt tal:content="python:'['+field.title()+']'" />
+        <dt i18n:translate="" tal:content="python:field.title()" />
         <dd tal:define="lines python:str(field.validate(here.REQUEST)).splitlines()">
           <tal:block tal:repeat="line lines">
             <span tal:content="line" /><br />

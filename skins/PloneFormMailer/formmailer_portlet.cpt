@@ -77,6 +77,7 @@
     
                     <div class="formControls">
                         <input tal:repeat="button python:pfm.getButtons()"                           
+                               i18n:attributes="value"
                                tal:attributes="value python:button[0] or 'submit';
                                                name  python:button[1] or button[0];
                                                type  python:button[2] or 'submit';
