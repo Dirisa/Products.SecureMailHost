@@ -6,13 +6,14 @@
        tal:define="references here/getRefs;
                    breferences here/getBRefs">
     <span class="legend" i18n:translate="legend_references">References</span>
+
       <ul>
         <li>References
           <ul>
-            <li tal:repeat="ref references">
-              <metal:block  tal:define="url python: ref.absolute_url(1)">
-                <a tal:attributes="href url" tal:content="ref/title_or_id" />
-                [<a tal:attributes="href string: delete_reference?issue_url=${url}">del</a>]
+            <li tal:repeat="rs here/getRelationships">
+              <metal:block tal:define="issue python: here.restrictedTraverse(rs.getURL())">
+                <a tal:attributes="href string:/${rs/getURL}" tal:content="string: ${issue/title_or_id} (${rs/getComment})" />
+                [<a tal:attributes="href string: delete_reference?issue_url=${rs/getURL}">del</a>]
               </metal:block>
             </li>
           </ul>
