@@ -32,12 +32,12 @@ msgstr "往上移"
 #. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
 #: phc_search.pt
 msgid "RSS Feed"
-msgstr "RSS 连接"
+msgstr "RSS 链接"
 
 #. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
 #: phc_search.pt
 msgid "RSS feed of these search results"
-msgstr "这些搜索结果的 RSS 连接"
+msgstr "这些搜索结果的 RSS 链接"
 
 #. <span class="discreet" i18n:attributes="title" i18n:translate="label_relevance_percentage" tal:condition="result/data_record_normalized_score_" title="Relevance">
 #: phc_search.pt
@@ -345,7 +345,7 @@ msgstr "最新教程"
 
 #: helpcenter_view.pt
 msgid "latest_link"
-msgstr "最新连接"
+msgstr "最新链接"
 
 #: helpcenter_view.pt
 msgid "latest_error"
@@ -369,7 +369,7 @@ msgstr "所有教程"
 
 #: helpcenter_view.pt
 msgid "All_link"
-msgstr "所有连接"
+msgstr "所有链接"
 
 #: helpcenter_view.pt
 msgid "All_error"
@@ -402,7 +402,7 @@ msgstr "完整模式浏览所有 FAQ"
 #. </span>
 #: faqfolder_view.pt
 msgid "phc_view_entire_section"
-msgstr "完整模块浏览本节"
+msgstr "完整模式浏览本节"
 
 #. <span i18n:translate="phc_view_index_faq">
 #.  View FAQ table of contents
@@ -470,7 +470,7 @@ msgstr "页"
 #. </span>
 #: helplink_view.pt
 msgid "phc_link"
-msgstr "连接:"
+msgstr "链接:"
 
 #. <span i18n:translate="phc_up_to_glossary">
 #.  Up to Glossary
@@ -486,7 +486,7 @@ msgid "help_detailed_question"
 msgstr "关于这个问题的详细描述,补充标题里描述得不清楚的内容."
 
 msgid "desc_answer"
-msgstr "回答此问题的确描述."
+msgstr "回答此问题的详细描述."
 
 # # 1 more: ./howto_attachments.pt
 #, fuzzy
@@ -498,7 +498,7 @@ msgstr "版本"
 
 msgid "phc_versions"
 msgstr ""
-"这个产品的版本号（如果定义任何版本号，请操持空）"
+"这个产品的版本号（如果未定义任何版本号，请保持空）"
 
 # # 1 more: ./howto_attachments.pt
 #, fuzzy
