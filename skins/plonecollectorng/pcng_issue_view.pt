@@ -10,7 +10,8 @@
     </div>
 
 
-    <div metal:fill-slot="main">
+    <div metal:fill-slot="main"
+         tal:define="mode python: request.get('mode', 'simple')" >
 
       <metal:block tal:define="action string: View">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
@@ -21,8 +22,15 @@
         <tal:def tal:define="dummy python: request.set('mode', member.getProperty('pcng_default_view'))" />
       </metal:block>
 
-      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="pcng_issue_view?mode=full">Full view</a> &nbsp;
-      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="pcng_issue_view?mode=simple">Simple view</a>   &nbsp;
+      <a tal:condition="python: mode in ('full', 'fullimages')"  href="pcng_issue_view?mode=simple">
+        <span i18n:translate="simpleview">Simple view</span> &bull;
+      </a> 
+      <a tal:condition="python: mode in ('simple', 'fullimages')" href="pcng_issue_view?mode=full">
+        <span i18n:translate="fullview">Full view </span> &bull;
+      </a> 
+      <a tal:condition="python: mode in ('simple', 'full')" href="pcng_issue_view?mode=fullimages">
+        <span i18n:translate="fullview_with_images">Full view with images</span> &bull;
+      </a> 
       <a href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
@@ -57,7 +65,7 @@
       </fieldset>
 
 
-      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+      <metal:block tal:condition="python: mode.startswith('full')" >
         <metal:block tal:repeat="schemata_name python: here.schema_getNames()">
           <metal:block tal:define="schemata python:here.schema_getSchema(schemata_name)">
             <metal:block tal:condition="python: schemata_name not in ('default', 'issuedata') "> 
@@ -82,9 +90,9 @@
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </fieldset>
 
-      <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
+      <metal:block tal:condition="python: request.get('mode', 'simple').startswith('full')" >
 
-        <metal:block tal:condition="python: 0"> <!-- remove this for inline images -->
+        <metal:block tal:condition="python: mode == 'fullimages'" >
           <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
             <img tal:attributes="src image/absolute_url">
           </metal:block>
