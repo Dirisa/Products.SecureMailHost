@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.24 2004/03/19 06:52:57 ajung Exp $
+$Id: notifications.py,v 1.25 2004/04/04 09:07:35 ajung Exp $
 """
 
 import sys
@@ -96,11 +96,13 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
     outer['To'] = ','.join(dest_emails)
-    subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.collector_abbreviation), issue.getId(), issue.Title(), len(issue), issue._last_action)
+    subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.collector_abbreviation), issue.getId(), 
+              issue.Title(), len(issue), issue.Translate(issue._last_action,issue._last_action))
     outer['Subject'] = Header(subject, encoding)
     outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email
     body = issue.format_transcript(collector.notification_language)
+    print repr(body)
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
 
@@ -111,7 +113,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
             outer.attach(MIMEImage(str(obj.data))) 
         
     MH = getattr(collector, 'MailHost') 
-    
+
     try:
         LOG('plongcollectorng', INFO, 'recipients for %s: %s' % (issue.absolute_url(1), dest_emails))
         MH._send(collector.collector_email, dest_emails, outer.as_string())
