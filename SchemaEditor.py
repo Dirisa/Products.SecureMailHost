@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.19 2003/09/28 14:05:35 ajung Exp $
+$Id: SchemaEditor.py,v 1.20 2003/10/16 15:44:21 ajung Exp $
 """
 
 import operator
@@ -18,9 +18,11 @@ from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
 
+from Products.CMFCore import CMFCorePermissions
 import util
 from config import ManageCollector
 from OrderedSchema import OrderedSchema
+
 
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
@@ -38,7 +40,7 @@ class SchemaEditor:
                 self._schemas[field.schemata] = OrderedSchema()
             self._schemas[field.schemata].addField(field)
 
-    security.declareProtected(ManageCollector, 'schema_getWholeSchema')
+    security.declareProtected(CMFCorePermissions.View, 'schema_getWholeSchema')
     def schema_getWholeSchema(self):
         """ return the concatenation of all schemas """       
         l = [self._schemas[name] for name in self._schemata_names]
