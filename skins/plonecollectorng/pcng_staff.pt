@@ -6,16 +6,41 @@
 <body>
 <div metal:fill-slot="main">	  
 
-  <form action="collector_edit" method="post">
+  <form action="set_staff" method="post">
     <div class="group"><span class="legend">Tracker Staff</span>
-      <table class="listing">
+      <table class="listing" 
+             tal:define="managers here/getManagers;
+                         supporters here/getSupporters;
+                         reporters here/getReporters">
         <tr>
-          <th i18n:translate="Name">Name</th>
           <th i18n:translate="UserID">User ID</th>
+          <th i18n:translate="Name">Name</th>
           <th i18n:translate="Email">Email</th>
           <th i18n:translate="Managers">Tracker Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
+       </tr>
+       <span tal:content="here/getTrackerUsers"/>
+       <tr tal:repeat="user here/getTrackerUsers">
+         <td tal:content="user/username" />
+         <td tal:content="user/fullname|nothing" />
+         <td tal:content="user/email|nothing" />
+         <td>
+           <input type="checkbox" name="managers:list:string" 
+                  tal:attributes="value user/username;
+                                  checked python: user['username'] in managers" />
+         </td>
+         <td>
+           <input type="checkbox" name="supporters:list:string" 
+                  tal:attributes="value user/username;
+                                  checked python: user['username'] in supporters" />
+         </td>
+         <td>
+           <input type="checkbox" name="reporters:list:string" 
+                  tal:attributes="value user/username;
+                                  checked python: user['username'] in reporters" />
+         </td>
+           
        </tr>
       </table>
 
