@@ -21,12 +21,15 @@
 
 
   <script language="javascript">
+    /* append a phrase to the text of the textarea */
     function followup_phrase() {
         var idx = document.followupform.phrases.selectedIndex;
         if (idx == -1) return;
         var text = document.followupform.phrases.options[idx].value;
+        var oldtext = document.followupform.comment.value;
         text = text.replace('<br>', '\n');
-        document.followupform.comment.value = text;
+        text = text.replace('<BR>', '\n');
+        document.followupform.comment.value = oldtext + "\n" + text;
     }
   </script>
     
