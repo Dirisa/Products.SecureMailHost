@@ -186,12 +186,6 @@ def install(self):
         #portal_control_panel has been renamed in RC1 (grumpf)
         portal_control_panel=getToolByName(self,'portal_controlpanel',None)        
 
-    #auto build
-
-
-    portal.left_slots=list(portal.left_slots)+[]
-    portal.rght_slots=list(portal.right_slots)+[]
-
     #try to call a custom install method
     #in 'AppInstall.py' method 'install'
     try:

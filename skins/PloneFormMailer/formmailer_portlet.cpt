@@ -6,12 +6,15 @@
        i18n:domain="plone"
        tal:omit-tag="" >
     <div class="portlet" 
-         id="portlet-formmailer">
+         id="portlet-formmailer"
+         tal:define="pfm python:here.pfmbox;
+	             translatable python:portal.portal_languages.isTranslatable(pfm);
+                     pfm python:translatable and pfm.getTranslation() or pfm;
+                     form python:pfm.form">
         <div class="padding">
-            <h5 tal:content="here/pfmbox/title_or_id">Title or Id</h5>
+            <h5 tal:content="pfm/title_or_id">Title or Id</h5>
             <div class="portletBody"
-                 tal:define="form python:here.pfmbox.form;
-                             title python: test(form.title, form.title, 'unknown');
+                 tal:define="title python: test(form.title, form.title, 'unknown');
                              method python:form.method; 
                              enc python:form.enctype;
                              fname string:${title}_form; 
@@ -71,7 +74,7 @@
                     </tal:repeat>
     
                     <div class="formControls">
-                        <input tal:repeat="button python:here.pfmbox.getButtons()"                           
+                        <input tal:repeat="button python:pfm.getButtons()"                           
                                tal:attributes="value python:button[0] or 'submit';
                                                name  python:button[1] or button[0];
                                                type  python:button[2] or 'submit';
