@@ -26,34 +26,29 @@ class TestTool(SecurityInjectorTestCase):
         portal=self.portal
         sitool = getattr(portal, 'portal_securityinjector', None)
         sitool.doActionFor( portal.firstfolder, 'set_break',comment='' )
-        if not sitool.manage_get_breakpoint(portal.firstfolder):
-            raise 'manage_get_breakpoint return wrong value'
 
-        sitool.doActionFor( portal.firstfolder, 'remove_break',comment='' )
-        if sitool.manage_get_breakpoint(portal.firstfolder):
-            raise 'manage_get_breakpoint return wrong value'
+        self.failUnless( sitool.manage_get_breakpoint(portal.firstfolder), "manage_get_breakpoint return wrong value")
+
+        sitool.doActionFor( portal.firstfolder, 'remove_break', comment='' )
+
+        self.failUnless( sitool.manage_get_breakpoint(portal.firstfolder), 'manage_get_breakpoint return wrong value')
 
     def testgetWorkflowFor(self):
         portal=self.portal
         sitool = getattr(portal, 'portal_securityinjector', None)
-        if not 'securityinjector_workflow' in sitool.getWorkflowFor(portal.firstfolder):
-            raise 'Workflow is not correct installed'
-
+        self.assertEqual('securityinjector_workflow' in sitool.getWorkflowFor(portal.firstfolder), True)
+ 
     def testcheck_local_roles(self):
         portal=self.portal
         sitool = getattr(portal, 'portal_securityinjector', None)
         mtool = portal.portal_membership
         user=portal.portal_membership.getMemberById('test1')
-        try:            
-            sitool.check_local_roles(user,portal.firstfolder)
-            raise 'Unautherized is not raised'
-        except Unauthorized:
-            pass
+        
+        self.failUnlessRaises(Unauthorized, sitool.check_local_roles, user, portal.firstfolder)
+
         mtool.setLocalRoles(portal.firstfolder,member_ids=['test1'],member_role='Reviewer')
-        try:            
-            sitool.check_local_roles(user,portal.firstfolder)
-        except Unauthorized:
-            raise 'Here should ne Unauthorized raised'
+
+        self.failUnlessRaises(Unauthorized, sitool.check_local_roles, user, portal.firstfolder)
 
     def testcheck_local_roles(self):
         portal=self.portal

@@ -41,8 +41,8 @@ __version__ = '0.2.2'
 
 # Save start state
 #
-__SOFTWARE_HOME = os.environ.get('SOFTWARE_HOME', 'C:\\Zope272\\lib\\python')
-__INSTANCE_HOME = os.environ.get('INSTANCE_HOME', 'C:\\Zope272\\instance\\vcard')
+__SOFTWARE_HOME = os.environ.get('SOFTWARE_HOME', '')
+__INSTANCE_HOME = os.environ.get('INSTANCE_HOME', '')
 
 if __SOFTWARE_HOME.endswith(os.sep):
     __SOFTWARE_HOME = os.path.dirname(__SOFTWARE_HOME)
