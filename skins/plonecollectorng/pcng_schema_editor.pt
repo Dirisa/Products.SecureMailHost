@@ -37,14 +37,14 @@
                         <metal:block tal:condition="python: field.getName() == request.get('field')">
                           <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
                             <b tal:content="string: ${field/getName}"/></a>
-                          <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
-                          <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
-                          <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
                         </metal:block>
-                          <metal:block tal:condition="not: python: field.getName() == request.get('field')">
-                            <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
-                              <span tal:content="string: ${field/getName}" /></a>
+                        <metal:block tal:condition="not: python: field.getName() == request.get('field')">
+                          <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
+                            <span tal:content="string: ${field/getName}" /></a>
                         </metal:block>
+                        <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
+                        <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
+                        <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
                       </li>
                     </metal:block>
                   </ul>
