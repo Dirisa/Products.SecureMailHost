@@ -22,7 +22,7 @@
       <table>
         <tr>
           <th i18n:translate="assign_to"> Assign to </th>
-          <th> <span i18n:translate="workflow_action_current_state">Workflow action (Current state</span>: <span tal:content="here/status" />)</th>
+          <th> <span i18n:translate="workflow_action_current_state">Action (Current state</span>: <span tal:content="here/status" />)</th>
         </tr>
     
         <tr>
