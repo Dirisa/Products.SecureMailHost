@@ -1,3 +1,16 @@
+<metal:macro metal:define-macro="issue_images" i18n:domain="plonecollectorng">
+  <tal:def tal:define="images python: here.objectValues(('Portal Image',))">
+    <fieldset tal:condition="images"> 
+      <legend i18n:translate="images">Images</legend>
+      <div tal:repeat="image images">
+        <span tal:content="image/getId" />:<br/>
+        <img tal:attributes="src image/absolute_url">
+        <br/>
+      </div>
+    </fieldset>
+  </tal:def>
+</metal:macro>
+
 <metal:block metal:define-macro="field_quoted" i18n:domain="plonecollectorng">
   <span metal:use-macro="python: here.widget(request.get('fieldname'), mode='view', use_label=1)"/>
 </metal:block>
