@@ -133,7 +133,7 @@
                                 </tal:block>
 
                                 <img tal:define="lockable python:hasattr(item, 'wl_isLocked')"
-                                     tal:condition="python:(lockable and item.wl_isLocked()) or (lock_tool lock_tool.isLockable(item) and lock_tool.isLockedOut(item))"
+                                     tal:condition="python:(lockable and item.wl_isLocked()) or (lock_tool and lock_tool.isLockable(item) and lock_tool.isLockedOut(item))"
                                      tal:replace="structure python:locked.tag(title='Locked')" />
 
                             </td>
