@@ -1,1 +1,144 @@
-# Gettext Message File for PloneCollectorNG.# Vladislav Gorbunov <vadigo@mail.ru>, 2004# This file keeps some translation under the domain 'plone'# and is needed to translate several action stringsmsgid ""msgstr """Project-Id-Version: PloneCollectorNG 1.0\n""POT-Creation-Date: 2004-06-01 00:00+1100\n""PO-Revision-Date: 2004-06-01 00:00+1100\n""Last-Translator: Vladislav Gorbunov <vadigo@mail.ru>, 2004\n""MIME-Version: 1.0\n""Content-Type: text/plain; charset=utf-8\n""Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=1; plural=0;\n""Language-code: ru\n""Language-name: Russian\n""Preferred-encodings: utf-8\n""X-Is-Fallback-For: ru-ua\n""Domain: plonecollectorng\n"msgid "Add issue"msgstr "?�???�?�???��?�? ?��????�?�?�??�?"msgid "Issue schema"msgstr "?��??�???� ?��????�?�?�??�?"msgid "Followup"msgstr "??�????��?�?"msgid "Notifications"msgstr "?�???�?�?????�?�???��?"msgid "Maintenance"msgstr "???��??Ȅ??�?�???�???�?�"msgid "Staff"msgstr "???��?�??????�?�"msgid "Member preferences"msgstr "???��??�???��?�?�? �?�??��?�????�?�????"msgid "References &amp; Uploads"msgstr "?��?�??�?�?� &amp; ???�??�?�??�?�?�"msgid "My collector preferences"msgstr "???��??�???��?�?�? ?????�???? �??�??�????�?�?�"msgid "Only staff members"msgstr "?�???Ȅ??�?? �?�??��?�???�?�?�??�?? ?�?��?�??????�?�"msgid "Any authenticated user"msgstr "??�??�???? ?�??�???�??�?�?????�????�??? ?�???Ȅ??�?????��??�?Ȅ?"msgid "Anyone"msgstr "?Ȅ??�????"msgid "Disabled"msgstr "??�??�?Ȅ?�??�????"msgid "Watchlist enabled for anyone"msgstr "�??�?��??�?� ??�?�??�?�?�?�???�???��? ???�?Ȅ?�??�??�? ?�?Ȅ? ??�??��?"msgid "Watchlist enabled for authenticated users"msgstr "�??�?��??�?� ??�?�??�?�?�?�???�???��? ???�?Ȅ?�??�??�? �????Ȅ??�?? ?�?Ȅ? ?�??�???�??�?�?????�????�?�? ?�???Ȅ??�?????��??�?�?�??"                                                                                  msgid "no notifications"msgstr "???��? �????�?�?????�?�???�??"msgid "Submitter, all supporters and tracker administrators"msgstr "?????��??�?��???�?, ??�??� ?��??�???�???��??�?�?� ?� ?�?�???�???��?�?�??��???�?�?"msgid "Submitter, assigned supporters and tracker administrators"msgstr "?????��??�?��???�?, ???�?�???��??�????�??� ?��??�???�???��??�?�?� ?� ?�?�???�???��?�?�??��???�?�?"msgid "Standard formatter (EN)"msgstr "?��??�???�?��?�???�??? �???�????��? (???????�?�??�??�?�??)"msgid "Standard formatter (DE)"msgstr "?��??�???�?��?�???�??? �???�????��? (???�???��??�?�??)"msgid "Your changes have been saved."msgstr "?�?���?� ?�?�???�???�???��? �???�?�??�???�??�?"
+# Gettext Message File for PloneCollectorNG.
+# Vladislav Gorbunov <vadigo@mail.ru>, 2004
+# This file keeps some translation under the domain 'plone'
+# and is needed to translate several action strings
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.0\n"
+"POT-Creation-Date: 2004-06-01 00:00+1100\n"
+"PO-Revision-Date: 2004-06-23 00:00+1100\n"
+"Last-Translator: Vladislav Gorbunov <vadigo@mail.ru>, 2004\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: ru\n"
+"Language-name: Russian\n"
+"Preferred-encodings: utf-8\n"
+"X-Is-Fallback-For: ru-ua\n"
+"Domain: plonecollectorng\n"
+
+msgid "Add issue"
+msgstr "Добавить проблему"
+
+msgid "Issue schema"
+msgstr "Схема проблемы"
+
+msgid "Followup"
+msgstr "Ответы"
+
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgid "Maintenance"
+msgstr "Обслуживание"
+
+msgid "Staff"
+msgstr "Персонал"
+
+msgid "Member preferences"
+msgstr "Параметры участников"
+
+msgid "References &amp; Uploads"
+msgstr "Ссылки &amp; Загрузки"
+
+msgid "My collector preferences"
+msgstr "Параметры моего сборника"
+
+msgid "Only staff members"
+msgstr "Только участвующий персонал"
+
+msgid "Any authenticated user"
+msgstr "Любой авторизованный пользователь"
+
+msgid "Anyone"
+msgstr "любой"
+
+msgid "Disabled"
+msgstr "отключено"
+
+msgid "Watchlist enabled for anyone"
+msgstr "списки отслеживания включены для всех"
+
+msgid "Watchlist enabled for authenticated users"
+msgstr "списки отслеживания включены только для авторизованных пользователей"
+                                                                                  
+msgid "no notifications"
+msgstr "нет уведомлений"
+
+msgid "Submitter, all supporters and tracker administrators"
+msgstr "Инициатор, все исполнители и администраторы"
+
+msgid "Submitter, assigned supporters and tracker administrators"
+msgstr "Инициатор, назначенные исполнители и администраторы"
+
+msgid "Standard formatter (EN)"
+msgstr "Стандартный формат (Английский)"
+
+msgid "Standard formatter (DE)"
+msgstr "Стандартный формат (Немецкий)"
+
+msgid "Your changes have been saved."
+msgstr "Ваши изменения сохранены"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "Clear all Plone slots"
+msgstr "Стереть все слоты Plone"
+
+msgid "Use Plone settings"
+msgstr "Использовать параметры Plone"
+
+msgid "Keep left Plone slot, clear right"
+msgstr "Оставить левый слот Plone, стереть правый"
+
+msgid "Clear left Plone slot, keep right"
+msgstr "Оставить правый слот Plone, стереть левый"
+
+msgid "Plone slots"
+msgstr "Слоты Plone"
+
+msgid "German"
+msgstr "Немецкий"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Finish"
+msgstr "Финский"
+
+msgid "Dutch"
+msgstr "Датский"
+
+msgid "Portlet usage"
+msgstr "Использование Portlet"
+
+msgid "Use left slot, keep plone settings"
+msgstr "Использовать левый слот, оставить настройки Plone"
+
+msgid "Use left slot, override plone settings"
+msgstr "Использовать левый слот, перекрыть настройки Plone"
+
+msgid "Use right slot, keep plone settings"
+msgstr "Использовать правый слот, оставить настройки Plone"
+
+msgid "Use right slot, override plone settings"
+msgstr "Использовать левый слот, перекрыть настройки Plone"
+
+msgid "File/Image uploads"
+msgstr "Загрузка Файла/изображения"
+
+msgid "References between issues"
+msgstr "Ссылки между проблемами"
+
+msgid "Issue submissions through email"
+msgstr "Отправка проблем через электронную почту"
+
+msgid "Verify incoming issue email submissions"
+msgstr "Проверить проблемы, присланные по электронной почте"
+
+msgid "Issues are private to the issue owner and staff"
+msgstr "Проблемы закрыты для владельца проблемы и персонала"
+
