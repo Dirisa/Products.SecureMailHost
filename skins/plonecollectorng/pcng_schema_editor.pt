@@ -52,7 +52,7 @@
             <h5 i18n:translate="fields">Fields</h5>
             <div class="portletBody">  
               <div tal:repeat="field python: here.atse_getSchemata(fieldset).fields()">
-                <a tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
+                <a tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
                                    class python: test(field.getName() == request.get('field'), 'selected', '')"
                     tal:content="string: ${field/getName}" />
                 <a tal:attributes="href string:atse_fieldMoveLeft?name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
@@ -228,10 +228,6 @@
           </div>
 
         </td>
-
-
-
-
 
       </tr>
 

@@ -48,7 +48,7 @@
         <b i18n:translate="" tal:content="set" />
       </div>
       <div tal:condition="python: set != fieldset" tal:omit-tag="">
-        <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_base_edit?fieldset=${set}">
+        <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
            <span i18n:translate="" tal:content="set" /></a>
       </div>
      <span tal:condition="not: repeat/set/end"> &bull;</span>

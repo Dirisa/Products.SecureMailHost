@@ -19,7 +19,7 @@
 
 <fieldset metal:define-macro="view_schemata" i18n:domain="plonecollectorng">
   <legend> <a class="schemata_legend"   
-              tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${schemata_name}">
+              tal:attributes="href string:pcng_base_edit?fieldset=${schemata_name}">
             <span i18n:translate="" tal:content="schemata_name"/>
            </a></legend>
   <metal:block  tal:repeat="field python: schemata.fields()">

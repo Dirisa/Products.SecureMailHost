@@ -37,7 +37,7 @@
           <metal:block tal:condition="python: member.has_permission('ManagePortalContent', here)" >
             <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
             <tal:block repeat="set fieldsets">
-              <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_base_edit?fieldset=${set}">
+              <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
                  <span i18n:translate="" tal:content="set" /></a> <span tal:condition="not: repeat/set/end">&bull;</span>
             </tal:block>
           </metal:block>
@@ -60,7 +60,7 @@
 
       <fieldset tal:define="fieldset python: 'issuedata'">
         <legend><a class="schemata_legend"  
-                   tal:attributes="href string:portal_form/pcng_base_edit?fieldset=${fieldset}"  
+                   tal:attributes="href string:pcng_base_edit?fieldset=${fieldset}"  
                    i18n:translate=""
                    tal:content="fieldset" /></legend>
 
