@@ -115,14 +115,11 @@
                                                                    sort_order='reverse', 
                                                                    sort_limit=5)[:5]">
 
-                    <div class="portlet portletThirdWidth"
-		    	tal:define="mylatest string:latest_${help_type/id}">
+                    <div class="portlet portletThirdWidth">
                         <h6>
                         <a tal:attributes="href help_type/getURL;
                                            title help_type/Description|nothing;">
-				<span i18n:translate="">
-				<span tal:replace="mylatest">LATEST DOCS</span>
-				</span>
+                        Latest <span tal:replace="help_type/Title">[type]</span>
                         </a>
                         </h6>
 
@@ -141,19 +138,15 @@
                             </div>
                             </tal:list>
                         
-                            <div class="portletContent odd"
-			    	tal:define="myall string:All_${help_type/id}">
-				<a class="portletMore"
-				   tal:attributes="href help_type/getURL;
-                                           title help_type/Description|nothing;"> 
-                                   <span i18n:translate="">
-				   	<span tal:replace="myall">ALL DOCS</span>
-				   </span>
-				   </a>
+                            <div class="portletContent odd">
+                                <a class="portletMore"
+                                   tal:attributes="href help_type/getURL" 
+                                   tal:content="structure string: All ${help_type/Title}&#8230;"
+                                   >All FAQs</a>
                             </div>
                           </div>
                         </div>
-
+                        
                     </div>
                 </div>
                 <div class="visualClear" tal:condition="python: repeat['help_type_tuple'].number() % 3 == 0" />
