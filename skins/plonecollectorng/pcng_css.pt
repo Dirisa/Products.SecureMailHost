@@ -26,6 +26,10 @@ div.collector_headline_right {
     text-align: left;
 }
 
+div.issue_metadata{
+    background: #eeeeee;
+}
+
 div.transcriptheader {
     background: #dddddd;
     font-size: 120%;
