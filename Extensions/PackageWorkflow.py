@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.3 $"[11:-2]
+__version__ = "$Revision: 1.4 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -70,7 +70,7 @@ def setupPSC_package_workflow(wf):
     ## Transitions initialization
     tdef = wf.transitions['retract']
     tdef.setProperties(title="""Member retracts submission""",
-                       new_state_id="""new""",
+                       new_state_id="""unapproved""",
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
@@ -106,7 +106,7 @@ def setupPSC_package_workflow(wf):
 
     tdef = wf.transitions['reject']
     tdef.setProperties(title="""Reviewer rejects submission""",
-                       new_state_id="""new""",
+                       new_state_id="""unapproved""",
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
