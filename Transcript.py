@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.12 2003/10/11 14:55:37 ajung Exp $
+$Id: Transcript.py,v 1.13 2003/10/11 19:01:20 ajung Exp $
 """
 
 import time 
@@ -100,6 +100,11 @@ class Transcript(Persistent, Implicit):
     security.declareProtected(CMFCorePermissions.View, 'addUpload')
     def addUpload(self, fileid, comment):
         event = TranscriptEvent('upload', fileid=fileid, comment=comment)
+        self.add(event)
+
+    security.declareProtected(CMFCorePermissions.View, 'addAction')
+    def addAction(self, action):
+        event = TranscriptEvent('action', action=action)
         self.add(event)
 
     security.declareProtected(CMFCorePermissions.View, 'getEvents')
