@@ -76,7 +76,7 @@
             </metal:block>
         </div>
         </fieldset>
-      </metal:block >
+      </metal:block>
 
       <fieldset><legend i18n:translate="transcript">Transcript</legend>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
@@ -84,8 +84,10 @@
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
 
-        <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
-          <img tal:attributes="src image/absolute_url">
+        <metal:block tal:condition="python: 0"> <!-- remove this for inline images -->
+          <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
+            <img tal:attributes="src image/absolute_url">
+          </metal:block>
         </metal:block>
 
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
