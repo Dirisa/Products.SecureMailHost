@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.46 2003/10/19 12:55:45 ajung Exp $
+$Id: Issue.py,v 1.47 2003/10/19 15:07:47 ajung Exp $
 """
 
 import sys, os
@@ -185,7 +185,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         # perform workflow action
         if not action in ('comment', ):
             if action != 'request' and not action in self.validActions():
-                raise Unauthorized('Invalid action: %s' % action)
+                raise Unauthorized(self.translate('invalid_action', 
+                                                  'Invalid action: %(action)s', action=action))
 
             old_status = self.status()
             wf = getToolByName(self, 'portal_workflow')
@@ -200,7 +201,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
         notifications.notify(self)
-        util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
+        util.redirect(RESPONSE, 'pcng_issue_view', 
+                      self.translate('followup_submitted', 'Followup submitted'))
 
     security.declareProtected(CMFCorePermissions.View, 'lastAction')
     def lastAction(self):
@@ -259,7 +261,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
         issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
         self.deleteReference(issue)
-        util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been deleted')
+        util.redirect(RESPONSE, 'pcng_issue_references', 
+                      self.translate('reference_deleted', 'Reference has been deleted'))
 
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
@@ -267,20 +270,21 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         tracker_url = unquote(reference.tracker)
         tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
         if not tracker:
-            raise ValueError('Tracker does not exist: %s' % tracker_url)
+            raise ValueError(self.translate('no_tracker', 'Tracker does not exist: %(tracker_url)s', tracker_url=tracker_url))
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
-            raise ValueError('Ticket number does not exist: %s' % reference.ticketnumber)
+            raise ValueError(self.translate('no_ticket', 'Ticket number does not exist: %(ticketnum)s', ticketnum=reference.ticketnumber))
         issue = tracker[reference.ticketnumber]
 
         if not reference.comment:
-            raise ValueError('References must have a comment')
+            raise ValueError(self.translate('reference_no_comment', 'References must have a comment'))
 
         self.addReference(issue, IssueRelationship(tracker.title_or_id(), 
                                                    issue.getId(),
                                                    issue.absolute_url(), 
                                                    reference.comment))
-        util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
+        util.redirect(RESPONSE, 'pcng_issue_references', 
+                      self.translate('reference_stored', 'Reference has been stored'))
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
@@ -296,7 +300,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         elif format in ('cmap',):
             graphviz.viz2map(vizfile, format, RESPONSE)
         else:
-            raise RuntimeError('unknown format "%s"' % format)
+            raise RuntimeError(self.translate('unknown_format', 'unknown format "%(format)s"', format=format))
 
     ######################################################################
     # File uploads 
@@ -315,9 +319,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             obj.manage_upload(uploaded_file)
             self._transcript.addUpload(file_id, comment)
 
-            util.redirect(RESPONSE, 'pcng_issue_references', 'File base been uploaded')
+            util.redirect(RESPONSE, 'pcng_issue_references', 
+                          self.translate('file_uploaded', 'File base been uploaded'))
         else:
-            util.redirect(RESPONSE, 'pcng_issue_references', 'Nothing to be uploaded')
+            util.redirect(RESPONSE, 'pcng_issue_references', 
+                          self.translate('nothing_for_upload', 'Nothing to be uploaded'))
 
     ######################################################################
     # Misc

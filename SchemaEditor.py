@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.20 2003/10/16 15:44:21 ajung Exp $
+$Id: SchemaEditor.py,v 1.21 2003/10/19 15:07:47 ajung Exp $
 """
 
 import operator
@@ -260,7 +260,6 @@ class SchemaEditor:
         field = self.schema_getWholeSchema()[name]
         del self._schemas[field.schemata][name]
         self._schemas[fieldset].addField(field)
-        print self._schemas[fieldset].fields()
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved to other fieldset', fieldset=fieldset, field=name)
 
     security.declareProtected(ManageCollector, 'schema_get_fieldtype')

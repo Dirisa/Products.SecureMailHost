@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.47 2003/10/19 13:32:15 ajung Exp $
+$Id: Collector.py,v 1.48 2003/10/19 15:07:47 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -209,7 +209,8 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._supporters = supporters
         self._adjust_staff_roles()
 
-        util.redirect(RESPONSE, 'pcng_view', self.translate('changes_saved', 'Your changes have been saved'))
+        util.redirect(RESPONSE, 'pcng_view', 
+                      self.translate('changes_saved', 'Your changes have been saved'))
 
     def _adjust_staff_roles(self):
         """ Adjust local-role assignments to track staff roster settings.
@@ -266,12 +267,14 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             emails = [e.strip() for e in emails if e.strip()]
             for email in emails:
                 if not util.isValidEmailAddress(email):
-                    raise ValueError('Invalid email address: %s' % email)
+                    raise ValueError(self.translate('invalid_email_address', 
+                                                    'Invalid email address: %(email)s', email=email))
 
             self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails
 
-        util.redirect(RESPONSE, 'pcng_view', self.translate('changes_saved', 'Your changes have been saved'))
+        util.redirect(RESPONSE, 'pcng_view', 
+                      self.translate('changes_saved', 'Your changes have been saved'))
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
     def getNotificationsForState(self, state):
@@ -323,14 +326,16 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
-        util.redirect(RESPONSE, REQUEST['HTTP_REFERER'], 'Issues updated')
+        util.redirect(RESPONSE, REQUEST['HTTP_REFERER'], 
+                      self.translate('issues_updated', 'Issues updated'))
 
     security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
         """ reindex all issues """
         for issue in self.objectValues('PloneIssueNG'):
             issue.reindexObject()
-        util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
+        util.redirect(RESPONSE, 'pcng_maintainance', 
+                      self.translate('issues_reindexed', 'Issues reindexed'))
 
     ######################################################################
     # Some Archetypes madness
@@ -347,7 +352,6 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             sub.addField(f)
             schemata[f.schemata] = sub
         return schemata
-
 
 registerType(PloneCollectorNG)
 
