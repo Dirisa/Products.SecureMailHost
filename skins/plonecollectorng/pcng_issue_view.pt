@@ -38,7 +38,9 @@
 
       <div metal:use-macro="here/issue_macros/macros/issue_uploads" /> 
       <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
-      <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
+      <div class="group"><span class="legend">Transcript</span>
+        <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
+      </div>
       <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
 
     </div>
