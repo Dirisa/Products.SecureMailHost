@@ -1,0 +1,54 @@
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+<metal:block metal:fill-slot="head_slot">
+  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+</metal:block>
+<div metal:fill-slot="main">	  
+
+  <metal:block tal:define="action string: Topic-Staff mapping for topic ${request/topic}; navig_configuration nothing">
+    <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+  </metal:block>
+
+  <form action="pcng_set_topics_user" method="post">
+    <table class="listing" 
+           tal:define="users python: here.getTrackerUsers(staff_only=1);
+                       topic_user here/get_topics_user;
+                       userids python: topic_user.get(request['topic'], [])">
+      <tr>
+        <th i18n:translate="staff_members">Staff members</th>
+      </tr>
+
+      <tr>
+        <td>
+          <select name="users:list:string" multiple size="10">
+            <option tal:repeat="user users"
+                    tal:content="user/username"
+                    tal:attributes="value user/username;
+                                    SELECTED python: user.get('username', None) in userids" />
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <div>
+      <input class="context" type="submit" value="Save" i18n:attributes="value" class="standalone"/>
+      <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
+    </div> <!-- End row -->
+    
+    <hr>
+    <div class="formHelp" i18n:translate="help_topics_users">
+    Topics taken from the Archetypes field 'topic' can be assigned to a set of staff members.
+    All staff members are automatically assigned to an issue if the submitter/supporter chooses
+    to assign an issue to a topic-group. The group of topics is taken from the list of all topics
+    except that topics named <em>maintopic/subtopic</em> are considered to belong to the topic
+    <em>maintopic</em>.  
+    </div>
+  </form>
+</div>
+</body>
+</html>
