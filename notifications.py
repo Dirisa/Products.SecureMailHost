@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.36 2004/05/09 09:02:04 ajung Exp $
+$Id: notifications.py,v 1.37 2004/05/09 09:17:28 ajung Exp $
 """
 
 import sys, time
@@ -91,7 +91,8 @@ def _send_notifications(recipients, issue, send_attachments=0):
     # No recipients???
     if not dest_emails: return  
     # don't send notifications for half-filled issues
-    if issue.aq_parent.meta_type != 'PloneCollectorNG': continue
+    try: id = int(issue.getId())
+    except: return 
 
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
