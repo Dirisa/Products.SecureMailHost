@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.209 2004/07/22 19:55:05 ajung Exp $
+$Id: Issue.py,v 1.210 2004/07/27 05:11:47 ajung Exp $
 """
 
 import os, time, random
@@ -315,8 +315,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ add a new reference (record object) """
 
         if self.haveATReferences():
+
             tracker_url = unquote(reference.tracker)
             tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
+
             if not tracker:
                 raise ValueError(self.Translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
 
@@ -324,8 +326,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 raise ValueError(self.Translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
             issue = tracker._getOb(reference.ticketnumber)
 
+            if issue == self:
+                raise ValueError(self.Translate('no_self_reference', 'Issues can not reference themselves')
+
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
+
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                    issue_url=issue.absolute_url(1),
                                                    collector_title=tracker.getId(),
