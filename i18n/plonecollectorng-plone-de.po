@@ -108,5 +108,3 @@ msgstr "Finnisch"
 
 msgid "Dutch"
 msgstr "Holländisch"
-msgid ""
-msgstr ""
