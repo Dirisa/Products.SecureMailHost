@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.19 2003/11/24 06:51:52 ajung Exp $
+$Id: migrate.py,v 1.20 2003/11/25 13:13:58 ajung Exp $
 """
 
 
@@ -113,9 +113,11 @@ def migrate_memberdata(source, dest):
 
 
 def migrate_tracker(tracker, dest):
+#    if tracker.getId() != 'HaufeReader': return
 
     print '-'*75
     print 'Migrating collector:', tracker.getId()
+    
 
     try: dest.manage_delObjects(tracker.getId())
     except: pass
@@ -248,11 +250,12 @@ def migrate_schema(tracker, collector):
 
 
 def migrate_issue(issue, collector):
+#    if issue.getId() != '325': return
+
     print 'Migrating issue:', issue
 
     collector.invokeFactory('PloneIssueNG', issue.getId())
     new_issue = collector._getOb(issue.getId())
-#    new_issue.setSchema(collector.schema_getWholeSchema())
 
     P = record()
     P.set('title', issue.title)
@@ -261,6 +264,7 @@ def migrate_issue(issue, collector):
     P.set('topic',  issue.topic + "/" + issue.subtopic)
     P.set('classification',  issue.classification)
     P.set('importance',  issue.importance)
+    P.set('version_info',  issue.version_info)
 
     for f in ('submitter_name', 'submitter_email' , 'submitter_company',
               'submitter_position' , 'submitter_city', 'submitter_phone',
@@ -319,6 +323,7 @@ def migrate_issue(issue, collector):
                                                 created=ts,
                                                 user=entry.getUser())   
 
+                
                 if change.getField().lower().find('zugewiesen') > -1 or \
                    change.getField().lower().find('assigned') > -1:
                     for u in change.getRemoved():
@@ -349,7 +354,7 @@ def migrate_issue(issue, collector):
         assignees = tr_assignees
     else:
         assignees = issue.assigned_to()
-   
+    
     if new_state.lower() != old_state.lower():
 
         wftool = collector.portal_workflow  # evil
@@ -368,5 +373,4 @@ def migrate_issue(issue, collector):
         else: 
             raise ValueError(new_state)
 
-        new_issue.workflow_history['pcng_issue_workflow'][-1]['assigned_to'] = assignees
-    
+    new_issue.workflow_history['pcng_issue_workflow'][-1]['assigned_to'] = assignees
