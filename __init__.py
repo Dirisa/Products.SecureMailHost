@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.18 2004/03/27 05:00:09 ajung Exp $
+$Id: __init__.py,v 1.19 2004/05/26 16:26:26 ajung Exp $
 """
 
 import os, sys
@@ -49,6 +49,7 @@ def initialize(context):
 from Products.PythonScripts.Utility import allow_module
 allow_module('textwrap')
 allow_module('group_assignment_policies')
+allow_module('base64')
 
 ##########################################################################
 # Monkeypatch CMFCore.FSMetadata to ensure that security settings in
