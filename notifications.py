@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.30 2004/04/16 06:30:19 ajung Exp $
+$Id: notifications.py,v 1.31 2004/04/16 06:40:55 ajung Exp $
 """
 
 import sys, time
@@ -110,14 +110,14 @@ def _send_notifications(recipients, issue, send_attachments=0):
         obj = latest_upload(issue)
         if obj.meta_type in('Portal Image',):
             att = MIMEImage(str(obj.data))
-            att.add_header('content-disposition', "attachment; filename='%s'" % obj.getId())
+            att.add_header('content-disposition', "attachment; filename=%s" % obj.getId())
             outer.attach(att)
 
     # Keyfile
     encoded_text = issue.encode_information(issue.absolute_url(1))
     keyfile = MIMEText(encoded_text)
     keyfile.add_header('content-type', 'text/plain')
-    keyfile.add_header('content-disposition', "attachment; filename='pcng.key'")
+    keyfile.add_header('content-disposition', "attachment; filename=pcng.key")
     outer.attach(keyfile)
 
 
