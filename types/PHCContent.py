@@ -100,3 +100,13 @@ class PHCContent (HistoryAwareMixin):
             return objs
         else:
             return None
+            
+    def getDefaultImportance(self):
+        """Get the default importance level, set on the root PHC object"""
+        if hasattr (self.aq_parent, 'getDefaultImportance'):
+            return self.aq_parent.getDefaultImportance ()
+        else:
+            # XXX: This is here to fall back gracefully if we are in a 
+            # PloneSoftwareCenter project where we don't have a dynamic
+            # importance vocab.
+            return IMPORTANCE_DEFAULT

@@ -17,7 +17,7 @@ except ImportError:
 ImportanceSchema = Schema((
     StringField('importance',
                required=1,
-               default='getImportanceDefault',
+               default_method="getDefaultImportance",
                index='KeywordIndex:schema',
                vocabulary='getImportanceVocab',
                widget=SelectionWidget(
@@ -273,6 +273,7 @@ HCRootSchema = BaseFolderSchema + Schema((
         
     StringField('defaultImportance',
         required=1,
+        enforceVocabulary=1,
         default=IMPORTANCE_DEFAULT,
         vocabulary='getImportance_vocab',
         widget=SelectionWidget(
