@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.32 2003/09/20 12:42:10 ajung Exp $
+$Id: Collector.py,v 1.33 2003/09/23 12:44:49 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -39,11 +39,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
-        {'id': 'edit',
-        'name': 'Edit',
-        'action': 'pcng_base_edit',
-        'permissions': (ManageCollector,)
-        },
+#        {'id': 'edit',
+#        'name': 'Edit',
+#        'action': 'pcng_base_edit',
+#        'permissions': (ManageCollector,)
+#        },
         {'id': 'pcng_addissue',
         'name': 'Add issue',
         'action': 'add_issue',
@@ -74,6 +74,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         'action': 'pcng_maintainance',
         'permissions': (ManageCollector,)
         },
+        {'id': 'pcng_member_preferences',
+        'name': 'Member preferences',
+        'action': 'pcng_member_preferences',
+        'permissions': (CMFCorePermissions.View,)
+        },
         )
 
     __ac_roles__ = ('Manager', 'TrackerAdmin', 'Supporter', 'Reporter')
@@ -94,9 +99,20 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
             util.add_local_role(self, username, role)
 
     def manage_afterAdd(self, item, container):
+        """ post creation actions """
         self._transcript = Transcript()
         self._transcript.addComment('Tracker created')
 
+        # Archestypes uses hardcoded factory-settings for 'immediate_view'
+        # that don't not meet our requirements to jump into the 'view' 
+        # from the navigation tree instead into 'edit'. So we tweak
+        # 'immediate_view' a bit.
+        typestool = getToolByName(self, 'portal_types', None)
+        ti = typestool.getTypeInfo('PloneIssueNG')
+        ti.immediate_view = 'pcng_issue_view'
+        ti = typestool.getTypeInfo('PloneCollectorNG')
+        ti.immediate_view = 'pcng_view'
+        
     def _setup_collector_catalog(self):
         """Create and situate properly configured collector catalog."""
         catalog = PloneCollectorNGCatalog()
@@ -256,7 +272,8 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     security.declareProtected(ManageCollector, 'issue_states')
     def issue_states(self):
         """ return a list of all related issue workflow states """
-        states = getattr(self.portal_workflow, IssueWorkflowName).states._mapping.keys()
+        wftool = getToolByName(self, 'portal_workflow')
+        states = wftool[IssueWorkflowName].states._mapping.keys()
         states.sort()
         return states
 
