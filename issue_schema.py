@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.4 2003/09/09 12:01:48 ajung Exp $
+$Id: issue_schema.py,v 1.5 2003/09/10 04:32:58 ajung Exp $
 """
 
 from Products.Archetypes.public import BaseSchema, Schema, DisplayList
@@ -30,11 +30,13 @@ schema = BaseSchema +  Schema((
     StringField('progress_percent_done',
                 schemata='progress'
                 ),
+    # do not remove 'contact_name'
     StringField('contact_name',
                 searchable=1,
                 required=1,
                 schemata='contact'
                 ),
+    # do not remove 'contact_email'
     StringField('contact_email',
                 searchable=1,
                 required=1,
