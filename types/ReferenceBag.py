@@ -20,7 +20,7 @@
 ##############################################################################
 """
 
-$Id: ReferenceBag.py,v 1.2 2004/05/02 12:15:42 dpunktnpunkt Exp $
+$Id: ReferenceBag.py,v 1.3 2004/05/13 18:17:34 dpunktnpunkt Exp $
 """
 
 from Products.Archetypes.debug import log, log_exc
@@ -68,8 +68,15 @@ class ReferenceBag(ReferenceFolder):
         self.manage_delObjects(self.objectIds())
 
 def modify_fti(fti):
-    fti.update({#'allowed_content_types': (),
-                #'filter_content_types': 1,
-                'global_allow': 0})
+    # Since the introduction of _verifyObjectPaste() in Plone 2.0.1 the
+    # filter_content_types approach ceased to work.
+    # The downside is that the UI is kinda borked because we don't want users
+    # to add content inside a Reference Bag.
+
+    fti.update({
+        'allowed_content_types': (),
+        'filter_content_types': 0, # <-- XXX
+        'global_allow': 0
+        })
     
 registerType(ReferenceBag)
