@@ -34,6 +34,6 @@ msgstr "Mitarbeiter"
 msgid "Member preferences"
 msgstr "Teilnehmer Voreinstellungen"
 
-msgid "References & Uploads"
-msgstr "Referenzen & Uploads"
+msgid "References &amp; Uploads"
+msgstr "Referenzen &amp; Uploads"
 
