@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.65 2003/11/03 20:17:22 ajung Exp $
+$Id: Issue.py,v 1.66 2003/11/04 13:47:03 ajung Exp $
 """
 
 import sys, os
@@ -110,7 +110,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         self.title = title 
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
-        self._transcript.addComment('Issue created')
+#        self._transcript.addComment('Issue created')
 
     def Schema(self):
         """ Return our schema (through acquisition....uuuuuh). We override
@@ -218,11 +218,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             (Used for TTW creation of issues)
         """
 
+        schema = self.Schema()
         for k in parameters.keys():
             if  k in ('id',):
                 raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
-            field = self.Schema()[k]
+            field = schema[k]
             field.storage.set(k, self, v)
 
     def getParameter(self, key):
