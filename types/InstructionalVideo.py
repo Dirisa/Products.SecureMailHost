@@ -9,7 +9,7 @@ from AccessControl import ClassSecurityInfo
 
 MAPPING = {'text_html' : 'text/html'}
 
-class HelpCenterInstructionalVideo(PHCContent,BaseFolder):
+class HelpCenterInstructionalVideo(PHCContent,BaseContent):
     """This is an Instructional Video content type, to which you can attach 
     movies and other relevant files.
     """
@@ -20,30 +20,16 @@ class HelpCenterInstructionalVideo(PHCContent,BaseFolder):
     archetype_name = 'Video'
     meta_type = 'HelpCenterInstructionalVideo'
     global_allow = 0
-    filter_content_types = 1
     allow_discussion = IS_DISCUSSABLE
-    allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
     actions = ({'id': 'view',
                 'name': 'View',
                 'action': 'string:${object_url}/ivideo_view',
                 'permissions': (CMFCorePermissions.View,)
-                },
-        {
-        'id': 'attachments',
-        'name': 'Files',
-        'action': 'string:${object_url}/ivideo_attachments',
-        'permissions': (CMFCorePermissions.ModifyPortalContent,)
-        },
-        
-        )
+                },       
+              )
         
     security = ClassSecurityInfo()
         
    
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setFormat')
-    def setFormat(self, value):
-        value = MAPPING.get(value, value)
-        BaseFolder.setFormat(self, value)
-
 registerType(HelpCenterInstructionalVideo, PROJECTNAME)

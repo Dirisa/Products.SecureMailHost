@@ -498,9 +498,10 @@ GlossarySchema = HCFolderSchema + Schema((
 # Instructional Video
 #####################
 
-InstructionalVideoSchema = HCFolderSchema + Schema((
+InstructionalVideoSchema = HCSchema + Schema((
     TextField('description',
               default='',
+              required=1,
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
@@ -511,13 +512,77 @@ InstructionalVideoSchema = HCFolderSchema + Schema((
                  label_msgid = "phc_label_detailed_video",
                  i18n_domain = "plonehelpcenter"
               ),
-              **DEFAULT_CONTENT_TYPES
-    ),
+        ),
+        
+    FileField(
+        name='video_file',
+        required=1,
+        primary=1,
+        widget=FileWidget(
+            description="Click 'Browse' to upload a Flash .swf file.",
+            description_msgid="phc_help_videofile_description",
+            label="Flash File (.swf)",
+            label_msgid="phc_label_videofile_description",
+            i18n_domain="plonehelpcenter",
+            ),
+        ),
+
+    ImageField(
+        name='screenshot',
+        required=0,
+        sizes=IMAGE_SIZES,
+        widget=ImageWidget(
+            label='Screenshot',
+            label_msgid='phc_label_video_screenshot',
+            description='Add a screenshot by clicking the \'Browse\' '
+                          'button. Add a screenshot that highlights the '
+                          'content of the instructional video.',
+            description_msgid='phc_help_video_screenshot',
+            i18n_domain='plonehelpcenter',
+            ),
+        ),
+
+    StringField('duration',
+        required=0,
+        widget=StringWidget(
+            description_msgid='phc_help_video_duration',
+            description='Length (in minutes) of the video',
+            label_msgid='phc_label_video_duration',
+            label='Duration',
+            i18n_domain='plonehelpcenter',
+            ),
+        ),
+
+    IntegerField('width',
+        required=0,
+        default='800',
+        validators=('isInt',),
+        widget=IntegerWidget(
+            description_msgid='phc_help_video_width',
+            description='Width of the video',
+            label_msgid='phc_label_video_width',
+            label='Width',
+            i18n_domain='plonehelpcenter',
+            ),
+        ),
+
+    IntegerField('height',
+        required=0,
+        default='600',
+        validators=('isInt',),
+        widget=IntegerWidget(
+            description_msgid='phc_help_video_height',
+            description='Height of the video',
+            label_msgid='phc_label_video_height',
+            label='Height',
+            i18n_domain='plonehelpcenter',
+            ),
+        ),
     ),
 
     marshall=PrimaryFieldMarshaller(),
 
- ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ############################
 # Instructional Video Folder

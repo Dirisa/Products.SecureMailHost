@@ -34,6 +34,24 @@
         <dl>
             <tal:video tal:repeat="video python:here.getItemsBySection(section=section)">
             <dt>
+                <div style="float:right; text-align: center; margin: 1em 0 1em 1em;"
+                     tal:condition="video/screenshot_thumb | nothing">
+                    <a class="discreet"
+                       tal:attributes="href string:${video/absolute_url}/screenshot/image_view_fullscreen">
+                        <img tal:replace="structure video/screenshot_thumb" />
+                        <br />
+                        <img tal:replace="structure here/search_icon.gif" />
+                        <span i18n:translate="label_click_to_enlarge">
+                            Click to enlarge
+                        </span>
+                    </a>
+                    <div class="discreet">
+                        <strong>Duration:</strong>
+                        <span tal:content="video/duration" tal:condition="video/duration | nothing">
+                              Duration
+                        </span>
+                    </div>
+                </div>
                 <img tal:replace="structure here/movie_icon.gif" />
                 <a href="" tal:content="video/Title"
                    tal:define="review_state python:getInfoFor(video, 'review_state', None)"

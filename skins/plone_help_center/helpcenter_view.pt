@@ -23,7 +23,8 @@
                                      ('HelpCenterTutorialFolder','HelpCenterTutorial'),
                                      ('HelpCenterLinkFolder','HelpCenterLink'),
                                      ('HelpCenterErrorReferenceFolder','HelpCenterErrorReference'),
-                                     ('HelpCenterGlossary','HelpCenterDefinition'));
+                                     ('HelpCenterGlossary','HelpCenterDefinition'),
+                                     ('HelpCenterInstructionalVideoFolder','HelpCenterInstructionalVideo'));
                     subtypes python: [ t[0] for t in subtypes_tuples ];
                     rss_subtypes python: [ t[1] for t in subtypes_tuples ];">
             <h1 tal:content="here/title_or_id" class="documentFirstHeading">
