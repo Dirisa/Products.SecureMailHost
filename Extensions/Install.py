@@ -31,9 +31,10 @@ def addWorkflow(self, out, tool, workflowName, workflowId):
         tool.manage_addWorkflow(workflowName, workflowId)
         print >> out, 'Added workflow %s.' % workflowName
 
-def addCatalogIndex(self, out, catalog, index, type, extra = None):
+def addCatalogIndex(self, out, catalog, index, type, extra=None):
     """Add the given index name, of the given type, to the catalog."""
-    
+    if catalog.meta_type == 'ZCatalog Queue':
+         catalog = self.unrestrictedTraverse(catalog._location)
     if index not in catalog.indexes():
         catalog.addIndex(index, type, extra)
         catalog.reindexIndex(index, self.REQUEST)
@@ -48,7 +49,7 @@ def addCatalogMetadata(self, out, catalog, column):
         print >> out, "Added", column, "to catalog metadata"
     else:
         print >> out, column, "already in catalog metadata"
-        
+
 def removeCatalogMetadata(self, out, catalog, column):
     """Delete the given metadata column"""
     if column in catalog.schema():
@@ -56,7 +57,7 @@ def removeCatalogMetadata(self, out, catalog, column):
         print >> out, "Removed column", column
     else:
         print >> out, "Column", column, "not in catalog"
-        
+
 def installWorkflows(self, out):
     workflow = getToolByName(self, 'portal_workflow')
     print >> out, 'Installing custom workflows'
@@ -166,9 +167,9 @@ def install(self):
 
 def uninstall(self):
     out = StringIO()
-    
+
     cleanCatalog(self, out)
-    
+
     print >> out, 'Successfully uninstalled %s.' % config.PROJECTNAME
-    
+
     return out.getvalue()
