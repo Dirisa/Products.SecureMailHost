@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.13 2003/11/09 13:47:51 ajung Exp $
+$Id: migrate.py,v 1.14 2003/11/09 14:47:58 ajung Exp $
 """
 
 
@@ -137,7 +137,7 @@ def migrate_tracker(tracker, dest):
                         supporters=tracker.supporters)
 
     # Number of issues
-    collector._num_issues = len(issues)
+    collector._num_issues = len(issues) + 1
     
     # Reindex issues
     collector.reindex_issues()
