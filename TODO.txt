@@ -9,9 +9,6 @@ General
 - IMPORTANT: "Additional resources" doesn't currently show the available PHC
              folder types. It should. :)
              
-- Important: It seems like PSC still uses the AreaWorkflow - should use the
-             default workflow of the site. May be plone.org issue, investigate.
-
 - I think the releasefolder_view has been generalized a bit too
   much, it says "There are no available releases in this project
   yet" when there are - they are just not in that section (Upcoming). 
@@ -30,7 +27,6 @@ General
 - RSS feed for Latest Releases, ability to have an RSS feed for every project
   and category too.
 
-- Need to list the documentation folder types in the Additional resources box.
 
 
 =========
