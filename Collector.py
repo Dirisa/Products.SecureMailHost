@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.180 2004/05/14 16:28:33 ajung Exp $
+$Id: Collector.py,v 1.181 2004/05/20 12:08:29 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -49,37 +49,37 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         'name': 'Browse issues',
         'action': 'pcng_view',
         'permissions': (View,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'pcng_search_form',
         'name': 'New search',
         'action': 'pcng_search_form',
         'permissions': (View,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'pcng_configuration',
         'name': 'Configuration',
         'action': 'pcng_configuration',
         'permissions': (ManageCollector,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'pcng_addissue',
         'name': 'Add issue',
         'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'pcng_history',
         'name': 'History',
         'action': 'pcng_history',
         'permissions': (ManageCollector,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'pcng_reports',
         'name': 'Reports',
         'action': 'pcng_reports',
         'permissions': (ManageCollector,),
-        'category' : 'pcng_collector',
+        'category' : 'object_pcng_collector',
         },
         {'id': 'collector_debug',
         'name': 'Debug',

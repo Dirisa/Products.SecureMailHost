@@ -84,7 +84,7 @@
   <div class="portlet" id="pcng_collector_portlet">
     <h5 i18n:translate="collector_actions">Collector actions</h5>
     <div class="portletBody"  id="pcng_portlet_collector">
-      <div class="pcng_action" tal:repeat="a actions/pcng_collector|nothing">
+      <div class="pcng_action" tal:repeat="a actions/object_pcng_collector|nothing">
           <a tal:attributes="href a/url">
             <span class="pcng_action"
                   i18n:translate="" 
@@ -162,7 +162,7 @@
     <h5 i18n:translate="issue_actions">Issue actions</h5>
      <span tal:content="python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here)"/>
     <div class="portletBody" id="pcng_portlet_issue">
-      <div class="pcng_action" loop tal:repeat="a actions/pcng_issue|nothing">
+      <div class="pcng_action" loop tal:repeat="a actions/object_pcng_issue|nothing">
         <a tal:attributes="href a/url">
           <span i18n:translate="" 
                 tal:attributes="id a/id"

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.172 2004/05/14 10:21:32 ajung Exp $
+$Id: Issue.py,v 1.173 2004/05/20 12:08:29 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -58,62 +58,62 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         'name': 'Browse issues',
         'action': 'pcng_ticket_browser',
         'permissions': (View,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_search_form',
         'name': 'New search',
         'action': 'pcng_search_form',
         'permissions': (View,),
-        'category' : 'pcng_issue',
+        'category' : 'object_pcng_issue',
         },
         {
         'id': 'pcng_new_issue',
         'name': 'Add issue',
         'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,),
-        'category' : 'pcng_issue',
+        'category' : 'object_pcng_issue',
         },
         {'id': 'pcng_issue_followup',
         'name': 'Followup',
         'action': 'pcng_issue_followup',
         'condition' : 'object/isPersistent',
         'permissions': (AddCollectorIssueFollowup,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_issue_uploads',
         'name': 'Uploads',
         'action': 'pcng_issue_uploads',
         'condition' : 'python: object.isPersistent() and object.haveUploads()',
         'permissions': (AddCollectorIssueFollowup,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_issue_references',
         'name': 'References',
         'action': 'pcng_issue_references',
         'condition' : 'python: object.isPersistent() and object.haveATReferences()',
         'permissions': (AddCollectorIssueFollowup,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_issue_simple_view',
         'name': 'Simple view',
         'action': 'pcng_issue_view_no_images',
         'condition' : 'object/isPersistent',
         'permissions': (View,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_issue_view_with_images',
         'name': 'View with images',
         'action': 'pcng_issue_view_images',
         'condition' : 'object/isPersistent',
         'permissions': (View,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'pcng_issue_pdf',
         'name': 'PDF',
         'action': 'asPDF',
         'condition' : 'object/isPersistent',
         'permissions': (View,),
-        'category' : 'pcng_issue'
+        'category' : 'object_pcng_issue'
         },
         {'id': 'issue_debug',
         'name': 'Debug',
