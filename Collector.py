@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.163 2004/04/15 15:57:15 ajung Exp $
+$Id: Collector.py,v 1.164 2004/04/17 12:32:05 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -674,6 +674,13 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 if node.nodeType == node.TEXT_NODE:
                     l.append(node.data)
             return ' '.join(l)
+
+        def response(RESPONSE, status, msg):
+            if RESPONSE:
+                RESPONSE.setStatus(401)
+                RESPONSE.write(msg)
+            else:
+                raise ValueError(msg)
     
         class record:
 
@@ -696,6 +703,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         R.set('title', fromDOM(DOM, 'subject'))
         R.set('description', fromDOM(DOM, 'body'))
         R.set('contact_email', fromDOM(DOM, 'senderaddress'))
+        R.set('issue_id', str(fromDOM(DOM, 'issue_id')))
 
         member = self._member_for_email(R.contact_email)
         if member:
@@ -707,38 +715,53 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         if not allowed_to_post:
             msg = 'No permission to post for %s' % str(R.contact_email)
-            if RESPONSE:
-                RESPONSE.setStatus(401)
-                RESPONSE.write(msg)
-                return
-            else:
-                raise ValueError(msg)
+            return response(RESPONSE, 401, msg)
 
-        id = self.new_issue_number()
-        self.invokeFactory('PloneIssueNG', id)
-        issue =  self._getOb(id)
-        issue.post_creation_actions()
-        issue.setParameters(R)
-        issue.changeOwnership(member)
-        transcript = issue.getTranscript()
-        transcript.addComment(u'Issue submitted through email')
+        key = fromDOM(DOM, 'key')
+        if key:
+            # Followup
+            issue_url = self.decode_information(key).strip()
+            issue = self.restrictedTraverse(issue_url, None)
+            if not issue:
+                msg = 'No such issue with URL %s' % issue_url
+                return response(RESPONSE, 404, msg)
 
-        # attachments
-        for node in DOM.getElementsByTagName('attachment'):
-            cn = node.childNodes[0]
-            xmldata = cn.data 
-            imgdata = base64.decodestring(xmldata)
-            issue.upload_file(imgdata, 
-                              srcname=node.getAttribute('filename'), 
-                              mimetype=node.getAttribute('mimetype'),
-                              notify=0)
+            issue.getTranscript().addComment(R.description, user=member_id)
 
-        if R.description:
-            transcript.addComment(R.description)
+        elif R.issue_id:
+            issue = getattr(self, R.issue_id, None)
+            if not issue:
+                msg = 'No such issue with id %s' % R.issue_id
+                return response(RESPONSE, 404, msg)
+
+            comment = R.description + '\n\n' + self.Translate('untrusted_submission', 'Untrusted issue submission: no verification possible')
+            issue.getTranscript().addComment(comment, user=member_id)
+
+        else:
+            # New issue
+            id = self.new_issue_number()
+            self.invokeFactory('PloneIssueNG', id)
+            issue =  self._getOb(id)
+            issue.post_creation_actions()
+            issue.setParameters(R)
+            issue.changeOwnership(member)
+            transcript = issue.getTranscript()
+            transcript.addComment(u'Issue submitted through email')
+
+            # attachments
+            for node in DOM.getElementsByTagName('attachment'):
+                cn = node.childNodes[0]
+                xmldata = cn.data 
+                imgdata = base64.decodestring(xmldata)
+                issue.upload_file(imgdata, 
+                                  srcname=node.getAttribute('filename'), 
+                                  mimetype=node.getAttribute('mimetype'),
+                                  notify=0)
+
+            if R.description: transcript.addComment(R.description)
+
         issue.reindexObject()
-
         notifications.notify(issue)
-
         RESPONSE.write(issue.absolute_url())
 
     def _member_for_email(self, email):

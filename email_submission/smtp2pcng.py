@@ -7,12 +7,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.15 2004/04/17 09:52:10 ajung Exp $
+$Id: smtp2pcng.py,v 1.16 2004/04/17 12:32:05 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
 
-import sys, os, logging, base64, logging, time
+import sys, os, logging, base64, logging, time, re
 import httplib, urllib, urlparse
 from ConfigParser import ConfigParser
 from cStringIO import StringIO
@@ -65,6 +65,9 @@ class Result:
 
     def __init__(self):
         self.attachments = []
+        self.key = ''
+        self.collector_abr = ''
+        self.issue_id = ''
 
     def addAttachment(self, data, mimetype, filename):
         self.attachments.append( (data, mimetype, filename))
@@ -76,7 +79,7 @@ class Result:
         IO = StringIO()
         IO.write('<?xml version="1.0" encoding="utf-8"?>\n')
         IO.write('<issue>\n')
-        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body', 'key'):
+        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body', 'key', 'issue_id', 'collector_abr'):
             IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a))
 
         for a in self.getAttachments():
@@ -146,6 +149,12 @@ def parse_mail(options):
         if part.has_key("Subject"):
             R.subject = decode_header(part.get("Subject"))[0][0]
             LOG.debug('Subject=%s' % (R.subject))
+            mo = re.search('\[(.*?)/(.*?)\]', R.subject)
+            if mo:
+                R.collector_abr = mo.group(1)
+                R.issue_id = mo.group(2)
+            else:
+                raise RuntimeError('Subject could not be parsed properly')
 
         if ct in ('text/plain',):
             R.body = unicode(part.get_payload(decode=1), encoding).encode('utf-8')
@@ -161,7 +170,6 @@ def submit_request(R, options):
                "Accept": "text/plain",
               }
     if options.username and options.password:
-        print options.username, options.password
         headers['Authorization'] = 'Basic ' + base64.encodestring('%s:%s' % (options.username, options.password))[:-1]
 
     f = urlparse.urlparse(options.url)
