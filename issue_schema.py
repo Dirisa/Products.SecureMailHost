@@ -5,14 +5,35 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.5 2003/09/10 04:32:58 ajung Exp $
+$Id: issue_schema.py,v 1.6 2003/09/12 16:12:57 ajung Exp $
 """
 
-from Products.Archetypes.public import BaseSchema, Schema, DisplayList
+from Products.Archetypes.public import Schema, DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget
+from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget
 
-schema = BaseSchema +  Schema((
+schema = Schema((
+    StringField('id',
+                required=1,
+                mode="rw",
+                accessor="getId",
+                mutator="setId",
+                default=None,
+                schemata='default',
+                widget=IdWidget(label_msgid="label_name",
+                                description_msgid="help_name",
+                                i18n_domain="plone"),
+                ),
+    StringField('title',
+                required=1,
+                searchable=1,
+                default='',
+                accessor='Title',
+                schemata='issuedata',
+                widget=StringWidget(label_msgid="label_title",
+                                    description_msgid="help_title",
+                                    i18n_domain="plone"),
+                ),
     StringField('description',
                 searchable=1,
                 schemata='issuedata'
