@@ -78,8 +78,8 @@ def getMetadataElements(filename,section):
 # --------------------------------------------------------------------
 security.declarePublic('testZipFile')
 def testZipFile(filename):
-   filename = filename.replace('\\','\\\\')
-   syscall = "%s %s" % (SYSCALL_TESTZIP,filename)
+   syscall_filename = fixDOSPathName(filename)
+   syscall = "%s %s" % (SYSCALL_TESTZIP,syscall_filename)
    result = os.system(syscall)
 
    if result == SYSCALL_TESTZIP_SUCCESS:
@@ -92,7 +92,7 @@ def testZipFile(filename):
 security.declareProtected(ModifyPortalContent, 'generate_zipinfo')
 def generate_zipinfo(filename):
 
-   syscall_filename = filename.replace('\\','\\\\')
+   syscall_filename = fixDOSPathName(filename)
    syscall = "%s %s" % (SYSCALL_ZIPINFO,syscall_filename)
    process_fp = os.popen(syscall)
    result = process_fp.read()
@@ -140,9 +140,9 @@ def parseZipInfoOutput(raw_output):
 security.declareProtected(ModifyPortalContent, 'upzipFile') 
 def upzipFile(filename):
    if testZipFile(filename):
-      filename = filename.replace('\\','\\\\')
-      exdir = os.path.dirname(filename)
-      syscall = "%s %s %s" % (SYSCALL_UNZIP,exdir,filename)
+      syscall_filename = fixDOSPathName(filename)
+      exdir = os.path.dirname(syscall_filename)
+      syscall = "%s %s %s" % (SYSCALL_UNZIP,exdir,syscall_filename)
       result = os.system(syscall)
       if result == SYSCALL_UNZIP_SUCCESS:
          zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() SUCCESS: %s" % syscall )
@@ -157,7 +157,7 @@ def upzipFile(filename):
 # --------------------------------------------------------------------
 security.declareProtected(ModifyPortalContent, 'generate_md5')
 def generate_md5(filename):
-   syscall_filename = filename.replace('\\','\\\\')
+   syscall_filename = fixDOSPathName(filename)
    syscall = "%s %s" % (SYSCALL_GENMD5,syscall_filename)
    process_fp = os.popen(syscall)
    md5 = process_fp.read()[:MD5_LENGTH]
@@ -182,3 +182,10 @@ def determine_bytes_usage(startObject):
         objects_size = 0
 
     return objects_size
+
+# --------------------------------------------------------------------
+def fixDOSPathName(srcFileName):
+    fixedName=string.join(string.split(srcFileName,'\\'),'\\\\')
+    fixedName=string.join(string.split(fixedName,'\t'),'\\\\t')
+    fixedName=string.join(string.split(fixedName,'\n'),'\\\\n')
+    return fixedName
