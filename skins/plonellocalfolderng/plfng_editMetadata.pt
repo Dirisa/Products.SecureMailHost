@@ -6,13 +6,26 @@
 	<body>
 
 	<div metal:fill-slot="main"
-	     tal:define="comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
+	     tal:define="portalPath string:${request/URL1};
+	                 realPath python:here.getFileRealPath(REQUEST=request);
+	     				  comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
 	                 uploader python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='source');
 	                 md5      python:here.getFileMetadata(REQUEST=request,section='DIAGNOSTICS',option='md5');
 	                 numUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='num_files');
 	                 sizezUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='unpacked_size');
 	                 ">
-	
+			<br>
+			<b>file portal path = </b>
+			   <span tal:content="portalPath">
+			       portalPath
+			   </span>
+			<br><br>
+			<b>file physical path = </b>
+			   <span tal:content="realPath">
+			       realPath
+			   </span>   
+			<br>
+			<br>   	
 			<fieldset>
 				<legend>GENERAL:</legend>
 				<b>uploader = </b><span tal:content="uploader">
