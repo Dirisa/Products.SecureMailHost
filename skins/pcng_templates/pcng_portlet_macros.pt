@@ -117,24 +117,26 @@
           <!-- saved searches are stored as a list of string 'RELATIVE_URL::query_id::QUERY_STRING' -->
           <select name="query"
                   tal:define="url python: test(here.meta_type=='PloneIssueNG', here.aq_parent.absolute_url(1), here.absolute_url(1))">
+
             <tal:loop  
                       tal:define="searches python: member.getProperty('pcng_saved_searches');
                                   searches python: test(searches , searches, ())" 
-                      tal:repeat="saved_search python: [s for s in here.pcng_member_property(member, 'pcng_saved_searches', ()) if s.member, startswith(url)]" >
+                      tal:repeat="saved_search python: [s for s in here.pcng_member_property(member, 'pcng_saved_searches', ()) if s.startswith(url)]" >
               <option tal:content="python: saved_search.split('::', 2)[1]" 
                       tal:attributes="value python: saved_search.split('::', 2)[2]"
                   />
 
             </tal:loop>
+
           </select>
           <input  src="search_icon.gif" i18n:attributes="value" type="image">
         </form>    
       </div>
 
       <div tal:condition="python: member.getUserName() != 'Anonymous User'">
-        <span id="pcng_saved_searches" i18n:translate="save_this_search_as">Save search as</span>:
+        <span id="pcng_saved_searches" i18n:translate="save_this_search_as">save search as</span>:
         <form method="post" action="pcng_save_search">
-          <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
+          <input type="hidden" name="query" tal:attributes="value request/query_string|nothing">
           <input type="text" name="query_id" value="" size="10" maxlength="20">
           <input type="image" src="add_icon.gif" />
           </form>    
