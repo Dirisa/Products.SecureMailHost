@@ -7,12 +7,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.17 2004/04/19 09:59:50 ajung Exp $
+$Id: smtp2pcng.py,v 1.18 2004/09/11 12:19:05 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
 
-import sys, os, logging, base64, logging, time, re
+import sys, os, base64, logging, time, re
 import httplib, urllib, urlparse
 from ConfigParser import ConfigParser
 from cStringIO import StringIO
@@ -20,8 +20,8 @@ from optparse import OptionParser
 import email
 from email.Header import decode_header 
 
-CFG_FILE = '.smtp2pcng.cfg'
-MAX_LENGTH = 32768
+from Result import Result
+from util import getLogger, getConfiguration, update_options
 
 # Spool directories
 SPOOL_PENDING = os.path.join(os.getcwd(), 'pcng_spool', 'unprocessed')
@@ -32,87 +32,14 @@ for d in (SPOOL_PENDING, SPOOL_DONE, SPOOL_ERROR):
     if not os.path.exists(d):
         os.makedirs(d)
 
-# Logger stuff
-LOG = logging.getLogger('pcng')
-hdlr = logging.FileHandler('smtp2pcng.log')
-hdlr1 = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(process)s %(message)s')
-hdlr.setFormatter(formatter)
-hdlr1.setFormatter(formatter)
-LOG.addHandler(hdlr)
-LOG.addHandler(hdlr1)
-LOG.setLevel(logging.DEBUG)
-
-# Configuration
-CFG_LOCATIONS = (os.getcwd(), os.path.expanduser('~'))
-config = ConfigParser()                               
-files = []
-for loc in CFG_LOCATIONS:
-    cfg_name = os.path.join(loc, CFG_FILE)
-    if not os.path.exists(cfg_name):
-        LOG.warn('No configuration file %s found' % cfg_name)
-    else:
-        LOG.debug('Reading configuration file %s ' % cfg_name)
-        files.append(cfg_name)
-
-if not files:
-    LOG.warn('No suitables configuration files found')
-else:
-    config.read(files)
-
-
-class Result:
-
-    def __init__(self):
-        self.attachments = []
-        self.key = ''
-        self.collector_abr = ''
-        self.issue_id = ''
-
-    def addAttachment(self, data, mimetype, filename):
-        self.attachments.append( (data, mimetype, filename))
-
-    def getAttachments(self):
-        return self.attachments
-
-    def toXML(self):
-        IO = StringIO()
-        IO.write('<?xml version="1.0" encoding="utf-8"?>\n')
-        IO.write('<issue>\n')
-        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body', 'key', 'issue_id', 'collector_abr'):
-            IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a))
-
-        for a in self.getAttachments():
-            IO.write('<attachment mimetype="%s" filename="%s">\n' % a[1:])
-            IO.write(base64.encodestring(a[0]))
-            IO.write('</attachment>\n')
-            
-        IO.write('</issue>\n')
-        return IO.getvalue()
-    
+LOG = getLogger()
+CONFIG = getConfiguration()
 
 def parse_mail(options):
-
-    # parse configuration
-    if options.configuration:
-
-        section = options.configuration
-        if not config.has_section(section):
-            raise ValueError("Section '%s' not found in configuration file" % section)
-        for op in ('url', 'username', 'password'):
-            if not config.has_option(section, op):
-                raise ValueError("Section '%s' has no option '%s'" % (section, op))
-
-        options.url = config.get(section, 'url')
-        options.username = config.get(section, 'username')
-        options.password = config.get(section, 'password')
-        if config.has_section('default'):
-            if config.has_option('default', 'maxlength'):
-                options.max_length = int(config.get('default', 'maxlength'))     
-            else:
-                options.max_length = MAX_LENGTH
-
-
+    """ retrieve email from stdin or a file and return a parsed
+        Result instance.
+    """
+ 
     if options.filename is not None:
         LOG.debug('Reading from: %s' % options.filename)
         text = open(options.filename).read()
@@ -124,7 +51,15 @@ def parse_mail(options):
     if len(text) > options.max_length:
         raise RuntimeError('Message size exceeds allowed length of %d bytes' % options.max_length)
 
+    return process_email_from_text(text)
+
+
+def process_email_from_text(text):
+    """ process an email represented as plain text """
+
+    # convert to Python internal message format
     msg = email.message_from_string(text)
+
     R = Result()
     R.original_message = text
 
@@ -155,7 +90,11 @@ def parse_mail(options):
                 R.issue_id = mo.group(2)
 
         if ct in ('text/plain',):
-            R.body = unicode(part.get_payload(decode=1), encoding).encode('utf-8')
+            payload = part.get_payload(decode=1)
+            if payload:
+                R.body = unicode(payload, encoding).encode('utf-8')
+            else:
+                R.body = ''
         elif ct.startswith('image/'):
             R.addAttachment(part.get_payload(decode=1), ct, part.get_filename())
 
@@ -163,6 +102,7 @@ def parse_mail(options):
 
 
 def submit_request(R, options):
+
     params = urllib.urlencode({'xml': R.toXML()})
     headers = {"Content-type": "application/x-www-form-urlencoded", 
                "Accept": "text/plain",
@@ -219,6 +159,9 @@ if __name__ == '__main__':
 
     LOG.info('-'*75)
     LOG.debug(options)
+
+    if options.configuration:
+        update_options(options, CONFIG)
 
     try:
         R = parse_mail(options)

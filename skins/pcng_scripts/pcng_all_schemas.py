@@ -17,7 +17,7 @@ for c in collectors:
     schema = c.Schema()
     print '<tr>'
     for field in fields:
-        print '<td>%s</td>' % schema[field.getName()].get(c)
+        print '<td>%s</td>' % schema[field.getName()].getAccessor(c)()
     print '</tr>'
 
 print '</table>'

@@ -57,7 +57,7 @@ w('<issue id="%s" collector="%s">' % (context.getId(), context.aq_parent.getId()
 
 w('<metadata>')
 for f in context.Schema().fields():
-    v = f.get(context)
+    v = f.getAccessor(context)()
     writeField(f.getName(), v)
 w('</metadata>')
 

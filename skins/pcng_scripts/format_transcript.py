@@ -13,7 +13,7 @@ def TR(id, default):
 def getValue(fieldname, translate=0):
 
     vocab = context.pcng_vocabulary_values(fieldname)
-    v = context.Schema()[fieldname].get(context)
+    v = context.Schema()[fieldname].getAccessor(context)()
 
     if translate:
         v = str(v)

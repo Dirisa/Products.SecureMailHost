@@ -13,7 +13,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.7 $"[11:-2]
+__version__ = "$Revision: 1.8 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -88,6 +88,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
+    tdef.addVariable(id='assigned_to', text="python: list(state_change.kwargs['assignees'])")
 
     tdef = wf.transitions['resolve']
     tdef.setProperties(title="""Mark issue as resolved""",
@@ -100,6 +101,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
+    tdef.addVariable(id='assigned_to', text="python: list(state_change.kwargs['assignees'])")
 
     tdef = wf.transitions['wont_fix']
     tdef.setProperties(title="""Issue will not be fixed""",
@@ -112,6 +114,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
+    tdef.addVariable(id='assigned_to', text="python: list(state_change.kwargs['assignees'])")
 
     tdef = wf.transitions['reject']
     tdef.setProperties(title="""Reject the issue""",
@@ -124,6 +127,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
+    tdef.addVariable(id='assigned_to', text="python: list(state_change.kwargs['assignees'])")
 
     tdef = wf.transitions['resign']
     tdef.setProperties(title="""resign""",
@@ -136,6 +140,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
+    tdef.addVariable(id='assigned_to', text="python: list(state_change.kwargs['assignees'])")
 
     tdef = wf.transitions['accept']
     tdef.setProperties(title="""Accept issue and assign supporters""",

@@ -1100,3 +1100,12 @@ msgstr "Maximale Größe einer Datei in Bytes, die hochgeladen werden darf"
 
 msgid "file_too_large"
 msgstr "Datei zu groß: die maximale Größe ist $bytes Bytes"
+
+msgid "label_workflow"
+msgstr "Workflow (dieser darf für einen leeren Bugtracker geändert werden)" 
+
+msgid "unable_changing_workflows"
+msgstr "Der Workflow für einen Bugtracker darf nur geändert werden, wenn dieser noch keine Tickets enhält!"
+
+msgid "search_saved"
+msgstr "Suche wurde gespeichert"

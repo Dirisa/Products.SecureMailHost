@@ -135,21 +135,23 @@
 
       <div tal:condition="python: member.getUserName() != 'Anonymous User'">
         <span id="pcng_saved_searches" i18n:translate="save_this_search_as">save search as</span>:
+
         <form method="post" action="pcng_save_search">
-          <input type="hidden" name="query" tal:attributes="value request/query_string|nothing">
+          <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING|nothing">
           <input type="text" name="query_id" value="" size="10" maxlength="20">
           <input type="image" src="add_icon.gif" />
-          </form>    
+        </form>    
       </div>
 
-      <div tal:condition="python: member.getUserName() != 'Anonymous User'">
+      <div tal:condition="python: member.getUserName() != 'Anonymous User'"
+           tal:define="base_url here/pcng_collector_url">
         <br/>
         <span id="pcng_quicklinks" i18n:translate="quicklinks">Quicklinks:</span>
         <div>
-          <a tal:attributes="href string:pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> 
+          <a tal:attributes="href string:$base_url/pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> 
         </div>
         <div>
-          <a tal:attributes="href string:pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+          <a tal:attributes="href string:$base_url/pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
         </div>
       </div>
 

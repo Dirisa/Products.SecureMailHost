@@ -5,13 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.13 2004/05/14 11:11:50 ajung Exp $
+$Id: Base.py,v 1.14 2004/09/11 12:19:04 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
-from Products.Archetypes.Schema import Schema
+from Products.Archetypes.Schema import WrappedSchema
 
 class Base(BaseBTreeFolder):
     """ base class for collector/issues """
@@ -43,10 +43,10 @@ class ParentManagedSchema:
         d = {}
         schema = self.Schema()
         for name in schema.getSchemataNames():
-            s = Schema()
+            s = WrappedSchema()
             for f in schema.getSchemataFields(name):
                 s.addField(f)
-            d[name] = s
+            d[name] = s.__of__(self)
         return d
 
     def Schema(self):
@@ -93,6 +93,6 @@ class ParentManagedSchema:
                 except:
                     field.set(self, field.default)
                         
-        return self._v_schema
+        return self._v_schema.__of__(self)
 
 InitializeClass(ParentManagedSchema)

@@ -1,8 +1,8 @@
 Requirements:
 
-  - Zope 2.6+, Plone 2.X, Archetypes 1.3 latest CVS checkout
+  - Zope 2.7+, Plone 2.X, Archetypes 1.3beta4
 
-  - Python 2.2.3 (Python 2.3.3 for the email submission feature)
+  - Python 2.3.3
  
   - The 'email' package of Python *must* be available. Either use Python 2.2.3
     for running Zope or get the 'email' package from Python 2.2.3 and install

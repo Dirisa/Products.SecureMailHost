@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.22 2004/07/01 14:53:23 ajung Exp $
+$Id: __init__.py,v 1.23 2004/09/11 12:19:04 ajung Exp $
 """
 
 import os, sys
@@ -51,3 +51,8 @@ allow_module('textwrap')
 allow_module('group_assignment_policies')
 allow_module('base64')
 
+# Perform initialization of PCNG add-ons
+try:
+    import PCNGAddOn
+except ImportError:
+    pass

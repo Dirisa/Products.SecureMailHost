@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.16 2004/07/27 05:11:47 ajung Exp $
+$Id: PCNGSchema.py,v 1.17 2004/09/11 12:19:04 ajung Exp $
 """
 
 from types import FileType
@@ -142,6 +142,9 @@ class PCNGSchemaNonPersistent(PCNGSchemata, DefaultLayerContainer):
         """Only call during object initialization. Sets fields to
         schema defaults
         """
+
+        import pdb
+        pdb.set_trace()
         ## XXX think about layout/vs dyn defaults
         for field in self._fields.values():
             if field.getName().lower() in ('id', 'allowdiscussion'):

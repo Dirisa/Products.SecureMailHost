@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.211 2004/08/09 04:49:19 ajung Exp $
+$Id: Issue.py,v 1.212 2004/09/11 12:19:04 ajung Exp $
 """
 
 import os, time, random
@@ -328,7 +328,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             if issue == self:
                 raise ValueError(self.Translate('no_self_reference', 'Issues can not reference themselves'))
-
+    
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
 

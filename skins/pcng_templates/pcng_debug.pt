@@ -22,7 +22,7 @@
             <span tal:content="field/getName" />
           </td>
           <td>
-            <span tal:content="python: here.getField(field.getName()).get(here)" />
+            <span tal:content="python: here.getField(field.getName()).getAccessor(here)()" />
           </td>
         </tr>
 

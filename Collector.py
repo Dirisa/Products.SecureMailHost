@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.200 2004/07/25 17:11:11 ajung Exp $
+$Id: Collector.py,v 1.201 2004/09/11 12:19:04 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -197,6 +197,13 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             hook to log changed properties to the transcript.
         """
 
+        # check for changes in workflow
+        if REQUEST.has_key('collector_workflow'):
+            new_wf = REQUEST['collector_workflow']
+            if new_wf != self.getCollector_workflow() and len(self) > 0:
+                raise RuntimeError(self.Translate('unable_changing_workflows', 
+                                                  'Unable to change the workflow for non-empty collectors'))
+
         field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
@@ -205,6 +212,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     self.getTranscript().add(ChangeEvent(name, old, new))
+
 
     ######################################################################
     # Transcript

@@ -3,7 +3,7 @@
 import textwrap
 #accessor = getattr(context, 'get' + fieldname.capitalize())
 #accessor = context.getField(fieldname).accessor
-text = context.Schema()[fieldname].get(context)
+text = context.Schema()[fieldname].getAccessor(context)()
 
 #text = accessor()
 if same_type(text, u''):

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.59 2004/07/23 17:21:01 ajung Exp $
+$Id: collector_schema.py,v 1.60 2004/09/11 12:19:04 ajung Exp $
 """
 
 
@@ -154,7 +154,7 @@ schema = BaseSchema + Schema((
                 vocabulary=VOC_WORKFLOWS,
                 default='pcng_issue_workflow (PloneCollectorNG default workflow)',
                 widget=SelectionWidget(format='select', 
-                                       label='Workflow',
+                                       label='Workflow (change the workflow *only* for empty collectors)',
                                        label_msgid='label_workflow',
                                        i18n_domain='plonecollectorng'),
                 schemata='Main'
