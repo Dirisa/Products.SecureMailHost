@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.41 2003/12/02 17:42:35 ajung Exp $
+$Id: SchemaEditor.py,v 1.42 2003/12/02 17:56:54 ajung Exp $
 """
 
-import copy
+import copy, re
 from types import StringType
 
 from Globals import InitializeClass
@@ -24,6 +24,8 @@ from config import ManageCollector
 
 UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
+
+id_regex = re.compile('[a-zA-Z0-9][a-zA-Z0-9_]*[a-zA-Z0-9]')
 
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
@@ -128,7 +130,16 @@ class SchemaEditor:
         ## ATT: this should go into a dedicated method
         if R.has_key('add_field'):
             if not R['name']:
-                raise ValueError(self.translate('atse_empty_field_name', 'Field name is empty'))
+                raise ValueError(self.translate('atse_empty_field_name', 
+                                 'Field name is empty'))
+
+            if not id_regex.match(R['name']):
+                raise ValueError(self.translate('atse_not_a_valid_id', 
+                                 '"$id" is not a valid ID', id=R['name']))
+
+            if R['name'] in [f.getName() for f in self._ms.fields()]:
+                raise ValueError(self.translate('atse_field_already_exists', 
+                                 '"$id" exists already', id=R['name']))
 
             fieldset = FD.schemata    
             field = StringField(R['name'], schemata=fieldset, widget=StringWidget)
