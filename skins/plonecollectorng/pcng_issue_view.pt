@@ -65,7 +65,7 @@
                    tal:content="fieldset" /></legend>
 
         <div style="float: left; width: 30%; vertical-align: top">
-          <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
+          <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
             <metal:block tal:condition="python: field.getName() not in ('title', 'description', 'solution')">
               <div>
                 <span tal:omit-tag="" metal:use-macro="here/issue_macros/macros/field_shortview" />
@@ -79,7 +79,7 @@
         </div>
 
         <div style="float: right; width: 70%; vertical-align: top;">
-          <metal:block tal:repeat="field python: here.schema_getSchema('issuedata').fields()">
+          <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
             <metal:block tal:condition="python: field.getName() in ('title', 'description', 'solution')">
                <div class="row" tal:condition="python: getattr(here, field.getName())" >
                 <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
@@ -93,8 +93,8 @@
 
 
       <metal:block tal:condition="python: mode.startswith('full')" >
-        <metal:block tal:repeat="schemata_name python: here.schema_getNames()">
-          <metal:block tal:define="schemata python:here.schema_getSchema(schemata_name)">
+        <metal:block tal:repeat="schemata_name python: here.atse_getSchemataNames()">
+          <metal:block tal:define="schemata python:here.atse_getSchemata(schemata_name)">
             <metal:block tal:condition="python: schemata_name not in ('default', 'issuedata') "> 
               <div metal:use-macro="here/issue_macros/macros/view_schemata" />
             </metal:block>
