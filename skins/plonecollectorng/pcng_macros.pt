@@ -119,6 +119,7 @@
                     b_start request/b_start|b_start">
 
     <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
+
       <div metal:use-macro="here/batch_macros/macros/navigation" />
 
       <metal:block tal:repeat="issue batch">
@@ -128,7 +129,7 @@
               <span tal:replace="issue/getId" />.
               <span tal:replace="issue/Title" />
             </a>
-          <a tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
+          <a tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo.gif"  height="14" width="18" border="0" title="PDF"></a>
           </h2>
         </metal:block>
         <div class="pcng_issueview_metadata">
@@ -154,6 +155,7 @@
 
         </div>
       </metal:block>
+      <div metal:use-macro="here/batch_macros/macros/navigation" />
     </div>
     <div tal:condition="not: results" i18n:translate="no_issues_found">No issues found</div>
   </span>
@@ -319,7 +321,7 @@
           <span i18n:translate="fulltextsearch">Fulltext search</span>
         </th>
         <td colspan="3">
-          <input type="text" name="SearchableText" value="" size="30">
+          <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
         </td>
       </tr>
 
