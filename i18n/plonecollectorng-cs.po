@@ -1,16 +1,17 @@
+# translation of plonecollectorng-cs.po to 
 # Gettext Message File for PloneCollectorNG.
-# David Pravec <alekibango@zug.cz>, 2003
-# if you know how to improve this translation, 
+# if you know how to improve this translation,
 # please do it. Feel free to change it.
-# 
+# David Pravec <alekibango@zug.cz>, 2003, 2004.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PloneCollectorNG 1.0\n"
+"Project-Id-Version: plonecollectorng-cs\n"
 "POT-Creation-Date: 2003-11-21 00:00+0300\n"
-"PO-Revision-Date: 2003-11-21 00:00+3000\n"
-"Last-Translator: David Pravec <alekibango@zug.cz>\n"
+"PO-Revision-Date: 2004-05-19 14:49+0200\n"
+"Last-Translator: Lukas Kubin<kubin@opf.slu.cz>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2; \n"
 "Language-code: cs\n"
@@ -18,6 +19,8 @@ msgstr ""
 "Preferred-encodings: utf-8 iso-8859-2\n"
 "X-Is-Fallback-For: cs-CS\n"
 "Domain: plonecollectorng\n"
+"Language-Team:  <cs@li.org>\n"
+"X-Generator: KBabel 1.3.1\n"
 
 msgid "changes_saved"
 msgstr "Zmìny byly ulo¾eny"
@@ -38,26 +41,28 @@ msgid "label_description"
 msgstr "Popis"
 
 msgid "label_topic"
-msgstr "Téma"
+msgstr "Kategorie"
 
-msgid "UserID" 
+msgid "UserID"
 msgstr "U¾ivatel"
 
-msgid "Managers" 
+msgid "Managers"
 msgstr "Správce"
 
-msgid "Email" 
-msgstr "EMail"
+msgid "Email"
+msgstr "Email"
 
-msgid "Reporter" 
+msgid "Reporter"
 msgstr "Nahlásil"
 
 msgid "Supporter"
-msgstr "Øe¹itel" 
+msgstr "Øe¹itel"
+
+msgid "TrackerAdmin"
+msgstr "Správce Collectoru"
 
 msgid "Authenticated"
-msgstr "Autentifikován" 
-
+msgstr "Autentizován"
 
 msgid "unassigned"
 msgstr "nepøiøazeno"
@@ -72,7 +77,7 @@ msgid "History"
 msgstr "Historie"
 
 msgid "View"
-msgstr "Zobrazit"
+msgstr "Zobrazení"
 
 msgid "transcript_time"
 msgstr "Èas"
@@ -90,7 +95,7 @@ msgid "legend_search_form"
 msgstr "Hledání"
 
 msgid "edit_fieldsets"
-msgstr "Upravit Pole"
+msgstr "Upravit pole"
 
 msgid "simpleview"
 msgstr "Zjednodu¹ené zobrazení"
@@ -116,7 +121,6 @@ msgstr "Text záznamu"
 msgid "contact"
 msgstr "Kontakt"
 
-
 msgid "issuedata"
 msgstr "Pøehled záznamu"
 
@@ -124,7 +128,7 @@ msgid "Issuedata"
 msgstr "Pøehled záznamu"
 
 msgid "progress"
-msgstr "Progress"
+msgstr "Prùbìh"
 
 msgid "deadline"
 msgstr "Deadline"
@@ -157,12 +161,15 @@ msgid "save"
 msgstr "Ulo¾it"
 
 msgid "Reset"
-msgstr "Reset"
+msgstr "Vyèistit formuláø"
 
 msgid "Accept"
 msgstr "Akceptovat"
 
 msgid "Resolve"
+msgstr "Vyøe¹it"
+
+msgid "resolve"
 msgstr "Vyøe¹it"
 
 msgid "Reject"
@@ -177,13 +184,11 @@ msgstr "Odlo¾it"
 msgid "workflow_action_current_state"
 msgstr "aktuální workflow status"
 
-
 msgid "action"
 msgstr "Akce"
 
 msgid "pending"
 msgstr "K vyøízení"
-
 
 msgid "issue_artifacts_table_info_link"
 msgstr "Info"
@@ -213,7 +218,7 @@ msgid "add_references_table_comment"
 msgstr "Kommentáø"
 
 msgid "collectordata"
-msgstr "Metadata"
+msgstr "Základní údaje"
 
 msgid "preferences"
 msgstr "Nastavení"
@@ -252,7 +257,7 @@ msgid "default_issue_view"
 msgstr "Výchozí zobrazení"
 
 msgid "hits_per_page"
-msgstr "hits per page"
+msgstr "nálezù na stránku"
 
 msgid " Save changes "
 msgstr "Ulo¾it zmìny"
@@ -300,22 +305,22 @@ msgid "reindex_all_issues"
 msgstr "Reindexovat v¹echny záznamy"
 
 msgid "update_schema_for_all_issues"
-msgstr "Aktualizace v¹ech záznamù podle nového schéma."
+msgstr "Aktualizace v¹ech záznamù podle nového schématu"
 
 msgid "update_collector_schema"
-msgstr "Aktualizace  Schéma Collectoru"
+msgstr "Aktualizace schéma Collectoru"
 
 msgid "recreate_collector_catalog"
 msgstr "Znovuvytvoøit Collector Catalog"
 
 msgid "Browse issues"
-msgstr "Prohlí¾et záznamy"
+msgstr "Pøehled záznamù"
 
 msgid "Edit"
 msgstr "Upravit"
 
 msgid "Schema Editor"
-msgstr "Schema Editor"
+msgstr "Editor schémat"
 
 msgid "Notifications"
 msgstr "Oznamování"
@@ -339,7 +344,7 @@ msgid "accepted"
 msgstr "Pøijato"
 
 msgid "created"
-msgstr "Vytoøeno"
+msgstr "Vytvoøeno"
 
 msgid "defered"
 msgstr "Odlo¾eno"
@@ -366,7 +371,7 @@ msgid "Submitter"
 msgstr "Vytvoøil"
 
 msgid "Progress"
-msgstr "Progress"
+msgstr "Prùbìh"
 
 msgid "Classification"
 msgstr "Klasifikace"
@@ -395,7 +400,7 @@ msgstr "Vzestupnì"
 msgid "fulltextsearch"
 msgstr "Fulltextové hledání"
 
-msgid  "followup"
+msgid "followup"
 msgstr "Odpovìï"
 
 msgid "followups"
@@ -423,7 +428,7 @@ msgid "issues_assigned_to_me"
 msgstr "Záznamy, které mám øe¹it"
 
 msgid "Search"
-msgstr  "Hledat"
+msgstr "Hledat"
 
 msgid "schematas"
 msgstr "Schémata"
@@ -451,7 +456,7 @@ msgstr "Vy¾adováno"
 
 ##
 msgid "size_schema_editor"
-msgstr "size schema editor"
+msgstr "Rozmìry"
 
 msgid "default"
 msgstr "Výchozí"
@@ -471,89 +476,89 @@ msgstr "Ulo¾it zmìny"
 msgid "Description"
 msgstr "Popis"
 
-msgid "invalid_email_address" 
+msgid "invalid_email_address"
 msgstr "Nesprávná Emailová adresa"
 
-msgid "issues_updated" 
-msgstr "Záznamù bylo aktualizováno"
+msgid "issues_updated"
+msgstr "Záznamy byly aktualizovány"
 
-msgid "issues_reindexed" 
-msgstr "Záznamù bylo reindexováno"
+msgid "issues_reindexed"
+msgstr "Záznamy byly reindexovány"
 
-msgid "invalid_action" 
+msgid "invalid_action"
 msgstr "Nesprávná Akce"
 
-msgid "followup_submitted" 
+msgid "followup_submitted"
 msgstr "Odpovìï odeslána"
 
 msgid "reference_deleted"
 msgstr "Reference byla smazána"
 
-msgid "no_tracker" 
-msgstr "Collector NEEXISTUJE: $tracker_url" 
+msgid "no_tracker"
+msgstr "Collector NEEXISTUJE: $tracker_url"
 
-msgid "reference_stored" 
+msgid "reference_stored"
 msgstr "Reference byla ulo¾ena"
 
-msgid "unknown_format" 
+msgid "unknown_format"
 msgstr "Neznámý formát: $format"
 
-msgid "file_uploaded" 
+msgid "file_uploaded"
 msgstr "Soubor byl pøilo¾en"
 
-msgid "nothing_for_upload" 
+msgid "nothing_for_upload"
 msgstr "Soubor nebyl pøilo¾en"
 
-msgid "upload_removed" 
+msgid "upload_removed"
 msgstr "Soubor odstranìn"
 
-msgid "schema_exists" 
-msgstr "Schéma $schema ji¾ existuje" 
+msgid "schema_exists"
+msgstr "Schéma $schema ji¾ existuje"
 
-msgid "schema_added" 
-msgstr "Schéma bylo pøidáno" 
+msgid "schema_added"
+msgstr "Schéma bylo pøidáno"
 
-msgid "schema_deleted" 
-msgstr "Schéma  bylo smazáno" 
+msgid "schema_deleted"
+msgstr "Schéma  bylo smazáno"
 
-msgid "schema_field_deleted" 
+msgid "schema_field_deleted"
 msgstr "Pole bylo smazáno"
 
-msgid "schema_field_added" 
-msgstr "Pole bylo pøidáno" 
+msgid "schema_field_added"
+msgstr "Pole bylo pøidáno"
 
-msgid "schema_unknown_field" 
-msgstr "Neznámý typ pole: $field" 
+msgid "schema_unknown_field"
+msgstr "Neznámý typ pole: $field"
 
-msgid "schema_unknown_widget" 
-msgstr "Neznámý typ Widgetku: $widget" 
+msgid "schema_unknown_widget"
+msgstr "Neznámý typ Widgetku: $widget"
 
 ##@@@###
-msgid "schema_moved_left" 
-msgstr "Schéma pøesunuto doleva" 
+msgid "schema_moved_left"
+msgstr "Schéma pøesunuto doleva"
 
-msgid "schema_moved_right" 
+msgid "schema_moved_right"
 msgstr "Schéma pøesunuto doprava"
 
-msgid "schema_field_moved_up" 
+msgid "schema_field_moved_up"
 msgstr "Políèko pøesunuto nahoru"
 
-msgid "schema_field_moved_down" 
-msgstr "Políèko pøesunuto dolù" 
+msgid "schema_field_moved_down"
+msgstr "Políèko pøesunuto dolù"
 
-msgid "schema_field_moved" 
-msgstr "Políèko bylo pøesunuto" 
+msgid "schema_field_moved"
+msgstr "Políèko bylo pøesunuto"
 
-msgid "email_already_registered" 
-msgstr "Tento email ji¾ je registrován"
+msgid "email_already_registered"
+msgstr "Tento email je ji¾ registrován"
 
-msgid "watchlist_added" 
+msgid "watchlist_added"
 msgstr "Byl pøidán Watchlist"
 
-msgid "email_not_registered" 
-msgstr "Emailová adresa $email není registrována" 
+msgid "email_not_registered"
+msgstr "Emailová adresa $email není registrována"
 
-msgid "watchlist_removed" 
+msgid "watchlist_removed"
 msgstr "Byl odstranìn Watchlist"
 
 msgid "collector_notifications"
@@ -584,7 +589,7 @@ msgid "label_name"
 msgstr "Jméno"
 
 msgid "label_title"
-msgstr "Title"
+msgstr "Název"
 
 msgid "label_classification"
 msgstr "Klasifikace"
@@ -593,12 +598,12 @@ msgid "label_importance"
 msgstr "Dùle¾itost"
 
 msgid "label_deadline"
-msgstr "Deadline"
+msgstr "Termín splnìní"
 
 msgid "label_hours_estimated"
 msgstr "Celkový odhad potøebného èasu (hodin)"
 
-msgid  "label_hours_needed"
+msgid "label_hours_needed"
 msgstr "Hodin do dokonèení"
 
 msgid "label_percent_done"
@@ -628,6 +633,9 @@ msgstr "Telefon"
 msgid "label_contact_fax"
 msgstr "Fax"
 
+msgid "label_limit_followups"
+msgstr "Limit reakcí"
+
 msgid "label_hostname"
 msgstr "Hostname"
 
@@ -646,17 +654,23 @@ msgstr "Zkratka pro název Collectoru"
 msgid "label_email_notification_policy"
 msgstr "Nastavení emailového upozoròování"
 
+msgid "label_issue_email_submission"
+msgstr "Pøidávání záznamù zasláním emailu"
+
+msgid "label_issue_email_verification"
+msgstr "Ovìøování pøíchozích emailù"
+
 msgid "label_email_issue_formatters"
 msgstr "Formátování záznamù v emailu"
 
 msgid "label_email_address"
-msgstr "Emailová adresa (pro FROM: und REPLY-TO: hlavièky)"
+msgstr "Emailová adresa (pro FROM: a REPLY-TO: hlavièky)"
 
 msgid "label_watchlist"
-msgstr "Watchlist"
+msgstr "Sledování"
 
 msgid "E-Mail"
-msgstr "EMail"
+msgstr "Email"
 
 msgid "References and uploads"
 msgstr "Reference a pøilo¾ené soubory"
@@ -689,14 +703,13 @@ msgid "Resolved"
 msgstr "Vyøe¹eno"
 
 msgid "sorting"
-msgstr "Tøíïìní"
+msgstr "Tøídìní"
 
 msgid "Status"
 msgstr "Status"
 
-
 msgid "topic"
-msgstr "Topic"
+msgstr "Kategorie"
 
 msgid "vocabulary"
 msgstr "Slovník (pou¾ívejte Klíè|Hodnota  pro páry klíèù a hodnot, nebo 'method:nazevmetody')"
@@ -758,19 +771,19 @@ msgstr "Tento formuláø umo¾òuje nastavení upozoròování pro ka¾dý stav workflow, 
 msgid "help_reindex_issues"
 msgstr "Po pøesunutí nebo pøejmenování Collectoru je tohle nutné udìlat."
 
-msgid  "help_update_schema_for_issues"
+msgid "help_update_schema_for_issues"
 msgstr "Po zmìnì definice schématu musí být v¹echny záznamy informovány o zmìnì."
 
-msgid  "help_update_collector_schema"
+msgid "help_update_collector_schema"
 msgstr "To je nìkdy potøeba po upgrade PloneCollectorNG"
 
-msgid  "help_setup_collector_catalog"
+msgid "help_setup_collector_catalog"
 msgstr "Tato funkce je nìkdy potøeba po upgrade PloneCollectorNG, nebo pokud jste pøidali index pro nìkterá pole."
 
-msgid  "help_incomplete_issues"
+msgid "help_incomplete_issues"
 msgstr "Zobrazí nedokonèené záznamy a dá mo¾nost je rychle a snadno zamítnout."
 
-msgid  "help_register_issue_uids"
+msgid "help_register_issue_uids"
 msgstr "Tuto funkci pou¾ivejte velmi opatrnì, a to <b>pouze tehdy</b>, pokud jste  vlo¾ili Collector do Plone pou¾itím importu nebo cut/paste."
 
 msgid "statistics"
@@ -797,4 +810,212 @@ msgstr "Obrázek"
 msgid "reaccept"
 msgstr "Znovu pøijmout"
 
+msgid "Change"
+msgstr "Zmìna"
 
+msgid "reject"
+msgstr "Odmítnout"
+
+msgid "page_number"
+msgstr "Strana $num"
+
+msgid "collector_id"
+msgstr "Collector $id"
+
+msgid "date_on"
+msgstr ""
+
+msgid "followup_with_quote"
+msgstr "Reagovat (s ocitováním tohoto komentáøe)"
+
+msgid "no_access"
+msgstr "¾ádný pøístup"
+
+msgid "issues_last_n_days"
+msgstr "Polo¾ky zmìnìné za posledních"
+
+msgid "Recent activity"
+msgstr "Poslední zmìny"
+
+msgid "days"
+msgstr "Dní"
+
+msgid "Refresh"
+msgstr "Aktualizovat"
+
+msgid "invalid_id_for_schemata"
+msgstr "$schemata je neplatné ID pro schemata"
+
+msgid "open_issue_in_new_window"
+msgstr "Otevøít v novém oknì"
+
+msgid "staff_members"
+msgstr "Èlenové systému"
+
+msgid "Topic-Staff mapping"
+msgstr "Pøiøadit téma u¾ivateli Collectoru"
+
+msgid "topic_user_mapping_saved"
+msgstr "Pøiøazení bylo ulo¾eno"
+
+msgid "atse_empty_name"
+msgstr "Chybìjící jméno"
+
+msgid "atse_exists"
+msgstr "Schema $schemata ji¾ existuje"
+
+msgid "atse_invalid_id_for_schemata"
+msgstr "Neplatné ID pro schema"
+
+msgid "atse_added"
+msgstr "Schema bylo pøidáno"
+
+msgid "atse_can_not_remove_last_schema"
+msgstr "Poslední schema nemohlo být odstranìno"
+
+msgid "atse_deleted"
+msgstr "Schema smazáno"
+
+msgid "atse_feld_not_deleteable"
+msgstr "Pole nesmí být smazáno"
+
+msgid "atse_field_deleted"
+msgstr "Pole bylo smazáno"
+
+msgid "atse_empty_field_name"
+msgstr "Prázdné pole"
+
+msgid "atse_not_a_valid_id"
+msgstr "Neplatné ID"
+
+msgid "atse_field_already_exists"
+msgstr "Pole ji¾ existuje"
+
+msgid "atse_field_added"
+msgstr "Pole bylo pøidáno"
+
+msgid "atse_unknown_field"
+msgstr "Neznámé pole"
+
+msgid "atse_unknown_widget"
+msgstr "Neznámý widget"
+
+msgid "atse_moved_left"
+msgstr "Pøesunuto vlevo"
+
+msgid "atse_moved_right"
+msgstr "Pøesunuto vpravo"
+
+msgid "atse_field_moved_up"
+msgstr "Pøesunuto nahoru"
+
+msgid "atse_field_moved_down"
+msgstr "Pøesunuto dolù"
+
+msgid "atse_field_moved"
+msgstr "Pole pøesunuto"
+
+msgid "help_topics_users"
+msgstr "Topics taken from the Archetypes field 'topic' can be assigned to a set of staff members. All staff members are automatically assigned to an issue if the submitter/supporter chooses to assign an issue to a topic-group. The group of topics is taken from the list of all topics except that topics named maintopic/subtopic are considered to belong to the topic maintopic."
+
+msgid "assign_to_users"
+msgstr "Pøiøazení k u¾ivateli"
+
+msgid "assign_to_group"
+msgstr "Pøiøazení ke skupinì"
+
+msgid "label_notification_language"
+msgstr "Jazyk pro upozoròování"
+
+msgid "tools_recreated"
+msgstr "Nástroje byly znovuvytvoøeny"
+
+msgid "medium"
+msgstr "Støední"
+
+msgid "Look and Feel"
+msgstr "U¾ivatelské rozhraní"
+
+msgid "new_issue"
+msgstr "Novy_ticket"
+
+msgid "search_by_date"
+msgstr "Hledání podle datumu"
+
+msgid "Last change"
+msgstr "Poslední zmìna"
+
+msgid "until"
+msgstr "do"
+
+msgid "since"
+msgstr "od"
+
+msgid "days_or_date"
+msgstr "dny nebo datum"
+
+msgid "followup_heading"
+msgstr "Napsal u¾ivatel $user, $date"
+
+msgid "References"
+msgstr "Vazby"
+
+msgid "Followup"
+msgstr "Reagovat"
+
+msgid "Uploads"
+msgstr "Pøílohy"
+
+msgid "New search"
+msgstr "Nové hledání"
+
+msgid "Configuration"
+msgstr "Nastavení"
+
+msgid "Add issue"
+msgstr "Pøidat nový"
+
+msgid "Add Issue"
+msgstr "Pøidat nový záznam"
+
+msgid "View with images"
+msgstr "Roz¹íøené zobrazení"
+
+msgid "Navigation"
+msgstr "Navigace:"
+
+msgid "show_issue_number"
+msgstr "Zobrazit záznam è."
+
+msgid "quicklinks"
+msgstr "Rychlé odkazy:"
+
+msgid "Reports"
+msgstr "Reporty"
+
+msgid "label_up_to_configuration"
+msgstr "Nahoru k nastavení"
+
+msgid "label_up_to_collector"
+msgstr "Nahoru na pøehled záznamù"
+
+msgid "last_search_results"
+msgstr "posledního nalezené"
+
+msgid "issue_actions"
+msgstr "mo¾né èinnosti"
+
+msgid "collector_actions"
+msgstr "mo¾né èinnosti"
+
+msgid "Submit followup"
+msgstr "Odeslat reakci"
+
+msgid "Issue reports"
+msgstr "Reporty"
+
+msgid "open_issues_grouped_by_user"
+msgstr "Otevøené problémy (seskupenì podle u¾ivatelù)"
+
+msgid "open_unassigned_issues"
+msgstr "Nepøiøazené problémy"

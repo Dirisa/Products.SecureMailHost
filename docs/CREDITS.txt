@@ -18,4 +18,6 @@ Credits:
 
   - JA translation by Tamakoshi Hiroki
 
-  - Icons provided by the Plone team (Alexander Limi)
+  - some icons provided by the Plone team (Alexander Limi)
+
+  - CS translation by Lukas Kubin
