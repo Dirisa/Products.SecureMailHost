@@ -230,34 +230,39 @@
     <h5 i18n:translate="uploads">Uploads</h5>
     <div class="portletBody" id="pcng_portlet_uploads">
 
-      <div>
-          <ol>
-            <li tal:repeat="item here/objectValues">
-              <tal:def tal:define="icon item/getIcon|item/icon|nothing">
+      <div class="clear" tal:repeat="item here/objectValues">
 
-                <span tal:condition="icon">
-                  <img src="" alt="" border="0"
-                       tal:attributes="src python: here.portal_url() + '/' + icon;
-                                       alt item/Type|nothing" />
-                </span>
-                <a href="ITEM URL"
-                   tal:attributes="href item/absolute_url">
-                  <span tal:content="string: ${item/getId}" /> 
-                </a>
+        <div class="left"
+             tal:define="icon item/getIcon|item/icon|nothing">
 
-                <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
-                <a i18n:translate="issue_artifacts_table_info_link"
-                   tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+            <span tal:condition="icon">
+              <img src="" alt="" border="0"
+                   tal:attributes="src python: here.portal_url() + '/' + icon;
+                                   alt item/Type|nothing" />
+            </span>
+            <a href="ITEM URL"
+               tal:attributes="href item/absolute_url">
+              <span tal:content="string: ${item/getId}" /> 
+            </a>
 
-                <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)">&bull;
-                   <span i18n:translate="issue_artifacts_table_deletion_link"
-                   tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</span>
-                </a>
-              </tal:def>
-              <pre id="upload"
-                    tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
-            </li> <!-- End row -->
-          </ol>
+            <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
+        </div>
+
+        <div class="right">
+            <a tal:attributes="href python:item.absolute_url() + '/view'">
+              <img i18n:attributes="title" title="Info" src="pcng_info.gif"/></a>
+
+            <tal:if tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)">
+               <a tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">
+                 <img i18n:attributes="title" title="Delete file" src="delete.gif"/></a>
+            </tal:if>
+        </div>
+        <div class="clear"> </div>
+
+        <tal:if tal:condition="python: item.getId() != item.title_or_id()">
+          <br> <!-- get rid of the BR -->
+          <pre id="upload" tal:content="item/title_or_id" />
+        </tal:if>
       </div>
 
       <div id="pcng_uploads" tal:condition="not: here/objectValues">
