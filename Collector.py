@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.202 2004/09/11 12:45:21 ajung Exp $
+$Id: Collector.py,v 1.203 2004/09/11 13:09:35 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -23,13 +23,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
-from Base import Base
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent, IncrementalChangeEvent
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
-from PCNGSchema import PCNGSchemaNonPersistent
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable

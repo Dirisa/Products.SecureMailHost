@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.212 2004/09/11 12:19:04 ajung Exp $
+$Id: Issue.py,v 1.213 2004/09/11 13:09:35 ajung Exp $
 """
 
 import os, time, random
@@ -22,21 +22,23 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
+from Products.Archetypes.BaseContent import BaseContent
 from zLOG import LOG, ERROR
 
-from Base import Base, ParentManagedSchema
+from Base import ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
 from group_assignment_policies import getUsersForGroups
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent
 from WatchList import WatchList
 from Translateable import Translateable
-from PCNGSchema import PCNGSchemaNonPersistent
+import issue_schema 
+from PCNGSchema import PCNGSchema
 import util, notifications
 
 _marker = []
 
-class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
+class PloneIssueNG(BaseContent, ParentManagedSchema, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = (
@@ -124,21 +126,20 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security = ClassSecurityInfo()
     archetype_name = 'PCNG Issue'
 
-    def __init__(self, id):
-        Base.__init__(self, id)
-        from issue_schema import schema
-        self.schema = PCNGSchemaNonPersistent(schema.fields())
-        self.wl_init()
-        self.id = id
-        self._last_action = 'Created'          # last action from the followup form
+    schema = issue_schema.schema
 
-        self._transcript2 = Transcript2().__of__(self)
-        self._md = PersistentMapping()
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
-        Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
+        BaseContent.manage_afterAdd(self, item, container)
+
+        self._transcript2 = Transcript2().__of__(self)
+        self._last_action = 'Created'          # last action from the followup form
+
+        self.schema = PCNGSchema(issue_schema.schema.fields())
+
+
         self.post_creation_actions()
 
         # Creator
@@ -656,31 +657,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             pass
         if self.getNotification_policy() != 'NoneNotificationPolicy': 
             notifications.notify(self)
-
-    ######################################################################
-    # Override processForm() from Archetype.BaseObject
-    ######################################################################
-
-    security.declarePrivate('_processForm')
-    def _processForm(self, data=1, metadata=None, REQUEST=None,values=None):
-
-        request = REQUEST or self.REQUEST
-        schema = self.Schema()
-
-        for k in request.form.keys():
-            field = self.getField(k)
-            if not field: continue
-
-            widget = field.widget
-            result = widget.process_form(self, field, request.form, empty_marker=_marker)
-            if result is _marker or result is None: continue
-
-            # Set things by calling the mutator
-            mutator = field.getMutator(self)
-            __traceback_info__ = (self, field, mutator)
-            mutator(result[0], **result[1])
-
-        self.reindexObject()
 
     security.declareProtected(View, 'get_size')
     def get_size(self):

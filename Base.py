@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.15 2004/09/11 12:45:21 ajung Exp $
+$Id: Base.py,v 1.16 2004/09/11 13:09:35 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -75,6 +75,7 @@ class ParentManagedSchema:
                 except:
                     field.set(self, field.default)
                         
-        return self._v_schema.__of__(self)
+#        return self._v_schema.__of__(self)
+        return self._v_schema
 
 InitializeClass(ParentManagedSchema)

@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.65 2004/07/23 10:51:52 ajung Exp $
+$Id: SchemaEditor.py,v 1.66 2004/09/11 13:09:35 ajung Exp $
 """
 
 import re
@@ -19,7 +19,7 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
-from PCNGSchema import PCNGSchemaNonPersistent
+from PCNGSchema import PCNGSchema
 
 import util
 from config import ManageCollector
@@ -39,24 +39,13 @@ class SchemaEditor:
 
     security.declareProtected(ManageCollector, 'atse_init')
     def atse_init(self, schema, filtered_schemas=('default', 'metadata')):
-        self._ms = PCNGSchemaNonPersistent(schema.fields())
+        self._ms = schema
         self._filtered_schemas = filtered_schemas
 
     security.declareProtected(View, 'atse_getSchema')
     def atse_getSchema(self):
         """ return the concatenation of all schemas """       
-
-        # Migration from old SchemaEditor
-
-        if not hasattr(self, '_ms'):
-            schema = PCNGSchemaNonPersistent()
-            for name in self._schemata_names:
-                for f in self._schemas[name].fields():
-                    schema.addField(f)
-            schema.addField(StringField('language', schemata='default'))
-            schema.addField(StringField('subject', schemata='default'))
-            self._ms = schema.copy()
-        return self._ms
+        return self._ms.__of__(self)
 
     security.declareProtected(View, 'atse_getSchemataNames')
     def atse_getSchemataNames(self):
@@ -68,7 +57,7 @@ class SchemaEditor:
     security.declareProtected(View, 'atse_getSchemata')
     def atse_getSchemata(self, name):
         """ return a schemata given by its name """
-        s = PCNGSchemaNonPersistent()
+        s = PCNGSchema()
         for f in self._ms.getSchemataFields(name):
             s.addField(f)
         return s
@@ -343,7 +332,7 @@ class SchemaEditor:
         """ migrate to PCNGSchema """
 
         old_schema = self._ms.copy()
-        self._ms = PCNGSchemaNonPersistent()
+        self._ms = PCNGSchema()
         for schemata_name in old_schema.getSchemataNames():
             for field in old_schema.getSchemataFields(schemata_name):
                 try:
