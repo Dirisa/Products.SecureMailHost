@@ -13,7 +13,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.5 $"[11:-2]
+__version__ = "$Revision: 1.6 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -27,9 +27,9 @@ def setupPcng_issue_workflow(wf):
     "..."
     wf.setProperties(title='Workflow for PloneCollectorNG issues')
 
-    for s in ['resolved', 'resigned', 'created', 'rejected', 'defered', 'accepted', 'pending']:
+    for s in ['resolved', 'resigned', 'created', 'rejected', 'defered', 'accepted', 'pending', 'wont_fix']:
         wf.states.addState(s)
-    for t in ['defer', 'resolve', 'reject', 'resign', 'accept', 'reaccept', 'assign', 'pending']:
+    for t in ['defer', 'resolve', 'reject', 'resign', 'accept', 'reaccept', 'assign', 'pending', 'wont_fix']:
         wf.transitions.addTransition(t)
     for v in ['confidential', 'assigned_to']:
         wf.variables.addVariable(v)
@@ -44,6 +44,10 @@ def setupPcng_issue_workflow(wf):
 
     ## States initialization
     sdef = wf.states['resolved']
+    sdef.setProperties(title="""""",
+                       transitions=('reaccept',))
+    
+    sdef = wf.states['wont_fix']
     sdef.setProperties(title="""""",
                        transitions=('reaccept',))
 
@@ -65,11 +69,11 @@ def setupPcng_issue_workflow(wf):
 
     sdef = wf.states['accepted']
     sdef.setProperties(title="""""",
-                       transitions=('assign', 'defer', 'reject', 'resign', 'resolve'))
+                       transitions=('assign', 'defer', 'reject', 'resign', 'resolve', 'wont_fix'))
 
     sdef = wf.states['pending']
     sdef.setProperties(title="""""",
-                       transitions=('accept', 'defer', 'reject', 'resign', 'resolve'))
+                       transitions=('accept', 'defer', 'reject', 'resign', 'resolve', 'wont_fix'))
 
 
     ## Transitions initialization
@@ -92,6 +96,18 @@ def setupPcng_issue_workflow(wf):
                        script_name="""""",
                        after_script_name="""send_notifications""",
                        actbox_name="""resolve""",
+                       actbox_url="""""",
+                       actbox_category="""pcng_issue_workflow""",
+                       props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
+                       )
+
+    tdef = wf.transitions['wont_fix']
+    tdef.setProperties(title="""Issue will not be fixed""",
+                       new_state_id="""wont_fix""",
+                       trigger_type=1,
+                       script_name="""""",
+                       after_script_name="""send_notifications""",
+                       actbox_name="""won't fix""",
                        actbox_url="""""",
                        actbox_category="""pcng_issue_workflow""",
                        props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
