@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.116 2004/02/13 13:02:11 ajung Exp $
+$Id: Collector.py,v 1.117 2004/02/15 18:18:30 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -492,6 +492,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 self._v_have_rl = 0
             have_rl = self._v_have_rl
         return have_rl 
+
+    def rename_objects(self, context, old_id, new_id):
+        """ rename an object """
+        return context.manage_renameObjects([old_id], [new_id])
 
 
 registerType(PloneCollectorNG)

@@ -28,7 +28,7 @@ if context.meta_type == 'PloneIssueNG':
             id = context.new_issue_number()
             parent = context.aq_parent
             context.processForm()
-            parent.manage_renameObjects([context.getId()], [id])
+            context.rename_objects(parent, context.getId(), id)
             new_context = getattr(parent, id)            
             new_context.processForm()
         
