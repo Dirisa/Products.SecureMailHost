@@ -5,19 +5,6 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema +  Schema((
-    LinesField('versions',
-                multivalued=1,
-                vocabulary='listDocVersions',
-                enforceVocabulary=1,
-                accessor='Versions',
-                widget=MultiSelectionWidget(format='checkbox',
-                       description_msgid='desc_howto_versions',
-                       description='The versions this Howto applies to',
-                       label_msgid='label_howto_versions',
-                       label='Versions',
-                       i18n_domain = "howto",
-                       ),
-               ),
     TextField('body',
               searchable=1,
               required=1,
@@ -32,13 +19,25 @@ schema = BaseFolderSchema +  Schema((
 
               **DEFAULT_CONTENT_TYPES
               ),
-    ),
 
+    LinesField('versions',
+                multivalued=1,
+                vocabulary='_get_versions_vocab',
+                enforceVocabulary=1,
+                accessor='Versions',
+                index='KeywordIndex',
+                widget=MultiSelectionWidget(
+                       description_msgid='desc_howto_versions',
+                       description='The versions this Howto applies to',
+                       label_msgid='label_howto_versions',
+                       label='Versions',
+                       i18n_domain = "howto",
+                       ),
+               ),
     LinesField('sections',
                multiValued=1,
                required=1,
-               vocabulary='_get_sections_vocab', # we acquire this from
-                                                 # FAQFolder
+               vocabulary='_get_sections_vocab',
                enforceVocabulary=1,
                widget=MultiSelectionWidget(
     label='Sections',
@@ -46,9 +45,10 @@ schema = BaseFolderSchema +  Schema((
     description='Section(s) that this How-to should appear in.',),
     description_msgid='desc_howto_sections',
     i18n_domain = "plonehelpcenter",
-               ),
+               )),
 
     marshall=PrimaryFieldMarshaller(),
+    
  )
 
 class HelpCenterHowTo(BaseFolder):
@@ -83,28 +83,12 @@ class HelpCenterHowTo(BaseFolder):
 
     security = ClassSecurityInfo()
     
-    security.declarePrivate('listDocVersions')
-    def listDocVersions(self):
-        """method to get the defined versions to which the howto may apply
-        """
-        versions = getattr(self, 'doc_versions', [])
-        results = []
-        for version in versions:
-            results.append([version,version])
-        versionstuple = tuple(results)
-        return DisplayList(versionstuple)
+    def _get_versions_vocab(self):
+        return self.aq_parent._get_versions_vocab()
     
-    security.declarePrivate('listDocSections')
-    def listDocSections(self):
-        """method to get the defined sections to which the howto may belong
-        """
-        sections = getattr(self, 'doc_sections', [])
-        results = []
-        for section in sections:
-            results.append([section,section])
-        sectiontuple = tuple(results)
-        return DisplayList(sectiontuple)
-    
+    def _get_sections_vocab(self):
+        return self.aq_parent._get_sections_vocab()
+
     security.declareProtected(CMFCorePermissions.View,'Versions')
     #
     def Versions(self):

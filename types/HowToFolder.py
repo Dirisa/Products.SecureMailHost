@@ -48,4 +48,10 @@ class HelpCenterHowToFolder(BaseFolder):
     
     security = ClassSecurityInfo()
     
+    def _get_versions_vocab(self):
+        return self.versions
+
+    def _get_sections_vocab(self):
+        return self.sections
+        
 registerType(HelpCenterHowToFolder, PROJECTNAME)
