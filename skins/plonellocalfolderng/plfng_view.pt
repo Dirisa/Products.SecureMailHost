@@ -206,14 +206,14 @@
         <table width="100%">
           <tr>
 	          <td width="50%" valign="top">
-		          File: <span class="fieldRequired" title="Required">(Required)</span><br>
-		          <input type="file" name="upload">
+		          File: <span class="fieldRequired" title="Required">(Required)</span><br/>
+		          <input type="file" name="upload"/>
 		          <div tal:condition="uploadMD5Required">
 		             MD5 Checksum: <span class="fieldRequired" title="Required">(Required)</span>
 		          </div>
 		       </td>
 		       <td width="50%" valign="top">
-		         Comment (optional):<br>
+		         Comment (optional):<br/>
 	             <textarea name="comment" cols="40" rows="2"></textarea>
 	          </td>
 	       </tr>
@@ -228,11 +228,11 @@
 					  
 						<div tal:content="error">Validation error output</div>
 		            
-		            <input  type="text" name="clientMD5" size="36">
+		            <input  type="text" name="clientMD5" size="36"/>
 		          </div>  
 	          </td>
 	          <td>
-              <center><input type="submit" value="Upload file" ></center>
+              <center><input type="submit" value="Upload file" /></center>
             </td>
           </tr>
         </table>
@@ -250,9 +250,9 @@
     <div>
         <form tal:attributes="action string:${request/URL1}/create_directory" method="post">
           Directory name:
-          <input type="text" name="dirname" size="30">
+          <input type="text" name="dirname" size="30"/>
           &nbsp;
-          <input type="submit" value="Create Directory" >
+          <input type="submit" value="Create Directory" />
         </form>
     </div>
     
