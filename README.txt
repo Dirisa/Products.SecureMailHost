@@ -22,6 +22,9 @@ Credits
   Original FAQ code -- 
   "Tim Terlegard":mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - further enhancements by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
 
+  Fixing various stuff, documentation -- 
+  The Sprinters: Christian Heimes, Dorneles Treméa, Daniel Nouri, Nate Aune
+
 Usage
 
   Several types of help documentation are available in a Help Center: 
