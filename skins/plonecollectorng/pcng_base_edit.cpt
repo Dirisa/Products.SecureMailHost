@@ -52,7 +52,7 @@
              <span i18n:translate="" tal:content="set" /></a>
         </div>
        <span tal:condition="not: repeat/set/end"> &bull;</span>
-      </tal:block>                                         i
+      </tal:block>                                         
     </div>
     <br>
 
