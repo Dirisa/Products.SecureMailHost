@@ -193,12 +193,11 @@ function show_tickets() {
 
 
 <div metal:define-macro="watchlist">
-  <fieldset tal:condition="python: here.wl_getMode()=='anyone' or 
-                                            (here.wl_getMode()=='authenticated' and member.getUserName() != 'Anonymous User') "
-       tal:define="email python: member.getProperty('email')">
+  <fieldset tal:condition="python: here.wl_getMode()=='anonymous' or 
+                                   (here.wl_getMode()=='authenticated' and member.getUserName() != 'Anonymous User') "
+            tal:define="email python: member.getProperty('email')">
 
     <legend i18n:translate="legend_watchlist">Watchlist</legend>
-
 
     <metal:block tal:condition="email">
       <div tal:condition="not: python: here.wl_isWatcher(email)">
@@ -212,7 +211,7 @@ function show_tickets() {
     <metal:block tal:condition="not: email">
       <form tal:attributes="action string:${here/absolute_url}/wl_addWatcher">
         <span i18n:translate="email_address">E-Mail address</span>:        
-        <input type="text" size="30" name="email" >
+        <input type="text" size="30" name="email" > &nbsp;
         <input type="submit" value=" Subscribe to this issue " class="standalone">
       </form>
     </metal:block>
