@@ -48,15 +48,6 @@
       <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
     </div>
   </form>
-
-  <div>
-    <form action="pcng_new_topic_group">
-      <span class="label" i18n:translate="new_group">New group</span>
-      <input type="text" value="" name="group">
-      <input class="context" type="submit" value="Create" i18n:attributes="value" class="standalone"/>
-    </form>
-  </div>
-
     
   <hr>
   <div class="formHelp" i18n:translate="help_topics_users">
