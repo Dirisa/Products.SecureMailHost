@@ -17,17 +17,18 @@
 
     <form action="xx" method="GET" name="search_form">
 
-      <tal:loop tal:repeat="item here/getIndexes">
-        <div>
-          <span class="label" i18n:translate="" tal:content="python: item[0]" />
-          <div>
+      <div>
+        <tal:loop tal:repeat="item here/getIndexes">
+          <div style="float: left; margin: 5pt">
+            <span class="label" i18n:translate="" tal:content="python: item[0]" />
+            <br>
             <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')">
-              <select multiple size="5"
+              <select multiple size="5" style="text-align: center"
                       tal:attributes="name python: '%s:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
                 <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
                   <option tal:attributes="value entry;
                                           selected python: request.get(item[0],'')==entry" 
-                          tal:content="entry" />
+                         tal:content="entry" />
                 </tal:loop>
               </select>
             </tal:if>
@@ -35,15 +36,16 @@
             <tal:if tal:condition="python: item[1].find('TextIndex') > -1">
               <input type="text" tal:attributes="name python: item[0]" value="" size="30">
             </tal:if>
-          <div>
-        </div>
-      </tal:loop>
+          </div>
+        </tal:loop>
+        <div style="float: right"></div>
+      </div>
+      <p>
 
       <div>
         <span class="label" i18n:translate="fulltextsearch">Fulltext search</span>
-        <div>
-          <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
-        </div>
+        <br/>
+        <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
       </div>
 
       <div>
