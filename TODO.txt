@@ -10,6 +10,35 @@ FAQ/FAQFolder:
 
 - Consider having an "Important" marker on entries, to mark the most common ones visually with a red (!) marker in the overview/listing.
 
+TUTORIAL TYPE
+
+- This type needs to be created
+
+- It's essentially a folderish object with three allowed subtypes: File, Image and Page
+
+- Image and File are the normal content types
+
+- It's for creating multi-page articles
+
+- Tutorial consists of TutorialPages
+
+- Tutorial is an OrderedFolder
+
+- Tutorial will need template logic to display previous/next according to ordering of TutorialPages
+
+- TutorialPage is a simple type with 
+
+  - Short Name
+
+  - Title
+
+  - Description
+
+  - Body text
+
+
+
+
 GENERAL:
 
 - We should use Keywords (DublinCore Subject) for the Sections, and restrict the usage to only being the ones defined in the folder (is this possible?)
