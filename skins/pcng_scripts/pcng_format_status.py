@@ -2,6 +2,9 @@
 
 # reformat the workflow state to a more readable string
 
+if status == 'wont_fix':
+    status = "Won't fix"
+
 if status.find('_') == -1: # not found:
     return status.capitalize()
 f = status.split('_', 1)
