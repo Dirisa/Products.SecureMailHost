@@ -15,7 +15,7 @@
       <!-- set the view mode based on the collector preferences -->
 
       <metal:block tal:condition="not: request/mode|nothing">
-        <metal:block tal:define="global mode python: member.getProperty('pcng_default_view')" />
+        <metal:block tal:define="global mode python: member.getProperty('pcng_default_view') or 'simple'" />
       </metal:block>
       <metal:block tal:condition="request/mode|nothing">
         <metal:block tal:define="global mode request/mode" />
