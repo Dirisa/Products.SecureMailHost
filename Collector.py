@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.82 2003/11/28 12:11:14 ajung Exp $
+$Id: Collector.py,v 1.83 2003/11/28 13:50:09 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -424,10 +424,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 self._v_have_rl = 0
             have_rl = self._v_have_rl
         return have_rl 
-
-    ######################################################################
-    # Some Archetypes madness
-    ######################################################################
 
 
 registerType(PloneCollectorNG)

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.90 2003/11/28 11:47:08 ajung Exp $
+$Id: Issue.py,v 1.91 2003/11/28 13:50:09 ajung Exp $
 """
 
 import sys, os, time
@@ -18,11 +18,11 @@ from Acquisition import aq_base
 from DateTime import DateTime
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
-from Products.Archetypes.Schema import Schemata
-from Base import Base
+from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 
+from Base import Base
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
@@ -108,6 +108,8 @@ class PloneIssueNG(Base, WatchList, Translateable):
 
     def __init__(self, id):
         Base.__init__(self, id) 
+        from issue_schema import schema
+        self.schema = schema
         self.wl_init()
         self.id = id
         self.title = id
@@ -116,10 +118,12 @@ class PloneIssueNG(Base, WatchList, Translateable):
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
+
         Base.manage_afterAdd(self, item, container)
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
+        schema = self.Schema()
 
         if member:
             fieldnames = [ f.getName() for f in schema.fields() ]
@@ -526,6 +530,23 @@ class PloneIssueNG(Base, WatchList, Translateable):
     def getWorkflowHistory(self):                     
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
+
+    ######################################################################
+    # We need this for base_edit
+    ######################################################################
+
+    def Schemata(self):
+        """ return dict of Schematas """
+
+        d = {}
+        schema = self.Schema()
+        for name in schema.getSchemataNames():
+            s = Schema()
+            for f in schema.getSchemataFields(name):
+                s.addField(f)
+            d[name] = s
+        return d
+            
 
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)

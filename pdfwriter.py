@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.13 2003/11/18 18:05:05 ajung Exp $
+$Id: pdfwriter.py,v 1.14 2003/11/28 13:50:09 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -98,12 +98,12 @@ def pdfwriter(collector, ids):
             header("Solution")
             definition(html_quote(issue.solution))
 
-        for name in issue.schema_getNames():
+        for name in issue.atse_getSchemataNames():
             if name in ('default', 'metadata'): continue
             
             l =[]
 
-            for field in issue.schema_getSchema(name).fields():
+            for field in issue.atse_getSchemata(name).fields():
                 if field.getName() in ('description', 'title'): continue
 
                 value = issue.getParameter(field.getName())
