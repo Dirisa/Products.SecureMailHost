@@ -20,8 +20,10 @@
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
        </tr>
-       <span tal:content="here/getTrackerUsers"/>
-       <tr tal:repeat="user here/getTrackerUsers">
+       <span tal:repeat="user here/getTrackerUsers" >
+
+       <tr class="odd" tal:attributes="class python:test(repeat['user'].even(), 'even', 'odd')">
+
          <td tal:content="user/username" />
          <td tal:content="user/fullname|nothing" />
          <td tal:content="user/email|nothing" />
@@ -42,6 +44,7 @@
          </td>
            
        </tr>
+       </span>
       </table>
 
       <div class="row">
