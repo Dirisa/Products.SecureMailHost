@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.15 2004/05/24 13:19:42 tiran Exp $
+$Id: SecureMailHost.py,v 1.16 2004/05/24 16:54:53 longsleep Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -240,7 +240,7 @@ class SecureMailBase(MailBase):
     def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isistance(messageText, email.MIMEText.MIMEText):
+        if not isinstance(messageText, email.MIMEText.MIMEText):
             message = email.message_from_string(messageText)
         else:
             message = messageText
