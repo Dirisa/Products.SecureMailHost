@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.23 2003/10/24 19:46:03 ajung Exp $
+$Id: SchemaEditor.py,v 1.24 2003/10/26 14:00:50 ajung Exp $
 """
 
 import operator
+from types import StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -176,7 +177,7 @@ class SchemaEditor:
             # instance
 
             if len(vocab) == 1 and vocab[0].startswith('method:'):
-                dummy,method = vocab[0].split(',')
+                dummy,method = vocab[0].split(':')
                 D['vocabulary'] = method.strip()
             else:
                 l = []
@@ -292,6 +293,10 @@ class SchemaEditor:
         """ format the DisplayList of a field to be display
             within a textarea.
         """
+
+        if isinstance(field.vocabulary, StringType):
+            return 'methode:' + field.vocabulary
+
         l = []
         for k in field.vocabulary:
             v = field.vocabulary.getValue(k)
