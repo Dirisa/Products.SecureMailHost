@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.18 2003/11/06 13:05:46 ajung Exp $
+$Id: collector_schema.py,v 1.19 2003/11/06 13:27:52 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -36,7 +36,7 @@ VOC_WATCHLIST = DisplayList((
 
 VOC_UI_ISSUE_VIEW = DisplayList((
   ('simple', 'Simple view'),
-  ('full', 'Full viewfor anyone'),
+  ('full', 'Full view'),
 ))
 
 
