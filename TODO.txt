@@ -8,6 +8,9 @@ Template changes:
      
  - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
+    Folders should not be addable by default, but they should show up if the 
+    user has manually adjusted PHC via portal_types to permit folders and then 
+    added folders.
 
         -> Should be able to use the macro from folder_listing.pt
 
@@ -15,6 +18,7 @@ Template changes:
     of what the user is permitted to see. Managers and reviewers should also
     see pending (but not in-progress or obsolete) items, styled in a different
     colour (this styling already exists)
+    (JIM)
     
         -> There is a states parameter to getItems() which will help
     
@@ -49,6 +53,9 @@ Workflow changes/permission issues:
  - Regular members don't have permission to add items if portal_factory is 
     enabled (as it is now). Either we must fix permissions, or we must fix
     the factory (or disable it, but that would a shame)
+
+ - If we're not using portal_factory, users should be able to delete their 
+    own documents (maybe? -- consider an add->cancel).
     
 =====================
 Schema/class changes:
@@ -86,6 +93,11 @@ Schema/class changes:
     sorted anyway, it does not. In either case, we need a catalogue index on
     getSections. We should probably also fix the templates to use brains,
     not objects.
+
+ - I seem to be unable to change the ownership of a Tutorial Page with 
+    portal.plone_utils.changeOwnershipOf( aPage, anId, 1 )
+    Is that a bug?
+
 
 ===========
 Marshallers
