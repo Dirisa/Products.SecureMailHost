@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.7 2005/03/09 18:04:43 dtremea Exp $
+$Id: PSCProject.py,v 1.8 2005/03/09 22:51:41 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -110,14 +110,33 @@ class PSCProject(OrderedBaseFolder):
 
     security.declareProtected(CMFCorePermissions.View, 'getLatestRelease')
     def getLatestRelease(self):
+        """Get the most recent release, or None if none can be found. Will
+        prefer releases of the preferred maturity set in the software center.
+        """
         release_folder = self.getReleaseFolder()
         catalog = getToolByName(self, 'portal_catalog')
-        res = catalog.searchResults(
-                        path = '/'.join(release_folder.getPhysicalPath()),
-                        review_state = 'published',
-                        sort_on = 'effective',
-                        sort_order = 'reverse',
-                        portal_type = 'PSCRelease')
+        
+        preferredMaturity = self.getPreferredMaturity()
+        
+        res = []
+        
+        if preferredMaturity:
+            res = catalog.searchResults(
+                            path = '/'.join(release_folder.getPhysicalPath()),
+                            review_state = 'published',
+                            getMaturity = preferredMaturity,
+                            sort_on = 'effective',
+                            sort_order = 'reverse',
+                            portal_type = 'PSCRelease')
+        
+        if not res:
+            res = catalog.searchResults(
+                            path = '/'.join(release_folder.getPhysicalPath()),
+                            review_state = 'published',
+                            sort_on = 'effective',
+                            sort_order = 'reverse',
+                            portal_type = 'PSCRelease')
+        
         if not res:
             return None
         else:

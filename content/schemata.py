@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.5 2005/03/09 21:45:42 optilude Exp $
+$Id: schemata.py,v 1.6 2005/03/09 22:51:41 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -807,6 +807,7 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         required=1,
         searchable=1,
         vocabulary='getMaturityVocab',
+        index='FieldIndex',
         widget=SelectionWidget(
             label='Maturity',
             label_msgid='label_release_maturity',
@@ -1083,6 +1084,19 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         widget=SimpleDataGridWidget(
             label='Release maturities',
             description='Define the available maturity states for software releases. Format is Name|Description',
+            i18n_domain='archpackage',
+            rows=6,
+        ),
+    ),
+
+    StringField(
+        name='preferredMaturity',
+        default='Final',
+        vocabulary='getAvailableMaturitiesAsDisplayList',
+        enforceVocabulary=1,
+        widget=SelectionWidget(
+            label='Preferred maturity',
+            description='When showing the latest release of a project, the software center will prefer releases with this maturity.',
             i18n_domain='archpackage',
             rows=6,
         ),
