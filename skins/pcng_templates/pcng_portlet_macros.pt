@@ -12,7 +12,7 @@
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
     <h5 i18n:translate="last_search_results">Results from last search</h5>
-    <div class="portletBody"
+    <div class="portletBody" id="pcng_results_portlet"
          tal:define="my_id here/getId;
                      results python: request.SESSION.get('pcng_searchresults', []);
                      issue_ids python: [i[1] for i in results]">
@@ -101,7 +101,7 @@
 <div metal:define-macro="pcng_search_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_search_portlet">
     <h5 i18n:translate="Search">Search</h5>
-    <div class="portletBody"  id="pcng_search-portlet">
+    <div class="portletBody"  id="pcng_search_portlet">
 
       <div>
         <span id="pcng_navigation" i18n:translate="Navigation">Navigation:</span>
@@ -227,33 +227,40 @@
   <div class="portlet">
     <h5 i18n:translate="uploads">Uploads</h5>
     <div class="portletBody" id="pcng_portlet_uploads">
-      <ul>
-        <li tal:repeat="item here/objectValues">
-          <span tal:define="icon item/getIcon|item/icon|nothing">
 
-            <span tal:condition="icon">
-              <img src="" alt="" border="0"
-                   tal:attributes="src python: here.portal_url() + '/' + icon;
-                                   alt item/Type|nothing" />
-            </span>
-            <a href="ITEM URL"
-               tal:attributes="href item/absolute_url">
-              <span tal:content="string: ${item/getId}" /> 
-            </a>
+      <div>
+          <ol>
+            <li tal:repeat="item here/objectValues">
+              <tal:def tal:define="icon item/getIcon|item/icon|nothing">
 
-            <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
-            <a i18n:translate="issue_artifacts_table_info_link"
-               tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+                <span tal:condition="icon">
+                  <img src="" alt="" border="0"
+                       tal:attributes="src python: here.portal_url() + '/' + icon;
+                                       alt item/Type|nothing" />
+                </span>
+                <a href="ITEM URL"
+                   tal:attributes="href item/absolute_url">
+                  <span tal:content="string: ${item/getId}" /> 
+                </a>
 
-            <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
-               i18n:translate="issue_artifacts_table_deletion_link"
-               tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
-          </span>
-          <pre tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
-        </li> <!-- End row -->
-      <ul>
-      <span i18n:translate="issue_artifacts_table_no_uploads_available"
-            tal:condition="not: here/objectValues">No uploads available</span>
+                <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
+                <a i18n:translate="issue_artifacts_table_info_link"
+                   tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
+
+                <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)">&bull;
+                   <span i18n:translate="issue_artifacts_table_deletion_link"
+                   tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</span>
+                </a>
+              </tal:def>
+              <pre id="upload"
+                    tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
+            </li> <!-- End row -->
+          </ol>
+      </div>
+
+      <div id="pcng_uploads" tal:condition="not: here/objectValues">
+          <span i18n:translate="issue_artifacts_table_no_uploads_available">No uploads available</span>
+      </div>
     </div>
   </div>
 </div> 
@@ -267,42 +274,48 @@
 
 
     <h5 i18n:translate="legend_references">References</h5>
-    <div class="portletBody" id="pcng_portlet_uploads">
+    <div class="portletBody" id="pcng_portlet_references">
 
-      <ul>
+      <div id="pcng_references">
+        <span id="label" i18n:translate="references">References</span>
+        <ol>
+          <li tal:repeat="ref references">
+            <tal:def tal:define="target python: ref.getTargetObject()">
+              <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
+              <pre tal:content="ref/comment" />
+            </tal:def>
+          </li>
+          <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
+        </ol>
+      </div>
 
-        <li><span i18n:translate="references">References</span>
-          <ul>
-            <li tal:repeat="ref references">
-              <tal:def tal:define="target python: ref.getTargetObject()">
-                <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-                [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
-                <pre tal:content="ref/comment" />
-              </tal:def>
-            </li>
-             <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
-          </ul>
-        </li>
+      <div id="pcng_references">
+        <span id="label" i18n:translate="referenced_by">Referenced by</span>
+        <ol>
+          <li tal:repeat="ref breferences">
+            <tal:def tal:define="source python: ref.getSourceObject()">
+              <a tal:attributes="href source/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${source/title_or_id}"/>
+              <pre tal:content="ref/comment" />
+            </tal:def>
+          </li>
+          <li tal:condition="not: breferences" i18n:translate="no_references">No references found</li>
+        </ol>
+      </div>
 
-        <li><span i18n:translate="referenced_by">Referenced by</span>
-          <ul>
-            <li tal:repeat="ref breferences">
-              <tal:def tal:define="source python: ref.getSourceObject()">
-                <a tal:attributes="href source/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${source/title_or_id}"/>
-                <pre tal:content="ref/comment" />
-              </tal:def>
-            </li>
-            <li tal:condition="not: breferences" i18n:translate="no_references">No references found</li>
-          </ul>
-        </li>
-        <li><span i18n:translate="dependency_graph">Dependency graph</span>: 
-          <a href="pcng_references_tree?format=gif">[GIF]</a>
-          <a href="pcng_references_tree?format=jpeg">[JPEG]</a>
-          <a href="pcng_references_tree?format=png">[PNG]</a>
-          <a href="pcng_references_tree?format=svg">[SVG]</a>
-          <a href="pcng_references_tree?format=ps">[PS]</a>
-        </li>
-      </ul>
+      <div id="pcng_references">
+        <span id="label"  i18n:translate="dependency_graph">Dependency graph</span>: 
+        <ol>
+          <li>
+            <a href="pcng_references_tree?format=gif">[GIF]</a>
+            <a href="pcng_references_tree?format=jpeg">[JPEG]</a>
+            <a href="pcng_references_tree?format=png">[PNG]</a>
+            <a href="pcng_references_tree?format=svg">[SVG]</a>
+            <a href="pcng_references_tree?format=ps">[PS]</a>
+          </li>
+        </ol>
+      </div>
+      
     </div> 
   </div> 
 </div>  

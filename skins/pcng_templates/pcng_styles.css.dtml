@@ -169,6 +169,15 @@ div #pcng_searchform{
     text-decoration: none;
 }
 
+.portlet div#pcng_portlet_uploads, 
+.portlet div#pcng_portlet_references, 
+.portlet div#pcng_results_portlet, 
+.portlet div#pcng_portlet_issue, 
+.portlet div#pcng_portlet_collector, 
+.portlet div#pcng_search_portlet {
+    padding: 0.5em;
+}
+
 
 div.pcng_action {
     margin-bottom: 0.5em;
