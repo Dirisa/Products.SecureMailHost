@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.73 2003/11/06 17:53:53 ajung Exp $
+$Id: Issue.py,v 1.74 2003/11/07 08:07:28 ajung Exp $
 """
 
 import sys, os
@@ -416,9 +416,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ redirect to ticket browser """
         util.redirect(RESPONSE, self.aq_parent.absolute_url() + '/pcng_view')
 
-    def view(self, RESPONSE=None):
+    def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
-        util.redirect(RESPONSE, self.absolute_url() + "/pcng_issue_view")
+        return self.pcng_issue_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
+
     base_view = view
 
     ######################################################################

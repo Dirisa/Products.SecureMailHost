@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.61 2003/11/06 16:01:55 ajung Exp $
+$Id: Collector.py,v 1.62 2003/11/07 08:07:29 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -320,9 +320,10 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         if RESPONSE is None:
             return id
 
-    def view(self, RESPONSE=None):
+    def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
-        util.redirect(RESPONSE, self.absolute_url() + "/pcng_view")
+        return self.pcng_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
+
     base_view = view
 
     ######################################################################
