@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.157 2004/04/08 14:31:18 ajung Exp $
+$Id: Collector.py,v 1.158 2004/04/08 15:57:09 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -894,6 +894,7 @@ def modify_fti(fti):
             a['visible'] = 0
     fti['filter_content_types'] = 1
     fti['allowed_content_types'] = ['PloneIssueNG']
+    fti['icon'] = 'collector_icon.gif'
     return fti
 
 InitializeClass(PloneCollectorNGCatalog)

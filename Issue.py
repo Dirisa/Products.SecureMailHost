@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.152 2004/04/07 09:26:55 ajung Exp $
+$Id: Issue.py,v 1.153 2004/04/08 15:57:07 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -618,5 +618,6 @@ def modify_fti(fti):
     fti['global_allow'] = 0
     fti['filter_content_types'] = 1
     fti['allowed_content_types'] = ['File', 'Portal File', 'Image', 'Portal Image']
+    fti['icon'] = 'issue_icon.gif'
     return fti
 
