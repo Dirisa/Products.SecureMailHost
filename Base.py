@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.5 2003/12/02 09:54:54 ajung Exp $
+$Id: Base.py,v 1.6 2003/12/02 11:27:02 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -65,17 +65,54 @@ class ParentManagedSchema:
         if schema is None:
             self._v_schema = self.aq_parent.atse_getSchema()
 
-            # Check if we need to update our own properties
             for field in self._v_schema.fields():
+
+                ##########################################################
+                # Fake accessor and mutator methods
+                ##########################################################
+
+                name = field.getName()
+
+                method = lambda self=self, name=name, *args, **kw: \
+                         self.Schema()[name].storage.get(name, self) 
+                setattr(self, '_v_%s_accessor' % name, method )
+                field.accessor = '_v_%s_accessor' % name
+                field.edit_accessor = field.accessor
+
+                method = lambda value,self=self, name=name, *args, **kw: \
+                         self.Schema()[name].storage.set(name, self, value) 
+                setattr(self, '_v_%s_mutator' % name, method )
+                field.mutator = '_v_%s_mutator' % name
+
+                # Check if we need to update our own properties
                 try:
                     value = field.storage.get(field.getName(), self)  
                 except:
                     field.storage.set(field.getName(), self, field.default)
-        
-                field.mutator = 'archetypes_mutator'
-                field.accessor = 'archetypes_accessor'
-                field.edit_accessor = 'archetypes_accessor'
                         
         return self._v_schema
+
+
+    def archetypes_accessor(self, *args, **kw):
+        """ this method is a very bad hack since we do intercept
+            the frame to get hold of the corresponding 'field' object
+        """
+
+        # look for the context in the stack
+        _marker = []
+        frame = sys._getframe()
+        context = _marker
+        while context is _marker and frame is not None:
+            context = frame.f_locals.get('econtext', _marker)
+            frame = frame.f_back
+        if context is _marker:
+            return None
+
+        field = context.local_vars['field']
+        try:
+            value = field.storage.get(field.getName(), self, **kw)
+        except:
+            value = None
+        return value 
 
 InitializeClass(ParentManagedSchema)
