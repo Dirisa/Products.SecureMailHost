@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.32 2004/04/19 09:56:44 ajung Exp $
+$Id: notifications.py,v 1.33 2004/04/20 05:04:39 ajung Exp $
 """
 
 import sys, time
@@ -41,10 +41,10 @@ def enrich_recipients(issue, recipients):
     for uid, u_dict in r.items():
         member = membership.getMemberById(uid)
         if member:
-            r[uid]['send_attachments'] = util.safeGetProperty(member, 'pcng_send_attachments', 'no')
-            r[uid]['send_emails'] = util.safeGetProperty(member, 'pcng_send_emails', 'yes')
+            r[uid]['send_attachments'] = util.safeGetProperty(member, 'pcng_send_attachments', 'no') or 'no'
+            r[uid]['send_emails'] = util.safeGetProperty(member, 'pcng_send_emails', 'yes') or 'no'
             if not u_dict.has_key('email'):    # guess email
-                r[uid]['email'] = util.safeGetProperty(member, 'email', '')
+                r[uid]['email'] = util.safeGetProperty(member, 'email', '') or ''
     return r
 
 
