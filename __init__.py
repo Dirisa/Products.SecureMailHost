@@ -10,8 +10,9 @@ from config import ADD_CONTENT_PERMISSION
 registerDirectory(SKINS_DIR, GLOBALS)
 
 from Products.validation import validation
-from validators import ExistingFolderPathValidator
+from validators import ExistingFolderPathValidator,ExternalMD5UtilityValidator
 validation.register(ExistingFolderPathValidator('isValidExistingFolderPath'))
+validation.register(ExternalMD5UtilityValidator('isValidExternalMD5Utility'))
 
 def initialize(context):
     ##Import Types here to register them
