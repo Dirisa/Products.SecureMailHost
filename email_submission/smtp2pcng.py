@@ -7,12 +7,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.10 2004/04/12 16:34:25 ajung Exp $
+$Id: smtp2pcng.py,v 1.11 2004/04/13 10:20:37 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
 
-import sys, os, logging, base64
+import sys, os, logging, base64, logging
 import httplib, urllib, urlparse
 from ConfigParser import ConfigParser
 from cStringIO import StringIO
@@ -21,6 +21,17 @@ import email
 from email.Header import decode_header 
 
 CFG_FILE = '.smtp2pcng.cfg'
+
+# Logger stuff
+LOG = logging.getLogger('myapp')
+hdlr = logging.FileHandler('smtp2pcng.log')
+hdlr1 = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(process)s %(message)s')
+hdlr.setFormatter(formatter)
+hdlr1.setFormatter(formatter)
+LOG.addHandler(hdlr)
+LOG.addHandler(hdlr1)
+LOG.setLevel(logging.DEBUG)
 
 class Result:
 
@@ -67,6 +78,7 @@ def parse_mail(options):
         options.password = config.get(section, 'password')
 
     if options.filename is not None:
+        LOG.debug('Reading from: %s' % options.filename)
         text = open(options.filename).read()
     else:
         print >>sys.stderr, 'Reading mail from stdin'
@@ -82,12 +94,15 @@ def parse_mail(options):
         if part.has_key("From"):
             R.sendername, R.senderaddress = email.Utils.parseaddr(part.get("From"))
             R.reply_to = R.senderaddress
+            LOG.debug('From=%s,%s' % (R.sendername, R.senderaddress))
 
         if part.has_key("Reply-To"):
             R.reply_to = email.Utils.parseaddr(part.get("Reply-To"))[1]
+            LOG.debug('Reply-To=%s' % (R.reply_to))
 
         if part.has_key("Subject"):
             R.subject = decode_header(part.get("Subject"))[0][0]
+            LOG.debug('Subject=%s' % (R.subject))
 
         if ct in ('text/plain',):
             R.body = unicode(part.get_payload(decode=1), encoding).encode('utf-8')
@@ -111,18 +126,22 @@ def submit_request(R, options):
     response = conn.getresponse()
     data = response.read()
     conn.close()
+
     return (response.status, response.reason, data)
 
 
 def handle_response(R, status, reason, data):
-    if status == 200:    # OK 
-        pass
-    elif status == 401:  # Unauthorized
-        pass
-    elif status == 404:  # NotFound
-        pass
 
-    print status, reason, data
+    LOG.debug('Status: %s' % status)
+    LOG.debug('Reason: %s' % reason)
+    LOG.debug('Data: %s' % data)
+
+    if status == 200:    # OK 
+        LOG.info('Submission ok')
+    elif status == 401:  # Unauthorized
+        LOG.info('Submission unauthorized')
+    elif status == 404:  # NotFound
+        LOG.info('Submission URL not found')
 
 
 if __name__ == '__main__':
@@ -140,8 +159,13 @@ if __name__ == '__main__':
                       help='Path to configuration file (~/%s)' % CFG_FILE, default='~/%s' % CFG_FILE)
     parser.add_option('-C', '--configuration', dest='configuration', 
                       help='Section from configuration file to be used', default=None)
-
     options, args = parser.parse_args()
+
+    LOG.info('-'*75)
+    LOG.debug(options)
+
     R = parse_mail(options)
     status, reason, data = submit_request(R, options)
     handle_response(R, status, reason, data)
+
+    LOG.info('End')
