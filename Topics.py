@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Topics.py,v 1.3 2004/10/09 16:08:50 ajung Exp $
+$Id: Topics.py,v 1.4 2004/10/09 16:19:17 ajung Exp $
 """
 
 
@@ -50,8 +50,9 @@ class Topics(Persistent):
 
     def addTopic(self, topic):
         """ add a topic """
-        if not topic in self._topics:
-            self._topics.append(topic)
+        if topic in self._topics:
+            raise ValueError('Topic %s already exists' % topic)
+        self._topics.append(topic)
         self._topic_user[topic] = []
         self._p_changed = 1
 
@@ -68,6 +69,8 @@ class Topics(Persistent):
 
     def deleteUser(self, topic, user):
         """ delete a user from a topic """
+        if not topic in self._topics:
+            raise ValueError('No such topic %s' % topic)
         if user in self._topic_user[topic]:
             self._topic_user.remove(user)
         self._p_changed = 1
