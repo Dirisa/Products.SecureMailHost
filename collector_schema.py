@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.20 2003/11/14 07:53:13 ajung Exp $
+$Id: collector_schema.py,v 1.21 2003/11/15 10:09:49 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -62,6 +62,7 @@ schema = OrderedSchema((
                 ),
 
     StringField('description',
+                required=1,
                 searchable=1,
                 schemata='collectordata',
                 widget=TextAreaWidget(label='Description',
