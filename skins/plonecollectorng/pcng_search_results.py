@@ -1,9 +1,13 @@
+##parameters=debug=0
 # perform a search
 
 R = context.REQUEST
 sort_on = R.get('sort_on', 'getId')
 sort_direction = R.get('sort_direction', 'desc')
 query = {}
+
+print sort_on
+print sort_direction
 
 def toQuery(key):
     if R.has_key(key):
@@ -33,9 +37,14 @@ toQuery('assigned_to')
 if len(query) == 0:
     query['status'] = ('Accepted', 'Pending')
 
+if debug:
+    print query
+
 results = list(context.pcng_catalog.searchResults(query))
 
 if sort_on:
     results.sort(query_sort)
 
+if debug:
+    return printed
 return results

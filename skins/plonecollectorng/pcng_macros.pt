@@ -89,6 +89,7 @@
  </span>
     
 <div metal:define-macro="show_issues">
+
   <span tal:define="results here/pcng_search_results; 
                     Batch python: modules['Products.CMFPlone'].Batch;
                     b_size python: 10;
@@ -99,7 +100,7 @@
     <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
       <table class="listing" width="100%">
         <tr>
-          <th colspan="5" width="100%">
+          <th colspan="4" width="100%">
             <div metal:use-macro="here/batch_macros/macros/navigation" />
           </th>
         </tr>
@@ -117,7 +118,13 @@
             <span tal:content="issue/Title" />
           </td>
           <td>
-            <span tal:content="issue/Creator" />
+            <span tal:content="python: '%s (%s)' % (here.toPortalTime(issue.created), issue.Creator)" />
+          </td>
+          <td>
+            <span tal:content="issue/topic" />
+          </td>
+          <td>
+            <span tal:content="python: here.toPortalTime(issue.progress_deadline)" />
           </td>
           <td>
             <span tal:content="issue/status" />
@@ -125,9 +132,9 @@
         </tr>
       </table>
     </div>
+    <div tal:condition="not: results">No hits</div>
   </span>
 </div>    
-
 
 
 <div metal:define-macro="search_issues_form">
@@ -192,19 +199,39 @@
 
         <td> &nbsp</td>
 
-        <td valign="top">
-          <select name="sort_direction" size="2">
-            <option value="getId">ID</option>
-          </select>
+        <td align="center" valign="top">
+          <select name="sort_on" size="5">
+            <option i18n:translate=""
+                    tal:repeat="item python: (
+                          ('getId','Issue'),
+                          ('creation_date','Date'),
+                          ('deadline','Deadline'),
+                          ('submitter_id','Submitter'),
+                          ('progress','Progress'),
+                          ('classification','Classification'),
+                          ('status','Status'),
+                          ('Title','Title') ,
+                          ('topic','Topic'),
+                          ('importance','Importance')
+                          )"
+                     tal:attributes="value python: item[0];
+                                     selected python: request.get('sort_on', 'getId') == item[0]"
+                     tal:content="python: item[1]" />
+          </select> 
         </td>
 
-        <td valign="top">
+        <td align="center" valign="top">
           <select name="sort_direction" size="2">
-            <option value="desc">Desc</option>
-            <option value="asc">Asc</option>
-          </select>
+            <option i18n:translate=""
+                    tal:repeat="item python: (
+                          ('desc','Descending'),
+                          ('asc','Ascending'),
+                          )"
+                     tal:attributes="value python: item[0];
+                                     selected python: request.get('sort_direction', 'desc') == item[0]"
+                     tal:content="python: item[1]" />
+          </select> 
         </td>
-
       </tr>
  
       <tr>
@@ -220,8 +247,6 @@
         </td>
       </tr>
     
-
     </table>
   </form>
-
 </div>
