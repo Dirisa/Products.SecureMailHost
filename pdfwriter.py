@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.24 2004/01/15 12:57:29 ajung Exp $
+$Id: pdfwriter.py,v 1.25 2004/01/15 13:01:53 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -213,7 +213,6 @@ def pdfwriter(collector, ids):
 
             for ev in group:
                 if ev.type == 'comment':
-                    print repr(ev.comment), type(ev.comment)
                     comment = html_quote(ev.comment)
                 elif ev.type == 'change':
                     l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed'), ev.field, ev.old, ev.new)))
