@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.44 2004/09/19 09:22:31 ajung Exp $
+$Id: notifications.py,v 1.45 2004/09/22 07:13:04 ajung Exp $
 """
 
 import sys
@@ -17,6 +17,7 @@ import email.Utils
 
 from zLOG import LOG, ERROR, INFO
 from AccessControl import getSecurityManager
+from DateTime.DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 
 import util, notification_policies
@@ -109,6 +110,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
     subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.getCollector_abbreviation()), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue.lastAction(),issue.lastAction()))
     outer['Subject'] = Header(subject, encoding)
+    outer['Date'] = DateTime().rfc822()
 
     # Message-ID:
     msg_id = email.Utils.make_msgid()
