@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.2 2003/10/11 14:56:24 ajung Exp $
+$Id: notifications.py,v 1.3 2003/10/11 15:53:45 ajung Exp $
 """
 
 import sys
@@ -82,45 +82,15 @@ def send_notifications(recipients, issue):
     outer['Content-Type'] = 'text/plain; charset=iso-8859-15'
     outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email 
-    body =  format_transcript(issue) 
+    body =  issue.format_transcript() 
     outer.attach(MIMEText(body, _charset='iso-8859-15'))
 
     mh = getattr(collector, 'MailHost') 
-
+    print outer.as_string()
     try:
         mh._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
         LOG('PloneCollectorNG', ERROR, 'MailHost.send() failed', error=sys.exc_info())
 
 
-
-
-def format_transcript(issue):
-
-    def f(text):
-        return '\n'.join( [ '  %s' % s for s in text.split('\n') ] )
-
-    IO = StringIO()
-
-    print >>IO,'Issue #%s: %s' % (issue.getId(), issue.Title())
-    print >>IO,'Topic: %s' % (issue.topic ) 
-    print >>IO,'Status: %s, Importance: %s' % (issue.status(), issue.importance)
-
-    print >>IO,'Ticket URL: http://%s/%s' % (issue.aq_parent.canonical_hostname, issue.absolute_url(1))
-    print >>IO,'-'*75 + '\n'
-
-#    for entry in issue.getTranscript():
-#
-#        print >>IO,'#%-3d -------------- %s %s -----------' % \
-#         (entry.getNumber(), entry.getTimestamp().strftime('%d.%m.%Y %H:%M:%Sh'), entry.getUser())
-#
-#        for k, v in (('Comments', entry.getComments()), ('Changes', entry.getChanges()),
-#                     ('Uploads', entry.getUploads()), ('References', entry.getReferences())):
-#
-#            for item in v:
-#                print >>IO, "%-12s %s" % ("%s:" % issue.trans(k), f(str(item)))
-#        
-#        print >>IO
-
-    return IO.getvalue()
 
