@@ -45,13 +45,15 @@
            <th>Required</th>
            <th>Visible</th>
          </tr>
+         <td tal:content="python: here.getSchema(fieldset)" />
+         <td tal:content="python: here.getSchema(fieldset).fields()" />
          <tr tal:repeat="field python: here.getSchema(fieldset).fields()" >
           <th tal:content="field/getName" />
           <td valign="top">
             <select tal:attributes="name string:${field/getName}.field:record:string">
               <span tal:repeat="item python: ('StringField', 'IntegerField')">
                 <option tal:attributes="value item;
-                                        selected python: item==here.schema_get_filetype(field)"
+                                        selected python: item==here.schema_get_fieldtype(field)"
                         tal:content="item" />
               </span>
             </select>
@@ -104,8 +106,11 @@
          </tr>
  
          <tr> 
-           <td colspan="6">
+           <td colspan="1">
              <input type="submit" value=" Save ">
+           </td>
+           <td colspan="5">
+             <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field ">
            </td>
            <td colspan="2">
              <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this schemata</a>
