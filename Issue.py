@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.150 2004/04/04 09:08:35 ajung Exp $
+$Id: Issue.py,v 1.151 2004/04/06 15:06:07 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -27,7 +27,7 @@ from zLOG import LOG, ERROR
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
-from config import CollectorCatalog, CollectorWorkflow
+from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
 from group_assignment_policies import getUsersForGroups
 from Transcript import Transcript
 from WatchList import WatchList
@@ -59,7 +59,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         {'id': 'pcng_edit',
         'name': 'Edit',
         'action': 'pcng_base_edit',
-        'permissions': (ModifyPortalContent,)
+        'permissions': (EditCollectorIssue,)
         },
         {'id': 'issue_references',
         'name': 'References & Uploads',

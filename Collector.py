@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.153 2004/04/04 08:43:49 ajung Exp $
+$Id: Collector.py,v 1.154 2004/04/06 15:06:07 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -377,6 +377,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         # AddCollectorIssue
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
+        self.manage_permission(EditCollectorIssue, roles=target_roles, acquire=0)
         self.manage_permission(AddCollectorIssue, roles=target_roles+add_roles, acquire=0)
         self.manage_permission(AddPortalContent, roles=target_roles+add_roles, acquire=0)
 
@@ -386,7 +387,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         # ModifyPortalContent
         target_roles = ('Supporter','TrackerAdmin','Manager', 'Owner')
-        self.manage_permission(ModifyPortalContent, roles=target_roles, acquire=0)
+        self.manage_permission(ModifyPortalContent, roles=target_roles+add_roles, acquire=0)
 
     def _adjust_view_mode(self):
         """Set role privileges according to view mode."""
