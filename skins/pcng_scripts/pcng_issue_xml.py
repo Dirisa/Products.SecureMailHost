@@ -31,24 +31,19 @@ def convertValue(v):
     else:
         raise RuntimeError('Unsupported type: %s' % v)
 
-def vXML(v):
-    if same_type(v, ''):
-        w('\t\t<value type="string">%s</value>' % unicode(v, enc, 'replace').encode('utf-8'))
-    elif same_type(v, 0):
-        w('\t\t<value type="int">%s</value>' % str(v))
-    elif same_type(v, u''):
-        w('\t\t<value type="string">%s</value>' % v.encode('utf-8'))
-    elif same_type(v, 0.0):
-        w('\t\t<value type="float">%s</value>' % str(v))
-    elif v is None:
-        w('\t\t<value type="null"></value>')
-    elif same_type(v, now):
-        w('\t\t<value type="date-iso">%s</value>' % v.ISO())
-    elif same_type(v, []):
-        w('\t\t<value type="list">%s</value>' % repr(v))
-        
+def writeField(fieldname, v):
+    if same_type(v, []) or same_type(v, ()):
+        w('\t<field name="%s">' % str(fieldname))
+        w('\t\t<list>')
+        for item in v:
+            type, value = convertValue(item)
+            w('\t\t\t<value type="%s">%s</field>' % (type, value))
+        w('\t\t</list>')
+        w('\t</field>')
     else:
-        raise RuntimeError('Unsupported type: %s' % v)
+        type, value = convertValue(v)
+        w('\t<field name="%s" type="%s">%s</field>' % (str(fieldname), type, value))
+
 
 if preamble:
     w('<?xml version="1.0" encoding="utf-8"?>')
@@ -63,17 +58,7 @@ w('<issue id="%s" collector="%s">' % (context.getId(), context.aq_parent.getId()
 w('<metadata>')
 for f in context.Schema().fields():
     v = f.get(context)
-    if same_type(v, []) or same_type(v, ()):
-        w('\t<field name="%s">' % str(f.getName()))
-        w('\t\t<list>')
-        for item in v:
-            type, value = convertValue(item)
-            w('\t\t\t<value type="%s">%s</field>' % (type, value))
-        w('\t\t</list>')
-        w('\t</field>')
-    else:
-        type, value = convertValue(v)
-        w('\t<field name="%s" type="%s">%s</field>' % (str(f.getName()), type, value))
+    writeField(f.getName(), v)
 w('</metadata>')
 
 ################################################################
@@ -82,20 +67,17 @@ w('</metadata>')
 
 w('<transcript>')
 for e in context.getTranscript().getEvents():
+
     w('\t<entry type="%s" timestamp="%s">' % (e.getType(), DateTime(e.getTimestamp()).ISO()) )
+
     if e.type == 'comment':
-        w('\t\t<comment>')
-        vXML((e.comment))
-        w('\t\t</comment>')
+       type, value = convertValue(e.comment)
+       w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
+
     elif e.type == 'change':
-        w('\t\t<field name="%s">' % e.field)
-        w('\t\t\t<old>') 
-        vXML(e.old)
-        w('\t\t\t</old>')
-        w('\t\t\t<new>')
-        vXML(e.new)
-        w('\t\t\t</new>')
-        w('\t\t</field>')
+        w('<!-- fix me -->')
+        writeField(e.field, e.old)
+        writeField(e.field, e.new)
 
     elif e.type == 'incrementalchange':
         w('\t\t<field name="%s">' % repr(e.field))
@@ -106,9 +88,8 @@ for e in context.getTranscript().getEvents():
 
     elif e.type == 'reference':
        w('\t\t<reference id="%s" collector="%s">' % (e.ticketnum, e.tracker))
-       w('<comment>')
-       vXML(e.comment)
-       w('</comment>')
+       type, value = convertValue(e.comment)
+       w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
        w('\t\t</reference>') 
 
     elif e.type == 'upload':
@@ -120,7 +101,6 @@ for e in context.getTranscript().getEvents():
         w('\t\t\t</data>')
 
         type, value = convertValue(e.comment)
-        
         w('\t\t\t<comment type="%s">%s</comment>' % (type, value))
         w('\t\t</upload>')
 
