@@ -2,14 +2,22 @@ PloneSoftwareCenter - Remaining issues
 
 Developer claiming item/comments is in [brackets].
 
-====================================
-Bugs found when testing on plone.org
-====================================
+==================
+Remaining features
+==================
 
-- Deleting file in release doesn't seem possible
+- The Releases portlet needs to list the Category of the release, therefore it
+  needs to be in the catalog.
 
-- The Releases portlet needs to list the category of the release with the Title,
-  therefore it needs to be in the catalog.
+- The PSCFileLink object should have a field where you can enter the size of the 
+  download manually, since we would like to display this even if the file is
+  hosted elsewhere (like with Plone).
+  
+- The main download section on the project page should not show alpha/beta 
+  releases if there is a final release available. A good test case is Plone;
+  2.0.5 should be the default release listed for download, even if we have 
+  released a 2.1 alpha release. The other releases are available in the Releases
+  folder, but not listed as the default release on the project front page.
 
 ===========================================
 PloneHelpCenter integration considerations:
