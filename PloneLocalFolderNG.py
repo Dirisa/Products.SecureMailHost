@@ -160,6 +160,14 @@ schema = BaseSchema +  Schema((
     ))
 
 
+def make_url(content, *args):
+    import posixpath
+    dest = ('/' + posixpath.join(content.absolute_url(1), *args))
+    # Mozilla browsers don't like backslashes in URLs, so
+    # replace any '\' with '/' that os.path.join might
+    # produce
+    return dest.replace('\\', '/')
+
 class PloneLocalFolderNG(BaseContent):
     """ PloneLocalFolderNG """
 
@@ -583,6 +591,13 @@ class PloneLocalFolderNG(BaseContent):
         #    raise NotImplementedError, "PLFNG objects can only be created and viewed through the Plone interface."
         else:
            rel_dir = '/'.join(REQUEST.get('_e', []))
+           if not rel_dir:
+               # We are being visited directly. Redirect to
+               # plfng_view here to avoid infinite redirection below.
+               dest = make_url(self, 'plfng_view')
+               RESPONSE.redirect(dest)
+               return
+
            destpath = os.path.join(self.folder, rel_dir)
 
            if os.path.isfile(destpath):
@@ -597,19 +612,20 @@ class PloneLocalFolderNG(BaseContent):
                   #catalogTool = getToolByName(self, 'portal_catalog')
                   return self.catalogContents()
                elif REQUEST.get('action', '') == 'editMetadata':
-                  RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_editMetadata')).replace('\\','/'))
+                   dest = make_url(self, rel_dir, 'plfng_editMetadata')
+                   RESPONSE.redirect(dest)
                else:
                   return self.showFile(destpath, REQUEST, RESPONSE)
            else:
                if hasattr(self, "default_page") and self.default_page:
-                  FSDefaultPageFullPath = os.path.join(destpath,self.default_page)
-                  if os.path.exists(FSDefaultPageFullPath):
-                     return self.showFile(FSDefaultPageFullPath, REQUEST, RESPONSE)
+                   FSDefaultPageFullPath = os.path.join(destpath, self.default_page)
+                   if os.path.exists(FSDefaultPageFullPath):
+                       return self.showFile(FSDefaultPageFullPath, REQUEST, RESPONSE)
 
-               #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
-               #  that os.path.join might produce
-               RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir)).replace('\\','/'))
-
+               # ''rel_dir'' should never be empty, otherwise you may cause
+               # a infinite redirection.
+               dest = make_url(self, rel_dir)
+               RESPONSE.redirect(dest)
 
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
         #zLOG.LOG('PLFNG', zLOG.INFO , "__bobo_traverse__() :: type(self.REQUEST) = %s" % type(self.REQUEST))
@@ -620,8 +636,12 @@ class PloneLocalFolderNG(BaseContent):
             REQUEST['_e'] = []
 
         if not hasattr(self, "folder"):
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__bobo_traverse__() :: no folder attribute")
-            raise NotImplementedError, "This PLFNG object has not been properly configured (folder attribute missing). Add it through the regular Plone interface?!"
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO ,
+                     "__bobo_traverse__() :: no folder attribute")
+            raise NotImplementedError, (
+                "This PLFNG object has not been properly configured "
+                "(folder attribute missing). Add it through the regular "
+                "Plone interface?!")
 
         destpath = os.path.join(self.folder, '/'.join(REQUEST['_e']), name)
         if os.path.exists(destpath):
@@ -630,11 +650,14 @@ class PloneLocalFolderNG(BaseContent):
         else:
             try: return getattr(self, name)
             except AttributeError: pass
-            if REQUEST.has_key('RESPONSE'):
-                REQUEST.RESPONSE.notFoundError(name)
+            # Should not raise NotFoundError on __bobo_traverse__.
+            # Instead, just return None and let
+            # ZPublisher+Acquisition do it's job
+            return
 
     security.declareProtected(ModifyPortalContent, 'addFile')
-    def addFile(self, sourceFSfullPath, destPLFNGrelativePath='', destBasename=None, moveFile=0, inputMD5=None):
+    def addFile(self, sourceFSfullPath, destPLFNGrelativePath='',
+                destBasename=None, moveFile=0, inputMD5=None):
         """ add a file """
 
         # 1st, make sure that the PLFNG instance is configured with valid FS folder
