@@ -2,6 +2,12 @@ from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.Marshall import PrimaryFieldMarshaller
 from Products.PloneHelpCenter.config import *
+try:
+    from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+    PHCReferenceWidget = ReferenceBrowserWidget
+except ImportError:
+    PHCReferenceWidget = ReferenceWidget
+
 
 #############################################################################################
 # Common components to Help Types schemas
@@ -76,6 +82,25 @@ SectionsVocabSchema = Schema((
                ),
     ))
 
+# which concrente items are related to the current one
+# what sections should there be? (for enclosing folders, not indiv items!)
+if ENABLE_REFERENCES:    
+    ReferenceSchema = Schema((
+        ReferenceField('referenced_items',
+                   relationship = 'PloneHelpCenter',
+                   allowed_types= REFERENCEABLE_TYPES,
+                   required = 0,
+                   multiValued=1,                   
+                   widget=PHCReferenceWidget (
+                       label="Referenced Items",
+                       description="Set one or more references to HelpCenter items.",
+                       i18n_domain="plonehelpcenter")
+                   ),
+        ))
+else:
+    ReferenceSchema = Schema()
+
+
 # non folderish Help Center Base schemata
 HCSchema = BaseSchema
 
@@ -114,7 +139,7 @@ FAQSchema = HCSchema + Schema((
                   rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
-    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # FAQ Folder
@@ -192,7 +217,7 @@ HowToSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
- ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+ ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # HowToFolder
@@ -229,7 +254,7 @@ TutorialSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
               ),
-    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # TutorialFolder
@@ -312,7 +337,7 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # ErrorReferenceFolder
@@ -358,7 +383,7 @@ LinkSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # LinkFolder
@@ -395,7 +420,7 @@ DefinitionSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
     ),
-    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
 ###
 # Glossary

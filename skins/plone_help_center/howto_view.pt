@@ -36,9 +36,12 @@
     <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>
     <span tal:condition="not: versions">Any version</span>
     </p>
-        <div metal:use-macro="here/document_byline/macros/byline">
-          Get the byline - contains details about author and modification date.
-        </div>    
+    <div metal:use-macro="here/helpcenter_references/macros/view_referenced_items">
+      see also - shows the references if this feature is switched on
+    </div>
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>    
 
     </div>
 

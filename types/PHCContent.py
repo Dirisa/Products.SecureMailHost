@@ -38,3 +38,13 @@ class PHCContent:
         """
 
         return ", ".join(getattr(self, 'versions', []))
+    
+    def getReferencedItems(self):
+        """method to fetch the referenced items in context of
+           config and permissions
+        """
+        if ENABLE_REFERENCES:
+            objs = [o for o in self.getReferenced_items() if self.portal_membership.checkPermission('View', o)]
+            return objs
+        else:
+            return None

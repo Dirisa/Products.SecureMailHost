@@ -26,3 +26,25 @@ IMPORTANCE_VOCAB = DisplayList((
     ))
     
 IMPORTANCE_DEFAULT = 'medium'
+
+# References to other referenceable (usally Archetypes based) items in the 
+# portal are disabled by default. By enabling them you'll get another Field in
+# all PHCContent based types where you can select one or more items. In the view
+# of those items at the bottom a 'see also' section shows the linked title and  
+# the description of the target object. Only 'View'able objects are shown.
+# another option is to use the new-style ATReferenceBrowserWidget. It will be 
+# used if it is in your Products folder. You need to install it with 
+# quickinstaller, otherwise the base_edit of PHCContent based types is broken.
+
+ENABLE_REFERENCES = False
+#ENABLE_REFERENCES = True
+
+# here you can specify which types are allowed as references.
+REFERENCEABLE_TYPES = ('HelpCenterFAQ',
+    'HelpCenterDefinition',
+    'HelpCenterTutorial',
+    'HelpCenterErrorReference',
+    'HelpCenterHowTo',
+    'HelpCenterLink',
+    #'Document'
+)

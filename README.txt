@@ -40,3 +40,6 @@ Credits
   Fixing various stuff, documentation -- The Sprinters: Christian Heimes,
   Dorneles Treméa, Daniel Nouri, Nate Aune
 
+  Added optional 'see also' references to other Archetypes based types --
+  Jens 'jensens' Klein, "jens quadrat":http://jensquadrat.com/
+

@@ -35,6 +35,12 @@ PloneHelpCenter 0.2
       migration script. The API should be fairly stable from now on,
       but keep in mind this is still only a 0.2 release ;) [Joel]
 
+    - added an optional ReferenceField (controlled in config.py) to cross-
+      reference from a PHC-type to another Archetype in the portal. This 
+      shouldnt affect existing code. If you have ATReferenceBrowserWidget
+      installed its used instead of the dumb default ReferenceWidget.
+      [Jensens]
+
 PloneHelpCenter 0.1
 
     - Development version
