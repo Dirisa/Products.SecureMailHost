@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.191 2004/06/17 06:54:26 ajung Exp $
+$Id: Collector.py,v 1.192 2004/06/17 06:55:30 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -430,7 +430,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         # if more than 50 issues in memory, remove the first 25
         if len(temp.objectIds()) > 50:
             pending = temp.objectValues('PloneIssueNG') 
-            pending.sort(lambda x,y: cmp(x.bobobase_modification_time(), y.bobobase_modification_time())
+            pending.sort(lambda x,y: cmp(x.bobobase_modification_time(), y.bobobase_modification_time()))
             temp.manage_delObjects(pending[:25])
         RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
 
