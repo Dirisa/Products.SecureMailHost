@@ -21,7 +21,10 @@ class FileProxy(FSObject):
     security.declarePublic('getChecksum')
     def getChecksum(self):
         """ return checksum"""
-        return self.checksum
+        if self.checksum:
+            return self.checksum
+        else:
+            return ''
 
     security.declarePublic('getComment')
     def getComment(self):
