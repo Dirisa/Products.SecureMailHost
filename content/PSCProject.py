@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.10 2005/03/10 22:42:29 optilude Exp $
+$Id: PSCProject.py,v 1.11 2005/03/11 01:09:07 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -92,6 +92,16 @@ class PSCProject(OrderedBaseFolder):
         if not self.objectIds('PSCImprovementProposalFolder'):
             self.invokeFactory('PSCImprovementProposalFolder',
                                config.IMPROVEMENTS_ID)
+
+    security.declareProtected(CMFCorePermissions.View, 'Categories')
+    def Categories(self):
+        """Return selected categories as a list of category long names,
+        for the user interface.
+        """
+        vocab = self.getCategoriesVocab()
+        values = [vocab.getValue(c) for c in self.getCategories()]
+        values.sort()
+        return values
 
     security.declareProtected(CMFCorePermissions.View, 'getCategoriesVocab')
     def getCategoriesVocab(self):
