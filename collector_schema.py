@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.25 2003/12/22 07:22:25 ajung Exp $
+$Id: collector_schema.py,v 1.26 2003/12/24 15:42:02 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -64,16 +64,16 @@ schema = Schema((
                 searchable=1,
                 schemata='collectordata',
                 widget=TextAreaWidget(label='Description',
-                                       label_msgid='label_description',
-                                       i18n_domain='plonecollectorng'),
+                                      label_msgid='label_description',
+                                      i18n_domain='plonecollectorng'),
                 ),
 
     StringField('canonical_hostname',
                 default='localhost',
-                widget=StringWidget(label='Hostname or IP address',
-                                       label_msgid='label_hostname',
-                                       i18n_domain='plonecollectorng'),
-                schemata='collectordata',
+                widget=StringWidget(label='Hostname or IP address (used as part of the URL inside email notifications)',
+                                     label_msgid='label_hostname',
+                                     i18n_domain='plonecollectorng'),
+                schemata='E-Mail',
                 ),
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
@@ -126,18 +126,20 @@ schema = Schema((
                 ),
     StringField('issue_formatter',
                 vocabulary=VOC_ISSUE_FORMATTERS,
-                widget=SelectionWidget(format='select', label='E-Mail issue formatter',
+                widget=SelectionWidget(format='select', 
+                                       label='E-Mail issue formatter',
                                        label_msgid='label_email_issue_formatters',
                                        i18n_domain='plonecollectorng'),
                 schemata='E-Mail'
                 ),
     StringField('watchlist_mode',
                 vocabulary=VOC_WATCHLIST,
-                widget=SelectionWidget(format='select', label='Watchlist',
+                widget=SelectionWidget(format='select', 
+                                       label='Watchlist (Subscription to an issue)',
                                        label_msgid='label_watchlist',
                                        i18n_domain='plonecollectorng'),
                 default='disabled',
-                schemata='E-Mail'
+                schemata='collectordata'
                 ),
 
     ))
