@@ -70,7 +70,7 @@
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
 
-        <metal:block tal:repeat="image python: here.objectValues('Portal Image')">
+        <metal:block tal:repeat="image python: here.objectValues(('Portal Image',))">
           <img tal:attributes="src image/absolute_url">
         </metal:block>
 

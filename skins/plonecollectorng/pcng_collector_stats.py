@@ -6,7 +6,7 @@ username = getSecurityManager().getUser().getUserName()
 catalog = context.pcng_catalog
 
 # determine total number of tickets
-total_tickets = len(context.objectIds('PloneIssueNG'))
+total_tickets = len(context.objectIds(('PloneIssueNG',)))
 
 # determine number of open tickets
 query = {}
