@@ -92,3 +92,6 @@ Internationalization support:
 
     o restart Zope and enjoy :-) 
 
+Known issues:
+
+    o see http://zope.org/Members/ajung/PloneCollectorNG/wiki/KnownIssues
