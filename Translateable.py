@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.21 2004/02/08 13:19:52 ajung Exp $
+$Id: Translateable.py,v 1.22 2004/02/08 13:28:11 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -13,7 +13,12 @@ from types import UnicodeType, StringType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
-from Products.PlacelessTranslationService import getTranslationService
+
+try:
+    from Products.PlacelessTranslationService import getTranslationService
+    have_pts = 1
+except ImportError:
+    have_pts = 0
 
 
 
@@ -26,6 +31,7 @@ class Translateable:
 
     def _getPTS(self):
         """ return PTS instance """
+        if not have_pts: return None
 
         pts = getattr(self, '_v_have_pts', None)
         if pts is None:
