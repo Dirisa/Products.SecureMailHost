@@ -1,3 +1,0 @@
-"""
-PloneLocalFolderNG Tests
-"""
