@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.10 2003/09/19 09:54:59 ajung Exp $
+$Id: Transcript.py,v 1.11 2003/09/25 12:59:04 ajung Exp $
 """
 
 import time 
@@ -82,7 +82,7 @@ class Transcript(Persistent, Implicit):
     security.declareProtected(CMFCorePermissions.View, 'addIncrementalChange')
     def addIncrementalChange(self, field, old, new):
 
-        assert isinstance(old, (list, tuple)) and isinstance(new, (list, tuple))
+#        assert isinstance(old, (list, tuple)) and isinstance(new, (list, tuple))
         added = list(difference(OOSet(new), OOSet(old)))
         removed = list(difference(OOSet(old), OOSet(new)))
 
@@ -113,12 +113,12 @@ class Transcript(Persistent, Implicit):
         """ return all events grouped by their timestamp """
 
         last_ts = 0; last_user = None
-        result = list()
+        result = []
         for event in self.getEvents(reverse=0):
             if event.getUser() != last_user or event.getTimestamp() - last_ts > 60  or event.getType() == 'comment':
                 # new event
                 result.append([])
-            result[-1].append(event)
+            result[-1].insert(0, event)
             last_ts = event.getTimestamp()
             last_user = event.getUser()
 
