@@ -27,7 +27,7 @@
         <div class="formHelp" i18n:translate="help_reindex_issues">You need to reindex all issues after renaming or moving a collector instance</div>
       </li>
       <li>
-        <a href="update_schema_for_issues?return_to=pcng_maintenance"><span i18n:translate="update_schema_for_all_issues">Update schema for all issues</span></a> 
+        <a href="update_all_schemas?return_to=pcng_maintenance"><span i18n:translate="update_schema_for_all_issues">Update schema for all issues</span></a> 
         <div class="formHelp" i18n:translate="help_update_schema_for_issues">After changing the schema all issues must be notified of the change</div>
       </li>
       <li>
