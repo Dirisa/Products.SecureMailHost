@@ -67,14 +67,16 @@
         </metal:block>
       </metal:block>
 
-      <div tal:define="uploads here/objectValues" >
+      <metal:block tal:omit-tag="" tal:define="uploads here/objectValues" >
         <fieldset tal:condition="uploads">
           <legend i18n:translate="uploads">Uploads</legend>
+        <div>
             <metal:block tal:repeat="item uploads">
-              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>&nbsp; &nbsp;
+              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>&nbsp; -
             </metal:block>
+        </div>
         </fieldset>
-      </div>
+      </metal:block >
 
       <fieldset><legend i18n:translate="transcript">Transcript</legend>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
