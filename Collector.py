@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.181 2004/05/20 12:08:29 ajung Exp $
+$Id: Collector.py,v 1.182 2004/05/20 14:37:45 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -29,6 +29,7 @@ from Transcript import Transcript
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
+from PCNGSchema import PCNGSchemaNonPersistent
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
@@ -38,10 +39,11 @@ import collector_schema
 import issue_schema
 import util
 
+
 class PloneCollectorNG(Base, SchemaEditor, Translateable):
     """ PloneCollectorNG """
 
-    schema = collector_schema.schema
+    schema = PCNGSchemaNonPersistent(collector_schema.schema.fields())
     archetype_name = 'PCNG Tracker'
 
     actions = ({
