@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.29 2003/09/14 14:48:47 ajung Exp $
+$Id: Collector.py,v 1.30 2003/09/18 19:25:59 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -15,6 +15,7 @@ from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
 from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import registerType
+from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
 
 from Transcript import Transcript
@@ -22,7 +23,7 @@ from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
-from OrderedSchema import OrderedBaseFolder
+from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import collector_schema 
 import issue_schema
 import util
@@ -292,6 +293,16 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         for issue in self.objectValues('PloneIssueNG'):
             issue.reindexObject()
         util.redirect(RESPONSE, 'pcng_maintainance', 'Issues reindexed')
+
+   
+    def Schemata(self):
+        """ return the schemata""" 
+        schemata = OrderedDict()
+        for f in self.schema.fields():
+            sub = schemata.get(f.schemata, OrderedSchema(name=f.schemata))
+            sub.addField(f)
+            schemata[f.schemata] = sub
+        return schemata
 
 
 registerType(PloneCollectorNG)

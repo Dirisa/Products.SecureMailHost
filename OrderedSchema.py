@@ -5,11 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: OrderedSchema.py,v 1.2 2003/09/13 13:08:21 ajung Exp $
+$Id: OrderedSchema.py,v 1.3 2003/09/18 19:25:59 ajung Exp $
 """
 
 from Globals import InitializeClass
 from Products.Archetypes.public import Schema, BaseFolder
+from Products.Archetypes.utils import OrderedDict
 
 class OrderedSchema(Schema):
     """ Provide basic order support for Archetypes schemas """
@@ -26,6 +27,15 @@ class OrderedSchema(Schema):
 
         self._ordered_keys.append(field.getName())
         self._p_changed = 1
+
+    def fields(self):
+        """ fields wrapper """
+
+        fields = Schema.fields(self)
+        fields.sort(lambda x,y,k=self._ordered_keys: cmp(k.index(x.getName()), k.index(y.getName())))
+        return fields
+
+
 
 InitializeClass(OrderedSchema)
 

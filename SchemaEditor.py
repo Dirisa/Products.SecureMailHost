@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.14 2003/09/14 14:42:48 ajung Exp $
+$Id: SchemaEditor.py,v 1.15 2003/09/18 19:25:59 ajung Exp $
 """
 
 import operator
@@ -111,13 +111,13 @@ class SchemaEditor:
         for name in fieldnames:
             d =  R[name]
 
-            if d.field == 'StringField': field = StringField
-            elif d.field == 'IntegerField': field = IntegerField
-            elif d.field == 'FloatField': field = FloatField
+            if d.field == 'StringField':       field = StringField
+            elif d.field == 'IntegerField':    field = IntegerField
+            elif d.field == 'FloatField':      field = FloatField
             elif d.field == 'FixedPointField': field = FixedPointField
-            elif d.field == 'BooleanField': field = BooleanField
-            elif d.field == 'LinesField': field = LinesField
-            elif d.field == 'DateTimeField': field = DateTimeField
+            elif d.field == 'BooleanField':    field = BooleanField
+            elif d.field == 'LinesField':      field = LinesField
+            elif d.field == 'DateTimeField':   field = DateTimeField
             else: raise TypeError('unknown field type: %s' % d.field)
 
             D = {}
@@ -127,7 +127,7 @@ class SchemaEditor:
             visible = d.get('visible', 1)
             if d.widget == 'String':        widget = StringWidget(visible=visible)
             elif d.widget == 'Select':      widget = SelectionWidget(format='select', visible=visible)
-            elif d.widget == 'Radio':       widget = SelectionWidget(visible=visible)
+            elif d.widget == 'Radio':       widget = SelectionWidget(format='radio', visible=visible)
             elif d.widget == 'Textarea':    widget = TextAreaWidget(visible=visible)
             elif d.widget == 'Calendar':    widget = CalendarWidget(visible=visible)
             elif d.widget == 'Boolean':     widget = BooleanWidget(visible=visible)
@@ -146,6 +146,7 @@ class SchemaEditor:
                 l = []
                 for line in vocab:
                     line = line.strip()
+                    if not line: continue
                     if line.find('|') == -1:
                         k = v = line
                     else:
