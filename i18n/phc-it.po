@@ -454,5 +454,21 @@ msgstr "di"
 msgid "phc_page"
 msgstr "Pagina"
 
+
+#: helplink_view.pt
+#. <span i18n:translate="phc_link">
+#. 	Link:
+#. </span>
+msgid "phc_link"
+msgstr "Collegamento:"
+
+
+#: definition_view.pt
+#. <span i18n:translate="phc_up_to_glossary">
+#.  Up to Glossary
+#. </span>
+msgid "phc_up_to_glossary"
+msgstr "Ritorna al Glossario"
+
 # MSB end mofification
 

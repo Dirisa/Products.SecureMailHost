@@ -19,7 +19,7 @@
       tal:condition="not: request/full|nothing"
       tal:define="parent_url python:here.navigationParent(here, template.getId())"
       tal:attributes="href parent_url">
-      Up to Glossary
+      <span i18n:translate="phc_up_to_glossary">Up to Glossary</span>      
     </a>
 
     <div class="documentDescription"

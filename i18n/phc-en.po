@@ -461,5 +461,21 @@ msgstr "of"
 msgid "phc_page"
 msgstr "Page"
 
+
+#: helplink_view.pt
+#. <span i18n:translate="phc_link">
+#. 	Link:
+#. </span>
+msgid "phc_link"
+msgstr "Link:"
+
+
+#: definition_view.pt
+#. <span i18n:translate="phc_up_to_glossary">
+#.  Up to Glossary
+#. </span>
+msgid "phc_up_to_glossary"
+msgstr "Up to Glossary"
+
 # MSB end mofification
 
