@@ -56,7 +56,7 @@
           <div tal:define="filesCataloged python:here.catalogContents();
         							 stopTime python:DateTime();
         							 elapsedTime python:(stopTime-startTime)*86400.0;">
-           <b># files cataloged = </b>
+           <b># files cataloged,skipped = </b>
            <span tal:content="filesCataloged">
              files
            </span>
