@@ -129,6 +129,16 @@
         </form>    
       </div>
 
+
+      <div>
+        <span id="pcng_saved_searches" i18n:translate="save_this_search_as">Save search as</span>:
+        <form method="post" action="pcng_save_search">
+          <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
+          <input type="text" name="query_id" value="" size="20" maxlength="20">
+          <input type="submit" value="Save" i18n:attributes="value" class="standalone" />
+          </form>    
+      </div>
+
       <br/>
       <div tal:condition="python: member.getUserName() != 'Anonymous User'">
         <span id="pcng_quicklinks" i18n:translate="quicklinks">Quicklinks:</span>

@@ -2,8 +2,8 @@
     <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_issue_portlet" />
     <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_issue_uploads" />
     <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_issue_references" />
-    <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_searchresults" />
     <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_search_portlet" />
+    <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_searchresults" />
 </metal:div>
 
 <metal:div metal:define-macro="pcng_collector_portlets">
