@@ -80,6 +80,7 @@
                                      n_fieldsets python:len(fieldsets);">
             <div class="label">&nbsp;</div>
             <div class="field">
+                <!--
                 <input tal:condition="python:fieldset_index > 0"
                        class="context"
                        tabindex=""
@@ -96,6 +97,7 @@
                        i18n:attributes="value"
                        value="Next"
                        tal:attributes="tabindex tabindex/next;" />
+                -->
                 <input class="context"
                        tabindex=""
                        type="submit"
