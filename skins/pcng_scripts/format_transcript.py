@@ -69,6 +69,21 @@ nl(context.wrap_text(context.Description()))
 nl()
 
 
+# Metadata
+nl(TR('metadata', 'Metadata'))
+nl('-'*40) 
+
+schema = context.Schema()
+for schemata in schema.getSchemataNames():
+    if schemata in ('default', 'metadata'): 
+        continue
+    for field in schema.getSchemataFields(schemata):
+        v = field.getAccessor(context)()
+        if v:
+            s = '%s = %s' % (field.getName(), str(v))
+            nl(s)
+nl()
+
 # Comments
 n = 0
 events = context.getTranscript().getEvents(types=('comment', 'upload', 'reference'))
@@ -85,7 +100,7 @@ nl()
 
 
 # metadata
-nl(TR('metadata', 'Metadata'))    
+nl(TR('metadata changes', 'Changes'))    
 nl('-'*75 + '\n') 
 events = context.getTranscript().getEvents()
 events = [e for e in events  if e.getType() not in ('comment', 'upload', 'reference')]
