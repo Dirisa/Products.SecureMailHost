@@ -15,24 +15,21 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.2 2004/05/16 07:36:28 tiran Exp $
+$Id: SecureMailHost.py,v 1.3 2004/05/16 19:09:06 tiran Exp $
 """
 
 X_MAILER = 'Zope/SecureMailHost'
 BAD_HEADERS = ()
 
-import sys
 from types import StringType, TupleType, ListType
 from copy import deepcopy
 
 from smtplib import SMTP
-import mimetools
 import base64
 import email.Message
 import email.MIMEText
 
 import re
-from cStringIO import StringIO
 
 from Globals import Persistent, DTMLFile, InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -58,7 +55,7 @@ def _getaddresses(fieldvalues):
 
 manage_addMailHostForm=DTMLFile('www/addMailHost_form', globals())
 def manage_addMailHost( self, id, title='', smtp_host='localhost'
-                      , localhost='localhost', smtp_port=25
+                      , smtp_port=25
                       , smtp_userid=None, smtp_pass=None
                       , timeout=1.0, REQUEST=None ):
     ' add a MailHost into the system '
@@ -107,11 +104,11 @@ class SecureMailBase(MailBase):
         self.title = title
         self.smtp_host = str(smtp_host)
         self.smtp_port = int(smtp_port)
-        self.smtp_userid = str(smtp_userid)
-        self.smtp_pass = str(smtp_pass)
         if smtp_userid:
+            self.smtp_userid = smtp_userid
             self.smtp_userid64 = base64.encodestring(smtp_userid)
         if smtp_pass:
+            self.smtp_pass = smtp_pass
             self.smtp_pass64 = base64.encodestring(smtp_pass)
 
     security.declareProtected( use_mailhost_services, 'sendTemplate' )
