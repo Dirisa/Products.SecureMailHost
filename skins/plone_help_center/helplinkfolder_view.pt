@@ -37,7 +37,7 @@
                 <a href="" tal:content="link/Title"
                    tal:attributes="href link/absolute_url">HowTo</a>
             </dt>
-            
+
             <dd tal:content="link/Description">Description</dd>
           </tal:link>
 
