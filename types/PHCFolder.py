@@ -1,10 +1,3 @@
-#
-#  This is the Plone Help Center FAQ Folder type, with enhanced features
-#  like dividing the FAQ into Sections, and Display relevant
-#  versions.
-#
-
-
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
