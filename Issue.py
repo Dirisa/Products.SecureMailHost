@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.121 2004/02/01 14:56:28 ajung Exp $
+$Id: Issue.py,v 1.122 2004/02/09 18:38:54 ajung Exp $
 """
 
 import sys, os, time
@@ -244,7 +244,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
             raise ValueError(self.translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
-        issue = tracker[reference.ticketnumber]
+        issue = tracker._getOb(reference.ticketnumber)
 
         if not reference.comment:
             raise ValueError(self.translate('reference_no_comment', 'References must have a comment'))
