@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.3 $"[11:-2]
+__version__ = "$Revision: 1.4 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -43,7 +43,7 @@ def setupPSC_area_workflow(wf):
                        transitions=('publish',))
     sdef.setPermission('Access contents information', 1, ['Member','Manager', 'Owner'])
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('View', 1, ['Member', 'Member', 'Owner'])
+    sdef.setPermission('View', 1, ['Member', 'Manager', 'Owner'])
     sdef.setPermission('Add portal content', 1, ['Manager','Owner'])
     sdef.setPermission('Add PloneSoftwareCenter Content', 1, ['Manager', 'Owner'])
 
