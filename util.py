@@ -329,7 +329,7 @@ def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypes
       dummyFileProxy.id = str(fileItem)
       dummyFileProxy.url = FSfullPathFileName
       dummyFileProxy.encoding = None
-      mi = mimetypesTool.classify(data=None, filename=fileItem)
+      mi = mimetypesTool.classify(data=None, filename=fileItem.lower())
       dummyFileProxy.setIconPath(mi.icon_path)
       dummyFileProxy.mime_type = mi.normalized()
       
@@ -409,7 +409,7 @@ def getFilteredFSItems(FSfullPath, skipInvalidIds, mimetypesTool, filetypePhrase
          else:
              
              if mimetypesTool:
-                mi = mimetypesTool.classify(data=None, filename=item)
+                mi = mimetypesTool.classify(data=None, filename=item.lower())
                 item_mime_type = mi.normalized()
              
                 for filetypePhrase in filetypePhrasesSkipList:
@@ -506,7 +506,7 @@ def getFilteredOutFSItems(FSfullPath, PLFNGrelPath, skipInvalidIds, mimetypesToo
              
              else:
                 if mimetypesTool:
-                   mi = mimetypesTool.classify(data=None, filename=item)
+                   mi = mimetypesTool.classify(data=None, filename=item.lower())
                    item_mime_type = mi.normalized()
                 
                    for filetypePhrase in filetypePhrasesSkipList:
