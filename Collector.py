@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.134 2004/03/08 20:03:00 ajung Exp $
+$Id: Collector.py,v 1.135 2004/03/09 19:03:51 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -241,7 +241,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def getReporters(self): return self._reporters
 
     security.declareProtected(View, 'getTrackerUsers')
-    def getTrackerUsers(self, staff_only=0, unassigned_only=0):   
+    def getTrackerUsers(self, staff_only=0, unassigned_only=0, with_groups=0):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
             informations for the presentation.
@@ -269,7 +269,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         groups = self.pcng_get_groups()  # get group IDs from GRUF
         for name in util.remove_dupes(names):
-            if name.replace('group_', '') in groups: continue  # no group names !!!
+            if name.replace('group_', '') in groups and not with_groups: continue  # no group names !!!
             member = membership_tool.getMemberById(name)
             d = { 'username':name, 'roles':[], 'fullname':'', 'email':''}
 
