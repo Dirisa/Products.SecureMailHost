@@ -11,21 +11,26 @@
     <h1 i18n:translate="legend_references_and_uploads"> References & Uploads </h1>
     <table width="100%">
       <tr>
-        <td valign="top" width="50%">
-          <div metal:use-macro="here/issue_macros/macros/issue_references" />
-        </td>
-        <td valign="top" width="50%">
+        <td valign="top">
           <div metal:use-macro="here/issue_macros/macros/issue_uploads" />
         </td>
       </tr>
       <tr>
-        <td valign="top" width="50%">
-          <div metal:use-macro="here/issue_macros/macros/add_references" />
-        </td>
-        <td valign="top" width="50%">
+        <td valign="top">
           <div metal:use-macro="here/issue_macros/macros/add_uploads" />
         </td>
       </tr>
+      <tr>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/issue_references" />
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          <div metal:use-macro="here/issue_macros/macros/add_references" />
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>
