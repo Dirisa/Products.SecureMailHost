@@ -5,10 +5,11 @@
  
 <body>
     <div metal:fill-slot="main">
-        <div metal:define-macro="faq">
+         
+        <div metal:define-macro="faq"
+             tal:define="faq python: context;">
         
-            <tal:vars define="w python:context.widget;
-                              faq python: context;">
+            <tal:vars define="w python:context.widget;">
     
                 <h2 tal:content="faq/Title">Question</h2>
                 

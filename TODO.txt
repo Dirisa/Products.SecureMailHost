@@ -1,0 +1,46 @@
+- We should populate the Sections attribute with 'General' so there is a section available at all times.
+
+- We should use Keywords (DublinCore Subject) for the Sections, and restrict the usage to only being the ones defined in the folder (is this possible?)
+
+- We should use Description for the full Question attribute in FAQ.py, not a dedicated attribute.
+
+- We should have an extra attribute that has additional words that are indexed along with the content - for example in a howto about VerboseSecurity, it would make sense to have:
+
+  - Verbose Security
+
+  - Insufficient Privileges (the Plone Error Message)
+
+  - Debugging security problems
+
+  - etc...
+
+- All content types should be Discussable
+
+- Workflows & Permissions
+
+  - Any logged in user should be able to add a FAQ/HowTo/Tutorial
+
+  - The content is not visible or searchable to anybody else than the Reviewers/Managers before it is Published
+
+  - Ie: there is no 'visible state', available states are:
+
+    - Private
+
+    - Pending
+
+    - Published
+
+    - Obsolete
+
+  - Transitions should be pretty self-explanatory:
+
+    - User creates content object (state=private)
+
+    - User has checkmark in the add form that says "Submit for approval immediately" so they don't have to worry about the state menu
+
+    - Reviewer sees content in queue, checks content + sections/versions, answers the question if it's a relevant Question without an Answer, publishes.
+
+    - Ideally, every time someone adds a comment to an item, the owner of it gets a mail containing the comment + content URL.
+
+    - The Obsolete state is for later, when the ratings tool can push something into an obsolete status if 3 or more people have marked the content wrong/obsolete. The Owner should then get a mail about it.
+
