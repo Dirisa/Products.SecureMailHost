@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.66 2003/11/04 13:47:03 ajung Exp $
+$Id: Issue.py,v 1.67 2003/11/05 11:38:34 ajung Exp $
 """
 
 import sys, os
@@ -91,6 +91,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         'name': 'Add Issue',
         'action': 'add_issue',
         'permissions': (AddCollectorIssue,)
+        },
+        {'id': 'issue_browser',
+        'name': 'Browse',
+        'action': 'pcng_ticket_browser',
+        'permissions': (View,)
         },
         {'id': 'issue_debug',
         'name': 'Debug',
@@ -389,6 +394,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ return the number of transcript events """
         return len(self._transcript.getEventsGrouped())
 
+    def pcng_ticket_browser(self, RESPONSE=None):
+        """ redirect to ticket browser """
+        util.redirect(RESPONSE, self.aq_parent.absolute_url())
+
     ######################################################################
     # Catalog stuff
     ######################################################################
@@ -445,6 +454,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
+        if self.getId() == '1134':
+            print '%s: %s' %  (self.getId(), self.Title())
         return '%s: %s' %  (self.getId(), self.Title())
 
     ######################################################################

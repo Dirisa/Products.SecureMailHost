@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.4 2003/11/05 09:00:46 ajung Exp $
+$Id: migrate.py,v 1.5 2003/11/05 11:38:34 ajung Exp $
 """
 
 
@@ -108,7 +108,7 @@ def migrate_memberdata(source, dest):
 
 def migrate_tracker(tracker, dest):
 
-    if tracker.getId() != 'HaufeReader': return
+    if tracker.getId() != 'SoftUse': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -123,7 +123,17 @@ def migrate_tracker(tracker, dest):
     for issue in issues:
         migrate_issue(issue, collector)
 
+    # Staff
+    collector.set_staff(reporters=tracker.reporters,
+                        managers=tracker.managers,
+                        supporters=tracker.supporters)
+
+    # Number of issues
     collector._num_issues = len(issues)
+    
+    # Reindex issues
+    collector.reindex_issues()
+
 
 
 def migrate_issue(issue, collector):

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.58 2003/11/05 10:03:47 ajung Exp $
+$Id: Collector.py,v 1.59 2003/11/05 11:38:34 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -37,7 +37,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
 
     actions = ({
         'id': 'view',
-        'name': 'View',
+        'name': 'Browse',
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
