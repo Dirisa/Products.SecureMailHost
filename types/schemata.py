@@ -130,13 +130,29 @@ if ENABLE_REFERENCES:
 else:
     ReferenceSchema = Schema()
 
+# Show contributors on main base_edit
+ContributorsSchema = Schema ((
+
+    LinesField('contributors',
+            accessor="Contributors",
+            widget=LinesWidget(
+                label='Contributors',
+                label_msgid="label_contributors",
+                description="Enter the names of those who have contributed to this entry, one per line.",
+                description_msgid="help_contributors",
+                i18n_domain="plone"),
+        ),
+    ))
 
 # non folderish Help Center Base schemata
-HCSchema = BaseSchema
+HCSchema = BaseSchema.copy ()
 
 # folderish Help Center Base schemata
-HCFolderSchema = BaseFolderSchema
+HCFolderSchema = BaseFolderSchema.copy ()
 
+# Remove "contributors" from metadata, so that we can add it later
+del HCSchema['contributors']
+del HCFolderSchema['contributors']
 
 #################################################################
 # The type definitions
@@ -162,7 +178,7 @@ FAQSchema = HCSchema + Schema((
                  i18n_domain = "plonehelpcenter")
     ),
     TextField('answer',
-              required=0,
+              required=1,
               searchable=1,
               primary=1,
               widget=TextAreaWidget(
@@ -173,7 +189,7 @@ FAQSchema = HCSchema + Schema((
                   rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
-    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ############
 # FAQ Folder
@@ -264,7 +280,7 @@ HowToSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
- ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+ ) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 #############
 # HowToFolder
@@ -304,7 +320,7 @@ TutorialSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
               ),
-    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ################
 # TutorialFolder
@@ -396,7 +412,7 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ######################
 # ErrorReferenceFolder
@@ -448,7 +464,7 @@ LinkSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ############
 # LinkFolder
@@ -488,7 +504,7 @@ DefinitionSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
     ),
-    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ##########
 # Glossary
@@ -510,7 +526,7 @@ GlossarySchema = HCFolderSchema + Schema((
                   rows=6)
               ),
 
-    )) + SectionsVocabSchema
+    )) + SectionsVocabSchema + ContributorsSchema + ReferenceSchema
 
 #####################
 # Instructional Video
@@ -600,7 +616,7 @@ InstructionalVideoSchema = HCSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 ############################
 # Instructional Video Folder
@@ -639,7 +655,7 @@ ReferenceManualSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
               ),
-    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + ContributorsSchema + RelatedSchema + ReferenceSchema
 
 #########################
 # Reference Manual Folder

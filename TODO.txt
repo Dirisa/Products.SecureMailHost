@@ -73,10 +73,6 @@ General
     
         -> XXX: Not tested, but assume this is done? (optilude)
   
-  - All content types need Sharing tab
-  
-        -> Appears done (optilude)
-  
   - HistoryAware mix-in - PHC types should have a history attached, so we can
     mount a non-packable storage on plone.org that will keep all the change
     history for documentation content types. ATContentTypes already has this.
@@ -141,11 +137,6 @@ General
   
         -> XXX: Not yet tested (optilude)
   
-  - Expose "Contributors" in the main edit screen instead of on Properties tab, if
-    possible. It's going to be used a lot :)
-    
-        -> TODO: Not yet done (optilude)
-  
   - The "Obsolete" state has non-obvious name for the transition to pull it back
     into play.
   
@@ -172,11 +163,6 @@ General
     lowercase).
     
         -> TODO: Not yet done (optilude)
-  
-  - Description should be required *everywhere*, the listings make very little sense
-    without this.
-  
-        -> Appears done (optilude)
   
   - Integrate with the ATRatings tool - we want ratings on content. If we get a
     basic rating UI going, Limi will try to step up with an improved JS version. 
@@ -247,7 +233,7 @@ Movie and Movie Area content type
 "Reference Manual" content type
 ===============================
  
-    -> Done in PHC-reference-guide-branch (optilude)
+    -> Done (optilude)
  
   For book-type manuals and individual products' documentation needs.
   

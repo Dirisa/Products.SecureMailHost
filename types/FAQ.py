@@ -11,7 +11,7 @@ class HelpCenterFAQ(PHCContent,BaseContent):
     __implements__ = (PHCContent.__implements__,
                       BaseContent.__implements__,)
 
-    typeDescription= 'You can add a Frequently Asked Question (preferrably with an answer), and it will be reviewed and approved by our documentation team.'
+    typeDescription= 'You can add a Frequently Asked Question (with an answer - this is not a place to ask questions), and it will be reviewed and approved by our documentation team.'
     typeDescMsgId  = 'description_edit_faq'
 
     content_icon = 'faq_icon.gif'
