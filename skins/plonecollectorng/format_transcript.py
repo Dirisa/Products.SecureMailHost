@@ -22,6 +22,8 @@ l = []
 # Determine site encoding
 site_encoding = context.getSiteEncoding()
 
+nl('*=*=*=*=*=*=*=*=*=* TOKEN: %s *=*=*=*=*=*=*=*=*=*=*' % context.getToken())
+
 nl('%s: #%s: %s' % (TR('Issue', 'Issue'), context.getId(), unicode(context.Title(), site_encoding)))
 nl('%s: %s' % (TR('topic', 'Topic'),context.topic))
 nl('%s: %s, %s: %s, %s: %s' % (TR('status', 'Status'), TR(context.status(), context.status()), 

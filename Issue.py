@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.129 2004/02/28 10:49:20 ajung Exp $
+$Id: Issue.py,v 1.130 2004/02/28 16:27:03 ajung Exp $
 """
 
 import sys, os, time, random
@@ -208,6 +208,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 raise ValueError(self.translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
             field = schema[k]
+            print field, self, v
             field.set(self, v)
 
     def getParameter(self, key):
