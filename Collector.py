@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.73 2003/11/18 12:50:35 ajung Exp $
+$Id: Collector.py,v 1.74 2003/11/21 07:36:06 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -135,7 +135,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
 
         for name in REQUEST.form.keys():
             new = REQUEST.get(name, None)
-            old = getattr(self, name, None)
+            old = self.Schema()[name].storage.get(name, self)
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     self._transcript.addChange(name, old, new)
