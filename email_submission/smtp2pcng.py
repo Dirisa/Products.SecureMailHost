@@ -7,12 +7,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.13 2004/04/13 18:03:02 ajung Exp $
+$Id: smtp2pcng.py,v 1.14 2004/04/14 17:10:25 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
 
-import sys, os, logging, base64, logging
+import sys, os, logging, base64, logging, time
 import httplib, urllib, urlparse
 from ConfigParser import ConfigParser
 from cStringIO import StringIO
@@ -22,6 +22,19 @@ from email.Header import decode_header
 
 CFG_FILE = '.smtp2pcng.cfg'
 MAX_LENGTH = 32768
+
+# Spool directories
+SPOOL_PENDING = os.path.join(os.getcwd(), 'pcng_spool', 'unprocessed')
+SPOOL_ERROR = os.path.join(os.getcwd(), 'pcng_spool', 'error')
+SPOOL_DONE = os.path.join(os.getcwd(), 'pcng_spool', 'processed')
+
+for d in (SPOOL_PENDING, SPOOL_DONE, SPOOL_ERROR):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+# Configuration
+config = ConfigParser()
+config.read([CFG_FILE, os.path.expanduser('~/%s' % CFG_FILE)])
 
 # Logger stuff
 LOG = logging.getLogger('myapp')
@@ -65,8 +78,7 @@ def parse_mail(options):
 
     # parse configuration
     if options.configuration:
-        config = ConfigParser()
-        config.read([CFG_FILE, os.path.expanduser('~/%s' % CFG_FILE), options.configuration_file])
+
         section = options.configuration
         if not config.has_section(section):
             raise ValueError("Section '%s' not found in configuration file" % section)
@@ -83,7 +95,6 @@ def parse_mail(options):
             else:
                 options.max_length = MAX_LENGTH
 
-    print options.max_length
 
     if options.filename is not None:
         LOG.debug('Reading from: %s' % options.filename)
@@ -98,6 +109,7 @@ def parse_mail(options):
 
     msg = email.message_from_string(text)
     R = Result()
+    R.original_message = text
 
     for part in msg.walk():
         ct = part.get_content_type() 
@@ -150,10 +162,18 @@ def handle_response(R, status, reason, data):
 
     if status == 200:    # OK 
         LOG.info('Submission ok')
+        fname = os.path.join(SPOOL_DONE, str(time.time()))
+        open(fname, 'w').write(R.original_message)
+
     elif status == 401:  # Unauthorized
         LOG.info('Submission unauthorized')
+        fname = os.path.join(SPOOL_ERROR, str(time.time()))
+        open(fname, 'w').write(R.original_message)
+
     elif status == 404:  # NotFound
         LOG.info('Submission URL not found')
+        fname = os.path.join(SPOOL_ERROR, str(time.time()))
+        open(fname, 'w').write(R.original_message)
 
 
 if __name__ == '__main__':
@@ -167,8 +187,6 @@ if __name__ == '__main__':
                       help='Plone user name', default='')
     parser.add_option('-p', '--password', dest='password', 
                       help='Plone user password', default='')
-    parser.add_option('-c', '--configuration-file', dest='configuration_file', 
-                      help='Path to configuration file (~/%s)' % CFG_FILE, default='~/%s' % CFG_FILE)
     parser.add_option('-C', '--configuration', dest='configuration', 
                       help='Section from configuration file to be used', default=None)
     options, args = parser.parse_args()
@@ -176,8 +194,11 @@ if __name__ == '__main__':
     LOG.info('-'*75)
     LOG.debug(options)
 
-    R = parse_mail(options)
-    status, reason, data = submit_request(R, options)
-    handle_response(R, status, reason, data)
+    try:
+        R = parse_mail(options)
+        status, reason, data = submit_request(R, options)
+        handle_response(R, status, reason, data)
+    except:
+        LOG.error('Error processing mail', exc_info=sys.exc_info())        
 
     LOG.info('End')
