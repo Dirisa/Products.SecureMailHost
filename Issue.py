@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.190 2004/06/24 05:20:01 ajung Exp $
+$Id: Issue.py,v 1.191 2004/06/26 08:37:40 ajung Exp $
 """
 
 import os, time, random 
@@ -359,15 +359,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             (using Graphviz) 
         """
         from Products.PloneCollectorNG import graphviz
-        graphs, nodes, edges = graphviz.build_tree(self, {}, [], [])
-        vizfile = graphviz.build_graphviz(graphs, nodes, edges)
-        
-        if format in ('gif','jpeg', 'png', 'mif', 'svg', 'ps'):
-            graphviz.viz2image(vizfile, format, RESPONSE)
-        elif format in ('cmap',):
-            graphviz.viz2map(vizfile, format, RESPONSE)
-        else:
-            raise RuntimeError(self.Translate('unknown_format', 'unknown format "$format"', format=format))
+        data = graphviz.build_tree2(self, format)
+
+        RESPONSE.setHeader('content-type', 'image/%s' % format)
+        RESPONSE.setHeader('content-length', str(len(data)))
+        RESPONSE.setHeader('content-disposition', 'attachment; filename=references_%s.%s' % (self.getId(), format))
+        RESPONSE.write(data)
 
     ######################################################################
     # File uploads 
