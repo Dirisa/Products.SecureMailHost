@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.136 2004/03/14 16:52:45 ajung Exp $
+$Id: Issue.py,v 1.137 2004/03/14 17:14:30 ajung Exp $
 """
 
 import sys, os, time
@@ -35,7 +35,6 @@ from Transcript import Transcript
 from WatchList import WatchList
 from Translateable import Translateable
 import util, notifications
-
 
 _marker = []
 
@@ -537,8 +536,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):                     
         """ return the workflow history """
-        print self.workflow_history
-        return self.workflow_history[IssueWorkflowName]
+        return self.workflow_history[self.collector_workflow]  # acquire name from parent
 
     security.declareProtected(View, 'send_notifications')
     def send_notifications(self):
