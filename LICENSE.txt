@@ -1,0 +1,1 @@
+PloneCollectorNG is published under the Zope Public License
