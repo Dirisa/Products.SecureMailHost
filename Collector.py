@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.172 2004/05/09 08:00:02 ajung Exp $
+$Id: Collector.py,v 1.173 2004/05/09 08:56:00 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -413,6 +413,16 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         issue = issue.__of__(temp)
         RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
 
+
+    def move_temporary_issue(self, issue, new_id):
+        """ Move a temporay issue from the temp folder """
+        tempfolder = issue.aq_parent
+        self.manage_pasteObjects(tempfolder.manage_copyObjects([issue.getId()]))
+        self.manage_renameObjects([issue.getId()], [new_id])
+        tempfolder.manage_delObjects([issue.getId()])
+        issue = getattr(self, new_id)
+        return issue
+
     security.declareProtected(AddCollectorIssue, 'add_issue')
     def add_issue(self, RESPONSE=None):
         """ create a new issue """
@@ -624,10 +634,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             return 1
         except ImportError:
             return 0
-
-    def rename_objects(self, context, old_id, new_id):
-        """ rename an object """
-        return context.manage_renameObjects([old_id], [new_id])
 
     security.declareProtected(View, 'get_size')
     def get_size(self):

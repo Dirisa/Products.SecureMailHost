@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.167 2004/05/05 15:54:55 ajung Exp $
+$Id: Issue.py,v 1.168 2004/05/09 08:56:00 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -493,6 +493,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
+        if self.aq_parent.meta_type != 'PloneCollectorNG': return
         self._get_catalog().indexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
@@ -500,7 +501,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
-
+        """ unindex issue """
+        if self.aq_parent.meta_type != 'PloneCollectorNG': return
         self._get_catalog().unindexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
@@ -537,7 +539,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def redirect_create_object(self, RESPONSE):
         """ redirect to parent """
         id = '%s_%f' % (self.Translate('new_issue', 'NewIssue'), time.time() * random.random())
-        RESPONSE.redirect(self._getCollector().absolute_url() + '/createObject?type_name=PloneIssueNG&id=%s' % id)
+        RESPONSE.redirect(self._getCollector().absolute_url() + '/redirect_create_object')
 
     ######################################################################
     # Presentation related stuff

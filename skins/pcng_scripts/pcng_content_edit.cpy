@@ -15,23 +15,18 @@ new_context = None
 # Support for portal_factory
 if context.meta_type == 'PloneIssueNG':
 
-    if context.portal_factory.isTemporary(context):
+    try:        
+        # persistent issue 
+        id = int(context.getId()) 
+        context.processForm()
+        new_context = context
+    except:
+        # temporary issue 
         id = context.new_issue_number()
-        new_context = context.portal_factory.doCreate(context, id)
+        parent = context.aq_parent.aq_parent  # tempissue -> tempfolder -> PCNG instance
+        context.processForm()
+        new_context = parent.move_temporary_issue(context, id)
         new_context.processForm()
-
-    else:
-        try:        
-            id = int(context.getId())
-            context.processForm()
-            new_context = context
-        except:
-            id = context.new_issue_number()
-            parent = context.aq_parent
-            context.processForm()
-            context.rename_objects(parent, context.getId(), id)
-            new_context = getattr(parent, id)            
-            new_context.processForm()
         
 else:
     new_context = context.portal_factory.doCreate(context, id)
