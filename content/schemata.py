@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.18 2005/03/13 01:41:55 optilude Exp $
+$Id: schemata.py,v 1.19 2005/03/13 01:59:19 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -74,7 +74,7 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     StringField(
         name='title',
-        default='Improvement proposals',
+        default='Roadmap',
         searchable=1,
         accessor="Title",
         widget=StringWidget(

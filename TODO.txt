@@ -5,8 +5,10 @@ Developer claiming item/comments is in [brackets].
 =========================
 Pre-deployment count-down
 =========================
-
-- portlet_releases.pt hard-codes link to "More..." :-(
+  
+- The More Projects link the in portlet currently uses a second catalog search
+    to find any PloneSoftwareCenter objects. This may not be optimal. Other
+    solutions welcome.
   
 - Get missing bottom border on category floats on the PSC front page in Firefox
   

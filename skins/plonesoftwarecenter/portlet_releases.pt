@@ -11,7 +11,13 @@
                                         portal_type='PSCRelease',
                                         sort_on='Date',
                                         sort_order='reverse',
-                                        review_state='published')[:5]">
+                                        sort_limit=5,
+                                        review_state='published')[:5];
+                 psc     python:context.portal_catalog(
+                                        portal_type='PloneSoftwareCenter',
+                                        sort_on='Date',
+                                        sort_order='reverse',
+                                        sort_limit=1)[:1]">
 
     <div class="portlet" id="portlet-releases">
 
@@ -46,13 +52,13 @@
 
             </tal:block>
 
-            <div class="portletContent even">
+            <div class="portletContent even" tal:condition="nocall:psc">
 
                 <a href=""
                    class="portletMore"
-                   tal:attributes="href string:${utool}/downloads"
+                   tal:attributes="href python:psc[0].getURL()"
                    i18n:translate="box_more_projects">
-                    More Projects...
+                    More Projects&#8230;
                 </a>
 
             </div>
