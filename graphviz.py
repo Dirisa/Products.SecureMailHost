@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.6 2003/11/01 17:03:25 ajung Exp $
+$Id: graphviz.py,v 1.7 2004/02/08 15:28:13 ajung Exp $
 """
 
 ##########################################################################
@@ -33,7 +33,7 @@ class Node:
     def __init__(self, issue):
         self.id = obj2id(issue)
         self.url = issue.absolute_url(1)
-        self.title = issue.title_or_id()
+        self.title = unicode(issue.title_or_id(), issue.getSiteEncoding(), 'ignore').encode('iso-8859-15')
         self.collector_url = issue.aq_parent.absolute_url(1)
         self.collector_id = obj2id(issue.aq_parent)
         self.text = '%s: %s' % (issue.getId(), issue.Title())
@@ -68,7 +68,7 @@ def build_tree(issue, graphs={}, nodes=[], edges=[]):
         graphs[collector_id] = {'title': issue.aq_parent.title_or_id(),         
                                 'url': issue.aq_parent.absolute_url(1)}
 
-    for ref in issue.getRefs():
+    for ref in (issue.getRefs() or []):
         ref_issue = issue.getPhysicalRoot().restrictedTraverse(unquote(ref.absolute_url(1)))
         e = Edge(node, Node(ref_issue)) 
         if not e in edges: edges.append(e)
