@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.207 2004/07/18 19:44:43 bcsaller Exp $
+$Id: Issue.py,v 1.208 2004/07/18 19:45:43 bcsaller Exp $
 """
 
 import os, time, random
@@ -717,7 +717,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if self.getPortlet_issuedata() == 'left' and self.isPersistent():
                 self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_left_slots)
-    #left_slots = ComputedAttribute(left_slots, 1)
+    left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
         pu = self.getPortlet_usage()
@@ -738,7 +738,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if self.getPortlet_issuedata() == 'right' and self.isPersistent():
                 self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_right_slots)
-    #right_slots = ComputedAttribute(right_slots, 1)
+    right_slots = ComputedAttribute(right_slots, 1)
 
     security.declareProtected(View, 'pcng_search_form')
     def pcng_search_form(self, RESPONSE):
