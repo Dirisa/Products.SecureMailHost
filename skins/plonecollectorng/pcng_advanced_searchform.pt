@@ -14,12 +14,20 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
 
-    <form action="pcng_view" method="GET"  name="search_form" >
+    <form action="pcng_view" method="GET"  name="search_form" 
+          tal:define="schema here/atse_getSchema">
     <table tal:define="settings here/getSearchForm" >
       <tr>
         <tal:loop tal:repeat="item python: here.getSearchForm().keys()">
           <th tal:condition="python: settings[item]['mode'] == 'selectwidget'">
-            <span i18n:translate="" tal:content="item" />
+            <tal:if tal:condition="python: schema.has_key(item)">
+              <tal:def tal:define="field python: schema[item]" >
+                <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />
+              </tal:def>
+            </tal:if>
+            <tal:if tal:condition="not: python: schema.has_key(item)">
+              <span class="schemata_label" tal:content="item" i18n:translate=""/>
+            </tal:if>
           </th>
         </tal:loop>
       </tr>
@@ -35,16 +43,25 @@
           </td>
         </tal:loop>
       </tr>
+    </table>
 
+    <table tal:define="settings here/getSearchForm">
       <tal:loop tal:repeat="item python: settings.keys()">
-        <tal:if tal:condition="python: settings[item]['mode'] == 'stringwidget'" >
+        <tr tal:condition="python: settings[item]['mode'] == 'stringwidget'" >
           <th>
-            <span tal:content="item" />
+            <tal:if tal:condition="python: schema.has_key(item)"
+                    tal:define="field python: schema[item]">
+              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            </tal:if>
+            <tal:if tal:condition="not: python: schema.has_key(item)">
+              <span class="schemata_label" tal:content="item" i18n:translate=""/>
+            </tal:if>
           </th>
           <td colspan="3">
             <input type="text" tal:attributes="name item" value="" size="30">
+            <span tal:content="python: here.pcng_getIndexTypeFor(item)" />
           </td>
-        </tal:if>    
+        </tr>
       </tal:loop>
 
       <tr>
@@ -54,9 +71,7 @@
         <td colspan="3">
           <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
         </td>
-
       </tr>
-
 
       <tr>
         <th align="left" i18n:translate="sorting">Sorting</th>
