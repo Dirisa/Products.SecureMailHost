@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: issue_schema.py,v 1.28 2004/01/29 17:15:44 ajung Exp $
+$Id: issue_schema.py,v 1.29 2004/05/09 18:56:25 ajung Exp $
 """
 
 
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import DisplayList, BaseSchema
 from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget, CalendarWidget
 
@@ -38,7 +38,7 @@ VOCAB_IMPORTANCE = DisplayList((
 ))
 
 
-schema = Schema((
+schema = BaseSchema + Schema((
     StringField('id',
                 required=1,
                 mode="rw",
@@ -50,11 +50,6 @@ schema = Schema((
                                 description_msgid="label_description",
                                 i18n_domain="plone"),
                 ),
-
-    DateTimeField('effectiveDate', schemata='default'),
-    DateTimeField('expirationDate', schemata='default'),
-    StringField('subject', schemata='default'),
-    StringField('language', schemata='default'),
 
     StringField('title',
                 required=1,
