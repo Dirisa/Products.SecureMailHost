@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.165 2004/05/02 16:58:54 ajung Exp $
+$Id: Issue.py,v 1.166 2004/05/03 17:56:30 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -60,9 +60,15 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         'permissions': (View,),
         'category' : 'pcng_issue'
         },
+        {'id': 'pcng_search_form',
+        'name': 'New search',
+        'action': 'pcng_search_form',
+        'permissions': (View,),
+        'category' : 'pcng_issue',
+        },
         {
         'id': 'pcng_new_issue',
-        'name': 'Add Issue',
+        'name': 'Add issue',
         'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,),
         'category' : 'pcng_issue',

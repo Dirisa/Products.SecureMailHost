@@ -980,3 +980,21 @@ msgstr "Offene Tickets gruppiert nach Benutzern"
 
 msgid "open_unassigned_issues"
 msgstr "Offene, nicht zugewiesene Tickets"
+
+msgid "show_issue_number"
+msgstr "Ticket zeigen, #"
+
+msgid "New search"
+msgstr "Neue Suche"
+
+msgid "last_search_results"
+msgstr "Treffer letzte Suche"
+
+msgid "Previous"
+msgstr "Vorhergehender"
+
+msgid "Next"
+msgstr "Nächster"
+
+msgid "label_up_to_collector"
+msgstr "Eine Ebene höher zum Bugtracker"
