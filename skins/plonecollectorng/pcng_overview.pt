@@ -11,7 +11,9 @@
     </metal:block>
 
     <div metal:fill-slot="main" >
-      <div class="motd" tal:content="here/pcng_motd|nothing" />
+      <tal:if tal:condition="here/pcng_motd"> 
+        <div class="motd" tal:content="here/pcng_motd" />
+      </tal:if>
       <h1 i18n:translate="collector_overview">Collector overview</h1>
       <br/>
 
