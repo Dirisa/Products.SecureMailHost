@@ -764,3 +764,8 @@ msgstr "Diese Funktion darf <b>nur</b> benutzt werden, wenn eine Collector Insta
 
 msgid "statistics"
 msgstr "Statistik"
+
+msgid "save_this_search_as"
+msgstr "Suche speichern als"
+
+
