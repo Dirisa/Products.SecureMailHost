@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.168 2004/04/25 12:47:37 ajung Exp $
+$Id: Collector.py,v 1.169 2004/04/26 05:37:06 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -46,7 +46,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     actions = ({
         'id': 'pcng_browse',
-        'name': 'Browse',
+        'name': 'Browse issues',
         'action': 'pcng_view',
         'permissions': (View,),
         'category' : 'pcng_collector',

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.161 2004/04/25 12:47:38 ajung Exp $
+$Id: Issue.py,v 1.162 2004/04/26 05:37:06 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -55,7 +55,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         },
         {
         'id': 'pcng_browse',
-        'name': 'Browse',
+        'name': 'Browse issues',
         'action': 'pcng_ticket_browser',
         'permissions': (View,),
         'category' : 'pcng_issue'
@@ -94,6 +94,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         {'id': 'pcng_issue_view_with_images',
         'name': 'View with images',
         'action': 'pcng_issue_view_images',
+        'permissions': (View,),
+        'category' : 'pcng_issue'
+        },
+        {'id': 'pcng_issue_pdf',
+        'name': 'PDF',
+        'action': 'asPDF',
         'permissions': (View,),
         'category' : 'pcng_issue'
         },
