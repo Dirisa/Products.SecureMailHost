@@ -190,10 +190,13 @@
   <div>
     <form method="post" action="pcng_do_search">
       <span i18n:translate="my_saved_searches">My saved searches</span>:
+
+      <!-- saved searches are stored as a list of string 'RELATIVE_URL::query_id::QUERY_STRING' -->
+
       <select name="query">
-        <tal:loop tal:repeat="saved_search python: member.getProperty('pcng_saved_searches')" >
-          <option tal:content="python: saved_search.split('::', 1)[0]" 
-                  tal:attributes="value python: saved_search.split('::', 1)[1]"
+        <tal:loop tal:repeat="saved_search python: [s for s in member.getProperty('pcng_saved_searches') if s.startswith(here.absolute_url(1))]" >
+          <option tal:content="python: saved_search.split('::', 2)[1]" 
+                  tal:attributes="value python: saved_search.split('::', 2)[2]"
               />
 
         </tal:loop>

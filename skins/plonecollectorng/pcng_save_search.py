@@ -1,7 +1,8 @@
 ##parameters=query,query_id
 
 # Save a query as memberdata preference 'pcng_saved_searches' which
-# itself is a list of queries in the form 'query_id::QUERY_STRING'
+# itself is a list of queries in the form 
+# 'RELATIVE_URL_OF_COLLECTOR:query_id::QUERY_STRING'
 
 mstool = context.portal_membership
 
@@ -17,7 +18,7 @@ for search in saved_searches:
     if search.startswith(query_id + '::'):
         raise ValueError(context.translate('id_already_in_use', 'ID already in use: $id', id=query_id))
 
-saved_searches.append('%s::%s' % (query_id, query))
+saved_searches.append('%s::%s::%s' % (context.absolute_url(1), query_id, query))
 member.setProperties({'pcng_saved_searches' : saved_searches})
 
 
