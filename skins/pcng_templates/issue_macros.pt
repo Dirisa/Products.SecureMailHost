@@ -138,22 +138,20 @@
   <legend i18n:translate="legend_artifacts_upload">Upload files or images</legend>
     <form method="post" action="upload_file" enctype="multipart/form-data">
 
-      <div class="row">
-          <div class="label required" i18n:translate="file_for_upload">File for upload</div>
-          <div class="field"><input type="file" name="uploaded_file" size="40"/></div>
+      <div>
+          <span class="label" i18n:translate="file_for_upload">File for upload</span>
+          <div><input type="file" name="uploaded_file" size="40"/></div>
       </div> <!-- End row -->
 
-       <div class="row">
-        <div class="label" i18n:translate="add_artifacts_table_comment">Comment</div>
-        <div class="field">
+       <div>
+        <span class="label" i18n:translate="add_artifacts_table_comment">Comment</span>
+        <div>
           <textarea name="comment" cols="60" rows="5"></textarea>
         </div>
        </div> <!-- End row -->
 
-       <div class="row">
-        <div class="field">
-          <input type="submit" value="Upload" class="standalone" i18n:attributes="value">
-        </div>
+       <div>
+        <input type="submit" value="Upload" class="standalone" i18n:attributes="value">
        </div> <!-- End row -->
   </form>
 </fieldset> <!-- End group -->
@@ -214,9 +212,7 @@ function show_tickets() {
       </div> 
 
       <div>
-        <div class="field">
-          <input type="submit" value="Submit" class="standalone" i18n:attributes="value">
-        </div>
+        <input type="submit" value="Create reference" class="standalone" i18n:attributes="value">
       </div>  
 
     </form>
@@ -325,7 +321,6 @@ function show_tickets() {
   </h2>
 
   <div id="pcng_issueview_metadata">
-    <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
     <b i18n:translate="status">Status</b>: <span i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" /> &bull; 
     <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> &bull;
     <b i18n:translate="importance">Importance</b>:
@@ -335,6 +330,9 @@ function show_tickets() {
         <span tal:content="structure display" />
     </metal:block> &bull;
     <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" />
+    <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
+    <b i18n:translate="number_uploads">Uploads</b>: <span tal:replace="issue/numberUploads|nothing" />
+    <b i18n:translate="number_references">Refs</b>: <span tal:replace="issue/numberReferences|nothing" />
   </div>
 
   <div id="pcng_issueview_description" 
