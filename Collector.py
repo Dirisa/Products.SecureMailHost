@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.176 2004/05/09 18:43:42 ajung Exp $
+$Id: Collector.py,v 1.177 2004/05/10 18:33:42 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -635,7 +635,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ check for suitable references support in AT (1.3+)"""
         try:
             from Products.Archetypes.config import REFERENCE_CATALOG
-            return 1
+            return self.getReferences_mode() == 'enabled'
         except ImportError:
             return 0
 
