@@ -5,13 +5,18 @@ Developer claiming item/comments is in [brackets].
 =========================
 Pre-deployment count-down
 =========================
-  
+
+- The categories listing on the front page currently lists the category portlets
+  in alphabetical order - it should be in the defined order instead.
+
 - The More Projects link the in portlet currently uses a second catalog search
     to find any PloneSoftwareCenter objects. This may not be optimal. Other
     solutions welcome.
-  
+
 - Get missing bottom border on category floats on the PSC front page in Firefox
-  
+  (I have code for a Better Vertical Table(tm) in our skunkworks project, I should
+   commit it to Plone ~limi)
+     
 - PSCProject has a currentVersions field to list supported versions (for PHC
     support). We could use this to show a portalMessage on unsupported
     releases if we want coupling between documentation-supported releases
