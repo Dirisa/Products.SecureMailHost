@@ -140,11 +140,14 @@
 
       <metal:block tal:condition="python: mode.startswith('full')" >
 
-        <metal:block tal:condition="python: mode == 'fullimages'" >
+        <fieldset tal:condition="python: mode == 'fullimages'" >
+          <legend i18n:translate="images">Images</legend>
           <div tal:repeat="image python: here.objectValues(('Portal Image',))">
+            <span tal:content="image/getId" />:<br/>
             <img tal:attributes="src image/absolute_url">
+            <br/>
           </div>
-        </metal:block>
+        </fieldset>
 
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
 
