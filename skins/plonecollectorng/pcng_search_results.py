@@ -32,18 +32,30 @@ toQuery('SearchableText')
 for idx_id, idx_type in context.getIndexes():
     toQuery(idx_id)
 
+# Datefields 
+d_value = R.get('datefield_value', None)
+d_field = R.get('datefield', None)
+d_direction = R.get('datefield_direction', None)
+
+if d_value:
+    try:
+        dummy = int(d_value)
+        date = DateTime() - dummy
+    except:
+        date = DateTime(d_value)
+
+    if d_direction == 'since': qrange = 'min'
+    elif d_direction == 'until': qrange = 'max'
+    else:
+        raise ValueError('invalid value for datefield_direction: %s' % d_direction)
+    query[d_field] = {'query' : date, 'range' : qrange}    
+
 # Default query
 if len(query) == 0:
     query['status'] = ('accepted', 'pending')
 
-if debug:
-    print query
-
+if debug: print query
 results = list(context.pcng_catalog.searchResults(query))
-
-if sort_on:
-    results.sort(query_sort)
-
-if debug:
-    return printed
+if sort_on: results.sort(query_sort)
+if debug: return printed
 return results
