@@ -6,19 +6,6 @@
 
 <!-- The news box -->
 
-<div metal:define-macro="navigation" i18n:domain="plonecollectorng">
-
-    <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'">
-      <div metal:use-macro="here/pcng_slots/macros/issue_metadata" />
-    </tal:if>
-
-    <tal:if tal:condition="python: here.meta_type=='PloneCollectorNG'">
-      <div metal:use-macro="here/pcng_slots/macros/collector_metadata" />
-    </tal:if>
-
-    <div metal:use-macro="here/pcng_slots/macros/searchresults" />
-</div>
-
 <!-- searchresults -->
 <div metal:define-macro="pcng_searchresults" i18n:domain="plonecollectorng">
 
