@@ -28,9 +28,24 @@ def install(self):
     workflow_tool.manage_importObject(filename)
 
     os.unlink(os.path.join(import_dir, filename))
-    workflow_tool.setChainForPortalTypes(('PloneCollectorNG Issue',), 'pcng_issue_workflow')    
+    workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
     print >> out, "Added 'pcng_issue_workflow' workflow"
 
+
+    # add some new properties to memberdatatool
+    memberdata_tool = getToolByName(self, 'portal_memberdata')
+
+    for key,default, tpe  in (
+               ('pcng_company', '', 'string') , ('pcng_position', '', 'string') , 
+               ('pcng_city', '', 'string') , ('pcng_substitute', [] , 'lines'),
+               ('pcng_address', '', 'string') , ('pcng_fax', '', 'string') , 
+               ('pcng_send_attachments','no', 'string'),
+               ('pcng_phone', '', 'string') ):
+        try:
+            memberdata_tool.manage_addProperty(key, default, tpe)
+            print >>out, 'Added "%s" to memberdata_tool' % key
+        except: 
+            print >>out, 'Skipping "%s" - already in memberdata_tool' % keys
 
     print >> out, "Successfully installed %s." % PROJECTNAME
     return out.getvalue()
