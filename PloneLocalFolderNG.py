@@ -10,6 +10,7 @@ from AccessControl.Permission import Permission
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.FSObject import FSObject
 from Products.Archetypes.public import BaseSchema, Schema
+from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import StringField, StringWidget
 from Products.Archetypes.public import BooleanField, BooleanWidget
 from Products.Archetypes.public import BaseContent, registerType
@@ -84,14 +85,15 @@ schema = BaseSchema +  Schema((
                 widget=StringWidget(label='filetypes for catalog action to skip',
                                     description='this comma-separated list of (partial) mimetype phrases is used by the catalog action to determine which files NOT to catalog',)
                 ),
-    BooleanField ('display_fullpath',
-                write_permission=CMFCorePermissions.ManagePortal,
-                default=1,
-                widget=BooleanWidget(
-                        label='Display the full portal path for PLFNG contents pages?',
-                        description='This field controls whether or not the displayed title contains the full portal path or not.',
-                        ),
-                ),
+    StringField('folder_address_display_style',
+               default='currentIdOnly',
+               required=1,
+               vocabulary='getAddressDisplayStyleVocab',
+               widget=SelectionWidget(
+					   label='Folder Address Display Style',
+					   description="""Select the folder address style to be displayed""",
+					   format="select",),
+      ),
     BooleanField ('fileBackup_enabled',
                 write_permission=CMFCorePermissions.ManagePortal,
                 default=0,
@@ -233,7 +235,7 @@ class PloneLocalFolderNG(BaseContent):
     content_icon = 'folder_icon.gif'
     schema = schema
     security = ClassSecurityInfo()
-
+    
     actions = (
       { 'id': 'view',
         'name': 'View',
@@ -245,7 +247,7 @@ class PloneLocalFolderNG(BaseContent):
         'action': 'string:${object_url}/plfng_view',
         'permissions': (View,),
         'visible'       : 0
-        },  
+        },
       { 'id': 'edit',
         'name': 'Edit',
         'action': 'string:$object_url/base_edit',
@@ -285,7 +287,7 @@ class PloneLocalFolderNG(BaseContent):
     def setFileMetadata(self, REQUEST, section, option, newvalue):
         """ set the metadata for the file """
         result = 0
-        zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: section=%s option=%s newvalue=%s" % (section, option, newvalue))
+        #zLOG.LOG('PLFNG', zLOG.INFO , "setFileMetadata() :: section=%s option=%s newvalue=%s" % (section, option, newvalue))
         rel_dir = '/'.join(REQUEST.get('_e', []))
         targetFile = os.path.join(self.folder, rel_dir)
 
@@ -345,8 +347,14 @@ class PloneLocalFolderNG(BaseContent):
     def validFolder(self,  REQUEST=None):
         """ determine if the requested folder path is legal and exists """
 
+        # provide necessary default values if REQUEST is missing
+        if REQUEST==None:
+            show_dir = ''
+        else:    
+            show_dir = '/'.join(REQUEST['_e'])
+            
         trimmedFolderBasePath = os.path.normpath(self.folder)
-        show_dir = '/'.join(REQUEST['_e'])
+
         #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: show_dir = %s" % show_dir)
         #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: trimmedFolderBasePath = %s" % trimmedFolderBasePath)
         
@@ -367,28 +375,36 @@ class PloneLocalFolderNG(BaseContent):
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: !!! path bad for: %s" %destfolder )
             return 0
 
-        
-    security.declareProtected('View', 'getContents')
-    def getContents(self,  REQUEST=None, RESPONSE=None):
+    security.declareProtected('View', 'listFolderContents')
+    def listFolderContents(self,  spec=None, contentFilter=None, suppressHiddenFiles=0, REQUEST=None, RESPONSE=None):
         """ list content of local filesystem """
-        
-        rel_dir = '/'.join(REQUEST.get('_e', []))
+        #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: REQUEST = %s" % REQUEST)
+        #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST = %s" % self.REQUEST)
+                
+        if REQUEST==None:
+            self.REQUEST.RESPONSE.redirect( self.REQUEST['URL1'] + '/plfng_view' )
+            #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST[URL1] = %s" % self.REQUEST['URL1'])
+            return []
+            
+            #zLOG.LOG('PLFNG', zLOG.INFO , "listFolderContents() :: self.REQUEST = %s" % self.REQUEST)
+            #self.REQUEST.RESPONSE.redirect( self.absolute_url() + '/plfng_view' )
+        else:    
+            rel_dir = '/'.join(REQUEST.get('_e', []))
+            show_dir = '/'.join(REQUEST['_e'])
+            action = REQUEST.get('action', '')
+
         destpath = os.path.join(self.folder, rel_dir)
         
-        #zLOG.LOG('PLFNG', zLOG.INFO , "getContents() :: REQUEST = %s" % REQUEST)
-        if REQUEST.get('action', '') == 'deleteFolder':
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: calling deleteFolder(%s)" % destpath)
-            self.deleteFolder(rel_dir, destpath, REQUEST)
-            return []
-      
+        if action == 'deleteFolder':
+           #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: calling deleteFolder(%s)" % destpath)
+           self.deleteFolder(rel_dir, destpath, REQUEST)
+           return []
         
         else:
-        
            this_portal = getToolByName(self, 'portal_url')
            mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
-   
+           
            trimmedFolderBasePath = os.path.normpath(self.folder)
-           show_dir = '/'.join(REQUEST['_e'])
            
            if show_dir.startswith('/') or show_dir.find('..') > -1:
                raise ValueError('illegal directory: %s' % show_dir)
@@ -401,7 +417,7 @@ class PloneLocalFolderNG(BaseContent):
        
            rel_dir = destfolder.replace(self.folder, '')
            if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
-   
+           
            l = []
            if os.path.exists(destfolder):
               for f in os.listdir(destfolder):
@@ -433,6 +449,17 @@ class PloneLocalFolderNG(BaseContent):
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
            return l
 
+    security.declareProtected(CMFCorePermissions.AccessContentsInformation,
+                              'folderlistingFolderContents')
+    def folderlistingFolderContents(self, spec=None, contentFilter=None,
+                                    suppressHiddenFiles=0 ):
+        """
+        Calls listFolderContents in protected only by ACI so that folder_listing
+        can work without the List folder contents permission, as in CMFDefault
+        """
+        return self.listFolderContents(spec, contentFilter, suppressHiddenFiles)
+
+
     security.declareProtected('View', 'breadcrumbs')
     def breadcrumbs(self, instance): 
         """ breadcrumbs """
@@ -451,6 +478,10 @@ class PloneLocalFolderNG(BaseContent):
 
     def __call__(self, REQUEST=None, RESPONSE=None, *args, **kw):
         #zLOG.LOG('PLFNG', zLOG.INFO , "__call__() :: REQUEST = %s" % REQUEST)
+        
+        if REQUEST == None:
+            return None
+
         if not hasattr(self, "folder"):
             #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: no folder attribute")
             return self
@@ -817,10 +848,10 @@ class PloneLocalFolderNG(BaseContent):
         """ return cataloging_enabled value """
         return self.cataloging_enabled 
     
-    security.declareProtected('View', 'diplayFullPortalPath')
-    def diplayFullPortalPath(self): 
-        """ return the display_fullpath value """
-        return self.display_fullpath
+    security.declareProtected('View', 'folderAddressDisplayStyle')
+    def folderAddressDisplayStyle(self): 
+        """ return the folder_address_display_style value """
+        return self.folder_address_display_style
         
     def catalogContents(self,rel_dir=None, catalog='portal_catalog'):
         
@@ -908,6 +939,14 @@ class PloneLocalFolderNG(BaseContent):
             this folder.
         """
         return []
+        
+    security.declareProtected(CMFCorePermissions.View,'getAddressDisplayStyleVocab')
+    def getAddressDisplayStyleVocab(self):
+        return DisplayList(
+           (
+            ('PLFNG_Base_Relative','PLFNG_Base_Relative'),
+           ))
+        
 
 def _getFolderProperties(fullfoldername):
    bytesInFolder = 0
