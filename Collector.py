@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.201 2004/09/11 12:19:04 ajung Exp $
+$Id: Collector.py,v 1.202 2004/09/11 12:45:21 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -24,11 +24,11 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
 from Base import Base
-from Transcript import Transcript
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent, IncrementalChangeEvent
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
+from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from PCNGSchema import PCNGSchemaNonPersistent
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
@@ -40,10 +40,10 @@ import issue_schema
 import util
 
 
-class PloneCollectorNG(Base, SchemaEditor, Translateable):
+class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     """ PloneCollectorNG """
 
-    schema = PCNGSchemaNonPersistent(collector_schema.schema.fields())
+    schema = collector_schema.schema
     archetype_name = 'PCNG Tracker'
 
     actions = ({
@@ -93,29 +93,26 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     __ac_roles__ = ('Manager', 'TrackerAdmin', 'Supporter', 'Reporter')
     security = ClassSecurityInfo()
 
-    def __init__(self, oid, **kwargs):
-        Base.__init__(self, oid, **kwargs)
-        self.initializeArchetype()
+    def manage_afterAdd(self, item, container):
+        """ post creation (or post renaming) actions """
+        BaseBTreeFolder.manage_afterAdd(self, item, container)
+
+        # Initialization
         self.atse_init(issue_schema.schema)   # initialize SchemaEditor
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
 
-        # setup roles
+        # setup local roles for creator
         username = util.getUserName()
         for role in ('Manager', 'TrackerAdmin', 'Owner'):
             util.addLocalRole(self, username, role)
 
-    def manage_afterAdd(self, item, container):
-        """ post creation (or post renaming) actions """
-        Base.manage_afterAdd(self, item, container)
-
         if getattr(self, '_already_created', 0) == 0:
             # Upon creation we need to add the transcript
-            self._transcript2 = Transcript().__of__(self)
+            self._transcript2 = Transcript2().__of__(self)
             self._transcript2.add(CommentEvent(u'Tracker created'))
             self._already_created = 1
-
         else:
             # manager_afterAdd() is also called when the collector is
             # renamed. So we reindex the issues automatically
@@ -134,6 +131,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
 
+        # high-security token for email notifications
         self.createToken()
 
     def manage_beforeDelete(self, item, container):
@@ -221,11 +219,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
-
-        if not hasattr(aq_base(self), '_transcript2'):
-            self._transcript2 = Transcript2().__of__(self)
-            from convert_transcript import convert2
-            convert2(self._transcript, self._transcript2)
         return self._transcript2
 
     ######################################################################
@@ -910,6 +903,11 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             except: pass
         return self._v_right_slots
     right_slots = ComputedAttribute(right_slots, 1)
+
+    def base_edit(self, RESPONSE=None):
+        """ redirect to our own edit method """
+        if RESPONSE:
+            RESPONSE.redirect('pcng_base_edit')
 
 registerType(PloneCollectorNG)
 

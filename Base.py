@@ -5,31 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.14 2004/09/11 12:19:04 ajung Exp $
+$Id: Base.py,v 1.15 2004/09/11 12:45:21 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from Products.Archetypes.Schema import WrappedSchema
-
-class Base(BaseBTreeFolder):
-    """ base class for collector/issues """
-
-    def SchemataNames(self):
-        """ return ordered list of schemata names """
-        return [n for n in self.Schema().getSchemataNames() if not n in ('default', 'metadata')]
-
-    def base_edit(self, RESPONSE=None):
-        """ redirect to our own edit method """
-        if RESPONSE:
-            RESPONSE.redirect('pcng_base_edit')
-
-    def manage_afterAdd(self, item, container):
-        BaseBTreeFolder.manage_afterAdd(self, item, container)
-
-InitializeClass(Base)
-
 
 class ParentManagedSchema:
     """ mix-in class for AT content-types whose schema is managed by
