@@ -21,8 +21,9 @@
         <tal:def tal:define="dummy python: request.set('mode', member.getProperty('pcng_default_view'))" />
       </metal:block>
 
-      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="pcng_issue_view?mode=full">Full view</a>
-      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="pcng_issue_view?mode=simple">Simple view</a>
+      <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="pcng_issue_view?mode=full">Full view</a> &nbsp;
+      <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="pcng_issue_view?mode=simple">Simple view</a>   &nbsp;
+      <a href="asPDF">PDF</a>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
         <legend><a class="schemata_legend"  
