@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plone"
+      metal:use-macro="here/main_template/macros/master">
+
+<body>
+
+
+<div metal:fill-slot="main"
+     tal:define="standalone python:1;
+                 mtool mtool|here/portal_membership;
+                 myfolder python:here.absolute_url()==mtool.getHomeUrl();
+                 filepath python:request.get('filepath','');">
+
+    <div>
+                                            
+			           <br>
+			           <b>filepath = </b>
+			           <span tal:content="filepath">
+			             filepath
+			           </span>
+			           <br><br>
+                
+    </div>
+
+</div>
+
+</body>
+</html>

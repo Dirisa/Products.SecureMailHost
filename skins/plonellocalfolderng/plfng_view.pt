@@ -150,7 +150,7 @@
                               </div>  
                             </td>
 
-                            <td tal:content="python:toPortalTime(item.ModificationDate())">
+                            <td tal:content="python:toPortalTime(item.ModificationDate(),long_format=1)">
                             08/19/2001 03:01 AM
                             </td>
 
@@ -163,7 +163,11 @@
 	                              <a tal:condition="python:item_typeinfo.Title() == 'application/zip' and member.has_permission('Modify portal content', here) and fileUnpackingAllowed"
 	                                  tal:attributes="href string:${item/absolute_url}?action=unpack">Unzip</a>
 	                              <a tal:condition="python:member.has_permission('Delete objects', here) and item_typeinfo.Title()!='directory'"
-	                                  tal:attributes="href string:${item/absolute_url}?action=delete">Delete</a>    
+	                                  tal:attributes="href string:${item/absolute_url}?action=deleteFile">Delete</a>
+	                              <a tal:condition="python:member.has_permission('Delete objects', here) and item_typeinfo.Title()=='directory'"
+	                                  tal:attributes="href string:${item/absolute_url}?action=deleteFolder">Delete</a>
+	                              <a tal:condition="python:member.has_permission('Manage portal', here)"
+	                                  tal:attributes="href string:${item/absolute_url}/plfng_editMetadata?filepath=${item/absolute_url}">Metadata</a>        
 	                           </div>       
                             </td>
                             
