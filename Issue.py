@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.231 2004/11/15 19:47:39 ajung Exp $
+$Id: Issue.py,v 1.232 2004/11/16 16:26:05 ajung Exp $
 """
 
 import os, time, random
@@ -149,8 +149,12 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
             wf = getToolByName(self, CollectorWorkflow, None)
-            if wf:
-                wf.notifyCreated(self)
+            if wf: 
+                # don't notify the workflow upon creating if object is
+                # is created through cut&paste
+                wfh = self.workflow_history.get(self.getCollector_workflow(), ())
+                if len(wfh) == 0:
+                    wf.notifyCreated(self)
 
         # Hook for 3rd-party post-creation operations
         try:
