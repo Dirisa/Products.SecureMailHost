@@ -239,7 +239,7 @@ function show_tickets() {
                      gruf_groups here/get_gruf_groups" >
     <tr>
       <th>
-        <span tal:condition="allow_assign" i18n:translate="assign_to_user"> Assign to users</span>
+        <span tal:condition="allow_assign" i18n:translate="assign_to_users"> Assign to users</span>
       </th>
       <th tal:condition="topics" width="20">
         &nbsp;
