@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.38 2004/04/04 08:43:49 ajung Exp $
+$Id: collector_schema.py,v 1.39 2004/04/11 13:47:41 ajung Exp $
 """
 
 
@@ -27,6 +27,13 @@ VOC_NOTIFICATION_LANGUAGES = DisplayList((
 ))
 
 VOC_PARTICIPATION_MODE = DisplayList((
+  ('staff', 'Only staff members'),
+  ('authenticated', 'Any authenticated user'),                                       
+  ('anyone', 'Anyone'),                                       
+))
+
+VOC_ISSUE_EMAIL_SUBMISSION = DisplayList((
+  ('disabled', 'Disabled'),
   ('staff', 'Only staff members'),
   ('authenticated', 'Any authenticated user'),                                       
   ('anyone', 'Anyone'),                                       
@@ -143,6 +150,15 @@ schema = Schema((
                 default='',
                 widget=StringWidget(label='Abbreviation (used in the email subject to identify the collector)',
                                     label_msgid='label_collector_abbreviation',
+                                    i18n_domain='plonecollectorng'),
+                schemata='E-Mail',
+                ),
+    StringField('issue_email_submission',
+                default='disabled',
+                vocabulary=VOC_ISSUE_EMAIL_SUBMISSION(),
+                widget=SelectionWidget(format='select',
+                                    label='Issue submissions through email)',
+                                    label_msgid='label_issue_email_submission',
                                     i18n_domain='plonecollectorng'),
                 schemata='E-Mail',
                 ),
