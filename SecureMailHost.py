@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.14 2004/05/24 13:12:05 longsleep Exp $
+$Id: SecureMailHost.py,v 1.15 2004/05/24 13:19:42 tiran Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -246,7 +246,7 @@ class SecureMailBase(MailBase):
             message = messageText
         from asyncmailer import mailQueue, initializeMailThread
         initializeMailThread()
-        mail = Mail(mfrom, mto, messageText,
+        mail = Mail(mfrom, mto, message,
                     smtp_host=self.smtp_host, smtp_port=self.smtp_port,
                     userid=self._smtp_userid, password=self._smtp_pass
                    )
