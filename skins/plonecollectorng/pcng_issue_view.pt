@@ -80,6 +80,8 @@
           </h5>
           <div class="portletBody">
             <metal:block tal:repeat="item uploads">
+              <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
+              <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
               <a tal:attributes="href item/absolute_url">
                 <span  tal:content="item/getId" tal:attributes="title item/title_or_id"/> 
               </a>
