@@ -1,8 +1,10 @@
 ##parameters=fieldname,cols=100
 
 import textwrap
+accessor = getattr(context, 'get' + fieldname.capitalize())
 
-text = context.getField(fieldname).get(context)
+#text = context.Schema()[fieldname].get(context)
+text = accessor()
 if same_type(text, u''):
     text = text.encode(context.getSiteEncoding())
 
