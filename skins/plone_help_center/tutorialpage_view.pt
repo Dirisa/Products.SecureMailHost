@@ -19,9 +19,9 @@
 
     <div metal:define-macro="main"
          tal:define="len_text python:len(here.getBody());
-	 sibl here/getPages;
-		     num_sibl python:len(sibl);
-		     pos python:here.getPagePosition(here);">
+                	 sibl here/getPages;
+		             num_sibl python:len(sibl);
+		             pos python:here.getPagePosition(here);">
       
         <h1 class="documentFirstHeading">
             <img tal:replace="structure here/howto_icon.gif" />
@@ -31,24 +31,6 @@
         <div metal:use-macro="here/document_actions/macros/document_actions">
             Document actions (print, sendto etc)
         </div>
-
-        <form style="float: right; margin-top: 1em; clear: right; display: inline;"
-              method="get" action="redirect_to">
-            <select name="dest"
-                    tabindex="3">
-                <option value="" i18n:translate="label_select">Page Index</option>
-                <option tal:repeat="s python:[s for s in sibl if s!=here]"
-                        tal:content="s/title_or_id"
-                        tal:attributes="value s/getId">
-                    Some Page
-                </option>
-            </select>
-            <input class="standalone"
-                   type="submit"
-                   value="Go"
-                   i18n:attributes="value"
-                   tabindex="4" />
-        </form>
 
         <div class="documentDescription"
              tal:content="here/Description">
@@ -122,6 +104,24 @@
 		</a>
                &nbsp;
         </div>
+
+        <form method="get" action="redirect_to" style="text-align:right;">
+            <label for="dest">Page index</label>
+            <select name="dest"
+                    tabindex="3">
+                <option value=".">Page Index</option>
+                <option tal:repeat="s sibl"
+                        tal:attributes="value s/getId;">
+                    Part <tal:index replace="repeat/s/number" />:
+                    <tal:page content="s/title_or_id">Some Page</tal:page>
+                </option>
+            </select>
+            <input class="standalone"
+                   type="submit"
+                   value="Go"
+                   i18n:attributes="value"
+                   tabindex="4" />
+        </form>
 
         <div metal:use-macro="here/document_byline/macros/byline">
           Get the byline - contains details about author and modification date.

@@ -251,10 +251,6 @@ Design/UI
     contain images/files
   
   - Discreet "Powered by PHC" in footer
-    
-  - Tutorial needs inline explanation if you have an empty Tutorial, like
-    ArchPackage does - only shows up if you have editing perms.
-  
   
   - A portlet to show content that hasn't been modified in 6 months - so we can go 
     in and see if it's still relevant. We'll just hit save if it is, this is a
@@ -262,13 +258,7 @@ Design/UI
   
   - Include the Documentation review portlet from plone.org
   
-  - Tutorial needs "This tutorial has no pages yet - use the Add menu to add
-    Tutorial Pages and Files/Images." text.
-  
-  - Tutorial Page Pulldown needs:
-    - Numbers (0. for Index)
-    - Needs to show the existing page (selected)
-    - Needs label ("index")
+  - Tutorial Page Pulldown needs to show the existing page as selected
   
   - Needs "All pages" choice that renders all the pages on one page for printing or
     similar.

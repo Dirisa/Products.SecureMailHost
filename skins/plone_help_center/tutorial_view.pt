@@ -27,7 +27,7 @@
     <div class="documentDescription"
       tal:condition="here/Description"
       tal:content="structure here/Description">
-      Full Question
+      Description
     </div>
 
         <div class="tutorialAbout"
@@ -53,6 +53,12 @@
       <a tal:attributes="href page/absolute_url" tal:content="page/Title">Title</a>
       <span tal:replace="page/Description">Descrip</span>
       </li>
+      <li>
+      <a href="tutorial-all-pages">
+      All content on one page (useful for printing, presentation mode etc.)
+      </a>
+      </li>
+
     </ol>
       
     <p tal:condition="here/getVersionsVocab" tal:define="versions here/Versions" class="discreet">
