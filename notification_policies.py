@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notification_policies.py,v 1.6 2003/11/01 17:03:25 ajung Exp $
+$Id: notification_policies.py,v 1.7 2003/11/07 16:22:24 ajung Exp $
 """
 
 """ 
@@ -33,7 +33,6 @@ class BasePolicy:
 
         # special notifications based on the state
         for email in self.collector.getNotificationsForState(issue.status()):
-            print email
             self.r[email] = {'email': email}
 
         # all managers
