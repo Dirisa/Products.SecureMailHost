@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.58 2003/11/02 08:54:53 ajung Exp $
+$Id: Issue.py,v 1.59 2003/11/02 09:15:34 ajung Exp $
 """
 
 import sys, os
@@ -210,7 +210,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     security.declareProtected(AddCollectorIssue, 'setParameters')
     def setParameters(self, parameters):
-        """ Takes the 'parameters' record object and updated fields.
+        """ Takes the 'parameters' record object and update the issue fields.
             (Used for TTW creation of issues)
         """
 
