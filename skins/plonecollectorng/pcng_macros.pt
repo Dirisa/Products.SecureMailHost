@@ -90,7 +90,7 @@
           <em i18n:translate="transcript_comments"
               tal:condition="entry/getComments">Comments:</em> 
           <metal:block tal:repeat="comment entry/getComments">
-            <pre width="140" class="comment" tal:content="comment/getComment" />             
+            <pre width="100" class="comment" tal:content="comment/getComment" />             
           </metal:block>
         </div>
         

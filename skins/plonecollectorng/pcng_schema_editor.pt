@@ -26,10 +26,10 @@
              </div>
            </tal:block>
            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-           <input type="text" name="name" value="" size="10">
+           <input type="text" name="fieldset" value="" size="10">
            <input type="submit" value=" Add schemata " >
            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-           <a tal:attributes="href string:delSchema?name=${fieldset}">Delete this schemata</a>
+           <a tal:attributes="href string:delSchema?fieldset=${fieldset}">Delete this schemata</a>
          </form>
 
        </div>  <!-- EOF Navigation -->
