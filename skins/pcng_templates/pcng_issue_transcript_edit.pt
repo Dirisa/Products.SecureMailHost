@@ -1,0 +1,32 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+  <body>
+    <metal:block metal:fill-slot="head_slot">
+      <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main">	  
+
+      <metal:block tal:define="action string: Edit transcript entry">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <form method="post" action="pcng_issue_transcript_update">
+        <div tal:define="comment python: here.pcng_get_transcript_entry(request['timestamp'])"> 
+          <span class="label" i18n:translate="comment">Comment</span>
+          <div>
+            <textarea name="comment" cols="80" rows="10" 
+                      tal:content="comment"></textarea>
+          </div>
+        </div>
+        <div> 
+          <input class="context" type="submit" value="Save transcript entry" i18n:attributes="value" class="standalone"/>
+          <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
