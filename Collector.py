@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.226 2004/10/10 15:48:07 ajung Exp $
+$Id: Collector.py,v 1.227 2004/10/15 18:07:51 ajung Exp $
 """
 
 import base64, time, random, md5, os 
@@ -757,6 +757,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         else:
             slots = []
         slots.extend(slots_left)
+        return slots
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
