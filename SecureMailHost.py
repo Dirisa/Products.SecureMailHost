@@ -1,19 +1,26 @@
 ##############################################################################
 #
-# Copyright (c) 2001-2004 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2004 Christian Heimes and Contributors
+# Copyright (c) 2001-2004 Zope Corporation and Contributors. 
+# Copyright (c) 2004 Christian Heimes and Contributors.
+# All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
+# Version 2.1 (ZPL). A copy of the ZPL should accompany this distribution.
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
 # WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
-# FOR A PARTICULAR PURPOSE
+# FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.18 2004/07/09 18:38:22 tiran Exp $
+$Id: SecureMailHost.py,v 1.19 2004/07/15 00:58:46 tiran Exp $
 """
+
+try:
+    True
+except NameError:
+    True=1
+    False=0
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
 

@@ -1,6 +1,19 @@
 SecureMailHost
 ==============
 
+0.2-rc1  2004-07-15
+---------------------
+
+ * Made SecureMailHost compatible with Python 2.1 (True, False ...)
+
+ * Added python compatibility for email package. email 2.5.5 is automagically
+   loaded if no email package is found. If an email package < 2.5.4 is found
+   SecureMailHost is raising a RuntimeError.
+
+ * Shipping releases with email package 2.5.5.
+
+ * Added copyright headers and LICENSE.txt file for ZPL 2.1.
+
 0.2-rc1  2004-07-09
 ---------------------
 

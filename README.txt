@@ -12,6 +12,8 @@ and usability enhancements:
   * Usage of Python 2.3's email package which has multiple benefits like easy to
     generate multi part messages including fance HTML emails and with images.
 
+  * Releases are shipped with a compatibility version of email for older pythons.
+
   * A new secureSend() method that seperates headers like mail to, mail from
     from the body text. You don't need to mingle body text and headers any more.
 
@@ -32,7 +34,7 @@ Author:
     Christian Heimes <heimes@faho.rwth-aachen.de>
 
 License:
-    ZPL 2.0
+    ZPL 2.1
 
 Downloads and bug collector:
     http://sf.net/projects/collective/
