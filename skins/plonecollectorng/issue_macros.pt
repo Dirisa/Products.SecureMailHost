@@ -232,17 +232,18 @@ function show_tickets() {
 </div>
 
 
-<tal:macro metal:define-macro="followup_table">
+<tal:macro metal:define-macro="followup_table" i18n:domain="plonecollectorng">
 
-  <table tal:define="allow_assign  python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter')">
+  <table tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter')">
     <tr>
       <th>
-        <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to  </span>
+        <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to </span>
       </th>
       <th>&nbsp;</th>
       <th tal:condition="show_actions|nothing"> 
-        <span i18n:translate="action">Action </span>
-        (<span i18n:translate="workflow_action_current_state">Current state</span>: <span i18n:translate="" tal:content="here/status" />)</th>
+        <span i18n:translate="action">Action</span>
+        (<span i18n:translate="workflow_action_current_state">Current state</span>:
+         <span i18n:translate="" tal:content="here/status" />)</th>
     </tr>
 
     <tr>
