@@ -5,13 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.14 2003/09/22 15:12:37 ajung Exp $
+$Id: issue_schema.py,v 1.15 2003/09/23 11:45:53 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
 from Products.Archetypes.public import DisplayList
-from Products.Archetypes.public import StringField, TextField, IntegerField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget
+from Products.Archetypes.public import StringField, TextField, IntegerField, DateTimeField
+from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget, CalendarWidget
 
 VOCAB_TOPIC = DisplayList((
   ('UI', 'UI'),
@@ -101,6 +101,12 @@ schema = OrderedSchema((
                                        i18n_domain="plone"),
                 ),
 
+    DateTimeField('progress_deadline',
+                schemata='progress',
+                widget=CalendarWidget(label='Deadline',
+                                      label_msgid='label_deadline',
+                                      i18n_domain='plonecollectorng'),
+                ),
 
     StringField('progress_hours_estimated',
                 schemata='progress',
