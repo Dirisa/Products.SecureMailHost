@@ -5,8 +5,9 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.6 2003/09/08 05:08:15 ajung Exp $
+$Id: Issue.py,v 1.7 2003/09/09 12:00:41 ajung Exp $
 """
+import sys
 
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
@@ -19,6 +20,7 @@ from config import IssueWorkflowName
 from References import Reference, ReferencesManager
 from WatchList import WatchList
 import util
+
 
 class Issue(BaseFolder, WatchList):
     """ PloneCollectorNG """
@@ -49,14 +51,49 @@ class Issue(BaseFolder, WatchList):
     security = ClassSecurityInfo()
 
     def __init__(self, id, title, schema, **kw):
-        BaseFolder.__init__(self, id, **kw)
-        self.wl_init()
         self.schema = schema
+        BaseFolder.__init__(self, id, **kw)
+        self.initializeArchetype()
+        self.wl_init()
         self.id = id
         self.title = title 
         self._references = ReferencesManager()
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
+                                                
+    ######################################################################
+    # Archetypes callbacks 
+    ######################################################################
+
+    def archetypes_mutator(self, v, **kw):
+        """ the Archetypes mutator callback.
+            ATT: we pass the Field instance as kw-arg 'field'
+            This requires a hacked Archetypes.BaseObject.py (lines 366ff)
+        """
+        field = kw['field']  # ATT: maybe sniff into the stack frames
+        self.Schema()[field.getName()].storage.set(field.getName(), self, v, **kw)
+
+    def archetypes_accessor(self, *args, **kw):
+        """ this method is a very bad hack since we do intercept
+            the frame to get hold of the corresponding 'field' object
+        """
+
+        # look for the context in the stack
+        _marker = []
+        frame = sys._getframe()
+        context = _marker
+        while context is _marker and frame is not None:
+            context = frame.f_locals.get('econtext', _marker)
+            frame = frame.f_back
+        if context is _marker:
+            return None
+
+        field = context.local_vars['field']
+        try:
+            value = field.storage.get(field.getName(), self, **kw)
+        except:
+            value = None
+        return value 
 
     ######################################################################
     # Transcript
@@ -141,6 +178,8 @@ class Issue(BaseFolder, WatchList):
     def updateSchema(self, schema):
         """ update the schema """
         self.schema = schema
+
+
 
 registerType(Issue)
 
