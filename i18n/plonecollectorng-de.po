@@ -117,6 +117,9 @@ msgstr "Kontakt"
 msgid "issuedata"
 msgstr "Ticketdaten"
 
+msgid "Issuedata"
+msgstr "Ticketdaten"
+
 msgid "progress"
 msgstr "Fortschritt"
 
@@ -186,7 +189,7 @@ msgid "issue_artifacts_table_deletion_link"
 msgstr "Löschen"
 
 msgid "legend_artifacts_upload"
-msgstr "Upload"
+msgstr "Dateien hochladen"
 
 msgid "add_artifacts_table_comment"
 msgstr "Kommentar"
@@ -234,13 +237,13 @@ msgid "send_emails"
 msgstr "Emailbenachrichtigungen"
 
 msgid "send_attachments"
-msgstr "Bilder als Attachtments verschicken"
+msgstr "Hochgeladene Bilder als Anhänge verschicken"
 
 msgid "position_searchform"
 msgstr "Position Suchmaske"
 
 msgid "default_searchform"
-msgstr "Voreingestellte Suchmask"
+msgstr "Voreingestellte Suchmaske"
 
 msgid "default_issue_view"
 msgstr "Voreingestellte Ticketansicht"
@@ -708,7 +711,7 @@ msgid "Member preferences"
 msgstr "Teilnehmer Voreinstellungen"
 
 msgid "saved_searches"
-msgstr "Gespeicherte Suchen"
+msgstr "Gespeicherte Suchanfragen"
 
 msgid "Delete"
 msgstr "Löschen"
@@ -721,3 +724,16 @@ msgstr "Keine Refererenzen"
 
 msgid "Submit"
 msgstr "Abschicken"
+
+msgid "images"
+msgstr "Bilder"
+
+msgid "uploaded_file"
+msgstr "Hochgeladenen Datei"
+
+msgid "file_for_upload"
+msgstr "Datei zum Hochladen"
+
+
+msgid "upload"
+msgstr "Hochladen"

@@ -25,7 +25,13 @@ msgstr "Neues Ticket"
 msgid "Issue schema"
 msgstr "Schema Editor"
 
-msgid "Maintainance"
+msgid "Followup"
+msgstr "Followup"
+
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+msgid "Maintenance"
 msgstr "Wartung"
 
 msgid "Staff"
