@@ -12,8 +12,9 @@ TUTORIAL TYPE
 
 - It's for creating multi-page articles
 
-- Tutorial will need template logic to display previous/next according to ordering of TutorialPages
+- tutorialpage_view.pt needs markup cleaning (look for XXX)
 
+- What do we want for tutorial_view.pt ?
 
 GENERAL:
 

@@ -19,7 +19,7 @@
             Document actions (print, sendto etc)
         </div>
 
-        <div>
+        <div><!-- XXX: Clean up markup -->
             <a tal:define="prev python:pos != 0 and sibl[pos-1]"
                tal:condition="python:prev"
                tal:attributes="href prev/absolute_url"
@@ -35,6 +35,23 @@
                 Next Item
 	    </a>
 	</div>
+
+        <form method="get" action="redirect_to">
+            <select name="dest">
+                <option i18n:translate="label_select">Select</option>
+                <option tal:repeat="s python:[s for s in sibl if s!=here]"
+                        tal:content="s/title_or_id"
+                        tal:attributes="value s/getId">
+                    Some Page
+		</option>
+	    </select>
+            <input class="standalone"
+                   type="submit"
+                   value="Go to"
+                   tabindex=""
+                   i18n:translate="value"
+                   tal:attributes="tabindex tabindex/next|nothing" />
+	</form>
     
         <div class="documentDescription"
              tal:content="here/Description">
