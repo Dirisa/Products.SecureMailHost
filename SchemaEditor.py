@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.56 2004/05/22 10:18:32 ajung Exp $
+$Id: SchemaEditor.py,v 1.57 2004/05/26 18:44:51 ajung Exp $
 """
 
 import copy, re
@@ -51,7 +51,6 @@ class SchemaEditor:
         """ return the concatenation of all schemas """       
 
         # Migration from old SchemaEditor
-        from OrderedSchema import OrderedSchema
 
         if not hasattr(self, '_ms'):
             schema = PCNGSchemaNonPersistent()
