@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.42 2004/07/13 18:28:27 ajung Exp $
+$Id: notifications.py,v 1.43 2004/09/17 14:04:56 ajung Exp $
 """
 
 import sys
@@ -17,6 +17,7 @@ import email.Utils
 
 from zLOG import LOG, ERROR, INFO
 from AccessControl import getSecurityManager
+from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 
 import util, notification_policies
@@ -90,6 +91,10 @@ def send_notifications(recipients, issue):
 def _send_notifications(recipients, issue, send_attachments=0):
     """ create the notification emails """
 
+    # Track notification message_id headers
+    if not hasattr(issue, 'message_ids'):
+        issue.message_ids = []
+
     encoding = 'utf8'
     collector = issue._getCollector()
     dest_emails = [ v['email'] for v in recipients.values()     
@@ -105,7 +110,17 @@ def _send_notifications(recipients, issue, send_attachments=0):
     subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.getCollector_abbreviation()), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue.lastAction(),issue.lastAction()))
     outer['Subject'] = Header(subject, encoding)
-    outer['Message-ID'] = email.Utils.make_msgid()
+
+    # Message-ID:
+    msg_id = email.Utils.make_msgid()
+    outer['Message-ID'] = msg_id
+    issue.message_ids.append(msg_id)
+
+    # Add a Reference header with the original message_id
+    if len(issue.message_ids) > 1: # 
+        outer['References'] = issue.message_ids[0]
+        outer['In-Reply-To'] = issue.message_ids[0]
+
     outer['Reply-To'] = collector.getCollector_email()
     body = issue.format_transcript(collector.getNotification_language())
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
