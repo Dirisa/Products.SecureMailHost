@@ -118,6 +118,7 @@ def CreateReferenceManuals( self, portal ):
 
 def CreateVideos( self, portal ):
     i = 0
+    # See CMFPlone/tests/dummy.py for faking a FileField
     return "Created %d PHC Videos." % i
 
 def CreateTestData( self, portal ):
