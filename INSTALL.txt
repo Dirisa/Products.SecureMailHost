@@ -42,7 +42,8 @@ ATTENTION TO USERS of Plone 2.0 beta 3:
        - *recreate* your Plone 2.0 site (if created *with* Plone 2.0 beta 3)
 
        - there is currently no support from my side to re-enable the
-         portal_workflow as action provider for Plone sites created under Plone 2.0 beta 3
+         portal_workflow as action provider for Plone sites created under
+         Plone 2.0 beta 3
 
 Installation:
  
