@@ -12,7 +12,7 @@
 
     <div metal:fill-slot="main" >
       <tal:if tal:condition="here/pcng_motd|nothing"> 
-        <div class="motd">
+        <div id="motd">
           <span tal:replace="here/pcng_motd" />
         </div>
       </tal:if>
@@ -29,7 +29,7 @@
           <span class="no_access" tal:condition="not: collector/view_permission" i18n:translate="no_access">(no access)</span>
         </h2>
 
-        <div class="ticket_stats" tal:condition="collector/view_permission"
+        <div id="ticket_stats" tal:condition="collector/view_permission"
                                   tal:define="stats collector/stats">
            <span i18n:translate="total_issues">Total issues</span>: <span tal:content="python: stats[0]"/> -
            <span i18n:translate="open_issues">Open issues</span>: <span tal:content="python: stats[1]"/> -
@@ -41,7 +41,7 @@
            </a> 
         </div> 
 
-        <div class="ticket_stats" tal:condition="not: collector/view_permission">
+        <div id="ticket_stats" tal:condition="not: collector/view_permission">
         &nbsp;
         </div>
 

@@ -29,6 +29,12 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
+      <a href=""
+         class="link-parent"
+         tal:attributes="href python: here.aq_parent.absolute_url()"
+         i18n:translate="label_up_to_configuration ">
+         Up to the PloneCollectorNG instance
+      </a>
 
       <div style="clear: both"> 
 
@@ -76,18 +82,62 @@
         <div class="portlet" id="pcng_metadata" tal:define="uploads here/objectValues">
           <h5>
             <span i18n:translate="Uploads">Uploads</span>
-            <a href="pcng_issue_references"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+            <a href="pcng_issue_uploads"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
           </h5>
           <div class="portletBody">
-            <metal:block tal:repeat="item uploads">
-              <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
-              <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
-              <a tal:attributes="href item/absolute_url">
-                <span  tal:content="item/getId" tal:attributes="title item/title_or_id"/> 
-              </a>
-              <span tal:condition="not: repeat/item/end">&bull;</span>   
-            </metal:block>
+            <dl>
+              <metal:block tal:repeat="item uploads">
+                <dt>
+                </dt>
+                <dd>
+                  <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
+                  <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
+                  <a tal:attributes="href item/absolute_url">
+                    <span  tal:content="item/getId" tal:attributes="title item/title_or_id"/> 
+                  </a>
+                </dd>
+              </metal:block>
+            </dl>
             <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
+          </div>
+        </div>
+
+        <div class="portlet" id="pcng_metadata">
+          <h5>
+            <span i18n:translate="actions">Actions</span>
+          </h5>
+          <div class="portletBody">
+            <ul tal:define="mode request/mode|string:simple">
+              <li>
+                <a href="redirect_create_object"><span i18n:translate="new_issue">New Issue</span></a>
+              </li>
+              <li>
+                <a href="pcng_issue_followup"><span i18n:translate="followup">Followup</span></a>
+              </li>
+              <li>
+                <a href="pcng_issue_references"><span i18n:translate="references">Referenzen</span></a>
+              </li>
+              <li>
+                <a href="pcng_issue_uploads"><span i18n:translate="uploads">Uploads</span></a>
+              </li>
+              <li>
+                <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
+                  <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
+                  <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
+                </a> 
+              </li>
+              <li>
+                <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
+                 <em tal:condition="choosen" i18n:translate="fullview_with_images">Full view with images</em> 
+                  <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
+                </a> 
+              </li>
+              <li>
+                <a tal:condition="here/haveReportlab" href="asPDF">
+                   <img src="pdflogo.gif" border="0" title="PDF">
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -119,7 +169,17 @@
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
       </div>
 
-      <metal:block tal:condition="python: mode.startswith('full')" >
+
+      <fieldset tal:condition="python: mode == 'full'" >
+        <legend i18n:translate="images">Images</legend>
+        <div tal:repeat="image python: here.objectValues(('Portal Image',))">
+          <span tal:content="image/getId" />:<br/>
+          <img tal:attributes="src image/absolute_url">
+          <br/>
+        </div>
+      </fieldset>
+
+      <metal:block tal:condition="python: mode=='full'" >
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
       </metal:block>
 

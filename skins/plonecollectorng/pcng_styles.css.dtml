@@ -18,7 +18,7 @@ div.collector_headline {
     padding: 0.5em;
 }
 
-div.headline_action {
+div #headline_action {
     font-size: 100%;
 }
 
@@ -35,7 +35,7 @@ div.collector_headline_right {
     text-align: left;
 }
 
-div.motd {
+div #motd {
     background: #cccccc;
     padding: 0.2em;
     font-weight: bold;
@@ -46,13 +46,13 @@ div.issue_metadata {
     padding: 0.2em;
 }
 
-div.transcriptheader {
-    background: #eeeeee;
+div #transcriptheader {
+    background: #dddddd;
     font-size: 120%;
     margin-top: 1em;
 }
 
-div.transcriptevent {
+div #transcriptevent {
     margin-top: 1px;
     margin-left: 15px;
 }
@@ -70,7 +70,7 @@ pre.collector_description{
     background: #eeeeee;
 }
 
-div.ticket_stats {
+div #ticket_stats {
     text-align: right;
 }
 
@@ -120,7 +120,7 @@ span.selected {
     font-weight: bold;
 }
 
-span.headline_action {
+span #headline_action {
    font-size: 90%;
 }
 
@@ -150,6 +150,5 @@ div #issue_transcript{
     clear: both;
     margin-top: 2em;
 }
-
 
 /* </dtml-with> */

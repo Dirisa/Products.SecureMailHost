@@ -11,32 +11,9 @@
       <img src="issue_icon.gif">
       <span tal:content="string:#${here/getId}: ${here/Title}" />
     </h2>
-    <div class="issue_view_navigation" 
-         tal:condition="python: template.id == 'pcng_issue_view'" 
-         tal:define="mode request/mode|string:simple">
-        
-      <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
-        <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
-        <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
-        &bull;
-      </a> 
-      <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
-        <em tal:condition="choosen" i18n:translate="fullview">Full view </em> 
-        <span tal:condition="not: choosen" i18n:translate="fullview">Full view </span> 
-        &bull;
-      </a> 
-      <a tal:define="choosen python: mode == 'fullimages'" href="pcng_issue_view?mode=fullimages">
-        <em tal:condition="choosen" i18n:translate="fullview_with_images">Full view with images</em> 
-        <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
-      </a> 
-      <a tal:condition="here/haveReportlab" href="asPDF">
-        &bull; <img src="pdflogo.gif" border="0" title="PDF">
-      </a>
-    </div>    
   </tal:if>
 
-  <div tal:condition="action|nothing"
-        class="headline_action">  
+  <div tal:condition="action|nothing" id="headline_action">  
     <h3>
     <span i18n:translate="" tal:content="string:${action}" />
     (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
@@ -54,13 +31,13 @@
     <span tal:condition="not: groups" i18n:translate="no_entries">No entries</span>
 
     <span tal:repeat="events groups">
-      <div class="transcriptheader">
+      <div id="transcriptheader">
         #<span tal:content="python: num_groups - repeat['events'].index" />:
          <span tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
       </div>
 
       <metal:block tal:repeat="event events">
-        <div class="transcriptevent">
+        <div id="transcriptevent">
           <tal:if tal:condition="python: event.getType()=='comment'">
             <pre tal:content="python: here.wrap_text(event.getValue('comment'), 80)"> comment </pre>
             <div style="text-align: right" >
