@@ -16,7 +16,7 @@ if mstool.isAnonymousUser():
 
 member = mstool.getAuthenticatedMember()
 saved_searches = member.getProperty('pcng_saved_searches', [])
-if saved_searches is (): saved_searches = []
+if saved_searches in (None, ()): saved_searches = []
 
 for search in saved_searches:
     if search.startswith(query_id + '::'):
