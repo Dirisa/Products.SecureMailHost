@@ -148,27 +148,12 @@
 
 
 <metal:div metal:define-macro="show_issues" i18n:domain="plonecollectorng">
-
-  <tal:def tal:define="results here/pcng_search_results; 
-                    Batch python: modules['Products.CMFPlone'].Batch;
-                    b_size python: request.get('batchsize', member.getProperty('pcng_hits_per_page', 10));
-                    b_start python: 0;
-                    b_start request/b_start|b_start;
-                    have_reportlab here/haveReportlab">
-
-    <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
-
-      <div metal:use-macro="here/batch_macros/macros/navigation" />
-
-      <metal:block tal:repeat="issue batch">
-        <div metal:use-macro="here/issue_macros/macros/issue_shortview" />
-      </metal:block>
-      <div metal:use-macro="here/batch_macros/macros/navigation" />
-    </div>
-    <div tal:condition="not: results">
-      <span class="label" i18n:translate="no_issues_found">No issues found</span>
-    </div>
-  </tal:def>
+  <tal:if tal:condition="python: context.getResults_representation() == 'list'">
+    <div metal:use-macro="context/pcng_result_macros/macros/results" />
+  </tal:if>
+  <tal:if tal:condition="python: context.getResults_representation() == 'table'" >
+    <div metal:use-macro="context/pcng_result_macros/macros/results2" />
+  </tal:if>
 </metal:div>    
 
 

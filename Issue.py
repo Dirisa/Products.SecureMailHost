@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.228 2004/10/10 14:26:09 ajung Exp $
+$Id: Issue.py,v 1.229 2004/11/12 15:37:52 ajung Exp $
 """
 
 import os, time, random
@@ -108,7 +114,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
         {'id': 'pcng_issue_pdf',
         'name': 'PDF',
         'action': 'asPDF',
-        'condition' : 'object/isPersistent',
+        'condition' : 'python: object.isPersistent() and object.haveReportlab()',
         'permissions': (View,),
         'category' : 'object_pcng_issue'
         },

@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: WorkflowTool.py,v 1.4 2004/09/21 14:51:28 ajung Exp $
+$Id: WorkflowTool.py,v 1.5 2004/11/12 15:37:52 ajung Exp $
 """
 
 # This code is in parts taken from Plone

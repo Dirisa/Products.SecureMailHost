@@ -5,7 +5,7 @@ View=0:Manager,TrackerAdmin
 title = Edit
 
 [validators]
-validators = validate_base
+validators = validate_base, pcng_validate_modes
 
 [actions]
 action.success = traverse_to:string:pcng_content_edit

@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.37 2004/07/04 09:27:53 ajung Exp $
+$Id: Translateable.py,v 1.38 2004/11/12 15:37:52 ajung Exp $
 """
 
 from types import UnicodeType, StringType

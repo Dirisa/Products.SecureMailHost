@@ -118,7 +118,7 @@
               </a>
 
               <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
-          </div>xxx
+          </div>
           <div class="right">
           <a i18n:translate="issue_artifacts_table_info_link"
              tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>

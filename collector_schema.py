@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.68 2004/10/10 15:40:52 ajung Exp $
+$Id: collector_schema.py,v 1.69 2004/11/12 15:37:52 ajung Exp $
 """
 
 
@@ -36,6 +42,14 @@ VOC_PARTICIPATION_MODE = DisplayList((
   ('anyone', 'Anyone'),                                       
 ))
 
+VOC_VIEW_MODE = DisplayList((
+  ('restrictedstaff', 'Assigned supporters, tracker administrator and issue reporter'),
+  ('staff', 'Only staff members'),
+  ('authenticated', 'Any authenticated user'),                                       
+  ('anyone', 'Anyone'),                                       
+))
+
+
 VOC_ISSUE_EMAIL_SUBMISSION = DisplayList((
   ('disabled', 'Disabled'),
   ('staff', 'Only staff members'),
@@ -51,11 +65,6 @@ VOC_REFERENCES_MODE= DisplayList((
 VOC_UPLOADS_MODE= DisplayList((
   ('disabled', 'Disabled'),
   ('enabled', 'Enabled'),
-))
-
-VOC_OWNER_VIEW_MODE = DisplayList((
-  ('yes', 'yes'),
-  ('no', 'no'),
 ))
 
 
@@ -100,6 +109,15 @@ VOC_COLLECTOR_PORTLETS = DisplayList((
   ('here/pcng_portlet_macros/macros/pcng_collector_portlet', 'Collector portlet'),
 ))
 
+VOC_RESULTS_REPRESENTATION = DisplayList((
+  ('table', 'as table'),
+  ('list', 'as flat list'),
+))
+
+VOC_NONSTAFF_TRANSCRIPT_FILTER = DisplayList((
+    ('public_private', 'all transcript entries'),
+    ('public_only', 'public transcript entries only') ,
+))
 
 VOC_PORTLETS = DisplayList((
   ('Plone', 'Plone portlets'),
@@ -305,6 +323,16 @@ schema = BaseSchema + Schema((
                 schemata='Look and Feel'
                 ),
 
+    StringField('results_representation',
+                vocabulary=VOC_RESULTS_REPRESENTATION,
+                widget=SelectionWidget(size=1,
+                                      format='select',
+                                      label='Representation of search results',
+                                      label_msgid='label_results_representation',
+                                      i18n_domain='plonecollectorng'),
+                default='list',
+                schemata='Look and Feel'
+                ),
 
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
@@ -317,22 +345,22 @@ schema = BaseSchema + Schema((
                 ),
 
     StringField('view_mode',
-                vocabulary=VOC_PARTICIPATION_MODE,
+                vocabulary=VOC_VIEW_MODE,
                 widget=SelectionWidget(format='select', 
                                        label='View mode (who can view issues)',
                                        label_msgid='label_view_mode',
-                                       i18n_domain='plonecollectorng'),
+                                       i18n_domain='plone#collectorng'),
                 default='staff',
                 schemata='Permissions',
                 ),
-
-    StringField('owner_view_mode',
-                vocabulary=VOC_OWNER_VIEW_MODE,
+    
+    StringField('nonstaff_transcript_filter',
+                vocabulary=VOC_NONSTAFF_TRANSCRIPT_FILTER,
                 widget=SelectionWidget(format='select', 
-                                       label='Issues are private to the issue owner and staff',
-                                       label_msgid='label_owner_view_mode',
+                                       label='Transcript entries visible to non-staff members',
+                                       label_msgid='label_view_mode',
                                        i18n_domain='plonecollectorng'),
-                default='no',
+                default='public_only',
                 schemata='Permissions',
                 ),
 

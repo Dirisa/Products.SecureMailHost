@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: notification_policies.py,v 1.9 2004/09/18 12:16:48 ajung Exp $
+$Id: notification_policies.py,v 1.10 2004/11/12 15:37:52 ajung Exp $
 """
 
 """ 
@@ -36,7 +42,7 @@ class BasePolicy:
             self.r[email] = {'email': email}
 
         # all managers
-        for uid in self.collector._managers: 
+        for uid in self.collector.getUsers().getUsersForRole('manage'): 
             self.r[uid] = {}   
     
     def clear(self):

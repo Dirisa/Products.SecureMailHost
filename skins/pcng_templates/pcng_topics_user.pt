@@ -33,7 +33,7 @@
         <td>
           <span tal:replace="python: ', '.join(users)" />
         </td>
-        <td tal:define="topic python: context.pcng_tool..quote(topic)">
+        <td tal:define="topic python: context.pcng_tool.quote(topic)">
           <a tal:attributes="href string:pcng_topics_user_form?topic=$topic">
             <img src="edit.gif" title="Edit assignment" i18n:attributes="title"/>
           </a>

@@ -1,11 +1,17 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com & others
+(C) 2002-2004, Andreas Jung
+
+ZOPYX Software Development and Consulting Andreas Jung
+Charlottenstr. 37/1
+D-72070 Tübingen, Germany
+Web: www.zopyx.com
+Email: info@zopyx.com 
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.15 2004/07/05 19:12:19 ajung Exp $
+$Id: graphviz.py,v 1.16 2004/11/12 15:37:52 ajung Exp $
 """
 
 ##########################################################################
