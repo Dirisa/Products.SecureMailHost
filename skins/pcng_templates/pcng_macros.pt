@@ -136,7 +136,7 @@
         <td>
           <span i18n:translate="" tal:content="event/getType" />
         </td>
-        <td tal:content="event/getField"/>
+        <td tal:content="event/getField|nothing"/>
         <td>
           <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
         </td>

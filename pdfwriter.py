@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.46 2004/09/23 18:55:58 ajung Exp $
+$Id: pdfwriter.py,v 1.47 2004/09/24 17:15:00 ajung Exp $
 """
 
 import os, cStringIO, tempfile
@@ -247,7 +247,7 @@ def pdfwriter(collector, ids):
         n = 1
 
         for group in issue.getTranscript().getEventsGrouped(reverse=0):
-            datestr = issue.toLocalizedTime(DateTime(group[0].created()), long_format=1)
+            datestr = issue.toLocalizedTime(DateTime(group[0].getCreated()), long_format=1)
             uid = group[0].getUser()
             header(u'#%d %s %s (%s)' % (n, translate(issue.lastAction(), issue.lastAction().capitalize(), as_unicode=1), datestr, uid)) 
 

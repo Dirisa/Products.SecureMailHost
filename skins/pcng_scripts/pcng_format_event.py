@@ -66,7 +66,7 @@ elif type == 'incremental':
         return s
 
     elif format == 'html':
-        s = '<span id="pcng_transcript_key">%s:</span> - %s, + %s' % (e.getField(), e.getRemoved(), e.getAdded())
+        s = '- %s, + %s' % (e.getRemoved(), e.getAdded())
         return s
 
     elif format == 'pdf':
@@ -85,7 +85,7 @@ elif type == 'upload':
         return s
 
     elif format == 'html':
-        s = '<span id="pcng_transcript_key">%s</span>: <a href="%s">%s</a>:</span> %s' % (TR('upload', 'Upload'), e.getFileId(), e.getFileId(), e.getComment())
+        s = '<a href="%s">%s</a>:</span> %s' % (e.getFileId(), e.getFileId(), e.getComment())
         return s
 
     elif format == 'pdf':
