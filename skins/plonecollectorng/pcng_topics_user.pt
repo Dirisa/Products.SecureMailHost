@@ -24,7 +24,7 @@
       </tr>
 
       <tal:loop tal:repeat="topic here/pcng_get_topics">
-        <tr>
+        <tr class="odd" tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')">
           <td valign="top"> 
             <span tal:content="topic" />
           </td>
@@ -36,9 +36,6 @@
               <span tal:content="user/username" /> 
             </tal:loop>
           </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
         </tr>
       </tal:loop>
 
