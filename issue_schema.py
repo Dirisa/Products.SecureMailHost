@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.7 2003/09/13 11:37:39 ajung Exp $
+$Id: issue_schema.py,v 1.8 2003/09/14 11:55:47 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -37,11 +37,13 @@ schema = OrderedSchema((
                 ),
     StringField('description',
                 searchable=1,
-                schemata='issuedata'
+                schemata='issuedata',
+                widget=TextAreaWidget,
                 ),
     StringField('solution',
                 searchable=1,
-                schemata='issuedata'
+                schemata='issuedata',
+                widget=TextAreaWidget,
                 ),
     StringField('progress_hours_estimated',
                 schemata='progress'
