@@ -2,6 +2,57 @@ PloneSoftwareCenter - Remaining issues
 
 Developer claiming item/comments is in [brackets].
 
+=======
+General
+=======
+
+- Downloadable File should have a hidden Short Name field, as the filename is
+  pulled from the uploaded file anyway.
+
+- RSS feed for Latest Releases, ability to have an RSS feed for every project
+  and category too.
+
+=========
+Design/UI
+=========
+
+- Page that lists all the downloads in a category, with batching. (needs template work)
+
+- Portlet listing the latest published Releases should have Category listed. This
+  requires the attribute metadata in the Catalog.
+
+- Now that we have data grids on licenses etc., we should probably clean it up
+a bit in the view templates for releases  (show links etc.)
+
+- Need to list the documentation types in the Additional resources box.
+
+
+====
+Misc
+====
+
+- DOAP feed support (Description of a Project)
+  http://www-106.ibm.com/developerworks/xml/library/x-osproj3/
+  - This will require us to expand the Software Project schema (Package)
+    a bit, to incorporate info about CVS/SVN etc, but it's all useful. :)
+
+- i18n support - right now there is no multilingual support.
+
+- Hard for regular members to find Package after it's been created, before
+  it's been published (Standard problem in Plone in general without Workspaces
+                        ~limi)
+
+- We may want to use the currentVersions field of a release to mark relases
+    which are not currently supported.
+
+- Display of "recommended" in psc_project_view.pt and psc_releasefolder_view.pt.
+    How does "recommended" work anyway? (Reviewers can flag something as a best-
+    of-breed product, but we need some guidelines for this first. ~limi.
+    Absolutely we need some guidelines here, or it's going to be a bloody 
+    political mess. - Joel
+    Indeed, that's why I haven't put any effort into this part yet ;) - limi)
+
+
 ===========================================
 PloneHelpCenter integration considerations:
 ===========================================
@@ -21,47 +72,6 @@ PloneHelpCenter integration considerations:
 
         - Active versions set in field on PSCProject.
 
-=======
-General
-=======
-
-- RSS feed for Latest Releases
-
-- DOAP feed support (Description of a Project)
-  http://www-106.ibm.com/developerworks/xml/library/x-osproj3/
-  - This will require us to expand the Software Project schema (Package)
-    a bit, to incorporate info about CVS/SVN etc, but it's all useful. :)
-
-- i18n support - right now there is no multilingual support.
-
-=========
-Design/UI
-=========
-
-- Hard for regular members to find Package after it's been created, before
-  it's been published (Standard problem in Plone in general without Workspaces
-                        ~limi)
-
-- We may want to use the currentVersions field of a release to mark relases
-    which are not currently supported.
-
-- Need to list the documentation types in the Additional resources box.
-
-- Display of "recommended" in psc_project_view.pt and psc_releasefolder_view.pt.
-    How does "recommended" work anyway? (Reviewers can flag something as a best-
-    of-breed product, but we need some guidelines for this first. ~limi. Absolutely
-    we need some guidelines here, or it's going to be a bloody political mess.
-    - Joel)
-
-- Correct platform icons for the download links.
-
-- Page that lists all the downloads in a category, with batching. (needs template work)
-
-- Portlet listing the latest published Releases should have Category listed. This
-  requires the attribute metadata in the Catalog.
-
-- Now that we have data grids on licenses etc., we should probably clean it up
-a bit in the view templates for releases  (show links etc.)
 
 ========================
 Nice-to-have-but-not-yet
