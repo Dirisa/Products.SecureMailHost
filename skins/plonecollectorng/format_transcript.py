@@ -4,6 +4,9 @@
 def nl(text=''):
     l.append(text)
 
+def indent_block(text):
+    return '\n'.join(['    %s' % line    for line in text.split('\n')])
+
 import DateTime
 
 l = []
@@ -23,9 +26,9 @@ for group in groups:
     for ev in group:
         if ev.type == 'comment':
             nl('Comment:')
-            nl(ev.comment)
+            nl(indent_block(ev.comment))
         elif ev.type == 'action':
-            nl('Action: %s"' % ev.action)
+            nl('Action: %s' % ev.action)
         elif ev.type == 'change':
             nl('Changed: %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new))
         elif ev.type == 'incrementalchange':
