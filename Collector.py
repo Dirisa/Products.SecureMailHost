@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.89 2003/12/12 07:40:36 ajung Exp $
+$Id: Collector.py,v 1.90 2003/12/12 09:24:33 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -328,6 +328,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         states.sort()
         return states
 
+    security.declareProtected(AddCollectorIssue, 'add_issue')
     def add_issue(self, REQUEST=None, RESPONSE=None):
         """ create a new issue """
         self._num_issues += 1
@@ -340,6 +341,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                       fieldset='issuedata')
         if RESPONSE is None:
             return id
+
+    createObject = add_issue   # override Plone's default object creation method
 
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
