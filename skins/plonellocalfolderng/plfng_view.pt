@@ -162,7 +162,7 @@
 	                                  tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
 	                              <a tal:condition="python:item_typeinfo.Title() == 'application/zip' and member.has_permission('Modify portal content', here) and fileUnpackingAllowed"
 	                                  tal:attributes="href string:${item/absolute_url}?action=unpack">Unzip</a>
-	                              <a tal:condition="python:member.has_permission('Delete objects', here)"
+	                              <a tal:condition="python:member.has_permission('Delete objects', here) and item_typeinfo.Title()!='directory'"
 	                                  tal:attributes="href string:${item/absolute_url}?action=delete">Delete</a>    
 	                           </div>       
                             </td>
