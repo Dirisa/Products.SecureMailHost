@@ -5,7 +5,7 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=item, value
+##parameters=item, value, contenttypes=0
 
 if same_type(item, 0): item = str(item)
 if same_type(value, 0): value = str(value)
