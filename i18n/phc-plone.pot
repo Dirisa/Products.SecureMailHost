@@ -23,8 +23,8 @@ msgstr "You can add a Frequently Asked Question (preferrably with an answer), an
 msgid "description_edit_faqfolder"
 msgstr "This is a folder that holds FAQs, and it allows you to display individual sections."
 
-msgid "FAQ Area"
-msgstr "FAQ Area"
+msgid "FAQ Section"
+msgstr "FAQ Section"
 
 msgid "HelpCenterFAQFolder"
 msgstr "FAQ Folder"
@@ -43,8 +43,8 @@ msgstr "Help Center"
 msgid "HelpCenter"
 msgstr "Help Center"
 
-msgid "How-to Area"
-msgstr "How-to Area"
+msgid "How-to Section"
+msgstr "How-to Section"
 
 msgid "HelpCenterHowToFolder"
 msgstr "HelpCenter How To Folder"
@@ -55,8 +55,8 @@ msgstr "This is a folder that holds PHC content"
 msgid "PHCFolder"
 msgstr "Plone Help Center Folder"
 
-msgid "How-to Area"
-msgstr "How-to Area"
+msgid "How-to Section"
+msgstr "How-to Section"
 
 msgid "HelpCenterHowToFolder"
 msgstr "Help Center How To Folder"
@@ -67,8 +67,8 @@ msgstr "How-to"
 msgid "HelpCenterHowTo"
 msgstr "Help Center How-To"
 
-msgid "Tutorial Area"
-msgstr "Tutorial Area"
+msgid "Tutorial Section"
+msgstr "Tutorial Section"
 
 msgid "HelpCenterTutorialFolder"
 msgstr "Help Center Tutorial Folder"
@@ -88,8 +88,8 @@ msgstr "Help Center Tutorial"
 msgid "description_edit_tutorial"
 msgstr "A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content."
 
-msgid "Error Reference Area"
-msgstr "Error Reference Area"
+msgid "Error Reference Section"
+msgstr "Error Reference Section"
 
 msgid "HelpCenterErrorReferenceFolder"
 msgstr "Help Center Error Reference Folder"
@@ -112,8 +112,8 @@ msgstr "Help Center links are links to other documentation, etc."
 msgid "HelpCenterLink"
 msgstr "Help Center Link"
 
-msgid "Link Area"
-msgstr "Link Area"
+msgid "Link Section"
+msgstr "Link Section"
 
 msgid "description_edit_glossary"
 msgstr "This is a folder that holds Definitions, and it lists them in a dictionary-like fashion, with anchor links."
@@ -132,4 +132,19 @@ msgstr "Help Center Definition"
 
 msgid "Definition"
 msgstr "Definition"
+
+msgid "Video Section"
+msgstr "Video Section"
+
+msgid "HelpCenterInstructionalVideoFolder"
+msgstr "Help Center Instructional Video Folder"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "HelpCenterInstructionalVideo"
+msgstr "Help Center Instructional Video"
+
+msgid "Video Section"
+msgstr "Video Section"
 

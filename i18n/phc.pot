@@ -714,6 +714,57 @@ msgstr "This Link applies to:"
 msgid "phc_definition_applies_to"
 msgstr "This Definition applies to:"
 
+msgid "phc_video_applies_to"
+msgstr "This Video applies to:"
+
+msgid "phc_help_detailed_video"
+msgstr "Brief explanation of the video's content."
+
+msgid "phc_label_detailed_video"
+msgstr "Summary"
+
+msgid "phc_help_videofile_description"
+msgstr "Click 'Browse' to upload a Flash .swf file."
+
+msgid "phc_label_videofile_description"
+msgstr "Flash File (.swf)"
+
+msgid "phc_label_video_screenshot"
+msgstr "Screenshot"
+
+msgid "phc_help_video_screenshot"
+msgstr "Add a screenshot by clicking the \'Browse\' button. Add a screenshot that highlights the content of the instructional video."
+
+msgid "phc_help_video_duration"
+msgstr "Length (in minutes) of the video"
+
+msgid "phc_label_video_duration"
+msgstr "Duration"
+
+msgid "phc_help_video_width"
+msgstr "Width of the video"
+
+msgid "phc_label_video_width"
+msgstr "Width"
+
+msgid "phc_help_video_height"
+msgstr "Height of the video"
+
+msgid "phc_label_video_height"
+msgstr "Height"
+
+msgid "phc_desc_video_folder"
+msgstr "Description for the Video section."
+
+msgid "phc_label_video_folder"
+msgstr "Description"
+
+msgid "latest_video"
+msgstr "latest Video"
+
+msgid "All_video"
+msgstr "All Video"
+
 # MSB end mofification
 
 

@@ -668,6 +668,59 @@ msgstr "Questo collegamento si applica alle versioni:"
 msgid "phc_definition_applies_to"
 msgstr "Questa definizione si applica alle versioni:"
 
+msgid "phc_video_applies_to"
+msgstr "Questo Video si applica alle versioni:"
+
+
+msgid "phc_help_detailed_video"
+msgstr "Breve spiegazione del contenuto del video."
+
+msgid "phc_label_detailed_video"
+msgstr "Sommario"
+
+msgid "phc_help_videofile_description"
+msgstr "Premi 'Mostra' per caricare un file Flash (.swf)."
+
+msgid "phc_label_videofile_description"
+msgstr "File Flash (.swf)"
+
+msgid "phc_label_video_screenshot"
+msgstr "Foto del video"
+
+msgid "phc_help_video_screenshot"
+msgstr "Aggiungi una foto del video premendo il tasto \'Mostra\'. Aggiugi una foto del video che evidenzi il contenuto del video didattico."
+
+msgid "phc_help_video_duration"
+msgstr "Durata (in minuti) del video"
+
+msgid "phc_label_video_duration"
+msgstr "Durata"
+
+msgid "phc_help_video_width"
+msgstr "Larghezza del video"
+
+msgid "phc_label_video_width"
+msgstr "Larghezza"
+
+msgid "phc_help_video_height"
+msgstr "Altezza del video"
+
+msgid "phc_label_video_height"
+msgstr "Altezza"
+
+
+msgid "phc_desc_video_folder"
+msgstr "Descrizione della sezione video."
+
+msgid "phc_label_video_folder"
+msgstr "Descrizione"
+
+
+msgid "latest_video"
+msgstr "Gli ultimi Video"
+
+msgid "All_video"
+msgstr "Tutti i Video"
 
 # MSB end mofification
 

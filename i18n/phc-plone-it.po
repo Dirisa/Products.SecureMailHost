@@ -23,8 +23,8 @@ msgstr "Puoi aggiungere una Domanda Frequente (preferibilmente con una risposta)
 msgid "description_edit_faqfolder"
 msgstr "Questa e' una cartella che contiene Domande Frequenti, e permette di visualizzare singole sezioni."
 
-msgid "FAQ Area"
-msgstr "Area Domande Frequenti"
+msgid "FAQ Section"
+msgstr "Sezione Domande Frequenti"
 
 msgid "HelpCenterFAQFolder"
 msgstr "Cartella delle Domande Frequenti"
@@ -42,10 +42,6 @@ msgstr "Centro di Supporto"
 msgid "HelpCenter"
 msgstr "Centro di Supporto"
 
-
-msgid "How-to Area"
-msgstr "Area Ricette"
-
 msgid "HelpCenterHowToFolder"
 msgstr "Cartella delle Ricette"
 
@@ -57,8 +53,8 @@ msgid "PHCFolder"
 msgstr "Cartella del Centro di Supporto"
 
 
-msgid "How-to Area"
-msgstr "Area Ricette"
+msgid "How-to Section"
+msgstr "Sezione Ricette"
 
 msgid "HelpCenterHowToFolder"
 msgstr "Cartella delle Ricette"
@@ -70,8 +66,8 @@ msgstr "Ricette"
 msgid "HelpCenterHowTo"
 msgstr "Ricette"
 
-msgid "Tutorial Area"
-msgstr "Area Guide"
+msgid "Tutorial Section"
+msgstr "Sezione Guide"
 
 msgid "HelpCenterTutorialFolder"
 msgstr "Cartella delle Guide"
@@ -93,8 +89,8 @@ msgstr "Guida"
 msgid "description_edit_tutorial"
 msgstr "Una Guida puo' contenere Pagine della guida, Immagini e File. L'ordine nell'indice e' dettato dall'ordine nella cartella della guida, utilizzare i normali selettori Su/Giu' per cambiare l'ordine del contenuto."
 
-msgid "Error Reference Area"
-msgstr "Area Decodifica Errori"
+msgid "Error Reference Section"
+msgstr "Sezione Decodifica Errori"
 
 msgid "HelpCenterErrorReferenceFolder"
 msgstr "Cartella Decodifica Errori"
@@ -119,8 +115,8 @@ msgstr "I Collegamenti del Centro di Supporto sono collegamenti ad altra documen
 msgid "HelpCenterLink"
 msgstr "Collegamento"
 
-msgid "Link Area"
-msgstr "Area Collegamenti"
+msgid "Link Section"
+msgstr "Sezione Collegamenti"
 
 
 msgid "description_edit_glossary"
@@ -140,6 +136,18 @@ msgstr "Definizione"
 
 msgid "Definition"
 msgstr "Definizione"
+
+msgid "HelpCenterInstructionalVideoFolder"
+msgstr "Cartella dei video didattici del Centro di Supporto"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "HelpCenterInstructionalVideo"
+msgstr "Video didattico"
+
+msgid "Video Section"
+msgstr "Sezione Video"
 
 
 
