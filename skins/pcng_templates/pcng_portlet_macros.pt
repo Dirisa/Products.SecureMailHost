@@ -83,16 +83,15 @@
 <div metal:define-macro="pcng_collector_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_collector_portlet">
     <h5 i18n:translate="collector_actions">Collector actions</h5>
-    <div class="portletBody"  id="pcng_portlet_collector"
-         tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
-        <div class="pcng_action" tal:repeat="a actions/pcng_collector|nothing">
-            <a tal:attributes="href a/url">
-              <span class="pcng_action"
-                    i18n:translate="" 
-                    tal:attributes="id a/id"
-                    tal:content="a/name" />
-            </a>
-        </div>
+    <div class="portletBody"  id="pcng_portlet_collector">
+      <div class="pcng_action" tal:repeat="a actions/pcng_collector|nothing">
+          <a tal:attributes="href a/url">
+            <span class="pcng_action"
+                  i18n:translate="" 
+                  tal:attributes="id a/id"
+                  tal:content="a/name" />
+          </a>
+      </div>
     </div>
   </div>
 </div>
@@ -161,8 +160,8 @@
 <div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_issue_portlet">
     <h5 i18n:translate="issue_actions">Issue actions</h5>
-    <div class="portletBody" id="pcng_portlet_issue"
-         tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
+     <span tal:content="python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here)"/>
+    <div class="portletBody" id="pcng_portlet_issue">
       <div class="pcng_action" loop tal:repeat="a actions/pcng_issue|nothing">
         <a tal:attributes="href a/url">
           <span i18n:translate="" 
