@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.86 2003/11/20 16:08:33 ajung Exp $
+$Id: Issue.py,v 1.87 2003/11/21 07:11:46 ajung Exp $
 """
 
 import sys, os, time
@@ -400,11 +400,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
         """
-        field_names = [ f.getName() for f in self.Schema().fields()]
+        schema = self.Schema()
+        field_names = [ f.getName() for f in schema.fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
             new = REQUEST.get(name, None)
-            old = getattr(self, name, '')
+            old = schema[name].storage.get(name, self)
             self._transcript.addChange(name, old, new)
 
     def post_validate(self, REQUEST, errors):
@@ -448,7 +449,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
         l = []
         for field in self.Schema().fields():
-            v = getattr(self, field.getName(), None)
+            v = field.storage.get(field.getName(),self)
             if v:
                 if callable(v): v = v()
                 l.append( str(v) )
