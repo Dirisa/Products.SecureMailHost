@@ -18,6 +18,7 @@ from config import X_MAILER
 import os, sys
 import smtplib
 import email.Message
+import email.Utils
 import socket
 from DateTime import DateTime
 from random import randint
@@ -49,10 +50,8 @@ class Mail:
         if not message.has_key('X-Mailer'):
             message['X-Mailer'] = X_MAILER
         if not message.has_key('Message-Id'):
-            date = DateTime().strftime('%Y%m%d%H%M%S')
-            rand = randint(100000, 999999)
-            host = socket.gethostname()
-            message['Message-Id'] = '<%s.%d@%s>' % (date, rand, host)
+            fqdn = socket.getfqdn()
+            message['Message-Id'] = email.Utils.make_msgid(fqdn)
 
         self.message = message
         

@@ -4,10 +4,14 @@ SecureMailHost
 1.0-rc1 - 2005-03-02
 --------------------
 
+ * Fixed [ 1047475 ] message-ids not RFC 2822 compliant. SMH is using
+   email.Utils.make_msgid with the fqdn as additional argument.
+   [tiran]
+
  * Ripped off the py_compatible module and the threaded feature from SMH.
    py_compatible isn't required any more because Plone needs Zope 2.7.4
    with the new email package and the threaded feature is too experimental.
-   Tiran
+   [tiran]
 
 2005-01-27
 ----------------
