@@ -599,5 +599,56 @@ msgstr "Il testo della pagina."
 msgid "phc_label_body_tutorial"
 msgstr "Corpo"
 
+
+msgid "description_edit_ErrorReference"
+msgstr "Descizione della Cartella Decodifica Errori."
+
+msgid "description_label_ErrorReference"
+msgstr "Descrizione"
+
+
+msgid "phc_desc_body_ErrorReference"
+msgstr "Spiegazione dell'errore."
+
+msgid "phc_label_body_ErrorReference"
+msgstr "Corpo"
+
+msgid "phc_desc_ErrorReference"
+msgstr "Inserire una breve descrizione"
+
+msgid "phc_label_ErrorReference"
+msgstr "Descrizione"
+
+
+msgid "description_edit_Link_Container"
+msgstr "Dedscrizione della cartella dei Collegamenti."
+
+
+msgid "description_edit_Link"
+msgstr "Descrizione del Collegamento."
+
+msgid "description_label_Link"
+msgstr "Descrizione"
+
+
+msgid "phc_desc_link_url"
+msgstr "Indirizzo sul Web"
+
+msgid "phc_label_link_url"
+msgstr "URL"
+
+
+msgid "phc_desc_folder_glossary"
+msgstr "Descrizione del Glossario."
+
+msgid "phc_label_folder_glossary"
+msgstr "Descrizione"
+
+msgid "phc_desc_definition"
+msgstr "Una spiegazione del termine."
+
+msgid "phc_label_definition"
+msgstr "Definizione"
+
 # MSB end mofification
 

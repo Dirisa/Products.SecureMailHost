@@ -92,3 +92,57 @@ msgstr "Guida"
 
 msgid "description_edit_tutorial"
 msgstr "Una Guida puo' contenere Pagine della guida, Immagini e File. L'ordine nell'indice e' dettato dall'ordine nella cartella della guida, utilizzare i normali selettori Su/Giu' per cambiare l'ordine del contenuto."
+
+msgid "Error Reference Area"
+msgstr "Area Decodifica Errori"
+
+msgid "HelpCenterErrorReferenceFolder"
+msgstr "Cartella Decodifica Errori"
+
+
+msgid "Error Reference"
+msgstr "Decodifica Errore"
+
+msgid "HelpCenterErrorReference"
+msgstr "Decodifica Errore"
+
+msgid "HelpCenterLinkFolder"
+msgstr "Cartella Collegamenti"
+
+msgid "description_edit_linkfolder"
+msgstr "Questa cartella contiene i Collegamenti del Centro di Supporto, e consente la visualizzazzione di singole sezioni."
+
+msgid "description_edit_link"
+msgstr "I Collegamenti del Centro di Supporto sono collegamenti ad altra documentazione, eccetera."
+
+
+msgid "HelpCenterLink"
+msgstr "Collegamento"
+
+msgid "Link Area"
+msgstr "Area Collegamenti"
+
+
+msgid "description_edit_glossary"
+msgstr "Questa e' una cartella che contiene Definizioni, e le presenta come un dizionario, con collegamenti ipertestuali."
+
+msgid "HelpCenterGlossary"
+msgstr "Glossario"
+
+msgid "Glossary"
+msgstr "Glossario"
+
+msgid "description_edit_definition"
+msgstr "Puoi aggiungere una Definizione al Glossario, e sara' rivista ed approvata dalla nostra squadra della documentazione."
+
+msgid "HelpCenterDefinition"
+msgstr "Definizione"
+
+msgid "Definition"
+msgstr "Definizione"
+
+
+
+
+
+

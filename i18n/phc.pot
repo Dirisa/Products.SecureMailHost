@@ -649,6 +649,54 @@ msgid "phc_label_body_tutorial"
 msgstr "Body text"
 
 
+msgid "description_edit_ErrorReference"
+msgstr "Description for the Error Reference Container."
+
+
+msgid "description_label_ErrorReference"
+msgstr "Description"
+
+
+msgid "phc_desc_body_ErrorReference"
+msgstr "Explanation of the error."
+
+msgid "phc_label_body_ErrorReference"
+msgstr "Body text"
+
+msgid "phc_desc_ErrorReference"
+msgstr "Enter a brief description"
+
+msgid "phc_label_ErrorReference"
+msgstr "Description"
+
+
+msgid "description_edit_Link_Container"
+msgstr "Description for the Link Container."
+
+
+msgid "description_edit_Link"
+msgstr "Description for the Link."
+
+msgid "description_label_Link"
+msgstr "Description"
+
+msgid "phc_desc_link_url"
+msgstr "Web address"
+
+msgid "phc_label_link_url"
+msgstr "URL"
+
+msgid "phc_desc_folder_glossary"
+msgstr "Description of the Glossary."
+
+msgid "phc_label_folder_glossary"
+msgstr "Description"
+
+msgid "phc_desc_definition"
+msgstr "An explanation of the term."
+
+msgid "phc_label_definition"
+msgstr "Definition"
 
 # MSB end mofification
 

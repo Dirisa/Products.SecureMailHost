@@ -88,3 +88,48 @@ msgstr "Help Center Tutorial"
 msgid "description_edit_tutorial"
 msgstr "A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content."
 
+msgid "Error Reference Area"
+msgstr "Error Reference Area"
+
+msgid "HelpCenterErrorReferenceFolder"
+msgstr "Help Center Error Reference Folder"
+
+msgid "Error Reference"
+msgstr "Error Reference"
+
+msgid "HelpCenterErrorReference"
+msgstr "Help Center Error Reference"
+
+msgid "HelpCenterLinkFolder"
+msgstr "Help Center Link Folder"
+
+msgid "description_edit_linkfolder"
+msgstr "This is a folder that holds Help Center Links, and it allows you to display individual sections."
+
+msgid "description_edit_link"
+msgstr "Help Center links are links to other documentation, etc."
+
+msgid "HelpCenterLink"
+msgstr "Help Center Link"
+
+msgid "Link Area"
+msgstr "Link Area"
+
+msgid "description_edit_glossary"
+msgstr "This is a folder that holds Definitions, and it lists them in a dictionary-like fashion, with anchor links."
+
+msgid "HelpCenterGlossary"
+msgstr "Help Center Glossary"
+
+msgid "Glossary"
+msgstr "Glossary"
+
+msgid "description_edit_definition"
+msgstr "You can add a Definition to the Glossary, and it will be reviewed and approved by our documentation team."
+
+msgid "HelpCenterDefinition"
+msgstr "Help Center Definition"
+
+msgid "Definition"
+msgstr "Definition"
+
