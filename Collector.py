@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.15 2003/09/07 10:24:27 ajung Exp $
+$Id: Collector.py,v 1.16 2003/09/07 17:51:56 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -60,6 +60,11 @@ class Collector(BaseFolder, SchemaEditor):
         'action': 'pcng_notifications',
         'permissions': (ManageCollector,)
         },
+        {'id': 'pcng_maintainance',
+        'name': 'Maintainance',
+        'action': 'pcng_maintainance',
+        'permissions': (ManageCollector,)
+        },
         )
 
     __ac_roles__ = ('Manager', 'TrackerAdmin', 'Supporter', 'Reporter')
@@ -97,6 +102,7 @@ class Collector(BaseFolder, SchemaEditor):
             old = getattr(self, name, None)
             if old:
                 if old != new:
+                    print old,new, type(old), type(new)
                     te.addChange(name, old, new)
 
         self.transcript.add(te)
@@ -235,6 +241,28 @@ class Collector(BaseFolder, SchemaEditor):
         if RESPONSE is not None: 
             RESPONSE.redirect(self.absolute_url() + "/" + id + "/base_edit")
 
+    ######################################################################
+    # Maintainance
+    ######################################################################
+
+    def update_schema_for_issues(self, RESPONSE=None):
+        """ update stored issue schema for all issues """
+
+        schema = self.getWholeSchema()
+        for issue in self.objectValues('Issue'):
+            issue.updateSchema(schema)
+
+        if RESPONSE is not None:
+            RESPONSE.redirect('pcng_maintainance?portal_status_message=Issues updated')
+
+    def reindex_issues(self, RESPONSE=None):
+        """ reindex all issues """
+
+        for issue in self.objectValues('Issue'):
+            issue.reindexObject()
+
+        if RESPONSE is not None:
+            RESPONSE.redirect('pcng_maintainance?portal_status_message=Issues reindexed')
 
 registerType(Collector)
 
