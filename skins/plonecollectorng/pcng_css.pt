@@ -5,6 +5,11 @@ span.label {
     font-weight: bold;
 }
 
+div.border {
+    border: 1; solid black;
+
+}
+
 div.collector_headline {
     background:  #dcdcff;
     font-size: 120%;
@@ -52,6 +57,11 @@ th.staff {
 
 a.schemata_legend {
     text-transform: capitalize;
+}
+
+a.selected {
+    font-weight: bold;
+    font-size: 120%;
 }
 
 fieldset {
