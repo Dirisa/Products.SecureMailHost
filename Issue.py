@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.36 2003/10/03 11:59:52 ajung Exp $
+$Id: Issue.py,v 1.37 2003/10/05 12:07:22 ajung Exp $
 """
 
 import sys, os
@@ -202,7 +202,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def delete_reference(self, issue_url, RESPONSE=None):
         """ delete a reference given by its position """
 
-        issue = self.restrictedTraverse(issue_url)
+        issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
         self.deleteReference(issue)
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been deleted')
 
@@ -210,7 +210,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ add a new reference (record object) """
 
         tracker_url = unquote(reference.tracker)
-        tracker = self.restrictedTraverse(tracker_url)
+        tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
         if not tracker:
             raise ValueError('Tracker does not exist: %s' % tracker_url)
 
