@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.159 2004/04/12 15:30:20 ajung Exp $
+$Id: Collector.py,v 1.160 2004/04/13 14:25:12 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -718,6 +718,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         issue =  self._getOb(id)
         issue.post_creation_actions()
         issue.setParameters(R)
+        issue.changeOwnership(member)
         transcript = issue.getTranscript()
         transcript.addComment(u'Issue submitted through email')
 
