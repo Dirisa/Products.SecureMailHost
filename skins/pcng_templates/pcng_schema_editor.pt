@@ -80,7 +80,7 @@
                 <div>
                   <input type="text" value="" size="40" 
                          name="fielddata.default:record:string"
-                         tal:attributes="value field/getDefault"/>
+                         tal:attributes="value python: here.pcng_field_default(field)"/>
                 </div>
               </div>
 
