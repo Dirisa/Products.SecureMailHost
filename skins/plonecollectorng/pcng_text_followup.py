@@ -5,7 +5,7 @@
 # will used for followups.
 
 def quote_text(text):
-    lines = text.split('\n')
+    lines = context.wrap_text(text).split('\n')
     lines = [':' + l for l in lines]
     return '\n'.join(lines)
 
