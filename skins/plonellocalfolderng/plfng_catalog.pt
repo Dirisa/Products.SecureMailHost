@@ -5,57 +5,75 @@
 
 <body>
 
-
 <div metal:fill-slot="main"
-     tal:define="folderfilter python:request.get('folderfilter', '');
-                 global decodedFilter python:here.decodeFolderFilter(folderfilter);
-                 global filterValues decodedFilter;
-                 global filter decodedFilter;
-                 standalone python:1;
-                 startTime python:DateTime();
-                 filesCataloged python:here.catalogContents();
-                 stopTime python:DateTime();
-                 elapsedTime python:(stopTime-startTime)*86400.0;
-                  
-                 mtool mtool|here/portal_membership;
-                 myfolder python:here.absolute_url()==mtool.getHomeUrl();">
+     tal:define="action python:request.get('action','none')">
+  <div>
+    <div tal:define="folder_props  python:here.getProperties(REQUEST=request);
+                     total_size    python:folder_props.get('size',0);
+                     total_folders python:folder_props.get('folders',0);
+                     total_files   python:folder_props.get('files',0);">
+       <br>
+       <b># files contained in this folder = </b>
+       <span tal:content="total_files">
+         files
+       </span> (
+       <span tal:content="total_size">
+         size
+       </span> bytes)
+       <br><br>
+       
+       <fieldset tal:condition="python:action!='catalog_now'">
+		 <legend>Catalog Folder Contents:</legend>
+		 	<br>
+		 	Note: This implementation is <b>NOT</b> complete!!! Use at your own risk!!!
+		 	<br>
+		 	<br>
+		 	This functionality depends on the TextIndexNG2 product and the proper 
+		 	configuration of the ZCatalog (ie, 'portal catalog') instance.
+		 	Specific documentation will be available shortly.
+		 	<br>
+		 	<br>
+		 	This 'catalog folder contents' action utilizes the TextIndexNG2 product 
+		 	to perform full text index cataloging of the files contained by the
+		 	PLFNG instance.  <u>Why catalog</u>? cataloging allows ZCatalog searches of 
+		 	the text contents of the files contained/proxy'd by PLFNG instance(s).
+		 	<u>Why use TextIndexNG2</u>? TextIndexNG2 appears to be a fast and
+		 	extensible product to quickly extract and catalog the text contents of
+		 	a variety of file types such as .html, .pdf, .ppt, .doc, etc.  It provides,
+		 	out of the box, text extract/conversion for some file types (eg, html), 
+		 	and relies on external system utilities (eg, wvWare, pdftotext, etc) for
+		 	other file types.
+		 	<br>
+		 	<br>
+         <center>
+	        <a class="button" tal:attributes="href string:${request/URL1}/plfng_catalog?action=catalog_now">Catalog Contents</a>
+  	      </center>
 
-    <div>
-                <div tal:define="folder_props  python:here.getProperties(REQUEST=request);
-                               total_size    python:folder_props.get('size',0);
-                               total_folders python:folder_props.get('folders',0);
-                               total_files   python:folder_props.get('files',0);">
-                               
-			           <br>
-			           <b># files contained in this folder = </b>
-			           <span tal:content="total_files">
-			             files
-			           </span> (
-			           <span tal:content="total_size">
-			             size
-			           </span> bytes)
-			           <br><br>
+	    </fieldset>
 
-			           <b># files cataloged = </b>
-			           <span tal:content="filesCataloged">
-			             files
-			           </span>
-			           <br><br>
-			           <b>elapsed time = </b>
-			           <span tal:content="elapsedTime">
-			             files
-			           </span>
-			           <br><br>
-			           <b>average index rate = </b>
-			           <span tal:content="python:total_size/elapsedTime/1024.0">
-			             files
-			           </span> (KB/sec)
-
-			           
-                </div>
-
+       <div tal:condition="python:action=='catalog_now'"
+            tal:define="startTime python:DateTime();">
+          <div tal:define="filesCataloged python:here.catalogContents();
+        							 stopTime python:DateTime();
+        							 elapsedTime python:(stopTime-startTime)*86400.0;">
+           <b># files cataloged = </b>
+           <span tal:content="filesCataloged">
+             files
+           </span>
+           <br><br>
+           <b>elapsed time = </b>
+           <span tal:content="elapsedTime">
+             files
+           </span>
+           <br><br>
+           <b>average index rate = </b>
+           <span tal:content="python:total_size/elapsedTime/1024.0">
+             files
+           </span> (KB/sec)
+          </div>
+       </div>   
     </div>
-
+  </div>
 </div>
 
 </body>
