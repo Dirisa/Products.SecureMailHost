@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.113 2004/01/15 17:25:45 ajung Exp $
+$Id: Issue.py,v 1.114 2004/01/16 20:50:45 ajung Exp $
 """
 
 import sys, os, time
@@ -118,6 +118,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             wf = getToolByName(self, 'portal_workflow')
             wf.notifyCreated(self)
 
+        self._transcript.setEncoding(self.getSiteEncoding())
         self.initializeArchetype()
                                                 
     def manage_beforeDelete(self, item, container):

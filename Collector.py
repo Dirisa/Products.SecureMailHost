@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.104 2004/01/12 20:13:08 ajung Exp $
+$Id: Collector.py,v 1.105 2004/01/16 20:50:45 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -124,6 +124,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         ti.immediate_view = 'pcng_issue_view'
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
+
+        self._transcript.setEncoding(self.getSiteEncoding())
         
     security.declareProtected(ManageCollector, 'setup_collector_catalog')
     def setup_collector_catalog(self, RESPONSE=None):
