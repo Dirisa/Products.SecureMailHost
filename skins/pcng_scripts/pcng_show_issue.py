@@ -10,5 +10,6 @@ if hasattr(context, issuenumber):
         url = "%s/%s" % (context.absolute_url(), issuenumber)
     context.REQUEST.RESPONSE.redirect(url)
 else:
-    raise ValueError('There is no issue #%s' % issuenumber)
+    context.REQUEST.RESPONSE.redirect(context.absolute_url() + "/base_view?portal_status_message=%s" % 
+        context.Translate('no_such_issue', 'No such issue'))
 
