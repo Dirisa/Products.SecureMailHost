@@ -58,14 +58,15 @@ schema = BaseFolderSchema +  Schema((
     marshall=PrimaryFieldMarshaller(),
  )
 
-class HowTo(BaseFolder):
+class HelpCenterHowTo(BaseFolder):
     """This is a howto document content object, to which you can attach images and
     files.
     """
 
     schema = schema
     archetype_name = 'How-to'
-    meta_type = 'HowTo'
+    meta_type = 'HelpCenterHowTo'
+    global_allow = 0
     filter_content_types = 1
     allowed_content_types = ('Image', 'File','PloneImage','PloneFile')
 
@@ -78,7 +79,7 @@ class HowTo(BaseFolder):
         {
         'id': 'attachments',
         'name': 'Attachments',
-        'action': 'string:${object_url}/howto_contents',
+        'action': 'string:${object_url}/howto_attachments',
         'permissions': (CMFCorePermissions.View,)
         },
         
@@ -115,4 +116,4 @@ class HowTo(BaseFolder):
                  result=version
          return result
 
-registerType(HowTo)
+registerType(HelpCenterHowTo)

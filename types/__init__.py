@@ -1,3 +1,7 @@
-import FaqFolder
-import FaqEntry
+import HelpCenter
+
+import FAQFolder
+import FAQ
+
+import HowToFolder
 import HowTo

@@ -29,12 +29,12 @@
                 <p style="discreet" tal:condition="python: not full and not req_section">[ <a tal:attributes="href python:'%s?full=1&section=%s' % ( here.absolute_url(), pss.url_quote(section) )">View section in full</a> ]</p>
 
                 <ul tal:condition="not: full">
-                    <li tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFaqEntry', getSections=section, path=faqpath)">
+                    <li tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
                     <a href="" tal:content="entry/Title"
                         tal:attributes="href entry/getURL">FAQ Question</a>
                     </li>
                 </ul>
-                <div tal:condition="full" tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFaqEntry', getSections=section, path=faqpath)">
+                <div tal:condition="full" tal:repeat="entry python: here.portal_catalog(portal_type='HelpCenterFAQ', getSections=section, path=faqpath)">
                     <h3 tal:content="entry/Title"></h3>
                     <tal:question define="entry entry/getObject">
                     <div style="font-weight: bold; font-style: italic" tal:content="structure entry/getQuestion" tal:condition="python: entry.getQuestion() != entry.Title()"></div>

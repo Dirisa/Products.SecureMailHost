@@ -8,7 +8,7 @@ default_output_type = 'text/html',
               allowable_content_types = ("text/html", "text/structured"),
               widget=TextAreaWidget(label_msgid = "label_question",
                                     description_msgid = "desc_question",
-                                    i18n_domain = "faq",
+                                    i18n_domain = "plonehelpcenter",
                                     description='Full question. If blank, defaults to title of this FAQ.',
                                     rows=4),
                                     
@@ -21,7 +21,7 @@ default_output_type = 'text/html',
               allowable_content_types = ("text/html", "text/structured"),
               widget=TextAreaWidget(description_msgid = "desc_answer",
                                     label_msgid = "label_answer",
-                                    i18n_domain = "faq",
+                                    i18n_domain = "plonehelpcenter",
                                     rows=6),
             ),
             
@@ -44,11 +44,18 @@ default_output_type = 'text/html',
     ))
 
 
-class HelpCenterFaqEntry(BaseContent):
+class HelpCenterFAQ(BaseContent):
     """A simple archetype"""
     schema = schema
-    archetype_name = 'Faq Entry'
-    meta_type = 'HelpCenterFaqEntry'
+    archetype_name = 'FAQ'
+    meta_type = 'HelpCenterFAQ'
+    global_allow = 0
+
+    actions = ({'id': 'view',
+                    'name': 'View',
+                    'action': 'faq_view',
+                    'permissions': (CMFCorePermissions.View,)
+                   },)
 
     def _get_versions_vocab(self):
         return self.aq_parent._get_versions_vocab()
@@ -59,4 +66,4 @@ class HelpCenterFaqEntry(BaseContent):
     def getQuestion(self):
         return self.question or self.Title()
     
-registerType(HelpCenterFaqEntry)
+registerType(HelpCenterFAQ)
