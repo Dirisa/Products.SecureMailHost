@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.64 2003/11/08 10:48:11 ajung Exp $
+$Id: Collector.py,v 1.65 2003/11/10 12:13:24 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -455,6 +455,8 @@ def modify_fti(fti):
     for a in fti['actions']:
         if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
             a['visible'] = 0
+    fti['filter_content_types'] = 1
+    fti['allowed_content_types'] = []
     return fti
 
 InitializeClass(PloneCollectorNGCatalog)

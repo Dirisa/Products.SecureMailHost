@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.75 2003/11/08 10:33:16 ajung Exp $
+$Id: Issue.py,v 1.76 2003/11/10 12:13:24 ajung Exp $
 """
 
 import sys, os
@@ -530,6 +530,8 @@ def modify_fti(fti):
             a['visible'] = 0
 
     fti['global_allow'] = 0
+    fti['filter_content_types'] = 1
+    fti['allowed_content_types'] = []
     return fti
 
 registerType(PloneIssueNG)
