@@ -346,14 +346,17 @@ class PloneLocalFolderNG(BaseContent):
             '/plfng_editMetadata?portal_status_message=' + msg)
 
     security.declareProtected(ModifyPortalContent, 'updateMD5Metadatum')
-    def updateMD5Metadatum(self, PLFNGrelativePath, mode='testonly'):
-        """ update a metadatum for the file """
-        # if REQUEST param exists, this method uses the rel_dir from
-        # the '_e' field of REQUEST, and the result of the method is
-        # provided via redirect portal_status_message output.
-        #
+    def updateMD5Metadatum(self, PLFNGrelativePath='', mode='testonly'):
+        """ update (or test) the MD5 metadatum for the file """
+        # INPUT:
+        # if PLFNGrelativePath is provided, it will be used by _getFSFullPath()
+        # to determine which target file this method will operate on.
+        # Otherwise, _getFSFullPath() will use the '_e' field of self.REQUEST
+        # to determine the target file.
+        # OUTPUT:
+        # if self.REQUEST exists, the result of the method is provided through
+        # portal_status_message output via redirect to plfng_editMetadata.
         # Otherwise, this method returns one of the following values:
-        #
         #   if existing metadata valid :: return -1
         #
         #   if existing metadata invalid AND metadata updated :: return 1
@@ -369,7 +372,7 @@ class PloneLocalFolderNG(BaseContent):
         #zLOG.LOG('PLFNG', zLOG.INFO , "updateMD5Metadatum() :: \
         #REQUEST=%s rel_dir=%s mode=%s" % (REQUEST, rel_dir, mode))
 
-        targetFile = self._getFSFullPath(PLFNGRelativePath='')
+        targetFile = self._getFSFullPath(PLFNGRelativePath=PLFNGrelativePath)
 
         if not os.path.isfile(targetFile):
             raise ValueError('not a file: %s' % PLFNGrelativePath)
@@ -489,11 +492,11 @@ class PloneLocalFolderNG(BaseContent):
            request.RESPONSE.redirect( redirURL )
            # MG: not sure why, but the preceding redirect only works from ZMI,
            # so throw the following exception in case the redirect fails
-           msg=msg + ' (use base_edit to fix)' 
+           msg=msg + ' (use base_edit to fix)'
            raise ValueError(msg)
 
         trimmedFSBasePath = os.path.normpath(self.folder)
- 
+
         if os.path.exists(trimmedFSBasePath):
             #msg = '_getFSBasePath() :: FSpath = ' + FSFullPath
             #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
@@ -518,7 +521,7 @@ class PloneLocalFolderNG(BaseContent):
             msg = "illegal relative path: " + PLFNGRelativePath
             zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: " + msg)
             raise ValueError(msg)
-        
+
         #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: \
         #trimmedFSBasePath = %s" % trimmedFSBasePath)
 
@@ -565,8 +568,12 @@ class PloneLocalFolderNG(BaseContent):
 
         GENERAL_MD = getMetadataElements(fullpath, 'GENERAL') or {}
         proxy.setComment(GENERAL_MD.get('comment',''))
-        proxy.setTitle(GENERAL_MD.get('title',''))
         proxy.setLanguage(GENERAL_MD.get('language','natural'))
+        proxy.setRevision(GENERAL_MD.get('revision',''))
+        proxy.setTitle(GENERAL_MD.get('title',''))
+
+        DIAGNOSTICS_MD = getMetadataElements(fullpath, 'DIAGNOSTICS') or {}
+        proxy.setChecksum(GENERAL_MD.get('md5',''))
 
         return proxy.__of__(self)
 
@@ -648,7 +655,7 @@ class PloneLocalFolderNG(BaseContent):
         else:
 
            trimmedFSBasePath = self._getFSBasePath()
-           
+
            relURL = destpath.replace(trimmedFSBasePath, '').replace('\\','/')
 
            #if relURL.startswith('/'): relURL = relURL[1:]
@@ -663,11 +670,11 @@ class PloneLocalFolderNG(BaseContent):
            folderSuffixesSkip = self._getAttribute('hidden_folder_suffixes')
            folderNamesSkip = self._getAttribute('hidden_folder_names')
 
-           
+
            #msg = 'listFolderContents() :: calling getFilteredFSItems() :\
            # FSfullPath = ' + destpath
            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
-           
+
            filteredFileList, filteredFolderList = \
               getFilteredFSItems(FSfullPath=destpath,
                                  skipInvalidIds=1,
@@ -749,6 +756,10 @@ class PloneLocalFolderNG(BaseContent):
                      # LinguaPlone TechnicalPreview 900 uses 'neutral'
                      # as neutral language code
                      P.setLanguage('neutral')
+
+                   DIAGNOSTICS_MD = getMetadataElements(FSfullPathFileName, 'DIAGNOSTICS') or {}
+                   proxy.setChecksum(GENERAL_MD.get('md5',''))
+
                else:
                    P.setComment('')
                    P.setTitle('')
@@ -856,7 +867,7 @@ class PloneLocalFolderNG(BaseContent):
 
         if not REQUEST.has_key('_e'):
             REQUEST['_e'] = []
-        
+
         FSBasePath = self._getFSFullPath(PLFNGRelativePath='')
         destpath = os.path.join(FSBasePath, name)
         if os.path.exists(destpath):
@@ -1021,8 +1032,15 @@ class PloneLocalFolderNG(BaseContent):
         destpath = self._getFSFullPath(PLFNGRelativePath='')
         trimmedFSBasePath = self._getFSBasePath()
         rel_dir = destpath.replace(trimmedFSBasePath, '')
-        
-        uploadFileBaseName = os.path.basename(upload.filename)
+
+        # pppffff....some IE browsers apparently do NOT strip the path from
+        # the filename on form submittals, so we need to do so here
+        if '\\' in upload.filename:
+            filename = upload.filename.split('\\')[-1]
+        else:
+            filename = upload.filename
+
+        uploadFileBaseName = os.path.basename(filename)
         if self.backup_folder:
             backupdestpath = os.path.join(self.backup_folder, rel_dir)
         else:
@@ -1040,8 +1058,8 @@ class PloneLocalFolderNG(BaseContent):
               '/plfng_view?portal_status_message=' + msg)
             return 0
 
-        filename = os.path.join(destpath, os.path.basename(upload.filename))
-        tmpfile = filename + '.plfngtmp'
+        destFSfullPath = os.path.join(destpath, os.path.basename(filename))
+        tmpfile = destFSfullPath + '.plfngtmp'
         f = open(tmpfile, 'wb')
         f.write(upload.read())
         f.close()
@@ -1050,7 +1068,7 @@ class PloneLocalFolderNG(BaseContent):
         newRevisionNumber = \
          self.addFile(sourceFSfullPath=tmpfile,
                      destPLFNGrelativePath=rel_dir,
-                     destBasename=os.path.basename(filename),
+                     destBasename=os.path.basename(destFSfullPath),
                      moveFile=1,
                      inputMD5=clientMD5)
 
@@ -1062,21 +1080,23 @@ class PloneLocalFolderNG(BaseContent):
 
            # ------------------------- apply metadata -------------------------
            # GENERAL:
-           #   comments - comments on the file
-           #   source   - userId of the source/uploader/provider
-           #   revision - the PLFNG centric revision # of this file
+           #   comments    - comments on the file
+           #   description - (tbd)
+           #   source      - userId of the source/uploader/provider
+           #   language    - language code for the file contents
+           #   revision    - the PLFNG centric revision # of this file
            # DIAGNOSTICS:
-           #   md5      - md5 checksum generated by the server for the file
+           #   md5         - server-validated md5 checksum of this file
            # ARCHIVEINFO:
            #   numUnpackedFiles   - # files that the packed file contains
            #   sizezUnpackedFiles - total # bytes for all of the unpacked files
            # CHANGELOG:
-           #   history  - (tbd)
+           #   history     - (tbd)
            # ------------------------------------------------------------------
 
            # GENERAL: 'comments' option
            if comment:
-               setMetadata(filename,
+               setMetadata(destFSfullPath,
                            section="GENERAL",
                            option="comment",
                            value=comment)
@@ -1088,27 +1108,27 @@ class PloneLocalFolderNG(BaseContent):
                creator = 'anonymous'
            else:
                creator = portal_membership.getAuthenticatedMember().getId()
-           setMetadata(filename,
+           setMetadata(destFSfullPath,
                        section="GENERAL",
                        option="source",
                        value=creator)
 
            # GENERAL: 'revision' option
-           setMetadata(filename,
+           setMetadata(destFSfullPath,
                        section="GENERAL",
                        option="revision",
                        value=newRevisionNumber)
 
            # DIAGNOSTICS: 'md5' option
            if clientMD5:
-               setMetadata(filename,
+               setMetadata(destFSfullPath,
                            section="DIAGNOSTICS",
                            option="md5",
                            value=clientMD5)
 
            # if .zip file, set ARCHIVEINFO metadata
            if self.mimetypes_registry.classify(data=None, \
-             filename=upload.filename.lower()) == 'application/zip':
+             filename=filename.lower()) == 'application/zip':
                setZipInfoMetadata(filename)
 
            self.REQUEST.RESPONSE.redirect(self.REQUEST['URL1']+\
@@ -1149,10 +1169,10 @@ class PloneLocalFolderNG(BaseContent):
             for this class instance """
 
         FSFullPath = self._getFSFullPath(PLFNGRelativePath='')
-        
+
         #msg = 'getProperties() :: calling _getFolderProperties('+FSfullPath+')'
         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
-        
+
         localfolder_props = _getFolderProperties(FSFullPath)
 
         return localfolder_props
@@ -1160,13 +1180,13 @@ class PloneLocalFolderNG(BaseContent):
     security.declareProtected('View', 'get_size')
     def get_size(self):
         """ return the size of the underlying contents """
-        
+
         if self.validFolder():
            trimmedFSBasePath = self._getFSBasePath()
            localfolder_props = _getFolderProperties(trimmedFSBasePath)
            return localfolder_props.get('size',0)
         else:
-           return 0   
+           return 0
 
     security.declareProtected(ModifyPortalContent, 'unpackFile')
     def unpackFile(self, plfngRelativeDir, FSpackedFile, REQUEST, RESPONSE):
@@ -1377,69 +1397,38 @@ class PloneLocalFolderNG(BaseContent):
 
         if rel_dir == None: rel_dir = ''
         destpath = self._getFSFullPath(PLFNGRelativePath=rel_dir)
-        
+
         if rel_dir == '':
            outputPrefix = ''
         else:
            outputPrefix = rel_dir.replace('\\', '/') + '/'
-           
 
         this_portal = getToolByName(self, 'portal_url')
         mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
 
-        if hasattr(self, "hidden_file_prefixes") and self.hidden_file_prefixes:
-           filePrefixesSkipList = split(self.hidden_file_prefixes,',')
-        else:
-           filePrefixesSkipList = []
-
-        if hasattr(self, "hidden_file_suffixes") and self.hidden_file_suffixes:
-           fileSuffixesSkipList = split(self.hidden_file_suffixes,',')
-        else:
-           fileSuffixesSkipList = []
-
-        if hasattr(self, "hidden_file_names") and self.hidden_file_names:
-           fileNamesSkipList = split(self.hidden_file_names,',')
-        else:
-           fileNamesSkipList = []
-
-        if hasattr(self, "hidden_folder_prefixes") and \
-          self.hidden_folder_prefixes:
-           folderPrefixesSkipList = split(self.hidden_folder_prefixes,',')
-        else:
-           folderPrefixesSkipList = []
-
-        if hasattr(self, "hidden_folder_suffixes") and \
-          self.hidden_folder_suffixes:
-           folderSuffixesSkipList = split(self.hidden_folder_suffixes,',')
-        else:
-           folderSuffixesSkipList = []
-
-        if hasattr(self, "hidden_folder_names") and self.hidden_folder_names:
-           folderNamesSkipList = split(self.hidden_folder_names,',')
-        else:
-           folderNamesSkipList = []
-
+        filePrefixesSkip = self._getAttribute('hidden_file_prefixes')
+        fileSuffixesSkip = self._getAttribute('hidden_file_suffixes')
+        fileNamesSkip = self._getAttribute('hidden_file_names')
+        folderPrefixesSkip = self._getAttribute('hidden_folder_prefixes')
+        folderSuffixesSkip = self._getAttribute('hidden_folder_suffixes')
+        folderNamesSkip = self._getAttribute('hidden_folder_names')
         trimmedFolderBasePath = os.path.normpath(destpath)
 
-        #msg = 'getFilteredContents() :: calling getFilteredFSItems() :\
-        #  FSfullPath = ' + trimmedFolderBasePath
-        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
-        
         filteredFileList, filteredFolderList = \
            getFilteredFSItems(FSfullPath=trimmedFolderBasePath,
                                  skipInvalidIds=1,
                                  mimetypesTool=mimetypesTool,
                                  filetypePhrasesSkipList=[],
-                                 filePrefixesSkipList=filePrefixesSkipList,
-                                 fileSuffixesSkipList=fileSuffixesSkipList,
-                                 fileNamesSkipList=fileNamesSkipList,
-                                 folderPrefixesSkipList=folderPrefixesSkipList,
-                                 folderSuffixesSkipList=folderSuffixesSkipList,
-                                 folderNamesSkipList=folderNamesSkipList)
+                                 filePrefixesSkipList=filePrefixesSkip,
+                                 fileSuffixesSkipList=fileSuffixesSkip,
+                                 fileNamesSkipList=fileNamesSkip,
+                                 folderPrefixesSkipList=folderPrefixesSkip,
+                                 folderSuffixesSkipList=folderSuffixesSkip,
+                                 folderNamesSkipList=folderNamesSkip)
 
         for filename in filteredFileList:
            resultList.append(outputPrefix + filename)
-        
+
         for subFolder in filteredFolderList:
            resultList.append(outputPrefix + subFolder+'/')
            new_rel_dir = os.path.join(rel_dir,subFolder)
@@ -1528,7 +1517,7 @@ def _getFolderProperties(FSfullPathFolderName):
    #msg = '_getFolderProperties() :: calling getFilteredFSItems() :\
    # FSfullPath = ' + FSfullPathFolderName
    #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
-        
+
    filteredFileList, filteredFolderList = \
       getFilteredFSItems(FSfullPath=FSfullPathFolderName,
                          skipInvalidIds=1,
@@ -1555,7 +1544,7 @@ def _getFolderProperties(FSfullPathFolderName):
 
       #msg = '_getFolderProperties() :: calling _getFolderProperties('+subfolderFullName+')'
       #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
-      
+
       subfolder_props = _getFolderProperties(subfolderFullName)
       bytesInFolder = bytesInFolder + subfolder_props.get('size',0)
       folderCount = folderCount + subfolder_props.get('folders',0)
