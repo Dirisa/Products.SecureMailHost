@@ -302,8 +302,8 @@ msgstr "Schema für alle Tickets aktualisieren"
 msgid "update_collector_schema"
 msgstr "Collector Schema aktualisieren"
 
-msgid "recreate_collector_catalog"
-msgstr "Collector Catalog neu anlegen"
+msgid "setup_tools"
+msgstr "Collector Catalog und Workflow Tools neu anlegen"
 
 msgid "Browse issues"
 msgstr "Ticketbrowser"
@@ -911,3 +911,6 @@ msgstr "Zuweisung an Gruppe"
 
 msgid "label_notification_language"
 msgstr "Sprache für Benachrichtigungen"
+
+msgid "tools_recreated"
+msgstr "Tools wurden neu angelegt"

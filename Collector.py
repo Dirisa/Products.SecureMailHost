@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.128 2004/03/02 07:31:31 ajung Exp $
+$Id: Collector.py,v 1.129 2004/03/02 11:42:23 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -152,7 +152,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance', 
-                          self.translate('catalog_recreated', 'Catalog recreated'))
+                          self.translate('tools_recreated', 'Tools recreated'))
 
     def _setup_catalog(self):
         """ setup catalog tool """
