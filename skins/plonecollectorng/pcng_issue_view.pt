@@ -87,9 +87,9 @@
           <tal:def tal:define="field python: schema['solution']" >
             <div class="row" tal:condition="python: getattr(here, field.getName())" >
               <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-              <div class="issue_metadata">
+              <pre class="issue_metadata">
                 <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
-              </div>
+              </pre>
             </div>
           </tal:def>
         </div>
