@@ -20,8 +20,8 @@
 	   tal:define="errors python:request.get('errors', {});
                    Iterator python:modules['Products.CMFPlone'].IndexIterator;
                    tabindex python:Iterator();
-                   schemata_names here/schema_getNames;
                    schematas here/Schemata;
+                   schemata_names here/SchemataNames;
                    default_fieldset python:  schemata_names[0];
                    fieldset request/fieldset|options/fieldset|default_fieldset;
                    fieldsets python:[key for key in schematas.keys() if key != 'metadata' and key != 'default'];"
@@ -36,9 +36,9 @@
           </span>
       </h1>
 
-     <div tal:condition="schemata_names">
+     <div tal:condition="fieldsets">
         <span i18n:translate="fieldsets">Fieldsets</span>: 
-       <tal:block repeat="set schemata_names">
+       <tal:block repeat="set fieldsets">
          <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
            <b>[<span tal:content="set" />]</b>
          </div>

@@ -5,19 +5,18 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.59 2003/11/05 11:38:34 ajung Exp $
+$Id: Collector.py,v 1.60 2003/11/06 12:53:23 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import  ClassSecurityInfo
-from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
 from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import setDefaultRoles, ModifyPortalContent
+from Products.CMFCore.CMFCorePermissions import *
 
 from Transcript import Transcript
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
@@ -39,7 +38,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         'id': 'view',
         'name': 'Browse',
         'action': 'pcng_view',
-        'permissions': (CMFCorePermissions.View,)
+        'permissions': (View,)
         },
         {'id': 'pcng_edit',
         'name': 'Edit',
@@ -79,7 +78,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         {'id': 'pcng_member_preferences',
         'name': 'Member preferences',
         'action': 'pcng_member_preferences',
-        'permissions': (CMFCorePermissions.SetOwnProperties,)
+        'permissions': (SetOwnProperties,)
         },
         )
 
@@ -137,7 +136,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     # Transcript
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'getTranscript')
+    security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
         return self._transcript
@@ -146,16 +145,16 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     # Staff handling
     ######################################################################
 
-    security.declareProtected(CMFCorePermissions.View, 'getSupporters')
+    security.declareProtected(View, 'getSupporters')
     def getSupporters(self): return self._supporters
 
-    security.declareProtected(CMFCorePermissions.View, 'getManagers')
+    security.declareProtected(View, 'getManagers')
     def getManagers(self): return self._managers
 
-    security.declareProtected(CMFCorePermissions.View, 'getReporters')
+    security.declareProtected(View, 'getReporters')
     def getReporters(self): return self._reporters
 
-    security.declareProtected(CMFCorePermissions.View, 'getTrackerUsers')
+    security.declareProtected(View, 'getTrackerUsers')
     def getTrackerUsers(self, staff_only=0, unassigned_only=0):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
@@ -265,7 +264,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         elif self.view_mode == 'anyone':
             target_roles += ('Authenticated', 'Anonymous')
 
-        self.manage_permission(CMFCorePermissions.View, roles=target_roles, acquire=0)
+        self.manage_permission(View, roles=target_roles, acquire=0)
 
     ######################################################################
     # Notifications
@@ -299,7 +298,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         """ return a of emails addresses that correspond to the given state.  """
         return self._notification_emails.get(state, [])
 
-    security.declareProtected(CMFCorePermissions.View, 'issue_states')
+    security.declareProtected(View, 'issue_states')
     def issue_states(self):
         """ return a list of all related issue workflow states """
         wftool = getToolByName(self, 'portal_workflow')
@@ -331,7 +330,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._adjust_view_mode()           # can we hook this somewhere else?
         self._adjust_participation_mode()
 
-    security.declareProtected(CMFCorePermissions.View, 'getNumberIssues')
+    security.declareProtected(View, 'getNumberIssues')
     def getNumberIssues(self):
         """ return the number of issues """
         return len(self.objectIds('PloneIssueNG'))
@@ -377,7 +376,17 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             schemata[f.schemata] = sub
         return schemata
 
+    def SchemataNames(self):
+        """ return ordered list of schemata names """
+
+        names = []
+        for f in self.schema.fields():
+            if not f.schemata in names and f.schemata != 'default':
+                names.append(f.schemata)
+        return names
+
 registerType(PloneCollectorNG)
+
 
 
 class PloneCollectorNGCatalog(CatalogTool):

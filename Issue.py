@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.70 2003/11/06 08:24:09 ajung Exp $
+$Id: Issue.py,v 1.71 2003/11/06 12:53:23 ajung Exp $
 """
 
 import sys, os
@@ -136,6 +136,15 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         if schema is None:
             self._v_schema = self.aq_parent.schema_getWholeSchema()
         return self._v_schema
+
+    def SchemataNames(self):
+        """ return ordered list of schemata names """
+
+        names = []
+        for f in self.Schema().fields():
+            if not f.schemata in names and f.schemata != 'default':
+                names.append(f.schemata)
+        return names
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
