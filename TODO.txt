@@ -38,11 +38,6 @@ General
   mount a non-packable storage on plone.org that will keep all the change
   history for documentation content types. ATContentTypes already has this.
 
-- "Manual" content type - for book-type manuals and product documentation.
-  Should be able to accommodate content like Andy's Plone Book, and 
-  Raphael's MySite tutorial - as well as product manuals like LinguaPlone,
-  End-users Guide to Plone manual etc.
-
 - I have removed workflow for TutorialPage (~limi), but we might consider a
   visible/hidden scheme, so you can have pages that you're adding while the
   Tutorial is available.
@@ -117,6 +112,60 @@ General
   the order that things are listed in the importance ratings, and
   add the red bang to the top-level ones. This gives us more
   flexibility for future importance ratings. --Joel
+
+=================================
+Movie and Movie Area content type
+=================================
+
+  Contains instructional flash videos.
+  
+  - Based off the How-to type (needs to be folderish) - same type of general listing, with categories in the container etc.
+  
+  - For each movie, show: 
+  
+    - title
+    - file size
+    - description
+    - and *perhaps* an image of a screenshot
+
+  - A Movie is a series of files
+
+  Advanced:
+
+  - The controller is an xml file
+  
+  - One approach:
+
+    1. Get author to upload a ZIP
+
+    2. The content type opens the zip, parses the controller XML, keeps the SWF
+
+    3. Throws out everything else
+
+    4. Generates the controller XML on the fly, contains:
+
+      - what is the screen dimensions of the &lt;object&gt;
+
+      - metadata
+
+  - Benefits:
+
+    - you snarf metadata from the XML, not re-enter it
+
+    - minidom could handle this one 
+
+    The alternative is to just use the layout that Camtasia produces (the generated HTML)
+
+=====================
+"Manual" content type
+=====================
+ 
+  For book-type manuals and individual products' documentation needs.
+
+  - Should be able to accommodate content like Andy's Plone Book, and 
+  Raphael's MySite tutorial 
+  
+  - As well as product manuals like LinguaPlone, End-users Guide to Plone manual etc.
 
 
 =====================
