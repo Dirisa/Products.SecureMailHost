@@ -20,7 +20,7 @@
 ##############################################################################
 """
 
-$Id: ReferenceBag.py,v 1.1 2004/03/24 11:30:02 dpunktnpunkt Exp $
+$Id: ReferenceBag.py,v 1.2 2004/05/02 12:15:42 dpunktnpunkt Exp $
 """
 
 from Products.Archetypes.debug import log, log_exc
@@ -68,8 +68,8 @@ class ReferenceBag(ReferenceFolder):
         self.manage_delObjects(self.objectIds())
 
 def modify_fti(fti):
-    fti.update({'allowed_content_types': (),
-                'filter_content_types': 1,
+    fti.update({#'allowed_content_types': (),
+                #'filter_content_types': 1,
                 'global_allow': 0})
     
 registerType(ReferenceBag)
