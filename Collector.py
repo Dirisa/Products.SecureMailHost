@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.55 2003/11/02 19:54:35 ajung Exp $
+$Id: Collector.py,v 1.56 2003/11/03 17:06:14 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -400,7 +400,12 @@ class PloneCollectorNGCatalog(CatalogTool):
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
+    
+    def searchResults(self, REQUEST=None, **kw):
+        """ Bypass searchResults() of the CatalogTool """
+        return self._catalog.searchResults(*(REQUEST,), **kw)
 
+    __call__ = searchResults
 
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
