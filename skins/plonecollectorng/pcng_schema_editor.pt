@@ -74,7 +74,7 @@
                       tal:attributes="selected python: field.getWidgetName()=='TextAreaWidget'" />
               <option value="Radio" 
                       tal:content="string:Radio"
-                      tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='flex'"/>
+                      tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='radio'"/>
               <option value="Select" 
                       tal:content="string:Select"
                       tal:attributes="selected python: field.getWidgetName()=='SelectionWidget' and field.widget.format=='select'"/>
