@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: config.py,v 1.9 2003/10/11 20:47:24 ajung Exp $
+$Id: config.py,v 1.10 2003/10/19 12:56:39 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -18,6 +18,7 @@ GLOBALS = globals()
 
 #
 IssueWorkflowName = 'pcng_issue_workflow'
+i18n_domain = 'plonecollectorng'
 
 # Permissions
 ManageCollector = 'Manage PloneCollectorNG'
