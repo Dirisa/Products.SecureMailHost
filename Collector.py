@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.70 2003/11/15 07:50:25 ajung Exp $
+$Id: Collector.py,v 1.71 2003/11/15 10:11:37 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -424,6 +424,14 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
 
 registerType(PloneCollectorNG)
 
+##########################################################################
+# Check the availability of TextIndexNG(2)
+##########################################################################
+
+try: import Products.TextIndexNG2; txng_version = 2
+except ImportError:
+    try: import Products.TextIndexNG; txng_version = 1
+    except: txng_version = 0
 
 
 class PloneCollectorNGCatalog(CatalogTool):
@@ -434,29 +442,37 @@ class PloneCollectorNGCatalog(CatalogTool):
     portal_type = 'PloneCollectorNG Catalog'
 
     def enumerateIndexes(self):
-        standard = CatalogTool.enumerateIndexes(self)
-        custom = (('status', 'FieldIndex'),
-                  ('importance', 'FieldIndex'),
-                  ('classification', 'FieldIndex'),
-                  ('topic', 'FieldIndex'),
-                  ('assigned_to', 'KeywordIndex'),
-                  ('progress_deadline', 'FieldIndex'),
-                  ('progress_percent_done', 'FieldIndex'),
-                  ('getId', 'FieldIndex'),
-                  ('numberFollowups', 'FieldIndex'),
-                  )
-        custom = tuple([col for col in custom if col not in standard])
-        return standard + custom
+        custom = [['status', 'FieldIndex'],
+                  ['Creator', 'FieldIndex'],
+                  ['created', 'FieldIndex'],
+                  ['SearchableText', 'TextIndex'],
+                  ['importance', 'FieldIndex'],
+                  ['classification', 'FieldIndex'],
+                  ['topic', 'FieldIndex'],
+                  ['assigned_to', 'KeywordIndex'],
+                  ['progress_deadline', 'FieldIndex'],
+                  ['progress_percent_done', 'FieldIndex'],
+                  ['getId', 'FieldIndex'],
+                  ['numberFollowups', 'FieldIndex'],
+                 ]
+        # Replace TextIndexes with TextIndexNG instances if possible
+        for i in range(len(custom)):
+            k,v = custom[i]
+            if v == 'TextIndex':
+                if txng_version == 1: custom[i][1] = 'TextIndexNG'
+                if txng_version == 2: custom[i][1] = 'TextIndexNG2'
+
+        return  custom
 
     def enumerateColumns( self ):
         """Return field names of data to be cached on query results."""
-        standard = CatalogTool.enumerateColumns(self)
-        custom = ('id', 'status', 'topic', 'classification',
+        
+        custom = ('Description', 'Title', 'Creator', 'created', 'modified',
+                  'id', 'status', 'topic', 'classification',
                   'importance', 'assigned_to', 'progress_deadline', 
                   'progress_percent_done', 'getId', 'numberFollowups'
                   )
-        custom = tuple([col for col in custom if col not in standard])
-        return standard + custom
+        return custom
     
     def searchResults(self, REQUEST=None, **kw):
         """ Bypass searchResults() of the CatalogTool """
