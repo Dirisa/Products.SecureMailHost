@@ -33,8 +33,8 @@ BAD_HEADERS = ()
 ## async mailer settings
 # use async mail thread?
 # WARNING: Make shure that your queue is empty before disabling the async mailer
-USE_ASNYC_MAILER=False
-#USE_ASNYC_MAILER=True
+#USE_ASNYC_MAILER=False
+USE_ASNYC_MAILER=True
 
 # sleep time for the main thread loop
 WAIT_TIME = 30

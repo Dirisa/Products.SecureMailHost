@@ -1,6 +1,17 @@
 SecureMailHost
 ==============
 
+2005-03-28
+----------------
+
+  * make 'mto/mfrom' in secureSendMail optional, at least 'mto' is optional. 
+    we can send a mail use bcc.
+    (ZWiki send notification email this way)
+    [panjunyong]
+
+  * Fix bug: Supported multiple mto/mcc/mbc now
+    [panjunyong]
+
 2005-01-27
 ----------------
 

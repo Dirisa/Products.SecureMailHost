@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.22 2005/01/27 07:21:07 panjunyong Exp $
+$Id: SecureMailHost.py,v 1.22.2.1 2005/03/28 16:50:28 panjunyong Exp $
 """
 
 try:
@@ -189,7 +189,7 @@ class SecureMailBase(MailBase):
                              subject=subject, encode=encode)
 
     security.declareProtected(use_mailhost_services, 'secureSend')
-    def secureSend(self, message, mto, mfrom, subject='[No Subject]',
+    def secureSend(self, message, mto=None, mfrom=None, subject='[No Subject]',
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
                    debug=False, **kwargs):
         """A more secure way to send a message
@@ -255,7 +255,13 @@ class SecureMailBase(MailBase):
         self.setHeaderOf(msg, **kwargs)
 
         # finally send email
-        return self._send(mfrom, mto, msg, debug=debug)
+        # smtplib need a list of all to_addrs
+        # XXX FIXME: here we should not split with '\,'
+        toList = []
+        for addr in (mto, mcc, mbcc):
+            if addr:
+                toList += addr.split(',')
+        return self._send(mfrom, toList, msg, debug=debug)
 
     security.declarePrivate('setHeaderOf')
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
