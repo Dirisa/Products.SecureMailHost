@@ -41,6 +41,7 @@
 
     <tal:if tal:condition="python: context.meta_type=='PloneIssueNG' and not context.isPersistent()" >
       <div id="pcng_submission_guideline"
+           tal:condition="context/pcng_submission_guideline|nothing"
            tal:content="structure context/pcng_submission_guideline|nothing">
       </div>
     </tal:if>
