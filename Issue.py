@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.84 2003/11/17 14:26:47 ajung Exp $
+$Id: Issue.py,v 1.85 2003/11/18 14:37:46 ajung Exp $
 """
 
-import sys, os
+import sys, os, time
 from urllib import unquote
 
 from Globals import Persistent, InitializeClass
@@ -355,6 +355,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         if uploaded_file:
             file_id = uploaded_file.filename.split('/')[-1].split('\\')[-1]
             ct = guess_content_type(file_id, uploaded_file.read())
+            if file_id in self.objectIds():
+                name,ext = os.path.splitext(file_id)
+                file_id = '%s_%s.%s' % (name, time.strftime('%Y%m%d_%H%M%S', time.localtime()), ext)
+
             if ct[0].find('image') > -1:
                 self.invokeFactory('Image', file_id)
             else:
