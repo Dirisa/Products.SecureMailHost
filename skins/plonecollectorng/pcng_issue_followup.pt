@@ -8,6 +8,7 @@
 <metal:block metal:fill-slot="head_slot">
   <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
 </metal:block>
+
 <div metal:fill-slot="main">	  
 
   <metal:block tal:define="action string: Followup">
@@ -20,7 +21,8 @@
     
   <form method="post" action="issue_followup">
     <fieldset
-         tal:define="assignees here/assigned_to">
+         tal:define="assignees here/assigned_to;
+                     show_actions python: 1">
       <legend><span i18n:translate="issue_followup">Issue Followup</span> #<span tal:content="python: len(here) + 1"/></legend>
 
       <div class="row">
@@ -31,42 +33,7 @@
         </div>
       </div>
 
-      <table tal:define="allow_assign  python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter')">
-        <tr>
-          <th>
-            <span tal:condition="allow_assign" i18n:translate="assign_to"> Assign to  </span>
-          </th>
-          <th>&nbsp;</th>
-          <th> 
-            <span i18n:translate="action">Action </span>
-            (<span i18n:translate="workflow_action_current_state">Current state</span>: <span i18n:translate="" tal:content="here/status" />)</th>
-        </tr>
-    
-        <tr>
-          <td valign="top">
-            <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
-              <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
-                <option tal:content="string: ${u/fullname} (${u/username})"
-                        tal:attributes="value u/username;
-                                        selected python: u['username'] in assignees" 
-                 />
-              </span>
-            </select>
-          </td>
-          <td width="200"> </td>
-
-          <td valign="top" tal:define="actions here/validActions">
-            <input class="required" type="radio" name="action" value="comment" checked>
-              <span i18n:translate="comment">Comment</span>
-            <tal:loop tal:repeat="action actions">
-              <br><input type="radio" name="action" 
-                         tal:attributes="value action;
-                                         CHECKED python: request.get('state','') == action"/>
-              <span i18n:translate="" tal:content="action/capitalize" />
-            </tal:loop>
-          </td>
-        </tr>
-      </table>
+      <div metal:use-macro="here/issue_macros/macros/followup_table" />
 
       <div class="row">
         <div class="label">&nbsp;</div>
