@@ -39,13 +39,12 @@
 
                 <h1 tal:condition="not:myfolder">
                   <img tal:replace="structure here/folder.gif" />
-                  <span tal:content="here/plfng_translatedpath" />
+                 	<span tal:content="here/plfng_translatedpath" />
                 </h1>
 
                 <metal:block tal:condition="not: folder_contents">
                 <p i18n:translate="description_no_visible_items_press_add">
-                This folder has no visible items. To add content, press the 'Add New Item' button,
-                or paste content from another location.
+                This folder has no visible items.
                 </p>
                 </metal:block>
 
@@ -54,6 +53,9 @@
                 Contains the items created and collected by <tal:block content="python:user.getUserName()" i18n:name="name">User</tal:block>
                 </p>
 
+                <div tal:define="url string:${request/URL2}">
+                  <a href="#" tal:attributes="href url" class="link-parent">Up one level</a>
+                </div>
                 <p tal:content="structure here/Description"
                    tal:condition="not:myfolder">
                    description
