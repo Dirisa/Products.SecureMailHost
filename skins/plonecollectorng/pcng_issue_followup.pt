@@ -25,6 +25,7 @@
       <table>
         <tr>
           <th i18n:translate="assign_to"> Assign to </th>
+          <th>&nbsp;</th>
           <th> <span i18n:translate="workflow_action_current_state">Action (Current state</span>: <span tal:content="here/status" />)</th>
         </tr>
     
@@ -39,6 +40,7 @@
               </span>
             </select>
           </td>
+          <td width="200"> </td>
 
           <td valign="top" tal:define="actions here/validActions">
             <input type="radio" name="action" value="comment" checked>Comment
