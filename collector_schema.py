@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+$Id: collector_schema.py,v 1.4 2003/09/07 17:51:01 ajung Exp $
 """
 
 from Products.Archetypes.public import BaseSchema, Schema, DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget
+from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget
 
 VOC_LIMIT_FOLLOWUPS = DisplayList((
@@ -51,6 +51,7 @@ schema = BaseSchema +  Schema((
                 ),
     IntegerField('deadline_tickets',
                 default=14,
+                widget=IntegerWidget,
                 ),
     StringField('collector_email',
                 searchable=0,
