@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.164 2004/04/17 12:32:05 ajung Exp $
+$Id: Collector.py,v 1.165 2004/04/19 08:19:19 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -677,7 +677,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         def response(RESPONSE, status, msg):
             if RESPONSE:
-                RESPONSE.setStatus(401)
+                RESPONSE.setStatus(status)
                 RESPONSE.write(msg)
             else:
                 raise ValueError(msg)
