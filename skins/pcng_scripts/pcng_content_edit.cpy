@@ -13,9 +13,8 @@ fieldset = REQUEST.get('fieldset', None)
 
 if context.meta_type == 'PloneIssueNG':
    
-    if context.aq_parent.meta_type == 'PloneCollectorNG':
+    if context.isPersistent():
         # persistent issue 
-        id = int(context.getId()) 
         context.processForm()
         new_context = context
     else:
