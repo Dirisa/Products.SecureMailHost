@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.143 2004/03/17 20:49:27 ajung Exp $
+$Id: Issue.py,v 1.144 2004/03/20 08:34:53 ajung Exp $
 """
 
-import sys, os, time
+import sys, os, time, random
 from urllib import unquote
 from types import StringType, UnicodeType
 
@@ -32,6 +32,7 @@ from group_assignment_policies import getUsersForGroups
 from Transcript import Transcript
 from WatchList import WatchList
 from Translateable import Translateable
+from PCNGSchema import PCNGSchemaNonPersistent
 import util, notifications
 
 _marker = []
@@ -78,11 +79,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         )
 
     security = ClassSecurityInfo()
+    archetype_name = 'PCNG Issue'
 
     def __init__(self, id):
         Base.__init__(self, id) 
         from issue_schema import schema
-        self.schema = schema
+        self.schema = PCNGSchemaNonPersistent(schema.fields())
         self.wl_init()
         self.id = id
         self.title = id
@@ -477,7 +479,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(AddCollectorIssue, 'redirect_create_object')
     def redirect_create_object(self, RESPONSE):
         """ redirect to parent """
-        RESPONSE.redirect(self._getCollector().absolute_url() + '/createObject?type_name=PloneIssueNG')
+        id = '%s_%f' % (self.Translate('new_issue', 'NewIssue'), time.time() * random.random())
+        RESPONSE.redirect(self._getCollector().absolute_url() + '/createObject?type_name=PloneIssueNG&id=%s' % id)
 
     ######################################################################
     # Presentation related stuff
@@ -549,7 +552,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'getWorkflowHistory')
     def getWorkflowHistory(self):                     
         """ return the workflow history """
-        return self.workflow_history[self.collector_workflow]  # acquire name from parent
+        return self.workflow_history.get(self.collector_workflow, ())  # acquire name from parent
 
     def _migrate_workflow_history(self):
         """ migrate a workflow history to a custom workflow """
@@ -599,7 +602,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getEncryptedInformations(self):
         """ Return inportant informations encrypted """
         from util import encrypt
-        s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" id="%s"/>' % (self.aq_parent.absolute_url(), self.getId())
+        s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" aaaaaaa/>' % (self.aq_parent.absolute_url(), self.getId())
         return encrypt(s, self.getToken()) 
 
 

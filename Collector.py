@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.143 2004/03/18 13:14:23 ajung Exp $
+$Id: Collector.py,v 1.144 2004/03/20 08:34:53 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -39,6 +39,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     """ PloneCollectorNG """
 
     schema = collector_schema.schema
+    archetype_name = 'PCNG Tracker'
 
     actions = ({
         'id': 'pcng_browse',
@@ -118,7 +119,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def manage_afterAdd(self, item, container):
         """ post creation (or post renaming) actions """
         Base.manage_afterAdd(self, item, container)
-        self.setup_tools()
 
         if getattr(self, '_already_created', 0) == 0:    
             # Upon creation we need to add the transcript
@@ -130,6 +130,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             # manager_afterAdd() is also called when the collector is
             # renamed. So we reindex the issues automatically
             self.reindex_issues()
+
+        self.setup_tools()
 
         # Archestypes uses hardcoded factory-settings for 'immediate_view'
         # that don't not meet our requirements to jump into the 'view' 
@@ -432,7 +434,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(AddCollectorIssue, 'redirect_create_object')
     def redirect_create_object(self, RESPONSE=None):
         """ create a new issue """
-        RESPONSE.redirect(self.absolute_url() + "/createObject?type_name=PloneIssueNG")
+        id = '%s_%f' % (self.Translate('new_issue', 'NewIssue'), time.time() * random.random())
+        RESPONSE.redirect(self.absolute_url() + "/createObject?type_name=PloneIssueNG&id=%s" % id)
 
     security.declareProtected(AddCollectorIssue, 'add_issue')
     def add_issue(self, RESPONSE=None):
