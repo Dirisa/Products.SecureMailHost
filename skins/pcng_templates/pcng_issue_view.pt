@@ -24,7 +24,6 @@
       <metal:block tal:condition="request/mode|nothing">
         <metal:block tal:define="global mode request/mode" />
       </metal:block>
-<span tal:content="mode" />
 
       <metal:block tal:define="action string: View">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
