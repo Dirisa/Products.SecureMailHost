@@ -63,16 +63,18 @@
       <ul>
 
         <li><span i18n:translate="references">References</span>
-          <ul>
-            <li tal:repeat="ref references">
-              <tal:def tal:define="target python: ref.getTargetObject()">
-                <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-                [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
-                <pre tal:content="ref/comment" />
-              </tal:def>
-            </li>
-             <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
-          </ul>
+          <div tal:repeat="ref references">
+            <tal:def tal:define="target python: ref.getTargetObject()">
+              <div class="left">
+              <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              </div>
+              <div class="right">
+              <a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}"><img src="delete.gif" title="delete" i18n:attributes="title"></a>
+              </div>
+              <pre tal:content="ref/comment" />
+            </tal:def>
+          </div>
+          <div tal:condition="not: references" i18n:translate="no_references">No references found</div>
         </li>
 
         <li><span i18n:translate="referenced_by">Referenced by</span>
@@ -333,9 +335,9 @@ function show_tickets() {
                              display python: here.displayValue(vocab, issue.importance)">
         <span tal:content="structure display" />
     </metal:block> &bull;
-    <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" />
+    <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" /> &bull;
     <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
-    <b i18n:translate="number_uploads">Uploads</b>: <span tal:replace="issue/numberUploads|nothing" />
+    <b i18n:translate="number_uploads">Uploads</b>: <span tal:replace="issue/numberUploads|nothing" /> &bull;
     <b i18n:translate="number_references">Refs</b>: <span tal:replace="issue/numberReferences|nothing" />
   </div>
 
