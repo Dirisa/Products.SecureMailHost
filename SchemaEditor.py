@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.8 2003/09/07 17:51:29 ajung Exp $
+$Id: SchemaEditor.py,v 1.9 2003/09/09 11:59:00 ajung Exp $
 """
 
 import operator
@@ -17,14 +17,10 @@ from Products.Archetypes.public import StringField, TextField, IntegerField, Flo
 from Products.Archetypes.public import DateTimeField, FixedPointField, LinesField, BooleanField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, StringWidget
 
+import util
+
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
-
-    def test(self):
-        """test"""
-        import issue_schema
-        self.schema_init(issue_schema.schema)
-        print 'done'
 
     def schema_init(self, schema):
         self._schema_names = []    # list of schemata names
@@ -39,7 +35,15 @@ class SchemaEditor:
     def getWholeSchema(self):
         """ return the concatenation of all schemas """       
         l = [self._schemas[name] for name in self._schema_names]
-        return reduce(operator.__add__, l) 
+        s = reduce(operator.__add__, l) 
+        for field in s.fields():
+            if field.mutator is None:
+                field.mutator = 'archetypes_mutator'
+            if field.edit_accessor is None:
+                field.edit_accessor = 'archetypes_accessor'
+            if field.accessor is None:
+                field.accessor = 'archetypes_accessor'
+        return s
 
     def getSchemaNames(self):
         """ return names of all schematas """
@@ -47,32 +51,28 @@ class SchemaEditor:
 
     def getSchema(self, name):
         """ return a schema given by its name """
-        print name, self._schemas[name]
         return self._schemas[name]
 
-    def newSchema(self, name, RESPONSE=None):
+    def newSchema(self, fieldset, RESPONSE=None):
         """ add a new schema """
-        if name in self._schema_names:
-            raise ValueError('Schemata "%s" already exists' % name)
-        self._schema_names.append(name)
-        self._schemas[name] = Schema(name)
+        if fieldset in self._schema_names:
+            raise ValueError('Schemata "%s" already exists' % fieldset)
+        self._schema_names.append(fieldset)
+        self._schemas[fieldset] = Schema(fieldset)
         self._p_changed = 1
 
-        if RESPONSE is not None:
-            RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Schema%%20added' % name)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema added', fieldset=fieldset)
 
-    def delSchema(self, name, RESPONSE=None):
+    def delSchema(self, fieldset, RESPONSE=None):
         """ delete a schema """
-        self._schema_names.remove(name)
-        del self._schemas[name]
-        if RESPONSE is not None:
-            RESPONSE.redirect('pcng_schema_editor?portal_status_message=Schema%20deleted')
+        self._schema_names.remove(fieldset)
+        del self._schemas[fieldset]
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted', fieldset=fieldset)
 
     def schema_del_field(self, fieldset, name, RESPONSE=None):
         """ remove a field from a fieldset """
         del self._schemas[fieldset][name]
-        if RESPONSE is not None:
-                RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Field deleted' % fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field deleted', fieldset=fieldset)
 
     def schema_update(self, REQUEST, RESPONSE=None):
         """ update a schema schema """
@@ -86,8 +86,7 @@ class SchemaEditor:
             schema.addField(field)
             self._schemas[fieldset] = schema
 
-            if RESPONSE is not None:
-                RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Field added' % fieldset)
+            util.redirect(RESPONSE, 'pcng_schema_editor', 'Field added', fieldset=fieldset)
             return            
 
         schema = Schema(fieldset)
@@ -107,7 +106,6 @@ class SchemaEditor:
             elif d.field == 'DateTimeField': field = DateTimeField
             else: raise TypeError('unknown field type: %s' % d.field)
 
-            print d
             D = {}
             D['default'] = d.get('default', '')
             D['schemata'] = fieldset
@@ -131,13 +129,14 @@ class SchemaEditor:
                 D['vocabulary'] = DisplayList(l)
 
             D['required'] = d.get('required', 0)
+            D['mutator'] = 'archetypes_mutator'
+            D['accessor'] = 'archetypes_accessor'
+            D['edit_accessor'] = 'archetypes_accessor'
             schema.addField(field(name, **D))
 
-        print schema
         self._schemas[fieldset] = schema
 
-        if RESPONSE is not None:
-            RESPONSE.redirect('pcng_schema_editor?fieldset=%s&portal_status_message=Schema changed' % fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema changed', fieldset=fieldset)
 
     def schema_get_fieldtype(self, field):
         """ return the type of a field """
