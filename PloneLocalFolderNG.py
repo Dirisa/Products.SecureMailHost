@@ -612,13 +612,13 @@ class PloneLocalFolderNG(BaseContent):
         properties = kw.get('properties', None)
         rel_dir = kw['rel_dir']
 
-        fullpath = join(destination, id)
+        fullpath = join(destination, id).replace('\\','/')
         foldername = dirname(fullpath)
         mi = self.mimetypes_registry.classify(data=None, filename=id.lower())
 
         proxy = FileProxy(id, filepath=fullpath, fullname=fullpath,
                           properties=properties)
-        proxy.setAbsoluteURL('%s/%s' % (self.absolute_url(), join(rel_dir,id)))
+        proxy.setAbsoluteURL('%s/%s' % (self.absolute_url(), join(rel_dir,id).replace('\\','/')))
 
         if proxy_type == 'folder':
             proxy.setIconPath('folder_icon.gif')
@@ -799,7 +799,8 @@ class PloneLocalFolderNG(BaseContent):
 
             destpath = self._getFSFullPath(PLFNGRelativePath='')
             trimmedFSBasePath = self._getFSBasePath()
-            rel_dir = destpath.replace(trimmedFSBasePath, '')
+            #rel_dir = destpath.replace(trimmedFSBasePath, '')
+            rel_dir = destpath.replace(trimmedFSBasePath, '').replace('\\','/')
             if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
 
             _proxy = self._createProxy(file,
@@ -1265,7 +1266,7 @@ class PloneLocalFolderNG(BaseContent):
               '/plfng_view?portal_status_message=' + msg)
             return 0
         # then, check that file unpacking will not violate any quota-limits
-        elif self.quota_maxbytes != 0:
+        elif int(self.quota_maxbytes) != 0:
             # traverse up the acquisition tree looking for first container with
             # a non-zero 'quota_maxbytes' attribute.  If such a container is
             # found, find out the total number of bytes used by the contents of
