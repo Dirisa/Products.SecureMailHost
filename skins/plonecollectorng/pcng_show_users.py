@@ -8,6 +8,7 @@ users.sort()
 context.REQUEST.RESPONSE.setHeader('content-type', 'text/plain; charset=utf-8')
 
 collectors = [ c.getObject() for c in context.portal_catalog(meta_type="PloneCollectorNG") ]
+collectors = [ c for c in collectors if c]
 
 for user in users:
  
