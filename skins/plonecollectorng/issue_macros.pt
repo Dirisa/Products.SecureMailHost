@@ -44,6 +44,12 @@
   </metal:block>
 </fieldset>
 
+<div metal:define-macro="view_schemata_as_div" i18n:domain="plonecollectorng">
+  <div tal:repeat="field fields">
+    <span metal:use-macro="here/issue_macros/macros/field_shortview" /> 
+  </div>
+</div>
+
 <!-- Issue related macros -->
 
 <div metal:define-macro="issue_references" i18n:domain="plonecollectorng">

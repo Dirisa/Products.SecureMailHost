@@ -29,131 +29,96 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
-      <fieldset style="border: 0">
 
-        <div class="issue_view_navigation"
-             tal:define="schematas here/Schemata;
-                         schemata_names here/SchemataNames;
-                         default_fieldset python:  schemata_names[0];
-                         fieldset request/fieldset|options/fieldset|default_fieldset;
-                         fieldsets python:[key for key in schemata_names if key != 'metadata' and key != 'default'];" >
+      <div style="clear: both"> 
 
-          <metal:block tal:condition="python: member.has_permission('ManagePortalContent', here)" >
-            <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
-            <tal:block repeat="set fieldsets">
-              <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
-                 <span i18n:translate="" tal:content="set" /></a> <span tal:condition="not: repeat/set/end">&bull;</span>
-            </tal:block>
-          </metal:block>
-        </div>
-      </fieldset>
+        <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames()">
+          <tal:if  tal:condition="python: schemata_name not in ('default',) "> 
+            <div class="portlet" id="pcng_metadata"
+                     tal:define="schemata python:here.atse_getSchemata(schemata_name);
+                                 fields python: test(schemata_name=='issuedata', 
+                                                [f for f in schemata.fields() if not f.getName() in ('title', 'description', 'solution')], 
+                                                schemata.fields())">
+              <h5>
+                <span i18n:translate="" tal:content="schemata_name" />
+                <a tal:attributes="href string:pcng_base_edit?fieldset=${schemata_name}"><img src="edit.gif" title="Edit" i18n:attributes="title"/></a>
+              </h5>
+              <div class="portletBody">
+                <div metal:use-macro="here/issue_macros/macros/view_schemata_as_div" />
 
-      <fieldset tal:define="fieldset python: 'issuedata'">
-        <legend><a class="schemata_legend"  
-                   tal:attributes="href string:pcng_base_edit?fieldset=${fieldset}"  
-                   i18n:translate=""
-                   tal:content="fieldset" /></legend>
-
-        <div style="float: left; width: 30%; vertical-align: top">
-          <metal:block tal:repeat="field python: here.atse_getSchemata('issuedata').fields()">
-            <metal:block tal:condition="python: field.getName() not in ('title', 'description', 'solution')">
-              <div>
-                <span tal:omit-tag="" metal:use-macro="here/issue_macros/macros/field_shortview" />
-              </div>
-            </metal:block>
-          </metal:block>
-
-          <span class="schemata_label" i18n:translate="status">Status</span>: 
-          <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
-          <br>
-          <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
-        </div>
-
-        <div style="float: right; width: 70%; vertical-align: top;"
-             tal:define="schema python: here.atse_getSchemata('issuedata')">
-
-          <tal:def tal:define="field python: schema['title']" >
-            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
-              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-              <div class="issue_metadata">
-                <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+                  <tal:if tal:condition="python: schemata_name == 'issuedata'" >
+                    <span class="schemata_label" i18n:translate="status">Status</span>: 
+                    <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
+                    <br>
+                    <span class="schemata_label" i18n:translate="assigned_to">Assigned to</span>: 
+                    <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+                  </tal:if>
               </div>
             </div>
-          </tal:def>
+          </tal:if>
+        </tal:loop>
 
-          <tal:def tal:define="field python: schema['description']" >
-            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
-              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-              <pre class="issue_metadata"
-                   tal:content="python: here.format_pre('description')" />
-            </div>
-          </tal:def>
-
-          <tal:def tal:define="field python: schema['solution']" >
-            <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
-              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-              <pre class="issue_metadata">
-                <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
-              </pre>
-            </div>
-          </tal:def>
+        <div class="portlet"  id="pcng_metadata" tal:define="references here/getForwardReferences">
+          <h5>
+            <span i18n:translate="references">References</span>
+            <a href="pcng_issue_references"><img src="edit.gif" title="Create new references" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
+            <metal:loop tal:repeat="ref references">
+              <a tal:define="target ref/getTargetObject"
+                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              <span tal:condition="not: repeat/ref/end">&bull;</span>   
+            </metal:loop>
+            <span tal:condition="not: references" i18n:translate="no_references">No references</span>
+          </div>
         </div>
-      </fieldset>
 
-      <metal:block tal:condition="python: mode.startswith('full')" >
-        <metal:block tal:repeat="schemata_name python: here.atse_getSchemataNames()">
-          <metal:block tal:define="schemata python:here.atse_getSchemata(schemata_name)">
-            <metal:block tal:condition="python: schemata_name not in ('default', 'issuedata') "> 
-              <div metal:use-macro="here/issue_macros/macros/view_schemata" />
-            </metal:block>
-          </metal:block>
-        </metal:block>
-      </metal:block>
-
-      <metal:block tal:omit-tag="" tal:define="uploads here/objectValues" >
-        <fieldset tal:condition="uploads">
-          <a href="pcng_issue_references#uploads">
-            <legend i18n:translate="uploads">Uploads</legend>
-          </a>
-          <div>
+        <div class="portlet" id="pcng_metadata" tal:define="uploads here/objectValues">
+          <h5>
+            <span i18n:translate="Uploads">Uploads</span>
+            <a href="pcng_issue_references"><img src="edit.gif" title="Upload file" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody">
             <metal:block tal:repeat="item uploads">
               <a tal:attributes="href item/absolute_url">
                 <span  tal:content="item/getId" tal:attributes="title item/title_or_id"/> 
               </a>
               <span tal:condition="not: repeat/item/end">&bull;</span>   
             </metal:block>
+            <span tal:condition="not: uploads" i18n:translate="no_uploads">No uploads</span>
           </div>
-        </fieldset>
-      </metal:block>
+        </div>
 
-      <metal:block tal:omit-tag="" tal:define="references here/getForwardReferences">
-        <fieldset tal:condition="references">
-          <a href="pcng_issue_references#references">
-            <legend i18n:translate="references">References</legend>
-          </a>
-          <div>
-            <metal:block tal:repeat="ref references">
-              <a tal:define="target ref/getTargetObject"
-                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-              <span tal:condition="not: repeat/ref/end">&bull;</span>   
-            </metal:block>
+       </div>
+
+
+      <div style="clear: both"  id="issue_description_solution"
+           tal:define="schema python: here.atse_getSchemata('issuedata')">
+        <tal:def tal:define="field python: schema['description']" >
+          <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
+            <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <pre class="issue_metadata"
+                 tal:content="python: here.format_pre('description')" />
           </div>
-        </fieldset>
-      </metal:block>
+        </tal:def>
 
+        <tal:def tal:define="field python: schema['solution']" >
+          <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
+            <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <pre class="issue_metadata">
+              <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+            </pre>
+          </div>
+        </tal:def>
+      </div>
 
-      <fieldset><legend i18n:translate="transcript">Transcript</legend>
+      <div id="issue_transcript">
+        <span class="schemata_label" i18n:translate="transcript">Transcript</span>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
-      </fieldset>
+      </div>
 
       <metal:block tal:condition="python: mode.startswith('full')" >
-
-        <tal:if tal:condition="python: mode == 'fullimages'" >
-          <div metal:use-macro="here/issue_macros/macros/issue_images" /> 
-        </tal:if>
-
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
-        <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
       </metal:block>
 
       <div class="documentByLine">
