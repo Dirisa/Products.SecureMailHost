@@ -535,6 +535,9 @@ class PloneLocalFolderNG(BaseContent):
         
     def catalogContents(self,rel_dir=None):
         
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        portalId = portal.getId()
+        
         filesCataloged = 0
         if rel_dir == None: rel_dir = ''
         fullfoldername = os.path.join(self.folder, rel_dir)
