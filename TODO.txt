@@ -36,9 +36,6 @@ about feature requests and/or to volunteer to help!!!
 - bug # 988620: rejected upload of file with same name 
    as existing file results in deletion of existing file
    
-- bug # 990294: PLFNG objects appear twice in Nav tree 
- (for admin user)
-
 - directory creation succeeds but gives an error
    message (not found 404) on Windows 
    (not reproducable yet) 
@@ -52,6 +49,10 @@ about feature requests and/or to volunteer to help!!!
 
 - various problems with filenames containing spaces
   (need to quantify this)
+  
+- metadata file is not deleted when associated file is deleted 
+
+- catalog results output is confusing (what is 2nd tuple?)
 
 ----------------------------------
   BEFORE NEXT RELEASE (0.50)
@@ -69,11 +70,11 @@ and we really need to get them officially released!
 - bug # 988620: rejected upload of file with same name 
    as existing file results in deletion of existing file
    
-- bug # 990294: PLFNG objects appear twice in Nav tree
-
 - resolve any problems wrt filenames containing spaces
 
 - better docs! (specifics tbd)
+
+- display size of contents of child folders within PLFNG folder
 
 - rework file uploads so that they are temporarily stored
   with a temporary filename to facilitate checking 
