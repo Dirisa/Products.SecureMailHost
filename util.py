@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.9 2003/09/20 17:31:15 ajung Exp $
+$Id: util.py,v 1.10 2003/09/21 14:02:34 ajung Exp $
 """
 
 import urllib
@@ -93,7 +93,8 @@ def remove_dupes(lst):
 
 
 def lists_eq(l1, l2):
-    """ compare two lists """
+    """ compare two lists """   
+    l1 = list(l1); l2 = list(l2)
     l1.sort(); l2.sort()
     return l1==l2
 
