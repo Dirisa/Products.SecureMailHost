@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.7 2004/02/08 15:28:13 ajung Exp $
+$Id: graphviz.py,v 1.8 2004/04/30 10:27:18 ajung Exp $
 """
 
 ##########################################################################
@@ -116,7 +116,6 @@ def build_graphviz(graphs, nodes, edges):
 
     print >>fp, '}'
     fp.close()
-#    print open(fname).read()
     return fname
 
 def viz2image(fname, format='gif', RESPONSE=None):
