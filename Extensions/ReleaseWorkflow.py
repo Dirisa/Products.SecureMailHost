@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -41,21 +41,21 @@ def setupPSC_release_workflow(wf):
     sdef = wf.states['in-progress']
     sdef.setProperties(title="""Work on the release is in progress""",
                        transitions=('re-plan', 'release'))
-    sdef.setPermission('Access contents information', 1, ['Manager', 'Owner'])
-    sdef.setPermission('View', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
+    sdef.setPermission('Access contents information', 1, ['Manager', 'Member','Owner'])
+    sdef.setPermission('View', 1, ['Manager', 'Member', 'Owner'])
     sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
 
     sdef = wf.states['planning']
     sdef.setProperties(title="""The release is in the planning stages""",
                        transitions=('begin', 'release'))
     sdef.setPermission('Access contents information', 1, ['Manager', 'Owner'])
-    sdef.setPermission('View', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
+    sdef.setPermission('View', 1, ['Manager', 'Owner'])
     sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""The release has been completed""",
                        transitions=('re-plan', 'retract'))
-    sdef.setPermission('Access contents information', 1, ['Manager', 'Owner'])
+    sdef.setPermission('Access contents information', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
     sdef.setPermission('View', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
     sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
 

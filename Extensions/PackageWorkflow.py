@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -49,10 +49,10 @@ def setupPSC_package_workflow(wf):
     sdef = wf.states['unapproved']
     sdef.setProperties(title="""Unapproved package, awaiting release""",
                        transitions=('publish', 'submit'))
-    sdef.setPermission('Access contents information', 0, ['Member', 'Owner', 'Reviewer'])
-    sdef.setPermission('Modify portal content', 0, ['Member', 'Owner', 'Reviewer'])
-    sdef.setPermission('View', 0, ['Manager', 'Owner', 'Reviewer'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Member', 'Owner', 'Reviewer'])
+    sdef.setPermission('Access contents information', 0, ['Manager', 'Owner'])
+    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
+    sdef.setPermission('View', 0, ['Manager', 'Owner'])
+    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""Public""",
