@@ -1,7 +1,29 @@
 0.6.0 (unstable)
 
+alpha5
+  - major spring cleaning!
+     
+     * added getFilteredFSItems() method to util.py
+       to centralize file/folder filtering and all 
+       calls to os.listdir()
+     
+     * catalogContents() no longer returns # files not cataloged
+     
+     * removed the following unnecessary methods: 
+		    quota_aware(),requireUploadMD5(),fileUnpackingAllowed() 
+		    catalogingEnabled(),folderAddressDisplayStyle() 
+
+     * removed many unnecessary imports
+     
+     * renamed upload_file() as HTMLFormUploadFile()
+     
+     * slightly improved plfng_catalog.pt 
+         - eliminated warning message
+         - pseudo button look for 'catalog contents now' link
+
 alpha4
   - relocated FileProxy class to its own file
+
   - relocated main cataloging logic to catalogFSContent() util.py method
     to facilitate non-web invokation
 

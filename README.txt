@@ -9,10 +9,15 @@ Requirements:
     
     (optional) TextIndexNG2 (http://www.zope.org/Members/ajung/TextIndexNG)
      and associated system utilites for optional zCatalog text-indexing of 
-     local filesystem contents.  For example, with converters like pdftotext, 
-     pptHtml, and vwWare, PDF MSPowerpoint, and MSWord files can be text indexed.
-     TextIndexNG2 has built-in support for text indexing plain, html, sgml, & xml
-     file types).  See DEPENDENCIES.txt for more information.
+     local filesystem contents. Why catalog? cataloging allows ZCatalog 
+     searches of the text contents of the files contained/proxy'd by PLFNG
+     instance(s).  Why use TextIndexNG2? The TextIndexNG2 product provides
+     a fast and extensible mechanism to quickly extract and catalog the text
+     contents of a variety of file types such as .html, .pdf, .ppt, .doc, etc.
+     It provides, out of the box, text extract/conversion for some file types
+     (eg, html), and relies on external system utilities (eg, wvWare, 
+     pdftotext, etc) for other file types. See DEPENDENCIES.txt for more 
+     information.
      
     (optional) A system utility for MD5 checksum generation. Note: python provides 
       built-in support for md5 generation and as of the 0.6 release of PLNFG,
