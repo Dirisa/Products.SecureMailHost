@@ -16,6 +16,14 @@
                 <span tal:replace="faq/Title">Question</span>
                 </h2>
                 
+                <a href=""
+                    class="link-parent visualNoPrint"
+                    tal:condition="not: request/full|nothing"
+                    tal:define="parent_url python:here.navigationParent(here, template.getId())"
+                    tal:attributes="href parent_url">
+                    Up to Table of Contents
+                </a>
+
                 <div class="documentDescription"
                      tal:content="structure faq/Description|nothing">
                 Full Question
