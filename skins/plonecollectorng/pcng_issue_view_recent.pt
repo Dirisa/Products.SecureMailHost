@@ -29,17 +29,13 @@
         </form>
       </div>
 
-      <ul tal:define="rows python: here.pcng_catalog(last_action = {'query' : DateTime()-days, 'range': 'min'}, 
-                                                     sort_on='last_action', 
-                                                     sort_order='reverse')">
-        <tal:loop tal:repeat="row rows">
-          <li>      
-            <span tal:content="python: here.toLocalizedTime(DateTime(row.last_action), long_format=1)" />  
-            <a tal:attributes="href string:${row/getURL}/pcng_issue_view" 
-               tal:content="python: row.getObject().title_or_id()"/>
-          </li>
-        </tal:loop>
-      </ul>
+      <tal:loop tal:repeat="issue python: here.pcng_catalog(
+                                             last_action = {'query' : DateTime()-days, 'range': 'min'}, 
+                                             sort_on='last_action', 
+                                             sort_order='reverse')"
+                tal:define="have_reportlab here/haveReportlab">
+          <div metal:use-macro="here/issue_macros/macros/issue_shortview" />
+      </tal:loop>
 
     </div>
   </body>
