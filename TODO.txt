@@ -6,15 +6,14 @@ Developer claiming item/comments is in [brackets].
 Bugs found when testing on plone.org
 ====================================
 
-- IMPORTANT: Download doesn't work at all right now! We get 
-  the file inside the browser window, not as a downloadable file.    
-    
 - Deleting file in release doesn't seem possible
 
 - primary=1 on downloadable file does not seem to work - going straight to path
   still shows view, and does not download file. Workaround with explicit link
   in psc_download_view.pt and psc_release_view.pt - this needs fixing.
-  
+  -- deo: who said that 'primary=1' is suposed to do it?
+  -- deo: his used for a completely different thing... :-)
+
 - The Releases portlet needs to list the category of the release with the Title,
   therefore it needs to be in the catalog.
 
@@ -25,23 +24,21 @@ PloneHelpCenter integration considerations:
  - Test carefully that all the methods/fields found on the PHC root and used
     as vocabs for contained objects are found in PSC as well, or that they
     are only optionally used.
-    
+
         - DC metadata 'rights' attribute gets acquired from project/package
-        
+
         - Importance vocabulary falls back on default Low, Medium, High
-        
+
         - Versions vocab for PHC items (not the same as versions vocab for
             releases, which relate to which version of Plone it's been
             tested with!) use a catalog search of all releases, in custom
             method getVersions_vocab () in PSCProject.
-            
+
         - Active versions set in field on PSCProject.
-        
+
 =======
 General
 =======
-
-- Need to ensure proper security declarations exist on all methods!
 
 - RSS feed for Latest Releases
 
@@ -56,11 +53,11 @@ General
 Design/UI
 =========
 
-- Hard for regular members to find Package after it's been created, before 
+- Hard for regular members to find Package after it's been created, before
   it's been published (Standard problem in Plone in general without Workspaces
                         ~limi)
-    
-- We may want to use the currentVersions field of a release to mark relases 
+
+- We may want to use the currentVersions field of a release to mark relases
     which are not currently supported.
 
 - Need to list the documentation types in the Additional resources box.
