@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.155 2004/04/14 18:13:18 ajung Exp $
+$Id: Issue.py,v 1.156 2004/04/19 09:18:12 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -213,13 +213,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             (Used for TTW creation of issues)
         """
 
-        schema = self.Schema()
         for k in parameters.keys():                                                          #
             if  k in ('id',):
                 raise ValueError(self.Translate('wrong_parameter', 'The parameter "$id" can not be set', id=k))
             v = getattr(parameters, k)
-            field = schema[k]
-            field.set(self, v)
+            field = self.getField(k)
+            if field:
+                field.set(self, v)
 
     def getParameter(self, key):
         """ return the value of an Archetypes field """
