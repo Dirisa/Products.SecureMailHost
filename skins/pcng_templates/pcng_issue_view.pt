@@ -39,16 +39,14 @@
         <tal:def tal:define="field python: schema['description']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
             <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-            <pre class="issue_metadata"
-                 tal:content="python: here.format_pre('description')" />
+            <pre class="issue_metadata" tal:content="python: here.format_pre('description')" />
           </div>
         </tal:def>
 
         <tal:def tal:define="field python: schema['solution']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
             <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-            <pre class="issue_metadata">
-              <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
+            <pre class="issue_metadata"><span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)"/>
             </pre>
           </div>
         </tal:def>

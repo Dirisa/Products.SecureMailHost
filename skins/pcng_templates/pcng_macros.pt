@@ -109,12 +109,13 @@
   </tal:def>
 </div>
 
-<div metal:define-macro="transcript_changes" i18n:domain="plonecollectorng">
+<metal:macro metal:define-macro="transcript_changes" i18n:domain="plonecollectorng">
 
   <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents() if e.getType() not in ('comment', 'action')];
                        num_events python: len(events)">
 
     <span tal:condition="not: events" i18n:translate="no_entries">No entries</span>
+
 
     <table class="listing">
       <tr tal:condition="events">
@@ -140,10 +141,10 @@
           <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
         </td>
       </tr>
-    <table>
+    </table>
   </tal:def>
 
-</div>
+</metal:macro>
 
 
 <metal:div metal:define-macro="show_issues" i18n:domain="plonecollectorng">
