@@ -72,7 +72,7 @@
           <legend i18n:translate="uploads">Uploads</legend>
         <div>
             <metal:block tal:repeat="item uploads">
-              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>&nbsp; -
+              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>&nbsp;&bull;
             </metal:block>
         </div>
         </fieldset>
