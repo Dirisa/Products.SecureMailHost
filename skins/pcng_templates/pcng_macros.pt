@@ -33,6 +33,9 @@
     <div class="right" id="pcng_headline" tal:condition="action|nothing">  
       <b>
           <span i18n:translate="" tal:content="string:${action}" />
+          <tal:if tal:condition="request/fieldset|nothing">
+              -- <span i18n:translate="" tal:content="request/fieldset" />
+          </tal:if>
           (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
       </b>
     </div>
