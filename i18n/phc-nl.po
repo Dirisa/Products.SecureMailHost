@@ -36,7 +36,7 @@ msgstr "Item naar boven verplaatsen"
 #. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
 #: ./phc_search.pt
 msgid "RSS Feed"
-msgstr "RSS Feed"
+msgstr "RSS berichtformaat"
 
 #. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
 #: ./phc_search.pt
