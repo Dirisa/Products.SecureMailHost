@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.39 2003/12/02 08:52:09 ajung Exp $
+$Id: SchemaEditor.py,v 1.40 2003/12/02 09:54:54 ajung Exp $
 """
 
 import copy
@@ -51,14 +51,6 @@ class SchemaEditor:
             schema.addField(StringField('subject', schemata='default'))
             self._ms = schema.copy()
  
-        for field in self._ms.fields():
-            if field.mutator is None:
-                field.mutator = 'archetypes_mutator'
-            if field.edit_accessor is None:
-                field.edit_accessor = 'archetypes_accessor'
-            if field.accessor is None:
-                field.accessor = 'archetypes_accessor'
-
         return self._ms
 
     security.declareProtected(View, 'atse_getSchemataNames')
@@ -225,9 +217,6 @@ class SchemaEditor:
                 D['vocabulary'] = DisplayList(l)
 
         D['required'] = FD.get('required', 0)
-        D['mutator'] = 'archetypes_mutator'
-        D['accessor'] = 'archetypes_accessor'
-        D['edit_accessor'] = 'archetypes_accessor'
 
         f = field(FD.name, **D)
         oldfield = self._ms[FD.name]

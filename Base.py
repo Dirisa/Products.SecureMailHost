@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.4 2003/12/02 08:52:09 ajung Exp $
+$Id: Base.py,v 1.5 2003/12/02 09:54:54 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -71,6 +71,10 @@ class ParentManagedSchema:
                     value = field.storage.get(field.getName(), self)  
                 except:
                     field.storage.set(field.getName(), self, field.default)
+        
+                field.mutator = 'archetypes_mutator'
+                field.accessor = 'archetypes_accessor'
+                field.edit_accessor = 'archetypes_accessor'
                         
         return self._v_schema
 
