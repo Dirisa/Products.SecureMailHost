@@ -1,0 +1,35 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+
+  <metal:block metal:fill-slot="head_slot">
+    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+  </metal:block>
+
+  <div metal:fill-slot="main">	  
+
+    <table tal:define="collectors python: test(here.meta_type=='PloneCollectorNG', [here], here.objectValues('PloneCollectorNG'))">
+      <tr>  
+        <th>Collector</th>
+        <th>Workflow tool</th>
+        <th>Catalog tool</th>
+        <th></th>
+      </tr>
+
+      <tr tal:repeat="col collectors">
+        <td tal:content="col/title_or_id" />
+        <td tal:content="python: test(hasattr(col, 'pcng_workflow'), 'YES', 'NO')" />
+        <td tal:content="python: test(hasattr(col, 'pcng_catalog'), 'YES', 'NO')" />
+        <td>
+          <a tal:attributes="href string:${col/absolute_url}/pcng_migrate_120">Migrate to 1.2</a>
+        </td>
+      </tr>
+
+    </table>
+
+  </div>
+</body>
+</html>                                          
