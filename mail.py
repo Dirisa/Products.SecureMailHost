@@ -99,7 +99,7 @@ class Mail:
         kw = self.kwargs
         userid   = kw.get('userid', None)
         password = kw.get('password', None)
-        forceTLS = kw.get('forctls', False)
+        forceTLS = kw.get('forcetls', False)
         message  = self.message.as_string()
         
         # connect

@@ -1,12 +1,128 @@
 from Interface import Interface, Attribute
- 
+
 class IMail(Interface):
-    """Email
+    """A mail object which knows how to send itself
+    
+    The mail object is initialized with the following arguments:
+    
+    mfrom     - mail from tag (only for SMTP server) (string)
+    mto       - mail to tag (only for SMTP server)  (string)
+    message   - message (email.Message.Message based object)
+    smtp_host - SMTP server address (string)
+    smtp_port - SMTP server port (string/int)
+    **kwargs  - additional keywords:
+        o userid   - user name for ESMTP login (string)
+        o password - password for ESMTP login (string)
+        o forcetls - flag to enforce TLS encryption. Sending will fail if the
+                     mailserver doesn't support TLS
     """
+   
+    def setId(id):
+        """Set the unique id of the mail
+        
+        The unique id is generated using the host name, a time stamp and a
+        random value by default. It's used as the key for the mail in the queue.
+        
+        Type: string
+        """
+
+    def getId():
+        """Get unique id
+        
+        The id can be used to identify the mail.
+        
+        Type: string
+        """
+        return self.id
+    
+    def incError():
+        """Increase the error counter
+        
+        Each mail has its own error counter which should be increased inside the
+        sender queue when the mail cannot be send.
+        """
+
+    def getErrors(f):
+        """Get the state of the error counter
+        """
+
+    def send(debug=False):
+        """Send mail to the SMTP server
+        
+        The mail including header from self.message is send to the SMTP server.
+        
+        send is trying to use starttls if possible. If 'forcetls' is set to a
+        true value and starttls isn't supported by the mailserver an error is
+        raised.
+        
+        If an userid and password is applied then send is using an ESMTP login.
+        If the server doesn't support esmtp login with a give userid an error is
+        raised.
+
+        Note: The data mfrom and mto is independed from the data inside the 
+              message header. Read the RFC about SMTP for more informations.
+        """
+        
+    def __str__():
+        """Return message as string including header
+        """
+    
+    def info(self):
+        """Return status informations about the mail
+        
+        The status information includes From, To, Subject, message size and the
+        state of the error counter.
+        """
+
     
 class IMailQueue(Interface):
+    """A generic and thread safe mail queue
+    
+    It's working like a dict except you can't use __setitem__
     """
-    """
+
+    def queue(mails):
+        """Sends one or more emails to the queue
+        """
+    
+    def __setitem__(key, obj):
+        """__setitem__ is not supported!
+        """
+        
+    def __getitem__(id):
+        """Get a mail by id
+        """
+
+    def __delitem__(mail_or_id):
+        """Removes an email from the queue
+
+        MUST be called within an acquired lock!
+        """
+
+    def sync():
+        """syncs the queue
+        
+        Useful to sync a DB in the filesystem
+
+        MUST be called within an acquired lock!
+        """
+        pass
+    
+    def mkMailId():
+        """Generates an id
+        """
+    
+    def keys():
+        """List all mail ids (queue keys)
+        """
+            
+    def has_key(id):
+        """Tests if the id is in the queue
+        """
+
+    def __len__():
+        """Thread safe len() method
+        """
 
 class IDataManager(Interface):
     """Objects that manage transactional storage.

@@ -40,7 +40,7 @@ class MailerThread(WorkerThread):
         LOG('SecureMailHost', DEBUG, 
             'Awaking thread with %d mails left in the queue.' % len(mailQueue))
 
-        for id in mailQueue.list():
+        for id in mailQueue.keys():
             mail = mailQueue.get(id)
             # checking for max errors
             if mail.getErrors() > MAX_ERRORS:

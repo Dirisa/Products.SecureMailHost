@@ -75,12 +75,12 @@ class MailQueue(DictMixin):
             self._lock.acquire()
             for mail in mails:
                 id = mail.getId()
-                self._queue(id, mail)
+                self._add(id, mail)
             self.sync()
         finally:
             self._lock.release()
             
-    def _queue(self, id, mail):
+    def _add(self, id, mail):
         """Adds one mail to the queue
 
         MUST be called within an acquired lock!
@@ -147,6 +147,8 @@ class MailQueue(DictMixin):
     
     def mkMailId(self):
         """Generates a id
+        
+        MUST be called within an acquired lock!
         """
         global host
         count = 0
@@ -154,7 +156,7 @@ class MailQueue(DictMixin):
             ts = time.time()
             rand = random.randint(1, 1000000)
             id = '%s-%s-%i-%i' % (ts, host, rand, count)
-            if not self.has_key(id):
+            if id not in self._queue.keys():
                 return id
             else:
                 count+=1
@@ -228,12 +230,12 @@ class AnyDBMailStorage(MailQueue):
             self._lock.acquire()
             for mail in mails:
                 id = mail.getId()
-                self._queue(id, mail)
+                self._add(id, mail)
             self.sync()
         finally:
             self._lock.release()
 
-    def _queue(self, id, mail):
+    def _add(self, id, mail):
         """Adds one mail to the queue
 
         MUST be called within an acquired lock!
@@ -296,7 +298,7 @@ class TransactionalMailQueue(MailQueue):
         # register self as
         get_transaction().register(self)
 
-    def _queue(self, id, mail):
+    def _add(self, id, mail):
         """Adds one mail to the queue
 
         MUST be called within an acquired lock!

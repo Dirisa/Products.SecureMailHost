@@ -21,6 +21,71 @@ except NameError:
 
 import threading
 
+try:
+    from Interface import Interface
+except:
+    Interface = object
+
+class IWorkerThread(Interface):
+    """Common Worker Thread
+    
+    A worker thread is working as a seperate thread inside Zope or other
+    threaded environments. Either the main() method or an optional callable 
+    target is running in an endless loop with a predefined pause between each
+    run.
+    
+    Worker threads are daemonized threads by default so they are automagically
+    stopped when the main thread of the application is stopped.
+    
+    Worker threads aren't started automagically. After creating a worker thread
+    instance you have to start the internal loop by calling the start() method.
+
+    Example:
+    >>> worker = WorkerThread(name='name', wait=float(10))
+    >>> worker.start()
+    >>> # calling main() method every 10 seconds until stopped
+    >>> worker.stop() # stopped
+    >>> worker.start() # started again
+    
+    Arguments:
+    name     - name of the thread
+    wait     - timer for the main loop
+    target   - a callable or None
+    *args    - optional args for the target
+    **kwargs - optinal keyword arguments for the target
+    
+    Do NOT overwrite the run() method! Overwrite the main() method or apply
+    a target.
+    """
+    
+    def start():
+        """Start the main loop
+        """
+
+    def stop():
+        """Stop the main loop
+        """
+        
+    def kick():
+        """Kicks the main loop to run
+        
+        When the thread is running and already working nothing special happens. 
+        
+        When the thread is running and in wait state the main() method is
+        started immideatly.
+        """
+        
+    def main():
+        """pay loader method
+        
+        The main() method is called everytime the thread is running and the 
+        event has timed out.
+        """
+        
+    def run():
+        """Internal method. DO NOT OVERWRITE IT!
+        """
+
 
 class ReadWriteLock:
     """A lock object that allows many simultaneous "read-locks", but
@@ -66,23 +131,9 @@ class ReadWriteLock:
 
 class WorkerThread(threading.Thread):
     """Common Worker Thread
-    
-    worker = WorkerThread(name='name', wait=float(10))
-    worker.setDaemon(True)
-    worker.start()
-    # calling main() method every 10 seconds until stopped
-    worker.stop() # stopped
-    worker.start() # started again
-    
-    name     - name of the thread
-    wait     - timer for the main loop
-    target   - a callable or None
-    *args    - optional args for the target
-    **kwargs - optinal keyword arguments for the target
-    
-    Do NOT overwrite the run() method. Overwrite the main() method or apply
-    a target.
     """
+    
+    __implements__ = IWorkerThread
     
     def __init__(self, name='WorkerThread', wait=10.0, target=None, *args, **kwargs):
         threading.Thread.__init__(self, name=name)
