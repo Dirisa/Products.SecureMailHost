@@ -57,6 +57,9 @@
           </a>
         </li>
       </ul>
+
+      <h3>XML</h3>
+      <pre tal:content="context/pcng_issue_xml" />
     </div>
   </body>
 </html>
