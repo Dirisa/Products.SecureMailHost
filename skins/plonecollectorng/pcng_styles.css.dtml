@@ -115,4 +115,8 @@ span.selected {
     font-weight: bold;
 }
 
+span.headline_action {
+   font-size: 90%;
+}
+
 /* </dtml-with> */
