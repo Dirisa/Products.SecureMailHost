@@ -8,7 +8,7 @@
       <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
     </div>
     <div metal:fill-slot="main" 
-         tal:define="search_form_position python: 'bottom'">
+         tal:define="search_form_position python: member.getProperty('pcng_position_searchform', 'bottom')">
 
       <!-- defaults for status: Pending+Accepted -->    
       <metal:block tal:condition="python: request.has_key('status') == 0">
