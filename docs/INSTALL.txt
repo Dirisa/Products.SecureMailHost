@@ -29,22 +29,6 @@ Requirements:
    - Graphviz (www.graphivz.org) to produce dependency tree for 
      issue references
 
-
-ATTENTION TO USERS of Plone 2.0 beta 3:
-
-    portal_workflow has been removed in Plone 2b3 from the action provider list.
-    This is a *big problem* and will be fixed in the next Plone release.
-    To fix this:
-
-       - remove the "deleteActionProvider()" call in 
-         CMFPlone/setup/ConfigurationMethods.py line 175
-
-       - *recreate* your Plone 2.0 site (if created *with* Plone 2.0 beta 3)
-
-       - there is currently no support from my side to re-enable the
-         portal_workflow as action provider for Plone sites created under
-         Plone 2.0 beta 3
-
 Installation:
  
   - visit the ZMI screeen of Plone site and go to the portal_quickinstaller
