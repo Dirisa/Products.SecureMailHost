@@ -135,8 +135,8 @@
                             <div class="portletContent odd">
                                 <a class="portletMore"
                                    tal:attributes="href help_type/getURL" 
-                                   tal:content="structure string: More ${help_type/Title}&#8230;"
-                                   >More FAQs</a>
+                                   tal:content="structure string: All ${help_type/Title}&#8230;"
+                                   >All FAQs</a>
                             </div>
                           </div>
                         </div>

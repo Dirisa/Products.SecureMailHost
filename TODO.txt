@@ -9,6 +9,22 @@ General:
   types. Almost done, it doesn't search the Glossary at the moment, it seems.
   (limi)
 
+- Expose Contributors in the main edit screen. It's going to be used a lot :)
+
+- Obsolete state has non-obvious name for the transition to pull it back into
+  play.
+
+- Definitions (in Glossary) need to be able to have Rich Text - the way it is
+  now, it can't have links to other definitions. The Description attribute 
+  should be this field, just rendered to Plain Text. If this is too much work,
+  having the "See also" thing so we can link to other definitions is also an
+  option. (Actually - probably a better option, as it is less susceptible to
+  link rot, since it's an AT reference)
+
+- Definitions (glossary_view template) should be alphabetically sorted - 
+  proper human sorting, not UNIX-sorting (ie. not uppercase letters before 
+  lowercase).
+
 - Make it easier to choose which subcomponents get installed. For
   example, put a simple textual list in config.py of the folderish
   products, and have types/init.py, Install.py, and
