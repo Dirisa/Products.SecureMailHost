@@ -14,3 +14,4 @@ Credits:
     by Bitstream as free software for open-source projects 
     (see ttffonts/COPYRIGHT.txt)
 
+  - Parts of the WorkflowTool code were taken from the Plone sources
