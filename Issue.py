@@ -5,13 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.26 2003/09/22 15:12:37 ajung Exp $
+$Id: Issue.py,v 1.27 2003/09/23 13:35:09 ajung Exp $
 """
 
 import sys
 
 from AccessControl import  ClassSecurityInfo, Unauthorized
 from Acquisition import aq_base
+from DateTime import DateTime
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
@@ -98,6 +99,9 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         else:
             name = 'contact_name'
             self.Schema()[name].storage.set(name, self, util.getUserName())
+
+        # pre-allocate the deadline property
+        self.progress_deadline = DateTime() + self.deadline_tickets        
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
