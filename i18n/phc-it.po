@@ -473,5 +473,46 @@ msgstr "Collegamento:"
 msgid "phc_up_to_glossary"
 msgstr "Ritorna al Glossario"
 
+
+msgid "label_detailed_question"
+msgstr "Dettagli della domanda"
+
+msgid "help_detailed_question"
+msgstr "Ulteriori dettagli relativi alla domanda, se non sono evidenti dal titolo."
+
+msgid "desc_answer"
+msgstr "Frasi significative che illustrano la risposta."
+
+msgid "label_answer"
+msgstr "Risposta"
+
+
+msgid "phc_label_versions"
+msgstr "Versioni"
+
+msgid "phc_versions"
+msgstr "Versioni del prodotto che si applicano a questo elemento (lasciare in bianco se non e' specifico di una versione)"
+
+
+msgid "phc_label_sections"
+msgstr "Sezioni"
+
+msgid "phc_sections"
+msgstr "Sezioni nelle quali l'elemento deve comparire."
+
+
+msgid "phc_label_importance"
+msgstr "Importanza"
+
+msgid "phc_importance"
+msgstr "Importanza di questo elemento."
+
+
+msgid "phc_label_related"
+msgstr "Parole chiave correlate"
+
+msgid "phc_related"
+msgstr "Una lista di parole chiave che doverbbero essere indicizzate assieme al contenuto (per esempio per una Ricetta sulla VerboseSecurity, dovresti includere Verbose Security, Privilegi insufficienti, problemi di sicurezza nel debugging)"
+
 # MSB end mofification
 

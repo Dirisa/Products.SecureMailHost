@@ -529,6 +529,46 @@ msgstr "Link:"
 msgid "phc_up_to_glossary"
 msgstr "Up to Glossary"
 
+
+
+msgid "label_detailed_question"
+msgstr "Detailed Question"
+
+msgid "help_detailed_question"
+msgstr "More details on the question, if not evident from the title."
+
+msgid "desc_answer"
+msgstr "Meaningful sentences that explains the answer."
+
+msgid "label_answer"
+msgstr "Answer"
+
+msgid "phc_label_versions"
+msgstr "Versions"
+
+msgid "phc_versions"
+msgstr "Versions of product that apply to this item (leave blank if not version-specific)"
+
+msgid "phc_label_sections"
+msgstr "Sections"
+
+msgid "phc_sections"
+msgstr "Section(s) that this item should appear in."
+
+
+msgid "phc_label_importance"
+msgstr "Importance"
+
+msgid "phc_importance"
+msgstr "Importance of this item."
+
+
+msgid "phc_label_related"
+msgstr "Related keywords"
+
+msgid "phc_related"
+msgstr "A list of keywords that should be indexed along with the content (e.g. for a how-to on VerboseSecurity, you might include Verbose Security, Insufficient Privileges, Debugging security problems)"
+
 # MSB end mofification
 
 

@@ -22,6 +22,9 @@ ImportanceSchema = Schema((
                widget=SelectionWidget(
                        label='Importance',
                        description='Importance of this item',
+			description_msgid = "phc_importance",
+			label_msgid = "phc_label_importance",               
+			i18n_domain = "plonehelpcenter"
                       ),
                ),
     ))
@@ -33,6 +36,8 @@ RelatedSchema = Schema((
                widget=LinesWidget(
                    label='Related keywords',
                    description='A list of keywords that should be indexed along with the content (e.g. for a how-to on VerboseSecurity, you might include Verbose Security, Insufficient Privileges, Debugging security problems)',
+                   description_msgid = "phc_related",
+                   label_msgid = "phc_label_related",               
                    i18n_domain="plonehelpcenter",
                    rows=6)
                ),
@@ -49,10 +54,13 @@ VersionsSchema = Schema((
                multiValued=1,
                enforceVocabulary=1,
                widget=MultiSelectionWidget(
-                       label='Versions',
+                       label_msgid='phc_label_versions',
+                       label= "Versions",
                        description='Versions of product that apply to this item '
                                    '(leave blank if not version-specific)',
-                      ),
+		       description_msgid = "phc_versions",
+		       i18n_domain = "plonehelpcenter"                      
+		      ),
                ),
     ))
 
@@ -66,7 +74,10 @@ SectionsSchema = Schema((
                index=':schema',
                widget=MultiSelectionWidget(
                         label='Sections',
-                        description='Section(s) that this item should appear in.',),
+                        description='Section(s) that this item should appear in.',
+			description_msgid = "phc_sections",
+			label_msgid = "phc_label_sections",               
+			i18n_domain = "plonehelpcenter"),
                ),
     ))
 
