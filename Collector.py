@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.214 2004/09/23 15:34:08 ajung Exp $
+$Id: Collector.py,v 1.215 2004/09/26 13:30:55 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -113,7 +113,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         if getattr(self, '_already_created', 0) == 0:
             # Upon creation we need to add the transcript
             self._transcript2 = Transcript2().__of__(self)
-            self._transcript2.add(CommentEvent(u'Tracker created'))
+            self._transcript2.add(CommentEvent(u'Tracker created', state='system'))
             self._already_created = 1
         else:
             # manager_afterAdd() is also called when the collector is
@@ -135,7 +135,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
         self._setup_catalog()
         self._setup_workflow()
-        self.getTranscript().add(CommentEvent(u'Tool setup'))
+        self.getTranscript().add(CommentEvent(u'Tool setup', state='system'))
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance',
@@ -533,7 +533,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """ reindex all issues """
 
         for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
-        self.getTranscript().add(CommentEvent(u'Issues reindexed'))
+        self.getTranscript().add(CommentEvent(u'Issues reindexed', state='system'))
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.Translate('issues_reindexed', 'Issues reindexed'))
 
@@ -549,7 +549,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     def resetNumberIssues(self, RESPONSE=None):
         """ reset number of issues """
         self._num_issues = 0
-        self.getTranscript().add(CommentEvent(u'Number of issues reset to 0'))
+        self.getTranscript().add(CommentEvent(u'Number of issues reset to 0', state='system'))
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.Translate('number_issues_reseted', 'Issue number reseted to 0'))
 
@@ -561,7 +561,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
-        self.getTranscript().add(CommentEvent(u'Issue schemas reseted'))
+        self.getTranscript().add(CommentEvent(u'Issue schemas reseted', state='system'))
         if return_to:
             util.redirect(RESPONSE, return_to,
                           self.Translate('issues_updated', 'Issues updated'))
@@ -584,7 +584,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             except:
                 field.set(self, field.default)
 
-        self.getTranscript().add(CommentEvent(u'Collector schema updated'))
+        self.getTranscript().add(CommentEvent(u'Collector schema updated', state='system'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                           self.Translate('collector_schema_updated', 'Collector schema updated'))
 
@@ -601,7 +601,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             if issue.UID() is None:
                 RC.registerObject(issue)
       
-        self.getTranscript().add(CommentEvent(u'Issue UIDs reregistered'))
+        self.getTranscript().add(CommentEvent(u'Issue UIDs reregistered', state='system'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('uids_recreated', 'UIDs recreated'))
 

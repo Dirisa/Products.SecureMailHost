@@ -68,33 +68,58 @@ nl(context.wrap_text(context.Description()))
 
 nl()
 
+# Comments
 n = 0
-groups = context.getTranscript().getEventsGrouped()
-for group in groups:
-    datestr = context.toLocalizedTime(DateTime.DateTime(group[0].created()), long_format=1)
-    creator = group[0].Creator()
-    user = group[0].getUser()
+events = context.getTranscript().getEvents(types=('comment', 'upload', 'reference'))
+for event in events:
+    datestr = context.toLocalizedTime(DateTime.DateTime(event.getCreated()), long_format=1)
+    creator = event.getCreator()
+    user = event.getUser()
 
-    # Find action in current group
-    action = context.pcng_action_from_events(group)
-    nl('#%d %s %s (%s)' % (len(groups)-n, TR(action, action), datestr, creator)) 
+    nl('#%d %s %s (%s)' % (len(events)-n, TR(event.getType(), event.getType()), datestr, creator)) 
     nl('-'*75)
-
-    for ev in group:
-        if ev.getType() == 'action': continue
-        nl(context.pcng_format_event(ev, 'plain'))
-
+    nl(context.pcng_format_event(event, 'plain'))
     n+=1; nl()
 
+# metadata
+nl()
+nl(TR('metadata', 'Metadata'))    
+nl('-'*75 + '\n') 
+events = context.getTranscript().getEvents()
+events = [e for e in events  if e.getType() not in ('comment', 'upload', 'reference')]
+for event in events:
 
+    date = event.getCreated()
+    date = context.toLocalizedTime(DateTime.DateTime(date), long_format=1)
+    type = event.getType()
+    user = event.getCreator()
+    try:
+        field = event.getField()
+    except: 
+        field = ''
+    text = context.pcng_format_event(event, 'plain')
+
+    s = '%s | %10s | %10s | %10s | %s' % (date, type, user, field, text)
+    nl(s)
+nl()
+
+# references
 if context.haveATReferences():
-    refs = context.getForwardReferences()
-    if refs:
+    events = context.getTranscript().getEvents(types=('references'))
+    if events:
         nl(TR('references_to_other_issues', 'References to other issues'))
         nl('-'*40)
-        for r in refs:
-            target = r.getTargetObject()
-            nl('   -> http://%s/%s' % (context.aq_parent.canonical_hostname, target.absolute_url(1)))
+        for event in events:
+            text = context.pcng_format_event(event, 'plain')
+            nl('   -> http://%s/%s' % (context.aq_parent.canonical_hostname, text))
+        nl()
+
+# Uploads
+events = context.getTranscript().getEvents(types=('upload'))
+if events:
+    nl(TR('uploads', 'Uploads'))
+    nl('-'*40)
+    for event in events:
+        nl('   -> %s/%s' % (context.absolute_url(), event.getFileId()))
 
 return '\n'.join(l)
-                                     

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.223 2004/09/25 09:01:02 ajung Exp $
+$Id: Issue.py,v 1.224 2004/09/26 13:30:56 ajung Exp $
 """
 
 import os, time, random
@@ -297,7 +297,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
         if self.haveATReferences():
             issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
             self.deleteReference(issue)
-            self.getTranscript().add(CommentEvent(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1), public=False))
+            self.getTranscript().add(CommentEvent(self.Translate('reference_removed', u'Reference removed: %s' % issue_url, as_unicode=1), state='private'))
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('reference_deleted', 'Reference has been deleted'))
         else:
@@ -430,7 +430,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     def remove_upload(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
-        self.getTranscript().add(CommentEvent(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1)))
+        self.getTranscript().add(CommentEvent(self.Translate('upload_removed', 'Removed: %s' % id, as_unicode=1), state='private'))
         util.redirect(RESPONSE, 'pcng_issue_uploads', 
                      self.Translate('upload_removed', 'File has been removed'))
 

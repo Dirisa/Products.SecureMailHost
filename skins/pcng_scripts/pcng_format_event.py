@@ -4,7 +4,7 @@
 
 def preXML(e):
     return '<%s creator="%s" user="%s" public="%s" created="%s">' % \
-        (e.getType(), e.Creator(), e.getUser(), e.isPublic(), e.created())
+        (e.getType(), e.getCreator(), e.getUser(), e.getState(), e.getCreated())
 
 def postXML(e):
     return '</%s>' % e.getType()
@@ -16,8 +16,7 @@ site_encoding = context.getSiteEncoding()
 if type == 'comment':
 
     if format == 'plain':
-        s = '%s: %s' % (TR(type, type, as_unicode=1), e.getComment())
-        return s
+        return e.getComment()
 
     elif format == 'html':
         s = '<pre>%s</pre>' % context.wrap_text(e.getComment(), 80, reencode=False)
@@ -39,7 +38,7 @@ elif type == 'change':
     if e.getOld() == e.getNew(): return ''
 
     if format == 'plain':
-        s = '%s: %s -> %s' % (e.getField(), e.getOld(), e.getNew())
+        s = '%s -> %s' % (e.getOld(), e.getNew())
         return s
 
     elif format == 'html':
@@ -62,7 +61,7 @@ elif type == 'incremental':
     if e.getAdded() == e.getRemoved(): return ''
 
     if format == 'plain':
-        s = '%s: -%s, +%s' % (e.getField(), e.getRemoved(), e.getAdded())
+        s = '-%s, +%s' % (e.getRemoved(), e.getAdded())
         return s
 
     elif format == 'html':
@@ -100,7 +99,7 @@ elif type == 'upload':
 elif type == 'reference':
 
     if format == 'plain':
-        s = '%s: %s/%s - %s' % (TR('reference', 'Reference'), e.getTrackerId(), e.getIssueId(), e.getComment())
+        s = '%s: %s' % (e.getIssueURL(), e.getComment())
         return s
 
     elif format == 'html':
