@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.123 2004/02/26 19:28:11 ajung Exp $
+$Id: Collector.py,v 1.124 2004/02/28 16:19:13 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -552,6 +552,70 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
+    security.declareProtected(View, 'add_xml')
+    def add_xml(self, xml, RESPONSE=None):
+        """ add issue through xml """
+        from xml.dom.minidom import parseString
+
+        def fromDOM(DOM, element):
+            l = []
+            for node in DOM.getElementsByTagName(element)[0].childNodes:
+                if node.nodeType == node.TEXT_NODE:
+                    l.append(node.data)
+            return ' '.join(l)
+    
+        class record:
+
+            def __init__(self):
+                self._k = []
+
+            def set(self, k, v):
+                if not k in self._k:                   
+                    self._k.append(k)
+                setattr(self, k, v)
+
+            def keys(self):
+                return self._k
+
+
+        DOM = parseString(xml)
+        DOM.normalize()
+
+        R = record()
+        R.set('title', fromDOM(DOM, 'subject'))
+        R.set('description', fromDOM(DOM, 'body'))
+        R.set('collector_email', fromDOM(DOM, 'senderaddress'))
+
+        if not self._verify_email(R.collector_email):
+            if RESPONSE:
+                RESPONSE.setStatus(401)
+                return
+            else:
+                raise ValueError('Email "%s" not allowed to post' % R.email)
+            
+
+        id = self.new_issue_number()
+        self.invokeFactory('PloneIssueNG', id)
+        issue =  self._getOb(id)
+        issue.post_creation_actions()
+
+        print 'keys:',R.keys()
+        issue.setParameters(R)
+
+        transcript = issue.getTranscript()
+        transcript.addComment(R.description)
+
+        RESPONSE.write(issue.absolute_url())
+
+    def _verify_email(self, email):
+        """ verify if 'email' exists or if is it is allowed to post """
+
+        for member in self.portal_membership.listMembers():
+            member_email = member.getProperty('email')
+            if member_email:
+                if email.lower().strip() == member_email.lower().strip():
+                    return self.pcng_member_allowed_to_post(member)
+        return 1   # XXX: FIX THIS
 
 registerType(PloneCollectorNG)
 
