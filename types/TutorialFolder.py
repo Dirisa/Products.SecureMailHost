@@ -23,7 +23,7 @@ def addHelpCenterTutorialFolder(self, id, **kwargs):
     o.initializeArchetype(**kwargs)
 
 
-class HelpCenterTutorialFolder(PHCFolder,BaseFolder):
+class HelpCenterTutorialFolder(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
     content_icon = 'tutorial_icon.gif'

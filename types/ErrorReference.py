@@ -6,7 +6,7 @@ from schemata import ErrorReferenceSchema
 from PHCContent import PHCContent
 
 
-class HelpCenterErrorReference(PHCContent,BaseFolder):
+class HelpCenterErrorReference(PHCContent,OrderedBaseFolder):
     """This is an error reference object, meant to hold documentation about error messages""" 
 
     content_icon = 'errorref_icon.gif'

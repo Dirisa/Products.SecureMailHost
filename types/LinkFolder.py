@@ -22,7 +22,7 @@ def addHelpCenterLinkFolder(self, id, **kwargs):
     o.initializeArchetype(**kwargs)
 
 
-class HelpCenterLinkFolder(PHCFolder,BaseFolder):
+class HelpCenterLinkFolder(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
     typeDescription= 'This is a folder that holds Help Center Links, and it allows you to display individual sections.'

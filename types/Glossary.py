@@ -21,7 +21,7 @@ def addHelpCenterGlossary(self, id, **kwargs):
     o.initializeArchetype(**kwargs)
 
 
-class HelpCenterGlossary(PHCFolder,BaseFolder):
+class HelpCenterGlossary(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
     typeDescription= 'This is a folder that holds Definitions, and it lists them in a dictionary-like fashion, with anchor links.'

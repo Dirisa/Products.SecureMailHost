@@ -22,7 +22,7 @@ def addHelpCenterFAQFolder(self, id, **kwargs):
     o.initializeArchetype(**kwargs)
 
 
-class HelpCenterFAQFolder(PHCFolder,BaseFolder):
+class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
     typeDescription= 'This is a folder that holds FAQs, and it allows you to display individual sections.'

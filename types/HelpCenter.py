@@ -17,7 +17,7 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HCRootSchema
 
-class HelpCenter(BaseFolder):
+class HelpCenter(OrderedBaseFolder):
     """A simple folderish archetype"""
     schema = HCRootSchema
 
