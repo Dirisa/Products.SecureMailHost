@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.11 2003/11/08 09:14:37 ajung Exp $
+$Id: migrate.py,v 1.12 2003/11/08 10:32:01 ajung Exp $
 """
 
 
@@ -25,7 +25,8 @@ from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
 from zLOG import LOG,INFO,ERROR,WARNING
 
-DEST_ID = 'trackers'
+ENFORCE_STATUS = 1  # set this to 1 to set the destination state based on the transcript information
+ENFORCE_ASSIGNEES = 1 # set this to 1 to migrate the assignees based on transcript information
 
 class record:
 
@@ -33,7 +34,7 @@ class record:
         self._k = []
 
     def set(self, k, v):
-        if not k in self._k:
+        if not k in self._k:                   
             self._k.append(k)
         setattr(self, k, v)
 
@@ -284,7 +285,13 @@ def migrate_issue(issue, collector):
 
     # Transcript
     transcript = new_issue.getTranscript()
-    for entry in issue.transcript:
+
+    status = ''
+    tr_assignees = []
+
+    entries = [e for e in issue.transcript] 
+    entries.reverse()
+    for entry in entries:
 
         ts = entry.getTimestamp().timeTime()
 
@@ -300,12 +307,23 @@ def migrate_issue(issue, collector):
                                      change.getNew(), 
                                      created=ts,
                                      user=entry.getUser())   
+                if change.getField() == 'Status':
+                    status = change.getNew()
+
             elif change.__class__.__name__ == 'IncrementalChangeEvent':
                 transcript.addIncrementalChange(change.getField(), 
                                                 change.getRemoved(), 
                                                 change.getAdded(), 
                                                 created=ts,
                                                 user=entry.getUser())   
+
+                if change.getField() == 'Assignees':
+                    for u in change.getRemoved():
+                        if u in tr_assignees: tr_assignees.remove(u)
+                    for u in change.getAdded():
+                        if not u in tr_assignees: tr_assignees.append(u)
+
+
             else:
                 raise TypeError(change)
 
@@ -317,14 +335,22 @@ def migrate_issue(issue, collector):
                                      user=entry.getUser())   
 
     # Workflow
-    new_state = issue.status()
     old_state = new_issue.status()
-    assignees = issue.assigned_to()
+
+    if ENFORCE_STATUS == 1 and status:
+        new_state = status  
+    else:
+        new_state = issue.status()
+
+    if ENFORCE_ASSIGNEES:
+        assignees = tr_assignees
+    else:
+        assignees = issue.assigned_to()
     
     if new_state.lower() != old_state.lower():
 
         wftool = collector.portal_workflow  # evil
-        
+
         if new_state == 'Resolved':
             wftool.doActionFor(new_issue, 'accept', assignees=assignees)
             wftool.doActionFor(new_issue, 'resolve', assignees=assignees)
@@ -338,4 +364,6 @@ def migrate_issue(issue, collector):
             wftool.doActionFor(new_issue, 'accept', assignees=assignees)
         else: 
             raise ValueError(new_state)
+
+        new_issue.workflow_history['pcng_issue_workflow'][-1]['assigned_to'] = assignees
     
