@@ -1,6 +1,11 @@
 Requirements:
 
   - Zope 2.6+, Plone 1.1 (2.0), Archetypes 1.0 (tested)
+ 
+  - The 'email' package of Python *must* be available. Either
+    use Python 2.2.3 for running Zope or get the 'email' package
+    from Python 2.2.3 and install it in the PYTHONPATH of your
+    Python 2.1.3 installation.
 
   - Plone 1.0.X is for now officially not supported. So use it
     at your own risk. A quick test showed at it seems to run
