@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.144 2004/03/20 08:34:53 ajung Exp $
+$Id: Issue.py,v 1.145 2004/03/20 16:47:47 ajung Exp $
 """
 
 import sys, os, time, random
@@ -87,7 +87,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self.schema = PCNGSchemaNonPersistent(schema.fields())
         self.wl_init()
         self.id = id
-        self.title = id
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
 
@@ -596,7 +595,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def get_size(self):
         """ hook for 'folder_contents' view """
         return 0 
-
 
     security.declareProtected(View, 'getEncryptedInformations')
     def getEncryptedInformations(self):
