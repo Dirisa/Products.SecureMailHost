@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.51 2004/01/30 10:17:53 ajung Exp $
+$Id: SchemaEditor.py,v 1.52 2004/02/07 11:46:26 ajung Exp $
 """
 
 import copy, re
@@ -244,6 +244,7 @@ class SchemaEditor:
         newfield = field(FD.name, **D)
         self._ms.replaceField(FD.name, newfield)
         self._p_changed = 1
+        self._ms._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
                       schemata=FD.schemata, field=FD.name)
