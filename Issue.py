@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.29 2003/09/28 14:03:46 ajung Exp $
+$Id: Issue.py,v 1.30 2003/09/29 19:44:55 ajung Exp $
 """
 
 import sys
@@ -364,5 +364,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     def getWorkflowHistory(self):
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
+
+def modify_fti(fti):
+    # hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ('syndication','references','metadata'):
+            a['visible'] = 0
+    return fti
 
 registerType(PloneIssueNG)

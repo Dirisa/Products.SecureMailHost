@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.36 2003/09/28 17:47:58 ajung Exp $
+$Id: Collector.py,v 1.37 2003/09/29 19:44:55 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -386,5 +386,13 @@ class PloneCollectorNGCatalog(CatalogTool):
                   )
         custom = tuple([col for col in custom if col not in standard])
         return standard + custom
+
+
+def modify_fti(fti):
+    # hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ('syndication','references','metadata'):
+            a['visible'] = 0
+    return fti
 
 InitializeClass(PloneCollectorNGCatalog)
