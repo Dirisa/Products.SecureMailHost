@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.20 2004/05/26 16:43:06 ajung Exp $
+$Id: __init__.py,v 1.21 2004/07/01 10:59:32 ajung Exp $
 """
 
 import os, sys
@@ -51,3 +51,9 @@ allow_module('textwrap')
 allow_module('group_assignment_policies')
 allow_module('base64')
 
+try:
+    from Products.Archetypes.config import REFERENCE_CATALOG
+except ImportError:
+    import os, zLOG
+    zLOG.LOG('plonecollectorng', zLOG.ERROR, 'PloneCollectorNG 1.2.X requires Archetypes 1.3 or higher') 
+    os._exit(1) 
