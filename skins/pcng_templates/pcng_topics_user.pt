@@ -35,7 +35,7 @@
           <span tal:replace="python: ', '.join(topic_users)" />
         </td>
         <td>
-          <a tal:attributes="href string:pcng_topic_user_form?topic=$topic">
+          <a tal:attributes="href string:pcng_topics_user_form?topic=$topic">
             <img src="edit.gif" title="Edit assignment" i18n:attributes="title"/>
           </a>
         </td>
