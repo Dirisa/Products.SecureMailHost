@@ -7,3 +7,7 @@ SKINS_DIR = 'skins'
 
 GLOBALS = globals()
 
+ManageCollector = 'Manage PloneCollectorNG'
+AddCollectorIssue = 'Add PloneCollectorNG issue'
+AddCollectorIssueFollowup = 'Add PloneCollectorNG issue followup'
+
