@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.17 2003/11/06 13:05:46 ajung Exp $
+$Id: Transcript.py,v 1.18 2003/12/04 14:51:52 ajung Exp $
 """
 
 import time 
@@ -82,8 +82,8 @@ class Transcript(Persistent, Implicit):
     replace = add  # make an alias to provide support to replace an event
 
     security.declareProtected(View, 'addComment')
-    def addComment(self, comment, user=None, created=None):
-        event = TranscriptEvent('comment', comment=comment, user=user, created=created)
+    def addComment(self, comment, text_format='plain', user=None, created=None):
+        event = TranscriptEvent('comment', comment=comment, text_format=text_format, user=user, created=created)
         self.add(event)
 
     security.declareProtected(View, 'addChange')

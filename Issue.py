@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.96 2003/12/02 11:25:44 ajung Exp $
+$Id: Issue.py,v 1.97 2003/12/04 14:51:52 ajung Exp $
 """
 
 import sys, os, time
@@ -158,7 +158,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
     # Followups
     ######################################################################
 
-    def issue_followup(self, action, comment='', assignees=[], RESPONSE=None):
+    def issue_followup(self, action, comment='', text_format='plain', assignees=[], RESPONSE=None):
         """ issue followup handling """
 
         # action for changes in assignment
@@ -168,7 +168,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
             self._transcript.addChange('assignees', old_assignees, assignees)
             assignees_changed = 1
 
-        if comment: self._transcript.addComment(comment)  
+        if comment: self._transcript.addComment(comment, text_format)  
         if action == 'comment' and assignees_changed: action = 'assign'
 
         # perform workflow action
@@ -488,6 +488,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
 
             # Set things by calling the mutator
             mutator = field.getMutator(self)
+            print field, mutator
             __traceback_info__ = (self, field, mutator)
             mutator(result[0], **result[1])
 
