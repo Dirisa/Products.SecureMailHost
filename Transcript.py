@@ -5,14 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.6 2003/09/11 04:12:36 ajung Exp $
+$Id: Transcript.py,v 1.7 2003/09/11 10:43:22 ajung Exp $
 """
 
 import time 
 
 from Globals import Persistent, InitializeClass
 from Acquisition import Implicit
-from BTrees.IOBTree import IOBTree
+from BTrees.OOBTree import OOBTree, OOSet, difference
 from AccessControl import ClassSecurityInfo 
 from Products.CMFCore import CMFCorePermissions
 
@@ -30,8 +30,12 @@ class TranscriptEvent(Persistent, Implicit):
         for k,v in kw.items():
             setattr(self, k, v)
 
+    def __str__(self):
+        return 'TranscriptEvent(%s)' % ','.join(['%s=%s' % (k,v) for k,v in self.__dict__.items()])
+    __repr__ = __str__
+
     security.declarePublic('getTimestamp')
-    def getTimestamp(self):
+    def getTimestamp(self):             
         return self.created
 
     security.declarePublic('getType')
@@ -55,14 +59,14 @@ class Transcript(Persistent, Implicit):
     security = ClassSecurityInfo()
 
     def __init__(self):
-        self._items = IOBTree()
+        self._items = OOBTree()
 
     def __len__(self): 
         return len(self._items)
 
     security.declareProtected(CMFCorePermissions.View, 'add')
     def add(self, event):
-        self._items[int(time.time())] = event
+        self._items[time.time()] = event
 
     security.declareProtected(CMFCorePermissions.View, 'addComment')
     def addComment(self, comment):
@@ -75,6 +79,15 @@ class Transcript(Persistent, Implicit):
             event = TranscriptEvent('change', field=field, old=old, new=new)
             self.add(event)
 
+    security.declareProtected(CMFCorePermissions.View, 'addIncrementalChange')
+    def addIncrementalChange(self, field, old, new):
+
+        assert isinstance(old, (list, tuple)) and isinstance(new, (list, tuple))
+        added = difference(OOSet(new), OOSet(old))
+        removed = difference(OOSet(old), OOSet(new))
+        event = TranscriptEvent('incrementalchange', field=field, added=list(added), removed=list(removed))
+        self.add(event)
+
     security.declareProtected(CMFCorePermissions.View, 'addReference')
     def addReference(self, tracker, ticketnum, comment):
         event = TranscriptEvent('reference', tracker=tracker, ticketnum=ticketnum, comment=comment)
@@ -86,10 +99,30 @@ class Transcript(Persistent, Implicit):
         self.add(event)
 
     security.declareProtected(CMFCorePermissions.View, 'getEvents')
-    def getEvents(self):
+    def getEvents(self, reverse=1):
+        """ return all events sorted by timestamp in reverse order """
         lst = list(self._items.values())
-        lst.sort(lambda x,y: -cmp(x.created, y.created))
+        lst.sort(lambda x,y:  cmp(x.created, y.created))
+        if reverse: lst.reverse()
         return lst
+    
+    security.declareProtected(CMFCorePermissions.View, 'getEventsGrouped')
+    def getEventsGrouped(self, reverse=1):
+        """ return all events grouped by their timestamp """
 
+        last_ts = 0; last_user = None
+        result = list()
+        for event in self.getEvents(reverse=0):
+            print event, event.getTimestamp() - last_ts
+            if event.getUser() != last_user or event.getTimestamp() - last_ts > 60:
+                # new event
+                result.append([])
+            result[-1].append(event)
+            last_ts = event.getTimestamp()
+            last_user = event.getUser()
+
+        if reverse: result.reverse()
+        return result
+    
 InitializeClass(Transcript)
 

@@ -1,22 +1,64 @@
     
-    <div metal:define-macro="transcript">
-     <table class="listing">
-      <tr>
-        <th i18n:translate="transcript_time">Time</th>
-        <th i18n:translate="transcript_user">User</th>
-        <th i18n:translate="transcript_changes">Changes</th>
-      </tr>
-      
-      <tr tal:repeat="event python: here.getTranscript().getEvents()">
-        <td span tal:content="python: here.toPortalTime(DateTime(event.getTimestamp()), long_format=1)" />
-        <td tal:content="event/getUser" />
-        <td>
-            <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')"> kommentar
-            </pre>
+<div metal:define-macro="transcript_plain">
+  
+  <span tal:define="groups python: here.getTranscript().getEventsGrouped();
+                    num_groups python: len(groups)">
+
+    <span tal:repeat="events groups">
+      <div class="transcriptheader">
+        #<span tal:content="python: num_groups - repeat['events'].index" />:
+         <span tal:content="python: here.toPortalTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
+      </div>
+
+      <metal:block tal:repeat="event events">
+        <div class="transcriptevent">
+          <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')"> kommentar
+          </pre>
+
+          <span tal:condition="python: event.getType()=='change'">
+           <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" -> 
+                    "<span tal:content="python: event.getValue('new')" />"              
+          </span>
+
+          <span tal:condition="python: event.getType()=='reference'"> Issue reference:
+            <a tal:attributes="href python: event.getValue('tracker') + '/' + event.getValue('ticketnum')"
+               tal:content="python: event.getValue('comment')" />
+          </span>
+
+          <span tal:condition="python: event.getType()=='upload'"> Uploaded file:
+            <a tal:attributes="href python: event.getValue('fileid')"
+               tal:content="python: event.getValue('fileid')" />
+            <span tal:condition="python: event.getValue('comment')" tal:content="python: '(%s)' % event.getValue('comment')" />
+          </span>
+        </div>
+      </metal:block>
+      <hr/>
+    </span>
+  </span>
+</div>
+    
+<span metal:define-macro="transcript">
+  <table class="listing"
+         tal:define="groups python: here.getTranscript().getEventsGrouped();
+                     num_groups python: len(groups)">
+    <tr>
+      <th i18n:translate="transcript_time">Time</th>
+      <th i18n:translate="transcript_user">User</th>
+      <th i18n:translate="transcript_changes">Changes</th>
+    </tr>
+
+    <tr tal:repeat="events groups">
+      <td valign="top" tal:content="python: here.toPortalTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
+      <td valign="top" tal:content="python: events[0].getUser()" />
+ 
+      <td valign="top">           
+          <div class="transcriptevent"
+               tal:repeat="event events" >
+            <pre tal:condition="python: event.getType()=='comment'" tal:content="python: event.getValue('comment')" /> 
 
             <span tal:condition="python: event.getType()=='change'">
-              <span tal:content="python: event.getValue('field')" />: old=<span tal:content="python: event.getValue('old')" />, 
-                       new=<span tal:content="python: event.getValue('new')" />              
+              <b><span tal:content="python: event.getValue('field')" /></b>: "<span tal:content="python: event.getValue('old')" />" -> 
+                       "<span tal:content="python: event.getValue('new')" />"              
             </span>
 
             <span tal:condition="python: event.getType()=='reference'"> Issue reference:
@@ -28,18 +70,12 @@
               <a tal:attributes="href python: event.getValue('fileid')"
                  tal:content="python: event.getValue('fileid')" />
               <span tal:condition="python: event.getValue('comment')" tal:content="python: '(%s)' % event.getValue('comment')" />
-            </span>
-        </td>
-      </tr>
-
-     </table>
-    </div>
-    
-    <span metal:define-macro="transcript_plain">
-      <div tal:repeat="entry here/getTranscript"> 
-        
-      </div>
-    </span>
+           </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+ </span>
     
 <div metal:define-macro="show_issues">
   <span tal:define="results python: here.objectValues('PloneIssueNG');

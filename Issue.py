@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.13 2003/09/11 04:13:25 ajung Exp $
+$Id: Issue.py,v 1.14 2003/09/11 10:43:22 ajung Exp $
 """
 
 import sys
@@ -199,12 +199,12 @@ class PloneIssueNG(BaseFolder, WatchList):
             hook to log changed properties to the transcript.
         """
 
+        field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
+            if not name in field_names: continue
             new = REQUEST.get(name, None)
-            old = getattr(self, name, None)
-            if old:
-                if str(old) != str(new): # Archetypes does not use Zope converters
-                    self._transcript.addChange(name, old, new)
+            old = getattr(self, name, '')
+            self._transcript.addChange(name, old, new)
 
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this

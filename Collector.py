@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.23 2003/09/11 06:55:43 ajung Exp $
+$Id: Collector.py,v 1.24 2003/09/11 10:43:22 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -175,9 +175,9 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
 
         reporters.sort(); managers.sort(); supporters.sort()
 
-        self._transcript.addChange('managers', self._managers, managers)
-        self._transcript.addChange('supporters', self._supporters, supporters)
-        self._transcript.addChange('reporters', self._reporters, reporters)
+        self._transcript.addIncrementalChange('managers', self._managers, managers)
+        self._transcript.addIncrementalChange('supporters', self._supporters, supporters)
+        self._transcript.addIncrementalChange('reporters', self._reporters, reporters)
 
         self._managers = managers
         self._reporters = reporters
