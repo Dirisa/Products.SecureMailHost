@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.7 2003/10/12 08:17:07 ajung Exp $
+$Id: notifications.py,v 1.8 2003/10/12 19:34:03 ajung Exp $
 """
 
 import sys
@@ -30,26 +30,6 @@ def notify(issue):
     recipients = enrich_recipients(issue, recipients)
     send_notifications(recipients, issue)
     
-
-def recipients4issue(issue):
-    """ determine the list of recipients for this issue """
-
-    collector = issue._getCollector()
-    r = {'submitter' : {'email': issue.contact_email}}
-    for uid in collector._managers: r[uid] = {}   # all managers
-
-    if collector.email_notifications == 'assigned':
-        for uid in issue.assigned_to(): r[uid] = {} # all assignees       
-    else:
-        for uid in collector._supporters: r[uid] = {} # all supporters
-
-    # TODO: support for substitutes
-    # TODO: support for confidential workflow
-    # TODO: support for watchers
-
-    return r
-
-
 def enrich_recipients(issue, recipients):
     """ take the recipients dict. and try to add as much as possible
         additional user data that we can collector from our env.
@@ -76,7 +56,7 @@ def send_notifications(recipients, issue):
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
     outer['To'] = ','.join(dest_emails)
-    subject = '[%s] #%s: %s' %  (collector.getId(), issue.getId(),  issue.Title())
+    subject = '[%s] %s/%s %s "%s"' %  (collector.getId(), issue.getId(), len(issue), issue._last_action, issue.Title())
     subject = str(Header(subject, 'iso-8859-1'))
     outer['Subject'] = subject
     outer['Message-ID'] = email.Utils.make_msgid()
