@@ -11,7 +11,7 @@ WORKFLOWS & PERMISSIONS:
 
 - There is no 'visible state', available states are:
 
-  - Private: Initial state, seen only to author/reviewers/managers.
+  - In-progress: Initial state, seen only to author/reviewers/managers.
 
   - Pending: Usual meaning.
 
@@ -24,7 +24,7 @@ WORKFLOWS & PERMISSIONS:
 
 - Transitions should be pretty self-explanatory:
 
-- User creates content object (state=private)
+- User creates content object (state=in-progress)
 
   - User has checkmark in the add form that says "Submit for approval
     immediately" so they don't have to worry about the state menu

@@ -213,10 +213,10 @@
                         08/19/2001 03:01 AM
                         </td>
 
-                        <td class="private"
+                        <td class="in-progress"
                             tal:define="review_state python:getInfoFor(item, 'review_state', '')"
                             tal:content="structure python:test(review_state, review_state, '&nbsp;')"
-                            tal:attributes="class python:test(review_state, 'state-'+review_state, 'state-private')"
+                            tal:attributes="class python:test(review_state, 'state-'+review_state, 'state-in-progress')"
                             i18n:translate="">&nbsp;
                         </td>
                         <td tal:condition="python:isOrderable and canModifyFolderContent">

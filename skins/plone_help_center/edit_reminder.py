@@ -4,7 +4,7 @@
 
 wtool = context.portal_workflow
 
-if wtool.getInfoFor(context, 'review_state') == 'private':
+if wtool.getInfoFor(context, 'review_state') == 'in-progress':
     msg = 'Saved.+This+must+be+published+before+it+will+be+visible.+Please+submit+for+review+when+you+are+ready.'
 else:
     msg='Your+changes+have+been+saved.'   

@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -22,7 +22,7 @@ def setupHelpcenter_workflow(wf):
     "..."
     wf.setProperties(title='Default Workflow [Plone]')
 
-    for s in ['private', 'obsolete', 'pending', 'published']:
+    for s in ['in-progress', 'obsolete', 'pending', 'published']:
         wf.states.addState(s)
     for t in ['retract', 'mark_obsolete', 'submit', 'publish', 'reject']:
         wf.transitions.addTransition(t)
@@ -35,10 +35,10 @@ def setupHelpcenter_workflow(wf):
         
 
     ## Initial State
-    wf.states.setInitialState('private')
+    wf.states.setInitialState('in-progress')
 
     ## States initialization
-    sdef = wf.states['private']
+    sdef = wf.states['in-progress']
     sdef.setProperties(title="""Visible and editable only by owner""",
                        transitions=('mark_obsolete', 'publish', 'submit'))
     sdef.setPermission('Access contents information', 0, ['Manager', 'Owner'])
@@ -74,7 +74,7 @@ def setupHelpcenter_workflow(wf):
     ## Transitions initialization
     tdef = wf.transitions['retract']
     tdef.setProperties(title="""Member retracts submission""",
-                       new_state_id="""private""",
+                       new_state_id="""in-progress""",
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
@@ -122,7 +122,7 @@ def setupHelpcenter_workflow(wf):
 
     tdef = wf.transitions['reject']
     tdef.setProperties(title="""Reviewer rejects submission""",
-                       new_state_id="""private""",
+                       new_state_id="""in-progress""",
                        trigger_type=1,
                        script_name="""""",
                        after_script_name="""""",
