@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.106 2003/12/28 18:28:50 ajung Exp $
+$Id: Issue.py,v 1.107 2003/12/29 13:09:44 ajung Exp $
 """
 
 import sys, os, time
@@ -414,6 +414,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ return all indexable texts """
 
         l = []
+        l.extend(self.objectIds())
+        l.extend([o.title_or_id() for o in self.objectValues()]
         for field in self.Schema().fields():
             v = field.storage.get(field.getName(),self)
             if v:
