@@ -9,7 +9,7 @@ Installation
 
 Requirements
 
-  Archetypes 1.0 or later.
+  Archetypes 1.3 or later.
 
 Credits
 
