@@ -5,12 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.7 2003/12/08 11:33:13 ajung Exp $
+$Id: Base.py,v 1.8 2003/12/08 13:43:26 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
+from Products.Archetypes.Schema import Schema
 
 class Base(BaseBTreeFolder):
     """ base class for collector/issues """
@@ -35,6 +36,7 @@ class ParentManagedSchema:
 
     def Schemata(self):
         """ return dict of Schematas """
+
         d = {}
         schema = self.Schema()
         for name in schema.getSchemataNames():
