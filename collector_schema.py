@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.43 2004/04/25 12:48:44 ajung Exp $
+$Id: collector_schema.py,v 1.44 2004/05/04 16:13:28 ajung Exp $
 """
 
 
@@ -202,7 +202,7 @@ schema = Schema((
     StringField('portlet_usage',
                 vocabulary=VOC_PORTLET_USAGE,
                 widget=SelectionWidget(format='select', 
-                                       label='Porlet usage',
+                                       label='Portlet usage',
                                        label_msgid='label_portlet_usage',
                                        i18n_domain='plonecollectorng'),
                 default='keep',
