@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notification_policies.py,v 1.1 2003/10/11 20:45:07 ajung Exp $
+$Id: notification_policies.py,v 1.2 2003/10/12 08:16:56 ajung Exp $
 """
 
 class BasePolicy:
@@ -19,23 +19,23 @@ class BasePolicy:
         raise NotImplementError
 
 
-def NoneNotificationPolicy(BasePolicy):
+class NoneNotificationPolicy(BasePolicy):
     """ no notifications """
 
     def getRecipients(self):
         return {}
 
 
-def SupportersNotificationPolicy(BasePolicy):
+class SupportersNotificationPolicy(BasePolicy):
     """ Submitter, all supporters and tracker administrators """
     
     def getRecipients(self):
         for uid in self.collector._managers: self.r[uid] = {}   # all managers
         for uid in self.collector._supporters: self.r[uid] = {} # all supporters
-        return r
+        return self.r
 
 
-def AssignedSupportersNotificationPolicy(BasePolicy):
+class AssignedSupportersNotificationPolicy(BasePolicy):
     """ Submitter, assigned supporters and tracker administrators """
 
     def getRecipients(self):
