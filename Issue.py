@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.127 2004/02/28 10:36:04 ajung Exp $
+$Id: Issue.py,v 1.128 2004/02/28 10:46:54 ajung Exp $
 """
 
 import sys, os, time, random
@@ -97,6 +97,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
         self.post_creation_actions()
+        self.createToken()
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
