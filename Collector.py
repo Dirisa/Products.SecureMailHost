@@ -1,3 +1,6 @@
+
+from AccessControl import getSecurityManager
+
 from Products.Archetypes.public import BaseSchema, Schema, DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget
@@ -6,6 +9,8 @@ from Products.Archetypes.public import BaseFolder, registerType
 from Products.BTreeFolder2 import CMFBTreeFolder
 
 from Products.CMFCore import CMFCorePermissions
+
+from Transcript import Transcript, TranscriptEntry
 
 VOC_LIMIT_FOLLOWUPS = DisplayList((
   (1, 'Yes'),
@@ -35,9 +40,20 @@ class Collector(BaseFolder):
     actions = ({
         'id': 'view',
         'name': 'View',
-        'action': 'collector_view',
+        'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
-        },)
+        },
+        {'id': 'history',
+        'name': 'History',
+        'action': 'pcng_history',
+        'permissions': (CMFCorePermissions.View,)
+        },
+        )
 
 
+    def __init__(self, oid, **kwargs):
+        BaseFolder.__init__(self, oid, **kwargs)
+        self.transcript = Transcript()
+        self.transcript.addComment('Tracker created')
+        
 registerType(Collector)
