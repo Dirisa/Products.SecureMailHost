@@ -19,28 +19,62 @@
     Document actions (print, sendto etc)
     </div>
 
-    <div class="documentDescription"
-    tal:content="here/Description">
+    <a href=""
+      class="link-parent visualNoPrint"
+      href=".">
+      Back to the Help Center
+    </a>
+    
+
+    <div class="documentDescription">
     A brief description of how you use and contribute to the Help Center.
     </div>
 
-    <p>Several types of help documentation are available in a Help Center:</p>
+    <p>
+    Welcome to the Help Center! This way of doing documentation is a bit
+    different from what you may be used to, so please read this document
+    to understand how to contribute.
+    <p>
+    
+    <h2>Quick Start</h2>
+    
+    <p>For the impatient, here's the bare minimum you should know:</p>
+    
+    <ol>
+        <li>You normally need to be logged in.</li>
 
-    <ul>
-        <li>FAQ</li>
+        <li>There are several different documentation types, most are 
+            self-explanatory, but pay attention to the difference between a
+            <strong>How-to</strong> and a <strong>Tutorial</strong> (explained
+            below).
+        </li>
 
-        <li>How-To</li>
+        <li>To add a piece of documentation/help, go into the relevant section,
+            <strong>make sure there isn't already an existing entry about what
+            you want to add</strong>,
+            and use the button at the top right to add (normally says <code>Add 
+            FAQ</code> or similar).
+        </li>
 
-        <li>Tutorial</li>
+        <li>Add your content, and save it. This edit/view cycle can be
+            performed as many times as you like, until you are happy with the
+            result.
+        </li>
 
-        <li>Help Link</li>
+        <li>Make sure you <code>Submit</code> your document for publication
+            when you are done &mdash; top right pulldown in the content area.
+        </li>
+        
+        <li>A reviewer will then pick up the document, and publish it unless
+            the content needs to be improved.
+        </li>
+            
+        <li>If somebody adds comments to your entry later, you will be notified
+            with by e-mail.
+        </li>
+    </ol>    
 
-        <li>Error Reference</li>
-
-        <li>Glossary Definition</li>
-    </ul>
-
-    <h2>Usage</h2>
+    <h2>What type of item is my documentation?</h2>
 
     <p>Below is a description, usage and example for each type.</p>
 
@@ -92,9 +126,16 @@
 
         <dd>
             <p>
-            A tutorial is a multi-paged article with lots of detail. The tutorial is
-    more in depth and may cover the conceptual aspects of the task, in addition
-    to the practical steps to get the job done.
+            A tutorial is a multi-paged article with lots of detail. The tutorial
+            is more in-depth than a How-to, and may cover the conceptual aspects
+            of the task, in addition to the practical steps to get the job done.
+            </p>
+            <p>
+            If you are unsure of the difference of a How-to and a Tutorial, think
+            about it as the difference between a recipe that only teaches you 
+            what ingredients are needed, and how to bake the cake (How-to),
+            and an article telling you about the history behind cakes in general,
+            that may or may not teach you how to actually bake one (Tutorial).
             </p>
 
             <fieldset>
