@@ -1,5 +1,7 @@
 Q: Which Archetypes version is necessary to run PCNG?
-A: Archetypes 1.3 is mandatory. Lower version will not run
+A: Archetypes 1.3 is mandatory. Lower versions will not run. The reason for this
+   restrict requirement is that a lot of the functionality of PCNG's schema editor
+   present in PCNG V 1.0 has been moved into the AT 1.3 core.
 
 Q: Which Plone version do I need to run PCNG?
 A: Plone 2.X is recommended. The skins of PCNG are designed to be used
@@ -8,5 +10,9 @@ A: Plone 2.X is recommended. The skins of PCNG are designed to be used
    was never a goal for PCNG and will never be a goal (means no support for
    PCNG/Plone 1.X issues).
 
-Q:
-A: 
+Q: How can I set my member collector preferences?
+A: Navigate to the collector instance and you should see a link to 
+   "My collector preferences" within the user action. Clicking on this
+   links will open a form where you can enter your preferences related
+   to *all* collector instances (means they are *global* and *not specific*
+   to a particular collector instance).

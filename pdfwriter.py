@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.20 2004/01/02 09:21:17 ajung Exp $
+$Id: pdfwriter.py,v 1.21 2004/01/02 12:55:22 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -29,6 +29,7 @@ from reportlab.lib.units import inch
 
 styles = getSampleStyleSheet()
 
+MAX_IMAGE_SIZE = 5*inch
 PAGE_HEIGHT = defaultPageSize[1]
 
 def dowrap(text):
@@ -148,15 +149,19 @@ def pdfwriter(collector, ids):
                 width, height= image.size
                 ratio = width*1.0 / height
                 
-                max = 5*inch
                 if ratio >  1.0:
-                    width = max
+                    width = MAX_IMAGE_SIZE
                     height = width / ratio
                 else:
-                    height = max
+                    height = MAX_IMAGE_SIZE
                     width = height * ratio
 
-                Elements.append(KeepTogether([XPreformatted('%s: %s' % (translate('image', 'Image'), img.title_or_id()), HeaderStyle),
+                if img.getId() == img.title_or_id():
+                    desc = img.getId()
+                else:
+                    desc = '%s (%s)' % (img.getId(), img.title_or_id())
+
+                Elements.append(KeepTogether([XPreformatted('%s: %s' % (translate('image', 'Image'), desc), HeaderStyle),
                                               Spacer(100, 0.1*inch),
                                               Image(fname, width, height)
                                              ]))
@@ -196,6 +201,12 @@ def pdfwriter(collector, ids):
             definition('\n'.join(l))
             if comment: pre(break_longlines(comment))
             n+=1
+
+        # references
+        fw_refs = issue.getForwardReferences()
+        if fw_refs:
+            header(translate('references', 'References'))
+            definition('\n'.join(['%s: %s' % (ref.getTargetObject().absolute_url(), ref.comment) for ref in fw_refs ]))
 
         Elements.append(PageBreak())
 
