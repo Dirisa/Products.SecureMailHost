@@ -195,7 +195,7 @@
     <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
   </div>
 
-  <div>
+  <div tal:condition="member">
     <form method="post" action="pcng_do_search">
       <span i18n:translate="my_saved_searches">My saved searches</span>:
 
