@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.13 2004/06/29 17:22:51 ajung Exp $
+$Id: graphviz.py,v 1.14 2004/06/30 16:12:02 ajung Exp $
 """
 
 ##########################################################################
@@ -23,7 +23,6 @@ MAX_DEPTH = 5
 def build_graph(node, graph, visited, depth=0):
 
     def fmt(node):
-        print type('%s %s' % (node.getId(), node.Title()))
         s = '%s %s' % (node.getId(), node.Title())
         s = unicode(s, node.getSiteEncoding(), 'ignore').encode('iso-8859-15', 'ignore')
         return s
