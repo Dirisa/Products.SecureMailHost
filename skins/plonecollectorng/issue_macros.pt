@@ -240,6 +240,9 @@ function show_tickets() {
       <th>
         <span tal:condition="allow_assign" i18n:translate="assign_to_user"> Assign to users</span>
       </th>
+      <th tal:condition="topics" width="20">
+        &nbsp;
+      </th>
       <th tal:condition="topics">
         <span tal:condition="allow_assign" i18n:translate="assign_to_group"> Assign to group</span>
       </th>
@@ -260,6 +263,9 @@ function show_tickets() {
              />
           </span>
         </select>
+      </td>
+      <td tal:condition="topics" width="20">
+        &nbsp;
       </td>
       <td valign="top" tal:condition="topics">
         <select tal:condition="allow_assign" name="assignees_group:list" size="7" multiple>
