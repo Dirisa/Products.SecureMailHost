@@ -292,9 +292,9 @@ class PloneLocalFolderNG(BaseContent):
             result = setMetadata(targetFile, section, option, newvalue)
         
         if result == 1:
-        		REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=file metadata updated.')
+            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=file metadata updated.')
         else:
-        		REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=Error updating file metadata.')
+            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=Error updating file metadata.')
 
 
     security.declareProtected('View', 'showFile')
@@ -593,8 +593,10 @@ class PloneLocalFolderNG(BaseContent):
                     setMetadata(filename, section="GENERAL", option="revision", value=oldRevisionNumber)
                 
                 # move existing file to backup location renamed with trailing rev.#
-                backupFileSuffix = '[' + str(oldRevisionNumber) + ']'
+                backupFileSuffix = '.' + str(oldRevisionNumber)
                 backupfilename = os.path.join(backupdestpath, os.path.basename(upload.filename)) + backupFileSuffix
+                # create skeleton directory structure under backupFolder if necessary 
+                if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
                 shutil.move(filename, backupfilename)
 
         # rename .plfngtmp file with filename provided by uploader
@@ -605,7 +607,7 @@ class PloneLocalFolderNG(BaseContent):
             
         # ------------------------- apply metadata ---------------------------------
         # GENERAL:
-        #	comments - comments on the file
+        #   comments - comments on the file
         #   source   - userId of the source/uploader/provider
         #   revision - the PLFNG centric revision # of this file
         # DIAGNOSTICS:
@@ -749,12 +751,37 @@ class PloneLocalFolderNG(BaseContent):
     security.declareProtected('Delete objects', 'deleteFile')
     def deleteFile(self, rel_dir, fileToDelete, REQUEST, RESPONSE):
         """ delete the file """
-        os.remove(fileToDelete)
-        metadataFileToDelete = fileToDelete + '.metadata'
-        if os.path.exists(metadataFileToDelete):
-            os.remove(metadataFileToDelete)
-        RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
-        return 1
+        
+        if not os.path.exists(fileToDelete):
+           return 0
+        else:   
+           # move file to backupFolder if file backup is enabled & backup_folder path is set  
+           if self.fileBackup_enabled and self.backup_folder:
+               # get revision of existing file (or 1 if revision metadata missing)
+               oldRevisionNumberText = getMetadataElement(fileToDelete, section="GENERAL", option="revision")
+               if oldRevisionNumberText:
+                   oldRevisionNumber = int(oldRevisionNumberText)
+               else:
+                   oldRevisionNumber = 1
+                   # uncomment the following line to update the file's metadata if its also going to be backed up 
+                   #setMetadata(fileToDelete, section="GENERAL", option="revision", value=oldRevisionNumber)
+                   
+               # move existing file to backup location renamed with trailing rev.#
+               backupdestpath = os.path.dirname(os.path.join(self.backup_folder,rel_dir))
+               backupFileSuffix = '.' + str(oldRevisionNumber)
+               backupfilename = os.path.join(backupdestpath, os.path.basename(fileToDelete)) + backupFileSuffix
+               # create skeleton directory structure under backupFolder if necessary 
+               if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
+               shutil.move(fileToDelete, backupfilename)
+           else:
+               os.remove(fileToDelete)
+           
+           metadataFileToDelete = fileToDelete + '.metadata'
+           if os.path.exists(metadataFileToDelete):
+               os.remove(metadataFileToDelete)
+
+           RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
+           return 1
 
     security.declareProtected('Delete objects', 'deleteFolder')
     def deleteFolder(self, rel_dir, folderToDelete, REQUEST):
