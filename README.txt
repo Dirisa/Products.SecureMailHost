@@ -67,6 +67,8 @@ Features:
 
   * fix DateTime Fields
 
+  * review with using SecureMailHost 
+
   * redirect to 'sent-page' after mail is sent
 
   * testing, bugfixing
