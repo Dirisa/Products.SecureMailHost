@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.132 2004/02/29 18:25:24 ajung Exp $
+$Id: Issue.py,v 1.133 2004/03/01 18:13:34 ajung Exp $
 """
 
 import sys, os, time
@@ -29,7 +29,7 @@ from zLOG import LOG, ERROR
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
-from config import IssueWorkflowName, CollectorCatalog
+from config import IssueWorkflowName, CollectorCatalog, CollectorWorkflow
 from group_assignment_policies import getUsersForGroups
 from Transcript import Transcript
 from WatchList import WatchList
@@ -100,7 +100,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
-            wf = getToolByName(self, 'portal_workflow')
+            wf = getToolByName(self, CollectorWorkflow)
             wf.notifyCreated(self)
 
     def post_creation_actions(self):
@@ -161,7 +161,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                                                   'Invalid action: %(action)s', action=action))
 
             old_status = self.status()
-            wf = getToolByName(self, 'portal_workflow')
+            wf = getToolByName(self, CollectorWorkflow)
             wf.doActionFor(self, action,
                            comment=comment,
                            username=util.getUserName(),
@@ -493,7 +493,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'assigned_to')
     def assigned_to(self, sorted=0):
         """ return assigned users according to the workflow """
-        wftool = getToolByName(self, 'portal_workflow')
+        wftool = getToolByName(self, CollectorWorkflow)
         users = list(wftool.getInfoFor(self, 'assigned_to', ()) or ())
         if sorted: users.sort()
         return users
@@ -507,13 +507,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     security.declareProtected(View, 'is_confidential')
     def is_confidential(self):
         """ return if the issue is confidential according to the workflow """
-        wftool = getToolByName(self, 'portal_workflow')
+        wftool = getToolByName(self, CollectorWorkflow)
         return wftool.getInfoFor(self, 'confidential', 0)
 
     security.declareProtected(View, 'status')
     def status(self):
         """ return workflow state """
-        wftool = getToolByName(self, 'portal_workflow')
+        wftool = getToolByName(self, CollectorWorkflow)
         return wftool.getInfoFor(self, 'state', 'pending')
 
     security.declareProtected(View, 'validActions')

@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.126 2004/02/29 10:19:43 ajung Exp $
+$Id: Collector.py,v 1.127 2004/03/01 18:13:34 ajung Exp $
 """
 
-import base64, time, random, md5
+import base64, time, random, md5, os
 
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -23,8 +23,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
 
 from Transcript import Transcript
+from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
-from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES 
+from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
@@ -106,7 +107,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
-        self.setup_collector_catalog()
 
         # setup roles 
         username = util.getUserName()
@@ -116,6 +116,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def manage_afterAdd(self, item, container):
         """ post creation (or post renaming) actions """
         Base.manage_afterAdd(self, item, container)
+        self.setup_tools()
 
         if getattr(self, '_already_created', 0) == 0:    
             # Upon creation we need to add the transcript
@@ -142,22 +143,50 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._transcript.setEncoding(self.getSiteEncoding())
         self.createToken()
         
-    security.declareProtected(ManageCollector, 'setup_collector_catalog')
-    def setup_collector_catalog(self, RESPONSE=None):
+    security.declareProtected(ManageCollector, 'setup_tools')
+    def setup_tools(self, RESPONSE=None):
         """Create and situate properly configured collector catalog."""
 
-        try: 
-            self.manage_delObjects(CollectorCatalog)
-        except ConflictError: raise
-        except: pass
-        
+        # cleanup tools
+        for id in (CollectorCatalog, CollectorWorkflow):
+            try: 
+                self.manage_delObjects(id)
+            except ConflictError: raise
+            except: pass
+       
+        # Catalog tool
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
 
+        # Workflow tool
+        wf = WorkflowTool()
+        self._setObject(CollectorWorkflow, wf)
+        wf = wf.__of__(self)
+        self._setup_workflow()   # install default workflow
+
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance', 
                           self.translate('catalog_recreated', 'Catalog recreated'))
+
+    def _setup_workflow(self, filename='pcng_issue_workflow.zexp'):
+        """ this code must go """
+
+        src_path = self.Control_Panel.Products.PloneCollectorNG.home
+        import_dir = os.path.join(INSTANCE_HOME, 'import')
+        src_file =  open(os.path.join(src_path, 'workflows', filename), 'rb')
+        if not os.path.exists(import_dir): os.makedirs(import_dir)
+        dest_file = open(os.path.join(import_dir, filename), 'wb')
+        dest_file.write(src_file.read())
+        src_file.close(); dest_file.close()
+
+        workflow_tool = getToolByName(self, CollectorWorkflow)
+        try:
+            workflow_tool.manage_importObject(filename)
+        except: pass
+
+        os.unlink(os.path.join(import_dir, filename))
+        workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
@@ -347,7 +376,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     security.declareProtected(View, 'issue_states')
     def issue_states(self):
         """ return a list of all related issue workflow states """
-        wftool = getToolByName(self, 'portal_workflow')
+        wftool = getToolByName(self, CollectorWorkflow)
         states = wftool[IssueWorkflowName].states._mapping.keys()
         states.sort()
         return states
