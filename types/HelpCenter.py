@@ -14,6 +14,8 @@
 
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
+from AccessControl import ClassSecurityInfo
+from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
 
@@ -35,7 +37,9 @@ class HelpCenter(BaseFolder):
     archetype_name = 'Help Center'
     meta_type = 'HelpCenter'
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder')
+    allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder', )
+    
+    security = ClassSecurityInfo()
     
     def initializeArchetype(self, **kwargs):
         # prepopulate folder
@@ -50,4 +54,4 @@ class HelpCenter(BaseFolder):
         self['howto'].setDescription('Step-by-step instructions.')
 
     
-registerType(HelpCenter)
+registerType(HelpCenter, PROJECTNAME)

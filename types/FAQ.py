@@ -1,5 +1,7 @@
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
+from AccessControl import ClassSecurityInfo
+from Products.PloneHelpCenter.config import *
 
 schema = BaseSchema + Schema((
     TextField('question',
@@ -60,13 +62,16 @@ class HelpCenterFAQ(BaseContent):
                     'permissions': (CMFCorePermissions.View,)
                    },)
 
+    security = ClassSecurityInfo()
+
     def _get_versions_vocab(self):
         return self.aq_parent._get_versions_vocab()
     
     def _get_sections_vocab(self):
         return self.aq_parent._get_sections_vocab()
 
+    security.declareProtected(CMFCorePermissions.View, 'getQuestion')
     def getQuestion(self):
-        return self.question or self.Title()
+        return self.getQuestion() or self.Title()
     
-registerType(HelpCenterFAQ)
+registerType(HelpCenterFAQ, PROJECTNAME)

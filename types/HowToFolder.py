@@ -8,8 +8,8 @@
 
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
-
-
+from AccessControl import ClassSecurityInfo
+from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
     TextField('description',
@@ -38,6 +38,8 @@ class HelpCenterHowToFolder(BaseFolder):
     meta_type = 'HelpCenterHowToFolder'
     global_allow = 0
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterHowTo')
+    allowed_content_types = ('HelpCenterHowTo', )
     
-registerType(HelpCenterHowToFolder)
+    security = ClassSecurityInfo()
+    
+registerType(HelpCenterHowToFolder, PROJECTNAME)

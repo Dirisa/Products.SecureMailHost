@@ -1,13 +1,8 @@
-from Products.Archetypes.public import BaseFolderSchema,BaseSchema, Schema
-from Products.Archetypes.public import StringField, TextField,LinesField
-from Products.Archetypes.public import SelectionWidget, TextAreaWidget
-from Products.Archetypes.public import RichWidget,MultiSelectionWidget
-from Products.Archetypes.public import OrderedBaseFolder,BaseContent 
-from Products.Archetypes.public import BaseFolder,registerType
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import *
 from Products.Archetypes.Marshall import PrimaryFieldMarshaller
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
+from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema +  Schema((
     LinesField('sections',
@@ -70,7 +65,7 @@ class HelpCenterHowTo(BaseFolder):
     meta_type = 'HelpCenterHowTo'
     global_allow = 0
     filter_content_types = 1
-    allowed_content_types = ('Image', 'File','PloneImage','PloneFile')
+    allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
     actions = ({
         'id': 'view',
@@ -89,33 +84,40 @@ class HelpCenterHowTo(BaseFolder):
 
     security = ClassSecurityInfo()
     
-    #method to get the defined versions to which the howto may apply
+    security.declarePrivate('listDocVersions')
     def listDocVersions(self):
-         versions = getattr(self, 'doc_versions', [])
-         results = []
-         for version in versions:
+        """method to get the defined versions to which the howto may apply
+        """
+        versions = getattr(self, 'doc_versions', [])
+        results = []
+        for version in versions:
             results.append([version,version])
-         versionstuple = tuple(results)
-         return DisplayList(versionstuple)
+        versionstuple = tuple(results)
+        return DisplayList(versionstuple)
     
-    #method to get the defined sections to which the howto may belong
+    security.declarePrivate('listDocSections')
     def listDocSections(self):
-         sections = getattr(self, 'doc_sections', [])
-         results = []
-         for section in sections:
+        """method to get the defined sections to which the howto may belong
+        """
+        sections = getattr(self, 'doc_sections', [])
+        results = []
+        for section in sections:
             results.append([section,section])
-         sectiontuple = tuple(results)
-         return DisplayList(sectiontuple)
+        sectiontuple = tuple(results)
+        return DisplayList(sectiontuple)
     
     security.declareProtected(CMFCorePermissions.View,'Versions')
-    #method to display the versions in a nicer way
+    #
     def Versions(self):
-         result=""
-         for version in self.versions:
-             if result:
-                 result=result+", "+ version
-             else:
-                 result=version
-         return result
+        """method to display the versions in a nicer way
+        """
+        result=""
+        for version in self.versions:
+            if result:
+                result=result+", "+ version
+            else:
+                result=version
+        return result
 
-registerType(HelpCenterHowTo)
+
+registerType(HelpCenterHowTo, PROJECTNAME)

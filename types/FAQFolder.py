@@ -7,6 +7,8 @@
 
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
+from AccessControl import ClassSecurityInfo
+from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
     TextField('description',
@@ -32,17 +34,20 @@ class HelpCenterFAQFolder(BaseFolder):
 
     schema = schema
     archetype_name = 'FAQ Container'
-    meta_type = 'HelpCenterFAQ'
+    meta_type = 'HelpCenterFAQFolder'
     global_allow = 0
     filter_content_types = 1
-    allowed_content_types = ('HelpCenterFAQ')
-
-    actions = ({'id': 'view',
-                    'name': 'View',
-                    'action': 'faqfolder_view',
-                    'permissions': (CMFCorePermissions.View,)
-                   },)
+    allowed_content_types = ('HelpCenterFAQ', )
     
+    security = ClassSecurityInfo()
+
+    actions = ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/faqfolder_view',
+        'permissions' : (CMFCorePermissions.View,)
+         },
+         )
     
     def _get_versions_vocab(self):
         return self.versions
@@ -50,4 +55,4 @@ class HelpCenterFAQFolder(BaseFolder):
     def _get_sections_vocab(self):
         return self.sections
     
-registerType(HelpCenterFAQFolder)
+registerType(HelpCenterFAQFolder, PROJECTNAME)
