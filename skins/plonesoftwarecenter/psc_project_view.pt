@@ -34,9 +34,9 @@
 
         <p class="portalMessage"
            tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')!='published'">
-        This project has not been approved yet, make sure you submit it for
-        approval when all the information is correct to make it available
-        to the general public.
+           You can not add releases, documentation or feature proposals until the 
+           project itself is approved, make sure you submit it for approval when 
+           the relevant project information has been entered.
         </p>        
 
         <h2 tal:condition="latestrelease"
@@ -48,13 +48,15 @@
 
         <tal:noreleases tal:condition="not:latestrelease">
 
-            <p class="discreet" i18n:translate="description_no_available_releases">
+            <p class="discreet" 
+               tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')=='published'"
+               i18n:translate="description_no_available_releases">
                     There are no published releases in this project yet.
                     This listing will prioritize releases with maturity 'Final',
                     but will list the latest published release of any other type
                     if no final release exists.
             </p>
-            <p class="discreet" tal:condition="is_editable">
+            <p class="discreet" tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')=='published'">
                 <a i18n:translate=""
                    tal:attributes="href string:$here_url/releases">
                   Go to the release folder to add or publish a release.

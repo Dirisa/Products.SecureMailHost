@@ -51,6 +51,13 @@
     project can add new features to the list.
     </div>
     
+    <p class="portalMessage"
+       tal:condition="python: is_editable and wtool.getInfoFor(here.aq_parent, 'review_state')!='published'">
+    You can not add releases, documentation or feature proposals until the 
+    project itself is approved, make sure you submit it for approval when 
+    the relevant project information has been entered.
+    </p>        
+
     <p>
     If you want to see all the feature proposals available, go to the 
     <a href="psc_improvements_listing">Improvement Proposal listing</a>.

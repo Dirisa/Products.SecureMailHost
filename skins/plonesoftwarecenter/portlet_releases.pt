@@ -33,6 +33,11 @@
                         </span>
                     </a>
 
+                    <div class="discreet"
+                         tal:content="obj/getCategories">
+                        Category
+                    </div>
+
                     <div class="portletDetails"
                          tal:content="python:here.toPortalTime(obj.Date)">
                         July 7, 08:11

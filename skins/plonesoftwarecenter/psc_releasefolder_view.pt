@@ -32,6 +32,13 @@
             description
         </div>
 
+        <p class="portalMessage"
+           tal:condition="python: is_editable and wtool.getInfoFor(here.aq_parent, 'review_state')!='published'">
+        You can not add releases, documentation or feature proposals until the 
+        project itself is approved, make sure you submit it for approval when 
+        the relevant project information has been entered.
+        </p>        
+
         <h2 i18n:translate="heading_upcoming_releases">Upcoming Releases</h2>
         
         <tal:block define="global releases here/getUpcomingReleases">

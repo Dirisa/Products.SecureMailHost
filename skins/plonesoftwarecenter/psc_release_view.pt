@@ -40,7 +40,8 @@
            tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')!='published'">
         This release needs to be published before it will show up in the download
         listings of the software center. When the files have been added, you
-        should publish this release.
+        should publish this release. There is no approval required to make a
+        release.
         </p>        
 
         <h2 i18n:translate="heading_available_downloads">
