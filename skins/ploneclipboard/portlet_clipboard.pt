@@ -1,0 +1,55 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plone">
+
+<body>
+
+<div metal:define-macro="portlet"
+     tal:define="tool nocall:here/ploneclipboard_tool;
+                 clipboards python:tool.getClipboards(create=1)"
+     tal:condition="python: not isAnon and clipboards">
+
+    <div class="portlet">
+
+        <h5 i18n:translate="box_clipboard_title">Clipboard</h5>
+
+        <div class="portletBody">
+
+            <tal:block tal:repeat="cb clipboards">
+                <div tal:define="count python:len(cb.contentIds());
+                                 oddrow repeat/cb/odd"
+                     tal:attributes="class python:test(oddrow, 'portletContent odd', 'portletContent even')">
+
+                    <a href="#"
+                       tal:attributes="href string:clipboard_paste?cb_id=${cb/getId}"
+                       tal:omit-tag="not:cb/isCopyBufferPasteable"
+                       tal:content="cb/title_or_id">A</a> -
+                    <span tal:condition="count"
+                          i18n:translate="box_clipboard_numberofitems">
+                        <span tal:replace="count" i18n:name="number" />
+                        items.
+                    </span>
+                    <span tal:condition="not:count"
+                          i18n:translate="box_clipboard_empty">empty.</span>
+                    <div tal:condition="count"
+                         style="margin-left:1em">
+                        <a href="#"
+                           tal:attributes="href cb/absolute_url;
+                                           title string:View ${cb/title_or_id}"
+                           i18n:translate="box_clipboard_view">View</a>.
+                        <a href="#"
+                           tal:attributes="href string:clipboard_clear?cb_id=${cb/getId}"
+                           i18n:translate="box_clipboard_clear">Clear</a>.
+                    </div>
+
+                </div>
+            </tal:block>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+</html>
