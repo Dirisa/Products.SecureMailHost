@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.11 2003/09/25 12:59:04 ajung Exp $
+$Id: Transcript.py,v 1.12 2003/10/11 14:55:37 ajung Exp $
 """
 
 import time 
@@ -66,7 +66,9 @@ class Transcript(Persistent, Implicit):
 
     security.declareProtected(CMFCorePermissions.View, 'add')
     def add(self, event):
-        self._items[time.time()] = event
+        self._items[event.created] = event
+
+    replace = add  # make an alias to provide support to replace an event
 
     security.declareProtected(CMFCorePermissions.View, 'addComment')
     def addComment(self, comment):
