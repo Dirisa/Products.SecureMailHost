@@ -1,0 +1,137 @@
+The following is a TODO list dealing with PLFNG features and bugs.
+It is organized into these categories:
+
+  "KNOWN ISSUES"
+
+  "BEFORE NEXT RELEASE (0.50)" (items that are on the critical path)
+
+  "BEFORE RELEASE 0.60" (items that are not on the immediate
+  critical path, but should be worked soon)
+  
+  "BEFORE 1.0 FINAL" (items that are not yet allocated to a
+  pre-1.0 release, but must be done before the big v1.0 release.
+  
+  "MAYBE NEVER BUT NICE TO HAVE" (items that are not yet on any 
+  critical path)
+
+
+As you find bugs in PLFNG, please submit them to 
+the 'Collective' sourceforge project bug tracker:
+http://sourceforge.net/tracker/?group_id=55262&atid=476390
+
+(the Collective is the official home for PLFNG and a variety
+of other Plone products)
+
+Also, feel free to email me (mgarnsey@users.sourceforge.net)
+about feature requests and/or to volunteer to help!!! 
+
+
+----------------------------------
+  KNOWN ISSUES
+----------------------------------
+
+1. bug # 971432: 'Adding a Local Folder ends up in a error'
+
+2. bug # 988620: rejected upload of file with same name 
+   as existing file results in deletion of existing file
+   
+3. bug # 988615: 'delete' action doesnt work for folders
+
+4. bug # 988627: folder path specification is too fragile
+   (path must have trailing slash for MacOS, but not Windows)
+
+
+----------------------------------
+  BEFORE NEXT RELEASE (0.50)
+----------------------------------
+Significant enhancements have been put into the 0.50 baseline,
+and we really need to get them officially released!
+
+The only remaining item that is in the critical path is 
+resolving bug # 971432: 'Adding a Local Folder ends up in a error'
+http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&atid=476390
+
+
+----------------------------------
+  BEFORE RELEASE 0.60
+----------------------------------
+
+- better docs! (specifics tbd)
+
+- validate 'folder' field inputs, possibly with
+  automatic fixing of trailing end of input path
+  (eg, add trailing '/' if *nix OS; remove trailing
+   '\' if Windows OS)
+
+- make file 'comments' metadata editable
+  (to include adding 'comments' to existing files)
+
+- add ability to delete folders
+
+- de-confuse presentation of PLFNG path on plfng_view.pt page
+  (current implementation of folder icon + '/' confuses users
+   into thinking that they are at the site root when they 
+   view a PLFNG object.)
+   
+- rework file uploads so that they are temporarily stored
+  with a temporary filename to facilitate checking 
+  (MD5, quota limit, archive integrity, etc). 
+  
+- add revisioning metadata for files
+  (to include who/when uploaded file) 
+
+- add optional support for archiving old revisions of files
+  (eg, place copy of file into a *.old folder when file
+   is deleted or when new revision of file is uploaded)
+
+- improve the unit testing for catalog action
+
+
+----------------------------------
+  BEFORE 1.0 FINAL
+----------------------------------
+
+tbd
+
+----------------------------------
+ MAYBE NEVER BUT NICE TO HAVE
+----------------------------------
+
+- multi-file select for group action (eg, delete)
+
+- virus scanning of uploaded files
+
+- id / track changes to folder contents
+
+- This probably has *nothing* to do with the PloneLocalFolderNG 
+product, but when using a GUI editor (i.e. - Epoz), the "toolbox" which 
+provides nice placeholders that make it easy to link to or display an 
+image, the PloneLocalFolder content doesn't appear like other content.
+This may be too much trouble to consider implementing, but it 
+might be something to put as a "caveat" in the README file.
+
+
+----------------------------------
+ MISC NOTES
+----------------------------------
+
+Note from Marcel on de-confusing the presentation of PLFNG path
+on plfng_view.pt page:
+
+	I think there are 2 sensible choices, since this feels like
+	mounting a folder in the Zope folder structure. Say physical
+	folder X (and physical subfolder Y) is mounted as a PLFNG 
+	with title P:
+	
+	a) Show '/' and the contents of X
+	b) Show Home/..../P
+	
+	the subfolder Y would then be shown as:
+	a) /Y
+	b) Home/..../P/Y
+	
+	where ... is any number of intermediate plone folders
+	
+	I think I prefer b). Or make it configurable ;-)
+	
+	
