@@ -807,5 +807,8 @@ msgstr "Bugtracker $id"
 msgid "date_on"
 msgstr "am"
 
+msgid "followup_with_quote"
+msgstr "Antworten (diesen Kommentar zitieren)"
+
 msgid "no_access"
 msgstr "Kein Zugriff"
