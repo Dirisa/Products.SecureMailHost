@@ -46,7 +46,7 @@
         <a href="pcng_incomplete_issues"><span i18n:translate="show_incomplete_issues">Show incomplete issues</span></a> 
         <div class="formHelp" i18n:translate="help_incomplete_issues">Shows you all unfilled issues and gives you a "fast-link" to reject issues (it pre-defines the followup text and the followup state)</div>
       </li>
-      <li>
+      <li tal:condition="here/haveATReferences">
         <a href="register_issue_uids"><span i18n:translate="recreate_uids_imported_issues">Recreate UIDs for imported issues</span></a> 
         <div class="formHelp" i18n:translate="help_register_issue_uids">Use this with care <b>and only</b> if you have imported a collector instance into a new site either through cut/paste or Zope's import/export functionality.</div>
       </li>
