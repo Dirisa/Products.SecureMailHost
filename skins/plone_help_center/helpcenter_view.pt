@@ -104,7 +104,7 @@
             <tal:defs define="help_types python: here.portal_catalog(portal_type=subtypes, path=my_path)">
               <tal:listings repeat="help_type_tuple subtypes_tuples">
                 <div tal:define="help_type python:[ c for c in help_types if c.portal_type==help_type_tuple[0] ][0]" tal:condition="help_type">
-                  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=help_type_tuple[1], path=folder_path)">
+                  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=help_type_tuple[1], path=folder_path, sort_on='modified', sort_order='reverse', sort_limit=5)[:5]">
 
                     <div class="portlet portletThirdWidth">
                         <h6>
