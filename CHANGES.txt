@@ -1,7 +1,14 @@
 0.6.0 (unstable)
 
+
 beta1
+	- listFolderContents() now uses _createProxy()
+	
+	- added rel_dir param to getFileMetadata() 
+	
 	- added 'MD5only' mode and 'redir' output to updateMD5Metadatum()
+	
+	- removed exception throw updateMD5Metadatum() for non-files
 
    - eliminated unnecessary 'editMetadata' action from __call__()
    
