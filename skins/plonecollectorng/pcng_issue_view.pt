@@ -105,14 +105,28 @@
       <metal:block tal:omit-tag="" tal:define="uploads here/objectValues" >
         <fieldset tal:condition="uploads">
           <legend i18n:translate="uploads">Uploads</legend>
-            <div>
-                <metal:block tal:repeat="item uploads">
-                  <a tal:attributes="href item/absolute_url" tal:content="item/getId"/> 
-                    <span tal:condition="not: repeat/item/end">&bull;</span>   
-                </metal:block>
-            </div>
+          <div>
+            <metal:block tal:repeat="item uploads">
+              <a tal:attributes="href item/absolute_url" tal:content="item/getId"/> 
+                <span tal:condition="not: repeat/item/end">&bull;</span>   
+            </metal:block>
+          </div>
         </fieldset>
       </metal:block>
+
+      <metal:block tal:omit-tag="" tal:define="references here/getForwardReferences">
+        <fieldset tal:condition="references">
+          <legend i18n:translate="references">References</legend>
+          <div>
+            <metal:block tal:repeat="ref references">
+              <a tal:define="target ref/getTargetObject"
+                 tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              <span tal:condition="not: repeat/ref/end">&bull;</span>   
+            </metal:block>
+          </div>
+        </fieldset>
+      </metal:block>
+
 
       <fieldset><legend i18n:translate="transcript">Transcript</legend>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
