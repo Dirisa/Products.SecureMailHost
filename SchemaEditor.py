@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.34 2003/11/28 10:46:37 ajung Exp $
+$Id: SchemaEditor.py,v 1.35 2003/11/28 10:49:49 ajung Exp $
 """
 
-import operator, copy
+import copy
 from types import StringType
 
 from Globals import InitializeClass
