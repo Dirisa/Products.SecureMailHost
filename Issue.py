@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.40 2003/10/12 19:33:22 ajung Exp $
+$Id: Issue.py,v 1.41 2003/10/12 20:40:59 ajung Exp $
 """
 
 import sys, os
@@ -53,7 +53,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         },
         {'id': 'edit',
         'name': 'Edit',
-        'action': 'pcng_base_edit',
+        'action': 'portal_form/pcng_base_edit',
         'permissions': (AddCollectorIssueFollowup,)
         },
         {'id': 'history',
@@ -279,7 +279,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
         """
-
         field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
