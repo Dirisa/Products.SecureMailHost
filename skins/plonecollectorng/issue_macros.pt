@@ -6,13 +6,15 @@
        tal:define="references here/getReferences">
     <span class="legend" i18n:translate="legend_references">References</span>
 
-    <ul>
-      <li tal:repeat="ref references">
-        <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
-        (<span tal:replace="ref/getComment"/>)
-      </li>
-    </ul>
-
+    <metal:block tal:condition="references" 
+                 tal:omit-tag="">
+      <ul>
+        <li tal:repeat="ref references">
+          <a tal:attributes="href ref/getURL" tal:content="ref/getURL" />
+          (<span tal:replace="ref/getComment"/>)
+        </li>
+      </ul>
+    </metal:block>
     <span i18n:translate="issue_references_table_no_references"
           tal:condition="not: references">No references available</span>
 
@@ -128,12 +130,6 @@ function show_tickets() {
         <div class="label" i18n:translate="add_references_table_issue_number">Issue #</div>
         <div class="field">
           <input type="text" name="reference.ticketnumber:record:string"  value="" size="5" />
-        </div>
-      </div> <!-- End row -->
-
-      <div class="row">
-        <div class="label">&nbsp;</div>
-        <div class="field">
           <input class="context" type="button"  onClick="javascript:show_tickets()" value="Select"
                  i18n:attributes="value" />
         </div>

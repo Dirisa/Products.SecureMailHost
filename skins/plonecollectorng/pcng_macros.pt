@@ -108,26 +108,30 @@
           <th>Issue</th>
           <th>Created</th>
           <th>Category</th>
-          <th>Deadline/Progress</th>
+          <th>Deadline/Assigned</th>
           <th>Status</th>
         </tr>
         <tr tal:repeat="issue batch">
-          <td>
-            <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId"
-               tal:content="issue/getId" />
-            <span tal:content="issue/Title" />
+          <td valign="top">
+            <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId">
+              <span tal:replace="issue/getId" />.
+              <span tal:replace="issue/Title" />
+            </a>
+            <div class="issue_short_description" 
+                 tal:content="python: here.shorten_string(issue.Description)" />
           </td>
-          <td>
-            <span tal:content="python: '%s (%s)' % (here.toPortalTime(issue.created), issue.Creator)" />
+          <td valign="top">
+            <span tal:content="python: '%s (%s)' % (here.toPortalTime(issue.created, long_format=1), issue.Creator)" />
           </td>
-          <td>
+          <td valign="top">
             <span tal:content="issue/topic" />
           </td>
-          <td>
-            <span tal:content="python: here.toPortalTime(issue.progress_deadline)" />
+          <td valign="top">
+            <span tal:replace ="python: here.toPortalTime(issue.progress_deadline)" />
+            <br/> -> <span tal:replace="python: ', '.join(issue.assigned_to)" />
           </td>
-          <td>
-            <span tal:content="issue/status" />
+          <td valign="top">
+            <span tal:content="python: here.pcng_format_status(issue.status)" />
           </td>
         </tr>
       </table>

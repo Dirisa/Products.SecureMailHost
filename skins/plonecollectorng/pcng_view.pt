@@ -4,6 +4,12 @@
       metal:use-macro="here/main_template/macros/master">
   <body>
     <div metal:fill-slot="main">
+
+    <!-- defaults for status: Pending+Accepted -->    
+    <metal:block tal:condition="python: request.has_key('status') == 0">
+      <span tal:define="dummy python: request.set('status', ['Pending', 'Accepted'])" />
+    </metal:block>   
+
 	<h1 tal:content="here/title_or_id" />
       <div class="group"><span class="legend">Issue overview</span>
         <div metal:use-macro="here/pcng_macros/macros/show_issues" />

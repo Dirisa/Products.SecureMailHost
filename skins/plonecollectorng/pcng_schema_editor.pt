@@ -143,7 +143,7 @@
               <td>
                 <textarea cols="60" rows="6"
                        name="fielddata.vocabulary:record:lines"
-                       tal:condition="python: field.getWidgetName()=='SelectionWidget'"
+                       tal:condition="python: field.getWidgetName() in ('MultiSelectionWidget', 'SelectionWidget')"
                        tal:content="python: here.schema_format_vocabulary(field)"
                  ></textarea>
               </td>
@@ -192,15 +192,19 @@
               </td> 
             </tr>
 
+
+            <tr>
+              <td colspan="2"> 
+                <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete </a> |
+                <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}">Move up</a> |
+                <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}">Move down</a> 
+              </td> 
+            </tr>
+
             <tr>
               <td colspan="2"> 
                 <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field ">
               </td>
-            </tr>
-            <tr>
-              <td colspan="2"> 
-                <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}">Delete this field</a>
-              </td> 
             </tr>
             </table>
           </form>
