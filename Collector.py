@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.94 2003/12/14 16:13:16 ajung Exp $
+$Id: Collector.py,v 1.95 2003/12/18 20:19:31 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -474,7 +474,20 @@ class PloneCollectorNGCatalog(CatalogTool):
     meta_type = 'PloneCollectorNG Catalog'
     portal_type = 'PloneCollectorNG Catalog'
 
+    def manage_afterAdd(self, container, item):
+        """ recreate catalog """
+
+        # We create the indexes and metadata in the manage_afterAdd() hook
+        # an *not+ inside the constructor as usually because we need an
+        # acquisition context inside enumerateIndexes() to retrieve
+        # the issue schema for custom index creation
+
+        self._initIndexes()
+
     def enumerateIndexes(self):
+
+        if not hasattr(self, 'aq_parent'): return  []   # only through manage_afterAdd()
+
         custom = [['status', 'FieldIndex'],
                   ['Creator', 'FieldIndex'],
                   ['created', 'FieldIndex'],
@@ -488,6 +501,19 @@ class PloneCollectorNGCatalog(CatalogTool):
                   ['getId', 'FieldIndex'],
                   ['numberFollowups', 'FieldIndex'],
                  ]
+
+        # add custom indexes for fields
+        custom_keys = [f[0] for f in custom]
+
+        for f in self.aq_parent.atse_getSchema().fields():
+            if getattr(f, 'createindex', 0) == 1 and f.getName() not in custom_keys:
+                if f.__class__.__name__ in ('StringField', 'TextField'):
+                    custom.append( [f.getName(), 'TextIndex'] )
+                elif f.__class__.__name__ in ('DateTimeField', 'IntField', 'FloatField', 'FixedPointField'):
+                    custom.append( [f.getName(), 'FieldIndex'] )
+                else:
+                    pass
+
         # Replace TextIndexes with TextIndexNG instances if possible
         for i in range(len(custom)):
             k,v = custom[i]
@@ -499,6 +525,8 @@ class PloneCollectorNGCatalog(CatalogTool):
 
     def enumerateColumns( self ):
         """Return field names of data to be cached on query results."""
+
+        if not hasattr(self, 'aq_parent'): return  []  # only through manage_afterAdd()
         
         custom = ('Description', 'Title', 'Creator', 'created', 'modified',
                   'id', 'status', 'topic', 'classification',

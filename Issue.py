@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.104 2003/12/18 18:17:25 ajung Exp $
+$Id: Issue.py,v 1.105 2003/12/18 20:19:31 ajung Exp $
 """
 
 import sys, os, time
@@ -22,6 +22,7 @@ from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
+from zLOG import LOG, ERROR
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
@@ -386,7 +387,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         at = getToolByName(self, ARCHETOOL_NAME , None)
         catalogs = at.getCatalogsByType(self.meta_type) or []
-        return [c for c in catalogs if c.getId() not in ('portal_catalog', )]
+        catalogs = [c for c in catalogs if c.getId() not in ('portal_catalog', )]
+        if not catalogs:
+            LOG('plonecollectorng', ERROR, 'getCatalogsByType() returned no usable catalogs') 
+        return catalogs
 
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
