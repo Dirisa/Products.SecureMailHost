@@ -137,7 +137,7 @@ class HelpCenterReferenceManual(PHCContent,OrderedBaseFolder):
             arrayIdx    = len (info['toc'])
                         
             # If this is the item we're looking for, record the relevant
-            #Êindexes
+            # indexes
             if current and item.absolute_url () == current.absolute_url ():            
                 selected = 1
             

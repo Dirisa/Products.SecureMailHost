@@ -42,7 +42,7 @@ class PHCFolder:
             return self.getImportance_vocab()
         else:
             # XXX: This is here so that PloneSoftwareCenter will get some
-            #Êimportance ratings. We may want to put a dynamic importance vocab
+            # importance ratings. We may want to put a dynamic importance vocab
             # somewhere in PSC and change this to return list(), though this
             # behaviour may be fine in either case.
             return IMPORTANCE_VOCAB_DEFAULT
