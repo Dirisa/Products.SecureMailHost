@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.11 2004/01/16 11:38:14 ajung Exp $
+$Id: Translateable.py,v 1.12 2004/01/16 15:46:29 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -65,7 +65,7 @@ class Translateable:
         if pts:
             return pts.getLanguages(i18n_domain)
         else:
-            return 'nix'
+            return []
 
     def _interpolate(self, text, mapping):
         """ convert a string containing vars for interpolation ('$var')
