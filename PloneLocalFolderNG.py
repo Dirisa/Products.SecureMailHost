@@ -1,4 +1,5 @@
 import os
+from urllib import quote
 
 from DateTime.DateTime import DateTime
 from Globals import InitializeClass, Persistent
@@ -127,6 +128,7 @@ class PloneLocalFolderNG(BaseFolder):
         REQUEST.RESPONSE.setHeader('content-type', mi.normalized())
         REQUEST.RESPONSE.setHeader('content-length', str(os.stat(fullname)[6]))
 #        REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(REQUEST['viewfile']))
+        print fullname
         fp = open(fullname)
                 
         while 1:
@@ -166,10 +168,10 @@ class PloneLocalFolderNG(BaseFolder):
 
             if os.path.isdir(fullname):
                 P.setIconPath('folder_icon.gif')
-                P.setAbsoluteURL(self.absolute_url() + '?showdir=' + os.path.join(rel_dir, f))
+                P.setAbsoluteURL(self.absolute_url() + '?showdir=' + quote(os.path.join(rel_dir, f)))
             else:
                 P.setIconPath(mi.icon_path)
-                P.setAbsoluteURL(self.absolute_url() + '?viewfile=' + os.path.join(rel_dir, f))
+                P.setAbsoluteURL(self.absolute_url() + '?viewfile=' + quote(os.path.join(rel_dir, f)))
             l.append(P) 
 
         return l
