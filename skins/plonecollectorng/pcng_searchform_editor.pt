@@ -1,0 +1,50 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+  <div metal:fill-slot="css_slot">
+    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
+  </div>
+  <div metal:fill-slot="main">
+
+    <metal:block tal:define="action string: Search form editor">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
+    <form method="post" action="update_searchform" 
+          tal:define="settings here/getSearchForm">
+      <span tal:content="settings" />
+      <table class="listing">
+        <tr>
+          <th>Field</th>
+          <th>appears in search form as</th>
+        </tr>
+
+        <tr tal:repeat="item here/pcng_get_searchfields">
+          <td>
+            <span i18n:translate="" tal:content="python: item[0]"/>
+          </td>
+          <td>
+            <select tal:attributes="name python:'field_%s:mode:string' % item[0]">
+              <option value="hidden" i18n:translate="hidden"
+                      tal:attributes="selected python: settings[item[0]]['mode']=='hidden'">
+                Hidden</option>
+              <option value="stringwidget" i18n:translate="stringfield"
+                      tal:attributes="selected python: settings[item[0]]['mode']=='stringwidget'">
+                String field</option>
+              <option value="selectwidget" i18n:translate="selectwidget"
+                      tal:attributes="selected python: settings[item[0]]['mode']=='selectwidget'">
+                Select widget</option>
+            </select>
+          </td>
+        </tr>
+
+      </table>
+      <input type="submit" value="Save" i18n:attributes="value" class="standalone">
+    </form>
+
+  </div>
+</body>
+</html>

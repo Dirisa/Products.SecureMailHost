@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.95 2003/12/18 20:19:31 ajung Exp $
+$Id: Collector.py,v 1.96 2003/12/19 13:05:34 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -350,6 +350,30 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         return self.pcng_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
 
     base_view = view
+
+    ######################################################################
+    # Searchform editor
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'update_searchform')
+    def update_searchform(self, REQUEST, RESPONSE):
+        """ update the searchform parameters"""
+   
+        d = {}
+ 
+        for k in REQUEST.form.keys():
+            if not k.startswith('field_'):  continue
+            d[k[6:]] = {'mode' : REQUEST.form[k]}
+
+        self._search_form = d
+        print d
+        util.redirect(RESPONSE, 'pcng_searchform_editor',     
+                      self.translate('searchform_saved', 'Search form has been saved')) 
+
+    security.declareProtected(View, 'getSearchForm')
+    def getSearchForm(self):
+        """ return the dict describing the search form """
+        return getattr(self, '_search_form', {})
 
     ######################################################################
     # Maintainance
