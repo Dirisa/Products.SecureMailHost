@@ -106,7 +106,7 @@ msgid "assigned_to"
 msgstr "Zugewiesen an"
 
 msgid "Uploads"
-msgstr "Hochgeladene Dateien"
+msgstr "Dateien"
 
 msgid "transcript"
 msgstr "Ticketverlauf"
