@@ -17,7 +17,7 @@
                tal:content="string: ${collector/getId} (${collector/Title})"/>
         </h2>
         <div class="ticket_stats">
-           <span tal:content="collector/getNumberIssues"/> <span i18n:translate="issues">issues</span>
+           <span tal:content="python: collector.getObject().getNumberIssues()"/> <span i18n:translate="issues">issues</span>
         </div> 
       </div>
     </div>

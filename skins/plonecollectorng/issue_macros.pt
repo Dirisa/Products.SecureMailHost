@@ -1,5 +1,5 @@
 <span metal:define-macro="field_shortview">
-  <metal:block tal:define="value python: here.getParameter(field.getName())">
+ <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:&nbsp;<span tal:content="value"/>
     </metal:block>
