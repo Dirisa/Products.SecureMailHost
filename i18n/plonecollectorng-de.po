@@ -747,7 +747,7 @@ msgid "progress_percent_done"
 msgstr "Fertig (Prozent)"
 
 msgid "help_notifications"
-msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Email-Adressen eingetragen werden, die im Falle eines Workflow-Änderungen eines Tickets ebenfalls eine Benachrichtigung erhalten."
+msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Email-Adressen eingetragen werden, die im Falle eines Workflow-Änderungen eines Tickets ebenfalls eine Benachrichtigung erhalten. Jede Email-Adresse muß in eine eigene Reihe innerhalb des Textarea Elementes eingetragen werden."
 
 
 msgid "help_reindex_issues"
