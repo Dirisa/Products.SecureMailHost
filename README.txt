@@ -30,6 +30,8 @@ Features:
 
  * encrypt message using a gpg
 
+ * i18n support with LinguaPlone (optional)
+
  Download
 
   PloneFormMailer resides in the 'collective'

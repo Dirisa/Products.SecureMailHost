@@ -9,6 +9,8 @@ Dependencies:
 
  * gpg binary (optional) 
 
+ * LinguaPlone (optional)
+
 Installation:
 
  Untar in your 'Products' directory in filesystem. Restart Zope. Go to 

@@ -4,7 +4,7 @@
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
 #
-# RCS-ID:       $Id: config.py,v 1.3 2004/08/24 23:29:22 yenzenz Exp $
+# RCS-ID:       $Id: config.py,v 1.4 2004/08/30 13:46:43 yenzenz Exp $
 # Copyright:    (c) 2004 by jens quadrat, Klein & Partner KEG, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -43,3 +43,10 @@ default_mailtemplate_body = \
 </html>
 </tal:block>"""
 
+# LinguaPlone addon?
+try:
+    from Products.LinguaPlone.public import registerType
+except ImportError:
+    HAS_LINGUA_PLONE = False
+else:
+    HAS_LINGUA_PLONE = True
