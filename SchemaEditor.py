@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.57 2004/05/26 18:44:51 ajung Exp $
+$Id: SchemaEditor.py,v 1.58 2004/05/30 14:36:06 ajung Exp $
 """
 
 import copy, re
@@ -43,7 +43,7 @@ class SchemaEditor:
 
     security.declareProtected(ManageCollector, 'atse_init')
     def atse_init(self, schema, filtered_schemas=('default', 'metadata')):
-        self._ms = schema.copy()     # ms=managed schema
+        self._ms = PCNGSchemaNonPersistent(schema.fields())
         self._filtered_schemas = filtered_schemas
 
     security.declareProtected(View, 'atse_getSchema')
