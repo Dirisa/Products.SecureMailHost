@@ -4,6 +4,8 @@ History of significant changes for PloneHelpCenter:
 
 PloneHelpCenter 0.2
 
+    - Added Glossary types, updated Help Center view [limi]
+
     - Added Link types [Joel]
 
     - Added ErrorReference types [Joel]

@@ -6,7 +6,7 @@
 # /faq - contains the FAQ objects
 # /howto - contains the How-tos
 # /tutorial - contains the tutorials
-#
+# 
 # The main goals of these folders are to restrict the addable types and
 # provide a sensible default view out-of-the-box, like the FAQ view.
 #
@@ -27,7 +27,7 @@ class HelpCenter(BaseFolder):
         'action': 'string:${object_url}/helpcenter_view',
         'permissions': (CMFCorePermissions.View,)
         },)
-    content_icon = 'book_icon.gif'
+    content_icon = 'helpcenter_icon.gif'
 
     archetype_name = 'Help Center'
     meta_type = 'HelpCenter'
@@ -36,7 +36,8 @@ class HelpCenter(BaseFolder):
                             , 'HelpCenterHowToFolder'
                             , 'HelpCenterTutorialFolder'
                             , 'HelpCenterLinkFolder'
-                            , 'HelpCenterErrorReferenceFolder' )
+                            , 'HelpCenterErrorReferenceFolder'
+                            , 'HelpCenterGlossary' )
 
     security = ClassSecurityInfo()
 
@@ -71,5 +72,9 @@ class HelpCenter(BaseFolder):
         self.invokeFactory('HelpCenterLinkFolder','link')
         self['link'].setTitle('Links')
         self['link'].setDescription('Links section.')
+
+        self.invokeFactory('HelpCenterGlossary','glossary')
+        self['glossary'].setTitle('Glossary')
+        self['glossary'].setDescription('Glossary of terms.')
 
 registerType(HelpCenter, PROJECTNAME)

@@ -14,3 +14,5 @@ import TutorialFolder, Tutorial, TutorialPage
 import LinkFolder, Link
 
 import ErrorReferenceFolder, ErrorReference
+
+import Glossary, Definition

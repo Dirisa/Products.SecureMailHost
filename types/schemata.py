@@ -374,3 +374,42 @@ LinkFolderSchema = HCFolderSchema + Schema((
             rows=6)),
         )) + SectionsVocabSchema
 
+###
+# Definition
+###
+
+DefinitionSchema = HCSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                 description = 'An explanation of the term.',
+                 description_msgid = "help_definition",
+                 label = "Definition",
+                 label_msgid = "label_definition",
+                 rows = 5,
+                 i18n_domain = "plonehelpcenter")
+    ),
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
+
+###
+# Glossary
+###
+
+GlossarySchema = HCFolderSchema + Schema((
+    TextField('description',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget=TextAreaWidget(
+    description="Description of the Glossary.",
+    description_msgid="desc_folder",
+    label_msgid="label_folder",
+    label="Description",
+    i18n_domain = "plonehelpcenter",
+    rows=6)
+              ),
+
+    )) + SectionsVocabSchema

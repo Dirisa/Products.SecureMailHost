@@ -7,7 +7,7 @@
   <div metal:fill-slot="main">
 
     <h1 tal:content="here/Title" class="documentFirstHeading">
-      Folder Title
+      Title
     </h1>
 
     <div metal:use-macro="here/document_actions/macros/document_actions">
@@ -19,21 +19,17 @@
       tal:condition="not: request/full|nothing"
       tal:define="parent_url python:here.navigationParent(here, template.getId())"
       tal:attributes="href parent_url">
-      Up to Table of Contents
+      Up to Glossary
     </a>
 
     <div class="documentDescription"
       tal:condition="here/Description"
       tal:content="structure here/Description">
-      Full Question
-    </div>
-
-    <div tal:content="structure here/getAnswer|string:(This question has not yet been answered.)">
-      Answer
+      Definition
     </div>
 
     <p tal:condition="here/getVersionsVocab" tal:define="versions here/Versions" class="discreet">
-    This FAQ applies to:
+    This Definition applies to:
     <span tal:condition="versions" tal:replace="versions">1.0, 2.0</span>
     <span tal:condition="not: versions">Any version</span>
     </p>

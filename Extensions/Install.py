@@ -54,7 +54,7 @@ def install(self):
     
     wf_tool.setChainForPortalTypes(pt_names=['HelpCenterFAQ','HelpCenterHowTo','HelpCenterLink'
                                             ,'HelpCenterTutorial','HelpCenterTutorialPage'
-                                            ,'HelpCenterErrorReference'], chain='helpcenter_workflow')
+                                            ,'HelpCenterErrorReference','HelpCenterDefinition'], chain='helpcenter_workflow')
     print >> out, 'Set helpcenter_workflow as default for help center content types.'
 
     fc_tool = getToolByName(self, 'portal_form_controller')
@@ -64,10 +64,12 @@ def install(self):
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterTutorialPage', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterLink', None, 'traverse_to', 'string:edit_reminder')
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterErrorReference', None, 'traverse_to', 'string:edit_reminder')
+    fc_tool.addFormAction('content_edit', 'success', 'HelpCenterDefinition', None, 'traverse_to', 'string:edit_reminder')
     print >> out, 'Set reminder to publish message hack on objects.'
 
     # make new types use portal_factory
     ft = getToolByName(self, 'portal_factory')    portal_factory_types = ft.getFactoryTypes().keys()    for t in ['HelpCenter'
+             ,'HelpCenterGlossary', 'HelpCenterDefinition'
              ,'HelpCenterErrorReference', 'HelpCenterErrorReferenceFolder'
              ,'HelpCenterFAQ', 'HelpCenterFAQFolder'
              ,'HelpCenterHowTo', 'HelpCenterHowToFolder'

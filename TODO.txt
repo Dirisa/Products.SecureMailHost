@@ -42,7 +42,7 @@ General:
   HelpCenter.py/__init__ respect this. Easier for other people who
   want to use product but might not want all parts.
 
-- Add simple Glossary type, with Glossary entries (by limi)
+- Add simple Glossary type, with Glossary entries (already added by limi)
 
   - I admit that it's 50% because we have 5 and not 6 different
     types now, which makes everything asymmetrical. ;)
