@@ -1,5 +1,5 @@
 """
-$Id: PSCImprovementProposal.py,v 1.3 2005/03/09 18:04:43 dtremea Exp $
+$Id: PSCImprovementProposal.py,v 1.4 2005/03/10 22:07:25 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -63,6 +63,13 @@ class PSCImprovementProposal(OrderedBaseFolder):
         with the title when it's displayed.
         """
         return '#%s: %s' % (self.getId(), self.getField('title').get(self))
-
+    
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
+                                'getRawTitle')
+    def getRawTitle(self):
+        """Get the raw title of the improvement proposal - no #${id} prefixing.
+        """
+        return self.getField('title').get(self)
+    
 
 registerType(PSCImprovementProposal, PROJECTNAME)

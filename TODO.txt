@@ -2,23 +2,19 @@ PloneSoftwareCenter - Remaining issues
 
 Developer claiming item/comments is in [brackets].
 
+====
+Bugs
+====
+
+- No permissions on ImprovementProposal workflow
+
+- If an unapproved package makes a published release, it shows up in searches,
+    but cannot be viewed.
+
+
 =======
 General
 =======
-
-- IMPORTANT: The category pages don't really work without having a key:value pair.
-  Right now it just uses the category directly, and you end up with stuff like:
-  /products/by-category/Internationalization%20and%20Multilingual, which should
-  really be /products/by-category/i18n.
-  Having a simple data grid layout like for Licenses and Release Maturities is
-  probably the bes solution, so you would have:
-  Categories: i18n|Internationalization and Multilingual
-  
-  In addition, it opens up for silly things like people creating an object called
-  i18n or Internationalization%20and%20Multilingual which will destroy access to
-  this category. Very simple and exploitable hack - easy to fix, but still silly.
-  So we have to check the naming of a project against the IDs that exist in the
-  folder. Argh.
 
 - RSS feed for Latest Releases, ability to have an RSS feed for every project
   and category too.
