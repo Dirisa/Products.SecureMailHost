@@ -888,15 +888,14 @@ class PloneLocalFolderNG(BaseContent):
                if REQUEST.get('action', '') == 'deleteFolder':
                    #msg = 'listFolderContents() :: deleteFolder(%s)' % destpath
                    #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , msg)
+                   redir_dest = make_url(self, 'plfng_view')
                    if self.deleteFolder(destpath):
-                      msg = '/plfng_view?portal_status_message='\
-                       + destpath + ' deleted.'
-                      RESPONSE.redirect(REQUEST['URL2']+ msg)
+                      msg = '?portal_status_message='+destpath+' deleted.'
+                      RESPONSE.redirect(redir_dest + msg)
                       return
                    else:
-                      msg = '/plfng_view?portal_status_message='\
-                       + destpath + ' NOT deleted.'
-                      RESPONSE.redirect(REQUEST['URL2']+ msg)
+                      msg = '?portal_status_message='+destpath+' NOT deleted.'
+                      RESPONSE.redirect(redir_dest + msg)
                       return
           
                if hasattr(self, "default_page") and self.default_page:
@@ -1216,11 +1215,13 @@ class PloneLocalFolderNG(BaseContent):
         except:
             raise RuntimeError('Directory could not be created')
 
-        url = '/' + os.path.join(self.absolute_url(1), rel_dir, dirname) +\
-         '/plfng_view?portal_status_message=Directory created'
-        REQUEST.RESPONSE.redirect(url)
+        redir_dest = make_url(self, 'plfng_view')
+        msg = '?portal_status_message='+destpath+' created.'
+        REQUEST.RESPONSE.redirect(redir_dest + msg)
+        return
 
-        security.declareProtected('View', 'getProperties')
+
+    security.declareProtected('View', 'getProperties')
     def getProperties(self, REQUEST=None):
         """ get the summary properties for the local filesystem directory
             for this class instance """
