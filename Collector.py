@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.62 2003/11/07 08:07:29 ajung Exp $
+$Id: Collector.py,v 1.63 2003/11/07 15:44:07 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -336,6 +336,14 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         self._adjust_view_mode()           # can we hook this somewhere else?
         self._adjust_participation_mode()
 
+    security.declareProtected(ManageCollector, 'reindex_issues')
+    def reindex_issues(self, RESPONSE=None):
+        """ reindex all issues """
+
+        for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
+        util.redirect(RESPONSE, 'pcng_maintainance', 
+                      self.translate('issues_reindexed', 'Issues reindexed'))
+
     security.declareProtected(View, 'getNumberIssues')
     def getNumberIssues(self):
         """ return the number of issues """
@@ -358,13 +366,22 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             util.redirect(RESPONSE, 'pcng_schema_editor',
                           self.translate('issues_updated', 'Issues updated'))
 
-    security.declareProtected(ManageCollector, 'reindex_issues')
-    def reindex_issues(self, RESPONSE=None):
-        """ reindex all issues """
+    security.declareProtected(ManageCollector, 'update_collector_schema')
+    def update_collector_schema(self, RESPONSE=None):
+        """ check the attributes of the collector instance against the
+            current schema and update attributes accordingly.
+        """
 
-        for issue in self.objectValues('PloneIssueNG'): issue.reindexObject()
-        util.redirect(RESPONSE, 'pcng_maintainance', 
-                      self.translate('issues_reindexed', 'Issues reindexed'))
+        for field in self.Schema().fields():
+
+            try:
+                value = field.storage.get(field.getName(), self)  
+            except:
+                field.storage.set(field.getName(), self, field.default)
+
+        util.redirect(RESPONSE, 'pcng_maintainance',
+                          self.translate('collector_schema_updated', 'Collector schema updated'))
+
 
     ######################################################################
     # Some Archetypes madness
