@@ -1,28 +1,4 @@
-PloneHelpCenter - remaining issues
-
-===================================
-PloneSoftwareCenter considerations:
-===================================
-
- - Test carefully that all the methods/fields found on the PHC root and used
-    as vocabs for contained objects are found in PSC as well, or that they
-    are only optionally used.
-    
-        - DC metadata 'rights' attribute gets acquired from project/package
-        
-        - Importance vocabulary falls back on default Low, Medium, High
-        
-        - Versions vocab is not set anywhere, defaults to ()
-        
-            -> Can provide getVersions_vocab () in PSCProject, finding versions
-                of available releases
-                
-        - Active versions is not found anywhere - breaks isOutdated ()
-        
-            -> Can provide getCurrentVersions() in PSCProject, finding most
-                recent release, or with a vocab set on project itself (e.g.
-                selected from versions of all available releases)
-                        
+PloneHelpCenter - remaining issues                        
         
 =================
 Template changes:
