@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.28 2004/01/15 19:01:45 ajung Exp $
+$Id: collector_schema.py,v 1.29 2004/01/15 20:34:28 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -14,7 +14,6 @@ from Products.Archetypes.public import StringField, TextField, IntegerField, Dat
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
-from config import VOC_ISSUE_FORMATTERS
 from notification_policies import VOC_NOTIFICATION_POLICIES
 
 VOC_NOTIFICATION_LANGUAGES = DisplayList((

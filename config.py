@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.15 2004/01/04 09:09:51 ajung Exp $
+$Id: config.py,v 1.16 2004/01/15 20:34:27 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -32,15 +32,6 @@ setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(AddCollectorIssue, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(AddCollectorIssueFollowup, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(ManageCollector, ('Manager', 'TrackerAdmin'))
-
-# Collector issue formatters for notification emails
-
-from Products.Archetypes.public import DisplayList
-
-VOC_ISSUE_FORMATTERS = DisplayList((
-  ('format_transcript', 'Standard formatter (EN)'),
-  ('format_transcript_de', 'Standard formatter (DE)'),
-))
 
 
 # Don't show the following indexes in the auto-generated searchform
