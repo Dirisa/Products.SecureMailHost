@@ -159,39 +159,7 @@
       <div metal:use-macro="here/batch_macros/macros/navigation" />
 
       <metal:block tal:repeat="issue batch">
-        <metal:block>
-          <h2 class="pcng_transcript"> 
-             <a tal:attributes="href string:${issue/getURL}/pcng_issue_view;
-                                target python: test(member.getProperty('pcng_issue_in_new_window', 0), '_blank', '_self')"
->
-              <span tal:replace="issue/getId" />.
-              <span tal:replace="issue/Title" />
-            </a>
-          <a tal:condition="have_reportlab" tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo_small.gif"  height="14" width="18" border="0" title="PDF"></a>
-          </h2>
-        </metal:block>
-        <div class="pcng_issueview_metadata">
-         <b i18n:translate="followups"># Followups</b>: <span tal:content="issue/numberFollowups" /> &bull; 
-         <b i18n:translate="status">Status</b>: <span i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" /> &bull; 
-         <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> &bull;
-         <b i18n:translate="importance">Importance</b>:
-         <metal:block tal:define="field python: here.atse_getSchema()['importance'];
-                                  vocab python: field.Vocabulary(here);
-                                  display python: here.displayValue(vocab, issue.importance)">
-            <span tal:content="structure display" />
-         </metal:block> &bull;
-         <b i18n:translate="assigned">Assigned</b>: <span tal:replace="python: ', '.join(issue.assigned_to)" />
-        </div>
-        <div class="pcng_issueview_description" 
-             tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
-
-        <div class="pcng_issueview_legend">
-          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> <span i18n:translate="date_on">on</span> <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
-          <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toLocalizedTime(issue.modified)" />
-          (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
-          <span i18n:translate="days_ago">days ago</span>)
-
-        </div>
+        <div metal:use-macro="here/issue_macros/macros/issue_shortview" />
       </metal:block>
       <div metal:use-macro="here/batch_macros/macros/navigation" />
     </div>
