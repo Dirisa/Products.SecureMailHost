@@ -58,8 +58,10 @@
 
           <form action="schema_update" method="post"
                 tal:define="field python: here.schema_getSchema(fieldset)[request['field']]">
-            <input type="hidden" name="field.name:record:string" value="request/field|nothing" />
-            <input type="hidden" name="field.schemata:record:string" value="request/fieldset|nothing" />
+            <input type="hidden" name="field.name:record:string" 
+                   tal:attributes="value request/field|nothing" />
+            <input type="hidden" name="field.schemata:record:string"    
+                   tal:attributes="value request/fieldset|nothing" />
 
             <table border="0">
 
