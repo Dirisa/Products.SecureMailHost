@@ -48,6 +48,9 @@ class HelpCenter(BaseFolder):
          },
          )
 
+    def _get_versions_vocab(self):
+        return self.versions
+
     def initializeArchetype(self, **kwargs):
         # prepopulate folder
         BaseFolder.initializeArchetype(self,**kwargs)

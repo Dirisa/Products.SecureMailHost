@@ -3,7 +3,32 @@ from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.Marshall import PrimaryFieldMarshaller
 from Products.PloneHelpCenter.config import *
 
-FAQSchema = BaseSchema + Schema((
+VersionSchema = Schema((
+    LinesField('versions',
+               accessor='Versions',
+               index='KeywordIndex',
+               vocabulary='_get_versions_vocab',
+               widget=MultiSelectionWidget(
+                       label='Versions',
+                       description='Versions of Plone that apply to this FAQ question '
+                                   '(leave blank if not version-specific)',
+                      ),
+               ),
+    ))
+
+# non folderish Help Center Base schemata
+HCSchema = BaseSchema
+HCSchemaWithVersion = HCSchema + VersionSchema
+
+# folderish Help Center Base schemata
+HCFolderSchema = BaseFolderSchema
+HCFolderSchemaWithVersion = HCFolderSchema + VersionSchema
+
+###
+# FAQ
+###
+
+FAQSchema = HCSchemaWithVersion + Schema((
     TextField('description',
               default='',
               searchable=1,
@@ -17,7 +42,6 @@ FAQSchema = BaseSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
     ),
-
     TextField('answer',
               required=1,
               searchable=1,
@@ -28,17 +52,6 @@ FAQSchema = BaseSchema + Schema((
     rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
-            
-    LinesField('versions',
-               accessor='Versions',
-               index='KeywordIndex',
-               vocabulary='_get_versions_vocab',
-               widget=MultiSelectionWidget(
-    label='Versions',
-    description='Versions of Plone that apply to this FAQ question '
-    '(leave blank if not version-specific)',),
-               ),
-               
     LinesField('sections',
                multiValued=1,
                required=1,
@@ -52,10 +65,10 @@ FAQSchema = BaseSchema + Schema((
     ))
 
 ###
-#
+# FAQ Folder
 ###
 
-FAQFolderSchema = BaseFolderSchema + Schema((
+FAQFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
@@ -80,11 +93,10 @@ FAQFolderSchema = BaseFolderSchema + Schema((
     ))
 
 ###
-#
+# Help Center base folder
 ###
 
-HelpCenterSchema = BaseFolderSchema + Schema((
-
+HCSchema = HCFolderSchemaWithVersion + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
@@ -95,19 +107,13 @@ HelpCenterSchema = BaseFolderSchema + Schema((
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
-
-    LinesField('versions',
-                widget=LinesWidget(description="The available versions of the product, one version on each line.",
-                                            label="Versions",
-                                            i18n_domain = "plonehelpcenter",
-                                            rows=6)),
     ))
 
 ###
-#
+# Howto
 ###
 
-HowToSchema = BaseFolderSchema +  Schema((
+HowToSchema = HCFolderSchemaWithVersion +  Schema((
     TextField('body',
               searchable=1,
               required=1,
@@ -122,21 +128,6 @@ HowToSchema = BaseFolderSchema +  Schema((
 
               **DEFAULT_CONTENT_TYPES
               ),
-
-    LinesField('versions',
-                multivalued=1,
-                vocabulary='_get_versions_vocab',
-                enforceVocabulary=1,
-                accessor='Versions',
-                index='KeywordIndex',
-                widget=MultiSelectionWidget(
-                       description_msgid='desc_howto_versions',
-                       description='The versions this Howto applies to',
-                       label_msgid='label_howto_versions',
-                       label='Versions',
-                       i18n_domain = "howto",
-                       ),
-               ),
     LinesField('sections',
                multiValued=1,
                required=1,
@@ -155,10 +146,10 @@ HowToSchema = BaseFolderSchema +  Schema((
  )
 
 ###
-#
+# HowToFolder
 ###
 
-HowToFolderSchema = BaseFolderSchema + Schema((
+HowToFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
@@ -180,10 +171,10 @@ HowToFolderSchema = BaseFolderSchema + Schema((
     ))
 
 ###
-#
+# Tutorial
 ###
 
-TutorialSchema = BaseSchema + Schema((
+TutorialSchema = HCSchemaWithVersion + Schema((
     TextField('description',
               default='',
               searchable=1,
@@ -211,10 +202,10 @@ TutorialSchema = BaseSchema + Schema((
 ))
 
 ###
-#
+# TutorialFolder
 ###
 
-TutorialFolderSchema = BaseFolderSchema + Schema((
+TutorialFolderSchema = HCFolderSchema + Schema((
     TextField('description',
               searchable=1,
               accessor="Description",
@@ -236,10 +227,10 @@ TutorialFolderSchema = BaseFolderSchema + Schema((
     ))
 
 ###
-#
+# TutorialPage
 ###
 
-TutorialPageSchema = BaseSchema + Schema((
+TutorialPageSchema = HCSchema + Schema((
     TextField('description',
               default='',
               searchable=1,
