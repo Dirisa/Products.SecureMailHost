@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.183 2004/06/10 08:13:34 ajung Exp $
+$Id: Issue.py,v 1.184 2004/06/11 08:00:02 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -24,6 +24,7 @@ from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
+from Products.Archetypes.config import REFERENCE_CATALOG
 from zLOG import LOG, ERROR
 
 from Base import Base, ParentManagedSchema
@@ -326,11 +327,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         else:
             raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
 
+
     security.declareProtected(View, 'getForwardReferences')
     def getForwardReferences(self):
         """ AT forward references """
         if self.haveATReferences():
-            return self.getRefs()
+            tool = getToolByName(self, REFERENCE_CATALOG)
+            return tool.getReferences(self)
         else:
             return ()
         
@@ -338,10 +341,17 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getBackReferences(self):
         """ AT forward references """
         if self.haveATReferences():
-            return self.getBRefs()
+            tool = getToolByName(self, REFERENCE_CATALOG)
+            return tool.getBackReferences(self)
         else:
             return ()
-        
+
+    security.declareProtected(View, 'getTargetObjectForReference')
+    def getTargetObjectForReference(self, ref):
+        """ Wrapper for reference.getTargetObject() """
+
+        return ref.getTargetObject()
+ 
     security.declareProtected(View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
         """ create graphical representation of the references tree
