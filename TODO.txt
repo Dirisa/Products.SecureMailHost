@@ -9,6 +9,18 @@ General:
 
 - Bug: Contents tab is visible to normal Members (at least on plone.org)
        - it shouldn't be.
+
+- All PHC types need to show the "log in to add FAQ/How-to/whatever" button
+
+- Howtos need to have a note about the fact that they are folderish and can
+  contain images/files
+  
+- Ideally, the "How to contribute to/use this resource" should be a howto
+  itself
+  
+- Add LinguaPlone support to the types
+
+- Discreet "Powered by PHC"
   
 - HistoryAware mix-in - PHC types should have a history attached, so we can
   mount a non-packable storage on plone.org that will keep all the change
