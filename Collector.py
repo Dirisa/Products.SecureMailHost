@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.142 2004/03/18 10:54:04 ajung Exp $
+$Id: Collector.py,v 1.143 2004/03/18 13:14:23 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -418,6 +418,16 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ return a new issue number"""
         self._num_issues += 1
         return str(self._num_issues)
+
+    security.declareProtected(View, 'get_current_issue_number')
+    def get_current_issue_number(self):
+        """ return a new issue number"""
+        return self._num_issues 
+
+    security.declareProtected(ManageCollector, 'set_current_issue_number')
+    def set_current_issue_number(self, num):
+        """ set the issue number """
+        self._num_issues = num
 
     security.declareProtected(AddCollectorIssue, 'redirect_create_object')
     def redirect_create_object(self, RESPONSE=None):
