@@ -824,3 +824,6 @@ msgstr "Tage"
 
 msgid "Refresh"
 msgstr "Aktualisieren"
+
+msgid "invalid_id_for_schemata"
+msgstr "$schemata ist eine ungültige ID für ein Schemata"
