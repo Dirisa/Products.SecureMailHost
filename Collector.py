@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.16 2003/09/07 17:51:56 ajung Exp $
+$Id: Collector.py,v 1.17 2003/09/07 17:54:00 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -101,8 +101,7 @@ class Collector(BaseFolder, SchemaEditor):
             new = REQUEST.get(name, None)
             old = getattr(self, name, None)
             if old:
-                if old != new:
-                    print old,new, type(old), type(new)
+                if str(old) != str(new): # Archetypes does not use Zope converters
                     te.addChange(name, old, new)
 
         self.transcript.add(te)
