@@ -923,3 +923,19 @@ msgstr "Benutzerinterface"
 
 msgid "new_issue"
 msgstr "Neues_Ticket"
+
+msgid "search_by_date"
+msgstr "Datumssuche"
+
+msgid "Last change"
+msgstr "Letzte Änderung"
+
+msgid "until"
+msgstr "bis"
+
+msgid "since"
+msgstr "seit"
+
+msgid "days_or_date"
+msgstr "Tage oder Datum"
+
