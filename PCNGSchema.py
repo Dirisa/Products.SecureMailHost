@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.4 2004/01/29 19:06:32 ajung Exp $
+$Id: PCNGSchema.py,v 1.5 2004/01/29 19:57:26 ajung Exp $
 """
 
 from types import FileType
@@ -69,6 +69,10 @@ class PCNGSchemata(Persistent):
             return default
 
     __getitem__ = get = getField
+
+    def hasField(self, field_id):
+        """ do we have a field with this id?"""
+        return field_id in self._names
 
     security.declareProtected(View, 'searchable')
     def searchable(self):
@@ -173,7 +177,7 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                     object.initializeInstance(instance, item, container)
                     initializedLayers.append((layer, object))
 
-    security.declareProtected(View, 'getSchemataNames')
+#    security.declareProtected(View, 'getSchemataNames')
     def getSchemataNames(self):
         """ return name of schematas """
         l = []
@@ -183,7 +187,7 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                 l.append(field.schemata)
         return l
 
-    security.declareProtected(View, 'getSchemataFields')
+#    security.declareProtected(View, 'getSchemataFields')
     def getSchemataFields(self, schemata_name):
         """ return fields of a given schemata """
 
