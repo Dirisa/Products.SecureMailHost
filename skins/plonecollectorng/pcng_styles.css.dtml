@@ -159,4 +159,21 @@ div.right {
     float: right;
 }
 
+div #pcng_references_show {
+    float: right;
+}
+
+div #pcng_references_edit{
+    float: left;
+}
+
+div #pcng_uploads_show {
+    float: right;
+}
+
+div #pcng_uploads_edit{
+    float: left;
+}
+
+
 /* </dtml-with> */

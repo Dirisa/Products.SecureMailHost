@@ -15,13 +15,23 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
 
-    <div  tal:condition="here/haveATReferences">
-     <div metal:use-macro="here/issue_macros/macros/issue_references" />
+    <div class="row" tal:condition="here/haveATReferences">
+      <div id="pcng_references_show">
+        <div metal:use-macro="here/issue_macros/macros/issue_references" />
+      </div>
+
+      <div id="pcng_references_edit">
+        <div metal:use-macro="here/issue_macros/macros/add_references" />
+      </div>
+
+      <div style="clear: both">
+      </div>
     </div>
 
-    <div tal:condition="here/haveATReferences">
-      <div metal:use-macro="here/issue_macros/macros/add_references" />
+    <div tal:condition="not: here/haveATReferences">
+      <span i18n:translate="no_references_support">No support for issue references in this version</span>
     </div>
+
   </div>
 </body>
 </html>
