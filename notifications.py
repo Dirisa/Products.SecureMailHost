@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.22 2004/03/05 05:56:14 ajung Exp $
+$Id: notifications.py,v 1.23 2004/03/18 16:06:52 ajung Exp $
 """
 
 import sys
@@ -89,6 +89,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
                                if util.isValidEmailAddress(v.get('email','')) and
                                   v.get('send_emails','yes').lower() == 'yes']
     if not dest_emails: return  # No recipients???
+    if not issue.Title() or issue.Title().find('PloneIssueNG') > -1: return 
 
     outer = MIMEMultipart()
     outer['From'] = collector.collector_email 
@@ -108,7 +109,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
             outer.attach(MIMEImage(str(obj.data))) 
         
     MH = getattr(collector, 'MailHost') 
-
+    
     try:
         LOG('plongcollectorng', INFO, 'recipients: %s' % dest_emails)
         MH._send(collector.collector_email, dest_emails, outer.as_string())
