@@ -67,49 +67,73 @@
  </div>
     
     
-<div metal:define-macro="transcript_plain" i18n:domain="plonecollectorng">
+<div metal:define-macro="transcript_comments" i18n:domain="plonecollectorng">
 
-  <span tal:define="groups python: here.getTranscript().getEventsGrouped();
-                    num_groups python: len(groups)">
+  <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents() if e.getType() == 'comment'];
+                    num_events python: len(events)">
 
-    <span tal:condition="not: groups" i18n:translate="no_entries">No entries</span>
+    <span tal:condition="not: events" i18n:translate="no_entries">No entries</span>
 
-    <tal:loop tal:repeat="events groups">
-      <tal:if tal:condition="events">
+    <tal:loop tal:repeat="event events" >
+      <div id="transcriptheader">
+        #<span tal:content="python: num_events - repeat['event'].index" />:
+         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />)
+      </div>
 
-          <div id="transcriptheader">
-            #<span tal:content="python: num_groups - repeat['events'].index" />:
-             <span tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
-             <span tal:content="python: context.pcng_action_from_events(events)" />
+      <div id="transcriptevent">
+        <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+        <div>
+          <div class="right" tal:condition="python: event.getType() == 'comment'" id="pcng_transcript_actions">
+            <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
+              <img src="arrowRightmost.gif" title="Followup (with quoting this comment)" i18n:attributes="title">
+            </a>
+            <a tal:condition="python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here)"
+               tal:attributes="href string:pcng_issue_transcript_edit?timestamp:float=${event/getTimestamp}">
+               <img src="edit.gif" title="Edit this entry" i18n:attributes="title">
+            </a>
+    <!--
+            <a tal:condition="python: member.has_permission('PloneCollectorNG: Manage PloneCollectorNG', here)"
+               tal:attributes="href string:pcng_issue_transcript_delete?timestamp:float=${event/getTimestamp}">
+               <img src="delete.gif" title="Delete this entry" i18n:attributes="title">
+            </a>
+    -->
           </div>
+          <div class="clear"></div>
+        </div>
+        <br/>
+      </div>
+    </tal:loop> 
+  </tal:def>
+</div>
 
-          <metal:block tal:repeat="event python: [e for e in events if e.getType() not in ('action',)]">
-            
-            <div id="transcriptevent">
-              <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+<div metal:define-macro="transcript_changes" i18n:domain="plonecollectorng">
 
-                <div class="right" tal:condition="python: event.getType() == 'comment'" id="pcng_transcript_actions">
+  <tal:def tal:define="events python: [e for e in here.getTranscript().getEvents() if e.getType() not in ('comment', 'action')];
+                       num_events python: len(events)">
 
-                  <a tal:attributes="href string:pcng_issue_followup?timestamp:float=${event/getTimestamp}">
-                    <img src="arrowRightmost.gif" title="Followup (with quoting this comment)" i18n:attributes="title">
-                  </a>
-                  <a tal:condition="python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here)"
-                     tal:attributes="href string:pcng_issue_transcript_edit?timestamp:float=${event/getTimestamp}">
-                     <img src="edit.gif" title="Edit this entry" i18n:attributes="title">
-                  </a>
-<!--
-                  <a tal:condition="python: member.has_permission('PloneCollectorNG: Manage PloneCollectorNG', here)"
-                     tal:attributes="href string:pcng_issue_transcript_delete?timestamp:float=${event/getTimestamp}">
-                     <img src="delete.gif" title="Delete this entry" i18n:attributes="title">
-                  </a>
--->
-                </div>
-            </div>
-          </metal:block>
-          <br/>
-      </tal:if>
-    </tal:loop>
-  </span>
+    <table class="listing">
+      <tr>
+        <th i18n:translate="date">Date</th>
+        <th i18n:translate="event_type">Event type</th>
+        <th i18n:translate="field">Field</th>
+        <th i18n:translate="changes">Changes</th>
+      </tr>
+
+      <tr tal:repeat="event events">
+        <td>
+         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />)
+        </td>
+        <td>
+          <span i18n:translate="" tal:content="event/getType" />
+        </td>
+        <td tal:content="event/getField"/>
+        <td>
+          <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+        </td>
+      </tr>
+    <table>
+  </tal:def>
+
 </div>
 
 

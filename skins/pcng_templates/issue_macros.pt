@@ -318,8 +318,8 @@ function show_tickets() {
         <span class="label" 
               i18n:translate="Followup_status"> Followup status</span>
         <br/>
-        <select name="status">
-           <option value="internal" i18:translate="status_internal" SELECTED>Internal</option>
+        <select name="state">
+           <option value="private" i18:translate="status_private" SELECTED>Private</option>
            <option value="public" i18:translate="status_public">Public</option>
         </select>
         <br/>

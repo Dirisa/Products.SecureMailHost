@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.220 2004/09/23 15:34:10 ajung Exp $
+$Id: Issue.py,v 1.221 2004/09/24 14:44:17 ajung Exp $
 """
 
 import os, time, random
@@ -148,7 +148,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
 
     security.declareProtected(View, 'Schema')
     def Schema(self):
-        """ Schema hook """
+        """ AT hook -- call the base method with the right SCHEMA_ID """
         return ParentManagedSchema.Schema(self, SCHEMA_ID)
 
     security.declareProtected(View, 'setDefaults')
@@ -191,7 +191,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     # Followups
     ######################################################################
 
-    def issue_followup(self, action, comment='', text_format='text/plain', assignees=[], assignees_group=[], RESPONSE=None):
+    def issue_followup(self, action, comment='', state='private', assignees=[], assignees_group=[], RESPONSE=None):
         """ issue followup handling """
 
         # action for changes in assignment
@@ -205,7 +205,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
             self.getTranscript().add(ChangeEvent('assignees', old_assignees, assignees))
             assignees_changed = 1
 
-        if comment: self.getTranscript().add(CommentEvent(unicode(comment, self.getSiteEncoding()), text_format, public=True))
+        if comment: self.getTranscript().add(CommentEvent(unicode(comment, self.getSiteEncoding()), state=state))
         if action == 'comment' and assignees_changed: 
             if 'assign' in self.validActions():
                 action = 'assign'

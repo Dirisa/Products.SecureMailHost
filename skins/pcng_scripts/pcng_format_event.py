@@ -43,7 +43,7 @@ elif type == 'change':
         return s
 
     elif format == 'html':
-        s = '<span id="pcng_transcript_key">%s:</span> %s -> %s' % (e.getField(), e.getOld(), e.getNew())
+        s = '%s -> %s' % (e.getOld(), e.getNew())
         return s
 
     elif format == 'pdf':
