@@ -30,7 +30,7 @@
             Document actions (print, sendto etc)
         </div>
 
-        <form style="float: right; margin-top: 1em; clear: right;"
+        <form style="float: right; margin-top: 1em; clear: right; display: inline;"
               method="get" action="redirect_to">
             <select name="dest"
                     tabindex="3">
@@ -63,6 +63,10 @@
         <div class="tutorialAbout"
              tal:define="portrait python: mtool.getPersonalPortrait(here.Creator);">
         
+            <!-- XXX - none of these seem to work, I am not able to get the correct
+                       portrait, nor the Description from the Tutorial object. ~limi
+              -->
+        
             <div style="text-align: center;">
                 <img src=""
                      alt=""
@@ -72,7 +76,7 @@
                      tal:attributes="src portrait/absolute_url" />
             </div>
                     
-            <div tal:content="container/Description">
+            <div tal:content="here/getTutorialDescription">
             Tutorial Description
             </div>
         </div>

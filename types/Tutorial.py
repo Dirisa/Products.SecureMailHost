@@ -30,6 +30,7 @@ class HelpCenterTutorial(OrderedBaseFolder):
     allowed_content_types = ('HelpCenterTutorialPage', 'Image', 'File')
 
     def getTutorialDescription(self):
+        """ Returns the description of the Tutorial - convenience method for TutorialPage """
         return self.Description()
     
 registerType(HelpCenterTutorial, PROJECTNAME)
