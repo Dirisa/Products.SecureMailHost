@@ -39,6 +39,8 @@ Fixes
          FYI: I get the above error when trying to view the
          attachements tab when writing a howto."
 
+  - BUG: Owners can't mark their own content Obsolete, they should be able to.
+
          FYI: I ALSO get the above error when trying to view the
          attachements tab, after creating a *error reference*
 
@@ -59,6 +61,9 @@ General
     visible/hidden scheme, so you can have pages that you're adding while the
     Tutorial is available.
    
+  - The help center template should list any other normal folders put into it, 
+    so you can add stuff that is just plain folders, like on plone.org.
+
   - Ideally, the "How to contribute to/use this resource" (phc_help) should be a 
     pre-populated howto itself, so it can be translated/modified to suit the
     particular use case.
@@ -106,7 +111,7 @@ General
   - A way to set PHC-wide default Rights attribute - on plone.org we want 
     everything to be under the same license, for example. Maybe look at
     PloneCC which is a product to add Creative Commons licenses.
-    http://woss.name/software/PloneCC/
+    http://woss.name/software/PloneCC/ (no idea if this is relevant or not)
   
   - Definitions (in Glossary) need to be able to have Rich Text - the way it is
     now, it can't have links to other definitions. The Description attribute 
