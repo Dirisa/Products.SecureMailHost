@@ -51,6 +51,12 @@ Workflow - specification (by limi, trying to capture the most important things :
   - Any logged in Member can add a new FAQ, Howto, Tutorial, ErrorRef, HelpLink
     and Definition, but only the owners of those objects can add the sub-objects
     like TutorialPages and Attachments.
+    
+  - Tutorial is treated as a *unit*, which is why we don't workflow the 
+    TutorialPages. They should just be inheriting the permissions of their 
+    container (Tutorial).
+    
+  - The same goes for HowTos, Attachments aren't workflowed.
   
 
 - Notify! People need to be notified when somebody adds a comment to their item,
