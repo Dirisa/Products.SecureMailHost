@@ -15,7 +15,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.3 2004/05/16 19:09:06 tiran Exp $
+$Id: SecureMailHost.py,v 1.4 2004/05/16 19:58:45 tiran Exp $
 """
 
 X_MAILER = 'Zope/SecureMailHost'
@@ -23,9 +23,11 @@ BAD_HEADERS = ()
 
 from types import StringType, TupleType, ListType
 from copy import deepcopy
+from random import randint
+import socket
 
 from smtplib import SMTP
-import base64
+#import base64
 import email.Message
 import email.MIMEText
 
@@ -105,11 +107,11 @@ class SecureMailBase(MailBase):
         self.smtp_host = str(smtp_host)
         self.smtp_port = int(smtp_port)
         if smtp_userid:
-            self.smtp_userid = smtp_userid
-            self.smtp_userid64 = base64.encodestring(smtp_userid)
+            self._smtp_userid = smtp_userid
+            #self._smtp_userid64 = base64.encodestring(smtp_userid)
         if smtp_pass:
-            self.smtp_pass = smtp_pass
-            self.smtp_pass64 = base64.encodestring(smtp_pass)
+            self._smtp_pass = smtp_pass
+            #self._smtp_pass64 = base64.encodestring(smtp_pass)
 
     security.declareProtected( use_mailhost_services, 'sendTemplate' )
     def sendTemplate(trueself, self, messageTemplate,
@@ -185,6 +187,11 @@ class SecureMailBase(MailBase):
             kwargs['Date'] = DateTime().rfc822()
         if 'X-Mailer' not in kwargs:
             kwargs['X-Mailer'] = X_MAILER
+        if 'Message-Id' not in kwargs:
+            date = DateTime().strftime('%Y%m%d%H%M%S')
+            rand = randint(100000, 999999)
+            host = socket.gethostname()
+            kwargs['Message-Id'] = '<%s.%d@%s>' % (date, rand, host)
         for bad in BAD_HEADERS:
             if bad in kwargs:
                 raise MailHostError, 'Header %s is forbidden' % bad
@@ -210,17 +217,20 @@ class SecureMailBase(MailBase):
 
     security.declarePrivate( '_send' )
     def _send( self, mfrom, mto, messageText, debug = False):
-        """ Send the message """
+        """Send the message
+        """
         smtpserver = SMTP( self.smtp_host, int(self.smtp_port) )
         if debug:
             smtpserver.set_debuglevel(1)
         smtpserver.ehlo()
+        if smtpserver.has_extn('starttls'):
+            smtpserver.starttls()
+            smtpserver.ehlo()
         if smtpserver.does_esmtp:
-            if self.smtp_userid:
-                smtpserver.docmd("auth", "login " + self.smtp_userid64[:-1])
-                smtpserver.docmd(self.smtp_pass64[:-1])
+            if self._smtp_userid:
+                smtpserver.login(self._smtp_userid, self._smtp_pass)
         else:
-            if self.smtp_userid:  #indicate error here to prevent inadvertent use of spam relay
+            if self._smtp_userid:  #indicate error here to prevent inadvertent use of spam relay
                 raise MailHostError,"Host does NOT support ESMTP, but username/password provided"
         smtpserver.sendmail( mfrom, mto, messageText )
         smtpserver.quit()
