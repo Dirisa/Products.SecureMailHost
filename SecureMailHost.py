@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.13 2004/05/24 13:01:51 tiran Exp $
+$Id: SecureMailHost.py,v 1.14 2004/05/24 13:12:05 longsleep Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -131,7 +131,7 @@ class SecureMailBase(MailBase):
                                      REQUEST=REQUEST)
 
     security.declareProtected( use_mailhost_services, 'send' )
-    def send(self, messageText, mto=None, mfrom=None, subject=None, 
+    def send(self, message, mto=None, mfrom=None, subject=None, 
              encode=None):
         """Send email
         """
@@ -143,7 +143,7 @@ class SecureMailBase(MailBase):
             self._v_send = 1
 
         return MailBase.send(self, message, mto=mto, mfrom=mfrom,
-                             subject=subjet, encode=encode)
+                             subject=subject, encode=encode)
 
     security.declareProtected(use_mailhost_services, 'secureSend')
     def secureSend(self, message, mto, mfrom, subject='[No Subject]',
@@ -224,7 +224,7 @@ class SecureMailBase(MailBase):
     def __SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isistance(messageText, email.MIMEText.MIMEText):
+        if not isinstance(messageText, email.MIMEText.MIMEText):
             message = email.message_from_string(messageText)
         else:
             message = messageText
