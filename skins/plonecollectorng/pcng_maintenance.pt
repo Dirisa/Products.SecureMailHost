@@ -20,6 +20,9 @@
         <span i18n:translate="number_issues">Number issues</span>: <span tal:replace="here/getNumberIssues" /> 
       </li>
       <li>
+        <span i18n:translate="schema_base_class">Schema base class</span>: <span tal:replace="here/atse_schema_baseclass" />
+      </li>
+      <li>
         <a href="reindex_issues"><span i18n:translate="reindex_all_issues">Reindex all issues</span></a> 
         <div class="formHelp" i18n:translate="help_reindex_issues">You need to reindex all issues after renaming or moving a collector instance</div>
       </li>

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.50 2004/01/29 18:05:22 ajung Exp $
+$Id: SchemaEditor.py,v 1.51 2004/01/30 10:17:53 ajung Exp $
 """
 
 import copy, re
@@ -339,5 +339,9 @@ class SchemaEditor:
                 self._ms.addField(field)
         self._p_changed = 1
 
+    security.declareProtected(ManageCollector, 'atse_schema_baseclass')
+    def atse_schema_baseclass(self):
+        """ return name of baseclass """
+        return str(self._ms.__class__)
 
 InitializeClass(SchemaEditor)
