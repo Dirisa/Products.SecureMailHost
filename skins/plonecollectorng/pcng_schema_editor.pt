@@ -30,16 +30,22 @@
             <div class="padding">
             <h5 i18n:translate="schematas">Schematas</h5>
             <div class="portletBody">
-              <div tal:repeat="set fieldsets">
-                <a tal:content="string: ${set}" t
-                   tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${set};
-                                   class python: test(set==fieldset, 'selected', '')"/>
-                <a tal:attributes="href string:atse_schemataMoveLeft?name=${set}"><img src="arrowUp.gif" title="Move up"></a> 
-                <a tal:attributes="href string:atse_schemataMoveRight?name=${set}"><img src="arrowDown.gif" title="Move down"></a> 
-                <a tal:attributes="href string:atse_delSchemata?name=${set}"><img src="delete.gif" title="Delete"></a> 
+              <div class="row" style="clear: both" tal:repeat="set fieldsets">
+                <div style="clear:both">
+                  <div style="float:left">
+                 <a tal:content="string: ${set}" t
+                     tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${set};
+                                     class python: test(set==fieldset, 'selected', '')"/>
+                  </div>
+                  <div style="float:right">
+                    <a tal:attributes="href string:atse_schemataMoveLeft?name=${set}"><img src="arrowUp.gif" title="Move up"></a> 
+                    <a tal:attributes="href string:atse_schemataMoveRight?name=${set}"><img src="arrowDown.gif" title="Move down"></a> 
+                    <a tal:attributes="href string:atse_delSchemata?name=${set}"><img src="delete.gif" title="Delete"></a> 
+                  </div>
+                </div>
               </div>
        
-              <div> 
+              <div style="clear: both" >
                 <form action="atse_addSchemata" method="post">
                   <input type="text" name="name" value="" >
                   <input type="submit" value="Add"  class="standalone" valign="top" i18n:attributes="value">
@@ -53,15 +59,19 @@
           <div class="portlet" tal:condition="fieldsets">    <!-- Fields -->
             <h5 i18n:translate="fields">Fields</h5>
             <div class="portletBody">  
-              <div tal:repeat="field python: here.atse_getSchemata(fieldset).fields()">
-                <a tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
-                                   class python: test(field.getName() == request.get('field'), 'selected', '')"
-                    tal:content="string: ${field/getName}" />
-                <a tal:attributes="href string:atse_fieldMoveLeft?name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
-                <a tal:attributes="href string:atse_fieldMoveRight?name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
-                <a tal:attributes="href string:atse_delField?name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
+              <div style="clear:both" tal:repeat="field python: here.atse_getSchemata(fieldset).fields()">
+                <div style="float: left">
+                  <a tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?schemata=${fieldset}&field=${field/getName};
+                                     class python: test(field.getName() == request.get('field'), 'selected', '')"
+                      tal:content="string: ${field/getName}" />
+                </div>
+                <div style="float: right">
+                  <a tal:attributes="href string:atse_fieldMoveLeft?name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
+                  <a tal:attributes="href string:atse_fieldMoveRight?name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
+                  <a tal:attributes="href string:atse_delField?name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
+                </div>
               </div>
-              <div>
+              <div style="clear: both">
                 <form action="atse_update" method="post">
                   <input type="hidden" name="fielddata.schemata:record:string"    
                        tal:attributes="value fieldset" />
