@@ -97,7 +97,7 @@
           <br/>
         </div>
         <div tal:condition="not: images">
-          <span i18n:translate="no_images_available">No images available</span>
+          <span i18n:translate="no_images">No images available</span>
         </div> 
       </fieldset>
 
