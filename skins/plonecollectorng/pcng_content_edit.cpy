@@ -38,8 +38,14 @@ else:
 
 # Assign ticket to assignees ('assign_ticket' is a hidden var
 # set in pcng_base_edit.pt)
+
+topics_user = context.get_topics_user()
+
 if REQUEST.get('assign_ticket', None) == '1':
     assignees = REQUEST.get('assignees', [])
+    # added users from the assignes_group
+    for group in REQUEST.get('assignees_group', []):
+        assignees.extend(list(topics_user[group]))
     if assignees:
         new_context.issue_followup(action='accept', assignees=assignees)
 

@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.124 2004/02/16 17:27:00 ajung Exp $
+$Id: Issue.py,v 1.125 2004/02/23 12:44:26 ajung Exp $
 """
 
 import sys, os, time
@@ -136,12 +136,18 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # Followups
     ######################################################################
 
-    def issue_followup(self, action, comment='', text_format='plain', assignees=[], RESPONSE=None):
+    def issue_followup(self, action, comment='', text_format='plain', assignees=[], assignees_group=[], RESPONSE=None):
         """ issue followup handling """
 
         # action for changes in assignment
         old_assignees = self.assigned_to()
         assignees_changed = 0
+
+        # added users group assignees_group
+        topics_users = self.get_topics_user()
+        for group in assignees_group:
+            assignees.extend(list(topics_users[group]))
+        
         if not util.lists_eq(assignees, old_assignees):
             self._transcript.addChange('assignees', old_assignees, assignees)
             assignees_changed = 1
