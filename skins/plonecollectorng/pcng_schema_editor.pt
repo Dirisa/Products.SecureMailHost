@@ -203,16 +203,8 @@
 
             <div class="row">
               <div class="field">
-                Move to
-                <a tal:repeat="fieldset fieldsets"
-                   tal:attributes="href string:schema_field_to_fieldset?fieldset=${fieldset}&name=${field/getName}"
-                   tal:content="fieldset" />
-              </div> 
-            </div>
-
-            <div class="row">
-              <div class="field">
-                <input type="text" name="name" value=""> <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
+                <input type="text" name="name" value=""> 
+                <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
               </div>
             </div>
 
