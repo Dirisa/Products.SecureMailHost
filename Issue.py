@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.9 2003/09/09 13:32:05 ajung Exp $
+$Id: Issue.py,v 1.10 2003/09/09 19:10:03 ajung Exp $
 """
 import sys
 
@@ -166,6 +166,20 @@ class Issue(BaseFolder, WatchList):
     ######################################################################
     # Misc
     ######################################################################
+
+    def pre_validate(self, REQUEST, errors):
+        """ Hook to perform pre-validation actions. We use this
+            hook to log changed properties to the transcript.
+        """
+        print 'prevalidate'
+        te = TranscriptEntry()
+        for name in REQUEST.form.keys():
+            new = REQUEST.get(name, None)
+            old = getattr(self, name, None)
+            if old:
+                if str(old) != str(new): # Archetypes does not use Zope converters
+                    te.addChange(name, old, new)
+        self._transcript.add(te)
 
     def post_validate(self, REQUEST, errors):
         """ Hook to perform post-validation actions. We use this
