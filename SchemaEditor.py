@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.26 2003/11/01 17:03:26 ajung Exp $
+$Id: SchemaEditor.py,v 1.27 2003/11/05 17:30:35 ajung Exp $
 """
 
 import operator
@@ -13,13 +13,12 @@ from types import StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.CMFCorePermissions import *
 from BTrees.OOBTree import OOBTree
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
 
-from Products.CMFCore import CMFCorePermissions
 import util
 from config import ManageCollector
 from OrderedSchema import OrderedSchema
@@ -41,7 +40,7 @@ class SchemaEditor:
                 self._schemas[field.schemata] = OrderedSchema()
             self._schemas[field.schemata].addField(field)
 
-    security.declareProtected(CMFCorePermissions.View, 'schema_getWholeSchema')
+    security.declareProtected(View, 'schema_getWholeSchema')
     def schema_getWholeSchema(self):
         """ return the concatenation of all schemas """       
         l = [self._schemas[name] for name in self._schemata_names]
@@ -55,12 +54,12 @@ class SchemaEditor:
                 field.accessor = 'archetypes_accessor'
         return s
 
-    security.declareProtected(ManageCollector, 'schema_getNames')
+    security.declareProtected(View, 'schema_getNames')
     def schema_getNames(self):
         """ return names of all schematas """
         return self._schemata_names
 
-    security.declareProtected(CMFCorePermissions.View, 'schema_getSchema')
+    security.declareProtected(View, 'schema_getSchema')
     def schema_getSchema(self, name):
         """ return a schema given by its name """
         return self._schemas[name]
@@ -68,6 +67,9 @@ class SchemaEditor:
     security.declareProtected(ManageCollector, 'schema_newSchema')
     def schema_newSchema(self, fieldset, RESPONSE=None):
         """ add a new schema """
+        if not fieldset:
+            raise TypeError(self.translate('schema_empty_name', 'Empty ID given'))
+
         if fieldset in self._schemata_names:
             raise ValueError(self.translate('schema_exists', 'Schemata "$schema" already exists', schema=fieldset))
         self._schemata_names.append(fieldset)
@@ -102,6 +104,9 @@ class SchemaEditor:
 
         ## ATT: this should go into a dedicated method
         if R.has_key('schema_add_field'):
+            if not R['name']:
+                raise ValueError(self.translate('schema_empty_field_name', 'Field name is empty'))
+        
             fieldset = FD.schemata    
             fields = self._schemas[fieldset].fields()
             fields.append(StringField(R['name'], schemata=fieldset, widget=StringWidget))

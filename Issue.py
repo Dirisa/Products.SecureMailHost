@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.67 2003/11/05 11:38:34 ajung Exp $
+$Id: Issue.py,v 1.68 2003/11/05 17:30:35 ajung Exp $
 """
 
 import sys, os
@@ -454,8 +454,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
-        if self.getId() == '1134':
-            print '%s: %s' %  (self.getId(), self.Title())
         return '%s: %s' %  (self.getId(), self.Title())
 
     ######################################################################
@@ -493,6 +491,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ return valid transitions for issue 'pcng_issue_workflow' """
         pa = getToolByName(self, 'portal_actions', None)
         allactions = pa.listFilteredActionsFor(self)
+
+        print [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
         return [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
 
     security.declareProtected(View, 'getWorkflowHistory')
