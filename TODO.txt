@@ -27,30 +27,23 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   KNOWN ISSUES
 ----------------------------------
+- subfolders of a PLFNG instance do not appear in the
+  navtree or global path bar 
+
 - file names beginning with underscore characters
   are listed but cannot be accessed (due to a Plone constraint)
-
-- GUI dialog for 'add new item' is visible but
-  non functional. ('Filter content types' setting doesnt
-  appear to work to fix this)
-
-- 'Plone Local Folder NG' title for PLFNG object type is
-  too long/confusing to non-developers
 
 - validation issues wrt 'backup_folder' field
   (field is optional unless fileBackup_enabled is set;
    trailing slash validator fires even when 
    fileBackup_enabled is not set)
    
-- full path display should not include leading plone site part
-  (virtual host issue)    
-
 - The upload file button should be centered in the
   view, not only below 'comments' box 
 
 - on the edit form for a PLFNG instance, the 'id' value 
   is not preserved after returning to the form after
-  on validation error
+  on validation error (this AT 1.3b4 fixes this) 
 
 - directory creation succeeds but gives an error
    message (not found 404) on Windows 
@@ -70,16 +63,15 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   BEFORE RELEASE 0.60
 ----------------------------------
+- eliminate external md5, unzip utilities dependencies
+  (use python's standard md5, unzip capabilities!)
+
 - resolve any problems wrt filenames containing spaces
 
 - better docs! (specifics tbd)
 
 - display size of contents of child folders within PLFNG folder
 
-- rework file uploads so that they are temporarily stored
-  with a temporary filename to facilitate checking 
-  (MD5, quota limit, archive integrity, etc). 
-  
 - add change history metadata for files
   (to include who/when uploaded or deleted a file, updated metadata, etc) 
 
@@ -87,6 +79,9 @@ about feature requests and/or to volunteer to help!!!
 
 - add metadata support for folders
  
+- add ability to hide files (e.g. 'dot' files like .DS_Store on OSX) 
+ 
+- ???
 
 ----------------------------------
   BEFORE 1.0 FINAL
@@ -133,7 +128,5 @@ might be something to put as a "caveat" in the README file.
 
 - ability to verify current file MD5 checksum against metadata MD5 value
 
-
-
-	
-	
+- ability to copy files from PLFNG and paste them elsewhere in the site 
+  (as regular Plone Files)

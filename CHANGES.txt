@@ -1,4 +1,4 @@
-0.50 RC3 (unreleased)
+0.50 (released)
 
   - added TextIndexNG2-based portal catalog indexing of PLFNG contents
      - including configurable ability to specify file types NOT to index
@@ -31,8 +31,6 @@
   
   - added capability view file metadata and edit comments metadata
   
-  - added configurable display of relative | full folder path on plfng_view page
-
   - added 'up one level' link on plfng_view page
   
   - added optional support for archiving old revisions of files
