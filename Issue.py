@@ -5,14 +5,14 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.184 2004/06/11 08:00:02 ajung Exp $
+$Id: Issue.py,v 1.185 2004/06/12 08:47:14 ajung Exp $
 """
 
 import sys, os, time, random, base64
 from urllib import unquote
 from types import StringType, UnicodeType
 
-from Globals import Persistent, InitializeClass
+from Globals import Persistent, InitializeClass, PersistentMapping
 from AccessControl import  ClassSecurityInfo, getSecurityManager
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
@@ -136,7 +136,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
 
-        from Globals import PersistentMapping
         self._md = PersistentMapping()
 
     def manage_afterAdd(self, item, container):
@@ -168,6 +167,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             side effects since the setDefaults() of AT was called after the objects
             manage_afterAdd() method.
         """
+
+        if not hasattr(self, '_md'):
+            self._md = PersistentMapping()
 
         if not hasattr(self, '_defaults_initialized'):
 
