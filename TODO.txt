@@ -30,8 +30,27 @@ about feature requests and/or to volunteer to help!!!
 - file names beginning with underscore characters
   are listed but cannot be accessed (due to a Plone constraint)
 
-- bug # 971432: 'Adding a Local Folder ends up in a error'
-   (AT 1.3.0b2 incompatibility issue)
+- GUI dialog for 'add new item' is visible but
+  non functional. ('Filter content types' setting doesnt
+  appear to work to fix this)
+
+- 'Plone Local Folder NG' title for PLFNG object type is
+  too long/confusing to non-developers
+
+- validation issues wrt 'backup_folder' field
+  (field is optional unless fileBackup_enabled is set;
+   trailing slash validator fires even when 
+   fileBackup_enabled is not set)
+   
+- full path display should not include leading plone site part
+  (virtual host issue)    
+
+- The upload file button should be centered in the
+  view, not only below 'comments' box 
+
+- on the edit form for a PLFNG instance, the 'id' value 
+  is not preserved after returning to the form after
+  on validation error
 
 - directory creation succeeds but gives an error
    message (not found 404) on Windows 
@@ -51,12 +70,6 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   BEFORE RELEASE 0.60
 ----------------------------------
-- bug #971432: 'Adding a Local Folder ends up in a error'
-  http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&atid=476390
-
-- bug # 988620: rejected upload of file with same name 
-   as existing file results in deletion of existing file
-   
 - resolve any problems wrt filenames containing spaces
 
 - better docs! (specifics tbd)
