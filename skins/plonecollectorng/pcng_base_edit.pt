@@ -24,7 +24,7 @@
                    schemata_names here/SchemataNames;
                    default_fieldset python:  schemata_names[0];
                    fieldset request/fieldset|options/fieldset|default_fieldset;
-                   fieldsets python:[key for key in schematas.keys() if key != 'metadata' and key != 'default'];"
+                   fieldsets python:[key for key in schemata_names if key != 'metadata' and key != 'default'];"
            tal:omit-tag="">
 
       <h1 i18n:translate="heading_edit_item">
