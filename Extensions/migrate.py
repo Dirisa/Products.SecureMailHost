@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.6 2003/11/05 15:02:31 ajung Exp $
+$Id: migrate.py,v 1.7 2003/11/06 09:17:37 ajung Exp $
 """
 
 
@@ -108,7 +108,7 @@ def migrate_memberdata(source, dest):
 
 def migrate_tracker(tracker, dest):
 
-#    if tracker.getId() != 'HaufeReader': return
+    if tracker.getId() != 'CMFCollectorNG': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -139,35 +139,37 @@ def migrate_tracker(tracker, dest):
 
 
 mapping = {
-'classification' : ('classification', 'collectordata'),
-'title' : ('title', 'collectordata'),
-'description' : ('description', 'collectordata'),
-'version_info' : ('version_info', 'collectordata'),
-'importance' : ('importance', 'collectordata'),
-'operating_system' : ('operating_system', 'collectordata'),
-'solution' : ('solution', 'collectordata'),
-'hours_needed' : ('progress_hours_needed', 'progress'),
-'hours_required' : ('progress_hours_estimated', 'progress'),
-'progress' : ('progress_percent_done', 'progress'),
-'deadline' : ('progress_deadline', 'progress'),
-'submitter_email' : ('contact_email', 'contact'),
-'submitter_address' : ('contact_address', 'contact'),
-'submitter_name' : ('contact_name', 'contact'),
-'submitter_phone' : ('contact_phone', 'contact'),
-'submitter_fax' : ('contact_fax', 'contact'),
-'submitter_position' : ('contact_position', 'contact'),
-'submitter_company' : ('contact_company', 'contact'),
-'submitter_city' : ('contact_city', 'contact'),
-'custom1' : ('custom1', 'collectordata'),
-'custom2' : ('custom2', 'collectordata'),
-'custom3' : ('custom3', 'collectordata'),
+    'classification' : ('classification', 'issuedata'),
+    'title' : ('title', 'issuedata'),
+    'topic' : ('topic', 'issuedata'),
+    'description' : ('description', 'issuedata'),
+    'version_info' : ('version_info', 'issuedata'),
+    'importance' : ('importance', 'issuedata'),
+    'operating_system' : ('operating_system', 'issuedata'),
+    'solution' : ('solution', 'issuedata'),
+    'hours_needed' : ('progress_hours_needed', 'progress'),
+    'hours_required' : ('progress_hours_estimated', 'progress'),
+    'progress' : ('progress_percent_done', 'progress'),
+    'deadline' : ('progress_deadline', 'progress'),
+    'submitter_email' : ('contact_email', 'contact'),
+    'submitter_address' : ('contact_address', 'contact'),
+    'submitter_name' : ('contact_name', 'contact'),
+    'submitter_phone' : ('contact_phone', 'contact'),
+    'submitter_fax' : ('contact_fax', 'contact'),
+    'submitter_position' : ('contact_position', 'contact'),
+    'submitter_company' : ('contact_company', 'contact'),
+    'submitter_city' : ('contact_city', 'contact'),
+    'custom1' : ('custom1', 'issuedata'),
+    'custom2' : ('custom2', 'issuedata'),
+    'custom3' : ('custom3', 'issuedata'),
 }
 
 def migrate_schema(tracker, collector):
     """ migrate old configuration to Archetypes schema """
 
     from Products.Archetypes.public import StringField, DateTimeField, FloatField
-    from Products.Archetypes.public import Schema
+    from Products.Archetypes.public import StringWidget, TextAreaWidget, SelectionWidget, MultiSelectionWidget
+    from Products.Archetypes.public import Schema, DisplayList
 
     schema = Schema()
     PM = tracker.issuePropertyManager
@@ -179,12 +181,28 @@ def migrate_schema(tracker, collector):
 
         new_id,schemata = mapping[prop.getId()]
 
+        # Determine AT Field
         if prop.getType() == 'date': field = DateTimeField
         elif prop.getType() == 'float': field = FloatField
         elif prop.getType() in ('textarea', 'select', 'text', 'select-multiple'): field = StringField
         else:
             raise ValueError('Unsupported field type: %s' % prop.getType())
 
+        # Determine AT widget
+        if prop.getType() in ('date', 'float', 'text'): widget = StringWidget()
+        elif prop.getType() in ('textarea',): widget = TextAreaWidget()
+        elif prop.getType() == 'select': widget = SelectionWidget(format='select')
+        elif prop.getType() == 'select-multiple': widget = MultiSelectionWidget(format='select')
+        else:
+            raise ValueError('Unsupported field type: %s' % prop.getType())
+
+        # Fill widget attributes
+        widget.visible = 1
+        widget.i18n_domain = 'plonecollectorng'
+        widget.label = prop.getDescription()
+        widget.label_msgid = 'label_' + widget.label
+
+        # Fill field attributes
         D = {}
         D['mutator'] = 'archetypes_mutator'
         D['accessor'] = 'archetypes_accessor'
@@ -192,19 +210,24 @@ def migrate_schema(tracker, collector):
         D['schemata'] = schemata
         D['default'] = prop.getDefaultValue()
         D['required'] = prop.getMandatory()
-        field = field(new_id, **D)
+        D['widget'] = widget
+        if widget.__class__.__name__ in ('SelectionWidget', 'MultiSelectionWidget'):
+            D['vocabulary'] = DisplayList(prop.getValuesAsList())
 
+        if prop.getId() == 'topic':
+            l = []
+            for topic,subtopics in tracker.getSubtopics():
+                for st in subtopics:
+                    s = topic + '/' + st
+                    l.append((s,s))
+            D['vocabulary'] = DisplayList(l)
+            
+
+        # Create and add field to schema
+        field = field(new_id, **D)
         schema.addField(field)
 
-    # Specialtreatemnt for topic/subtopic
-    field = StringField('topic',
-                         mutator='archetypes_mutator',
-                         accessor='archetypes_accessor',
-                         edit_accessor='archetypes_accessor',
-                         schemata = 'collectordata',
-                         )
-    schema.addField(field)
-
+    # Check if all properties were migrated properly
     for id in PM.getPropertyIds():
         if id  in ('assignees','security_related', 'status', 'subtopic', 'topic'): continue
         if not id in mapping.keys():
@@ -277,7 +300,6 @@ def migrate_issue(issue, collector):
                                      upload.getComment(),
                                      created=ts,
                                      user=entry.getUser())   
-
 
     # Workflow
     new_state = issue.status()
