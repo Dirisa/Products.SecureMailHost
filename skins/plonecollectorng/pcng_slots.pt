@@ -23,7 +23,7 @@
 <div metal:define-macro="searchresults">
   <div class="portlet" id="pcng-collector-metadata"
        tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
-    <h5 i18n:translate="last_search_results">Last search results</h5>
+    <h5 i18n:translate="last_search_results">Results from last search</h5>
     <div class="portletBody"
          tal:define="my_id here/getId;
                      results python: request.SESSION.get('pcng_searchresults', []);
@@ -33,19 +33,23 @@
         <tal:def tal:define=" issue_index python: issue_ids.index(here.getId())">
   
           <a tal:condition="python: issue_index > 0"
-             tal:attributes="href python: results[issue_index-1][0]">Previous</a>
+             tal:attributes="href python: results[issue_index-1][0]"><img src="arrowLeft.gif" title="Previous" i18n:attributes="title"></a>
+
           <a tal:condition="python: issue_index < len(results) "
-             tal:attributes="href python: results[issue_index+1][0]">Next</a>
+             tal:attributes="href python: results[issue_index+1][0]"><img src="arrowRight.gif" title="Next" i18n:attributes="title"></a>
         </tal:def>
       </tal:if>
 
-      <ul>
+      <ul tal:define="num_results python: len(results);
+                      results python: test(num_results > 20, results[:20], results)">
         <li tal:repeat="item results">
           <a tal:attributes="href python: item[0]">
             <span tal:attributes="class python: test(item[1]==my_id, 'selected', '')"
-                  tal:content="python: '%s - %s' % (item[1],item[2])" />
+                  tal:content="python: item[1]" />
           </a>
+          - <span tal:replace="python: here.shorten_string(item[2], maxlength=40)" />
         </li>        
+        <li tal:condition="python: num_results > 20">...</li>        
       </ul>
     </div>
   </div>
