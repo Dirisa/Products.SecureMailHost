@@ -39,12 +39,20 @@
         <div class="formHelp" i18n:translate="help_setup_collector_catalog">This is sometimes necessary after an upgrade of PloneCollectorNG or when the catalog setup changed. You must also recreate the catalog if you have checked "Create index" for a field.</div>
       </li>
       <li>
+        <a href="migrate_issue_workflow_histories"><span i18n:translate="migrate_issue_workflow_histories">Migrate workflow histories of all issues</span></a> 
+        <div class="formHelp" i18n:translate="help_migrate_issue_workflow_histories">The migration of all issue workflow histories is necessary after upgrading from V 1.X to 1.2 or higher </div>
+      </li>
+      <li>
         <a href="pcng_incomplete_issues"><span i18n:translate="show_incomplete_issues">Show incomplete issues</span></a> 
         <div class="formHelp" i18n:translate="help_incomplete_issues">Shows you all unfilled issues and gives you a "fast-link" to reject issues (it pre-defines the followup text and the followup state)</div>
       </li>
       <li>
         <a href="register_issue_uids"><span i18n:translate="recreate_uids_imported_issues">Recreate UIDs for imported issues</span></a> 
         <div class="formHelp" i18n:translate="help_register_issue_uids">Use this with care <b>and only</b> if you have imported a collector instance into a new site either through cut/paste or Zope's import/export functionality.</div>
+      </li>
+      <li>
+        <a href="pcng_mailform"><span i18n:translate="send_email_to_staff">Send an email to all staff members</span></a> 
+        <div class="formHelp" i18n:translate="help_send_email_to_staff">A simple to form to send an email to all staff members</div>
       </li>
     </ul>
   </div>
