@@ -313,7 +313,7 @@ function show_tickets() {
   <h2 class="pcng_transcript"> 
      <a tal:attributes="href string:${issue/getURL}/pcng_issue_view;
                         target python: test(member.getProperty('pcng_issue_in_new_window', 0), '_blank', '_self')">
-
+      <img src="issue_icon.gif" />
       <span tal:replace="issue/getId" />.
       <span tal:replace="issue/Title" />
     </a>

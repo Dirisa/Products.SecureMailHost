@@ -1,25 +1,27 @@
 <metal:block metal:define-macro="collector_headline" i18n:domain="plonecollectorng">
 
-  <div class="collector_headline" tal:condition="python: here.meta_type=='PloneCollectorNG'" >
-    <div>
+  <tal:if tal:condition="python: here.meta_type=='PloneCollectorNG'" >
+    <h1>
+      <img src="collector_icon.gif">
       Collector: <a tal:attributes="href here/absolute_url" tal:content="here/title_or_id" />
       <span tal:condition="here/description"  tal:content="string:(${here/description})" />
-    </div>
-    <div style="font-size: 70%; " tal:condition="action|nothing"> 
+    </h1>
+    <h4 tal:condition="action|nothing"> 
       <span i18n:translate="" tal:content="string:${action}" />
       (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
-    </div>
-  </div>
+    </h4>
+  </tal:if>
 
-  <div class="collector_headline" tal:condition="python: here.meta_type=='PloneIssueNG'" >
-    <div>
+  <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'" >
+    <h1>
+      <img src="issue_icon.gif">
       Collector: <a tal:attributes="href python: here.aq_parent.absolute_url()" tal:content="python: here.aq_parent.title_or_id()" />:
       <span tal:content="string:#${here/getId}: ${here/Title}" />
-    </div>
-    <div style="font-size: 70%; " tal:condition="action|nothing"> 
+    </h1>
+    <h4 tal:condition="action|nothing"> 
       <span i18n:translate="" tal:content="string:${action}" />
       (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
-    </div>
+    </h4>
     <div class="issue_view_navigation" 
          tal:condition="python: template.id == 'pcng_issue_view'" 
          tal:define="mode request/mode|string:simple">
@@ -41,7 +43,7 @@
       </a> 
       <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
     </div>    
-  </div>
+  </tal:if>
 
 </metal:block>
 
