@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.9 2004/04/12 16:20:01 ajung Exp $
+$Id: smtp2pcng.py,v 1.10 2004/04/12 16:34:25 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
@@ -114,6 +114,17 @@ def submit_request(R, options):
     return (response.status, response.reason, data)
 
 
+def handle_response(R, status, reason, data):
+    if status == 200:    # OK 
+        pass
+    elif status == 401:  # Unauthorized
+        pass
+    elif status == 404:  # NotFound
+        pass
+
+    print status, reason, data
+
+
 if __name__ == '__main__':
 
     parser = OptionParser()
@@ -132,4 +143,5 @@ if __name__ == '__main__':
 
     options, args = parser.parse_args()
     R = parse_mail(options)
-    print submit_request(R, options)
+    status, reason, data = submit_request(R, options)
+    handle_response(R, status, reason, data)
