@@ -23,7 +23,7 @@
               i18n:translate="" 
               tal:content="schemata_name"/></legend>
   <metal:block  tal:repeat="field python: schemata.fields()">
-    <span metal:use-macro="here/issue_macros/macros/field_shortview" />
+    <span metal:use-macro="here/issue_macros/macros/field_shortview" /> &nbsp;&nbsp;
   </metal:block>
 </fieldset>
 
