@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: graphviz.py,v 1.12 2004/06/29 13:55:15 ajung Exp $
+$Id: graphviz.py,v 1.13 2004/06/29 17:22:51 ajung Exp $
 """
 
 ##########################################################################
@@ -36,7 +36,8 @@ def build_graph(node, graph, visited, depth=0):
     for ref in node.getForwardReferences(): 
         source = node
         target = ref.getTargetObject()
-        e = pydot.Edge(fmt(source), fmt(target), label=ref.comment)
+        c = unicode(ref.comment, node.getSiteEncoding(), 'ignore').encode('iso-8859-15', 'ignore')
+        e = pydot.Edge(fmt(source), fmt(target), label=c)
         graph.add_edge(e)
         if not target.absolute_url(1) in visited:
             build_graph(target, graph, visited, depth+1)
