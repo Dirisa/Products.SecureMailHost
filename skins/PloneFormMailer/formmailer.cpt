@@ -23,7 +23,8 @@
                  tal:content="structure python:here.getForm_pre()">
                 Prepended text.
             </div>
-                                              
+                  
+            <div id="formmailer">
             <form action=""
                   tal:define="errors options/state/getErrors;
                               groups form/get_groups"
@@ -100,6 +101,7 @@
                 <input type="hidden" name="uf_formid" tal:attributes="value form/id" />
             
             </form>
+            </div>
 
             <div tal:condition="python:here.isTransformable('form_post')"
                  tal:content="structure python:here.getForm_post()">
