@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.46 2004/11/12 15:37:52 ajung Exp $
+$Id: notifications.py,v 1.47 2004/11/17 16:52:57 ajung Exp $
 """
 
 import sys
@@ -115,6 +115,7 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer['To'] = ','.join(dest_emails)
     subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.getCollector_abbreviation()), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue.lastAction(),issue.lastAction()))
+    subject = unicode(subject, issue.getSiteEncoding(), 'ignore').encode(encoding)
     outer['Subject'] = Header(subject, encoding)
     outer['Date'] = DateTime().rfc822()
 
