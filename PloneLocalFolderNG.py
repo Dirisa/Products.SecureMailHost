@@ -183,8 +183,12 @@ class PloneLocalFolderNG(BaseContent):
         'name': 'Catalog',
         'action': 'string:$object_url/plfng_catalog',
         'permissions': (ManagePortal,),
-        },        
-        
+        },
+      { 'id': 'diagnostics',
+        'name': 'Diagnostics',
+        'action': 'string:$object_url/plfng_summary',
+        'permissions': (ManagePortal,),
+        },          
       { 'id': 'metadata',
         'name': 'Properties',
         'action': 'string:${object_url}/base_metadata',
@@ -596,6 +600,118 @@ class PloneLocalFolderNG(BaseContent):
             if REQUEST.has_key('RESPONSE'):
                 REQUEST.RESPONSE.notFoundError(name)
 
+    security.declareProtected(ModifyPortalContent, 'addFile')
+    def addFile(self, sourceFSfullPath, destPLFNGrelativePath='', destBasename=None, moveFile=0, inputMD5=None):
+        """ add a file """
+
+        # 1st, make sure that the PLFNG instance is configured with valid FS folder
+        
+        if self.validFolder() != 1:
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! PLFNG instance failed validFolder() test." )
+           return 0
+           
+        # make sure that a file was specified
+
+        if not os.path.isfile(sourceFSfullPath):
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! sourceFSfullPath = %s not a file" % sourceFSfullPath )
+           return 0
+        
+        if not destBasename:
+           destBasename = os.path.basename(sourceFSfullPath)
+        
+        # make sure destination file name is valid   
+
+        checkValidIdResult = checkValidId(destBasename)
+        if checkValidIdResult != 1:
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! destination filename (%s) is not permitted: %s" % (destBasename,checkValidIdResult))
+           return 0
+    
+        # make sure the PLFNG destination relative path is valid   
+
+        if destPLFNGrelativePath.startswith('/'):
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! PLFNG destination path (%s) cannot begin with forward slash" % destPLFNGrelativePath)
+           return 0
+        
+        pathItemList = split(destPLFNGrelativePath,'/')
+        for pathItem in pathItemList:
+           checkValidIdResult = checkValidId(destBasename)
+           if checkValidIdResult != 1:
+              zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! PLFNG destination path (%s) invalid: %s" % (destPLFNGrelativePath,checkValidIdResult))
+              return 0
+           
+        # make sure this add operation will not violate quota limit restrictions
+
+        max_allowed_bytes = self.getAvailableQuotaSpace()
+        contentLength = 0 # mpg fix this!!!  
+        if max_allowed_bytes != -1 and contentLength > max_allowed_bytes:
+           # uploaded file rejected as it would result in quota limit being exceeded
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: file rejected! CONTENT_LENGTH (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (contentLength,usedBytes, max_allowed_bytes) )
+           return 0
+
+        # if a MD5 checksum was provided, make sure that the server-generated MD5 matches it
+        
+        serverMD5 = None
+        if inputMD5:
+           serverMD5 = generate_md5(sourceFSfullPath,self.external_syscall_md5)
+           if inputMD5 != serverMD5:
+              zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: file rejected! inputMD5 (%s) != generated MD5 (%s)" % (inputMD5,serverMD5) )
+              return 0
+
+        # create destination path as necessary
+        
+        destFSfullPathFolderName = os.path.join(self.folder, destPLFNGrelativePath)
+        
+        if not os.path.exists(destFSfullPathFolderName):
+           try:
+              os.makedirs(destFSfullPathFolderName)
+           except:
+              zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! could not create FS destination path folders (%s)" % destFSfullPathFolderName )
+              return 0
+        
+        # backup existing file as necessary
+        
+        destFSfullPath = os.path.join(destFSfullPathFolderName, destBasename)
+        
+        if not os.path.exists(destFSfullPath):    
+           newRevisionNumber = 1 
+        
+        else:    
+           # get revision of existing file (or 1 if revision metadata missing)
+           oldRevisionNumberText = getMetadataElement(destFSfullPath, section="GENERAL", option="revision")
+           if oldRevisionNumberText:
+              oldRevisionNumber = int(oldRevisionNumberText)
+           else:
+              oldRevisionNumber = 1
+                
+           newRevisionNumber = oldRevisionNumber + 1
+            
+           # backup existing file if file backup is enabled & backup_folder path is set  
+           if self.fileBackup_enabled and self.backup_folder:
+              backupdestpath = os.path.join(self.backup_folder, destPLFNGrelativePath)
+
+              if not oldRevisionNumberText:
+                 setMetadata(destFSfullPath, section="GENERAL", option="revision", value=oldRevisionNumber)
+                
+              # move existing file to backup location renamed with trailing rev.#
+              backupFileSuffix = '.' + str(oldRevisionNumber)
+              backupfilename = os.path.join(backupdestpath, destBasename) + backupFileSuffix
+              # create skeleton directory structure under backupFolder if necessary 
+              if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
+              shutil.move(destFSfullPath, backupfilename)
+        
+        # copy/move file to destination path
+
+        try:
+           if moveFile==1:
+              shutil.move(sourceFSfullPath, destFSfullPath)
+           else:
+              shutil.copy(sourceFSfullPath, destFSfullPath)
+        except:
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "addFile() :: Error! could not add file" )
+           return 0
+        
+        return newRevisionNumber   
+
     security.declareProtected(ModifyPortalContent, 'HTMLFormUploadFile')
     def HTMLFormUploadFile(self, upload, comment, REQUEST, clientMD5=None):
         """ upload a file via HTML form-based file upload mechanism """
@@ -607,34 +723,15 @@ class PloneLocalFolderNG(BaseContent):
             backupdestpath = os.path.join(self.backup_folder, rel_dir)
         else:
             backupdestpath = None
+
         if not upload:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=no file was uploaded!')
             return 0        
         
-        checkValidIdResult = checkValidId(uploadFileBaseName)
-        if checkValidIdResult != 1:
-            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=upload of this file (%s) is not permitted: %s' % (uploadFileBaseName,checkValidIdResult))
-            return 0
-        
-        if uploadFileBaseName.endswith('.metadata'):
-            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=upload of .metadata files is not permitted.')
-            return 0
-        
         if self.require_MD5_with_upload and not clientMD5:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=you MUST provide the MD5 checksum for the file you want to upload!')
             return 0
-        
-        
-        max_allowed_bytes = getAvailableQuotaSpace()
-            
-        contentLength = int(REQUEST.get_header('CONTENT_LENGTH'))
-        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile() :: CONTENT_LENGTH=%d usedBytes=%d max_allowed_bytes=%d" % (contentLength,usedBytes, max_allowed_bytes) )
-        
-        if max_allowed_bytes != -1 and contentLength > max_allowed_bytes:
-           REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file rejected as it would result in quota limit being exceeded.')
-           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile() :: file rejected! CONTENT_LENGTH (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (contentLength,usedBytes, max_allowed_bytes) )
-           return 0
-        
+
         filename = os.path.join(destpath, os.path.basename(upload.filename))
         tmpfile = filename + '.plfngtmp'
         f = open(tmpfile, 'wb')
@@ -642,93 +739,57 @@ class PloneLocalFolderNG(BaseContent):
         f.close()
         serverMD5 = None
         
-        # calculate the MD5 for the tmpfile 
-        if self.generate_MD5_after_upload:
-            serverMD5 = generate_md5(tmpfile,self.external_syscall_md5)
-   
-        # reject if client-provided MD5 for uploaded file does not match server-generated MD5
-        if self.require_MD5_with_upload:
-            if not serverMD5:
-               serverMD5 = generate_md5(tmpfile,self.external_syscall_md5)
-            if clientMD5 != serverMD5:
-               os.remove(tmpfile)
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "HTMLFormUploadFile()::MD5 CHECK FAILED...DELETED: %s" % tmpfile )
-               REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=uploaded file failed MD5 integrity test and was deleted!')
-               return 0
-
-
-        if not os.path.exists(filename):    
-            newRevisionNumber = 1 
+        newRevisionNumber = \
+         self.addFile(sourceFSfullPath=tmpfile,
+                     destPLFNGrelativePath=rel_dir,
+                     destBasename=os.path.basename(filename),
+                     moveFile=1,
+                     inputMD5=clientMD5)
         
-        if os.path.exists(filename):    
-            # get revision of existing file (or 1 if revision metadata missing)
-            oldRevisionNumberText = getMetadataElement(filename, section="GENERAL", option="revision")
-            if oldRevisionNumberText:
-                oldRevisionNumber = int(oldRevisionNumberText)
-            else:
-                oldRevisionNumber = 1
-                
-            
-            newRevisionNumber = oldRevisionNumber + 1
-            
-            # backup existing file if file backup is enabled & backup_folder path is set  
-            if self.fileBackup_enabled and self.backup_folder:
-                
-                if not oldRevisionNumberText:
-                    setMetadata(filename, section="GENERAL", option="revision", value=oldRevisionNumber)
-                
-                # move existing file to backup location renamed with trailing rev.#
-                backupFileSuffix = '.' + str(oldRevisionNumber)
-                backupfilename = os.path.join(backupdestpath, os.path.basename(upload.filename)) + backupFileSuffix
-                # create skeleton directory structure under backupFolder if necessary 
-                if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
-                shutil.move(filename, backupfilename)
-
-        # rename .plfngtmp file with filename provided by uploader
-        fixedSrcFileName = fixDOSPathName(tmpfile)
-        fixedDstFileName = fixDOSPathName(filename)
-        if os.path.exists(filename): os.remove(filename)
-        os.rename(fixedSrcFileName, fixedDstFileName)
-            
-        # ------------------------- apply metadata ---------------------------------
-        # GENERAL:
-        #   comments - comments on the file
-        #   source   - userId of the source/uploader/provider
-        #   revision - the PLFNG centric revision # of this file
-        # DIAGNOSTICS:
-        #   md5      - md5 checksum generated by the server for the file
-        # ARCHIVEINFO:
-        #   numUnpackedFiles   - # files that the packed file contains
-        #   sizezUnpackedFiles - total # bytes for all of the unpacked files 
-        # CHANGELOG:
-        #   history  - (tbd)
-        # -------------------------------------------------------------------------
-        
-        # GENERAL: 'comments' option
-        if comment:
-            setMetadata(filename, section="GENERAL", option="comment", value=comment)
-
-        # GENERAL: 'source' option
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        portal_membership = getToolByName(portal, 'portal_membership')
-        if portal_membership.isAnonymousUser():
-            creator = 'anonymous'
+        if newRevisionNumber == 0:
+           os.remove(tmpfile)
+           REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file rejected.')
         else:
-            creator = portal_membership.getAuthenticatedMember().getId()
-        setMetadata(filename, section="GENERAL", option="source", value=creator)
-        
-        # GENERAL: 'revision' option
-        setMetadata(filename, section="GENERAL", option="revision", value=newRevisionNumber)
-        
-        # DIAGNOSTICS: 'md5' option
-        if serverMD5:
-            setMetadata(filename, section="DIAGNOSTICS", option="md5", value=serverMD5)
-        
-        # if .zip file, set ARCHIVEINFO metadata
-        if self.mimetypes_registry.classify(data=None, filename=upload.filename) == 'application/zip':
-            setZipInfoMetadata(filename)
+           
+           # ------------------------- apply metadata ---------------------------------
+           # GENERAL:
+           #   comments - comments on the file
+           #   source   - userId of the source/uploader/provider
+           #   revision - the PLFNG centric revision # of this file
+           # DIAGNOSTICS:
+           #   md5      - md5 checksum generated by the server for the file
+           # ARCHIVEINFO:
+           #   numUnpackedFiles   - # files that the packed file contains
+           #   sizezUnpackedFiles - total # bytes for all of the unpacked files 
+           # CHANGELOG:
+           #   history  - (tbd)
+           # -------------------------------------------------------------------------
+           
+           # GENERAL: 'comments' option
+           if comment:
+               setMetadata(filename, section="GENERAL", option="comment", value=comment)
+   
+           # GENERAL: 'source' option
+           portal = getToolByName(self, 'portal_url').getPortalObject()
+           portal_membership = getToolByName(portal, 'portal_membership')
+           if portal_membership.isAnonymousUser():
+               creator = 'anonymous'
+           else:
+               creator = portal_membership.getAuthenticatedMember().getId()
+           setMetadata(filename, section="GENERAL", option="source", value=creator)
+           
+           # GENERAL: 'revision' option
+           setMetadata(filename, section="GENERAL", option="revision", value=newRevisionNumber)
+           
+           # DIAGNOSTICS: 'md5' option
+           if clientMD5:
+               setMetadata(filename, section="DIAGNOSTICS", option="md5", value=clientMD5)
+           
+           # if .zip file, set ARCHIVEINFO metadata
+           if self.mimetypes_registry.classify(data=None, filename=upload.filename) == 'application/zip':
+               setZipInfoMetadata(filename)
 
-        REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file added.')
+           REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file added.')
 
     security.declareProtected(ModifyPortalContent, 'create_directory')
     def create_directory(self, dirname, REQUEST):
@@ -838,6 +899,9 @@ class PloneLocalFolderNG(BaseContent):
             RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked.')
             return 0
 
+
+
+    
     security.declareProtected('Delete objects', 'deleteFile')
     def deleteFile(self, rel_dir, fileToDelete, REQUEST, RESPONSE):
         """ delete the file """
@@ -936,7 +1000,94 @@ class PloneLocalFolderNG(BaseContent):
             ('PLFNG_Base_Relative','PLFNG_Base_Relative'),
            ))
         
+    security.declareProtected('View', 'getFilteredOutContents')
+    def getFilteredOutContents(self,rel_dir=None):
+        """ list filtered out content of local filesystem """
+        
+        illegalFilesList = []
+        filteredOutFileList = []
+        filteredOutFolderList = []
+        
+        filteredFileList = []
+        filteredFolderList = []
 
+        if rel_dir == None: rel_dir = ''
+        destpath = os.path.join(self.folder, rel_dir)
+        
+        this_portal = getToolByName(self, 'portal_url')
+        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
+
+        if hasattr(self, "hidden_file_prefixes") and self.hidden_file_prefixes:
+           filePrefixesSkipList = split(self.hidden_file_prefixes,',')
+        else:
+           filePrefixesSkipList = []
+        
+        if hasattr(self, "hidden_file_suffixes") and self.hidden_file_suffixes:
+           fileSuffixesSkipList = split(self.hidden_file_suffixes,',')
+        else:
+           fileSuffixesSkipList = []
+        
+        if hasattr(self, "hidden_file_names") and self.hidden_file_names:
+           fileNamesSkipList = split(self.hidden_file_names,',')
+        else:
+           fileNamesSkipList = []
+        
+        if hasattr(self, "hidden_folder_prefixes") and self.hidden_folder_prefixes:
+           folderPrefixesSkipList = split(self.hidden_folder_prefixes,',')
+        else:
+           folderPrefixesSkipList = []
+        
+        if hasattr(self, "hidden_folder_suffixes") and self.hidden_folder_suffixes:
+           folderSuffixesSkipList = split(self.hidden_folder_suffixes,',')
+        else:
+           folderSuffixesSkipList = []
+        
+        if hasattr(self, "hidden_folder_names") and self.hidden_folder_names:
+           folderNamesSkipList = split(self.hidden_folder_names,',')
+        else:
+           folderNamesSkipList = []
+           
+        
+        trimmedFolderBasePath = os.path.normpath(destpath)
+        
+        illegalFilesList, illegalFoldersList, filteredOutFileList, filteredOutFolderList = \
+           getFilteredOutFSItems(FSfullPath=trimmedFolderBasePath,
+                              PLFNGrelPath=rel_dir, 
+                              skipInvalidIds=1, 
+                              mimetypesTool=mimetypesTool,  
+                              filetypePhrasesSkipList=[], 
+                              filePrefixesSkipList=filePrefixesSkipList, 
+                              fileSuffixesSkipList=fileSuffixesSkipList, 
+                              fileNamesSkipList=fileNamesSkipList,
+                              folderPrefixesSkipList=folderPrefixesSkipList, 
+                              folderSuffixesSkipList=folderSuffixesSkipList, 
+                              folderNamesSkipList=folderNamesSkipList)
+
+        filteredFileList, filteredFolderList = \
+           getFilteredFSItems(FSfullPath=trimmedFolderBasePath, 
+                                 skipInvalidIds=1, 
+                                 mimetypesTool=mimetypesTool,  
+                                 filetypePhrasesSkipList=[], 
+                                 filePrefixesSkipList=filePrefixesSkipList, 
+                                 fileSuffixesSkipList=fileSuffixesSkipList, 
+                                 fileNamesSkipList=fileNamesSkipList,
+                                 folderPrefixesSkipList=folderPrefixesSkipList, 
+                                 folderSuffixesSkipList=folderSuffixesSkipList, 
+                                 folderNamesSkipList=folderNamesSkipList)
+        
+        for subFolder in filteredFolderList:
+           new_rel_dir = os.path.join(rel_dir,subFolder)
+           sub_illegalFilesList, sub_illegalFoldersList, sub_filteredOutFileList, sub_filteredOutFolderList = \
+              self.getFilteredOutContents(rel_dir = new_rel_dir)
+              
+           illegalFilesList = illegalFilesList + sub_illegalFilesList
+           illegalFoldersList = illegalFoldersList + sub_illegalFoldersList
+           filteredOutFileList = filteredOutFileList + sub_filteredOutFileList
+           filteredOutFolderList = filteredOutFolderList + sub_filteredOutFolderList
+        
+        return illegalFilesList, illegalFoldersList, filteredOutFileList, filteredOutFolderList 
+   
+           
 def _getFolderProperties(FSfullPathFolderName):
    
    filteredFileList = []
