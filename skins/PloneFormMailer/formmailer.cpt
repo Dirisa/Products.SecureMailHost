@@ -47,8 +47,8 @@
                              tal:condition="not:field/hidden"
                              tal:define="field_id field/id;
                                          error python:errors.get(field_id, None)"
-                             tal:attributes="class python:test(error,
-                                                               'field error', 'field')">
+                             tal:attributes="class python:test(error, 'field error', 'field');
+                                             id    python:'pfm_'+field_id;">
                                        
                             <label tal:content="field/title"
                                    i18n:translate="">Label</label>
@@ -91,6 +91,7 @@
                                            name  python:button[1] or button[0];
                                            type  python:button[2] or 'submit';
                                            class python:button[3] or 'context';
+                                           id    python:'pfm_button_%s' % button[1] or button[0];
                                            tabindex tabindex/next;"
                            class="context"/> 
                 </div>
