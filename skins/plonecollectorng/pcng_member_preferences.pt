@@ -39,6 +39,7 @@
             <select name="pcng_send_emails">
               <option tal:repeat="item python: (('no', 'No'), ('yes', 'Yes'))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_send_emails') == item[0]"
               />
@@ -52,6 +53,7 @@
             <select name="pcng_send_attachments">
               <option tal:repeat="item python: (('no', 'No'), ('yes', 'Yes'))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_send_attachments') == item[0]"
               />
@@ -65,6 +67,7 @@
             <select name="pcng_position_searchform">
               <option tal:repeat="item python: (('bottom', 'Bottom'), ('top', 'Top'))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_position_searchform') == item[0]"
               />
@@ -78,6 +81,7 @@
             <select name="pcng_default_searchform">
               <option tal:repeat="item python: (('simple', 'Simple search form'), ('advanced', 'Advanced search form'))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_default_searchform') == item[0]"
               />
@@ -91,6 +95,7 @@
             <select name="pcng_default_view">
               <option tal:repeat="item python: (('simple', 'Simple view'), ('full', 'Full view'), ('fullimages', 'Full view with images'))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_default_view') == item[0]"
               />
@@ -104,6 +109,7 @@
             <select name="pcng_hits_per_page:int">
               <option tal:repeat="item python: ((10,10), (20,20), (50,50), (100,100), (200,200))"
                       tal:content="python: item[1]"
+                      i18n:translate=""
                       tal:attributes="value python: item[0];
                                       selected python: member.getProperty('pcng_hits_per_page') == item[0]"
               />

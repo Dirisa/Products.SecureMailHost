@@ -200,3 +200,208 @@ msgstr "Auswählen"
 
 msgid "add_references_table_comment"
 msgstr "Kommentar"
+
+msgid "collectordata"
+msgstr "Metadaten"
+
+msgid "preferences"
+msgstr "Voreinstellungen"
+
+msgid "Company"
+msgstr "Firma"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "City"
+msgstr "Stadt"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "send_emails"
+msgstr "Emailbenachrichtigungen"
+
+msgid "send_attachments"
+msgstr "Bilder als Attachtments verschicken"
+
+msgid "position_searchform"
+msgstr "Position Suchmaske"
+
+msgid "default_searchform"
+msgstr "Voreingestellte Suchmask"
+
+msgid "default_issue_view"
+msgstr "Voreingestellte Ticketansicht"
+
+msgid "hits_per_page"
+msgstr "Treffer je Seite"
+
+msgid " Save changes "
+msgstr "Änderungen speichern"
+
+msgid " Reset "
+msgstr "Zurücksetzen"
+
+msgid "Member preferences"
+msgstr "Teilnehmer Voreinstellungen"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Bottom"
+msgstr "Unten"
+
+msgid "Top"
+msgstr "Oben"
+
+msgid "Simple search form"
+msgstr "Einfache Suchmaske"
+
+msgid "Advanced search form"
+msgstr "Expertensuchmaske"
+
+msgid "Simple view"
+msgstr "Einfache Ansicht"
+
+msgid "Full view"
+msgstr "Vollansicht"
+
+msgid "Full view with images"
+msgstr "Vollansicht mit Bildern"
+
+msgid "Maintainance"
+msgstr "Maintainierung"
+
+msgid "number_issues"
+msgstr "Anzahl Tickets"
+
+msgid "reindex_all_issues"
+msgstr "Alle Tickets reindexieren"
+
+msgid "update_schema_for_all_issues"
+msgstr "Schema für alle Tickets aktualisieren"
+
+msgid "update_collector_schema"
+msgstr "Collector Schema aktualisieren"
+
+msgid "recreate_collector_catalog"
+msgstr "Collector Catalog neu anlegen"
+
+msgid "Browse issues"
+msgstr "Ticketbrowser"
+
+msgid "Edit"
+msgstr "Editieren"
+
+msgid "Schema Editor"
+msgstr "Schema Editor"
+
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+msgid "jump_to_ticket"
+msgstr "Spring zu Ticket"
+
+msgid " Jump "
+msgstr "Springe"
+
+msgid "heading_status"
+msgstr "Status"
+
+msgid "heading_requester"
+msgstr "Reporter"
+
+msgid "heading_assigned"
+msgstr "Zugewiesen an"
+
+msgid "accepted"
+msgstr "Akzeptiert"
+
+msgid "created"
+msgstr "Angelegt"
+
+msgid "defered"
+msgstr "Zurückgestellt"
+
+msgid "rejected"
+msgstr "Zurückgewiesen"
+
+msgid "resigned"
+msgstr "Resigniert"
+
+msgid "resolved"
+msgstr "Gelöst"
+
+msgid "Issue"
+msgstr "Ticket"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Deadline"
+msgstr "Deadline"
+
+msgid "Submitter"
+msgstr "Einsteller"
+
+msgid "Progress"
+msgstr "Fortschritt"
+
+msgid "Classification"
+msgstr "Klassifizierung"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Topic"
+msgstr "Kategorie"
+
+msgid "Importance"
+msgstr "Wichtigkeit"
+
+msgid "Desc"
+msgstr "absteigend"
+
+msgid "Asc"
+msgstr "aufsteigend"
+
+msgid "fulltextsearch"
+msgstr "Volltextsuche"
+
+msgid "followups"
+msgstr "Followups"
+
+msgid "importance"
+msgstr "Wichtigkeit"
+
+msgid "assigned"
+msgstr "zugewiesen an"
+
+msgid "submitted_by"
+msgstr "eingestellt von"
+
+msgid "last_modified"
+msgstr "Letzte Änderung"
+
+msgid "days_ago"
+msgstr "Tage alt"
+
+msgid "issues_submitted_by_me"
+msgstr "Meine eingestellten Tickets"
+
+msgid "issues_assigned_to_me"
+msgstr "Mir zugewiesene Tickets"
+
+msgid "Search"
+msgstr  "Suchen"
+
