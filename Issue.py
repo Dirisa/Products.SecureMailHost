@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.93 2003/11/29 08:12:04 ajung Exp $
+$Id: Issue.py,v 1.94 2003/11/29 13:12:36 ajung Exp $
 """
 
 import sys, os, time
@@ -147,11 +147,6 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
             wf.notifyCreated(self)
 
         self.initializeArchetype()
-
-        if container.meta_type == 'PloneCollectorNG':
-            container._num_issues +=1
-            container.manage_renameObjects([item.getId()], [str(container._num_issues)])
-    
                                                 
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
@@ -365,7 +360,13 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
     security.declareProtected(View, '_getCollector')
     def _getCollector(self):
         """ return collector instance """
-        return self.aq_parent
+        parent = self.aq_parent
+        while 1:
+            if parent.meta_type != 'PloneCollectorNG':
+                parent = parent.aq_parent
+            else: 
+                break
+        return parent
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
@@ -432,18 +433,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
 
     def add_issue(self, RESPONSE):
         """ redirect to parent """
-        # find parent collector (might be portal_factory as well)
-        parent = self.aq_parent
-        while 1:
-            if parent.meta_type != 'PloneCollectorNG':
-                parent = parent.aq_parent
-            else: 
-                break
-        RESPONSE.redirect('%s/createObject?type_name=PloneIssueNG' % parent.absolute_url())
-
-    ######################################################################
-    # Some Archetypes madness
-    ######################################################################
+        return self._getCollector().add_issue(RESPONSE=RESPONSE)
 
     ######################################################################
     # Presentation related stuff

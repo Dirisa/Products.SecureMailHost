@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.85 2003/11/29 08:12:04 ajung Exp $
+$Id: Collector.py,v 1.86 2003/11/29 13:12:36 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -319,10 +319,17 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         return states
 
     def add_issue(self, REQUEST=None, RESPONSE=None):
-        """ Redirect to Plone's createObject method to 
-            support portal_factory 
-        """
-        RESPONSE.redirect('createObject?type_name=PloneIssueNG')
+        """ create a new issue """
+        self._num_issues += 1
+        id = str(self._num_issues)
+        self.invokeFactory('PloneIssueNG', id)
+        issue = aq_base(self._getOb(id))
+
+        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
+                      portal_status_message=self.translate('new_issue_created', 'New issue created'),
+                      fieldset='issuedata')
+        if RESPONSE is None:
+            return id
 
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
