@@ -6,7 +6,7 @@
 
 def quote_text(text):
     lines = text.split('\n')
-    lines = ['> ' + l for l in lines]
+    lines = [':' + l for l in lines]
     return '\n'.join(lines)
 
 for ev in context.getTranscript().getEvents():
