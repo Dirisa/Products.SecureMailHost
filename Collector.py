@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.101 2003/12/31 11:01:59 ajung Exp $
+$Id: Collector.py,v 1.102 2004/01/01 12:32:08 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -135,7 +135,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
-        self._transcript.addComment('Catalog recreated')
         util.redirect(RESPONSE, 'pcng_maintenance', 
                       self.translate('catalog_recreated', 'Catalog recreated'))
 
