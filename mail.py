@@ -19,7 +19,7 @@ class Mail:
     mto       - mail to tag (only for SMTP server)
     message   - The message email.Message.Message based object
     smtp_host - SMTP server address
-    smtp_host - SMTP server port
+    smtp_port - SMTP server port
     **kwargs  - additional keywords like userid, password and forceTLS
     """
 
@@ -100,3 +100,21 @@ class Mail:
         # send and quiet
         smtpserver.sendmail(self.mfrom, self.mto, message)
         smtpserver.quit()
+        
+    def __str__(self):
+        return self.message.as_string()
+    
+    def __repr__(self):
+        return '<%s (%s) at %s>' % (
+            self.__class__.__name__, self.info(),
+            id(self))
+            
+    def info(self):
+        """Return status informations about the email
+        """
+        return 'From: %(from)s, To: %(to)s, Subject: %(subject)s ' \
+             '(s:%(size)d, e:%(errors)d)' % {
+                'id' : self.getId(), 'errors' : self.errors,
+                'from' : self.message['From'], 'to' : self.message['To'],
+                'subject' : self.message['Subject'], 'size' : len(self.message)
+                }

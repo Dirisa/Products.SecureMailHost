@@ -5,7 +5,7 @@ from config import WAIT_TIME, MAX_ERRORS, TEMP_ERRORS
 import sys
 import traceback
 
-from zLOG import LOG, INFO, PROBLEM
+from zLOG import LOG, INFO, PROBLEM, DEBUG
 
 from workerthread import WorkerThread
 from mailqueue import mailQueue
@@ -18,29 +18,31 @@ class MailerThread(WorkerThread):
         """Worker method
         """
         global mailQueue
-        #LOG('SecureMailHost', INFO, 'threading')
+        LOG('SecureMailHost', DEBUG, 
+            'Awaking thread with %d mails left in the queue.' % len(mailQueue))
 
         for id in mailQueue.list():
             mail = mailQueue.get(id)
             # checking for max errors
             if mail.getErrors() > MAX_ERRORS:
-                LOG('SecureMailHost', PROBLEM, 'Max errors')
+                LOG('SecureMailHost', PROBLEM, 'Max errors for mail %s. '
+                    'Canceling delivery!' % mail.info())
                 mailQueue.remove(mail)
                 continue
             # trying to send
             try:
                 mail.send()
             except TEMP_ERRORS, msg:
-                # XXX log
-                LOG('SecureMailHost', PROBLEM, 'Temp error %s\n%s' %
-                    (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
+                LOG('SecureMailHost', PROBLEM, 'Temp error %s sending %s:\n%s' %
+                    (msg, mail.info(), ''.join(traceback.format_tb(sys.exc_traceback)))
                 )
             except Exception, msg:
-                LOG('SecureMailHost', PROBLEM, 'Fatal error %s\n%s' %
-                    (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
+                LOG('SecureMailHost', PROBLEM, 'Fatal error %s sending %s:\n%s' %
+                    (msg, mail.info(), ''.join(traceback.format_tb(sys.exc_traceback)))
                 )
                 mail.incError()
             else:
+                LOG('SecureMailHost', INFO, 'Mail sended: %s' % mail.info())
                 mailQueue.remove(mail)
 
     def stop(self):

@@ -1,6 +1,20 @@
 SecureMailHost
 ==============
 
+0.2-rc1  2004-07-09
+---------------------
+
+ * Better logging at multiple places like awaking thread, sending mail ...
+
+ * Mail object supports str() and repr() and has a new method called info()
+   which returns some useful informations about the email
+
+ * Queue supports len()
+
+ * Automagically start threading if ASYNC is used and queue isn't empty.
+
+ * Fixed a problem with not showing user and password in the edit template
+
 0.2-beta2  2004-05-24
 ---------------------
 

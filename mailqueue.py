@@ -9,6 +9,7 @@ import threading
 import socket
 import cPickle as pickle
 from types import IntType
+from zLOG import LOG, INFO, PROBLEM, DEBUG
 
 class MailStorage:
     """Stores Email objects in a queue.
@@ -47,6 +48,7 @@ class MailStorage:
             self.sync()
         finally:
             self._lock.release()
+        LOG('SecureMailHost', DEBUG, 'Mail queued: %s' % mail.info())
         
     def get(self, id):
         """Get a mail by id
@@ -106,9 +108,14 @@ class MailStorage:
         return id
     
     def list(self):
-        """
+        """List all mail ids
         """
         return self._queue.keys()
+    
+    def __len__(self):
+        """
+        """
+        return len(self._queue)
     
 
 mailQueue = MailStorage()

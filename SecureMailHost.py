@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.17 2004/05/25 08:56:16 fobmagog Exp $
+$Id: SecureMailHost.py,v 1.18 2004/07/09 18:38:22 tiran Exp $
 """
 
 from config import BAD_HEADERS, USE_ASNYC_MAILER
@@ -42,6 +42,14 @@ class SMTPError(Exception):
     pass
 
 from Products.SecureMailHost.mail import Mail
+
+# import mailQueue if we are using the async mailer
+if USE_ASNYC_MAILER:
+    from Products.SecureMailHost.mailqueue import mailQueue
+    # start async thread if the queue isn't empty
+    if len(mailQueue):
+        from Products.SecureMailHost.asyncmailer import initializeMailThread
+        initializeMailThread()
 
 EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
@@ -106,12 +114,16 @@ class SecureMailBase(MailBase):
         self.smtp_port = int(smtp_port)
         if smtp_userid:
             self._smtp_userid = smtp_userid
+            self.smtp_userid = smtp_userid
         else:
             self._smtp_userid = None
+            self.smtp_userid = None
         if smtp_pass:
             self._smtp_pass = smtp_pass
+            self.smtp_pass = smtp_pass
         else:
             self._smtp_pass = None
+            self.smtp_pass = None
 
     security.declareProtected( use_mailhost_services, 'sendTemplate' )
     def sendTemplate(trueself, self, messageTemplate,
@@ -245,7 +257,7 @@ class SecureMailBase(MailBase):
             message = email.message_from_string(messageText)
         else:
             message = messageText
-        from asyncmailer import mailQueue, initializeMailThread
+        from Products.SecureMailHost.asyncmailer import initializeMailThread
         initializeMailThread()
         mail = Mail(mfrom, mto, message,
                     smtp_host=self.smtp_host, smtp_port=self.smtp_port,
