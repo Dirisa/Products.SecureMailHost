@@ -25,21 +25,28 @@
                <span i18n:translate="" tal:content="set" /></a>
             <span tal:condition="not: repeat/set/end"> &bull;</span>
           </tal:loop>                                         
+          <div class="formHelp" i18n:translate="help_staff_configuration">Misc. configuration options</div>
         </li>
         <li>
           <a href="pcng_staff"><span i18n:translate="Staff">Staff</span></a>
+          <div class="formHelp" i18n:translate="help_staff_configuration">Assign individuals or groups to the collector.</div>
         </li>
         <li>
           <a href="pcng_schema_editor"><span i18n:translate="schema_editor">Schema Editor</span></a>
+          <div class="formHelp" i18n:translate="help_schema_editor">The schema editor allows you to edit the what fields belong to an issue, their types, their grouping and their internal represenation through the web.</div>
         </li>
         <li>
           <a href="pcng_topics_user"><span i18n:translate="Topic-Staff mapping">Topic-groups configuration</span></a>
+          <div class="formHelp" i18n:translate="help_topic_groups">The topic groups configuration allows you to assign individuals to a group responsible for a particular topic.</div>
         </li>
         <li>
           <a href="pcng_notifications"><span i18n:translate="collector_notifications">Email notifications</span></a>
+          <div class="formHelp" i18n:translate="help_notifications">The notifications configuration allows to add additional email addresses
+          on a pre-workflow-state basis. Notifications will be send out to the configured addresses in case of a workflow transition</div>
         </li>
         <li>
           <a href="pcng_maintenance"><span i18n:translate="maintenance">Maintenance</span></a>
+          <div class="formHelp" i18n:translate="help_maintenance">Misc. maintenance options</div>
         </li>
       </ul>
 
