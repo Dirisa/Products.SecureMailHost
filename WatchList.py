@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: WatchList.py,v 1.8 2003/11/01 17:03:26 ajung Exp $
+$Id: WatchList.py,v 1.9 2003/11/06 13:05:46 ajung Exp $
 """
 
 from Globals import InitializeClass
 from AccessControl import  ClassSecurityInfo 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.CMFCorePermissions import *
 from ZODB.PersistentList import PersistentList
 
 import util
@@ -23,23 +23,23 @@ class WatchList:
     def wl_init(self):
         self._watchers = PersistentList()
 
-    security.declareProtected(CMFCorePermissions.View, 'wl_getMode')
+    security.declareProtected(View, 'wl_getMode')
     def wl_getMode(self):
         """ return watchlist mode """
         return self.watchlist_mode
 
-    security.declareProtected(CMFCorePermissions.View, 'wl_getWatchers')
+    security.declareProtected(View, 'wl_getWatchers')
     def wl_getWatchers(self):
         """ return list of watchers """
         return self._watchers
 
-    security.declareProtected(CMFCorePermissions.View, 'wl_isWatcher')
+    security.declareProtected(View, 'wl_isWatcher')
     def wl_isWatcher(self, email):
         """ is watcher """
         if email is None: return 0
         return email.lower() in self._watchers
 
-    security.declareProtected(CMFCorePermissions.View, 'wl_addWatcher')
+    security.declareProtected(View, 'wl_addWatcher')
     def wl_addWatcher(self, email, RESPONSE):
         """ add watcher """
         if self.wl_isWatcher(email):
@@ -48,7 +48,7 @@ class WatchList:
         util.redirect(RESPONSE, 'pcng_issue_view', 
                       self.translate('watchlist_added', 'You were added to the watchlist'))
 
-    security.declareProtected(CMFCorePermissions.View, 'wl_removeWatcher')
+    security.declareProtected(View, 'wl_removeWatcher')
     def wl_removeWatcher(self, email, RESPONSE):
         """ remove watcher """
         if not self.wl_isWatcher(email):
