@@ -13,33 +13,36 @@
   <body>
     <div metal:fill-slot="main">
 
-      <h1 tal:content="here/Title" class="documentFirstHeading">
-        Folder Title
-      </h1>
+    <h1 tal:content="here/Title" class="documentFirstHeading">
+      Folder Title
+    </h1>
 
-      <div metal:use-macro="here/document_actions/macros/document_actions">
-        Document actions (print, sendto etc)
-      </div>
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+      Document actions (print, sendto etc)
+    </div>
 
-      <div class="documentDescription"
-        tal:content="here/Description">
-        Description.
-      </div>
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
 
-      <div tal:repeat="section here/getSectionsToList">
+    <div tal:repeat="section here/getSectionsToList">
 
         <h2 tal:content="section">Section Heading</h2>
 
-        <ul>
+        <dl>
+            <tal:howto tal:repeat="howto python:here.getItemsBySection(section=section)">
+            <dt>
+                <img tal:replace="structure here/howto_icon.gif" />
+                <a href="" tal:content="howto/Title"
+                   tal:attributes="href howto/absolute_url">HowTo</a>
+            </dt>
+            
+            <dd tal:content="howto/Description">Description</dd>
+          </tal:howto>
+        </dl>
 
-          <li tal:repeat="howto python:here.getItemsBySection(section=section)">
-          <a href="" tal:content="howto/Title"
-            tal:attributes="href howto/absolute_url">HowTo</a>
-          <span tal:replace="howto/Description">[descrip]</span>
-          </li>
-          
-        </ul>
-      </div>
+    </div>
 
     <div metal:use-macro="here/document_byline/macros/byline">
       Get the byline - contains details about author and modification date.

@@ -50,15 +50,15 @@
             tal:attributes="href python:'%s/faqsection_view?section=%s' % (here.absolute_url(), pss.url_quote(section) )">
             View section in full</a> 
 
-          <ul>
+          <ol>
             <li tal:repeat="faq python:here.getItemsBySection(section=section)">
             <a tal:attributes="href faq/absolute_url" tal:content="faq/Title"></a></li>
-          </ul>
+          </ol>
 
         </tal:section>
 
         <div tal:condition="full" 
-          tal:repeat="faq python:here.getFaqItemsBySection(section=section)">
+          tal:repeat="faq python:here.getItemsBySection(section=section)">
           
           <h3>
             <img tal:replace="structure here/faq_icon.gif" />

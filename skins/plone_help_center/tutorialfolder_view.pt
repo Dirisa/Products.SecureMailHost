@@ -26,20 +26,27 @@
         Description.
       </div>
 
-      <div tal:repeat="section here/getSectionsToList">
+    <div tal:repeat="section here/getSectionsToList">
 
         <h2 tal:content="section">Section Heading</h2>
 
-        <ul>
+        <dl>
 
-          <li tal:repeat="tutorial python:here.getItemsBySection(section=section)">
-          <a href="" tal:content="tutorial/Title"
-            tal:attributes="href tutorial/absolute_url">HowTo</a>
-          <span tal:replace="tutorial/Description">[descrip]</span>
-          </li>
+            <tal:tutorial repeat="tutorial python:here.getItemsBySection(section=section)">
+            
+            <dt>
+                <img tal:replace="structure here/tutorial_icon.gif" />
+                <a href="" 
+                   tal:content="tutorial/Title"
+                   tal:attributes="href tutorial/absolute_url">Tutorial</a>
+            </dt>
+            
+            <dd tal:content="tutorial/Description">Description</dd>
+
+            </tal:tutorial>
           
-        </ul>
-      </div>
+        </dl>
+    </div>
 
     <div metal:use-macro="here/document_byline/macros/byline">
       Get the byline - contains details about author and modification date.
