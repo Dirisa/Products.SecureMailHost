@@ -69,21 +69,18 @@ a.selected {
 }
 
 fieldset {
- padding: 0.5em;
- margin: 0.25em;
+    padding: 0.5em;
+    margin: 0.25em;
 }
 
 span.schemata_label {
     font-weight: bold;
 }
 
-pre.plain {
-border: none;
-background-color: white;
-font-size: 100%;
-padding: 0em;
-
-
+h2.tracker_overview {
+    font-size: 120%;
+    font-weight: bold;
+}
 
 </style>
 </metal:block>
