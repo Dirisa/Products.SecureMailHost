@@ -12,7 +12,7 @@ Installation:
 
     See INSTALL.txt
 
-    Attention: Archetypes 1.3 (CVS HEAD) IS MANDATORY. 
+    Attention: Archetypes 1.3 IS MANDATORY. 
                Archetypes 1.2.X is *NOT SUPPORTED*
 
 
