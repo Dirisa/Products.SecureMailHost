@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.66 2003/11/10 15:59:54 ajung Exp $
+$Id: Collector.py,v 1.67 2003/11/10 17:54:17 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -350,6 +350,13 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         """ return the number of issues """
         return len(self.objectIds('PloneIssueNG'))
     __len__ = getNumberIssues
+
+    security.declareProtected(View, 'resetNumberIssues')
+    def resetNumberIssues(self, RESPONSE):
+        """ reset number of issues """
+        self._num_issues = 0
+        util.redirect(RESPONSE, 'pcng_maintainance', 
+                      self.translate('number_issues_reseted', 'Issue number reseted to 0'))
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
     def update_schema_for_issues(self, return_to=None, REQUEST=None, RESPONSE=None):
