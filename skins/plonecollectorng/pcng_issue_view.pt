@@ -11,6 +11,10 @@
 
     <div metal:fill-slot="main">
 
+      <!-- The evil in person -->
+      <tal:call> 
+        <span tal:define="dummy here/setDefaults" />
+      </tal:call>
 
       <!-- set the view mode based on the collector preferences -->
 

@@ -1,13 +1,11 @@
 """
-        self.initializeArchetype()
-        self.initializeArchetype()
 PloneCollectorNG - A Plone-based bugtracking system
 
 (C) by Andreas Jung, andreas@andreas-jung.com & others
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.139 2004/03/17 12:08:32 ajung Exp $
+$Id: Issue.py,v 1.140 2004/03/17 16:48:58 ajung Exp $
 """
 
 import sys, os, time
@@ -103,31 +101,44 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if wf:
                 wf.notifyCreated(self)
 
+    security.declareProtected(AddCollectorIssue, 'post_creation_actions')
     def post_creation_actions(self):
         """ perform post-creation actions """
-
         self._transcript.setEncoding(self.getSiteEncoding())
         self._transcript.addComment(self.Translate('Created', 'Created', as_unicode=1))
 
-        # added member preferences as defaults to the issue
-        member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
-        schema = self.Schema()
+    security.declareProtected(AddCollectorIssue, 'setDefaults')
+    def setDefaults(self):
+        """ set some default value based on the member data """
+        if not hasattr(self, '_defaults_initialized'):
 
-        if member:
-            fieldnames = [ f.getName() for f in schema.fields() ]
-            for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
-                                ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
-                                ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
-                                ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
+            # added member preferences as defaults to the issue
+            member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
+            schema = self.Schema()
 
-                if name in fieldnames:                
-                    schema[name].set(self, member.getProperty(name1))
-        else:
-            name = 'contact_name'
-            schema[name].set(self, util.getUserName())
+            print '*'*80
+            print 'user', util.getUserName()
+            print 'member', member
+            print self, self.absolute_url()
+            
+            if member:
+                fieldnames = [ f.getName() for f in schema.fields() ]
+                for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
+                                    ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
+                                    ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
+                                    ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
-        # pre-allocate the deadline property
-        self.progress_deadline = DateTime() + self.deadline_tickets        
+                    if name in fieldnames:                
+                        print 'setting', name, member.getProperty(name1)
+                        schema[name].set(self, member.getProperty(name1))
+            else:
+                name = 'contact_name'
+                schema[name].set(self, util.getUserName())
+
+            # pre-allocate the deadline property
+            self.progress_deadline = DateTime() + self.deadline_tickets        
+            self._defaults_initialized = 1
+
 
                                                 
     def manage_beforeDelete(self, item, container):
