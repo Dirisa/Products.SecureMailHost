@@ -26,6 +26,13 @@ class FileProxy(FSObject):
 
     def setComment(self, comment):
         self.comment = comment
+    
+    def setTitle(self, title):
+        self.title = title
+
+    security.declarePublic('getTitle')
+    def getTitle(self):
+        return self.title
 
     security.declarePublic('absolute_url')
     def absolute_url(self,relative=0):
@@ -35,7 +42,7 @@ class FileProxy(FSObject):
     security.declarePublic('title_or_id')
     def title_or_id(self):
         """ return title or id """
-        return self.id
+        return self.title or self.id
 
     security.declarePublic('getComment')
     def getComment(self):

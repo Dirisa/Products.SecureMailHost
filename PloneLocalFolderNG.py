@@ -274,7 +274,11 @@ class PloneLocalFolderNG(BaseContent):
         targetFile = os.path.join(self.folder, rel_dir)
 
         if section and option and newvalue:
-            result = setMetadata(targetFile, section, option, newvalue)
+            if len(section)==len(option)==len(newvalue):
+                tmpres = len(section) > 0  # initialize to True
+                for i in range(0,len(section)):
+                    tmpres = tmpres and setMetadata(targetFile, section[i], option[i], newvalue[i])
+                result = tmpres  # return True when all matadatas are successfully set
         
         if result == 1:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_editMetadata?portal_status_message=file metadata updated.')
@@ -493,8 +497,15 @@ class PloneLocalFolderNG(BaseContent):
                      P.setComment(getMetadataElement(FSfullPathFolderName, section="GENERAL", option="comment"))
                    except:
                      P.setComment('')
+                   try:
+                     P.setTitle(getMetadataElement(FSfullPathFolderName, section="GENERAL", option="title"))
+                   except:
+                     P.setTitle('')
+  
                else:
                    P.setComment('')
+                   P.setTitle('')
+
                proxyObjectsList.append(P)
            
            for f in filteredFileList:
@@ -513,8 +524,14 @@ class PloneLocalFolderNG(BaseContent):
                      P.setComment(getMetadataElement(FSfullPathFileName, section="GENERAL", option="comment"))
                    except:
                      P.setComment('')
+                   try:
+                     P.setTitle(getMetadataElement(FSfullPathFileName, section="GENERAL", option="title"))
+                   except:
+                     P.setTitle('')
                else:
                    P.setComment('')
+                   P.setTitle('')
+
                proxyObjectsList.append(P)
 
            return proxyObjectsList
