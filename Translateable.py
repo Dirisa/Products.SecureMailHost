@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Translateable.py,v 1.3 2003/10/19 15:07:47 ajung Exp $
+$Id: Translateable.py,v 1.4 2003/10/19 15:17:21 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -27,20 +27,13 @@ class Translateable:
 
     security.declarePublic('translate')
     def translate(self, msg_id, text, **kw):
-        """ ATT: this code is subject to change """a
+        """ ATT: this code is subject to change """
 
         if not have_ts: return text % kw
-
-        PL = getToolByName(self, 'portal_languages', None)
-        if PL:
-            prefered_lang = self.portal_languages.getRequestLanguages()[0]
-        else:
-            prefered_lang = 'en'
 
         ret = translate(domain=i18n_domain, 
                          msgid=msg_id, 
                          context=self,
-                         target_language=prefered_lang,
                          mapping=kw,  
                          default=text)
         return ret
