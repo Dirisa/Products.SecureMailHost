@@ -214,8 +214,9 @@ class Collector(BaseFolder):
         self._num_issues += 1
         id = str(self._num_issues)
         issue = Issue(id, id, schema = self._issue_schema)
-        issue = issue.__of__(self)
         self._setObject(id, issue)
+        issue = issue.__of__(self)
+
         if RESPONSE is not None: 
             RESPONSE.redirect(self.absolute_url() + "/" + id + "/base_edit")
 
