@@ -6,20 +6,33 @@ Bugs
 
   - BUG: Howtos seem to not pick up the 'versions' defined in the Help Center.
          Check that this works for all content types.
-  
+
+        -> Appears fixed (optilude)
+          
   - BUG: Contents tab is visible to normal Members (at least on plone.org)
          - it shouldn't be.
+    
+        -> Appears fixed (optilude)
   
   - BUG: Owners can't edit their content when it has been published. They should
          be able to do this, we don't want to have the retract/edit/re-publish
          dance.
-  
+         
+        -> I'm having some trouble here... I can't add content at all as
+        a regular member. I'm getting insufficient privileges, though I can't
+        see why. VerboseSecurity and portal_workflow seem to be in disagreement.
+        I'm probably missing something obvious (optilude)
+          
   - BUG: Comments on TutorialPages end up on the containerish Tutorial object
          instead, at least on plone.org. It should be possible to add a comment
          to a page.
+         
+         -> Appears fixed (optilude)
   
   - BUG: RSS feed doesn't work (fix was committed, needs testing, especially with 
          foreign character sets and UTF-8 chars)
+    
+        -> XXX: Not yet tested (optilude)
   
   - BUG: error_reference object has "wrong attachments" tab
 
@@ -29,6 +42,8 @@ Bugs
 
          I get this wrong behavior, when trying to view the
          Attachments tab after creating a *error reference*
+         
+         -> Fixed in PHC-reference-guide-branch now (optilude)
 
 ====
 Fixes
@@ -44,6 +59,8 @@ Fixes
          FYI: I ALSO get the above error when trying to view the
          attachements tab, after creating a *error reference*
 
+        -> Appears fixed (optilude)
+
 =======
 General
 =======
@@ -53,13 +70,21 @@ General
   
   - All content types need Sharing tab
   
+        -> Appears done (optilude)
+  
   - HistoryAware mix-in - PHC types should have a history attached, so we can
     mount a non-packable storage on plone.org that will keep all the change
     history for documentation content types. ATContentTypes already has this.
   
+        -> Done, though not always sensible values to test, since some fields
+            use metadata only (answer in Description) and this doesn't seem
+            to be versioned in the ZODB (optilude)
+  
   - I have removed workflow for TutorialPage (~limi), but we might consider a
     visible/hidden scheme, so you can have pages that you're adding while the
     Tutorial is available.
+    
+        -> TODO: Not yet done (optilude)
    
   - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
@@ -68,11 +93,16 @@ General
     pre-populated howto itself, so it can be translated/modified to suit the
     particular use case.
     
+        -> TODO: Not yet done (optilude)
+    
   - Add LinguaPlone support to the types
 
     - The LinguaPlone import statement
 
     - Declare relevant fields as language-independent
+  
+  
+        -> XXX: Not yet tested (optilude)
   
   - The view templates for listings (howto, tutorial, faq etc - all of them)
     should only display *published* items, even if you have the permissions
@@ -95,23 +125,31 @@ General
                the Catalog-based queries once Plone 2.1 with catalog-ordering is
                out.
   
-  
+        -> TODO: Can still see in-progress items as manager (optilude)
   
   - Search needs to be hooked up! It should allow searching on all the different
     types. Almost done, it doesn't search the Glossary at the moment, it seems.
     This needs proper testing, the search seems to not be indexing things properly
     at the moment - searching the PHC on plone.org is a miserable experience. :]
   
+        -> XXX: Not yet tested (optilude)
+  
   - Expose "Contributors" in the main edit screen instead of on Properties tab, if
     possible. It's going to be used a lot :)
+    
+        -> TODO: Not yet done (optilude)
   
   - The "Obsolete" state has non-obvious name for the transition to pull it back
     into play.
   
+        -> TODO: Not yet done (optilude)
+    
   - A way to set PHC-wide default Rights attribute - on plone.org we want 
     everything to be under the same license, for example. Maybe look at
     PloneCC which is a product to add Creative Commons licenses.
     http://woss.name/software/PloneCC/ (no idea if this is relevant or not)
+  
+        -> XXX: Unsure what this means, but doesn't appear to be done (optilude)
   
   - Definitions (in Glossary) need to be able to have Rich Text - the way it is
     now, it can't have links to other definitions. The Description attribute 
@@ -119,17 +157,25 @@ General
     having the "See also" thing so we can link to other definitions is also an
     option. (Actually - probably a better option, as it is less susceptible to
     link rot, since it's an AT reference)
+    
+        -> TODO: Not yet done (optilude)
   
   - Definitions (glossary_view template) should be alphabetically sorted - 
     proper human sorting, not UNIX-sorting (ie. not uppercase letters before 
     lowercase).
+    
+        -> TODO: Not yet done (optilude)
   
   - Description should be required *everywhere*, the listings make very little sense
     without this.
   
+        -> Appears done (optilude)
+  
   - Integrate with the ATRatings tool - we want ratings on content. If we get a
     basic rating UI going, Limi will try to step up with an improved JS version. 
     We need the initial implementation in place first, though. :)
+  
+        -> TODO: Not yet done (optilude)
   
   - Importance: I think we can/should generalize this more: add a ImportanceVocab
     list to help center for list of importance raitings, ie,
@@ -137,12 +183,18 @@ General
     the order that things are listed in the importance ratings, and
     add the red bang to the top-level ones. This gives us more
     flexibility for future importance ratings. --Joel
+    
+        -> TODO: Not yet done (optilude)
 
 =================================
 Movie and Movie Area content type
 =================================
 
   Contains instructional flash videos.
+  
+    -> Appears done, though why are we limiting to Flash videos only? Also,
+    doesn't appear to be using external storage, which we probably want.
+    (optilude)
   
   - Based off the How-to type (needs to be folderish) - same type of general listing, with categories in the container etc.
   
@@ -184,21 +236,24 @@ Movie and Movie Area content type
 
     The alternative is to just use the layout that Camtasia produces (the generated HTML)
 
-=====================
-"Manual" content type
-=====================
+===============================
+"Reference Manual" content type
+===============================
+ 
+    -> Done in PHC-reference-guide-branch (optilude)
  
   For book-type manuals and individual products' documentation needs.
-
-  - Should be able to accommodate content like Andy's Plone Book, and 
-  Raphael's MySite tutorial 
   
-  - As well as product manuals like LinguaPlone, End-users Guide to Plone manual etc.
+  - Add tests, test properly
+  
+    -> well, not this part :)
 
 
 =====================
 Comment notifications
 =====================
+
+    -> XXX: Not yet tested (optilude)
 
   People need to be notified when somebody adds a comment to their item,
   so they can maintain and refine. The PloneHelpCenter concept will not work 
@@ -256,6 +311,8 @@ Versions (not versioning ;)
     "This content is only relevant to Plone 1.0. The current version is
      Plone 2.0. Make sure you are using the correct version before
      following the instructions given here."
+     
+        -> TODO: Not done (optilude)
   
   - Nice to have: A way to set the default view help-center-wide 
     (Example, let's say we just want to show Plone 2.0 elements 
@@ -272,7 +329,7 @@ Unit tests
 
     - We need more tests!
 
-
+        -> Word (optilude)
 
 =========
 Design/UI
@@ -280,20 +337,32 @@ Design/UI
 
   - All PHC types need to show the "log in to add FAQ/How-to/whatever" button
   
+    -> TODO: Not done (optilude)
+  
   - Howtos need to have a note about the fact that they are folderish and can
     contain images/files
   
+    -> TODO: Not done (optilude)
+  
   - Discreet "Powered by PHC" in footer
+  
+    -> TODO: Not done, but why do we care? (optilude)
   
   - A portlet to show content that hasn't been modified in 6 months - so we can go 
     in and see if it's still relevant. We'll just hit save if it is, this is a
     simple way of making sure content is reviewed periodically.
   
+    -> Appears done (optilude)
+  
   - Include the Documentation review portlet from plone.org
+  
+    -> XXX: No idea if this is done or not (optilude)
   
   - Tutorial Page Pulldown needs to show the existing page as selected
   
-
+    -> XXX: Not yet tested. If it's missing there, it's also missing on the
+    refrence manual type (optilude)
+    
 ========================
 Nice-to-have-but-not-yet
 ========================

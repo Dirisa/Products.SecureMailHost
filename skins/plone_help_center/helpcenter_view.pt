@@ -21,6 +21,7 @@
                                      ('HelpCenterFAQFolder','HelpCenterFAQ'),
                                      ('HelpCenterHowToFolder','HelpCenterHowTo'),
                                      ('HelpCenterTutorialFolder','HelpCenterTutorial'),
+('HelpCenterReferenceManualFolder','HelpCenterReferenceManual'),
                                      ('HelpCenterLinkFolder','HelpCenterLink'),
                                      ('HelpCenterErrorReferenceFolder','HelpCenterErrorReference'),
                                      ('HelpCenterGlossary','HelpCenterDefinition'),

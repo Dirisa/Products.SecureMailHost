@@ -11,6 +11,8 @@ import HowToFolder, HowTo
 
 import TutorialFolder, Tutorial, TutorialPage
 
+import ReferenceManualFolder, ReferenceManual, ReferenceManualSection, ReferenceManualPage
+
 import InstructionalVideoFolder, InstructionalVideo
 
 import LinkFolder, Link

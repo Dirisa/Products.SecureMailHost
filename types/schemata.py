@@ -619,3 +619,99 @@ InstructionalVideoFolderSchema = HCFolderSchema + Schema((
                                     rows=6)),
     )) + SectionsVocabSchema
 
+##################
+# Reference Manual
+##################
+
+ReferenceManualSchema = HCSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              required=1,
+              primary=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                 description = 'A summary of the reference manual -- subject and scope. Will be displayed on every page of the manual.',
+                 description_msgid = "phc_help_referencemanual_summary",
+                 label = "Reference Manual Description",
+                 label_msgid = "phc_label_referencemanual_description",
+                 rows = 5,
+                 i18n_domain = "plonehelpcenter")
+              ),
+    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
+
+#########################
+# Reference Manual Folder
+#########################
+
+ReferenceManualFolderSchema = HCFolderSchema + Schema((
+    TextField('description',
+              searchable=1,
+              required=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget=TextAreaWidget(description_msgid="phc_desc_folder_referencemanual",
+                                    description="Description for the reference manual section.",
+                                    label_msgid="phc_label_folder_referencemanual",
+                                    label="Description",
+                                    i18n_domain = "plonehelpcenter",
+                                    rows=6)),
+    )) + SectionsVocabSchema
+
+##########################
+# Reference Manual Section
+##########################
+
+ReferenceManualSectionSchema = HCSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              required=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                  description = "Enter a brief description for this section of the manual",
+                  description_msgid = "phc_desc_referencemanual_section",
+                  label = "Description",
+                  label_msgid = "phc_label_referencemanual_section",
+                  rows = 5,
+                  i18n_domain = "plonehelpcenter")),
+    ))
+
+
+#######################
+# Reference Manual Page
+#######################
+
+ReferenceManualPageSchema = HCSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              required=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+                  description = "Enter a brief description",
+                  description_msgid = "phc_desc_referencemanual_page",
+                  label = "Description",
+                  label_msgid = "phc_label_referencemanual_page",
+                  rows = 5,
+                  i18n_domain = "plonehelpcenter")),
+
+    TextField('body',
+                  required = 1,
+                  searchable = 1,
+                  primary = 1,
+
+                  widget = RichWidget(
+                      description = "The body text",
+                      description_msgid = "phc_desc_body_referencemanual",
+                      label = "Body text",
+                      label_msgid = "phc_label_body_referencemanual",
+                      rows = 25,
+                      i18n_domain = "plonehelpcenter"),
+                  **DEFAULT_CONTENT_TYPES
+                  ))
+              )
+

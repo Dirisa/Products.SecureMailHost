@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonehelpcenter">
+
+<head>
+    <metal:css fill-slot="css_slot">
+    <style type="text/css" media="all"
+           tal:content="string: @import url($portal_url/helpcenter.css);"></style>
+    </metal:css>
+
+    <metal:override fill-slot="column_two_slot" />
+
+</head>
+
+<body>
+
+<div metal:fill-slot="main">
+
+    <div metal:define-macro="main"
+         tal:define="sections here/referencemanual_getSections">
+
+        <h1>
+        <img tal:replace="structure here/referencemanual_icon.gif" />
+        <span tal:replace="here/Title" />
+        </h1>
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+        </div>
+
+        <p class="discreet noPrint">
+        Note: This is the print view with all the Reference Manual pages on one
+        page.
+        <a href="" tal:attributes="href here/absolute_url">
+        The paginated version is available here</a>, if you prefer that.
+        </p>
+
+        <div class="documentDescription" 
+             tal:content="here/getReferenceManualDescription">
+        Reference Manual Description
+        </div>
+
+        <tal:sections repeat="section sections">
+        <tal:block define="item nocall:section/item">
+      
+            <h1>
+                <span tal:replace="section/number">1.</span>
+                <span tal:replace="item/title_or_id">Title or id</span>
+            </h1>
+        
+            <div class="documentDescription"
+                 tal:content="item/Description">
+                description
+            </div>
+            
+            <div id="bodyContent" tal:condition="section/hasBody">
+                <div tal:replace="structure item/getBody" />
+            </div>
+            
+            <tal:subsections repeat="subsection section/contents">            
+            <tal:block define="subitem nocall:subsection/item;
+                    depthClass string:manual-level-${subsection/depth}">
+            
+                <h2 tal:attributes="class depthClass">
+                    <span tal:replace="subsection/number">1.1.</span>
+                    <span tal:replace="subitem/title_or_id">Title</span>
+                </h2>
+            
+                <div class="documentDescription"
+                 tal:content="subitem/Description">
+                    description
+                </div>
+                
+                <div id="bodyContent" tal:condition="subsection/hasBody">
+                    <div tal:replace="structure subitem/getBody" />
+                </div>
+            
+            </tal:block>
+            </tal:subsections>
+        </tal:block>        
+        </tal:sections>
+    </div>
+
+</div>
+
+</body>
+</html>

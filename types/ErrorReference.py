@@ -32,7 +32,7 @@ class HelpCenterErrorReference(PHCContent,OrderedBaseFolder):
         {
             'id': 'attachments',
             'name': 'Attachments',
-            'action': 'string:${object_url}/howto_attachments',
+            'action': 'string:${object_url}/errorreference_attachments',
             'permissions': (CMFCorePermissions.ModifyPortalContent,)
         },
         {

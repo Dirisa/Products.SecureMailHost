@@ -10,6 +10,7 @@
 # /link - contains the links to other documentation
 # /glossary - contains the definitions
 # /video - contains video files for training/instruction
+# /manual - contains reference manuals
 #
 # The main goals of these folders are to restrict the addable types and
 # provide a sensible default view out-of-the-box, like the FAQ view.
@@ -33,6 +34,7 @@ class HelpCenter(OrderedBaseFolder):
     allowed_content_types = ( 'HelpCenterFAQFolder'
                             , 'HelpCenterHowToFolder'
                             , 'HelpCenterTutorialFolder'
+                            , 'HelpCenterReferenceManualFolder'
                             , 'HelpCenterInstructionalVideoFolder'
                             , 'HelpCenterLinkFolder'
                             , 'HelpCenterErrorReferenceFolder'
@@ -91,6 +93,18 @@ class HelpCenter(OrderedBaseFolder):
 					msgid='phc_tutorial_description',
 					domain='plonehelpcenter',
 					default='Detailed tutorials.'))
+
+        if 'manual' not in self.objectIds():
+            self.invokeFactory('HelpCenterReferenceManualFolder','manual')
+            self['manual'].setTitle(self.translate(
+					msgid='phc_referencemanual_title',
+					domain='plonehelpcenter',
+					default='Reference Manuals'))
+            self['manual'].setDescription(self.translate(
+					msgid='phc_referencemanual_description',
+					domain='plonehelpcenter',
+					default='Reference manuals for larger projects.'))
+
 
         if 'video' not in self.objectIds():
             self.invokeFactory('HelpCenterInstructionalVideoFolder','video')
