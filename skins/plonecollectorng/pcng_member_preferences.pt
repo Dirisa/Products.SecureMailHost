@@ -13,6 +13,7 @@
       <fieldset>
         <legend i18n:translate="preferences">Preferences</legend>
         <metal:block tal:repeat="item python: ( 
+                                         ('fullname','Name'), 
                                          ('pcng_company','Company'), 
                                          ('pcng_position','Position'), 
                                          ('pcng_address','Address'),
