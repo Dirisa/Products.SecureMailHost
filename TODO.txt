@@ -6,6 +6,10 @@ FAQ/FAQFolder:
 
 - We should use Description for the full Question attribute in FAQ.py, not a dedicated attribute.
 
+- RSS feed for Latest Documentation
+
+- Included help templates that explain what the different parts do, how a FAQ differs from a howto, differs from a Tutorial etc.
+
 
 GENERAL:
 
