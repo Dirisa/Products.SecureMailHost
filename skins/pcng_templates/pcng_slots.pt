@@ -98,17 +98,14 @@
     <h5 i18n:translate="collector_actions">Collector actions</h5>
     <div class="portletBody"  id="pcng_portlet_collector"
          tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
-      <ul>
-        <tal:loop tal:repeat="a actions/pcng_collector|nothing">
-          <li>
+        <div class="pcng_action" tal:repeat="a actions/pcng_collector|nothing">
             <a tal:attributes="href a/url">
-              <span i18n:translate="" 
-                    tal:attributes="id string:pcng_${a/id}"
+              <span class="pcng_action"
+                    i18n:translate="" 
+                    tal:attributes="id a/id"
                     tal:content="a/name" />
             </a>
-          </li>
-        </tal:loop>
-      </ul>
+        </div>
     </div>
   </div>
 </div>
@@ -119,17 +116,13 @@
     <h5 i18n:translate="issue_actions">Issue actions</h5>
     <div class="portletBody" id="pcng_portlet_issue"
          tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)">
-      <ul>
-        <tal:loop tal:repeat="a actions/pcng_issue|nothing">
-          <li>
-            <a tal:attributes="href a/url">
-              <span i18n:translate="" 
-                    tal:attributes="id string:pcng_${a/id}"
-                    tal:content="a/name" />
-            </a>
-          </li>
-        </tal:loop>
-      </ul>
+      <div class="pcng_action" loop tal:repeat="a actions/pcng_issue|nothing">
+        <a tal:attributes="href a/url">
+          <span i18n:translate="" 
+                tal:attributes="id a/id"
+                tal:content="a/name" />
+        </a>
+      </div>
     </div>
   </div>
 </div>

@@ -162,4 +162,19 @@ div #pcng_uploads_edit{
     text-decoration: none;
 }
 
+div.pcng_action {
+    margin-bottom: 0.5em;
+    margin-top: 0.3em;
+}
+
+.portlet #pcng_issue_pdf {
+    background: transparent url(&dtml-portal_url;/pdflogo_small.gif) center left no-repeat;
+    padding-left: 25px;
+    padding-bottom: 2px;
+}
+.portlet #pcng_browse {
+    background: transparent url(&dtml-portal_url;/search_icon.gif) center left no-repeat;
+    padding-left: 25px;
+    padding-bottom: 2px;
+}
 /* </dtml-with> */
