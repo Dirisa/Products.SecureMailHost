@@ -9,3 +9,8 @@ Credits:
 
   - Marc Lindahl for several bug reports and pointing out some
     deficiencies in PCNG 
+
+  - PCNG ships with the "Vera" TrueType font which has been released
+    by Bitstream as free software for open-source projects 
+    (see ttffonts/COPYRIGHT.txt)
+

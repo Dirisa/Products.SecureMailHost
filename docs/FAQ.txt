@@ -17,10 +17,3 @@ A: Navigate to the collector instance and you should see a link to
    to *all* collector instances (means they are *global* and *not specific*
    to a particular collector instance).
 
-Q: Why does the PDF output uses such ugly fonts and not the standard PDF
-   fonts?
-A: Reportlab seems to unable to create PDFs using standard PDF fonts if the
-   rendered text used UTF-8 as encoding. For this reason PCNG uses a free
-   TrueType font 'Steelfish' from larabiefonts.com that looks somewhat good
-   and works with UTF-8 encoding. If you have a nicer font capable to handle
-   UTF-8 please let me know. 
