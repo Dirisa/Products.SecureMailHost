@@ -25,10 +25,10 @@
            <span i18n:translate="total_issues">Total issues</span>: <span tal:content="python: stats[0]"/> -
            <span i18n:translate="open_issues">Open issues</span>: <span tal:content="python: stats[1]"/> -
            <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=submitted">
-             <span i18n:translate="my_created_issued">My submitted issues</span>: <span tal:content="python: stats[2]"/> 
+             <span i18n:translate="my_created_issues">My submitted issues</span>: <span tal:content="python: stats[2]"/> 
            </a> -
            <a tal:attributes="href string:${collector/getURL}/pcng_view?filter=assigned">
-             <span i18n:translate="my_created_issued">Issues assigned to me</span>: <span tal:content="python: stats[3]"/> 
+             <span i18n:translate="my_assigned_issues">Issues assigned to me</span>: <span tal:content="python: stats[3]"/> 
            </a> 
         </div> 
       </div>
