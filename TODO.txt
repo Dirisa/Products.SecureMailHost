@@ -8,6 +8,13 @@ General
 
 - IMPORTANT: "Additional resources" doesn't currently show the available PHC
              folder types. It should. :)
+             
+- Important: It seems like PSC still uses the AreaWorkflow - should use the
+             default workflow of the site. May be plone.org issue, investigate.
+
+- I think the releasefolder_view has been generalized a bit too
+  much, it says "There are no available releases in this project
+  yet" when there are - they are just not in that section (Upcoming). 
 
 - by-category.pt shows the category short name, should show full name (but
   requires that you pass in short name and get back full name, since we pull
@@ -29,6 +36,9 @@ General
 =========
 Design/UI
 =========
+
+- "Expected release date" should become "Released" when the product is actually
+  released. :)
 
 - Portlet listing the latest published Releases should have Category listed. 
   This requires the attribute metadata in the Catalog.
