@@ -3,8 +3,6 @@ It is organized into these categories:
 
   "KNOWN ISSUES"
 
-  "BEFORE NEXT RELEASE (0.50)" (items that are on the critical path)
-
   "BEFORE RELEASE 0.60" (items that are not on the immediate
   critical path, but should be worked soon)
   
@@ -29,13 +27,12 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
   KNOWN ISSUES
 ----------------------------------
+- file names beginning with underscore characters
+  are listed but cannot be accessed (due to a Plone constraint)
 
 - bug # 971432: 'Adding a Local Folder ends up in a error'
    (AT 1.3.0b2 incompatibility issue)
 
-- bug # 988620: rejected upload of file with same name 
-   as existing file results in deletion of existing file
-   
 - directory creation succeeds but gives an error
    message (not found 404) on Windows 
    (not reproducable yet) 
@@ -48,17 +45,7 @@ about feature requests and/or to volunteer to help!!!
 - i18n not complete.
 
 - various problems with filenames containing spaces
-  (need to quantify this)
-  
-- metadata file is not deleted when associated file is deleted 
-
-- catalog results output is confusing (what is 2nd tuple?)
-
-----------------------------------
-  BEFORE NEXT RELEASE (0.50)
-----------------------------------
-Significant enhancements have been put into the 0.50 baseline,
-and we really need to get them officially released!
+  (not an issue on Mac OSX; need to quantify this)
 
 
 ----------------------------------
@@ -80,15 +67,13 @@ and we really need to get them officially released!
   with a temporary filename to facilitate checking 
   (MD5, quota limit, archive integrity, etc). 
   
-- add revisioning metadata for files
-  (to include who/when uploaded file) 
-
-- add optional support for archiving old revisions of files
-  (eg, place copy of file into a *.old folder when file
-   is deleted or when new revision of file is uploaded)
+- add change history metadata for files
+  (to include who/when uploaded or deleted a file, updated metadata, etc) 
 
 - improve the unit testing for catalog action
 
+- add metadata support for folders
+ 
 
 ----------------------------------
   BEFORE 1.0 FINAL
