@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.37 2003/10/05 12:07:22 ajung Exp $
+$Id: Issue.py,v 1.38 2003/10/11 11:30:26 ajung Exp $
 """
 
 import sys, os
@@ -25,7 +25,7 @@ from config import IssueWorkflowName
 from Transcript import Transcript
 from WatchList import WatchList
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
-import util
+import util, notifications
 
 
 class IssueRelationship(Persistent):
@@ -150,6 +150,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             self._transcript.addChange('status', old_status, new_status)
 
         self.notifyModified() # notify DublinCore
+        notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
 
     ######################################################################
@@ -221,7 +222,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         if not reference.comment:
             raise ValueError('References must have a comment')
 
-        self.addReference(issue, IssueRelationship(issue.absolute_url(1), reference.comment))
+#        self.addReference(issue, IssueRelationship(issue.absolute_url(1), reference.comment))
+        self.addReference(issue, reference.comment)
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')
