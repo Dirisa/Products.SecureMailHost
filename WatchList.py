@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: WatchList.py,v 1.5 2003/10/12 19:05:58 ajung Exp $
+$Id: WatchList.py,v 1.6 2003/10/13 17:43:46 ajung Exp $
 """
 
 from Globals import InitializeClass
-from AccessControl import  ClassSecurityInfo, Unauthorized
+from AccessControl import  ClassSecurityInfo 
 from Products.CMFCore import CMFCorePermissions
 from ZODB.PersistentList import PersistentList
 
