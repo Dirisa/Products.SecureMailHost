@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.129 2004/03/02 11:42:23 ajung Exp $
+$Id: Collector.py,v 1.130 2004/03/02 12:10:00 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -29,6 +29,7 @@ from config import IssueWorkflowName, CollectorCatalog, SEARCHFORM_IGNOREABLE_IN
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
+from workflows import VOC_WORKFLOWS
 import collector_schema 
 import issue_schema
 import util
@@ -177,9 +178,12 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         wf = wf.__of__(self)
 
         wf_tool = getToolByName(self, CollectorWorkflow)
-        wf_tool.manage_addWorkflow( id='pcng_issue_workflow'
-                                  , workflow_type='pcng_issue_workflow (pcng_issue_workflow)')
-        wf_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
+
+        # Get the workflow ID from the instance
+        wf_id = self.Schema()['collector_workflow'].get(self)
+        wf_type = VOC_WORKFLOWS.getValue(wf_id) 
+        wf_tool.manage_addWorkflow(id=wf_id, workflow_type=wf_type)
+        wf_tool.setChainForPortalTypes(('PloneIssueNG',), wf_id)
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
