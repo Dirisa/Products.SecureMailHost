@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.179 2004/05/29 15:31:19 ajung Exp $
+$Id: Issue.py,v 1.180 2004/05/31 13:53:33 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -60,6 +60,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         'action': 'pcng_search_form',
         'permissions': (View,),
         'category' : 'object_pcng_issue',
+        },
+        {'id': 'pcng_edit',
+        'name': 'Edit',
+        'action': 'pcng_base_edit',
+        'permissions': (EditCollectorIssue,)
         },
         {
         'id': 'pcng_new_issue',
@@ -169,7 +174,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
 
             if member:
-                fieldnames = [f.getName() for f in schema.fields()]
+                fieldnames = [f.getName() for f in self.Schema().fields()]
                 for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
                                     ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
                                     ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
