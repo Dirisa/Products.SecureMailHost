@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.26 2004/02/09 20:32:53 ajung Exp $
+$Id: Translateable.py,v 1.27 2004/02/11 11:12:04 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -48,6 +48,17 @@ class Translateable:
             self._v_site_encoding = self.portal_properties.site_properties.default_charset
         return self._v_site_encoding    
 
+    def _unicode(self, s, encoding=None):
+        try:
+            return unicode(s, encoding)
+        except:
+            try:
+                return unicode(s, self._getPloneEncoding())
+            except:
+                try:
+                    return unicode(s, 'latin1')
+                except:
+                    pass
 
     security.declarePublic('translate')
     def translate(self, msgid, text, target_language=None, as_unicode=0, **kw):
@@ -71,8 +82,9 @@ class Translateable:
                            default=text,
                            target_language=target_language)
         
+
         if not v: 
-            v = unicode(text)
+            v = self._unicode(text)
         if isinstance(v, StringType):
             if as_unicode: return unicode(v, self._getPloneEncoding())
             else: return v
