@@ -13,7 +13,7 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
 
-    <table border="1" cellspacing="4" cellpadding="2"
+    <table border="0" cellspacing="4" cellpadding="2"
            td tal:define="fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];
                           default_fieldset python: fieldsets[0];
                           fieldset request/fieldset|default_fieldset; ">
@@ -22,54 +22,70 @@
       </metal:block>
 
       <tr>
-        <th>Schemata</th>
-        <th>Field definition</th>
-      </tr>
-
-      <tr>
         <td valign="top">
-          <div tal:condition="fieldsets">  <!-- Navigation -->
-            <form action="schema_newSchema" method="post">
-              <tal:block repeat="set fieldsets">
-                <div tal:condition="python: set == fieldset">
-                  <b tal:content="string: ${set}" />
-                    <a tal:attributes="href string:schema_moveLeft?fieldset=${fieldset}"><img src="arrowUp.gif" title="Move up"></a> 
-                    <a tal:attributes="href string:schema_moveRight?fieldset=${fieldset}"><img src="arrowDown.gif" title="Move down"></a> 
-                    <a tal:attributes="href string:schema_delSchema?fieldset=${fieldset}"><img src="delete.gif" title="Delete"></a> 
-                  <ul>
-                    <metal:block tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
-                      <li> 
-                        <metal:block tal:condition="python: field.getName() == request.get('field')">
-                          <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
-                            <b tal:content="string: ${field/getName}"/></a>
-                        </metal:block>
-                        <metal:block tal:condition="not: python: field.getName() == request.get('field')">
-                          <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}&field=${field/getName}">
-                            <span tal:content="string: ${field/getName}" /></a>
-                        </metal:block>
-                        <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
-                        <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
-                        <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
-                      </li>
-                    </metal:block>
-                  </ul>
+
+          <div class="box" tal:condition="fieldsets">    <!-- Fieldsets -->
+            <div class="padding">
+            <h5 i18n:translate="schematas">Schematas</h5>
+            <div class="body">
+              <form action="schema_newSchema" method="post">
+                <div tal:repeat="set fieldsets">
+                  <a tal:content="string: ${set}" t
+                     tal:attributes="href string:${here/absolute_url}/pcng_schema_editor?fieldset=${set};
+                                     class python: test(set==fieldset, 'selected', '')"/>
+                  <a tal:attributes="href string:schema_moveLeft?fieldset=${set}"><img src="arrowUp.gif" title="Move up"></a> 
+                  <a tal:attributes="href string:schema_moveRight?fieldset=${set}"><img src="arrowDown.gif" title="Move down"></a> 
+                  <a tal:attributes="href string:schema_delSchema?fieldset=${set}"><img src="delete.gif" title="Delete"></a> 
                 </div>
-                <div tal:condition="python: set != fieldset">
-                  <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}"
-                     tal:content="string: ${set}" />
+       
+                <div> 
+                  <input type="text" name="fieldset" value="" >
+                  <input type="submit" value=" Add "  class="standalone">
                 </div>
-              </tal:block>
-              <hr/>
-              <div class="row"> 
-                <input type="text" name="fieldset" value="" size="15">
-                <input type="submit" value=" Add new schemata"  class="standalone">
-              </div>
-            </form>
-            <a href="update_schema_for_issues?return_to=pcng_schema_editor">Update schema for all issues</a>
+              </form>
+            </div>
+            </div>
           </div>
+
+
+          <div class="box" tal:condition="fieldsets">    <!-- Fields -->
+            <h5 i18n:translate="fields">Fields</h5>
+            <div class="body">  
+              <div tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
+                <a tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${fieldset}&field=${field/getName};
+                                   class python: test(field.getName() == request.get('field'), 'selected', '')"
+                    tal:content="string: ${field/getName}" />
+                <a tal:attributes="href string:schema_field_up?fieldset=${fieldset}&name=${field/getName}"><img src="arrowUp.gif" title="Move up"></a> 
+                <a tal:attributes="href string:schema_field_down?fieldset=${fieldset}&name=${field/getName}"><img src="arrowDown.gif" title="Move down"></a> 
+                <a tal:attributes="href string:schema_del_field?fieldset=${fieldset}&name=${field/getName}"><img src="delete.gif" title="Delete"></a> 
+              </div>
+              <div>
+                <form action="schema_update" method="post">
+                  <input type="hidden" name="fielddata.schemata:record:string"    
+                       tal:attributes="value request/fieldset|nothing" />
+                    <input type="text" name="name" value=""> 
+                    <input type="submit" name="schema_add_field" value=" Add " class="standalone">
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="box">
+            <h5 i18n:translate="maintainance">Maintainance</h5>
+            <div class="body">
+              <div>
+                <a href="update_schema_for_issues?return_to=pcng_schema_editor">Update schema for all issues</a>
+              </div>
+            </div>
+          </div>
+
         </td>  <!-- EOF Navigation -->
 
         <td valign="top" tal:condition="request/field|nothing">  <!-- field editor -->
+
+          <div class="box">
+            <h5 i18n:translate="field_definition">Field definition</h5>
+            <div class="body">
 
           <form action="schema_update" method="post"
                 tal:define="field python: here.schema_getSchema(fieldset)[request['field']]">
@@ -207,30 +223,8 @@
             </div>
           </form>
 
-          <form action="schema_update" method="post">
-            <input type="hidden" name="fielddata.schemata:record:string"    
-                   tal:attributes="value request/fieldset|nothing" />
-            <div class="row">
-              <div class="field">
-                <input type="text" name="name" value=""> 
-                <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
-              </div>
-            </div>
-          </form>
-
-        </td>
-
-        <td valign="top" tal:condition="not: request/field|nothing">  <!-- field editor -->
-          <form action="schema_update" method="post">
-            <input type="hidden" name="fielddata.schemata:record:string"    
-                   tal:attributes="value request/fieldset|nothing" />
-            <div class="row">
-              <div class="field">
-                <input type="text" name="name" value=""> 
-                <input type="submit" name="schema_add_field" value=" Add new field " class="standalone">
-              </div>
-            </div>
-          </form>
+          </div>
+          </div>
 
         </td>
 
