@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.212 2004/09/21 13:12:07 ajung Exp $
+$Id: Collector.py,v 1.213 2004/09/21 14:02:49 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -40,6 +40,8 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
     schema = collector_schema.schema
     archetype_name = 'PCNG Tracker'
+    default_view = 'pcng_view'
+    immediate_view = 'pcng_view'
 
     actions = ({
         'id': 'pcng_browse',
@@ -117,17 +119,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             self.reindex_issues()
 
         self.setup_tools()
-
-        # Archestypes uses hardcoded factory-settings for 'immediate_view'
-        # that don't not meet our requirements to jump into the 'view'
-        # from the navigation tree instead into 'edit'. So we tweak
-        # 'immediate_view' a bit.
-
-        typestool = getToolByName(self, 'portal_types', None)
-        ti = typestool.getTypeInfo('PloneIssueNG')
-        ti.immediate_view = 'pcng_issue_view'
-        ti = typestool.getTypeInfo('PloneCollectorNG')
-        ti.immediate_view = 'pcng_view'
 
         # high-security token for email notifications
         self.createToken()
