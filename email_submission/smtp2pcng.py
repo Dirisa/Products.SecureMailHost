@@ -1,4 +1,4 @@
-#!/usr/local/bin/python2.1
+#!/usr/local/bin/python2.3
 
 """
 PloneCollectorNG - A Plone-based bugtracking system
@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.7 2004/02/29 08:50:29 ajung Exp $
+$Id: smtp2pcng.py,v 1.8 2004/03/20 12:48:24 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
