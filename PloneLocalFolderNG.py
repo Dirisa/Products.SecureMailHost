@@ -1,5 +1,6 @@
 import os
 from urllib import quote
+from string import split,find
 
 from DateTime.DateTime import DateTime
 from Globals import InitializeClass, Persistent
@@ -18,7 +19,13 @@ import zLOG
 from Products.CMFCore.utils import getToolByName
 
 from Acquisition import aq_chain
- 
+
+try:
+    from Products.mxmCounter import mxmCounter
+except ImportError:
+    zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "ImportError :: mxmCounter")
+    mxmCounter = None
+
 schema = BaseSchema +  Schema((
     StringField('folder',
                 write_permission=CMFCorePermissions.ManagePortal,
@@ -57,6 +64,21 @@ schema = BaseSchema +  Schema((
                         description='Allow users to extract the contents of archive files (eg, .zip, .tar) on to server local filesystem.',
                         ),
                 ),
+    BooleanField ('cataloging_enabled',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default=1,
+                widget=BooleanWidget(
+                        label='Is file cataloging enabled?',
+                        description='This field controls whether or not files can be cataloged.',
+                        ),
+                ),                
+    StringField('filetypes_not_to_catalog',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='image/,video/,audio/',
+                widget=StringWidget(label='filetypes for catalog action to skip',
+                                    description='this comma-separated list of (partial) mimetype phrases is used by the catalog action to determine which files NOT to catalog',)
+                ),
+                
     ))
 
 class TypeInfo(SimpleItem):
@@ -224,7 +246,32 @@ class PloneLocalFolderNG(BaseContent):
             else:
                 break
         fp.close()
-
+        
+        # mxmCounter (v1.1.0, http://www.mxm.dk/products/public/mxmCounter)
+        # is a nice little hit counter, but to get it to count hits on PLFNG
+        # files, I opted to call it here since PLFNG files don't show with the
+        # standard footer.pt where I place the mxmCounter::count() routine.
+        #
+        #   Note: for the following code to work with mxmCounter (v1.1.0), you 
+        #         will need to modify/extend the mxmCounter class by adding the 
+        #         following method:
+        #
+        #         def proxyObject_increase_count(self,url_path): 
+        #            return increase_count(url_path, self.save_interval)
+        #
+        #   I have contacted the mxmCounter author to ask that this type of
+        #   functionality be added to the baseline of mxmCounter.
+        
+        if mxmCounter:
+            url_path = REQUEST['URLPATH0']
+            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: mxmCounter file=%s" % url_path )
+            this_portal = getToolByName(self, 'portal_url') 
+            try:
+               mxmCounter_obj = getattr( this_portal,'mxm_counter' )
+               mxmCounter_obj.proxyObject_increase_count(url_path)
+            except:
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: there was a problem with mxmCounter" )
+         
     security.declareProtected('View', 'getContents')
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
@@ -489,11 +536,11 @@ class PloneLocalFolderNG(BaseContent):
                unpackedSize = int(getMetadataElement(packedFile, section="ZIPINFO", option="unpacked_size"))
             except:
                try:
-	               setZipInfoMetadata(packedFile)
-	               unpackedSize = int(getMetadataElement(packedFile, section="ZIPINFO", option="unpacked_size"))
+                  setZipInfoMetadata(packedFile)
+                  unpackedSize = int(getMetadataElement(packedFile, section="ZIPINFO", option="unpacked_size"))
                except:
-               	RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked (not a valid file?!).')
-               	return 0
+                  RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked (not a valid file?!).')
+                  return 0
             if max_allowed_bytes > 0 and (unpackedSize + usedBytes) > max_allowed_bytes:
                REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file cannot be unpacked as doing so would violate quota limit.')
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "unpackFile() :: unpack rejected! unpackedSize (%s) + usedBytes(%s) > max_allowed_bytes(%s)" % (unpackedSize,usedBytes, max_allowed_bytes) )
@@ -532,13 +579,25 @@ class PloneLocalFolderNG(BaseContent):
     def fileUnpackingAllowed(self): 
         """ return allow_file_unpacking value """
         return self.allow_file_unpacking 
+
+    security.declareProtected('View', 'catalogingEnabled')
+    def catalogingEnabled(self): 
+        """ return cataloging_enabled value """
+        return self.cataloging_enabled 
         
     def catalogContents(self,rel_dir=None):
         
         portal = getToolByName(self, 'portal_url').getPortalObject()
         portalId = portal.getId()
         
+        if self.filetypes_not_to_catalog:
+         filetypePhrasesSkipList = split(self.filetypes_not_to_catalog,',')
+        else:
+         filetypePhrasesSkipList = []
+        
         filesCataloged = 0
+        filesNotCataloged = 0
+        
         if rel_dir == None: rel_dir = ''
         fullfoldername = os.path.join(self.folder, rel_dir)
         
@@ -562,7 +621,10 @@ class PloneLocalFolderNG(BaseContent):
             if os.path.isdir(itemFullName): 
                 new_rel_dir = os.path.join(rel_dir,f)
                 #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: subdir=%s" % new_rel_dir )
-                filesCataloged = filesCataloged + self.catalogContents(new_rel_dir)
+                subfolderfilesCataloged,subfolderfilesNotCataloged = self.catalogContents(new_rel_dir)
+                filesCataloged = filesCataloged + subfolderfilesCataloged
+                filesNotCataloged = filesNotCataloged + subfolderfilesNotCataloged
+                
             else:
                 uid = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/' +  os.path.join(rel_dir, f).replace('\\','/'))
                 
@@ -573,14 +635,27 @@ class PloneLocalFolderNG(BaseContent):
                 dummyFileProxy.setIconPath(mi.icon_path)
                 dummyFileProxy.mime_type = mi.normalized()
                 
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % itemFullName )
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
-                #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+                # check to see if the mimetype for this file is on the skip list. 
+                # The main reason for this is to avoid having TextIndexNG2 process 
+                # files that we know it doesnt handle, but this could also be useful
+                # for other scenarios.
+                 
+                skipFile = 0
+                for filetypePhrase in filetypePhrasesSkipList:
+                  if dummyFileProxy.mime_type.find(filetypePhrase) >= 0: skipFile=1
                 
-                catalogTool.catalog_object( dummyFileProxy, uid )
-                
-                filesCataloged = filesCataloged + 1
-        return filesCataloged            
+                if skipFile:
+                  filesNotCataloged = filesNotCataloged + 1
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: not cataloging file=%s" % dummyFileProxy.url )
+                else:
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % itemFullName )
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+                      
+                  catalogTool.catalog_object( dummyFileProxy, uid )
+                      
+                  filesCataloged = filesCataloged + 1
+        return filesCataloged, filesNotCataloged            
 
 
 def _getFolderProperties(fullfoldername):
