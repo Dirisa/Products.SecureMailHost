@@ -1,5 +1,5 @@
 """
-$Id: PSCFileLink.py,v 1.1 2005/03/05 04:38:26 optilude Exp $
+$Id: PSCFileLink.py,v 1.2 2005/03/06 03:11:47 limi Exp $
 """
 
 from Products.Archetypes.public import BaseContent
@@ -26,7 +26,7 @@ class PSCFileLink(BaseContent):
     security = ClassSecurityInfo()
     __implements__ = (BaseContent.__implements__)
 
-    archetype_name = 'External File'
+    archetype_name = 'Externally Hosted File'
     immediate_view = default_view = 'psc_external_download_view'
     content_icon = 'link_icon.gif'
     schema = PSCFileLinkSchema

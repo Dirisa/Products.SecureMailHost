@@ -7,34 +7,16 @@ Bugs found when testing on plone.org
 ====================================
 
 - IMPORTANT: Download doesn't work at all right now! We get 
-  AttributeError: downloadableFile 
-  when clicking the download link. To reproduce, make sure you have latest
-  ExternalStorage and latest Archetypes from the 1.3 branch.
-  
- - When you add a file inside a release, you get AttributeError:
-   downloadableFile, template is psc_download_view.
-  
-    [these are the same, and happened because the template was using the
-     attribute and not the accessor for downloadableFile, which obviously
-     doesn't apply when we use external storage. please test with latest
-     version of ES though, since I'm not sure if I have that ~optilude]
-    
-    
+  the file inside the browser window, not as a downloadable file.    
     
 - Deleting file in release doesn't seem possible
 
 - primary=1 on downloadable file does not seem to work - going straight to path
   still shows view, and does not download file. Workaround with explicit link
-  in psc_download_view.pt and psc_release_view.pt
+  in psc_download_view.pt and psc_release_view.pt - this needs fixing.
   
-  
-  
-- Right now, anonymous users can't see the following folders in navtree:
-
-    - Release Folder
-    - Roadmap folder
-    
-    [this is due to NavTreeSuck(tm) - they have no workflow ~optilude]
+- The Releases portlet needs to list the category of the release with the Title,
+  therefore it needs to be in the catalog.
 
 ===========================================
 PloneHelpCenter integration considerations:
