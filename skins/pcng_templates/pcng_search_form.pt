@@ -18,9 +18,7 @@
       <span tal:define="dummy python: request.set('advanced_search', 1)" />
       <metal:block metal:use-macro="here/pcng_macros/macros/search_issues_form" />
 
-      <div class="documentByLine">
-      PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Software development and Consulting Andreas Jung</a>
-      </div>
+      <metal:div metal:use-macro="here/pcng_macros/macros/copyright" />
 
     </div>
   </body>

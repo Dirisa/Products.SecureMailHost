@@ -340,3 +340,10 @@
   </div>
 </tal:macro>
 
+<!-- (C) footer -->
+
+<tal:macro metal:define-macro="copyright">
+  <div class="documentByLine">
+  PloneCollectorNG (C) 2003-2004 by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Software Development and Consulting Andreas Jung</a>
+  </div>
+</tal:macro>

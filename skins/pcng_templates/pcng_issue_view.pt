@@ -77,9 +77,7 @@
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
       </metal:block>
 
-      <div class="documentByLine">
-      PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Software development and Consulting Andreas Jung</a>
-      </div>
+      <metal:div metal:use-macro="here/pcng_macros/macros/copyright" />
     </div>
   </body>
 </html>
