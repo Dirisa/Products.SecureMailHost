@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.108 2003/12/30 11:02:14 ajung Exp $
+$Id: Issue.py,v 1.109 2004/01/02 10:23:43 ajung Exp $
 """
 
 import sys, os, time
@@ -123,7 +123,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
         self.unindexObject()
-
 
     ######################################################################
     # Followups
