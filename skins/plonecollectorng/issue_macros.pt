@@ -86,8 +86,9 @@
                                      alt item/Type|nothing" />
               </span>
               <a href="ITEM URL"
-                 tal:attributes="href item/absolute_url"
-                 tal:content="item/id">ITEM ID</a>
+                 tal:attributes="href item/absolute_url">
+                <span tal:content="string: ${item/getId}" /> 
+              </a>
 
               <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
               <a i18n:translate="issue_artifacts_table_info_link"
@@ -97,7 +98,7 @@
                  i18n:translate="issue_artifacts_table_deletion_link"
                  tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
             </span>
-             <span tal:replace="item/description"> DESCRIPTION</span>
+            <pre tal:condition="python: item.getId() != item.title_or_id()" tal:content="item/title_or_id" />
 
 
       </li> <!-- End row -->
