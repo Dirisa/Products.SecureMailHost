@@ -29,7 +29,7 @@
       </ul>
 
       <h3>Email</h3>
-      <pre tal:content="python: here.format_transcript()[0]" />
+      <pre tal:content="python: here.format_transcript().encode('utf8')" />
       
     </div>
   </body>
