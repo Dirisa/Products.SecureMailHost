@@ -1,15 +1,8 @@
 """
-$Id: utils.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: utils.py,v 1.2 2005/03/09 18:04:32 dtremea Exp $
 """
 
 from Products.Archetypes.utils import findDict
-from Products.CMFCore.CMFCorePermissions import ModifyPortalContent
-from os.path import join, abspath, dirname, basename
-
-PREFIX = abspath(dirname(__file__))
-
-def data_file_path(file):
-    return join(PREFIX, 'content', 'data', file)
 
 def setSchemata(klass, name='default', fields=None):
     schema = klass.schema.copy()
@@ -21,7 +14,6 @@ def setSchemata(klass, name='default', fields=None):
         if name != 'metadata':
             f.isMetadata = 0
         f.schemata = name
-
     klass.schema = schema
 
 def std_modify_fti(fti, allowed = (), global_allow=0):
@@ -41,7 +33,7 @@ def folder_modify_fti(fti, allowed = (), global_allow=0):
 
 def changeWidgetLabel(klass, field_name, new_value):
     # convenient wrapper for the lazy
-    changeWidgetThing(klass, field_name, "label", new_value)
+    changeWidgetThing(klass, field_name, 'label', new_value)
 
 def changeWidgetThing(klass, field_name, key, value):
     schema = klass.schema.copy()

@@ -1,14 +1,17 @@
 """
-$Id: schemata.py,v 1.3 2005/03/05 08:08:26 limi Exp $
+$Id: schemata.py,v 1.4 2005/03/09 18:04:43 dtremea Exp $
 """
 
-from Products.Archetypes.public import *
-from Products.PloneSoftwareCenter.config import *
-from Products.PloneSoftwareCenter.utils import changeWidgetLabel
 from Products.CMFCore import CMFCorePermissions
+
+from Products.Archetypes.public import *
 from Products.validation import V_SUFFICIENT, V_REQUIRED
+
 from Products.ArchAddOn.Fields import SimpleDataGridField
 from Products.ArchAddOn.Widgets import SimpleDataGridWidget
+
+from Products.PloneSoftwareCenter.config import *
+from Products.PloneSoftwareCenter.utils import changeWidgetLabel
 
 # We'd like to use the ATReferenceBrowserWidget, but, at this time,
 # it has enough UI sharp edges that it's hard to use. Since all
@@ -41,7 +44,7 @@ TEXT_TYPES = (
     'text/x-rst',
     'text/html',
     'text/plain',
-    )
+)
 
 IMAGE_SIZES = {
     'preview': (400, 400),
@@ -49,13 +52,13 @@ IMAGE_SIZES = {
     'tile': (64, 64),
     'icon': (32, 32),
     'listing': (16, 16),
-    }
-    
+}
+
 ##############################
 # ImprovementProposalContainer
 ##############################
 
-PSCImprovementProposalFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
+PSCImprovementProposalFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     StringField(
         name='id',
@@ -63,11 +66,11 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         searchable=1,
         mode='r', # Leave the custom auto-generated ID
         widget=StringWidget (
-            description="Short name of the container - this should be 'roadmap' to comply with the standards.",
             label="Short name",
+            description="Short name of the container - this should be 'roadmap' to comply with the standards.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ComputedField(
         name='title',
@@ -76,9 +79,8 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Title",
         widget=StringWidget(
             modes=('view',)
-            ),
         ),
-
+    ),
 
     ComputedField(
         name='description',
@@ -87,65 +89,64 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Description",
         widget=StringWidget(
             modes=('view',)
-            ),
         ),
+    ),
 
-    ))
-
+))
 
 ######################
 # Improvement proposal
 ######################
 
-PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
-    
+PSCImprovementProposalSchema = OrderedBaseFolderSchema.copy() + Schema((
+
     # About the ID field:
     #
     #  The id of an improvement proposal is auto-generated via the override
     #  for generateUniqueId() found in ImprovementProposalContainer. This
     #  ensures that IDs are sequentially allocated integers, so that we can
     #  say string:Proposal #${here/getId} to get the proposal number.
-    #  
+    #
     #  The id field is set to mode='r' so that it's hidden on the edit tab.
     #  However, it's still possible to rename it using the 'Rename' button
     # in folder_contents for intance and set it to a non-number. I don't
     # think we need to be that anal, though. :-)
     #
     #   - Martin (optilude)
-    
+
     StringField(
         name='id',
         required=0,
         searchable=1,
         mode='r', # Leave the custom auto-generated ID
-        widget=StringWidget (
-            description="The number of the Improvement Proposal.",
+        widget=StringWidget(
             label="Proposal number",
+            description="The number of the Improvement Proposal.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='proposer',
         required=1,
         searchable=1,
         widget=StringWidget(
-            description="The person proposing this improvement.",
             label="Proposer",
+            description="The person proposing this improvement.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='seconder',
         required=0,
         searchable=1,
         widget=StringWidget(
-            description="The person seconding this improvement.",
             label="Seconder",
+            description="The person seconding this improvement.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='description',
@@ -154,26 +155,28 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(
-            description="A short summary of the proposal.",
             label="Proposal Summary",
-            rows=5,
+            description="A short summary of the proposal.",
             i18n_domain="archpackage",
-            ),
+            rows=5,
         ),
-        
-    LinesField('proposalTypes',
-               multiValued=1,
-               required=1,
-               vocabulary='getProposalTypesVocab',
-               enforceVocabulary=1,
-               index='KeywordIndex:schema',
-               widget=MultiSelectionWidget(
-                        label='Proposal types',
-                        description='The type of proposal this is.',
-                        description_msgid = "help_proposal_types",
-                        label_msgid = "label_proposal_types",
-                        i18n_domain = "archpackage"),
-               ),
+    ),
+
+    LinesField(
+        name='proposalTypes',
+        multiValued=1,
+        required=1,
+        vocabulary='getProposalTypesVocab',
+        enforceVocabulary=1,
+        index='KeywordIndex:schema',
+        widget=MultiSelectionWidget(
+            label='Proposal types',
+            label_msgid = "label_proposal_types",
+            description='The type of proposal this is.',
+            description_msgid = "help_proposal_types",
+            i18n_domain = "archpackage",
+        ),
+    ),
 
     TextField(
         name='definitions',
@@ -184,12 +187,12 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="If you have any definitions for your proposal, please include them here.",
             label="Definitions",
-            rows=5,
+            description="If you have any definitions for your proposal, please include them here.",
             i18n_domain="archpackage",
-            ),
+            rows=5,
         ),
+    ),
 
     TextField(
         name='motivation',
@@ -200,12 +203,12 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="Why does this proposal exist and what problem does it solve?",
             label="Motivation",
-            rows=20,
+            description="Why does this proposal exist and what problem does it solve?",
             i18n_domain="archpackage",
-            ),
+            rows=20,
         ),
+    ),
 
     TextField(
         name='assumptions',
@@ -215,13 +218,13 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
+            label="Assumptions",
             description="Key assumptions made. What is being covered by and what is "
                         "intentionally left out of the scope of the proposal.",
-            label="Assumptions",
-            rows=20,
             i18n_domain="archpackage",
-            ),
+            rows=20,
         ),
+    ),
 
     TextField(
         name='proposal',
@@ -232,12 +235,12 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="What needs to be done?",
             label="Proposal",
-            rows=20,
+            description="What needs to be done?",
             i18n_domain="archpackage",
-            ),
+            rows=20,
         ),
+    ),
 
     TextField(
         name='implementation',
@@ -248,12 +251,12 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="How should it be done?",
             label="Implementation",
-            rows=20,
+            description="How should it be done?",
             i18n_domain="archpackage",
-            ),
+            rows=20,
         ),
+    ),
 
     TextField(
         name='deliverables',
@@ -264,13 +267,13 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
+            label="Deliverables",
             description="What code and documentation needs to be produced? "
                         "Standard items: Unit tests, localization, and documentation",
-            label="Deliverables",
             rows=10,
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     TextField(
         name='risks',
@@ -281,13 +284,13 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
+            label="Risks",
             description="What are the risks of implementing this proposal? "
                         "What incompatibilities can it cause?",
-            label="Risks",
-            rows=10,
             i18n_domain="archpackage",
-            ),
+            rows=10,
         ),
+    ),
 
     TextField(
         name='timeline',
@@ -298,13 +301,13 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
+            label="Time Line",
             description="An approximate estimation of how long it will take to complete and "
                         "where you see it fit into the Plone versions.",
-            label="Time Line",
-            rows=10,
             i18n_domain="archpackage",
-            ),
+            rows=10,
         ),
+    ),
 
     TextField(
         name='participants',
@@ -314,34 +317,33 @@ PSCImprovementProposalSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="The people already identified for the implementation, if applicable.",
             label="Participants",
-            rows=5,
+            description="The people already identified for the implementation, if applicable.",
             i18n_domain="archpackage",
-            ),
+            rows=5,
         ),
+    ),
 
     StringField(
         name='branch',
         widget=StringWidget(
-            description="The URL for the branch development is done on, if applicable.",
             label="Branch name/URL",
+            description="The URL for the branch development is done on, if applicable.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ComputedField(
-            name='relatedReleases',
-            expression="[ {'id':o.getId(), 'url':o.absolute_url() } for o in context.getBackReferences('RelatedFeatures') ]",
-            widget=StringWidget(
-                label='Related Releases',
-                modes=('view',),
-                ),
-            index=':schema',
-            ),
+        name='relatedReleases',
+        expression="[ {'id':o.getId(), 'url':o.absolute_url() } for o in context.getBackReferences('RelatedFeatures') ]",
+        index=':schema',
+        widget=StringWidget(
+            label='Related Releases',
+            modes=('view',),
+        ),
+    ),
 
-
-    ))
+))
 
 ############
 # Dependency
@@ -359,13 +361,13 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
         enforceVocabulary=1,
         relationship='dependsOnPackage',
         widget=SelectionWidget(
-            description="help_dependency_package",
-            description_msgid="",
             label="Platform",
             label_msgid="label_dependency_package",
+            description="help_dependency_package",
+            description_msgid="",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ReferenceField(
         name='release',
@@ -375,13 +377,13 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
         enforceVocabulary=1,
         relationship='dependsOnRelease',
         widget=SelectionWidget(
-            description="",
-            description_msgid="help_dependency_version",
             label="Version",
             label_msgid="label_dependency_release",
+            description="",
+            description_msgid="help_dependency_version",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='dependency_type',
@@ -389,22 +391,21 @@ APDependencySchema = ExtensibleMetadataSchema + Schema((
         searchable=1,
         vocabulary='_get_dependencies',
         widget=SelectionWidget(
-            description="",
-            description_msgid="help_dependency_type",
             label="Dependency Type",
             label_msgid="label_dependency_type",
+            description="",
+            description_msgid="help_dependency_type",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
-    ))
-
+))
 
 #########
 # Project
 #########
 
-PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
+PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     TextField(
         name='description',
@@ -414,14 +415,14 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Description",
         storage=MetadataStorage(),
         widget=TextAreaWidget(
-            description="A short summary of the project.",
-            description_msgid="help_description",
             label="Project Summary",
             label_msgid="label_project_description",
-            rows=5,
+            description="A short summary of the project.",
+            description_msgid="help_description",
             i18n_domain="archpackage",
-            ),
+            rows=5,
         ),
+    ),
 
     TextField(
         name='text',
@@ -433,14 +434,14 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         default_output_type='text/html',
         allowable_content_types=TEXT_TYPES,
         widget=RichWidget(
-            description="The complete project description.",
-            description_msgid="help_package_body_text",
             label="Full Project Description",
             label_msgid="label_package_body_text",
-            rows=25,
+            description="The complete project description.",
+            description_msgid="help_package_body_text",
             i18n_domain="archpackage",
-            ),
+            rows=25,
         ),
+    ),
 
     # recommended is intended for reviewers to select those products
     # that represent "best of breed"
@@ -452,54 +453,57 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         default=0,
         write_permission=CMFCorePermissions.ReviewPortalContent,
         widget=BooleanWidget(
-            description="",
-            description_msgid="help_package_recommended",
             label="Recommended Project",
             label_msgid="label_package_recommended",
+            description="",
+            description_msgid="help_package_recommended",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
-    LinesField('categories',
-               multiValued=1,
-               required=1,
-               vocabulary='getCategoriesVocab',
-               enforceVocabulary=1,
-               index='KeywordIndex:schema',
-               widget=MultiSelectionWidget(
-                        label='Categories',
-                        description='Categories that this item should appear in.',
-                        description_msgid = "help_categories",
-                        label_msgid = "label_categories",
-                        i18n_domain = "archpackage"),
-               ),
-               
-    LinesField('currentVersions',
+    LinesField(
+        name='categories',
+        multiValued=1,
+        required=1,
+        vocabulary='getCategoriesVocab',
+        enforceVocabulary=1,
+        index='KeywordIndex:schema',
+        widget=MultiSelectionWidget(
+            label='Categories',
+            label_msgid="label_categories",
+            description='Categories that this item should appear in.',
+            description_msgid="help_categories",
+            i18n_domain="archpackage",
+        ),
+    ),
+
+    LinesField(
+        name='currentVersions',
         required=0,
         multiValued=1,
-        vocabulary='getVersions_vocab',
+        vocabulary='getVersionsVocab',
         widget=MultiSelectionWidget(
+            label="Active/supported versions",
+            label_msgid="label_current_versions",
             description_msgid="description_current_versions",
             description="For documentation items and releases, users will be warned if the relevant version is not in this list.",
-            label="Active/supported versions",
-	    label_msgid="label_current_versions",
-            i18n_domain = "archpackage",
-            ),
+            i18n_domain="archpackage",
         ),
+    ),
 
-
-    LinesField('proposalTypes',
-               multiValued=1,
-               required=1,
-               default=['User interface', 'Architecture'],
-               widget=LinesWidget(
-                        label='Roadmap proposal types',
-                        description='You will have a roadmap available in your project, and you can add categories of enhancement specifications below.',
-                        description_msgid = "help_roadmap_types",
-                        label_msgid = "label_roadmap_types",
-                        i18n_domain = "archpackage"),
-               ),
-
+    LinesField(
+        name='proposalTypes',
+        multiValued=1,
+        required=1,
+        default=['User interface', 'Architecture'],
+        widget=LinesWidget(
+            label='Roadmap proposal types',
+            label_msgid="label_roadmap_types",
+            description='You will have a roadmap available in your project, and you can add categories of enhancement specifications below.',
+            description_msgid="help_roadmap_types",
+            i18n_domain="archpackage",
+        ),
+    ),
 
     StringField(
         name='homepage',
@@ -507,13 +511,13 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         required=0,
         validators=('isURL',),
         widget=StringWidget(
-            description="The project's home page - if different from this.",
-            description_msgid="help_package_homepage",
             label="Home page ",
             label_msgid="label_package_homepage",
+            description="The project's home page - if different from this.",
+            description_msgid="help_package_homepage",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='repository',
@@ -521,13 +525,13 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         required=0,
         validators=('isURL',),
         widget=StringWidget(
-            description="Either the repository itself, or a repository page, if it exists.",
-            description_msgid="help_package_repository",
             label="URL of version control repository",
             label_msgid="label_package_repository",
+            description="Either the repository itself, or a repository page, if it exists.",
+            description_msgid="help_package_repository",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='tracker',
@@ -535,13 +539,13 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         required=0,
         validators=('isURL',),
         widget=StringWidget(
-            description="URL of issue tracker, if the project has one.",
-            description_msgid="help_package_tracker",
             label="Issue tracker URL",
             label_msgid="label_package_tracker",
+            description="URL of issue tracker, if the project has one.",
+            description_msgid="help_package_tracker",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='mailingList',
@@ -549,26 +553,26 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         required=0,
         validators=('isURL',),
         widget=StringWidget(
-            description="URL of mailing list information page/archives or support forum, if the project has one.",
-            description_msgid="help_package_mailinglist",
             label="Support mailing list or forum URL",
             label_msgid="label_package_mailinglist",
+            description="URL of mailing list information page/archives or support forum, if the project has one.",
+            description_msgid="help_package_mailinglist",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     StringField(
         name='contact_email',
         required=1,
         validators=('isEmail',),
         widget=StringWidget(
-            description="This will not be exposed publicly.",
-            description_msgid="help_package_contact_email",
             label="Contact email",
             label_msgid="label_package_contact_email",
+            description="This will not be exposed publicly.",
+            description_msgid="help_package_contact_email",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ImageField(
         name='logo',
@@ -576,13 +580,13 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         original_size=(300,150),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
+            label="Logo",
+            label_msgid="label_package_logo",
             description="Add a logo for the project (or company) by clicking the 'Browse' button. Max 300x150 pixels (will be resized if bigger).",
             description_msgid="help_package_logo",
-            label= "Logo",
-            label_msgid="label_package_logo",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ImageField(
         name='screenshot',
@@ -590,21 +594,21 @@ PSCProjectSchema = OrderedBaseFolder.schema.copy() + Schema((
         original_size=(800,600),
         sizes=IMAGE_SIZES,
         widget=ImageWidget(
+            label="Screenshot",
+            label_msgid="label_package_screenshot",
             description="Add a screenshot by clicking the 'Browse' button. Max 800x600 (will be resized if bigger).",
             description_msgid="help_package_screenshot",
-            label= "Screenshot",
-            label_msgid="label_package_screenshot",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
-    ))
+))
 
 ###############
 # ReleaseFolder
 ###############
 
-PSCReleaseFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
+PSCReleaseFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     StringField(
         name='id',
@@ -612,11 +616,11 @@ PSCReleaseFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         searchable=1,
         mode='r', # Leave the custom auto-generated ID
         widget=StringWidget (
-            description="Short name of the container - this should be 'release' to comply with the standards.",
             label="Short name",
+            description="Short name of the container - this should be 'release' to comply with the standards.",
             i18n_domain="archpackage",
-            ),
         ),
+    ),
 
     ComputedField(
         name='title',
@@ -625,8 +629,8 @@ PSCReleaseFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Title",
         widget=StringWidget(
             modes=('view',)
-            ),
         ),
+    ),
 
     ComputedField(
         name='description',
@@ -635,17 +639,16 @@ PSCReleaseFolderSchema = OrderedBaseFolder.schema.copy() + Schema((
         accessor="Description",
         widget=StringWidget(
             modes=('view',)
-            ),
         ),
+    ),
 
-    ))
-
+))
 
 #########
 # Release
 #########
 
-PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
+PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     StringField(
         name='id',
@@ -665,51 +668,54 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
             i18n_domain='archpackage',
         ),
     ),
-    
-    ComputedField('title',
-            accessor='Title',
-            expression="context.generateTitle ()",
-            mode='r',
-            widget=ComputedWidget
-            (description="The title of the release, computed from the title of the package and the version number.",
-                i18n_domain='archpackage',
-                label="Release title",
-                modes=('view',),
-                visible={'edit' : 'invisible',
-                        'view' : 'visible' },
-            ),
-        ),
 
+    ComputedField(
+        name='title',
+        accessor='Title',
+        expression="context.generateTitle ()",
+        mode='r',
+        widget=ComputedWidget(
+            label='Release title',
+            description="The title of the release, computed from the title of the package and the version number.",
+            i18n_domain='archpackage',
+            modes=('view',),
+            visible={
+                'edit': 'invisible',
+                'view': 'visible',
+            },
+        ),
+    ),
 
     StringField(
-            name='codename',
-            required=0,
-            searchable=1,
-            widget=StringWidget(
-                label='Codename',
-                description='Codename for this release, if you have one.',
-                description_msgid='help_release_codename_description',
-                label_msgid='help_release_codename_label',
-                i18n_domain='archpackage',
-                ),
-            ),
+        name='codename',
+        required=0,
+        searchable=1,
+        widget=StringWidget(
+            label='Codename',
+            label_msgid='help_release_codename_label',
+            description='Codename for this release, if you have one.',
+            description_msgid='help_release_codename_description',
+            i18n_domain='archpackage',
+        ),
+    ),
 
-    TextField('description',
+    TextField(
+        name='description',
         default='',
         searchable=1,
         required=1,
         accessor='Description',
         storage=MetadataStorage(),
         widget=TextAreaWidget(
+            label='Release Summary',
+            label_msgid='label_release_description',
             description='A short description of the most important '
                         'focus of this release. Not a version history, '
                         'but in plain text what the main benefit of '
                         'this release is.',
             description_msgid='help_release_description',
-            label='Release Summary',
-            label_msgid='label_release_description',
-            rows=5,
             i18n_domain='archpackage',
+            rows=5,
         ),
     ),
 
@@ -725,8 +731,8 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
             label_msgid='label_release_body_text',
             description='The complete release text.',
             description_msgid='help_release_body_text',
-            rows=25,
             i18n_domain='archpackage',
+            rows=25,
         ),
     ),
 
@@ -742,34 +748,32 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
             label_msgid='label_release_changelog',
             description='A detailed log of what has changed since the previous release.',
             description_msgid='help_release_changelog',
-            rows=25,
             i18n_domain='archpackage',
+            rows=25,
         ),
     ),
 
     StringField('releaseManager',
-            required=0,
-            searchable=1,
-            widget=StringWidget(
-                label='Release Manager',
-                description='Release manager for this release.',
-                description_msgid='help_release_relmgr_description',
-                label_msgid='help_release_relmgr_label',
-                i18n_domain='archpackage',
-                ),
-            ),
+        required=0,
+        searchable=1,
+        widget=StringWidget(
+            label='Release Manager',
+            label_msgid='help_release_relmgr_label',
+            description='Release manager for this release.',
+            description_msgid='help_release_relmgr_description',
+            i18n_domain='archpackage',
+        ),
+    ),
 
     DateTimeField('expectedReleaseDate',
-            required=0,
-            searchable=0,
-            widget=CalendarWidget(
-                label='Expected Release Date',
-                label_msgid='help_release_expected_date_label',
-                i18n_domain='archpackage',
-                ),
-            ),
-
-    
+        required=0,
+        searchable=0,
+        widget=CalendarWidget(
+            label='Expected Release Date',
+            label_msgid='help_release_expected_date_label',
+            i18n_domain='archpackage',
+        ),
+    ),
 
     StringField(
         name='license',
@@ -829,19 +833,19 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
             i18n_domain='archpackage',
         ),
     ),
-    
+
     ReferenceField('relatedFeatures',
-            allowed_types=('PSCImprovementProposal',),
-            multiValued=1,
-            relationship='RelatedFeatures',
-            widget=ReferenceBrowserWidget(
-                startup_directory="../%s" % (IMPROVEMENTS_ID,),
-                description="Please select related improvement proposals for features going into this release.",
-                label='Associated feature proposals',
-                i18n_domain='archpackage',
-            ),
-            vocabulary='getRelatedFeaturesVocab',
+        allowed_types=('PSCImprovementProposal',),
+        multiValued=1,
+        relationship='RelatedFeatures',
+        widget=ReferenceBrowserWidget(
+            label='Associated feature proposals',
+            description="Please select related improvement proposals for features going into this release.",
+            i18n_domain='archpackage',
+            startup_directory="../%s" % (IMPROVEMENTS_ID,),
         ),
+        vocabulary='getRelatedFeaturesVocab',
+    ),
 
     StringField(
         name='repository',
@@ -849,50 +853,33 @@ PSCReleaseSchema = OrderedBaseFolder.schema.copy() + Schema((
         required=0,
         validators=('isURL',),
         widget=StringWidget(
-            description_msgid="help_release_repository",
             label="Repository branch",
-            description="URL of version control repository branch for this release.",
             label_msgid="label_release_repository",
+            description="URL of version control repository branch for this release.",
+            description_msgid="help_release_repository",
             i18n_domain="archpackage",
-            ),
         ),
-
-    #StringField(
-    #    name='populate',
-    #    mutator='populateFrom',
-    #    required=0,
-    #    vocabulary='_get_releases',
-    #    widget=SelectionWidget(
-    #        label='Initialize Dependencies',
-    #        description='Choose a release to use as a base for the '
-    #                      'dependencies for this release. Normally '
-    #                      'you use the previous release.',
-    #        visible={'view': 'hidden', 'edit': 'visible'},
-    #        ),
-    #    ),
+    ),
 
     ComputedField(
-            name='ProjectURL',
-            expression='context.aq_parent.getProjectURL()',
-            index='FieldIndex:schema',
-            widget=StringWidget(
-                modes=('view',),
-                label='Project URL',
-                description='URL of project for this release.',
-                ),
-            ),
+        name='ProjectURL',
+        expression='context.aq_parent.getProjectURL()',
+        index='FieldIndex:schema',
+        widget=StringWidget(
+            label='Project URL',
+            description='URL of project for this release.',
+            modes=('view',),
+        ),
+    ),
 
-    ))
+))
 
 
 ######
 # File
 ######
 
-PSCFileSchema = BaseSchema.copy()
-
-
-PSCFileSchema += Schema((
+PSCFileSchema = BaseSchema.copy() + Schema((
 
     TextField(
         name='title',
@@ -900,14 +887,14 @@ PSCFileSchema += Schema((
         searchable=1,
         accessor="Title",
         widget=StringWidget(
+            label="File Description",
+            label_msgid="label_file_title",
             description="File description. Normally something like "
                         "'Product Package', 'Windows Installer',  - "
                         "or 'Events subsystem' if you have several "
                         "separate modules. The actual file name will "
                         "be the same as the file you upload.",
             description_msgid="help_file_title",
-            label="File Description",
-            label_msgid="label_file_title",
             i18n_domain="archpackage",
         ),
     ),
@@ -917,10 +904,10 @@ PSCFileSchema += Schema((
         primary=1,
         required=1,
         widget=FileWidget(
-            description="Click 'Browse' to upload a release file.",
-            description_msgid="help_file_description",
             label="File",
             label_msgid="label_file_description",
+            description="Click 'Browse' to upload a release file.",
+            description_msgid="help_file_description",
             i18n_domain="archpackage",
         ),
         storage=downloadableFileStorage,
@@ -932,28 +919,25 @@ PSCFileSchema += Schema((
         searchable=0,
         vocabulary='getPlatformVocab',
         widget=SelectionWidget(
-            description="",
-            description_msgid="help_file_platform",
             label="Platform",
             label_msgid="label_file_platform",
+            description="",
+            description_msgid="help_file_platform",
             i18n_domain="archpackage",
         ),
     ),
 
-    ),
+),
 
-    marshall = PrimaryFieldMarshaller(),
+marshall = PrimaryFieldMarshaller(),
 
-    )
+)
 
 ###########
 # File link
 ###########
 
-PSCFileLinkSchema = BaseSchema.copy()
-
-
-PSCFileLinkSchema += Schema((
+PSCFileLinkSchema = BaseSchema.copy() + Schema((
 
     TextField(
         name='title',
@@ -961,14 +945,14 @@ PSCFileLinkSchema += Schema((
         searchable=1,
         accessor="Title",
         widget=StringWidget(
+            label="File Description",
+            label_msgid="label_file_title",
             description="File description. Normally something like "
                         "'Product Package', 'Windows Installer',  - "
                         "or 'Events subsystem' if you have several "
                         "separate modules. The actual file name will "
                         "be the same as the file you upload.",
             description_msgid="help_file_title",
-            label="File Description",
-            label_msgid="label_file_title",
             i18n_domain="archpackage",
         ),
     ),
@@ -979,10 +963,10 @@ PSCFileLinkSchema += Schema((
         searchable=0,
         vocabulary='getPlatformVocab',
         widget=SelectionWidget(
-            description="",
-            description_msgid="help_file_platform",
             label="Platform",
             label_msgid="label_file_platform",
+            description="",
+            description_msgid="help_file_platform",
             i18n_domain="archpackage",
         ),
     ),
@@ -992,59 +976,62 @@ PSCFileLinkSchema += Schema((
         required=1,
         validators=('isURL',),
         widget=StringWidget(
-            description="Please enter the URL where the file is hosted.",
-            description_msgid="help_file_ext_url",
             label="URL for externally hosted file",
             label_msgid="label_file_ext_url",
+            description="Please enter the URL where the file is hosted.",
+            description_msgid="help_file_ext_url",
             i18n_domain="archpackage",
         ),
     ),
 
-    ),
-    )
-    
+))
+
 ##############
 # Package area
 ##############
 
-PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
+PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
 
-    TextField('description',
+    TextField(
+        name='description',
         searchable=1,
         accessor='Description',
         storage=MetadataStorage(),
         widget=TextAreaWidget(
-            description_msgid='help_package_area',
-            description='Description for the Software Package area.',
             label_msgid='label_package_area',
             label='Description',
+            description_msgid='help_package_area',
+            description='Description for the Software Package area.',
             i18n_domain='archpackage',
             rows=6,
         ),
     ),
 
-    LinesField('availableCategories',
+    LinesField(
+        name='availableCategories',
         default=['Stand-alone products', 'Add-on components', 'Infrastructure'],
         widget=LinesWidget(
             label='Categories',
+            label_msgid='label_categories_vocab',
             description='Define the available categories for classifying these packages.',
             description_msgid='help_categories_vocab',
-            label_msgid='label_categories_vocab',
             i18n_domain='archpackage',
             rows=6,
         ),
     ),
 
-
-    SimpleDataGridField('availableLicenses',
-        default=['GPL|GPL - GNU General Public License|http://opensource.org/licenses/gpl-license',
-                 'LGPL|LGPL - GNU Lesser General Public License|http://opensource.org/licenses/lgpl-license',
-                 'BSD|BSD License (revised)|http://opensource.org/licenses/bsd-license',
-                 'Freeware|Freeware|http://wikipedia.org/Freeware',
-                 'Public Domain|Public Domain|http://creativecommons.org/licenses/publicdomain',
-                 'OSI|Other OSI Approved|http://opensource.org/licenses',
-                 'ZPL|Zope Public License (ZPL)|http://opensource.org/licenses/zpl',
-                 'Commercial|Commercial License|http://plone.org/documentation/faq/plone-license'],
+    SimpleDataGridField(
+        name='availableLicenses',
+        default=[
+            'GPL|GPL - GNU General Public License|http://opensource.org/licenses/gpl-license',
+            'LGPL|LGPL - GNU Lesser General Public License|http://opensource.org/licenses/lgpl-license',
+            'BSD|BSD License (revised)|http://opensource.org/licenses/bsd-license',
+            'Freeware|Freeware|http://wikipedia.org/Freeware',
+            'Public Domain|Public Domain|http://creativecommons.org/licenses/publicdomain',
+            'OSI|Other OSI Approved|http://opensource.org/licenses',
+            'ZPL|Zope Public License (ZPL)|http://opensource.org/licenses/zpl',
+            'Commercial|Commercial License|http://plone.org/documentation/faq/plone-license',
+        ],
         widget=SimpleDataGridWidget(
             label='Licenses',
             description='Define the available licenses for software releases. The format is Name|URL.',
@@ -1052,15 +1039,18 @@ PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
             rows=6,
         ),
     ),
-    
-    LinesField('availableVersions',
-        default=['Plone 1.0',
-                 'Plone 1.0.1',
-                 'Plone 1.0.2',
-                 'Plone 1.0.3',
-                 'Plone 1.0.4',
-                 'Plone 1.0.5',
-                 'Plone 2.0'],
+
+    LinesField(
+        name='availableVersions',
+        default=[
+            'Plone 1.0',
+            'Plone 1.0.1',
+            'Plone 1.0.2',
+            'Plone 1.0.3',
+            'Plone 1.0.4',
+            'Plone 1.0.5',
+            'Plone 2.0',
+        ],
         widget=LinesWidget(
             label='Versions',
             description='Define the vocabulary for versions that software releases can be listed as being compatible with.',
@@ -1069,14 +1059,15 @@ PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
         ),
     ),
 
-    SimpleDataGridField('availableMaturities',
+    SimpleDataGridField(
+        name='availableMaturities',
         default=[
             'Final|Final Release - Ready for production sites',
             'RC|Release Candidate - Final testing stages',
             'Beta|Beta - Stable API, but may still have bugs',
             'Alpha|Alpha - Unstable, early development',
             'In progress|In progress - Still under active development, not released yet',
-            ],
+        ],
         widget=SimpleDataGridWidget(
             label='Release maturities',
             description='Define the available maturity states for software releases. Format is Name|Description',
@@ -1085,15 +1076,16 @@ PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
         ),
     ),
 
-    LinesField('availablePlatforms',
+    LinesField(
+        name='availablePlatforms',
         default=[
-            'all platforms', 
-            'Linux', 
-            'Mac OS X', 
+            'all platforms',
+            'Linux',
+            'Mac OS X',
             'Windows',
-            'BSD', 
+            'BSD',
             'UNIX (other)'
-            ],
+        ],
         widget=LinesWidget(
             label='Platforms',
             description='Define the available platforms for software files.',
@@ -1101,7 +1093,5 @@ PloneSoftwareCenterSchema = OrderedBaseFolder.schema.copy() + Schema((
             rows=6,
         ),
     ),
-    
-    
 
-    ))
+))

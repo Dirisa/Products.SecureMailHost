@@ -7,7 +7,7 @@ Overview
 
 Installation
 
-  Install as a usual Plone Product. If you have Plone Help Center 
+  Install as a usual Plone Product. If you have Plone Help Center
   installed, you get the ability to add documentation objects inside
   the Software Projects.
 
@@ -19,15 +19,13 @@ Installation
     ZODB.
 
   - Requires ArchAddOn from Collective.
-    [We could copy/move the SimpleDataGridWidget in here, but I think
-    it makes sense in ArchAddOn. Thoughts? - joel]
-  
+
   - Can optionally use PloneHelpCenter to provide package-specific help
     containers.
 
 Credits
 
-  Base code for original project -- 
+  Base code for original project --
   Sidnei da Silva, "awkly.org":http://awkly.org
 
   User Interface, Additional code, Quality Assurance --
@@ -39,7 +37,7 @@ Credits
   Archetypes fixes, workflow code --
   "Martin Aspeli":mailto:optilude@gmx.net
 
-  Additional code help and Archetypes fixes --
+  Additional code help, Archetypes fixes, Clean ups --
   Dorneles Trem&eacute;a, "Plone Solutions":http://www.plonesolutions.com
 
   Additional Assistance --
@@ -49,5 +47,5 @@ Credits
   Icons --
   Vidar Andersen, "Black Tar":http://www.blacktar.com
 
-  Testing, Feedback, and Bug Fixes -- 
+  Testing, Feedback, and Bug Fixes --
   Michael Davis

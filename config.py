@@ -1,11 +1,7 @@
 """
-$Id: config.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: config.py,v 1.2 2005/03/09 18:04:32 dtremea Exp $
 """
-from AccessControl import ModuleSecurityInfo
-from zLOG import LOG, ERROR, INFO, PROBLEM
-
-from Products.Archetypes.public import DisplayList
-from Products.PloneSoftwareCenter.utils import data_file_path
+from zLOG import LOG, PROBLEM
 
 # Use ExternalStorage for PSCFile?
 USE_EXTERNAL_STORAGE = True
@@ -17,25 +13,21 @@ USE_EXTERNAL_STORAGE = True
 # the ExternalStorage config (default: EXTERNAL_STORAGE_BASE_PATH)
 EXTERNAL_STORAGE_PATH = 'files'
 
-# security
-security = ModuleSecurityInfo()
-security.declarePublic('CATEGORY_LIST')
-
 PROJECTNAME = 'PloneSoftwareCenter'
-ADD_CONTENT_PERMISSION = 'Add PloneSoftwareCenter Content'
 SKINS_DIR = 'skins'
+
 HARD_DEPS = 'ArchAddOn',
 SOFT_DEPS = 'ATReferenceBrowserWidget',
+
 RELEASES_ID = 'releases'
 IMPROVEMENTS_ID = 'roadmap'
 
 GLOBALS = globals()
-
 
 if USE_EXTERNAL_STORAGE:
     try:
         import Products.ExternalStorage
     except ImportError:
         LOG('PloneSoftwareCenter',
-            PROBLEM, "ExternalStorage N/A, falling back to AttributeStorage")
+            PROBLEM, 'ExternalStorage N/A, falling back to AttributeStorage')
         USE_EXTERNAL_STORAGE = False

@@ -1,22 +1,22 @@
 """
-$Id: PSCProject.py,v 1.6 2005/03/05 04:48:33 optilude Exp $
+$Id: PSCProject.py,v 1.7 2005/03/09 18:04:43 dtremea Exp $
 """
 
-from Products.Archetypes.public import OrderedBaseFolder
-from Products.Archetypes.public import registerType
-from Products.Archetypes.public import DisplayList
-
-from Products.PloneSoftwareCenter.config import *
-from Products.PloneSoftwareCenter.factory import factoryRegistry
-from Products.PloneSoftwareCenter.factory import getFactory
-from Products.PloneSoftwareCenter.utils import folder_modify_fti
+from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
-from schemata import PSCProjectSchema
+from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import registerType
+from Products.Archetypes.public import OrderedBaseFolder
 
-from AccessControl import ClassSecurityInfo
+from Products.PloneSoftwareCenter import config
+from Products.PloneSoftwareCenter.factory import getFactory
+from Products.PloneSoftwareCenter.factory import factoryRegistry
+from Products.PloneSoftwareCenter.utils import folder_modify_fti
+from Products.PloneSoftwareCenter.content.schemata import PSCProjectSchema
+from Products.PloneSoftwareCenter.permissions import ADD_CONTENT_PERMISSION
 
 def modify_fti(fti):
     folder_modify_fti(fti, allowed=('PSCReleaseFolder',
@@ -35,7 +35,8 @@ def modify_fti(fti):
 
 
 class PSCProject(OrderedBaseFolder):
-    """ Package class that holds the information about the Software Project """
+    """Package class that holds the information about the Software Project.
+    """
 
     __implements__ = (OrderedBaseFolder.__implements__,)
 
@@ -43,70 +44,51 @@ class PSCProject(OrderedBaseFolder):
     immediate_view = default_view = 'psc_project_view'
     content_icon = 'product_icon.gif'
     schema = PSCProjectSchema
-    
-    actions = ({
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${object_url}/psc_project_view',
-        'permissions' : (CMFCorePermissions.View,)
-         },{
-        'id'          : 'sharing',
-        'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,)
-         },
-         )
 
+    security = ClassSecurityInfo()
 
-    typeDescription= 'A Software Project contains details about a particular software package. It can keep track of meta-data about the project, as well as releases and improvement proposals.'
-    typeDescMsgId  = 'description_edit_package'
+    actions = (
+        {
+            'id': 'view',
+            'name': 'View',
+            'action': 'string:${object_url}/psc_project_view',
+            'permissions': (CMFCorePermissions.View,),
+        },
+        {
+            'id': 'sharing',
+            'name': 'Sharing',
+            'action': 'string:${object_url}/folder_localrole_form',
+            'permissions': (CMFCorePermissions.ManageProperties,),
+        },
+    )
 
-    security = ClassSecurityInfo ()
+    typeDescMsgId = 'description_edit_package'
+    typeDescription = ('A Software Project contains details about a '
+                       'particular software package. It can keep track '
+                       'of meta-data about the project, as well as '
+                       'releases and improvement proposals.')
 
+    security.declarePrivate('initializeArchetype')
     def initializeArchetype(self, **kwargs):
         """Initialize package.
 
-        Packages are initialized with a release folder and a roadmap
+        Packages are initialized with a release folder and a roadmap.
         """
         OrderedBaseFolder.initializeArchetype(self,**kwargs)
+        if not self.objectIds('PSCReleaseFolder'):
+            self.invokeFactory('PSCReleaseFolder', config.RELEASES_ID)
+        if not self.objectIds('PSCImprovementProposalFolder'):
+            self.invokeFactory('PSCImprovementProposalFolder',
+                               config.IMPROVEMENTS_ID)
 
-        if not  self.objectIds('PSCReleaseFolder'):
-            self.invokeFactory( 'PSCReleaseFolder'
-                , RELEASES_ID
-                )
-                
-        if not  self.objectIds('PSCImprovementProposalFolder'):
-            self.invokeFactory( 'PSCImprovementProposalFolder'
-                , IMPROVEMENTS_ID
-                )
-
-    def _get_settings(self):
-        facts = [(k, v.description) for k, v in
-                 factoryRegistry.items()]
-        return DisplayList(facts)
-
+    security.declareProtected(CMFCorePermissions.View, 'getCategoriesVocab')
     def getCategoriesVocab(self):
-        """Get categories vocabulary from parent package area via acquisition
+        """Get categories vocabulary from parent package area via acquisition.
         """
-        return DisplayList ([(item, item) for item in \
-                                self.getAvailableCategories ()])
+        return DisplayList([(item, item) for item in \
+                           self.getAvailableCategories()])
 
-    def enableSettings(self, settings):
-        current = list(self.getSettings())
-        settings = list(settings)
-        # Keep previously enabled settings in
-        # addition to the current ones. The effect is
-        # that you can't disable settings.
-        settings.extend(filter(lambda x: x not in settings, current))
-        self.Schema()['settings'].set(self, settings)
-        settings = self.getSettings()
-        for name in settings:
-            factory = getFactory(name, None)
-            if factory is None:
-                raise ValueError, ('Non-existing factory '
-                                   'named %s' % name)
-            factory(self)
-
+    security.declareProtected(CMFCorePermissions.View, 'getReleaseFolder')
     def getReleaseFolder(self):
         """Get the release folder.
 
@@ -114,9 +96,9 @@ class PSCProject(OrderedBaseFolder):
         folder. This is created when we're created, so we should always
         have one.
         """
-
         return self.contentValues('PSCReleaseFolder')[0]
 
+    security.declareProtected(CMFCorePermissions.View, 'getRoadmapFolder')
     def getRoadmapFolder(self):
         """Get the roadmap folder.
 
@@ -124,12 +106,11 @@ class PSCProject(OrderedBaseFolder):
         folder. This is created when we're created, so we should always
         have one.
         """
-
         return self.contentValues('PSCImprovementProposalFolder')[0]
-        
+
+    security.declareProtected(CMFCorePermissions.View, 'getLatestRelease')
     def getLatestRelease(self):
         release_folder = self.getReleaseFolder()
-        
         catalog = getToolByName(self, 'portal_catalog')
         res = catalog.searchResults(
                         path = '/'.join(release_folder.getPhysicalPath()),
@@ -141,29 +122,23 @@ class PSCProject(OrderedBaseFolder):
             return None
         else:
             return res[0].getObject()
-        
-    
-    security.declareProtected (ADD_CONTENT_PERMISSION, 'generateUniqueId')
+
+    security.declareProtected(ADD_CONTENT_PERMISSION, 'getNotAddableTypes')
     def getNotAddableTypes(self):
-        """Hide the release container types if it already exists
+        """Hide the release container types if it already exists.
         """
-        
         ignored = []
-            
-        if RELEASES_ID in self.objectIds ():
-            ignored.append ('PSCReleaseFolder')
-            
-        if IMPROVEMENTS_ID in self.objectIds ():
-            ignored.append ('PSCImprovementProposalFolder')
-            
+        if config.RELEASES_ID in self.objectIds():
+            ignored.append('PSCReleaseFolder')
+        if config.IMPROVEMENTS_ID in self.objectIds():
+            ignored.append('PSCImprovementProposalFolder')
         return ignored
-    
-        
-    security.declareProtected (ADD_CONTENT_PERMISSION, 'generateUniqueId')
+
+    security.declareProtected(ADD_CONTENT_PERMISSION, 'generateUniqueId')
     def generateUniqueId(self, type_name):
         """Override for the .py script in portal_scripts with the same name.
         Gives some default names for contained content types:
-        
+
             PSCImprovementProposalFolder: 'improvement'
             PSCReleaseFolder: 'release'
             HelpCenterFAQFolder: 'faq'
@@ -174,60 +149,56 @@ class PSCProject(OrderedBaseFolder):
             HelpCenterGlossary: 'glossary'
             HelpCenterInstructionalVideoFolder: 'video'
             #Collector: 'collector'
-            
+
         for all other types, falls back on the aq parent.
         """
-                        
+
         consideredTypes = {
-            'PSCImprovementProposalFolder'              : IMPROVEMENTS_ID,
-            'PSCReleaseFolder'                          : RELEASES_ID,
-            'HelpCenterFAQFolder'                       : 'faq',
-            'HelpCenterHowToFolder'                     : 'howto',
-            'HelpCenterTutorialFolder'                  : 'tutorial',
-            'HelpCenterErrorReferenceFolder'            : 'error',
-            'HelpCenterLinkFolder'                      : 'link',
-            'HelpCenterGlossary'                        : 'glossary',
-            'HelpCenterInstructionalVideoFolder'        : 'video',
-            #'Collector'                                 : 'collector'
+            'PSCImprovementProposalFolder': config.IMPROVEMENTS_ID,
+            'PSCReleaseFolder': config.RELEASES_ID,
+            'HelpCenterFAQFolder': 'faq',
+            'HelpCenterHowToFolder': 'howto',
+            'HelpCenterTutorialFolder': 'tutorial',
+            'HelpCenterErrorReferenceFolder': 'error',
+            'HelpCenterLinkFolder': 'link',
+            'HelpCenterGlossary': 'glossary',
+            'HelpCenterInstructionalVideoFolder': 'video',
+            #'Collector': 'collector'
             }
-            
+
         # Use aq parent if we don't know what to do with the type
         if type_name not in consideredTypes:
-            return self.aq_inner.aq_parent.generateUniqueId (type_name)
+            return self.aq_inner.aq_parent.generateUniqueId(type_name)
         else:
-            return self._ensureUniqueId (consideredTypes[type_name])
+            return self._ensureUniqueId(consideredTypes[type_name])
 
-    def _ensureUniqueId (self, id):
+    security.declarePrivate('_ensureUniqueId')
+    def _ensureUniqueId(self, id):
         """Test the given id. If it's not unique, append .<n> where n is a
-        number to make it unique
+        number to make it unique.
         """
-        
-        if id in self.objectIds ():
+        if id in self.objectIds():
             idx = 0
-        
-            while "%s.%d" % (id, idx) in self.objectIds ():
+            while '%s.%d' % (id, idx) in self.objectIds():
                 idx += 1
-                
-            return "%s.%d" % (id, idx)
+            return '%s.%d' % (id, idx)
         else:
             return id
 
+    security.declareProtected(CMFCorePermissions.View, 'getProjectURL')
     def getProjectURL(self):
         """Return URL to this project. Child items can use this."""
         return self.absolute_url()
-        
-    def getVersions_vocab (self):
+
+    security.declareProtected(CMFCorePermissions.View, 'getVersionsVocab')
+    def getVersionsVocab(self):
         """To ensure PloneHelpCenter integration works, return the versions
         defined, by looking at the versions found in the releases.
         """
-        
-        catalog = getToolByName (self, 'portal_catalog')
-        
-        releases = catalog.searchResults (portal_type = 'PSCRelease',
-                                          path = '/'.join(self.getPhysicalPath ()))
-                                         
+        catalog = getToolByName(self, 'portal_catalog')
+        releases = catalog.searchResults(portal_type = 'PSCRelease',
+                                         path = '/'.join(self.getPhysicalPath()))
         return [r.getId for r in releases if r]
 
-        
 
-registerType(PSCProject, PROJECTNAME)
+registerType(PSCProject, config.PROJECTNAME)
