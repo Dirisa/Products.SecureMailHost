@@ -62,16 +62,18 @@ Features:
 
   For Version 0.2
 
-  * encryption: import a publickey or get it from keyserver, 
+  * encryption: import a public key or get it from keyserver, 
     if not in current keyring
+
+  * fix DateTime Fields
+
+  * redirect to 'sent-page' after mail is sent
 
   * testing, bugfixing
   
   For Version 0.3 and future
 
-  * seperate Form-Integration and Mailer in two products
-
-  * generic mail templates, better than zpt-output rendered  with lynx
+  * seperate Formulator-Integration and Mailer in two products
 
   * integrate Formulator in Plone-UI
 
