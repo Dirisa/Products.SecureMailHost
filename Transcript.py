@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.19 2003/12/25 12:19:35 ajung Exp $
+$Id: Transcript.py,v 1.20 2004/01/12 20:13:08 ajung Exp $
 """
 
 import time 
+from types import UnicodeType
 
 from Globals import Persistent, InitializeClass
 from Acquisition import Implicit
@@ -80,6 +81,8 @@ class Transcript(Persistent, Implicit):
 
     security.declareProtected(View, 'addComment')
     def addComment(self, comment, text_format='plain', user=None, created=None):
+        if not isinstance(comment, UnicodeType):
+            raise TypeError('comment must be unicode')
         event = TranscriptEvent('comment', comment=comment, text_format=text_format, user=user, created=created)
         self.add(event)
 

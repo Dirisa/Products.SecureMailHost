@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.110 2004/01/12 19:55:18 ajung Exp $
+$Id: Issue.py,v 1.111 2004/01/12 20:13:08 ajung Exp $
 """
 
 import sys, os, time
@@ -138,7 +138,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             self._transcript.addChange('assignees', old_assignees, assignees)
             assignees_changed = 1
 
-        if comment: self._transcript.addComment(comment, text_format)  
+        if comment: self._transcript.addComment(unicode(comment, self.getSiteEncoding()), text_format)  
         if action == 'comment' and assignees_changed: action = 'assign'
 
         # perform workflow action
