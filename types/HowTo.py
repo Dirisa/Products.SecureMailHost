@@ -35,12 +35,6 @@ schema = BaseFolderSchema +  Schema((
               searchable=1,
               required=1,
               primary=1,
-              default_content_type = 'text/structured',
-              default_output_type = 'text/html',
-              allowable_content_types=('text/plain',
-                                       'text/structured',
-                                       'text/restructured',
-                                       'text/html'),
               widget=RichWidget(description_msgid='desc_howto_body',
                          description='The text of the Howto',
                          label_msgid='body',
@@ -48,6 +42,8 @@ schema = BaseFolderSchema +  Schema((
                          i18n_domain = "faq",
                          rows=25,
                          ),
+
+              **DEFAULT_CONTENT_TYPES
               ),
     ),
     marshall=PrimaryFieldMarshaller(),
