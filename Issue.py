@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.204 2004/07/05 17:54:21 ajung Exp $
+$Id: Issue.py,v 1.205 2004/07/14 13:53:03 ajung Exp $
 """
 
 import os, time, random 
@@ -637,7 +637,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         old_status = getattr(self, '_v_old_status', None)
         if old_status and old_status != self.status():
             self._transcript.addChange('status', old_status, self.status())
-        notifications.notify(self)
+
+        if self.getNotification_policy() != 'NoneNotificationPolicy': 
+            notifications.notify(self)
 
     ######################################################################
     # Override processForm() from Archetype.BaseObject
