@@ -15,7 +15,6 @@
         </h1>
         <span tal:condition="python:here.isTransformable('sent_message')"
               tal:replace="structure python:here.getSentMessage()"
-              i18n:translate=""
               />
       </metal:define>
     </metal:block>

@@ -4,13 +4,13 @@
 ##parameters=
 ##title=Sends a formmailer form.
 ##
-if context.getCpyaction().strip():
-    return state.set(next_action='traverse_to:'+context.getCpyaction())
+if context.getCPYAction().strip():
+    return state.set(next_action='traverse_to:'+context.getCPYAction())
 
 context.send_form()
 
-if context.getSent_redirect().strip():
-    return state.set(next_action='redirect_to:'+context.getSent_redirect())
+if context.getSentRedirect().strip():
+    return state.set(next_action='redirect_to:'+context.getSentRedirect())
 
 return state.set(next_action='redirect_to:string:formmailer_sent')
 
