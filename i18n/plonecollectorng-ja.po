@@ -1,0 +1,532 @@
+# Gettext Message File for PloneCollectorNG.
+# Tamakoshi Hiroki <tamakoshi@planetcomp.com>, 2004
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.1.2\n"
+"POT-Creation-Date: 2004-03-03 00:00+0300\n"
+"PO-Revision-Date: 2004-03-09 00:00+3000\n"
+"Last-Translator: Tamakoshi Hiroki <tamakoshi@planetcomp.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: ja-jp\n"
+"Language-name: 日本語\n"
+"Preferred-encodings: utf-8\n"
+"X-Is-Fallback-For: ja\n"
+"Domain: plonecollectorng\n"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Browse issues"
+msgstr "バグ報告一覧"
+
+msgid "Supporter"
+msgstr "開発者"
+
+msgid "edit_fieldsets"
+msgstr "バグ報告の編集"
+
+msgid "issuedata"
+msgstr "バグの詳細"
+
+msgid "progress"
+msgstr "進捗"
+
+msgid "contact"
+msgstr "連絡先"
+
+msgid "legend_search_form"
+msgstr "検索"
+
+msgid "jump_to_ticket"
+msgstr "指定した番号のバグ報告を表示"
+
+msgid " Jump "
+msgstr "表示"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "issues_assigned_to_me"
+msgstr "自分に割り当てられたバグ報告"
+
+msgid "issues_submitted_by_me"
+msgstr "自分で報告したバグ"
+
+msgid "advanced_search"
+msgstr "詳細検索"
+
+msgid "followups"
+msgstr "フォローアップの数"
+
+msgid "status"
+msgstr "状態"
+
+msgid "topic"
+msgstr "トピック"
+
+msgid "importance"
+msgstr "重要度"
+
+msgid "assigned"
+msgstr "割り当て"
+
+msgid "submitted_by"
+msgstr "報告者"
+
+msgid "date_on"
+msgstr "日時"
+
+msgid "last_modified"
+msgstr "更新日時"
+
+msgid "days_ago"
+msgstr "日前"
+
+msgid "Pending"
+msgstr "保留中"
+
+msgid "Accepted"
+msgstr "修正中"
+
+msgid "Others"
+msgstr "その他"
+
+msgid "UI"
+msgstr "ユーザインタフェイス"
+
+msgid "Medium"
+msgstr "中くらい"
+
+msgid "Low"
+msgstr "低い"
+
+msgid "High"
+msgstr "高い"
+
+msgid "Critical"
+msgstr "致命的"
+
+msgid "no_issues_found"
+msgstr "バグ報告はありません"
+
+msgid "accepted"
+msgstr "修正中"
+
+msgid "pending"
+msgstr "保留中"
+
+msgid "resolved"
+msgstr "解決済み"
+
+msgid "classification"
+msgstr "分類"
+
+msgid "save_this_search_as"
+msgstr "この検索結果に名前を付けておく"
+
+msgid "Bug"
+msgstr "バグ"
+
+msgid "Creator"
+msgstr "作成者"
+
+msgid "assigned_to"
+msgstr "割り当てられている人"
+
+msgid "progress_percent_done"
+msgstr "何％終わっているか"
+
+msgid "fulltextsearch"
+msgstr "全文検索"
+
+msgid "sorting"
+msgstr "並び替え"
+
+msgid "Issue"
+msgstr "バグ報告"
+
+msgid "Date"
+msgstr "時刻"
+
+msgid "Deadline"
+msgstr "期限"
+
+msgid "Submitter"
+msgstr "報告者"
+
+msgid "Progress"
+msgstr "進捗"
+
+msgid "Classification"
+msgstr "分類"
+
+msgid "Status"
+msgstr "状態"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Topic"
+msgstr "トピック"
+
+msgid "Importance"
+msgstr "重要度"
+
+msgid "Desc"
+msgstr "降順"
+
+msgid "Asc"
+msgstr "昇順"
+
+msgid "hits_per_page"
+msgstr "一ページあたり表示する数"
+
+msgid "statistics"
+msgstr "統計"
+
+msgid "Created"
+msgstr "作成された"
+
+msgid "Defered"
+msgstr "延期された"
+
+msgid "Rejected"
+msgstr "却下された"
+
+msgid "Resigned"
+msgstr "お手上げ"
+
+msgid "Resolved"
+msgstr "解決済み"
+
+msgid "View"
+msgstr "表示"
+
+msgid "simpleview"
+msgstr "簡易表示"
+
+msgid "fullview"
+msgstr "全体表示"
+
+msgid "fullview_with_images"
+msgstr "画像付き全体表示"
+
+msgid "transcript"
+msgstr "履歴"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Hours estimated"
+msgstr "推定修正時間"
+
+msgid "Hours needed"
+msgstr "必要修正時間"
+
+msgid "Percent done"
+msgstr "何％修正終了したか"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "E-Mail"
+msgstr "電子メール"
+
+msgid "legend_references"
+msgstr "参照"
+
+msgid "references"
+msgstr "参照"
+
+msgid "no_references"
+msgstr "参照はありません"
+
+msgid "referenced_by"
+msgstr "被参照"
+
+msgid "dependency_graph"
+msgstr "依存グラフ"
+
+msgid "followup_with_quote"
+msgstr "このコメントを引用してフォローアップする"
+
+msgid "images"
+msgstr "画像"
+
+msgid "Staff"
+msgstr "関係者"
+
+msgid "Managers"
+msgstr "管理者"
+
+msgid "Reporter"
+msgstr "報告者"
+
+msgid "UserID"
+msgstr "ユーザID"
+
+msgid "Email"
+msgstr "電子メール"
+
+msgid "Assigned"
+msgstr "割り当て"
+
+msgid "Unassigned"
+msgstr "未割り当て"
+
+msgid "help_staff"
+msgstr "<b>管理者</b>はバグトラッキングシステムの設定をする人です。<br><b>開発者</b>はバグを修正する人です。普通、バグ報告は開発者に割り当てます。<br><b>報告者</b>はバグを報告する人です。"
+
+msgid "TrackerAdmin"
+msgstr "管理者"
+
+msgid "Reset"
+msgstr "リセット"
+
+msgid "References and uploads"
+msgstr "参照とアップロード"
+
+msgid "uploads"
+msgstr "アップロード"
+
+msgid "issue_artifacts_table_no_uploads_available"
+msgstr "アップロードされたものはありません。"
+
+msgid "legend_artifacts_upload"
+msgstr "ファイルや画像のアップロード"
+
+msgid "file_for_upload"
+msgstr "アップロードするファイル"
+
+msgid "add_artifacts_table_comment"
+msgstr "コメント"
+
+msgid "Upload"
+msgstr "アップロードする"
+
+msgid "legend_new_reference_to_issue"
+msgstr "他のバグ報告の参照を追加する"
+
+msgid "add_references_table_collector"
+msgstr "バグトラッキングシステムの選択"
+
+msgid "add_references_table_issue_number"
+msgstr "バグ報告の番号"
+
+msgid "Select"
+msgstr "選択"
+
+msgid "add_references_table_comment"
+msgstr "コメント"
+
+msgid "Submit"
+msgstr "決定"
+
+msgid "Followup"
+msgstr "フォローアップ"
+
+msgid "issue_followup"
+msgstr "フォローアップ番号"
+
+msgid "comment"
+msgstr "コメント"
+
+msgid "assign_to_user"
+msgstr "割り当てる人"
+
+msgid "assign_to_group"
+msgstr "割り当てるグループ"
+
+msgid "action"
+msgstr "アクション"
+
+msgid "workflow_action_current_state"
+msgstr "現在の状態"
+
+msgid "Assign"
+msgstr "割り当てる"
+
+msgid "Defer"
+msgstr "延期する"
+
+msgid "Reject"
+msgstr "却下する"
+
+msgid "Resign"
+msgstr "お手上げ"
+
+msgid "Resolve"
+msgstr "解決"
+
+msgid "Debug"
+msgstr "デバグ"
+
+msgid "History"
+msgstr "履歴"
+
+msgid "transcript_time"
+msgstr "時刻"
+
+msgid "transcript_user"
+msgstr "ユーザ"
+
+msgid "transcript_changes"
+msgstr "変更箇所"
+
+msgid "removed"
+msgstr "削除"
+
+msgid "added"
+msgstr "追加"
+
+msgid "Schema Editor"
+msgstr "形式の編集"
+
+msgid "schematas"
+msgstr ""
+
+msgid "Add"
+msgstr "追加"
+
+msgid "fields"
+msgstr ""
+
+msgid "maintenance"
+msgstr "保守点検"
+
+msgid "field_definition"
+msgstr ""
+
+msgid "type"
+msgstr "型"
+
+msgid "widget"
+msgstr ""
+
+msgid "size"
+msgstr "大きさ"
+
+msgid "rows"
+msgstr "行数"
+
+msgid "cols"
+msgstr "列数"
+
+msgid "default"
+msgstr "デフォルト"
+
+msgid "label"
+msgstr "ラベル"
+
+msgid "required"
+msgstr "必須項目にする"
+
+msgid "create_index"
+msgstr "検索可能にする"
+
+msgid "Save changes"
+msgstr "設定する"
+
+msgid "Topic-Staff mapping"
+msgstr "関係者をトピックに割り当てる"
+
+msgid "staff_members"
+msgstr "関係者"
+
+msgid "Maintenance"
+msgstr "保守点検"
+
+msgid "number_issues"
+msgstr "バグ報告の総数"
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "created"
+msgstr "作成された"
+
+msgid "defered"
+msgstr "延期された"
+
+msgid "rejected"
+msgstr "却下された"
+
+msgid "resigned"
+msgstr "お手上げになった"
+
+msgid "help_notifications"
+msgstr "それぞれの状態になったら必ず通知を出すべきメールアドレスをここで設定します。電子メールアドレスは一行に一つ記入してください。"
+
+msgid "label_participation_mode"
+msgstr "誰がバグを報告できるか"
+
+msgid "label_view_mode"
+msgstr "閲覧"
+
+msgid "label_watchlist"
+msgstr ""
+
+msgid "Enter a value for Participation mode (who can file issues)."
+msgstr "誰がバグを報告できるか指定してください。"
+
+msgid "Enter a value for View mode (who can view issues)."
+msgstr "バグ報告の閲覧権利を指定してください。"
+
+msgid "label_deadline_tickets"
+msgstr "新規バグ報告の修正期限日数"
+
+msgid "Enter a value for Automatic deadline in days for new issues."
+msgstr "新規に追加したバグ報告の修正期限を自動設定します。"
+
+msgid "label_watchlist"
+msgstr ""
+
+msgid "Enter a value for Watchlist (Subscription to an issue)."
+msgstr ""
+
+msgid "collectordata"
+msgstr "バグトラッキングシステムの詳細"
+
+msgid "label_hostname"
+msgstr "ホスト名かIPアドレス(メールを出すときに使います。)"
+
+msgid "label_email_address"
+msgstr "電子メールアドレス(From:とReply-To:ヘッダに使います。)"
+
+msgid "label_collector_abbreviation"
+msgstr "略称(メールを出すときのバグトラッキングシステムの略称)"
+
+msgid "label_email_notification_policy"
+msgstr "電子メールでの通知の方法"
+
+msgid "label_notification_language"
+msgstr "通知するときの言語"
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
