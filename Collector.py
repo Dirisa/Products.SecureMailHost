@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.225 2004/10/10 15:40:52 ajung Exp $
+$Id: Collector.py,v 1.226 2004/10/10 15:48:07 ajung Exp $
 """
 
-import base64, time, random, md5, os, urllib
+import base64, time, random, md5, os 
 
 from DateTime import DateTime
 from BTrees.OOBTree import OOBTree

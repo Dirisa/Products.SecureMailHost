@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Topics.py,v 1.6 2004/10/10 11:03:10 ajung Exp $
+$Id: Topics.py,v 1.7 2004/10/10 15:48:07 ajung Exp $
 """
 
 
 from Globals import InitializeClass, Persistent
-from BTrees.OOBTree import OOBTree, difference, OOSet
+from BTrees.OOBTree import OOBTree
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
 
