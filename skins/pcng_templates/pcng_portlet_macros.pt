@@ -286,13 +286,21 @@
       <div id="pcng_references">
         <span id="label" i18n:translate="references">References</span>
         <ol>
-          <li tal:repeat="ref references">
-            <tal:def tal:define="target python: ref.getTargetObject()">
-              <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
-              [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
+          <div tal:repeat="ref references">
+            <div tal:define="target python: ref.getTargetObject()">
+              <div class="left">
+                <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+              </div>
+              <div class="right">
+                <a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}"><img src="delete.gif" title="delete" i18n:attributes="title"></a>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <br>
+            <div>
               <pre tal:content="ref/comment" />
-            </tal:def>
-          </li>
+            </div>
+          </div>
           <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
         </ol>
       </div>
