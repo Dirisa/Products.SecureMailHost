@@ -1011,3 +1011,5 @@ msgstr "Erstellt am"
 msgid "Won't fix"
 msgstr "Wird nicht gelöst"
 
+msgid "wont_fix"
+msgstr "Wird nicht gelöst"
