@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.29 2003/11/11 08:02:16 ajung Exp $
+$Id: SchemaEditor.py,v 1.30 2003/11/20 17:22:47 ajung Exp $
 """
 
 import operator
@@ -97,8 +97,9 @@ class SchemaEditor:
         if name in UNDELETEABLE_FIELDS:
             raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted', name=name))
             
-        del self._schemas[fieldset][name]
-        self._schemas._p_changed = 1
+        f = self._schemas[fieldset]
+        del f[name]
+        self._schemas[fieldset] = f
         util.redirect(RESPONSE, 'pcng_schema_editor', 
                       self.translate('schema_field_deleted', 'Field deleted'), fieldset=fieldset)
 
