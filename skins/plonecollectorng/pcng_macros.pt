@@ -182,13 +182,40 @@
     <input type="submit" value=" Jump " i18n:attributes="value" class="standalone"/>
   </form>
 
-  <a href="pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> - 
-  <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+  <div>
+    <a href="pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> - 
+    <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+  </div>
+
+  <div>
+    <form method="post" action="pcng_do_search">
+      <span i18n:translate="my_saved_searches">My saved searches</span>:
+      <select name="query">
+        <tal:loop tal:repeat="saved_search python: member.getProperty('pcng_saved_searches')" >
+          <option tal:content="python: saved_search.split('::', 1)[0]" 
+                  tal:attributes="value python: saved_search.split('::', 1)[1]"
+              />
+
+        </tal:loop>
+      </select>
+      <input type="submit" value=" Search " />
+    </form>    
+  </div>
+
+  <div tal:condition="advanced" >
+      <form method="post" action="pcng_save_search">
+        <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
+        <span i18n:translate="save_this_search_as">Save search as</span>:
+        <input type="text" name="query_id" value="" size="20" maxlength="20">
+        <input type="submit" value=" Save " />
+      </form>    
+  </div>
+
 
   <br>
   <br>
         
-  <form action="pcng_view" method="post"  name="search_form" tal:condition="advanced">
+  <form action="pcng_view" method="GET"  name="search_form" tal:condition="advanced">
     <input type="hidden" name="advanced_search" value="1">
     <table>
       <tr>
