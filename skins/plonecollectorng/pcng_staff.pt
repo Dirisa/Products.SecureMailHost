@@ -4,9 +4,31 @@
       i18n:domain="plonecollectorng">
 
 <body>
+<div metal:fill-slot="main">	  
 
-  <div metal:fill-slot="main">	  
-  </div>
+  <form action="collector_edit" method="post">
+    <div class="group"><span class="legend">Tracker Staff</span>
+      <table class="listing">
+        <tr>
+          <th i18n:translate="Name">Name</th>
+          <th i18n:translate="UserID">User ID</th>
+          <th i18n:translate="Email">Email</th>
+          <th i18n:translate="Managers">Tracker Administrator</th>
+          <th i18n:translate="Supporter">Supporter</th>
+          <th i18n:translate="Reporter">Reporter</th>
+       </tr>
+      </table>
 
+      <div class="row">
+        <div class="label">&nbsp;</div>
+        <div class="field">
+          <input class="context" type="submit" value=" Save " i18n:attributes="value"/>
+          <input class="context" type="reset" value=" Reset " i18n:attributes="value"/>
+        </div>
+      </div> <!-- End row -->
+
+    </div> <!-- End group -->
+  </form>
+</div>
 </body>
 </html>
