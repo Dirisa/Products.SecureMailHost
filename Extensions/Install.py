@@ -14,7 +14,7 @@ configlets = \
   , 'category'   : 'Member'
   , 'appId'      : 'PloneCollectorNG'
   , 'permission' : 'View'
-#  , 'imageUrl'  : 'ploneboard_icon.gif'
+  , 'imageUrl'   : 'collector_icon.gif'
   }
 ,
 )
