@@ -13,6 +13,7 @@
         (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
       </span>
     </h1>
+
   </tal:if>
 
   <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'" >
@@ -45,9 +46,10 @@
       <a tal:define="choosen python: mode == 'fullimages'" href="pcng_issue_view?mode=fullimages">
         <em tal:condition="choosen" i18n:translate="fullview_with_images">Full view with images</em> 
         <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
-        &bull;
       </a> 
-      <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
+      <a tal:condition="here/haveReportlab" href="asPDF">
+        &bull; <img src="pdflogo.gif" border="0" title="PDF">
+      </a>
     </div>    
   </tal:if>
 
