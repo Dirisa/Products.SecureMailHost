@@ -54,9 +54,9 @@ def getMetadataElement(filename,section,option):
          metadataFileParser.read(metadataFileName)
          return metadataFileParser.get(section,option)
       except:
+         #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+         # "getMetadataElement(%s,%s,%s)=None" % (section,option,filename))
          return None
-         #raise 'Metadata Not Found', 'Could not retrieve metadata %s:%s for \
-         #the file %s.' % (section,option,filename)
    else:
       return None
 
@@ -140,13 +140,13 @@ def upzipFile(FSfilename, FSBackupFolderBase=None):
 
       # extract the files from the zipfile
       for zitem in z.namelist():
-         checkValidIdResult = checkValidId(zitem)
-         if checkValidIdResult != 1:
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
-              "upzipFile() :: checkValidId(%s) failed:: %s" \
-              % (zitem,checkValidIdResult) ) 
-         else:
-            if not zitem.endswith('/'):
+         if not zitem.endswith('/'):
+            checkValidIdResult = checkValidId(os.path.basename(zitem))
+            if checkValidIdResult != 1:
+               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , \
+                 "upzipFile() :: checkValidId(%s) failed:: %s" \
+                 % (zitem,checkValidIdResult) ) 
+            else:
                tofile = os.path.join(todir, zitem)
                oldRevisionNumber = 0
                newRevisionNumber = 1
