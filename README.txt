@@ -6,7 +6,7 @@ PloneFormMailer
  displayed.
 
  It combines the power of Formulator and CMFFormController glued together in an 
- Archetypes product, which was created by ArchGenXML.
+ Archetypes product, which was initially created by ArchGenXML.
 
  PloneFormMailer is designed to be customized very easy.
 
@@ -50,7 +50,7 @@ Features:
   Thanks to the unknown author of the howto at plone.org "Integrating 
   CMFFormController with Formulator":http://plone.org/documentation/howto/IntegratingCMFFormControllerWithFormulator
   and also to the authors of CMFFormController and Formulator.
-  And also thanks to all contributors of minor changes.
+  And also thanks to all contributors of all minor changes.
 
  Contribution:
 
