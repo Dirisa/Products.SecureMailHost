@@ -697,3 +697,27 @@ msgstr "Geändert"
 
 msgid "issue_number"
 msgstr "Ticket #$id"
+
+msgid "show_incomplete_issues"
+msgstr "Unvollständige Tickets"
+
+msgid "recreate_uids_imported_issues"
+msgstr "Archetypes UIDs für importierte Tickets regenerieren"
+
+msgid "Member preferences"
+msgstr "Teilnehmer Voreinstellungen"
+
+msgid "saved_searches"
+msgstr "Gespeicherte Suchen"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "my_saved_searches"
+msgstr "Meine gespeicherte Suchen"
+
+msgid "no_references"
+msgstr "Keine Refererenzen"
+
+msgid "Submit"
+msgstr "Abschicken"
