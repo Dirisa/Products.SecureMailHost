@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.6 2003/10/11 20:46:49 ajung Exp $
+$Id: notifications.py,v 1.7 2003/10/12 08:17:07 ajung Exp $
 """
 
 import sys
@@ -18,15 +18,15 @@ import email.Utils
 from zLOG import LOG, ERROR
 from Products.CMFCore.utils import getToolByName
 
-import util
+import util, notification_policies
 
 def notify(issue):
     """ notification handling """
 
     collector = issue._getCollector()
-    if collector.email_notifications == 'none': return
 
-    recipients = recipients4issue(issue)
+    NP = eval('notification_policies.%s(issue)' % collector.notification_policy)
+    recipients = NP.getRecipients()
     recipients = enrich_recipients(issue, recipients)
     send_notifications(recipients, issue)
     
