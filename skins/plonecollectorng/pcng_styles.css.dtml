@@ -111,4 +111,8 @@ pre {
     padding: 0.2em;
 }
 
+span.selected {
+    font-weight: bold;
+}
+
 /* </dtml-with> */
