@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.159 2004/04/23 16:11:33 ajung Exp $
+$Id: Issue.py,v 1.160 2004/04/25 12:33:42 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -17,6 +17,7 @@ from AccessControl import  ClassSecurityInfo, Unauthorized
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
 from DateTime import DateTime
+from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Schema import Schema
@@ -40,31 +41,61 @@ _marker = []
 class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     """ PloneCollectorNG """
 
-    actions = ({
-        'id': 'pcng_browse',
-        'name': 'Browse',
-        'action': 'pcng_ticket_browser',
-        'permissions': (View,)
-        },
+    actions = (
+
         {'id': 'pcng_issue_view',
         'name': 'View',
         'action': 'pcng_issue_view',
         'permissions': (View,)
-        },
-        {'id': 'followup',
-        'name': 'Followup',
-        'action': 'pcng_issue_followup',
-        'permissions': (AddCollectorIssueFollowup,)
         },
         {'id': 'pcng_edit',
         'name': 'Edit',
         'action': 'pcng_base_edit',
         'permissions': (EditCollectorIssue,)
         },
-        {'id': 'issue_add_issue',
-        'name': 'Add issue',
+        {
+        'id': 'pcng_browse',
+        'name': 'Browse',
+        'action': 'pcng_ticket_browser',
+        'permissions': (View,),
+        'category' : 'pcng_issue'
+        },
+        {
+        'id': 'pcng_new_issue',
+        'name': 'New Issue',
         'action': 'redirect_create_object',
-        'permissions': (AddCollectorIssue,)
+        'permissions': (AddCollectorIssue,),
+        'category' : 'pcng_issue',
+        },
+        {'id': 'pcng_issue_followup',
+        'name': 'Followup',
+        'action': 'pcng_issue_followup',
+        'permissions': (AddCollectorIssueFollowup,),
+        'category' : 'pcng_issue'
+        },
+        {'id': 'pcng_issue_uploads',
+        'name': 'Uploads',
+        'action': 'pcng_issue_uploads',
+        'permissions': (AddCollectorIssueFollowup,),
+        'category' : 'pcng_issue'
+        },
+        {'id': 'pcng_issue_references',
+        'name': 'References',
+        'action': 'pcng_issue_references',
+        'permissions': (AddCollectorIssueFollowup,),
+        'category' : 'pcng_issue'
+        },
+        {'id': 'pcng_issue_simple_view',
+        'name': 'Simple view',
+        'action': 'pcng_issue_view',
+        'permissions': (View,),
+        'category' : 'pcng_issue'
+        },
+        {'id': 'pcng_issue_view_with_images',
+        'name': 'View with images',
+        'action': 'pcng_issue_view_images',
+        'permissions': (View,),
+        'category' : 'pcng_issue'
         },
         {'id': 'issue_debug',
         'name': 'Debug',
@@ -263,10 +294,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
-            print issue.getId()
-            print issue.absolute_url()
-            print tracker.getId()
-            print reference.comment
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                    issue_url=issue.absolute_url(1), 
                                                    collector_title=tracker.getId(),
@@ -353,17 +380,17 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             if notify: 
                 notifications.notify(self)
 
-            util.redirect(RESPONSE, 'pcng_issue_references', 
+            util.redirect(RESPONSE, 'pcng_issue_uploads', 
                           self.Translate('file_uploaded', 'File base been uploaded'))
         else:
-            util.redirect(RESPONSE, 'pcng_issue_references', 
+            util.redirect(RESPONSE, 'pcng_issue_uploads', 
                           self.Translate('nothing_for_upload', 'Nothing to be uploaded'))
 
     security.declareProtected(ManageCollector, 'upload_remove')
     def upload_remove(self, id, RESPONSE):
         """ Remove an uploaded file """
         self.manage_delObjects([id])
-        util.redirect(RESPONSE, 'pcng_issue_references', 
+        util.redirect(RESPONSE, 'pcng_issue_uploads', 
                      self.Translate('upload_removed', 'File has been removed'))
 
 
@@ -597,6 +624,24 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
+    ######################################################################
+    # Slots handling
+    ######################################################################
+
+    def left_slots(self):
+        pu = self.getPortlet_usage() 
+        if not hasattr(self, '_v_left_slots') or getattr(self, '_v_porlet_usage', '') != pu:
+            if pu == 'keep': 
+                self._v_left_slots = list(self.aq_parent.left_slots)
+            else:
+                self._v_left_slots = []
+            self._v_portlet_usage = pu
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_issue_portlet')
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_issue_uploads')
+            self._v_left_slots.append('here/pcng_slots/macros/pcng_issue_references')
+            self._v_left_slots = tuple(self._v_left_slots)
+        return self._v_left_slots
+    left_slots = ComputedAttribute(left_slots, 1)
 
 registerType(PloneIssueNG)
 
