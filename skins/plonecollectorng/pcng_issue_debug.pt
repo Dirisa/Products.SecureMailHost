@@ -33,7 +33,7 @@
         <a tal:attributes="href string:pcng_issue_debug?language=${lang}" 
            tal:content="lang" />
       </tal:loop>
-      <pre tal:content="python: here.format_transcript(request.get('language', 'en')).encode(here.portal_properties.site_properties.default_charset)" />
+      <pre tal:content="python: here.format_transcript(request.get('language', 'en')).encode(here.getSiteEncoding())" />
       
     </div>
   </body>
