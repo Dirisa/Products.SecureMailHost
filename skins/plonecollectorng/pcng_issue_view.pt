@@ -156,6 +156,9 @@
         <div metal:use-macro="here/issue_macros/macros/issue_references" /> 
       </metal:block>
 
+      <div class="documentByLine">
+      PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Andreas Jung</a>
+      </div>
     </div>
   </body>
 </html>
