@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.79 2003/11/28 09:33:15 ajung Exp $
+$Id: Collector.py,v 1.80 2003/11/28 10:47:16 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -373,7 +373,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def update_schema_for_issues(self, return_to=None, REQUEST=None, RESPONSE=None):
         """ update stored issue schema for all issues """
 
-        schema = self.schema_getWholeSchema()
+        schema = self.atse_getSchema()
         for issue in self.objectValues(('PloneIssueNG',)):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
