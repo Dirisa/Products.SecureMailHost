@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.6 2003/12/02 11:27:02 ajung Exp $
+$Id: Base.py,v 1.7 2003/12/08 11:33:13 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -35,7 +35,6 @@ class ParentManagedSchema:
 
     def Schemata(self):
         """ return dict of Schematas """
-
         d = {}
         schema = self.Schema()
         for name in schema.getSchemataNames():
@@ -92,27 +91,5 @@ class ParentManagedSchema:
                         
         return self._v_schema
 
-
-    def archetypes_accessor(self, *args, **kw):
-        """ this method is a very bad hack since we do intercept
-            the frame to get hold of the corresponding 'field' object
-        """
-
-        # look for the context in the stack
-        _marker = []
-        frame = sys._getframe()
-        context = _marker
-        while context is _marker and frame is not None:
-            context = frame.f_locals.get('econtext', _marker)
-            frame = frame.f_back
-        if context is _marker:
-            return None
-
-        field = context.local_vars['field']
-        try:
-            value = field.storage.get(field.getName(), self, **kw)
-        except:
-            value = None
-        return value 
 
 InitializeClass(ParentManagedSchema)
