@@ -1,29 +1,65 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
-      lang="en-US"
-      i18n:domain="plone"
-      metal:use-macro="here/main_template/macros/master">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+	      lang="en-US"
+	      i18n:domain="plone"
+	      metal:use-macro="here/main_template/macros/master">
+	
+	<body>
 
-<body>
-
-
-<div metal:fill-slot="main"
-     tal:define="standalone python:1;
-                 mtool mtool|here/portal_membership;
-                 myfolder python:here.absolute_url()==mtool.getHomeUrl();
-                 filepath python:request.get('filepath','');">
-
-    <div>
-                                            
-			           <br>
-			           <b>filepath = </b>
-			           <span tal:content="filepath">
-			             filepath
-			           </span>
-			           <br><br>
-                
-    </div>
-
-</div>
-
-</body>
-</html>
+	<div metal:fill-slot="main"
+	     tal:define="comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
+	                 uploader python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='source');
+	                 md5      python:here.getFileMetadata(REQUEST=request,section='DIAGNOSTICS',option='md5');
+	                 numUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='num_files');
+	                 sizezUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='unpacked_size');
+	                 ">
+	
+			<fieldset>
+				<legend>GENERAL:</legend>
+				<b>uploader = </b><span tal:content="uploader">
+					uploader
+				</span>
+				<br>
+				<b>comments = </b>
+				
+	         <form tal:attributes="action string:${request/URL1}/setFileMetadata" method="post">
+		        <table width="100%">
+		          <tr>
+				       <td width="100%" valign="top">
+			             <input type="hidden" name="section" value="GENERAL"/>
+			             <input type="hidden" name="option" value="comment"/>
+			             <textarea name="newvalue" cols="40" rows="2"
+			                       tal:content="comments">
+			             </textarea>
+			          </td>
+			       </tr>
+			       <tr>   
+				      <td>
+		              <center><input type="submit" value="Update Comment" ></center>
+		            </td>
+		          </tr>
+		        </table>
+	         </form>
+			</fieldset>	
+			
+			<fieldset>
+				<legend>DIAGNOSTICS:</legend>
+				<b>md5 = </b><span tal:content="md5">
+					md5
+				</span>
+				<br>
+			</fieldset>	
+			<fieldset>	
+				<legend>ARCHIVEINFO:</legend>
+				<b>numUnpackedFiles = </b><span tal:content="numUnpackedFiles">
+					numUnpackedFiles
+				</span>
+				<br>
+				<b>sizezUnpackedFiles = </b><span tal:content="sizezUnpackedFiles">
+					sizezUnpackedFiles
+				</span>
+				<br>
+			</fieldset>	
+	</div>
+	
+	</body>
+	</html>
