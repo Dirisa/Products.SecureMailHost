@@ -34,7 +34,7 @@ Misc
   - This will require us to expand the Software Project schema (Package)
     a bit, to incorporate info about CVS/SVN etc, but it's all useful. :)
 
-- i18n support - right now there is no multilingual support.
+- i18n revision - first cut was added but there's some corners remaining.
 
 - Hard for regular members to find Package after it's been created, before
   it's been published (Standard problem in Plone in general without Workspaces
@@ -46,7 +46,7 @@ Misc
 - Display of "recommended" in psc_project_view.pt and psc_releasefolder_view.pt.
     How does "recommended" work anyway? (Reviewers can flag something as a best-
     of-breed product, but we need some guidelines for this first. ~limi.
-    Absolutely we need some guidelines here, or it's going to be a bloody 
+    Absolutely we need some guidelines here, or it's going to be a bloody
     political mess. - Joel
     Indeed, that's why I haven't put any effort into this part yet ;) - limi)
 

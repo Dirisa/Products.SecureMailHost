@@ -40,13 +40,13 @@
         </p>        
 
         <h2 i18n:translate="heading_upcoming_releases">Upcoming Releases</h2>
-        
+
         <tal:block define="global releases here/getUpcomingReleases">
             <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
         </tal:block>
-        
-        <h2 i18n:translate="heading_previous_releases">Downloadable Releases</h2>
-        
+
+        <h2 i18n:translate="heading_downloadable_releases">Downloadable Releases</h2>
+
         <tal:block define="global releases here/getPreviousReleases">
             <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
         </tal:block>
@@ -57,14 +57,9 @@
 
     </div>
 
-</div>
-
-</body>
-</html>
-
-<!-- Macro used to show releases, since we need two near identical lists -->
-<!-- Call this with a variable 'releases' defined -->
-<metal:macro define-macro="release_listing">
+    <!-- Macro used to show releases, since we need two near identical lists -->
+    <!-- Call this with a variable 'releases' defined -->
+    <metal:macro define-macro="release_listing">
         <tal:noreleases tal:condition="not:releases">
 
             <div class="discreet">
@@ -124,12 +119,12 @@
                                tal:attributes="href download/getDirectURL">
                                 <span i18n:translate="label_download">Download</span>
                                 <span tal:replace="download/Title">Windows Installer</span>
-                                
+
                                 <tal:size define="fileSize download/getFileSize" condition="fileSize">
                                     (<span tal:replace="fileSize">256KB</span>)
                                 </tal:size>
                             </a>
-                            
+
                         </tal:downloads>
                     </dd>
 
@@ -140,4 +135,9 @@
             <div class="visualClear"></div>
 
         </tal:releases>
-</metal:macro>
+    </metal:macro>
+
+</div>
+
+</body>
+</html>

@@ -33,31 +33,38 @@
         </div>
 
         <p class="portalMessage"
+           i18n:translate="description_cannot_add_before_approved"
            tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')!='published'">
-           You can not add releases, documentation or feature proposals until the 
-           project itself is approved, make sure you submit it for approval when 
+           You can not add releases, documentation or feature proposals until the
+           project itself is approved, make sure you submit it for approval when
            the relevant project information has been entered.
-        </p>        
+        </p>
 
-        <h2 tal:condition="latestrelease"
-            i18n:translate="heading_latest_release">
-        <a href="#" tal:attributes="href latestrelease/absolute_url">
-        Latest release: 
-           <span tal:replace="latestrelease/Title">Ploneboard 1.0</span></a>
+        <h2 tal:condition="latestrelease">
+            <a href="#"
+               i18n:translate="heading_latest_release_project"
+               tal:attributes="href latestrelease/absolute_url">
+              Latest release:
+              <span tal:replace="latestrelease/Title"
+                    i18n:name="project">Ploneboard 1.0</span></a>
         </h2>
 
         <tal:noreleases tal:condition="not:latestrelease">
 
-            <p class="discreet" 
-               tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')=='published'"
-               i18n:translate="description_no_available_releases">
+            <p class="discreet"
+               tal:condition="python:is_editable and wtool.getInfoFor(here, 'review_state')=='published'">
+                 <tal:noreleases i18n:translate="description_no_available_releases">
                     There are no published releases in this project yet.
+                 </tal:noreleases>
+                 <tal:prioritize i18n:translate="description_prioritize_releases">
                     This listing will prioritize releases with maturity 'Final',
                     but will list the latest published release of any other type
                     if no final release exists.
+                 </tal:prioritize>
             </p>
-            <p class="discreet" tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')=='published'">
-                <a i18n:translate=""
+            <p class="discreet"
+               tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')=='published'">
+                <a i18n:translate="label_goto_release_folder"
                    tal:attributes="href string:$here_url/releases">
                   Go to the release folder to add or publish a release.
                 </a>
@@ -126,11 +133,13 @@
                 <p style="float: right;">
                     <img tal:replace="structure here/product_icon.gif" />
                     <a i18n:translate="label_show_all_releases"
-                       tal:attributes="href python:here.getReleaseFolder().absolute_url()">Show all releases&#8230;</a>
+                       tal:attributes="href python:here.getReleaseFolder().absolute_url()">
+                       Show all releases&hellip;</a>
 
                     <img tal:replace="structure here/improvementproposal_icon.gif" />
                     <a i18n:translate="label_show_upcoming_releases"
-                       tal:attributes="href python:here.getRoadmapFolder().absolute_url()">Show upcoming releases&#8230;</a>
+                       tal:attributes="href python:here.getRoadmapFolder().absolute_url()">
+                       Show upcoming releases&hellip;</a>
                 </p>
 
             </div>
@@ -143,51 +152,51 @@
 
         <fieldset style="float: right; margin-left: 0.5em;">
             <legend>Additional resources</legend>
-            
+
             <ul style="list-style-type: none; list-style-image: none; margin-left: 0;">
                 <li tal:condition="here/getHomepage">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/link_icon.gif" />
                     <a href=""
-                       class="link-plain" 
+                       class="link-plain"
                        tal:attributes="href here/getHomepage">
                     Project home page
                     </a>
                 </li>
-                
+
                 <li tal:condition="here/getTracker">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/issuetracker_icon.gif" />
                     <a href=""
-                       class="link-plain" 
+                       class="link-plain"
                        tal:attributes="href here/getTracker">
                     Issue tracker
                     </a>
                 </li>
-                
+
                 <li tal:condition="here/getMailingList">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/info_icon.gif" />
                     <a href=""
-                       class="link-plain" 
+                       class="link-plain"
                        tal:attributes="href here/getMailingList">
                     Support
                     </a>
                 </li>
-                
+
                 <li tal:condition="here/getRepository">
                     <img src="" alt=""
                          tal:attributes="src string:${portal_url}/sitemap_icon.gif" />
                     <a href=""
-                       class="link-plain" 
+                       class="link-plain"
                        tal:attributes="href here/getRepository">
                     Development repository
                     </a>
                 </li>
 
             </ul>
-            
-           
+
+
         </fieldset>
 
         <div tal:replace="structure here/getText" />

@@ -42,7 +42,7 @@
         listings of the software center. When the files have been added, you
         should publish this release. There is no approval required to make a
         release.
-        </p>        
+        </p>
 
         <h2 i18n:translate="heading_available_downloads">
           Available downloads
@@ -66,11 +66,11 @@
           <tal:nodownloads tal:condition="not: here/contentValues">
 
             <div class="discreet">
-              <span i18n:translate="description_no_available_releases">
+              <span i18n:translate="description_no_available_files">
                 There are no available software files in this release yet.
               </span>
               <span tal:condition="is_editable"
-                i18n:translate="description_use_add_menu_to_add_releases">
+                i18n:translate="description_use_add_menu_to_add_files">
                 Use the Add menu to add software files.
               </span>
             </div>
@@ -90,7 +90,7 @@
 
                   for
                   <span tal:replace="file/getPlatform" />
-                  
+
                   <tal:size condition="fileSize">
                       (<span tal:replace="fileSize">256KB</span>)
                   </tal:size>
@@ -120,11 +120,11 @@
         <table class="listing" style="float: right;">
             <tr tal:condition="here/compatibility">
                 <th class="vertical"
-                     i18n:translate="heading_tested_and_working_with">
+                     i18n:translate="heading_tested_with">
                 Tested with
                 </th>
                 <td class="vertical">
-                    <metal:versions 
+                    <metal:versions
                      metal:use-macro="python:context.widget('compatibility')">
                     Plone 1.0, Plone 2.0...
                     </metal:versions>
@@ -132,11 +132,11 @@
             </tr>
             <tr>
                 <th class="vertical" i18n:translate="heading_state">State</th>
-                <td class="vertical" i18n:translate="" 
+                <td class="vertical" i18n:translate=""
                     tal:content="here/getMaturity">Stable</td>
             </tr>
             <tr>
-                <th  class="vertical" 
+                <th  class="vertical"
                      i18n:translate="heading_license">License</th>
                 <td class="vertical" i18n:translate=""
                     tal:content="here/getLicense">
@@ -157,9 +157,9 @@
         </tal:relnotes>
 
         <div class="visualClear"></div>
-            
 
-          <!-- XXX: The sort below should probably make it into a function 
+
+          <!-- XXX: The sort below should probably make it into a function
           on the object -->
           <tal:proposals define="proposals here/getRelatedFeatures;
             dummy python:proposals.sort (lambda x,y: cmp (x.getId (), y.getId ()))"
@@ -169,14 +169,14 @@
 
             <dl>
                 <tal:proposals repeat="proposal proposals">
-                
+
                 <dt>
                   <a tal:attributes="href proposal/absolute_url">
                      #<span tal:replace="proposal/getId"/> &mdash;
                      <span tal:replace="proposal/title_or_id" />
                   </a>
                 </dt>
-                
+
                 <dd tal:content="proposal/Description" />
 
                 </tal:proposals>
