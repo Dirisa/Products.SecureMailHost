@@ -14,7 +14,7 @@ class TestErrorReference(PHCTestCase.PHCTestCase):
     """General tests for ErrorReference Folder and ErrorReference objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.ef = self.folder.hc.error
         self.ef.invokeFactory('HelpCenterErrorReference', id='e')
         self.errorRef = self.ef.e

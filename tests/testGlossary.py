@@ -14,7 +14,7 @@ class TestGlossary(PHCTestCase.PHCTestCase):
     """General tests for Glossary and Definition objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.gf = self.folder.hc.glossary
         self.gf.invokeFactory('HelpCenterDefinition', id='d')
         self.definition = self.gf.d

@@ -14,7 +14,7 @@ class TestTutorial(PHCTestCase.PHCTestCase):
     """General tests for Tutorial Folder and Tutorial objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.tf = self.folder.hc.tutorial
         self.tf.invokeFactory('HelpCenterTutorial', id='t')
         self.tutorial = self.tf.t

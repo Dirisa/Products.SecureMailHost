@@ -29,6 +29,23 @@ PloneTestCase.setupPloneSite(products=PRODUCTS)
 
 class PHCTestCase(PloneTestCase.PloneTestCase):
 
+    defaultTitle = 'Default Testing Title'
+    defaultVersions = ( 'Version 1.0', 'Version 2.0', 'Different Version1.0', )
+    defaultImportances = ('Low', 'Medium', 'High', 'Life Changing', )
+    defaultDefaultImportance = 'Medium'
+    defaultBodyRst = """
+    Bogus reST body
+    ===============
+    
+    Here's fake body content for unit tests.
+    
+    * Looks like a list.
+    * Smells like a list.
+    * It's a list!
+    
+    Final content afer the list.
+    """
+
     class Session(dict):
         def set(self, key, value):
             self[key] = value
@@ -36,3 +53,34 @@ class PHCTestCase(PloneTestCase.PloneTestCase):
     def _setup(self):
         PloneTestCase.PloneTestCase._setup(self)
         self.app.REQUEST['SESSION'] = self.Session()
+
+    def _createHelpCenter(self, folder, id='hc', title=defaultTitle, versions=defaultVersions):
+        """Creates and returns a refence to a PHC HelpCenter.
+        This method publishes a HelpCenter instance under folder.  It fills in
+        all of the standard properties."""
+        folder.invokeFactory('HelpCenter',
+                             id=id,
+                             title=title,
+                             description='A HelpCenter instance for unit tests.',
+                             versions_vocab=versions,
+                             importance_vocab=self.defaultImportances,
+                             defaultImportance=self.defaultDefaultImportance )
+        helpCenter = getattr(folder, id)
+        self.portal.portal_workflow.doActionFor(helpCenter, 'submit')
+        return helpCenter
+
+    def _createHowto(self, howtoFolder, id, title=defaultTitle):
+        """Creates and returns a refence to a PHC Howto.
+        This method publishes a Howto instance under a folder.  It fills in
+        all of the standard properties."""
+        howtoFolder.invokeFactory('HelpCenterHowTo',
+                                  id=id,
+                                  title=title,
+                                  description='A PHC Howto for unit tests.',
+                                  body=self.defaultBodyRst, 
+                                  versions=('Version 2.0',),
+                                  sections=('General',),
+                                  importance=self.defaultDefaultImportance)
+        howto = getattr(howtoFolder, id)
+        self.portal.plone_utils.editMetadata(howto, format='text/x-rst')
+        return howto

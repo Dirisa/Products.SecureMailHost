@@ -141,7 +141,7 @@ class _TestFolderishContainmentBase(PHCTestCase.PHCTestCase):
     """A base class for holding a bit of common code"""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.hc = self.folder.hc
         
 

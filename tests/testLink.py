@@ -14,7 +14,7 @@ class TestLink(PHCTestCase.PHCTestCase):
     """General tests for Link Folder and Link objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.lf = self.folder.hc.link
         self.lf.invokeFactory('HelpCenterLink', id='l')
         self.link = self.lf.l

@@ -14,10 +14,9 @@ class TestHowto(PHCTestCase.PHCTestCase):
     """General tests for Howto folder and HOWTO objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
-        self.hf = self.folder.hc.howto
-        self.hf.invokeFactory('HelpCenterHowTo', id='h')
-        self.howto = self.hf.h
+        self._createHelpCenter( self.folder, 'hc' )
+        self._createHowto( self.folder.hc.howto, 'howto1' )
+        self.howto = self.folder.hc.howto.howto1
 
     def testVersionsHowto(self):
         versions = ('1.0','2.0','Strange version')

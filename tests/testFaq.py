@@ -14,7 +14,7 @@ class TestFaq(PHCTestCase.PHCTestCase):
     """General tests for FAQ Folder and FAQ objects."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.ff = self.folder.hc.faq
         self.ff.invokeFactory('HelpCenterFAQ', id='f')
         self.faq = self.ff.f

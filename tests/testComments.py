@@ -15,7 +15,7 @@ class TestTutorialPageComments(PHCTestCase.PHCTestCase):
     items were shoting up on the tutorial itself."""
 
     def afterSetUp(self):
-        self.folder.invokeFactory('HelpCenter', id='hc')
+        self._createHelpCenter(self.folder, 'hc')
         self.tf = self.folder.hc.tutorial # tutorial folder
         self.tf.invokeFactory('HelpCenterTutorial', id='t')
         self.tutorial = self.tf.t
