@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.146 2004/03/27 05:06:06 ajung Exp $
+$Id: Issue.py,v 1.147 2004/03/28 08:02:28 ajung Exp $
 """
 
 import sys, os, time, random
@@ -595,9 +595,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def getEncryptedInformations(self):
         """ Return inportant informations encrypted """
         from util import encrypt
-        s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" aaaaaaa/>' % (self.aq_parent.absolute_url(), self.getId())
-        return encrypt(s, self.getToken()) 
-
+        import base64
+        s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" id="%s"/>' % (self.aq_parent.absolute_url(1), self.getId())
+        s = encrypt(s, self.getToken()) 
+        s = base64.encodestring(s)
+        return s
 
 registerType(PloneIssueNG)
 
