@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.15 2004/02/23 17:06:54 ajung Exp $
+$Id: __init__.py,v 1.16 2004/03/02 07:31:31 ajung Exp $
 """
 
 import os, sys
@@ -48,6 +48,10 @@ def initialize(context):
     from Products.Archetypes.Schema import Schema
     if not hasattr(Schema(), 'replaceField'):
         raise RuntimeError('Wrong Archetypes version detected. You need at least Archetype 1.3 or higher')
+
+    # Install workflow factories
+
+    from Products.PloneCollectorNG.workflows import pcng_issue_workflow
 
 from Products.PythonScripts.Utility import allow_module
 allow_module('textwrap')

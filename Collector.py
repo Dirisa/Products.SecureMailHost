@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.127 2004/03/01 18:13:34 ajung Exp $
+$Id: Collector.py,v 1.128 2004/03/02 07:31:31 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -145,48 +145,41 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         
     security.declareProtected(ManageCollector, 'setup_tools')
     def setup_tools(self, RESPONSE=None):
-        """Create and situate properly configured collector catalog."""
+        """ setup up required tools """
 
-        # cleanup tools
-        for id in (CollectorCatalog, CollectorWorkflow):
-            try: 
-                self.manage_delObjects(id)
-            except ConflictError: raise
-            except: pass
-       
-        # Catalog tool
-        catalog = PloneCollectorNGCatalog()
-        self._setObject(catalog.getId(), catalog)
-        catalog = catalog.__of__(self)
-
-        # Workflow tool
-        wf = WorkflowTool()
-        self._setObject(CollectorWorkflow, wf)
-        wf = wf.__of__(self)
-        self._setup_workflow()   # install default workflow
+        self._setup_catalog()
+        self._setup_workflow()
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance', 
                           self.translate('catalog_recreated', 'Catalog recreated'))
 
-    def _setup_workflow(self, filename='pcng_issue_workflow.zexp'):
-        """ this code must go """
+    def _setup_catalog(self):
+        """ setup catalog tool """
 
-        src_path = self.Control_Panel.Products.PloneCollectorNG.home
-        import_dir = os.path.join(INSTANCE_HOME, 'import')
-        src_file =  open(os.path.join(src_path, 'workflows', filename), 'rb')
-        if not os.path.exists(import_dir): os.makedirs(import_dir)
-        dest_file = open(os.path.join(import_dir, filename), 'wb')
-        dest_file.write(src_file.read())
-        src_file.close(); dest_file.close()
-
-        workflow_tool = getToolByName(self, CollectorWorkflow)
-        try:
-            workflow_tool.manage_importObject(filename)
+        try: self.manage_delObjects(CollectorCatalog)
+        except ConflictError: raise
         except: pass
 
-        os.unlink(os.path.join(import_dir, filename))
-        workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
+        catalog = PloneCollectorNGCatalog()
+        self._setObject(catalog.getId(), catalog)
+        catalog = catalog.__of__(self)
+
+    def _setup_workflow(self):
+        """ setup workflow tool """
+
+        try: self.manage_delObjects(CollectorWorkflow)
+        except ConflictError: raise
+        except: pass
+
+        wf = WorkflowTool()
+        self._setObject(CollectorWorkflow, wf)
+        wf = wf.__of__(self)
+
+        wf_tool = getToolByName(self, CollectorWorkflow)
+        wf_tool.manage_addWorkflow( id='pcng_issue_workflow'
+                                  , workflow_type='pcng_issue_workflow (pcng_issue_workflow)')
+        wf_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
 
     def pre_validate(self, REQUEST, errors):
         """ Hook to perform pre-validation actions. We use this
