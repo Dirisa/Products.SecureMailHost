@@ -11,10 +11,8 @@
         <li>References
           <ul>
             <li tal:repeat="rs here/getRelationships">
-              <metal:block tal:define="issue python: here.restrictedTraverse(rs.getURL())">
-                <a tal:attributes="href string:/${rs/getURL}" tal:content="string: ${issue/title_or_id} (${rs/getComment})" />
-                [<a tal:attributes="href string: delete_reference?issue_url=${rs/getURL}">del</a>]
-              </metal:block>
+              <a tal:attributes="href string:/${rs/getURL}" tal:content="string: ${rs/getCollectorTitle}:${rs/getId} (${rs/getComment})" />
+              [<a tal:attributes="href string: delete_reference?issue_url=${rs/getURL}">del</a>]
             </li>
           </ul>
         </li>

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.44 2003/10/16 15:44:58 ajung Exp $
+$Id: Issue.py,v 1.45 2003/10/16 16:42:59 ajung Exp $
 """
 
 import sys, os
@@ -33,18 +33,26 @@ import util, notifications
 class IssueRelationship(Persistent):
     security = ClassSecurityInfo()
     
-    def __init__(self, issue_url, comment):
+    def __init__(self, collector_title, id, issue_url, comment):
+        self.collector_title = collector_title
+        self.id = id
         self.issue_url = issue_url
         self.comment = comment
 
     def __hash__(self):
         return self.issue_url
 
+    security.declarePublic('getId')
+    def getId(self): return self.id
+
     security.declarePublic('getURL')
     def getURL(self): return self.issue_url
 
     security.declarePublic('getComment')
     def getComment(self): return self.comment
+
+    security.declarePublic('getCollectorTitle')
+    def getCollectorTitle(self): return self.collector_title
 
     def __str__(self):
         return '%s: %s' % (self.issue_url, self.comment)
@@ -268,8 +276,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         if not reference.comment:
             raise ValueError('References must have a comment')
 
-        self.addReference(issue, IssueRelationship(issue.absolute_url(1), reference.comment))
-#        self.addReference(issue, reference.comment)
+        self.addReference(issue, IssueRelationship(tracker.title_or_id(), 
+                                                   issue.getId(),
+                                                   issue.absolute_url(), 
+                                                   reference.comment))
         util.redirect(RESPONSE, 'pcng_issue_references', 'Reference has been stored')
 
     security.declareProtected(CMFCorePermissions.View, 'references_tree')
