@@ -32,6 +32,7 @@ except ImportError:
 
 schema = BaseSchema +  Schema((
     StringField('folder',
+                validators=("isExistingFolder",),
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=1,
                 default=INSTANCE_HOME,
@@ -281,35 +282,47 @@ class PloneLocalFolderNG(BaseContent):
          
     security.declareProtected('View', 'validFolder')
     def validFolder(self,  REQUEST=None):
-        """ dtermine if the requested folder path is legal and exists """
+        """ determine if the requested folder path is legal and exists """
 
+        trimmedFolderBasePath = os.path.normpath(self.folder)
         show_dir = '/'.join(REQUEST['_e'])
+        #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: show_dir = %s" % show_dir)
+        #zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: trimmedFolderBasePath = %s" % trimmedFolderBasePath)
         
         if show_dir.startswith('/') or show_dir.find('..') > -1:
             raise ValueError('illegal directory: %s' % show_dir)
-        destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
-        if not destfolder.startswith(self.folder):
+        
+        destfolder = os.path.normpath(os.path.join(trimmedFolderBasePath, show_dir))
+        
+        if not destfolder.startswith(trimmedFolderBasePath):
+            zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: destfolder = %s" % destfolder)
+            zLOG.LOG('PLFNG', zLOG.INFO , "validFolder() :: trimmedFolderBasePath = %s" % trimmedFolderBasePath)
             raise ValueError('illegal directory: %s' % show_dir)
-        
-        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path = %s" %destfolder )
-        
+
         if os.path.exists(destfolder):
             #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path ok for: %s" %destfolder )
             return 1
         else:
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: !!! path bad for: %s" %destfolder )
             return 0
+
         
     security.declareProtected('View', 'getContents')
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
+        
+        this_portal = getToolByName(self, 'portal_url')
+        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
 
+        trimmedFolderBasePath = os.path.normpath(self.folder)
         show_dir = '/'.join(REQUEST['_e'])
         
         if show_dir.startswith('/') or show_dir.find('..') > -1:
             raise ValueError('illegal directory: %s' % show_dir)
-        destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
-        if not destfolder.startswith(self.folder):
+
+        destfolder = os.path.join(trimmedFolderBasePath, show_dir)
+        
+        if not destfolder.startswith(trimmedFolderBasePath):
             raise ValueError('illegal directory: %s' % show_dir)
 
     
@@ -324,7 +337,7 @@ class PloneLocalFolderNG(BaseContent):
                fullname = os.path.join(destfolder, f)
                P = FileProxy(f, fullname, f)
                mi = self.mimetypes_registry.classify(data=None, filename=f)
-   
+
                if os.path.isdir(fullname):
                    P.setIconPath('folder_icon.gif')
                    P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
@@ -395,12 +408,16 @@ class PloneLocalFolderNG(BaseContent):
           
             
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+        #zLOG.LOG('PLFNG', zLOG.INFO , "__bobo_traverse__() :: type(self.REQUEST) = %s" % type(self.REQUEST))
+        #zLOG.LOG('PLFNG', zLOG.INFO , "__bobo_traverse__() :: REQUEST = %s" % REQUEST)
+        #zLOG.LOG('PLFNG', zLOG.INFO , "__bobo_traverse__() :: name = %s" % name)
+        
         if not REQUEST.has_key('_e'): 
             REQUEST['_e'] = []
             
         if not hasattr(self, "folder"):
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__bobo_traverse__() :: no folder attribute")
-            raise NotImplementedError, "This PLFNG object was not properly instantiated.  If it was created through the ZMI, you will have to delete it and add it through the regular Plone interface."
+            raise NotImplementedError, "This PLFNG object has not been properly configured (folder attribute missing). Add it through the regular Plone interface?!"
 
         destpath = os.path.join(self.folder, '/'.join(REQUEST['_e']), name)
         if os.path.exists(destpath): 
@@ -521,12 +538,15 @@ class PloneLocalFolderNG(BaseContent):
     def getProperties(self, REQUEST=None):
         """ get the summary properties for the local filesystem directory for this class instance """
 
+        trimmedFolderBasePath = os.path.normpath(self.folder)
         show_dir = '/'.join(REQUEST['_e'])
         
         if show_dir.startswith('/') or show_dir.find('..') > -1:
             raise ValueError('illegal directory: %s' % show_dir)
+
         destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
-        if not destfolder.startswith(self.folder):
+        
+        if not destfolder.startswith(trimmedFolderBasePath):
             raise ValueError('illegal directory: %s' % show_dir)
 
         localfolder_props = _getFolderProperties(destfolder)
@@ -748,3 +768,6 @@ def modify_fti(fti):
     return fti
 
 registerType(PloneLocalFolderNG, PROJECTNAME)
+
+
+
