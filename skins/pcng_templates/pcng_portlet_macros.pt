@@ -214,7 +214,7 @@
           <img src="file_icon.gif" tal:condition="python: item.meta_type=='Portal File'">
           <img src="image_icon.gif" tal:condition="python: item.meta_type=='Portal Image'">
           <a tal:attributes="href item/absolute_url">
-            <span  tal:content="item/getId" 
+            <span  tal:content="python: here.shorten_string1(item.getId(), 16)" 
                    tal:attributes="title python: '(%s, %s): %s' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator(), item.title_or_id())" />
           </a>
         </li>
