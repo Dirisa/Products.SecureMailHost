@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.24 2003/11/28 11:46:13 ajung Exp $
+$Id: collector_schema.py,v 1.25 2003/12/22 07:22:25 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -16,11 +16,6 @@ from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
 from config import VOC_ISSUE_FORMATTERS
 from notification_policies import VOC_NOTIFICATION_POLICIES
-
-VOC_LIMIT_FOLLOWUPS = DisplayList((
-  (1, 'Yes'),
-  (0, 'No'),                                       
-))
 
 VOC_PARTICIPATION_MODE = DisplayList((
   ('staff', 'Only staff members'),
@@ -71,15 +66,6 @@ schema = Schema((
                 widget=TextAreaWidget(label='Description',
                                        label_msgid='label_description',
                                        i18n_domain='plonecollectorng'),
-                ),
-    IntegerField('limit_followups',
-                vocabulary=VOC_LIMIT_FOLLOWUPS,
-                widget=SelectionWidget(format='select',
-                                       label='Limit followups',
-                                       label_msgid='label_limit_followups',
-                                       i18n_domain='plonecollectorng'),
-                default=0,
-                schemata='collectordata',
                 ),
 
     StringField('canonical_hostname',
