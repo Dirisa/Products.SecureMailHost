@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.20 2003/11/25 13:13:58 ajung Exp $
+$Id: migrate.py,v 1.21 2003/12/08 12:35:38 ajung Exp $
 """
 
 
@@ -23,6 +23,7 @@ COMPLAIN IN CASE OF A FAILURE OR DATA LOSS. YOU HAVE BEEN WARNED!!!!!!!!!!!
 from Acquisition import aq_base
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
+from Products.CMFCore.utils import getToolByName
 from zLOG import LOG,INFO,ERROR,WARNING
 
 ENFORCE_STATUS = 1  # set this to 1 to set the destination state based on the transcript information
@@ -118,7 +119,6 @@ def migrate_tracker(tracker, dest):
     print '-'*75
     print 'Migrating collector:', tracker.getId()
     
-
     try: dest.manage_delObjects(tracker.getId())
     except: pass
 
@@ -178,9 +178,14 @@ def migrate_schema(tracker, collector):
 
     from Products.Archetypes.public import StringField, DateTimeField, FloatField
     from Products.Archetypes.public import StringWidget, TextAreaWidget, SelectionWidget, MultiSelectionWidget
-    from Products.Archetypes.public import Schema, DisplayList
+    from Products.Archetypes.public import Schema, DisplayList 
 
     schema = Schema()
+    schema.addField(StringField('language', schemata='default'))
+    schema.addField(StringField('subject', schemata='default'))
+    schema.addField(DateTimeField('effectiveDate', schemata='default'))
+    schema.addField(DateTimeField('expirationDate', schemata='default'))
+
     PM = tracker.issuePropertyManager
 
     for oldfield in mapping.keys():
@@ -246,7 +251,7 @@ def migrate_schema(tracker, collector):
         if not id in mapping.keys():
             raise ValueError('unknown field "%s"' % id)
 
-    collector.schema_init(schema)
+    collector.atse_init(schema)
 
 
 def migrate_issue(issue, collector):
@@ -341,9 +346,9 @@ def migrate_issue(issue, collector):
                                      upload.getComment(),
                                      created=ts,
                                      user=entry.getUser())   
-
     # Workflow
     old_state = new_issue.status()
+    get_transaction().commit()
 
     if ENFORCE_STATUS == 1 and status:
         new_state = status  
