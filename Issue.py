@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.182 2004/06/04 14:15:08 ajung Exp $
+$Id: Issue.py,v 1.183 2004/06/10 08:13:34 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -13,7 +13,7 @@ from urllib import unquote
 from types import StringType, UnicodeType
 
 from Globals import Persistent, InitializeClass
-from AccessControl import  ClassSecurityInfo, Unauthorized, getSecurityManager
+from AccessControl import  ClassSecurityInfo, getSecurityManager
 from OFS.content_types import guess_content_type
 from Acquisition import aq_base
 from DateTime import DateTime
@@ -219,7 +219,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._last_action = action
         if not action in ('comment', ):
             if action != 'request' and not action in self.validActions():
-                raise Unauthorized(self.Translate('invalid_action', 
+                raise RuntimeError(self.Translate('invalid_action', 
                                                   'Invalid action: %(action)s', action=action))
 
             self._v_old_status = self.status()
