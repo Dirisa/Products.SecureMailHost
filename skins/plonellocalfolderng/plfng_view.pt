@@ -144,16 +144,36 @@
                         </td>
 
                     </tr>
+
                 </metal:block>
                 </tbody>
                 </metal:block>
+
+            </table>
+
+            <table>
+              <tr>
+                <td>
+                  <form tal:attributes="action string:${here/absolute_url}/upload_file" type="post" enctype="multipart/form-data">
+                    <input type="hidden" value="directory" tal:attributes="value request/PATH_TRANSLATED" >
+                    File:
+                    <input type="file" name="upload">
+                    <br>
+                    Comment:
+                    <textarea name="comment" cols="60" rows="3"></textarea>
+                    <br>
+                    <input type="submit" value="Upload file" >
+                  </form>
+
+                </td>
+              </tr>
             </table>
             </metal:block>
 
             <!-- Navigation -->
             <div metal:use-macro="here/batch_macros/macros/navigation" />
 
-
+<pre tal:content="structure request" />
     </form>
 
 </div>
