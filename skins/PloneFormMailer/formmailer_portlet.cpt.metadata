@@ -1,5 +1,0 @@
-[validators]
-validators = formmailer_validator
-
-[actions]
-action.success = traverse_to:string:formmailer_send
