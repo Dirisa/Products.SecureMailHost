@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.202 2004/07/02 17:05:14 ajung Exp $
+$Id: Issue.py,v 1.203 2004/07/04 08:00:22 ajung Exp $
 """
 
 import os, time, random 
@@ -512,6 +512,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def reindexObject(self, idxs=None):
         """ reindex issue """
         if not self.isPersistent(): return
+        if not hasattr(self, '_md'):
+            self._md = PersistentMapping()
         self._get_catalog().indexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
