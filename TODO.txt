@@ -14,6 +14,9 @@ General:
 - Obsolete state has non-obvious name for the transition to pull it back into
   play.
 
+- A way to set PHC-wide default Rights attribute - on plone.org we want 
+  everything to be under the same license, for example.
+
 - Definitions (in Glossary) need to be able to have Rich Text - the way it is
   now, it can't have links to other definitions. The Description attribute 
   should be this field, just rendered to Plain Text. If this is too much work,
