@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.131 2004/03/05 10:18:25 ajung Exp $
+$Id: Collector.py,v 1.132 2004/03/08 17:47:42 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -198,6 +198,25 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             if old:
                 if str(old) != str(new): # Archetypes does not use Zope converters
                     self._transcript.addChange(name, old, new)
+
+        # Look&Feel slots handling
+        if REQUEST.has_key('slots_mode'):
+            mode = REQUEST['slots_mode'] 
+            if mode == 'plone':
+                try: delattr(self, 'left_slots')
+                except: pass
+                try: delattr(self, 'right_slots')
+                except: pass
+            elif mode == 'left':
+                try: delattr(self, 'left_slots')
+                except: pass
+                self.right_slots = []
+            elif mode == 'right':
+                try: delattr(self, 'right_slots')
+                except: pass
+                self.left_slots = []
+            else:
+                self.left_slots = self.right_slots = []
 
     ######################################################################
     # Transcript
@@ -751,6 +770,10 @@ class PloneCollectorNGCatalog(CatalogTool):
                 if txng_version == 2: custom[i][1] = 'TextIndexNG2'
 
         return  custom
+
+    def manage_afterClone(self, item):
+        self.reindex_issues()
+        print 'reindexing'
 
     def enumerateColumns( self ):
         """Return field names of data to be cached on query results."""

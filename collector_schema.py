@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.35 2004/03/05 09:22:25 ajung Exp $
+$Id: collector_schema.py,v 1.36 2004/03/08 17:47:42 ajung Exp $
 """
 
 
@@ -36,6 +36,13 @@ VOC_WATCHLIST = DisplayList((
   ('disabled', 'Disabled'),
   ('anonymous', 'Watchlist enabled for anyone'),
   ('authenticated', 'Watchlist enabled for authenticated users'),
+))
+
+VOC_SLOTS_MODE= DisplayList((
+  ('plone', 'Use Plone settings'),
+  ('left', 'Keep left Plone slot, clear right'),
+  ('right', 'Clear left Plone slot, keep right'),
+  ('clear', 'Clear all Plone slots'),
 ))
 
 
@@ -111,7 +118,7 @@ schema = Schema((
                 ),
     StringField('collector_workflow',
                 vocabulary=VOC_WORKFLOWS,
-                default='pcng_issue_workflow',
+                default='pcng_issue_workflow (PloneCollectorNG default workflow)',
                 widget=SelectionWidget(format='select', 
                                        label='Workflow',
                                        label_msgid='label_workflow',
@@ -162,4 +169,13 @@ schema = Schema((
                 schemata='collectordata'
                 ),
 
+    StringField('slots_mode',
+                vocabulary=VOC_SLOTS_MODE,
+                widget=SelectionWidget(format='select', 
+                                       label='Plone slots',
+                                       label_msgid='label_slots_mode',
+                                       i18n_domain='plonecollectorng'),
+                default='plone',
+                schemata='Look and Feel'
+                ),
     ))
