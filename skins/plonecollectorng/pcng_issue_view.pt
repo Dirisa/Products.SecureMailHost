@@ -44,14 +44,20 @@
         </div>
 
         <div style="float: right; width: 50%; vertical-align: top; text-align: right">
-          <a tal:condition="python: mode in ('full', 'fullimages')"  href="pcng_issue_view?mode=simple">
-            <span i18n:translate="simpleview">Simple view</span> &bull;
+          <a tal:define="choosen python: mode =='simple'"  href="pcng_issue_view?mode=simple">
+            <em tal:condition="choosen" i18n:translate="simpleview">Simple view</em> 
+            <span tal:condition="not: choosen" i18n:translate="simpleview">Simple view</span> 
+            &bull;
           </a> 
-          <a tal:condition="python: mode in ('simple', 'fullimages')" href="pcng_issue_view?mode=full">
-            <span i18n:translate="fullview">Full view </span> &bull;
+          <a tal:define="choosen python: mode == 'full'" href="pcng_issue_view?mode=full">
+            <em tal:condition="choosen" i18n:translate="fullview">Full view </em> 
+            <span tal:condition="not: choosen" i18n:translate="fullview">Full view </span> 
+            &bull;
           </a> 
-          <a tal:condition="python: mode in ('simple', 'full')" href="pcng_issue_view?mode=fullimages">
-            <span i18n:translate="fullview_with_images">Full view with images</span> &bull;
+          <a tal:define="choosen python: mode == 'fullimages'" href="pcng_issue_view?mode=fullimages">
+            <em tal:condition="choosen" i18n:translate="fullview_with_images">Full view with images</em> 
+            <span tal:condition="not: choosen" i18n:translate="fullview_with_images">Full view with images</span> 
+            &bull;
           </a> 
           <a tal:condition="here/haveReportlab" href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
         </div>
@@ -60,7 +66,7 @@
       <fieldset tal:define="fieldset python: 'issuedata'">
         <legend><a class="schemata_legend"  
                    tal:attributes="href string:pcng_base_edit?fieldset=${fieldset}"  
-                   i18n:translate=""
+                   li18n:translate=""
                    tal:content="fieldset" /></legend>
 
         <div style="float: left; width: 30%; vertical-align: top">
