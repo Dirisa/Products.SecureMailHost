@@ -33,19 +33,27 @@ Requirements:
      issue references
 
 Installation:
+    
+  - unpack the archive in the Products folder of your Zope installation
+    or your INSTANCE_HOME
  
-  - visit the ZMI screeen of Plone site and go to the portal_quickinstaller
-    tool 
+  - restart Zope
+ 
+      - visit the ZMI screeen of Plone site and go to the portal_quickinstaller
+        tool 
 
-  - select the checkboxes for PloneCollectorNG (and Archetypes) and press
-    'Install'
+      - select the checkboxes for PloneCollectorNG (and Archetypes) and press
+        'Install'
 
-  - select "Plone Collector NG" from the add-list of the folder_contents view
-    of a folder and create a new instance
+      - select "Plone Collector NG" from the add-list of the folder_contents view
+        of a folder and create a new instance
 
-  You can also use the Plone frontend. Go to "Plone setup". Choose
-  "Add/remove products" and select "PloneCollectorNG" to be installed. That's
-  it. 
+
+     or 
+
+      - You can also use the Plone frontend. Go to "Plone setup". Choose
+        "Add/remove products" and select "PloneCollectorNG" to be installed. 
+        That's it. 
 
 Upgrading:
 
