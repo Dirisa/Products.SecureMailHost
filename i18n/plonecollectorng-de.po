@@ -318,7 +318,7 @@ msgid "Browse issues"
 msgstr "Ticketbrowser"
 
 msgid "Edit"
-msgstr "Editieren"
+msgstr "Bearbeiten"
 
 msgid "Schema Editor"
 msgstr "Schema Editor"
