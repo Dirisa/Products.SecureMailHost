@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.17 2005/03/12 08:06:04 limi Exp $
+$Id: schemata.py,v 1.18 2005/03/13 01:41:55 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -72,23 +72,27 @@ PSCImprovementProposalFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
         ),
     ),
 
-    ComputedField(
+    StringField(
         name='title',
-        expression="'Roadmap'",
+        default='Improvement proposals',
         searchable=1,
         accessor="Title",
         widget=StringWidget(
-            modes=('view',)
+            label="Title",
+            description="Enter a title for the container",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
-    ComputedField(
+    StringField(
         name='description',
-        expression='"Improvement proposals for %s" % context.aq_parent.Title()',
+        default='Improvement proposals which will be considered for this project',
         searchable=1,
         accessor="Description",
-        widget=StringWidget(
-            modes=('view',)
+        widget=TextAreaWidget(
+            label="Description",
+            description="Enter a description of the container",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -639,23 +643,27 @@ PSCReleaseFolderSchema = OrderedBaseFolderSchema.copy() + Schema((
         ),
     ),
 
-    ComputedField(
+    StringField(
         name='title',
-        expression="'Releases'",
+        default='Releases',
         searchable=1,
         accessor="Title",
         widget=StringWidget(
-            modes=('view',)
+            label="Title",
+            description="Enter a title for the container",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
-    ComputedField(
+    StringField(
         name='description',
-        expression='"Available releases of %s." % context.aq_parent.Title()',
+        default='Past and upcoming releases for this project',
         searchable=1,
         accessor="Description",
-        widget=StringWidget(
-            modes=('view',)
+        widget=TextAreaWidget(
+            label="Description",
+            description="Enter a description of the container",
+            i18n_domain="plonesoftwarecenter",
         ),
     ),
 
@@ -1079,6 +1087,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     SimpleDataGridField(
         name='availableCategories',
+        columns=3,
         default=[
             'standalone|Stand-alone products|Projects that are self-contained.', 
             'add-on|Add-on components|Projects that provide additional functionality.', 
@@ -1096,6 +1105,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     SimpleDataGridField(
         name='availableLicenses',
+        columns=3,
         default=[
             'GPL|GPL - GNU General Public License|http://opensource.org/licenses/gpl-license',
             'LGPL|LGPL - GNU Lesser General Public License|http://opensource.org/licenses/lgpl-license',
@@ -1143,6 +1153,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     SimpleDataGridField(
         name='availableMaturities',
+        columns=2,
         default=[
             'Final|Final Release - Ready for production sites',
             'RC|Release Candidate - Final testing stages',

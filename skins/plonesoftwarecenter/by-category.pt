@@ -20,31 +20,9 @@
          tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
                      category python:request.traverse_subpath and request.traverse_subpath[0] or nothing;">
 
-        <tal:selection condition="not:category">
-        
-            <h1 class="documentFirstHeading" i18n:translate="heading_view_by_category">
-              View by category
-            </h1>
-            
-            <a href=""
-              class="link-parent"
-              i18n:translate="label_up_to_project_overview"
-              tal:define="parent_url here/absolute_url"
-              tal:condition="parent_url"
-              tal:attributes="href parent_url">
-              Up to project overview
-            </a>
-            
-            Please select a category:
-            
-            <ul tal:define="categories here/getAvailableCategoriesAsDisplayList">
-                <li tal:repeat="categoryId python:categories.keys()">
-                    <a tal:attributes="href string:${here/absolute_url}/by-category/${categoryId}"
-                        tal:content="python:categories.getValue(categoryId)"/>
-                </li>
-            </ul>
-            
-        </tal:selection>
+        <tal:logic condition="not:category">
+            <tal:redirect define="dummy python:request.RESPONSE.redirect(here.absolute_url())"/>
+        </tal:logic>
 
         <tal:projects condition="category"
                       define="packages python:here.getPackagesByCategory(category)">
@@ -73,7 +51,8 @@
             </tal:nopackages>
         
             <tal:packages condition="nocall:packages">
-                <div class="documentDescription">
+                <div class="documentDescription" 
+                    tal:content="python:here.getCategoryDescription(category)">
                 The available projects in this category, latest first.
                 </div>
 

@@ -1,5 +1,5 @@
 """
-$Id: PloneSoftwareCenter.py,v 1.6 2005/03/12 04:00:41 optilude Exp $
+$Id: PloneSoftwareCenter.py,v 1.7 2005/03/13 01:41:55 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -126,26 +126,30 @@ class PloneSoftwareCenter(OrderedBaseFolder):
 
     security.declareProtected(CMFCorePermissions.View, 'getCategoriesToList')
     def getCategoriesToList(self, states=[]):
-        """Categories that have at least one listable package"""
+        """Get a list of category ids that have at least one listable package"""
         vocab = self.getAvailableCategoriesAsDisplayList()
         catalog = getToolByName(self, 'portal_catalog')
         uniqueCategories = catalog.uniqueValuesFor('getCategories')
         
-        categories = DisplayList()
+        categories = []
         for cat in uniqueCategories:
-            value = vocab.getValue(cat)
-            # Ensure the value came from our vocab and not some other 
-            # getCategories somewhere
-            if value:
-                categories.add(cat, value)
-                
-        return categories.sortedByValue()
+            if cat in vocab.keys():
+                categories.append(cat)
+        
+        categories.sort()
+        return categories
 
     security.declareProtected(CMFCorePermissions.View, 'getCategoryName')
     def getCategoryName(self, category):
         """Get the long name of a category.
         """
-        return self.getAvailableCategoriesAsDisplayList().getValue(category)
+        return self.getField('availableCategories').lookup(self, category, 1)
+
+    security.declareProtected(CMFCorePermissions.View, 'getCategoryDescription')
+    def getCategoryDescription(self, category):
+        """Get the description of a category.
+        """
+        return self.getField('availableCategories').lookup(self, category, 2)
 
     security.declareProtected(CMFCorePermissions.View,
                               'getAvailableCategoriesAsDisplayList')

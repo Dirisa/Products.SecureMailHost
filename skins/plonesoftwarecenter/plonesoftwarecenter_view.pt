@@ -69,12 +69,9 @@
     category, click "Show all".
     </p>
 
-<span tal:content="python:here.getCategoriesToList().items()" />
-
-    <div tal:repeat="categoryItems python:here.getCategoriesToList().items()">
+    <div tal:repeat="categoryId python:here.getCategoriesToList()">
         <div class="portlet portletThirdWidth"
-                tal:define="categoryId   python:categoryItems[0];
-                            category     python:categoryItems[1];">
+                tal:define="category     python:here.getCategoryName(categoryId)">
             <h6>
                     <a href=""
                        tal:content="category"
@@ -83,22 +80,31 @@
                         Category heading
                     </a>
             </h6>
-            <div class="portletBody">
-                <tal:list define="releases python:here.getReleasesByCategory(categoryId, limit = 5)"
-                          repeat="release releases"
-                          condition="releases">
+            <div class="portletBody"
+                 tal:define="releases python:here.getReleasesByCategory(categoryId, limit = 5)">
+                 
+                <tal:list repeat="release releases"
+                          condition="nocall:releases">
                 
-                <div class="portletContent" 
-                     tal:define="oddrow repeat/release/odd"
-                     tal:attributes="class python:test(oddrow, 'portletContent even', 'portletContent odd')">
-                    <img tal:replace="structure here/product_icon.gif" />
-                    <a href="" tal:content="release/Title"
-                      tal:define="review_state release/review_state"
-                       tal:attributes="href release/getURL;
-                                       title release/Description;
-                                       class string:state-$review_state">Package</a>
-                </div>
+                    <div class="portletContent" 
+                         tal:define="oddrow repeat/release/odd"
+                         tal:attributes="class python:test(oddrow, 'portletContent even', 'portletContent odd')">
+                        <img tal:replace="structure here/product_icon.gif" />
+                        <a href="" tal:content="release/Title"
+                          tal:define="review_state release/review_state"
+                           tal:attributes="href release/getURL;
+                                           title release/Description;
+                                           class string:state-$review_state">Package</a>
+                    </div>
                 </tal:list>
+                
+                <tal:nolist condition="not:nocall:releases">
+                    <div class="portletContent odd">
+                        <span class="discreet" i18n:translate="no_releases_found">
+                            No releases made in this category yet
+                        </span>
+                    </div>
+                </tal:nolist>
 
                 <div class="portletContent even">
                     <a href=""
@@ -111,7 +117,7 @@
             </div>
         </div>
     
-        <div class="visualClear" tal:condition="python: repeat['categoryItems'].number() % 3 == 0" />
+        <div class="visualClear" tal:condition="python: repeat['categoryId'].number() % 3 == 0" />
     </div>
 
     <div metal:use-macro="here/document_byline/macros/byline">

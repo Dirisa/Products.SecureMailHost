@@ -1,5 +1,5 @@
 """
-$Id: PSCImprovementProposalFolder.py,v 1.4 2005/03/12 01:52:01 optilude Exp $
+$Id: PSCImprovementProposalFolder.py,v 1.5 2005/03/13 01:41:55 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -41,14 +41,6 @@ class PSCImprovementProposalFolder(OrderedBaseFolder):
             'name': 'View',
             'action': 'string:${object_url}/psc_roadmap',
             'permissions': (CMFCorePermissions.View,),
-        },
-        {
-        
-            'id' : 'edit',
-            'name' : 'Edit',
-            'action' : 'string:${object_url}/base_edit',
-            'permissions' : (CMFCorePermissions.ModifyPortalContent,),
-            'visible' : 0,
         },
         {
             'id' : 'metadata',

@@ -6,18 +6,9 @@ Developer claiming item/comments is in [brackets].
 Pre-deployment count-down
 =========================
 
-- Important: Portlet is broken, please fix.
-  Module Python expression "', '.join(obj.getCategoryTitles)", line 1, in 
-  <expression> TypeError: sequence expected, Missing found
+- portlet_releases.pt hard-codes link to "More..." :-(
   
-- We may want to add description on the categories, so it behaves like this:
-  shortname|Full Name|Description of the category, because not all categories
-                      are immediately sensible from a short title.
-  (Added this, but get list index out of range when I try using it on the
-   plonesoftwarecenter_view page ~limi)
-
-- by-category.pt needs a little UI love, esp. for the list presented when
-    no category is entered.
+- Get missing bottom border on category floats on the PSC front page in Firefox
   
 - PSCProject has a currentVersions field to list supported versions (for PHC
     support). We could use this to show a portalMessage on unsupported
