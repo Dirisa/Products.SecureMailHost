@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.98 2003/12/05 13:59:45 ajung Exp $
+$Id: Issue.py,v 1.99 2003/12/07 16:59:44 ajung Exp $
 """
 
 import sys, os, time
@@ -462,7 +462,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
     ######################################################################
 
     security.declarePrivate('_processForm')
-    def _processForm(self, data=1, metadata=None, REQUEST=None):
+    def _processForm(self, data=1, metadata=None, REQUEST=None,values=None):
 
         request = REQUEST or self.REQUEST
         schema = self.Schema()
