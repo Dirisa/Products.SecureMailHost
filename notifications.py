@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.33 2004/04/20 05:04:39 ajung Exp $
+$Id: notifications.py,v 1.34 2004/04/21 13:02:03 ajung Exp $
 """
 
 import sys, time
@@ -114,12 +114,12 @@ def _send_notifications(recipients, issue, send_attachments=0):
             outer.attach(att)
 
     # Keyfile
-    encoded_text = issue.encode_information(issue.absolute_url(1))
-    keyfile = MIMEText(encoded_text)
-    keyfile.add_header('content-type', 'text/plain')
-    keyfile.add_header('content-disposition', "attachment; filename=pcng.key")
-    outer.attach(keyfile)
-
+    if issue.getIssue_email_verification() != 'disabled':
+        encoded_text = issue.encode_information(issue.absolute_url(1))
+        keyfile = MIMEText(encoded_text)
+        keyfile.add_header('content-type', 'text/plain')
+        keyfile.add_header('content-disposition', "attachment; filename=pcng.key")
+        outer.attach(keyfile)
 
     MH = getattr(collector, 'MailHost') 
     
