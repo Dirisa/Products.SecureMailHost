@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.65 2003/11/10 12:13:24 ajung Exp $
+$Id: Collector.py,v 1.66 2003/11/10 15:59:54 ajung Exp $
 """
 
 from Globals import InitializeClass
+from Acquisition import aq_base
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore.CatalogTool import CatalogTool
 from BTrees.OOBTree import OOBTree
@@ -306,13 +307,13 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         states.sort()
         return states
 
-    def add_issue(self, RESPONSE=None):
+    def add_issue(self, REQUEST=None, RESPONSE=None):
         """ create a new issue """
         self._num_issues += 1
         id = str(self._num_issues)
-        issue = PloneIssueNG(id, '', self.schema_getWholeSchema())
-        issue = issue.__of__(self)
-        self._setObject(id, issue)
+        self.invokeFactory('PloneIssueNG', id)
+        issue = aq_base(self._getOb(id))
+        issue.setSchema(self.schema_getWholeSchema())
 
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
                       portal_status_message='New issue created',
@@ -456,7 +457,7 @@ def modify_fti(fti):
         if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
             a['visible'] = 0
     fti['filter_content_types'] = 1
-    fti['allowed_content_types'] = []
+    fti['allowed_content_types'] = ['PloneIssueNG']
     return fti
 
 InitializeClass(PloneCollectorNGCatalog)

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.76 2003/11/10 12:13:24 ajung Exp $
+$Id: Issue.py,v 1.77 2003/11/10 15:59:54 ajung Exp $
 """
 
 import sys, os
@@ -106,16 +106,17 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     security = ClassSecurityInfo()
 
-    def __init__(self, id, title, schema, **kw):
-        self.schema = schema
-        OrderedBaseFolder.__init__(self, id, **kw)
-        self.initializeArchetype()
+    def __init__(self, id):
+        OrderedBaseFolder.__init__(self, id) 
         self.wl_init()
         self.id = id
-        self.title = title 
+        self.title = id
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
-#        self._transcript.addComment('Issue created')
+
+    def setSchema(self, schema):
+        self.schema = schema
+        self.initializeArchetype()
 
     def Schema(self):
         """ Return our schema (through acquisition....uuuuuh). We override
@@ -531,7 +532,7 @@ def modify_fti(fti):
 
     fti['global_allow'] = 0
     fti['filter_content_types'] = 1
-    fti['allowed_content_types'] = []
+    fti['allowed_content_types'] = ['File', 'Portal File', 'Image', 'Portal Image']
     return fti
 
 registerType(PloneIssueNG)
