@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.26 2003/12/24 15:42:02 ajung Exp $
+$Id: collector_schema.py,v 1.27 2004/01/15 18:24:04 ajung Exp $
 """
 
 from Products.Archetypes.Schema import Schema
@@ -16,6 +16,13 @@ from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
 from config import VOC_ISSUE_FORMATTERS
 from notification_policies import VOC_NOTIFICATION_POLICIES
+
+VOC_NOTIFICATION_LANGUAGES = DisplayList((
+  ('EN', 'English'),
+  ('DE', 'German'),
+  ('FI', 'Finish'),
+  ('NL', 'Dutch'),
+))
 
 VOC_PARTICIPATION_MODE = DisplayList((
   ('staff', 'Only staff members'),
@@ -124,11 +131,11 @@ schema = Schema((
                 default='NoneNotificationPolicy',
                 schemata='E-Mail'
                 ),
-    StringField('issue_formatter',
-                vocabulary=VOC_ISSUE_FORMATTERS,
+    StringField('notification_language',
+                vocabulary=VOC_NOTIFICATION_LANGUAGES,
                 widget=SelectionWidget(format='select', 
-                                       label='E-Mail issue formatter',
-                                       label_msgid='label_email_issue_formatters',
+                                       label='Notification language',
+                                       label_msgid='label_notification_language',
                                        i18n_domain='plonecollectorng'),
                 schemata='E-Mail'
                 ),
