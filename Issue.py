@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.25 2003/09/22 07:01:51 ajung Exp $
+$Id: Issue.py,v 1.26 2003/09/22 15:12:37 ajung Exp $
 """
 
 import sys
@@ -252,6 +252,21 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ Hook to perform post-validation actions. We use this
             to reindex the issue.
         """
+
+        # ATT: this is some kind of a hack. If the issue is pending
+        # and the user marks the issue as security related then we
+        # trigger the transition to move the issue to the Pending_
+        # confidential state. In addition we mark the field as
+        # readonly (only through a followup we can switch back from
+        # confidential to non-confidential.
+
+        if self.status() == 'Pending' and self.security_related:
+            wf = getToolByName(self, 'portal_workflow')
+            wf.doActionFor(self, 'restrict_pending_automatic')
+            
+            if len(self.getWorkflowHistory()) > 2:
+                self.getField('security_related').mode = 'r'
+
         self.notifyModified() # notify DublinCore
         self.indexObject()
 
