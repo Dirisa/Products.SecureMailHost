@@ -43,6 +43,9 @@
         <li>
           <a href="pcng_notifications"><span i18n:translate="collector_notifications">Email notifications</span></a>
         </li>
+        <li>
+          <a href="pcng_maintenance"><span i18n:translate="maintenance">Maintenance</span></a>
+        </li>
       </ul>
 
     </div>
