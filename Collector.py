@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.158 2004/04/08 15:57:09 ajung Exp $
+$Id: Collector.py,v 1.159 2004/04/12 15:30:20 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -697,13 +697,21 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         R.set('contact_email', fromDOM(DOM, 'senderaddress'))
 
         member = self._member_for_email(R.contact_email)
-        if member is None:
+        if member:
+            member_id = member.getUserName()
+        else:
+            member_id = 'Anonymous User'
+
+        allowed_to_post = self._is_allowed_to_post(member_id)
+
+        if not allowed_to_post:
+            msg = 'No permission to post for %s' % str(R.contact_email)
             if RESPONSE:
                 RESPONSE.setStatus(401)
-                RESPONSE.write('Unknown email address: %s' % str(R.contact_email))
+                RESPONSE.write(msg)
                 return
             else:
-                raise ValueError('Email "%s" not allowed to post' % R.email)
+                raise ValueError(msg)
 
         id = self.new_issue_number()
         self.invokeFactory('PloneIssueNG', id)
@@ -735,11 +743,26 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             member_email = member.getProperty('email')
             if member_email:
                 if email.lower().strip() == member_email.lower().strip():
-                    if self.pcng_member_allowed_to_post(member):
-                        return member
-                    else:
-                        return None
+                    return member
         return None  
+
+    def _is_allowed_to_post(self, userid):
+        """ Return 0|1 in case 'userid' is permitted to submit 
+            submissions through email.
+        """
+
+        mode = self.getIssue_email_submission()
+
+        if mode == 'disabled':
+            return 0
+        elif mode == 'staff':
+            user_ids= [u['username'] for u in self.getTrackerUsers(staff_only=1)]
+            return userid in user_ids
+        elif mode == 'authenticated':
+            user_ids= [u['username'] for u in self.getTrackerUsers()]
+            return userid in user_ids
+        elif mode == 'anyone':
+            return 1
 
     ######################################################################
     # Securitytoken
