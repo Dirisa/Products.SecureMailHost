@@ -1,6 +1,10 @@
 Requirements:
 
-  - Zope 2.6+, Plone 1.1 (2.0), Archetypes 1.0
+  - Zope 2.6+, Plone 1.1 (2.0), Archetypes 1.0 (tested)
+
+  - Plone 1.0.X is for now officially not supported. So use it
+    at your own risk. A quick test showed at it seems to run
+    problems under Plone 1.0.5.
 
 Installation:
  
