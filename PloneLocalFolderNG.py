@@ -12,6 +12,7 @@ from Products.Archetypes.public import BaseSchema, Schema
 from Products.Archetypes.public import StringField, StringWidget
 from Products.Archetypes.public import BooleanField, BooleanWidget
 from Products.Archetypes.public import BaseContent, registerType
+from Products.Archetypes.ExtensibleMetadata import FLOOR_DATE,CEILING_DATE
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
 from config import *
@@ -647,6 +648,9 @@ class PloneLocalFolderNG(BaseContent):
         perm = Permission(View,'',self)
         view_roles = perm.getRoles()
         dummyFileProxy._View_Permission = view_roles
+        # set 'effective' and 'expires' keys
+        dummyFileProxy.effective = FLOOR_DATE
+        dummyFileProxy.expires = CEILING_DATE  
 
         this_portal = getToolByName(self, 'portal_url')
         catalogTool = getToolByName(this_portal, 'portal_catalog')
