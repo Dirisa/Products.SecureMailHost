@@ -627,7 +627,7 @@ msgid "label_limit_followups"
 msgstr "Limitierung von Followups"
 
 msgid "label_hostname"
-msgstr "Hostname"
+msgstr "Hostname:Portnummer (wird für die URL in EMail-Benachrichtigungen verwendet)"
 
 msgid "label_participation_mode"
 msgstr "Berechtigung zur Teilnahme (Einstellen von Tickets)"
@@ -639,7 +639,7 @@ msgid "label_deadline_tickets"
 msgstr "Deadline"
 
 msgid "label_collector_abbreviation"
-msgstr "Abkürzung"
+msgstr "Abkürzung für den Tracker (wird im Subject der Email-Benachrichtigungen verwendet)"
 
 msgid "label_email_notification_policy"
 msgstr "Benachrichtigungspolicy"
