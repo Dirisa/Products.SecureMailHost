@@ -31,7 +31,7 @@
 	    name="edit_form"
 	    method="post"
 	    enctype="multipart/form-data"
-        tal:attributes="action python:here.portal_form_url(template.id)" >
+        tal:attributes="action python:here.portal_form_url(template.id)">
 
 errors:
  	<div tal:condition="errors" class="error">
@@ -40,8 +40,8 @@ errors:
 	  </div>
 	</div>
 
-        <input type="hidden" name="data:int" value="1">
-        <input type="hidden" name="metadata:int" value="0">
+        <input type="hidden" name="data:int" value="1" />
+        <input type="hidden" name="metadata:int" value="0" />
 
         <metal:block tal:repeat="name python: here.schema_getNames()">
           <fieldset tal:condition="python: name not in ('default',)" 
