@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.10 2004/01/16 10:17:54 ajung Exp $
+$Id: Translateable.py,v 1.11 2004/01/16 11:38:14 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -30,10 +30,11 @@ class Translateable:
             except:
                 self._v_have_pts = None
 
-        elif pts.meta_type.find('Broken') > -1: 
-            self._v_have_pts = None
-
-        return self._v_have_pts
+        try:
+            self._v_have_pts.translate
+            return self._v_have_pts
+        except:
+            return None
 
 
     security.declarePublic('translate')
