@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.141 2004/03/18 10:37:03 ajung Exp $
+$Id: Collector.py,v 1.142 2004/03/18 10:54:04 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -145,13 +145,17 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._transcript.setEncoding(self.getSiteEncoding())
         self.createToken()
         
+    def manage_beforeDelete(self, item, container):
+        """ Hook for pre-deletion actions """
+        self.unindexObject()
+
     security.declareProtected(ManageCollector, 'setup_tools')
     def setup_tools(self, RESPONSE=None):
         """ setup up required tools """
 
         self._setup_catalog()
         self._setup_workflow()
-        self.getTranscript().addComment('Tool setup')
+        self.getTranscript().addComment(u'Tool setup')
 
         if RESPONSE:
             util.redirect(RESPONSE, 'pcng_maintenance', 
