@@ -975,4 +975,8 @@ msgstr "Keine Referenzen vorhanden"
 msgid "Submit followup"
 msgstr "Antwort senden"
 
+msgid "open_issues_grouped_by_user"
+msgstr "Offene Tickets gruppiert nach Benutzern"
 
+msgid "open_unassigned_issues"
+msgstr "Offene, nicht zugewiesene Tickets"
