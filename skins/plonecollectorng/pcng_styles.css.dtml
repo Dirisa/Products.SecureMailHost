@@ -31,7 +31,13 @@ div.collector_headline_right {
     text-align: left;
 }
 
-div.issue_metadata{
+div.motd {
+    background: #cccccc;
+    padding: 0.2em;
+    font-weight: bold;
+}
+
+div.issue_metadata {
     background: #eeeeee;
     padding: 0.2em;
 }

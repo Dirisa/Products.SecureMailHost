@@ -11,8 +11,8 @@
     </metal:block>
 
     <div metal:fill-slot="main" >
+      <div class="motd" tal:content="here/pcng_motd|nothing" />
       <h1 i18n:translate="collector_overview">Collector overview</h1>
-
       <br/>
 
       <div tal:repeat="collector here/pcng_get_collectors" >
