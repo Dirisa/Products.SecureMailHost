@@ -85,7 +85,6 @@ class Collector(BaseFolder):
                     te.addChange(name, old, new)
 
         self.transcript.add(te)
-        self.transcript._p_changed = 1
 
     ######################################################################
     # Staff handling
@@ -135,7 +134,6 @@ class Collector(BaseFolder):
         self._adjust_staff_roles()
 
         self.transcript.add(te)
-        self.transcript._p_changed = 1
 
         if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
 
@@ -194,7 +192,6 @@ class Collector(BaseFolder):
             self._notification_emails[state] = emails
 
         self.transcript.add(te)
-        self.transcript._p_changed = 1
         if RESPONSE is not None: RESPONSE.redirect('pcng_view?portal_status_message=Your%20changes%20has%20been%20saved')
 
     security.declareProtected(ManageCollector, 'getNotificationsForState')
