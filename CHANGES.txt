@@ -18,6 +18,8 @@
   	 - unpacked_size (size in bytes of the unpacked contents of the packed file)
 
   - fixed URL backslash bug in __call__() causing grief for Mozilla browsers
+  
+  - added file delete capability
 
 0.4
 
