@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.218 2004/10/08 16:11:59 ajung Exp $
+$Id: Collector.py,v 1.219 2004/10/09 16:08:50 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -31,6 +31,7 @@ import notifications, collector_schema, issue_schema, util
 from Issue import PloneIssueNG
 from Translateable import Translateable
 from Catalog import PloneCollectorNGCatalog
+from Topics import Topics
 from workflows import VOC_WORKFLOWS
 
 
@@ -484,27 +485,13 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     # Topic-user mapping
     ######################################################################
 
-    security.declareProtected(ManageCollector, 'set_topic_users')
-    def set_topic_users(self, topic, users):
-        """Set the topics-user mapping for 'topic' where 'users' is a list
-           of user IDs.
-        """
-
-        if not hasattr(self, '_topic_user'):
-            self._topic_user = OOBTree()
-        self._topic_user[topic] = users
-
-    security.declareProtected(View, 'get_topics_user')
-    def get_topics_user(self):
-        """Return the topic-user mapping """
-        if not hasattr(self, '_topic_user'):
-            self._topic_user = OOBTree()
-
-        d = {}
-        for k,v in self._topic_user.items():
-            d[k] = v
-        return d
-
+    security.declareProtected(View, 'getTopics')
+    def getTopics(self):
+        """ return Topics instance """
+        if not hasattr(self, '_topics'):
+            self._topics = Topics()
+        return self._topics
+        
     ######################################################################
     # GroupUserFolder
     ######################################################################

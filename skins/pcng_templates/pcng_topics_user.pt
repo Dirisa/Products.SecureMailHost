@@ -16,32 +16,39 @@
 
 
   <table class="listing" 
-         tal:define="users python: here.getTrackerUsers(staff_only=1);
-                     topic_user here/get_topics_user">
+         tal:define="users python: here.getTrackerUsers(staff_only=1)">
     <tr>
       <th i18n:translate="topic">Topic</th>
       <th i18n:translate="staff_members">Staff members</th>
       <th i18n:translate="action">Action</th>
     </tr>
 
-    <tal:loop tal:repeat="topic here/pcng_get_topics">
+    <tal:loop tal:repeat="topic python: context.getTopics().getTopics()">
       <tr tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')"
-          tal:define="topic_users python: topic_user.get(topic, [])">
+          tal:define="users python: here.getTopics().getUsersForTopic(topic)">
   
         <td valign="top"> 
           <span tal:content="topic" />
         </td>
         <td>
-          <span tal:replace="python: ', '.join(topic_users)" />
+          <span tal:replace="python: ', '.join(users)" />
         </td>
         <td tal:define="topic python: context.quote(topic)">
           <a tal:attributes="href string:pcng_topics_user_form?topic=$topic">
             <img src="edit.gif" title="Edit assignment" i18n:attributes="title"/>
           </a>
+          <a tal:attributes="href string:pcng_delete_topic?topic=$topic">
+            <img src="delete.gif" title="Delete topic" i18n:attributes="title"/>
+          </a>
         </td>
       </tr>
     </tal:loop>
   </table>
+
+  <form method="post" action="pcng_add_topic">
+    <input type="text" name="topic" value="">
+    <input type="submit" class="context" i18n:attributes="value" value="New topic" />
+  </form>
 
     
   <hr>

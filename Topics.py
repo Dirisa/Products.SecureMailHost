@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Topics.py,v 1.2 2004/10/09 15:19:30 ajung Exp $
+$Id: Topics.py,v 1.3 2004/10/09 16:08:50 ajung Exp $
 """
 
 
@@ -30,7 +30,9 @@ class Topics(Persistent):
     
     def getTopics(self):
         """ return list of topics """
-        return self._topics
+        lst = self._topics
+        lst.sort()        
+        return lst
 
     def getTopicsForUser(self, user):
         """ get a list of topics for a particular user """
@@ -44,22 +46,31 @@ class Topics(Persistent):
         """ delete a topic""" 
         self._topics.remove(topic)
         del self._topic_user[topic]
+        self._p_changed = 1
 
     def addTopic(self, topic):
         """ add a topic """
         if not topic in self._topics:
             self._topics.append(topic)
         self._topic_user[topic] = []
+        self._p_changed = 1
 
     def addUser(self, topic, user):
         """ add a user to a topic """
         if not user in self._topic_user[topic]:
             self._topic_user.append(user)
+        self._p_changed = 1
+    
+    def setUsers(self, topic, users):
+        """ set users for a topic """
+        self._topic_user[topic] = users
+        self._p_changed = 1
 
     def deleteUser(self, topic, user):
         """ delete a user from a topic """
         if user in self._topic_user[topic]:
             self._topic_user.remove(user)
+        self._p_changed = 1
 
 InitializeClass(Topics) 
 
