@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.26 2004/01/16 10:56:13 ajung Exp $
+$Id: pdfwriter.py,v 1.27 2004/01/16 18:59:58 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -40,14 +40,11 @@ PAGE_HEIGHT = rl_config.defaultPageSize[1]
 # Settup custom fonts for UTF8 handling
 rl_config.warnOnMissingFontGlyphs = 0
 rl_config.TTFSearchPath= list(rl_config.TTFSearchPath) + [ os.path.join(os.path.dirname(__file__), 'ttffonts') ]
-pdfmetrics.registerFont(TTFont('NFont', 'rina.ttf'))
-
-#addMapping('NFont', 0, 0, 'NFont')
-#addMapping('NFont', 0, 1, 'NFont')
-#addMapping('NFont', 1, 0, 'NFont')
-#addMapping('NFont', 1, 1, 'NFont')
+pdfmetrics.registerFont(TTFont('NFont', 'steelfis.ttf'))
+pdfmetrics.registerFont(TTFont('NFont-Bold', 'steelfib.ttf'))
 
 NORMAL_FONT = 'NFont'
+BOLD_FONT = 'NFont-Bold'
 
 SITE_ENCODING = 'n/a'
 
@@ -89,7 +86,7 @@ myFirstPage = myLaterPages
 Elements = []
 
 HeaderStyle = styles["Heading3"] 
-HeaderStyle.fontName = NORMAL_FONT
+HeaderStyle.fontName = BOLD_FONT
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
@@ -168,6 +165,7 @@ def pdfwriter(collector, ids):
                     ## as the corresponding language catalog instead of returning unicode
                     ## or at least a string encoded using the site_encoding
                     l.append('<b>%s</b>: %s ' % (unicode(field.widget.Label(issue), 'latin1').encode('utf8'), v))
+                    print field.widget.Label(issue), type(field.widget.Label(issue))
 
             s = (', '.join(l)).strip()
             if s:
