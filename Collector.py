@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.224 2004/10/10 15:05:48 ajung Exp $
+$Id: Collector.py,v 1.225 2004/10/10 15:40:52 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -22,7 +22,8 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
 from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
-from config import CollectorCatalog, CollectorWorkflow, CollectorTool
+from config import CollectorCatalog, CollectorWorkflow
+from config import CollectorTool as CollectorToolId
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import UNDELETEABLE_FIELDS, SCHEMA_ID
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
@@ -160,7 +161,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     def _setup_util_tool(self):
         """ setup util tooltool """
 
-        try: self.manage_delObjects(CollectorTool)
+        try: self.manage_delObjects(CollectorToolId)
         except ConflictError: raise
         except: pass
 
@@ -756,7 +757,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         else:
             slots = []
         slots.extend(slots_left)
-        return slots
     left_slots = ComputedAttribute(left_slots, 1)
 
     def right_slots(self):
