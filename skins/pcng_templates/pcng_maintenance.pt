@@ -39,10 +39,6 @@
         <div class="formHelp" i18n:translate="help_setup_collector_catalog">This is sometimes necessary after an upgrade of PloneCollectorNG or when the catalog setup changed. You must also recreate the catalog if you have checked "Create index" for a field.</div>
       </li>
       <li>
-        <a href="migrate_issue_workflow_histories"><span i18n:translate="migrate_issue_workflow_histories">Migrate workflow histories of all issues</span></a> 
-        <div class="formHelp" i18n:translate="help_migrate_issue_workflow_histories">The migration of all issue workflow histories is necessary after upgrading from V 1.X to 1.2 or higher </div>
-      </li>
-      <li>
         <a href="pcng_incomplete_issues"><span i18n:translate="show_incomplete_issues">Show incomplete issues</span></a> 
         <div class="formHelp" i18n:translate="help_incomplete_issues">Shows you all unfilled issues and gives you a "fast-link" to reject issues (it pre-defines the followup text and the followup state)</div>
       </li>

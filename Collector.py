@@ -5,12 +5,12 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.208 2004/09/17 15:22:42 ajung Exp $
+$Id: Collector.py,v 1.209 2004/09/19 09:19:16 ajung Exp $
 """
 
 import base64, time, random, md5, os
 
-from Globals import InitializeClass
+from Globals import InitializeClass, PersistentMapping
 from ComputedAttribute import ComputedAttribute
 from AccessControl import  ClassSecurityInfo
 from Acquisition import aq_base
@@ -585,10 +585,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """ check the attributes of the collector instance against the
             current schema and update attributes accordingly.
         """
-        from Globals import PersistentMapping
-
-        if not hasattr(self, '_md'):
-            self._md = PersistentMapping()
 
         for field in self.Schema().fields():
 
@@ -598,9 +594,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
                 pass
             except:
                 field.set(self, field.default)
-
-        # PCNGSchema migration
-        self.migrate_schema()
 
         self.getTranscript().add(CommentEvent(u'Collector schema updated'))
         util.redirect(RESPONSE, 'pcng_maintenance',
@@ -622,17 +615,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         self.getTranscript().add(CommentEvent(u'Issue UIDs reregistered'))
         util.redirect(RESPONSE, 'pcng_maintenance',
                       self.Translate('uids_recreated', 'UIDs recreated'))
-
-
-    security.declareProtected(ManageCollector, 'migrate_issue_workflow_histories')
-    def migrate_issue_workflow_histories(self, RESPONSE=None):
-        """ Migrate workflow histories of all issues to new workflow id """
-        for issue in self.objectValues('PloneIssueNG'):
-            issue._migrate_workflow_history()
-        self.getTranscript().add(CommentEvent(u'Issue workflows migrated'))
-        util.redirect(RESPONSE, 'pcng_maintenance',
-                      self.Translate('issue_workflow_histories_migrated', 'Issue workflow histories migrated'))
-
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, ids, RESPONSE):

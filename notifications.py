@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.43 2004/09/17 14:04:56 ajung Exp $
+$Id: notifications.py,v 1.44 2004/09/19 09:22:31 ajung Exp $
 """
 
 import sys
@@ -17,7 +17,6 @@ import email.Utils
 
 from zLOG import LOG, ERROR, INFO
 from AccessControl import getSecurityManager
-from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 
 import util, notification_policies
