@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.97 2003/12/04 14:51:52 ajung Exp $
+$Id: Issue.py,v 1.98 2003/12/05 13:59:45 ajung Exp $
 """
 
 import sys, os, time
@@ -30,37 +30,6 @@ from WatchList import WatchList
 from Translateable import Translateable
 import util, notifications
 
-
-class IssueRelationship(Persistent):
-    security = ClassSecurityInfo()
-    
-    def __init__(self, collector_title, id, issue_url, comment):
-        self.collector_title = collector_title
-        self.id = id
-        self.issue_url = issue_url
-        self.comment = comment
-
-    def __hash__(self):
-        return self.issue_url
-
-    security.declarePublic('getId')
-    def getId(self): return self.id
-
-    security.declarePublic('getURL')
-    def getURL(self): return self.issue_url
-
-    security.declarePublic('getComment')
-    def getComment(self): return self.comment
-
-    security.declarePublic('getCollectorTitle')
-    def getCollectorTitle(self): return self.collector_title
-
-    def __str__(self):
-        return '%s: %s' % (self.issue_url, self.comment)
-
-    __repr__ = __str__
-
-InitializeClass(IssueRelationship)
 
 _marker = []
 
@@ -259,13 +228,33 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
         if not reference.comment:
             raise ValueError(self.translate('reference_no_comment', 'References must have a comment'))
 
-        self.addReference(issue, IssueRelationship(tracker.title_or_id(), 
-                                                   issue.getId(),
-                                                   issue.absolute_url(), 
-                                                   reference.comment))
+        self.addReference(issue, "relates_to", issue_id=issue.getId(),
+                                               issue_url=issue.absolute_url(), 
+                                               collector_title=tracker.getId(),
+                                               comment=reference.comment)
+
         util.redirect(RESPONSE, 'pcng_issue_references', 
                       self.translate('reference_stored', 'Reference has been stored'))
 
+
+    security.declareProtected(View, 'getForwardReferences')
+    def getForwardReferences(self):
+        """ AT forward references """
+        from Products.Archetypes.config import REFERENCE_CATALOG
+        tool = getToolByName(self, REFERENCE_CATALOG)
+        refs = tool.getReferences(self, None)
+        return refs
+        
+    security.declareProtected(View, 'getBackReferences')
+    def getBackReferences(self):
+        """ AT forward references """
+        from Products.Archetypes.config import REFERENCE_CATALOG
+        tool = getToolByName(self, REFERENCE_CATALOG)
+        sID, sobj = tool._uidFor(self)
+        brains = tool._queryFor(tid=sID, relationship=None)
+        refs = tool._resolveBrains(brains)
+        return refs
+        
     security.declareProtected(View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
         """ create graphical representation of the references tree
