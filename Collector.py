@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.60 2003/11/06 12:53:23 ajung Exp $
+$Id: Collector.py,v 1.61 2003/11/06 16:01:55 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -35,7 +35,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     schema = collector_schema.schema
 
     actions = ({
-        'id': 'view',
+        'id': 'pcng_browse',
         'name': 'Browse',
         'action': 'pcng_view',
         'permissions': (View,)
@@ -320,6 +320,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         if RESPONSE is None:
             return id
 
+    def view(self, RESPONSE=None):
+        """ override 'view' """
+        util.redirect(RESPONSE, self.absolute_url() + "/pcng_view")
+    base_view = view
+
     ######################################################################
     # Maintainance
     ######################################################################
@@ -429,7 +434,7 @@ class PloneCollectorNGCatalog(CatalogTool):
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
     for a in fti['actions']:
-        if a['id'] in ('syndication','references','metadata', 'edit'):
+        if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
             a['visible'] = 0
     return fti
 

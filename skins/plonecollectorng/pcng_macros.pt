@@ -103,7 +103,7 @@
 
       <metal:block tal:repeat="issue batch">
         <h2 class="pcng_transcript">       
-          <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId">
+          <a tal:attributes="href python: here.absolute_url() + '/' + issue.getId + '/pcng_issue_view'">
             <span tal:replace="issue/getId" />.
             <span tal:replace="issue/Title" />
           </a>
@@ -129,7 +129,7 @@
 
 <div metal:define-macro="search_issues_form">
 
-  <a href="?advanced_search=1"
+  <a href="pcng_view?advanced_search=1"
      tal:condition="not: request/advanced_search|nothing">Advanced search</a>
 
   <form  method="post" tal:attributes="action string: ${here/absolute_url}/pcng_show_issue">

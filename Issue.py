@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.71 2003/11/06 12:53:23 ajung Exp $
+$Id: Issue.py,v 1.72 2003/11/06 16:01:55 ajung Exp $
 """
 
 import sys, os
@@ -67,7 +67,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = ({
-        'id': 'view',
+        'id': 'pcng_browse',
+        'name': 'Browse',
+        'action': 'pcng_ticket_browser',
+        'permissions': (View,)
+        },
+        {'id': 'pcng_issue_view',
         'name': 'View',
         'action': 'pcng_issue_view',
         'permissions': (View,)
@@ -91,11 +96,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         'name': 'Add Issue',
         'action': 'add_issue',
         'permissions': (AddCollectorIssue,)
-        },
-        {'id': 'issue_browser',
-        'name': 'Browse',
-        'action': 'pcng_ticket_browser',
-        'permissions': (View,)
         },
         {'id': 'issue_debug',
         'name': 'Debug',
@@ -406,7 +406,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
     def pcng_ticket_browser(self, RESPONSE=None):
         """ redirect to ticket browser """
-        util.redirect(RESPONSE, self.aq_parent.absolute_url())
+        util.redirect(RESPONSE, self.aq_parent.absolute_url() + '/pcng_view')
+
+    def view(self, RESPONSE=None):
+        """ override 'view' """
+        util.redirect(RESPONSE, self.absolute_url() + "/pcng_issue_view")
+    base_view = view
 
     ######################################################################
     # Catalog stuff
@@ -511,7 +516,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
     for a in fti['actions']:
-        if a['id'] in ('syndication','references','metadata', 'edit'):
+        if a['id'] in ('view', 'syndication','references','metadata', 'edit'):
             a['visible'] = 0
 
     fti['global_allow'] = 0

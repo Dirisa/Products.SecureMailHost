@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.16 2003/11/01 17:03:26 ajung Exp $
+$Id: util.py,v 1.17 2003/11/06 16:01:55 ajung Exp $
 """
 
 import urllib
@@ -106,7 +106,6 @@ def redirect(RESPONSE, dest, msg=None,**kw):
             url += "portal_status_message=%s&" % urllib.quote(msg)
         if kw:
             url += '&'.join(['%s=%s' % (k, urllib.quote(v)) for k,v in kw.items()])
-
         RESPONSE.redirect(url) 
 
 

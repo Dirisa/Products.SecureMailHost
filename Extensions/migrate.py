@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.9 2003/11/06 11:52:15 ajung Exp $
+$Id: migrate.py,v 1.10 2003/11/06 16:01:55 ajung Exp $
 """
 
 
@@ -144,18 +144,23 @@ def migrate_tracker(tracker, dest):
 
 
 mapping = {
-    'classification' : ('classification', 'issuedata'),
     'title' : ('title', 'issuedata'),
-    'topic' : ('topic', 'issuedata'),
     'description' : ('description', 'issuedata'),
+    'solution' : ('solution', 'issuedata'),
+    'classification' : ('classification', 'issuedata'),
+    'topic' : ('topic', 'issuedata'),
     'version_info' : ('version_info', 'issuedata'),
     'importance' : ('importance', 'issuedata'),
     'operating_system' : ('operating_system', 'issuedata'),
-    'solution' : ('solution', 'issuedata'),
+    'custom1' : ('custom1', 'issuedata'),
+    'custom2' : ('custom2', 'issuedata'),
+    'custom3' : ('custom3', 'issuedata'),
+
     'hours_needed' : ('progress_hours_needed', 'progress'),
     'hours_required' : ('progress_hours_estimated', 'progress'),
     'progress' : ('progress_percent_done', 'progress'),
     'deadline' : ('progress_deadline', 'progress'),
+
     'submitter_email' : ('contact_email', 'contact'),
     'submitter_address' : ('contact_address', 'contact'),
     'submitter_name' : ('contact_name', 'contact'),
@@ -164,9 +169,6 @@ mapping = {
     'submitter_position' : ('contact_position', 'contact'),
     'submitter_company' : ('contact_company', 'contact'),
     'submitter_city' : ('contact_city', 'contact'),
-    'custom1' : ('custom1', 'issuedata'),
-    'custom2' : ('custom2', 'issuedata'),
-    'custom3' : ('custom3', 'issuedata'),
 }
 
 def migrate_schema(tracker, collector):
