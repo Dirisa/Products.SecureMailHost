@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.138 2004/03/12 15:40:50 ajung Exp $
+$Id: Collector.py,v 1.139 2004/03/17 19:33:12 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -424,7 +424,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ create a new issue """
         id = self.new_issue_number()
         self.invokeFactory('PloneIssueNG', id)
-        issue =  self._getOb(id)
+        issue = self._getOb(id)
         issue.post_creation_actions()
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
                       portal_status_message=self.Translate('new_issue_created', 'New issue created'),
@@ -576,7 +576,18 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
       
         self._transcript.addComment(u'Issue UIDs reregistered')
         util.redirect(RESPONSE, 'pcng_maintenance',
-                          self.Translate('uids_recreated', 'UIDs recreated'))
+                      self.Translate('uids_recreated', 'UIDs recreated'))
+
+
+    security.declareProtected(ManageCollector, 'migrate_issue_workflow')
+    def migrate_issue_workflow_histories(self, RESPONSE=None):
+        """ Migrate workflow histories of all issues to new workflow id """
+        for issue in self.objectValues('PloneIssueNG'):
+            issue._migrate_workflow_history()
+        self._transcript.addComment(u'Issue workflows migrated')
+        util.redirect(RESPONSE, 'pcng_maintenance',
+                      self.Translate('issue_workflow_histories_migrated', 'Issue workflow histories migrated'))
+      
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, ids, RESPONSE):
