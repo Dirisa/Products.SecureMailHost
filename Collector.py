@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.135 2004/03/09 19:03:51 ajung Exp $
+$Id: Collector.py,v 1.136 2004/03/11 17:19:20 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -271,15 +271,15 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         for name in util.remove_dupes(names):
             if name.replace('group_', '') in groups and not with_groups: continue  # no group names !!!
             member = membership_tool.getMemberById(name)
-            d = { 'username':name, 'roles':[], 'fullname':'', 'email':''}
+            d = { 'username':name, 'role':'', 'fullname':'', 'email':''}
 
             if member:
                 d['fullname'] = member.getProperty('fullname')
                 d['email'] = member.getProperty('email')
             
-            if name in self._managers: d['roles'].append('TrackerAdmin')
-            if name in self._supporters: d['roles'].append('Supporter')
-            if name in self._reporters: d['roles'].append('Reporter')
+            if name in self._reporters: d['role'] = 'Reporter'
+            if name in self._supporters: d['role'] = 'Supporter'
+            if name in self._managers: d['role'] = 'TrackerAdmin'
             l.append(d)
 
         l.sort(lambda a,b: cmp(a['username'].lower(), b['username'].lower()))

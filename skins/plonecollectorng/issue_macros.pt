@@ -258,7 +258,7 @@ function show_tickets() {
       <td valign="top">
         <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
           <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
-            <option tal:content="string: ${u/fullname} (${u/username})"
+            <option tal:content="string: ${u/fullname} (${u/username}, ${u/role})"
                     tal:attributes="value u/username;
                                     selected python: u['username'] in assignees" 
              />
