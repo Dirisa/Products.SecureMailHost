@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+License: see LICENSE.txt
+
+$Id: PCNGSchema.py,v 1.2 2004/01/29 17:14:51 ajung Exp $
+"""
+
 
 from types import FileType
 
@@ -9,7 +19,9 @@ from ZPublisher.HTTPRequest import FileUpload
 from Products.Archetypes.utils import mapply
 from Products.Archetypes.Layer import DefaultLayerContainer
 from Products.Archetypes.interfaces.layer import ILayerContainer, ILayerRuntime, ILayer 
+from Products.Archetypes.interfaces.field import IField
 
+# Some replacement classes for Archetypes
 
 class PCNGSchemata(Persistent):
 
@@ -41,8 +53,8 @@ class PCNGSchemata(Persistent):
 
         if not field_id in self._names:
             raise KeyError("Field '%s' does not exists" % field_id)
-        del self._names[field_id]
-        del self._fields[fields_id]
+        self._names.remove(field_id)
+        del self._fields[field_id]
         self._p_changed = 1
 
     __delitem__ = delField
@@ -57,7 +69,6 @@ class PCNGSchemata(Persistent):
             return default
 
     __getitem__ = get = getField
-
 
     security.declareProtected(View, 'searchable')
     def searchable(self):
@@ -97,6 +108,14 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
         PCNGSchemata.__init__(self, fields=fields)
         DefaultLayerContainer.__init__(self)
 
+    security.declareProtected(ModifyPortalContent, 'copy')
+    def copy(self):
+        """ copy """
+
+        s = PCNGSchema()
+        for name in self._names:
+            s.addField(self._fields[name])
+        return s
 
     security.declareProtected(ModifyPortalContent, 'setDefaults')
     def setDefaults(self, instance):
@@ -123,9 +142,6 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                     # specify a mimetype if the mutator takes a mimetype argument
                     kw['mimetype'] = field.default_content_type
                 mapply(mutator, *args, **kw)
-
-
-
 
     security.declareProtected(ModifyPortalContent, 'initializeLayers')
     def initializeLayers(self, instance, item=None, container=None):
@@ -156,6 +172,7 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                     object.initializeInstance(instance, item, container)
                     initializedLayers.append((layer, object))
 
+    security.declareProtected(View, 'getSchemataNames')
     def getSchemataNames(self):
         """ return name of schematas """
         l = []
@@ -165,6 +182,7 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                 l.append(field.schemata)
         return l
 
+    security.declareProtected(View, 'getSchemataFields')
     def getSchemataFields(self, schemata_name):
         """ return fields of a given schemata """
 
@@ -175,8 +193,6 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                 l.append(field)
         return l
         
-
-
     security.declareProtected(View, 'validate')
     def validate(self, instance, REQUEST=None, errors=None, data=None, metadata=None):
         """Validate the state of the entire object.
@@ -344,6 +360,116 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
                 except Exception, E:
                     log_exc()
                     errors[name] = E
+
+    ######################################################################
+    # Schema manipulation methods 
+    ######################################################################
+
+    security.declareProtected(ModifyPortalContent, 'delSchemata')
+    def delSchemata(self, schemata_name):
+        names = [f.getName() for f in self._fields.values()  if f.schemata==schemata_name]
+        print names
+        for name in names:
+            self.delField(name)
+
+    security.declareProtected(ModifyPortalContent, 'addSchemata')
+    def addSchemata(self, name):
+        """ create a new schema by adding a new field with schemata 'name' """
+        from Products.Archetypes.Field import StringField
+
+        if name in self.getSchemataNames():
+            raise ValueError('Schemata "%s" already exists' % name)
+        self.addField(StringField('%s_default' % name, schemata=name))
+
+    security.declareProtected(ModifyPortalContent, 'changeSchemataForField')
+    def changeSchemataForField(self, fieldname, schemataname):
+        """ change the schemata for a field """
+        field = self._fields[fieldname]
+        self.delField(fieldname)
+        field.schemata = schemataname
+        self.addField(field)
+
+    security.declareProtected(ModifyPortalContent, 'moveSchemata')
+    def moveSchemata(self, name, direction):
+        """ move a schemata to left (direction=-1) or to right
+            (direction=1)
+        """
+        if not direction in (-1, 1):
+            raise ValueError('direction must be either -1 or 1')
+
+        fields = self.fields()
+        fieldnames = [f.getName() for f in fields]
+        schemata_names = self.getSchemataNames()
+
+        d = {}
+        for s_name in self.getSchemataNames():
+            d[s_name] = self.getSchemataFields(s_name)
+
+        pos = schemata_names.index(name)
+        if direction == -1:
+            if pos > 0:
+                schemata_names.remove(name)
+                schemata_names.insert(pos-1, name)
+        if direction == 1:
+            if pos < len(schemata_names):
+                schemata_names.remove(name)
+                schemata_names.insert(pos+1, name)
+
+        self.clear()
+
+        for s_name in schemata_names:
+            for f in fields:
+                if f.schemata == s_name:
+                    self.addField(f)
+
+    security.declareProtected(ModifyPortalContent, 'moveField')
+    def moveField(self, name, direction):
+        """ move a field inside a schema to left (direction=-1) or to right
+            (direction=1)
+        """
+        if not direction in (-1, 1):
+            raise ValueError('direction must be either -1 or 1')
+
+        fields = self.fields()
+        fieldnames = [f.getName() for f in fields]
+        schemata_names = self.getSchemataNames()
+
+        field = self[name]
+        field_schemata_name = self[name].schemata
+
+        d = {}
+        for s_name in self.getSchemataNames():
+            d[s_name] = self.getSchemataFields(s_name)
+
+        lst = d[field_schemata_name]  # list of fields of schemata
+        pos = [f.getName() for f in lst].index(field.getName())
+
+        if direction == -1:
+            if pos > 0:
+                del lst[pos]
+                lst.insert(pos-1, field)
+        if direction == 1:
+            if pos < len(lst):
+                del lst[pos]
+                lst.insert(pos+1, field)
+
+        d[field_schemata_name] = lst
+
+        self.clear()
+        for s_name in schemata_names:
+            for f in d[s_name]:
+                self.addField(f)
+
+    security.declareProtected(ModifyPortalContent, 'replaceField')
+    def replaceField(self, name, field):
+        """ replace field with name 'name' in-place with 'field' """
+
+        if IField.isImplementedBy(field):
+            if not name in self._names:
+                raise ValueError("Field '%s' does not exist" % field.getName())
+            self._fields[name] = field
+        else:
+            raise ValueError('wrong field: %s' % field)
 
 InitializeClass(PCNGSchema)
 
