@@ -1,0 +1,147 @@
+================================================================
+This file is to capture issues/ideas/feedback on how 
+PloneLocalFolderNG (PLFNG) should handle filesystem 
+file/folder names that are illegal Zope/Plone id's.
+Comments from <Sarah> and <Marcel> were in response to my 
+original email (at the end of this file) to them.
+
+Since that initial email exchange, I have continued to 
+have problems on the PLFNG-enabled Plone site that 
+am managing wrt users uploading and trying to access
+files with illegal Plone ID's, so have added logic to
+via checkValidId() and getFilteredFSItems() methods
+to prevent the listing/upload/unzip of files with 
+illegal Plone ID's.  Note: I have included the 
+'skipInvalidIds' parameter in getFilteredFSItems() 
+to override filtering out of illegal Plone ID's just
+in case someone *really* wants expose such content.
+
+regards, Mike. <mgarnsey>
+================================================================
+
+<mgarnsey>
+----------------------------------------------------------------
+I like radimnov's idea of placing the original (illegal Plone
+ID) filename in metadata.  Generalizing on this, though, I think
+the right way to implement this is to add 'title' metadata to the
+file/folder metadata.  Specifically, the approach would be to
+add as section='GENERAL', option='title'.  I will see if I
+can squeeze this into the v0.6 release.
+----------------------------------------------------------------
+
+<radimnov>
+----------------------------------------------------------------
+> We are using national characters in filenames.  Thus
+> this filername is invalid Zope ID. It would be nice to
+> PLFNG can (optionally) rewrite this invalid id to some
+> valid Zope ID (random number and letters, or replace
+> invalid chars with underscore). 
+> Original filename should be stored in metadata.
+
+> PLFNG will present object title from metadata,
+> downloadable version file name will be taken from
+> metadata too (because on filesystem will be stored file
+> with original filename).
+
+and
+
+> I investigated how to successfully read file with 'illegal'
+> characters from filesystem and it is not so easy.
+> So, described feature seems to be a bit crazy. 
+
+> I'll rename all files to conform Zope ID format, but I need
+> to present them in polite form. I need to add some 'title'
+> to file and folder metadata.
+----------------------------------------------------------------
+
+
+<Sarah>
+----------------------------------------------------------------
+> I honestly don't see major issues with simply setting some 
+> guidelines and outline them in the readme file. 
+
+> look at the limitations when naming Windows files. There are 
+> several "illegal" characters. The Mac has a few as well, not 
+> as many, but limitations do exist - like... not using colons
+> in the name, etc...
+----------------------------------------------------------------
+
+<Marcel>
+----------------------------------------------------------------
+> Not easy. I think I prefer a combination of 2 and 3. Do the name 
+> mangling AND give the uploader a warning that this will be the 
+> case so that he may adjust his links.
+
+> BTW would AT unique IDs be of help (somewhere in the future)? AT 
+> objects can be linked to, regardless of their location. Of course,
+> the manager would have to adjust his links as well. So just forget 
+> this.
+----------------------------------------------------------------
+
+
+On Jul 20, 2004, at 4:33 PM, Mike Garnsey wrote:
+----------------------------------------------------------------
+> when Andreas wrote PLFNG, he made id=title=filename
+> (which makes perfect sense IMHO)
+>
+> there's nothing wrong with titles + filenames
+> starting with underscores....its just id's
+> that Plone doesnt allow to begin that way.
+>
+> problem is, users might upload files with
+> names that begin with underscores --e.g. _foo.c
+>
+> So, in plfng_view.pt, file '_foo.c' has the link:
+>    http://localhost/test3/_foo.c
+> which, when clicked, gets Plone to invoke
+> PLFNG's __call__() method, which in
+> turn calls showFile().  But Plone checks to
+> make sure the id is legal, thus the problem.
+>
+> Possible solutions?
+>
+> 1. disallow such filenames in PLFNG instances
+>    either through code and/or warning messages.
+>
+> 2. mung the id for PLFNG contents so that
+>    they are always 'legal'.  eg,
+>
+>    a. via special prefix like [fs]
+>
+>       name = _foo.c
+>          ->     id = [fs]_foo.c
+>          ->  title = _foo.c
+>
+>       __call__() would simply use title
+>       instead of id to fetch the actual
+>       file (_foo.c) contents.
+>
+>    note: this would only have to be done for
+>    filenames beginning with '_'
+>
+> 3. somehow hack/patch/disable Plone's
+>    id checking for PLFNG content
+>
+> 4. ????
+>
+> solution #1 is easy to do for file uploads,
+> but not trivial to enforce via code for
+> upload of packed files (containing illegal
+> filenamed contents) that are subsequently
+> unpacked.
+>
+> solution #2 seems good for browsing of
+> PLFNG contents, but would add levy a burden
+> on site content creators not to create
+> hyperlinks for PLFNG 'problem' files as
+>     <img src="/images/_foo.png">
+>  but as:
+>     <img src="/images/[fs]_foo.png">
+>
+> solution #3 is a bad idea for a variety of reasons ;)
+>
+> thoughts?
+>
+----------------------------------------------------------------
+
+
