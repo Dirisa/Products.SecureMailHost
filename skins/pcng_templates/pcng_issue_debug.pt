@@ -22,11 +22,17 @@
         <li>Roles: <span tal:content="python: member.getRolesInContext(here)" />
       </ul>
         
+
       <h3>Workflow history</h3>
-      <ul>
-      <li tal:repeat="item here/getWorkflowHistory" 
-          tal:content="item" />
+      <ul tal:define="wf_history here/getWorkflowHistory">
+        <li tal:repeat="wf wf_history/keys" >
+          <span  tal:content="wf" />
+          <ul>
+            <li tal:repeat="item python: wf_history.get(wf)" tal:content="item" />
+          </ul>
+        </li>
       </ul>
+
 
       <h3>Email</h3>
       <tal:loop tal:repeat="lang python: ['en'] + here.getLanguages()">
@@ -35,6 +41,7 @@
         <span tal:condition="not: repeat/lang/end">&bull;</span>
       </tal:loop>
       <pre tal:content="python: here.format_transcript(request.get('pcng_language', 'en')).encode(here.getSiteEncoding())" />
+
 
       <h3>Archetypes</h3>
       <table>
@@ -46,8 +53,8 @@
             <span tal:content="python: here.getField(field.getName()).get(here)" />
           </td>
         </tr>
-
       </table>
+
 
       <h3>Misc.</h3>
       <ul>
@@ -57,6 +64,7 @@
           </a>
         </li>
       </ul>
+
 
       <h3>XML</h3>
       <pre tal:content="context/pcng_issue_xml" />
