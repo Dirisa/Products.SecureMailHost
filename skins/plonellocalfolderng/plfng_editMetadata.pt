@@ -10,6 +10,7 @@
 	                 realPath python:here.getFileRealPath(REQUEST=request);
 	     				  comments python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='comment');
 	                 uploader python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='source');
+	                 revision python:here.getFileMetadata(REQUEST=request,section='GENERAL',option='revision');
 	                 md5      python:here.getFileMetadata(REQUEST=request,section='DIAGNOSTICS',option='md5');
 	                 numUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='num_files');
 	                 sizezUnpackedFiles python:here.getFileMetadata(REQUEST=request,section='ARCHIVEINFO',option='unpacked_size');
@@ -32,8 +33,11 @@
 					uploader
 				</span>
 				<br>
+				<b>revision = </b><span tal:content="revision">
+					revision
+				</span>
+				<br>
 				<b>comments = </b>
-				
 	         <form tal:attributes="action string:${request/URL1}/setFileMetadata" method="post">
 		        <table width="100%">
 		          <tr>
