@@ -15,7 +15,6 @@ Installation:
     Attention: Archetypes 1.3 IS MANDATORY. 
                Archetypes 1.2.X is *NOT SUPPORTED*
 
-
 Migration:
 
     Migration to PloneCollectorNG is supported for CMFCollectorNG.  see
