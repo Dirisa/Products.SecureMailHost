@@ -15,7 +15,7 @@ default_output_type = 'text/html',
                                     rows=4),
                                     
               ),
-              
+
     TextField('answer',
               required = 1,
               searchable = 1,
@@ -49,7 +49,10 @@ default_output_type = 'text/html',
 class HelpCenterFAQ(BaseContent):
     """A simple archetype"""
 
-    content_icon = 'discussionitem_icon.gif'
+    typeDescription= 'You can add a Frequently Asked Question (preferrably with an answer), and it will be reviewed and approved by our documentation team.'
+    typeDescMsgId  = 'description_edit_faq'
+
+    content_icon = 'faq_icon.gif'
 
     schema = schema
     archetype_name = 'FAQ'

@@ -5,10 +5,10 @@
  
 <body>
     <div metal:fill-slot="main">
-        <div metal:define-macro="body" 
+        <div metal:define-macro="faq" 
              tal:define="w python:here.widget;">
 
-            <h1 tal:content="here/Title">Question</h1>
+            <h2 tal:content="here/Title">Question</h2>
             
             <div class="documentDescription"
                  tal:content="structure here/getQuestion|nothing">
@@ -21,10 +21,15 @@
     
             <p tal:condition="here/getVersions" 
                class="discreet">
-                This FAQ entries applies to: 
-                <span metal:use-macro="python:here.widget('versions')">
+                This FAQ applies to: 
+                <span tal:condition="here/versions"
+                      metal:use-macro="python:here.widget('versions')">
                 Versions
-                </span>.
+                </span>
+
+                <span tal:condition="not: here/versions">
+                Any version.
+                </span>
             </p>
     
         </div>

@@ -30,7 +30,10 @@ schema = BaseFolderSchema + Schema((
 class HelpCenterFAQFolder(BaseFolder):
     """A simple folderish archetype"""
 
-    content_icon = 'discussionitem_icon.gif'
+    typeDescription= 'This is a folder that holds FAQs, and it allows you to display individual sections.'
+    typeDescMsgId  = 'description_edit_faqfolder'
+
+    content_icon = 'faq_icon.gif'
 
     schema = schema
     archetype_name = 'FAQ Container'
