@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.24 2003/10/26 14:00:50 ajung Exp $
+$Id: SchemaEditor.py,v 1.25 2003/10/26 15:07:08 ajung Exp $
 """
 
 import operator
@@ -295,7 +295,7 @@ class SchemaEditor:
         """
 
         if isinstance(field.vocabulary, StringType):
-            return 'methode:' + field.vocabulary
+            return 'method:' + field.vocabulary
 
         l = []
         for k in field.vocabulary:
