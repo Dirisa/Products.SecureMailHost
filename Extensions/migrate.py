@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.17 2003/11/10 12:39:49 ajung Exp $
+$Id: migrate.py,v 1.18 2003/11/10 17:08:21 ajung Exp $
 """
 
 
@@ -20,7 +20,7 @@ PERFORM A BACKUP OF YOUR DATA.FS **BEFORE** RUNNING THIS SCRIPT.  DO NOT
 COMPLAIN IN CASE OF A FAILURE OR DATA LOSS. YOU HAVE BEEN WARNED!!!!!!!!!!!
 """
 
-
+from Acquisition import aq_base
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
 from zLOG import LOG,INFO,ERROR,WARNING
@@ -250,9 +250,9 @@ def migrate_schema(tracker, collector):
 def migrate_issue(issue, collector):
     print 'Migrating issue:', issue
 
-    new_issue = PloneIssueNG(issue.getId(), issue.title, collector.schema_getWholeSchema())
-    collector._setObject(issue.getId(), new_issue)
-    new_issue = getattr(collector, issue.getId())
+    collector.invokeFactory('PloneIssueNG', issue.getId())
+    new_issue = collector._getOb(issue.getId())
+    new_issue.setSchema(collector.schema_getWholeSchema())
 
     P = record()
     P.set('title', issue.title)
@@ -281,6 +281,7 @@ def migrate_issue(issue, collector):
     new_issue.changeOwnership(new_owner)
     
     # Migrate uploads
+    
     ids = issue.objectIds()
     new_issue.manage_pasteObjects(issue.manage_copyObjects(ids))
 
