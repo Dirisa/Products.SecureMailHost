@@ -8,12 +8,6 @@ Bugs found when testing on plone.org
 
 - Deleting file in release doesn't seem possible
 
-- primary=1 on downloadable file does not seem to work - going straight to path
-  still shows view, and does not download file. Workaround with explicit link
-  in psc_download_view.pt and psc_release_view.pt - this needs fixing.
-  -- deo: who said that 'primary=1' is suposed to do it?
-  -- deo: his used for a completely different thing... :-)
-
 - The Releases portlet needs to list the category of the release with the Title,
   therefore it needs to be in the catalog.
 

@@ -1,5 +1,5 @@
 """
-$Id: PSCFile.py,v 1.4 2005/03/09 18:04:32 dtremea Exp $
+$Id: PSCFile.py,v 1.5 2005/03/09 19:06:09 dtremea Exp $
 """
 
 import re
@@ -71,12 +71,11 @@ class PSCFile(BaseContent):
         """Get the direct URL to the download.
         """
         #return '%s/getDownloadableFile' % self.absolute_url()
-        return '%s/psc_download' % self.absolute_url()
+        return self.absolute_url()
 
-    # XXX: Just a workaround to lauch PloneSoftwareCenter
-    security.declareProtected(CMFCorePermissions.View, 'psc_download')
-    def psc_download(self):
-        """The real fix come soon... ;-)"""
+    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    def index_html(self):
+        """Allows file direct access download."""
         field = self.getField('downloadableFile')
         field.download(self)
 
