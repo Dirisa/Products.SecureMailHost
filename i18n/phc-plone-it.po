@@ -42,3 +42,53 @@ msgstr "Centro di Supporto"
 msgid "HelpCenter"
 msgstr "Centro di Supporto"
 
+
+msgid "How-to Area"
+msgstr "Area Ricette"
+
+msgid "HelpCenterHowToFolder"
+msgstr "Cartella delle Ricette"
+
+
+msgid "description_edit_phc"
+msgstr "Questa e' una cartella che contiene elementi del Centro di Supporto"
+
+msgid "PHCFolder"
+msgstr "Cartella del Centro di Supporto"
+
+
+msgid "How-to Area"
+msgstr "Area Ricette"
+
+msgid "HelpCenterHowToFolder"
+msgstr "Cartella delle Ricette"
+
+
+msgid "How-to"
+msgstr "Ricette"
+
+msgid "HelpCenterHowTo"
+msgstr "Ricette"
+
+msgid "Tutorial Area"
+msgstr "Area Guide"
+
+msgid "HelpCenterTutorialFolder"
+msgstr "Cartella delle Guide"
+
+
+msgid "Tutorial Page"
+msgstr "Pagina della Guida"
+
+msgid "HelpCenterTutorialPage"
+msgstr "Pagina della Guida"
+
+
+msgid "Tutorial"
+msgstr "Guida"
+
+msgid "HelpCenterTutorial"
+msgstr "Guida"
+
+msgid "description_edit_tutorial"
+msgstr "Una Guida puo' contenere Pagine della guida, Immagini e File. L'ordine nell'indice e' dettato dall'ordine nella cartella della guida, utilizzare i normali selettori Su/Giu' per cambiare l'ordine del contenuto."

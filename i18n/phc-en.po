@@ -569,5 +569,37 @@ msgid "phc_label_version_helpcenter"
 msgstr "Versions"
 
 
+msgid "phc_desc_howto_folder"
+msgstr "Description for the How-to Container."
+
+msgid "phc_label_howto_folder"
+msgstr "Description"
+
+
+msgid "phc_help_tutorial_summary"
+msgstr "A summary of the tutorial--aims and scope. Will be displayed on every page of the tutorial."
+
+msgid "phc_label_tutorial_description"
+msgstr "Tutorial Description"
+
+
+msgid "phc_desc_tutorial_page"
+msgstr "Enter a brief description"
+
+msgid "phc_label_tutorial_page"
+msgstr "Description"
+
+msgid "phc_label_folder_tutorial"
+msgstr "Description"
+
+msgid "phc_desc_tutorial_page"
+msgstr "Enter a brief description"
+
+msgid "phc_desc_body_tutorial"
+msgstr "The body text."
+
+msgid "phc_label_body_tutorial"
+msgstr "Body text"
+
 # MSB end mofification
 

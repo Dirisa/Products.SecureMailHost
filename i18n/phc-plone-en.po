@@ -42,3 +42,54 @@ msgstr "Help Center"
 msgid "HelpCenter"
 msgstr "Help Center"
 
+
+msgid "How-to Area"
+msgstr "How-to Area"
+
+msgid "HelpCenterHowToFolder"
+msgstr "HelpCenter How To Folder"
+
+
+msgid "description_edit_phc"
+msgstr "This is a folder that holds PHC content"
+
+msgid "PHCFolder"
+msgstr "Plone Help Center Folder"
+
+
+msgid "How-to Area"
+msgstr "How-to Area"
+
+msgid "HelpCenterHowToFolder"
+msgstr "Help Center How To Folder"
+
+
+msgid "How-to"
+msgstr "How-to"
+
+msgid "HelpCenterHowTo"
+msgstr "Help Center How-To"
+
+
+msgid "Tutorial Area"
+msgstr "Tutorial Area"
+
+msgid "HelpCenterTutorialFolder"
+msgstr "Help Center Tutorial Folder"
+
+
+msgid "Tutorial Page"
+msgstr "Tutorial Page"
+
+msgid "HelpCenterTutorialPage"
+msgstr "Help Center Tutorial Page"
+
+
+msgid "Tutorial"
+msgstr "Tutorial"
+
+msgid "HelpCenterTutorial"
+msgstr "Help Center Tutorial"
+
+msgid "description_edit_tutorial"
+msgstr "A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content."

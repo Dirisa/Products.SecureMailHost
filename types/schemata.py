@@ -255,9 +255,9 @@ HowToFolderSchema = HCFolderSchema + Schema((
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
-              widget=TextAreaWidget(description_msgid="desc_folder",
+              widget=TextAreaWidget(description_msgid="phc_desc_howto_folder",
                                     description="Description for the How-to Container.",
-                                    label_msgid="label_folder",
+                                    label_msgid="phc_label_howto_folder",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
@@ -275,9 +275,9 @@ TutorialSchema = HCSchema + Schema((
               storage=MetadataStorage(),
               widget = TextAreaWidget(
                  description = 'A summary of the tutorial--aims and scope. Will be displayed on every page of the tutorial.',
-                 description_msgid = "help_tutorial_summary",
+                 description_msgid = "phc_help_tutorial_summary",
                  label = "Tutorial Description",
-                 label_msgid = "label_tutorial_description",
+                 label_msgid = "phc_label_tutorial_description",
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
               ),
@@ -292,9 +292,9 @@ TutorialFolderSchema = HCFolderSchema + Schema((
               searchable=1,
               accessor="Description",
               storage=MetadataStorage(),
-              widget=TextAreaWidget(description_msgid="desc_folder",
+              widget=TextAreaWidget(description_msgid="phc_desc_folder_tutorial",
                                     description="Description for the tutorials section.",
-                                    label_msgid="label_folder",
+                                    label_msgid="phc_label_folder_tutorial",
                                     label="Description",
                                     i18n_domain = "plonehelpcenter",
                                     rows=6)),
@@ -312,11 +312,11 @@ TutorialPageSchema = HCSchema + Schema((
               storage=MetadataStorage(),
               widget = TextAreaWidget(
                   description = "Enter a brief description",
-                  description_msgid = "help_description",
+                  description_msgid = "phc_desc_tutorial_page",
                   label = "Description",
-                  label_msgid = "label_description",
+                  label_msgid = "phc_label_tutorial_page",
                   rows = 5,
-                  i18n_domain = "plone")),
+                  i18n_domain = "plonehelpcenter")),
 
               TextField('body',
                   required = 1,
@@ -325,11 +325,11 @@ TutorialPageSchema = HCSchema + Schema((
 
                   widget = RichWidget(
                       description = "The body text.",
-                      description_msgid = "help_body_text",
+                      description_msgid = "phc_desc_body_tutorial",
                       label = "Body text",
-                      label_msgid = "label_body_text",
+                      label_msgid = "phc_label_body_tutorial",
                       rows = 25,
-                      i18n_domain = "plone"),
+                      i18n_domain = "plonehelpcenter"),
                   **DEFAULT_CONTENT_TYPES
                   ))
               )

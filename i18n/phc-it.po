@@ -566,5 +566,38 @@ msgid "phc_label_version_helpcenter"
 msgstr "Versioni"
 
 
+msgid "phc_desc_howto_folder"
+msgstr "Descrizione per la cartella delle Ricette."
+
+msgid "phc_label_howto_folder"
+msgstr "Descrizione"
+
+
+msgid "phc_help_tutorial_summary"
+msgstr "Un riassunto della Guida -- obiettivo e campo di applicazione. Verra' mostrato su ogni pagina della guida."
+
+msgid "phc_label_tutorial_description"
+msgstr "Descrizione della Guida"
+
+
+msgid "phc_desc_tutorial_page"
+msgstr "Inserire una breve descrizione"
+
+msgid "phc_label_tutorial_page"
+msgstr "Descrizione"
+
+
+msgid "phc_desc_folder_tutorial"
+msgstr "Descrizione della Guida."
+
+msgid "phc_label_folder_tutorial"
+msgstr "Descrizione"
+
+msgid "phc_desc_body_tutorial"
+msgstr "Il testo della pagina."
+
+msgid "phc_label_body_tutorial"
+msgstr "Corpo"
+
 # MSB end mofification
 
