@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.11 2003/10/22 19:21:32 ajung Exp $
+$Id: notifications.py,v 1.12 2003/10/26 13:44:07 ajung Exp $
 """
 
 import sys
@@ -30,6 +30,7 @@ def notify(issue):
     recipients = enrich_recipients(issue, recipients)
     send_notifications(recipients, issue)
     
+
 def enrich_recipients(issue, recipients):
     """ take the recipients dict. and try to add as much as possible
         additional user data that we can collector from our env.
@@ -39,18 +40,51 @@ def enrich_recipients(issue, recipients):
     membership = getToolByName(issue, 'portal_membership', None)
 
     for uid, u_dict in r.items():
-        if not u_dict.has_key('email'):    # guess email
-        
-            member = membership.getMemberById(uid)
-            r[uid]['email'] = util.safeGetProperty(member, "email", "")
-
+        member = membership.getMemberById(uid)
+        if member:
+            r[uid]['send_attachments'] = util.safeGetProperty(member, 'pcng_send_attachments', 'no')
+            if not u_dict.has_key('email'):    # guess email
+                r[uid]['email'] = util.safeGetProperty(member, 'email', '')
     return r
+
+
+def latest_upload(issue):
+    """ return the latest uploaded object """
+    objs = issue.objectValues()
+    objs.sort(lambda x,y: cmp(x.bobobase_modification_time, y.bobobase_modification_time))
+    return objs[0]
+
+
+def divide_recipients(recipients):
+    """ Divide the recipients dict into a dict with
+        recipients that receive attachements and recipients
+        that do not receive attachements. We return a tuple
+        of dicts with recipients (recipient_with_attachments,
+        recipients_without_attachement)
+    """
+
+    r_with = {}; r_without = {}
+    for k,v in recipients.items():
+        if v.get('send_attachments', None) in ('yes', 'YES'):
+            r_with[k] = v
+        else:
+            r_without[k] = v
+    return (r_with, r_without)
 
 
 def send_notifications(recipients, issue):
     """ send out notifications through email """
 
+    r_with, r_without = divide_recipients(recipients)
+    _send_notifications(r_without, issue, send_attachments=0)
+    _send_notifications(r_with, issue, send_attachments=1)
+
+
+def _send_notifications(recipients, issue, send_attachments=0):
+    """ create the notification emails """
+
     collector = issue._getCollector()
+
     dest_emails = [ v['email'] for v in recipients.values() if util.isValidEmailAddress(v.get('email','')) ]
     if not dest_emails: return  # No recipients???
 
@@ -66,11 +100,20 @@ def send_notifications(recipients, issue):
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body, _charset=encoding))
 
-    mh = getattr(collector, 'MailHost') 
+#    if send_attachments and  issue.lastAction() == 'Upload':
+    if 1:
+        # we need to attach the latest Upload to the email
+        
+        obj = latest_upload(issue)
+        print obj.getId(), obj.meta_type
+        if obj.meta_type in('Portal Image',):
+            outer.attach(MIMEImage(str(obj.data))) 
+        
+    MH = getattr(collector, 'MailHost') 
     
     try:
         LOG('plongcollectorng', TRACE, 'recipients: %s' % dest_emails)
-        mh._send(collector.collector_email, dest_emails, outer.as_string())
+        MH._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
         LOG('plonecollectorng', ERROR, 'MailHost.send() failed', error=sys.exc_info())
 
