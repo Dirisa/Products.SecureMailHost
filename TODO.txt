@@ -2,6 +2,18 @@ ArchPackage - Remaining issues
 
 Developer claiming item is in [brackets].
 
+====================================
+Bugs found when testing on plone.org
+====================================
+
+- psc_improvements_listing only shows completed items, it has to show items
+  in all states, that's its job :)
+  
+- When you add a file inside a release, you get AttributeError: downloadableFile,
+  template is psc_download_view.
+  
+- We need to test ExternalStorage of files (right now I have only tested links).
+
 ===========================================
 PloneHelpCenter integration considerations:
 ===========================================
