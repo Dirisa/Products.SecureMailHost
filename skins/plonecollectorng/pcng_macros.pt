@@ -140,11 +140,27 @@
                     b_start request/b_start|b_start">
 
     <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
-      <div metal:use-macro="here/batch_macros/macros/navigation" />
-        <div class="row" tal:repeat="issue batch">
-          <span tal:content="issue/getId"/>
-          <span tal:content="issue/Title"/>
-        </div>
+      <table class="listing" width="100%">
+        <tr>
+          <th colspan="5" width="100%">
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
+          </th>
+        </tr>
+        <tr>
+          <th>Issue</th>
+          <th>Created</th>
+          <th>Category</th>
+          <th>Deadline/Progress</th>
+          <th>Status</th>
+        </tr>
+        <tr tal:repeat="issue batch">
+          <td>
+            <a tal:attributes="href issue/absolute_url" 
+               tal:content="issue/getId" />
+            <span tal:content="issue/title_or_id" />
+          </td>
+        </tr>
+      </table>
     </div>
   </span>
 </div>    
