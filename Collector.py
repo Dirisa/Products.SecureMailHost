@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.22 2003/09/11 04:13:25 ajung Exp $
+$Id: Collector.py,v 1.23 2003/09/11 06:55:43 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -141,7 +141,18 @@ class PloneCollectorNG(BaseFolder, SchemaEditor):
         membership_tool = getToolByName(self, 'portal_membership', None)
         names = self._managers + self._supporters + self._reporters
         if not staff_only:
-            names += self.acl_users.getUserNames()
+            folder = self
+            running = 1
+            while running:     # search for acl_users folders
+                if hasattr(folder, 'acl_users'):
+                    usernames = folder.acl_users.getUserNames()
+                    for name in usernames:
+                        if not name in names:
+                            names.append(name)
+
+                if len(folder.getPhysicalPath()) == 1:
+                    running = 0
+                folder = folder.aq_parent
 
         for name in util.remove_dupes(names):
             member = membership_tool.getMemberById(name)
