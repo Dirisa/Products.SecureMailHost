@@ -31,7 +31,7 @@
 
             <h1 tal:condition="not:myfolder">
               <img tal:replace="structure here/folder.gif" />
-              <span tal:content="python: request['PATH_TRANSLATED'].replace('plfng_view', '')" />
+              <span tal:content="here/plfng_translatedpath" />
             </h1>
 
             <metal:block tal:condition="not: folder_contents">
