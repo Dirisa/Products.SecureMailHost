@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.186 2004/05/26 18:56:24 ajung Exp $
+$Id: Collector.py,v 1.187 2004/05/29 14:28:41 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -198,8 +198,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             hook to log changed properties to the transcript.
         """
 
-        schema = self.Schema()
-        field_names = [ f.getName() for f in schema.fields()]
+        field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
             new = REQUEST.get(name, None)

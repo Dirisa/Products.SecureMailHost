@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.177 2004/05/29 13:10:00 ajung Exp $
+$Id: Issue.py,v 1.178 2004/05/29 14:28:41 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -172,25 +172,23 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             # added member preferences as defaults to the issue
             member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
-            schema = self.Schema()
 
             if member:
-                fieldnames = [ f.getName() for f in schema.fields() ]
+                fieldnames = [f.getName() for f in schema.fields()]
                 for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
                                     ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
                                     ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
                                     ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
                     if name in fieldnames:                
-                        schema[name].set(self, member.getProperty(name1))
+                        self.getField(name).set(self, member.getProperty(name1))
             else:
                 name = 'contact_name'
-                schema[name].set(self, util.getUserName())
+                self.getField(name).set(self, util.getUserName())
 
             # pre-allocate the deadline property
             self.progress_deadline = DateTime() + self.deadline_tickets        
             self._defaults_initialized = 1
-
                                                 
     def manage_beforeDelete(self, item, container):
         """ Hook for pre-deletion actions """
@@ -437,12 +435,11 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ Hook to perform pre-validation actions. We use this
             hook to log changed properties to the transcript.
         """
-        schema = self.Schema()
-        field_names = [ f.getName() for f in schema.fields()]
+        field_names = [ f.getName() for f in self.Schema().fields()]
         for name in REQUEST.form.keys():
             if not name in field_names: continue
             new = REQUEST.get(name, None)
-            old = schema[name].get(self)
+            old = self.getField(name).get(self)
             self._transcript.addChange(name, old, new)
 
     def post_validate(self, REQUEST, errors):
