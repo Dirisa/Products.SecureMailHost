@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.12 2005/03/11 02:38:27 optilude Exp $
+$Id: PSCProject.py,v 1.13 2005/03/11 03:49:27 dtremea Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -93,6 +93,24 @@ class PSCProject(OrderedBaseFolder):
             self.invokeFactory('PSCImprovementProposalFolder',
                                config.IMPROVEMENTS_ID)
 
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+                              'setCategories')
+    def setCategories(self, value):
+        """Overrides categories mutator so we can reindex internal content.
+        """
+        self.getField('categories').set(self, value)
+        self.reindexObject(idxs=['getCategories'])
+        catalog = getToolByName(self, 'portal_catalog')
+        res = catalog.searchResults(
+                          portal_type=['PSCRelease',
+                                       'PSCFile',
+                                       'PSCFileLink',
+                                       'PSCImprovementProposal'],
+                          path='/'.join(self.getPhysicalPath()))
+        for r in res:
+            o = r.getObject()
+            o.reindexObject(idxs=['getCategories'])
+
     security.declareProtected(CMFCorePermissions.View, 'getCategoryTitles')
     def getCategoryTitles(self):
         """Return selected categories as a list of category long names,
@@ -136,11 +154,11 @@ class PSCProject(OrderedBaseFolder):
         """
         release_folder = self.getReleaseFolder()
         catalog = getToolByName(self, 'portal_catalog')
-        
+
         preferredMaturity = self.getPreferredMaturity()
-        
+
         res = []
-        
+
         if preferredMaturity:
             res = catalog.searchResults(
                             path = '/'.join(release_folder.getPhysicalPath()),
@@ -149,7 +167,7 @@ class PSCProject(OrderedBaseFolder):
                             sort_on = 'effective',
                             sort_order = 'reverse',
                             portal_type = 'PSCRelease')
-        
+
         if not res:
             res = catalog.searchResults(
                             path = '/'.join(release_folder.getPhysicalPath()),
@@ -157,7 +175,7 @@ class PSCProject(OrderedBaseFolder):
                             sort_on = 'effective',
                             sort_order = 'reverse',
                             portal_type = 'PSCRelease')
-        
+
         if not res:
             return None
         else:
