@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.137 2004/03/14 17:14:30 ajung Exp $
+$Id: Issue.py,v 1.138 2004/03/16 18:29:11 ajung Exp $
 """
 
 import sys, os, time
@@ -378,7 +378,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             to reindex the issue.
         """
         self.notifyModified() # notify DublinCore
-        self.send_notifications()
+#        self.send_notifications()
 
     def __len__(self):
         """ return the number of transcript events """
