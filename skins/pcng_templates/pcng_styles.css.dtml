@@ -138,6 +138,10 @@ div.right {
     float: right;
 }
 
+div.clear {
+    clear: both;
+}
+
 div #pcng_references_show {
 }
 
