@@ -4,7 +4,7 @@
 #
 # Author:       Jens Klein <jens.klein@jensquadrat.de>
 #
-# RCS-ID:       $Id: config.py,v 1.1 2004/08/12 08:31:14 yenzenz Exp $
+# RCS-ID:       $Id: config.py,v 1.2 2004/08/12 16:52:40 yenzenz Exp $
 # Copyright:    (c) 2004 by jens quadrat, Klein & Partner KEG, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
@@ -28,6 +28,12 @@ default_mailtemplate_body = \
     <tal:block tal:condition="python:here.REQUEST.get('field_%s' % field.id, '')">
       <pre tal:content="python:'['+field.title()+']'" />
       <pre tal:content="python:here.REQUEST.get('field_%s' % field.id, '')" /><br />
+    </tal:block>
+    <tal:block tal:condition="field/sub_form | nothing">
+     <pre tal:content="python:'['+field.title()+']'" />
+      <tal:block tal:repeat="sub_field python:sub_form.get_fields()">
+        <pre>subform renderer not implemented'</pre>
+      </tal:block>
     </tal:block>
   </tal:block>
 </tal:block>
