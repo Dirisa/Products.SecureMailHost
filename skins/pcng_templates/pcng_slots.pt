@@ -29,18 +29,22 @@
                      results python: request.SESSION.get('pcng_searchresults', []);
                      issue_ids python: [i[1] for i in results]">
    
-      <tal:if tal:condition="python: here.meta_type=='PloneIssueNG' and here.pcng_issue_temporary()" >
+      <div tal:condition="python: here.meta_type=='PloneIssueNG' and here.pcng_issue_temporary()" >
         <tal:if tal:condition="python: here.getId() in issue_ids" > 
-        <tal:def tal:define=" issue_index python: issue_ids.index(here.getId())">
+            <tal:def tal:define=" issue_index python: issue_ids.index(here.getId())">
+            <div class="left">
+              <a tal:condition="python: issue_index > 0"
+                 tal:attributes="href python: results[issue_index-1][0]"><img src="arrowLeft.gif" title="Previous" i18n:attributes="title"></a>
+            </div>
 
-          <a tal:condition="python: issue_index > 0"
-             tal:attributes="href python: results[issue_index-1][0]"><img src="arrowLeft.gif" title="Previous" i18n:attributes="title"></a>
-
-          <a tal:condition="python: issue_index < len(results)-1 "
-             tal:attributes="href python: results[issue_index+1][0]"><img src="arrowRight.gif" title="Next" i18n:attributes="title"></a>
-        </tal:def>
+            <div class="right">
+              <a tal:condition="python: issue_index < len(results)-1 "
+                 tal:attributes="href python: results[issue_index+1][0]"><img src="arrowRight.gif" title="Next" i18n:attributes="title"></a>
+            </div>
+            <div style="clear: both"> </div>
+            </tal:def>
         </tal:if>
-      </tal:if>
+      </div>
 
       <ul tal:define="num_results python: len(results);
                       results python: test(num_results > 20, results[:20], results)">
