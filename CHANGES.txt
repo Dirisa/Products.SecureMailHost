@@ -1,4 +1,25 @@
-0.4 (unreleased)
+0.5 (unreleased)
+
+  - added TextIndexNG2-based portal catalog indexing of PLFNG contents
+
+  - added integrity checking for uploaded zip'd files
+
+  - added optional ability to unzip ('unpack' action) zip'd files on server filesystem
+
+  - added optional MD5 checksum verification support for file uploads
+
+  - added optional file space quota limit enforcement (for both upload and unpack actions)
+
+  - generalized .metadata implementation to use ConfigParser
+
+  - added the following .metadata information to the original 'changes' metadata
+  	 - md5 (server-generated MD5 checksum for file)
+  	 - source (ID of authenticated member who uploaded the file)
+  	 - unpacked_size (size in bytes of the unpacked contents of the packed file)
+
+  - fixed URL backslash bug in __call__() causing grief for Mozilla browsers
+
+0.4
 
   - added support to create directories
  
