@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.14 2003/11/01 17:03:25 ajung Exp $
+$Id: notifications.py,v 1.15 2003/11/06 11:06:21 ajung Exp $
 """
 
 import sys
@@ -43,6 +43,7 @@ def enrich_recipients(issue, recipients):
         member = membership.getMemberById(uid)
         if member:
             r[uid]['send_attachments'] = util.safeGetProperty(member, 'pcng_send_attachments', 'no')
+            r[uid]['send_emails'] = util.safeGetProperty(member, 'pcng_send_emails', 'yes')
             if not u_dict.has_key('email'):    # guess email
                 r[uid]['email'] = util.safeGetProperty(member, 'email', '')
     return r
@@ -85,7 +86,9 @@ def _send_notifications(recipients, issue, send_attachments=0):
 
     collector = issue._getCollector()
 
-    dest_emails = [ v['email'] for v in recipients.values() if util.isValidEmailAddress(v.get('email','')) ]
+    dest_emails = [ v['email'] for v in recipients.values()     
+                               if util.isValidEmailAddress(v.get('email','')) and
+                                  v.get('send_emails','').lower() == 'yes']
     if not dest_emails: return  # No recipients???
 
     outer = MIMEMultipart()
