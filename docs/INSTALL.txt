@@ -23,7 +23,7 @@ Requirements:
 
    - Reportlab (www.reportlab.org) - required for PDF output
   
-   - PIL (Python Imaging Library) required to include uploaded images
+   - PIL (Python Imaging Library)  - required to include uploaded images
      in the PDF output
 
    - Graphviz (www.graphivz.org) to produce dependency tree for 
