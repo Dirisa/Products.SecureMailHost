@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.146 2004/03/27 05:06:06 ajung Exp $
+$Id: Collector.py,v 1.147 2004/03/28 08:27:41 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -746,6 +746,22 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def createToken(self):
         """ create a new token"""
         self._token = md5.new(str(time.time() * random.random())).hexdigest()
+
+    security.declareProtected(View, 'decode_information')
+    def decode_information(self, s):
+        """ decode encrypted information from incoming email """
+
+        res = []
+        for l in s.split('\n'):
+            pos = l.find('=>')
+            if pos > -1:
+                res.append(l[pos+3:])
+        res.append('\n')
+        s = '\n'.join(res)[:-1]
+        s = base64.decodestring(s)
+        s = util.decrypt(s, self.getToken())
+        return s
+                
 
 registerType(PloneCollectorNG)
 
