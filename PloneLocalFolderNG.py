@@ -248,6 +248,10 @@ class PloneLocalFolderNG(BaseContent):
         },
       )
 
+    security.declareProtected(View, 'view')
+    def view(self, REQUEST, RESPONSE):
+        """Invokes the default view."""
+        return self.__call__(REQUEST, RESPONSE)
 
     security.declareProtected(ManagePortal, 'getFileRealPath')
     def getFileRealPath(self, REQUEST):
