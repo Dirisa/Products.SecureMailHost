@@ -17,7 +17,8 @@
       <table class="listing" 
              tal:define="managers here/getManagers;
                          supporters here/getSupporters;
-                         reporters here/getReporters">
+                         reporters here/getReporters;
+                         users_topics here/pcng_get_user_topics">
         <tr>
           <th i18n:translate="UserID">User ID</th>
           <th i18n:translate="Name">Name</th>
@@ -25,13 +26,15 @@
           <th i18n:translate="Managers">Administrator</th>
           <th i18n:translate="Supporter">Supporter</th>
           <th i18n:translate="Reporter">Reporter</th>
+          <th i18n:translate="Groups">Topic groups</th>
+          <th i18n:translate="GRUFGroups">GRUF groups</th>
         </tr>
 
         <span tal:repeat="item python: (('Assigned', here.getTrackerUsers(staff_only=1)),
                                         ('Unassigned', here.getTrackerUsers(unassigned_only=1)))">
           <span tal:define="headline python: item[0]; users python: item[1]" >
             <tr>
-              <th class="staff" colspan="6" i18n:translate="" tal:content="headline" />
+              <th class="staff" colspan="8" i18n:translate="" tal:content="headline" />
             </tr>
             <span tal:repeat="user users" >
           
@@ -54,10 +57,16 @@
                          tal:attributes="value user/username;
                                          checked python: user['username'] in reporters" />
                 </td>
+                <td>
+                  <span tal:replace="structure python: ' &bull; '.join(users_topics.get(user['username'], []))" />
+                </td>
+                <td>
+                  <span tal:replace="structure python: ' &bull; '.join(here.pcng_get_groups_for_user(user['username']))" />
+                </td>
               </tr>
             </span>
             <tr tal:condition="not: users">
-              <td colspan="6">
+              <td colspan="8">
                 <span i18n:translate="no_users_found">No users found</span>
               </td>
             </tr>
@@ -65,7 +74,7 @@
         </span>
 
        <tr>
-         <th colspan="6" i18n:translate="help_staff" style="text-align: left">
+         <th colspan="8" i18n:translate="help_staff" style="text-align: left">
          <b>Collector administors</b> are responsible for the configuration and the
          maintainance of a collector
          <br><b>Supporters</b> work on issues. Usually issues are assigned to a supporter
