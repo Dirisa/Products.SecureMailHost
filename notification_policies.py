@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notification_policies.py,v 1.7 2003/11/07 16:22:24 ajung Exp $
+$Id: notification_policies.py,v 1.8 2004/09/18 12:12:47 ajung Exp $
 """
 
 """ 
@@ -25,11 +25,11 @@ class BasePolicy:
         self.collector = self.issue._getCollector()
 
         # submitter
-        self.r = {'submitter' : {'email': issue.contact_email}}
+        self.r = {'submitter' : {'email': issue.getContact_email()}}
 
         # all watchers 
         for email in issue.wl_getWatchers():
-            self.r[email] = {'email': issue.contact_email}
+            self.r[email] = {'email': issue.getContact_email()}
 
         # special notifications based on the state
         for email in self.collector.getNotificationsForState(issue.status()):
