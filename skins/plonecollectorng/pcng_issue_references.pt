@@ -5,6 +5,7 @@
 
 <body>
   <div metal:fill-slot="main">	  
+    <h1> References & Uploads </h1>
     <table width="100%">
       <tr>
         <td valign="top" width="50%">
