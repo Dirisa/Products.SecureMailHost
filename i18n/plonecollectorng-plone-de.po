@@ -96,3 +96,17 @@ msgstr "Linken Slot löschen, rechten Slot beibehalten"
 
 msgid "Plone slots"
 msgstr "Plone Slots"
+
+msgid "German"
+msgstr "Deutsch"
+
+msgid "English"
+msgstr "Englisch"
+
+msgid "Finish"
+msgstr "Finnisch"
+
+msgid "Dutch"
+msgstr "Holländisch"
+msgid ""
+msgstr ""
