@@ -33,6 +33,7 @@ div.collector_headline_right {
 
 div.issue_metadata{
     background: #eeeeee;
+    padding: 0.2em;
 }
 
 div.transcriptheader {
@@ -98,6 +99,10 @@ div.portletBody {
 span.no_access {
     color: red;
     font-size: 90%;
+}
+
+pre {
+    padding: 0.2em;
 }
 
 /* </dtml-with> */
