@@ -13,12 +13,6 @@
 ##############################################################################
 """
 """
-try:
-    True
-except NameError:
-    True=1
-    False=0
-
 from config import X_MAILER
 
 import os, sys

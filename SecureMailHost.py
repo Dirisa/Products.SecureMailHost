@@ -13,16 +13,10 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.22 2005/01/27 07:21:07 panjunyong Exp $
+$Id: SecureMailHost.py,v 1.23 2005/03/02 21:26:45 tiran Exp $
 """
 
-try:
-    True
-except NameError:
-    True=1
-    False=0
-
-from config import BAD_HEADERS, USE_ASNYC_MAILER
+from config import BAD_HEADERS
 
 from types import StringType, TupleType, ListType
 from copy import deepcopy
@@ -41,24 +35,12 @@ from AccessControl.Permissions import view_management_screens, \
 from DateTime import DateTime
 from zLOG import LOG, WARNING
 
-## from asyncmailer import mailQueue, initializeMailThread
-## initializeMailThread()
-
 from Products.MailHost.MailHost import MailHostError, MailBase
 class SMTPError(Exception):
     pass
 
 from Products.SecureMailHost.mail import Mail
 
-# import mailQueue if we are using the async mailer
-if USE_ASNYC_MAILER:
-    from Products.SecureMailHost.mailqueue import mailQueue
-    # start async thread if the queue isn't empty
-    if len(mailQueue):
-        from Products.SecureMailHost.asyncmailer import initializeMailThread
-        initializeMailThread()
-
-##EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_RE = re.compile(r"^(\w&.+-]+!)*[\w&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
 
@@ -270,7 +252,7 @@ class SecureMailBase(MailBase):
             msg[key] = val
         return msg
 
-    def __SYNC_send( self, mfrom, mto, messageText, debug=False):
+    def _send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
         if not isinstance(messageText, email.MIMEText.MIMEText):
@@ -285,29 +267,6 @@ class SecureMailBase(MailBase):
             return mail
         else:
             mail.send()
-
-    def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
-        """Send the message
-        """
-        if not isinstance(messageText, email.MIMEText.MIMEText):
-            message = email.message_from_string(messageText)
-        else:
-            message = messageText
-        from Products.SecureMailHost.asyncmailer import initializeMailThread
-        initializeMailThread()
-        mail = Mail(mfrom, mto, message,
-                    smtp_host=self.smtp_host, smtp_port=self.smtp_port,
-                    userid=self._smtp_userid, password=self._smtp_pass
-                   )
-        if debug:
-            return mail
-        else:
-            mailQueue.queue(mail)
-
-    if USE_ASNYC_MAILER:
-        _send = __A_SYNC_send
-    else:
-        _send = __SYNC_send
 
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):

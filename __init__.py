@@ -15,7 +15,6 @@
 """MailHost Product Initialization
 $Id: 
 """
-import py_compatible
 import SecureMailHost
 import mail
 
