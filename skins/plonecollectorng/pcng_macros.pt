@@ -1,7 +1,3 @@
-<html xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
-      i18n:domain="collectorng">
-  <body>
     
     <div metal:define-macro="transcript">
      <table class="listing">
@@ -136,6 +132,19 @@
       </div>
     </span>
     
-    
-  </body>
-</html>
+<div metal:define-macro="show_issues">
+  <span tal:define="results python: here.objectValues('PloneIssueNG');
+                    Batch python: modules['Products.CMFPlone'].Batch;
+                    b_size python: 2;
+                    b_start python: 0;
+                    b_start request/b_start|b_start">
+
+    <div tal:condition="results" tal:define="batch python: Batch(results, b_size, int(b_start), orphan=0)">
+      <div metal:use-macro="here/batch_macros/macros/navigation" />
+        <div class="row" tal:repeat="issue batch">
+          <span tal:content="issue/getId"/>
+          <span tal:content="issue/Title"/>
+        </div>
+    </div>
+  </span>
+</div>    

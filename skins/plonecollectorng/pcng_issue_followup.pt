@@ -8,7 +8,7 @@
 <div metal:fill-slot="main">	  
 
   <form method="post" action="issue_followup">
-    <div class="group"><span class="legend">Issue Followup</span>
+    <div class="group"><span class="legend">Issue Followup #<span tal:content="python: len(here) + 1"/></span>
       <table class="listing" 
              tal:define="assignees here/getAssignees">
         <tr>
@@ -21,7 +21,6 @@
          <th i18n:translate="Assigned to">Assigned to</th>
          <td>
            <select name="assignees:list" size="7" multiple>
-             <span tal:content=" python: here.getTrackerUsers(staff_only=1)"/>
              <span tal:repeat="u python: here.getTrackerUsers(staff_only=1)">
                <option tal:content="string: ${u/fullname} (${u/username})"
                        tal:attributes="value u/username;

@@ -4,20 +4,9 @@
       metal:use-macro="here/main_template/macros/master">
   <body>
     <div metal:fill-slot="main">
-      <div metal:define-macro="main"
-	tal:omit-tag="">
 	<h1 tal:content="here/title_or_id" />
-
-	  <!-- do as you will -->
-	  <div tal:repeat="field python: here.Schema().filterFields(isMetadata=0)">
-	    <span metal:use-macro="python: here.widget(field.getName(), mode='view')"/>
-	  </div>
-
-      <ul>
-        <li tal:repeat="issue here/objectValues">
-          <a tal:attributes="href issue/absolute_url" tal:content="string: ${issue/id} ${issue/title_or_id}" />
-        </li>
-      </ul>
+      <div class="group"><span class="legend">Issue overview</span>
+        <div metal:use-macro="here/pcng_macros/macros/show_issues" />
       </div>
     </div>
   </body>
