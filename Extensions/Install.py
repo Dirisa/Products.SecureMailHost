@@ -35,6 +35,27 @@ def install(self):
     except: pass
     print >> out, "Added 'pcng_issue_workflow' workflow"
 
+    # add some new properties to portal_properties
+    portal_properties = getToolByName(self, 'portal_properties')
+
+    try:
+        portal_properties.form_properties.manage_delProperties(['pcng_base_edit'])
+    except: pass
+    portal_properties.form_properties.manage_addProperty(id='pcng_base_edit',
+                                                         type='string',
+                                                         value='validate_base')
+
+    try: portal_properties.navigation_properties.manage_delProperties(['default.pcng_base_edit.success'])
+    except: pass
+    try: portal_properties.navigation_properties.manage_delProperties(['default.pcng_base_edit.failure'])
+    except: pass
+
+    portal_properties.navigation_properties.manage_addProperty(id='default.pcng_base_edit.success',
+                                                         type='string',
+                                                         value='script:content_edit')
+    portal_properties.navigation_properties.manage_addProperty(id='default.pcng_base_edit.failure',
+                                                         type='string',
+                                                         value='pcng_base_edit')
 
     # add some new properties to memberdatatool
     memberdata_tool = getToolByName(self, 'portal_memberdata')
