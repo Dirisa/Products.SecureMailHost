@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.147 2004/03/28 08:27:41 ajung Exp $
+$Id: Collector.py,v 1.148 2004/03/30 04:45:48 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -761,7 +761,26 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         s = base64.decodestring(s)
         s = util.decrypt(s, self.getToken())
         return s
+
+
+    ######################################################################
+    # Misc
+    ######################################################################
                 
+    def String2DateTime(self, datestr):
+        """ Try to convert a date string to a DateTime instance. """
+
+        for fmt in (self.portal_properties.site_properties.localTimeFormat, '%d.%m.%Y', '%d-%m-%Y'):
+            try:
+                return DateTime('%d/%d/%d' % (time.strptime(datestr, fmt))[:3])
+            except ValueError:                                                                   
+                pass
+
+        try:
+            return DateTime(datestr)
+        except:
+            raise ValueError('Unsupported date format: %s' % datestr)       
+
 
 registerType(PloneCollectorNG)
 
