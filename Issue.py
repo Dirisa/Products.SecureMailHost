@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.48 2003/10/19 15:31:44 ajung Exp $
+$Id: Issue.py,v 1.49 2003/10/20 07:46:26 ajung Exp $
 """
 
 import sys, os
@@ -456,6 +456,8 @@ def modify_fti(fti):
     for a in fti['actions']:
         if a['id'] in ('syndication','references','metadata'):
             a['visible'] = 0
+
+    fti['global_allow'] = 0
     return fti
 
 registerType(PloneIssueNG)
