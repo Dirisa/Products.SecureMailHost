@@ -921,3 +921,5 @@ msgstr "Mittel"
 msgid "Look and Feel"
 msgstr "Benutzerinterface"
 
+msgid "new_issue"
+msgstr "Neues_Ticket"
