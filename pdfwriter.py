@@ -5,10 +5,15 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.4 2003/11/14 19:36:59 ajung Exp $
+$Id: pdfwriter.py,v 1.5 2003/11/15 12:33:18 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
+
+try:
+    from PIL import Image as PIL_Image
+    have_pil = 1
+except ImportError: have_pil = 0
 
 from reportlab.platypus import *
 from reportlab.lib.styles import getSampleStyleSheet
@@ -24,8 +29,11 @@ Elements = []
 HeaderStyle = styles["Heading2"] 
 
 def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
-    para = klass(txt, style)
-    Elements.append(para)
+#    para = klass(txt, style)
+#    Elements.append(para)
+
+    p = XPreformatted(txt, style)
+    Elements.append(p)
 
 ParaStyle = styles["Normal"]
 
@@ -35,8 +43,6 @@ def p(txt):
 PreStyle = styles["Code"]
 
 def pre(txt):
-    s = Spacer(0.05*inch, 0.05*inch)
-    Elements.append(s)
     p = Preformatted(txt, PreStyle)
     Elements.append(p)
 
@@ -81,16 +87,26 @@ def pdfwriter(issue):
         definition(', '.join(l))
 
     for img in issue.objectValues('Portal Image'):
-        from PIL import Image as PIL_Image
-        fname = tempfile.mktemp()
-        open(fname, 'w').write(fname)
-        image = PIL_Image.open(fname)
-        width, height= image.size
-        multi = ((height +0.0) / (0.75 * inch))
-        width = int(width / multi)
-        height = int(height / multi)
-        Elements.append(Image(fname, width, height))
-        os.unlink(fname)
+
+        if have_pil:
+            fname = tempfile.mktemp()
+            open(fname, 'w').write(fname)
+            image = PIL_Image.open(fname)
+            width, height= image.size
+            ratio = width*1.0 / height
+
+            max = 7*inch
+            if ratio > 1.0:
+                width = max
+                height = max / radio
+            else:
+                height = max
+                width = max / radio
+
+            Elements.append(Image(fname, width, height))
+            os.unlink(fname)
+        else:
+            p('Image: %s' % img.title_or_id())
 
     header('Transcript')
 
