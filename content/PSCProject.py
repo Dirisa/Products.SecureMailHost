@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.15 2005/03/12 01:52:01 optilude Exp $
+$Id: PSCProject.py,v 1.16 2005/03/12 04:00:41 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -91,6 +91,13 @@ class PSCProject(OrderedBaseFolder):
         if not self.objectIds('PSCImprovementProposalFolder'):
             self.invokeFactory('PSCImprovementProposalFolder',
                                config.IMPROVEMENTS_ID)
+
+    security.declareProtected(CMFCorePermissions.View, 'sort_title')
+    def sort_title(self):
+        """Get the sort-order title. Used in a catalog index to sort the
+        title of the item with human ordering.
+        """
+        return self.title_or_id().strip().lower()
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                               'setCategories')

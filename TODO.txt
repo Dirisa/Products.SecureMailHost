@@ -5,24 +5,11 @@ Developer claiming item/comments is in [brackets].
 =========================
 Pre-deployment count-down
 =========================
-
-- Company logo isn't shown at the moment.
-
-- May want to re-order expected release date, feature freeze date and PLIP 
-    freeze date in release schema - at present, they are listed in reverse
-    chronological order, so to speak (i.e. feature freeze comes before release,
-    but the release date field comes before the freeze date).
- 
-- by-category.pt shows the category short name, should show full name (but
-  requires that you pass in short name and get back full name, since we pull
-  short name from last element in URL)
   
-- by-category.pt fails miserably when no category is specified, it should
-  redirect to parent URL in that case - not show index out of range error.
-
-- by-category.pt results should be sorted by latest release first, right now
-  it's listing latest project added first, I believe - which is not what we
-  want. The projects doing frequest releases should come first.
+- by-category.pt needs a little UI love, esp. for the list presented when
+    no category is entered.
+  
+- Company logo isn't shown at the moment on project_view.
 
 - PSCProject has a currentVersions field to list supported versions (for PHC
     support). We could use this to show a portalMessage on unsupported
@@ -35,7 +22,7 @@ Pre-deployment count-down
     after plip freeze date (trivial validators)
     
 - May want to actually enforce plip freeze date - widget label seems to imply 
-    this (how to hide field?)
+    this (should hide field from base_edit, but unsure how to do this)
 
 - Now that we have data grids on licenses etc., we should probably clean it up
   a bit in the view templates for releases  (show links etc.)
@@ -44,6 +31,8 @@ Pre-deployment count-down
 Misc
 ====
 
+- i18n revision - first cut was added but there's some corners remaining.
+
 - DOAP feed support (Description of a Project)
   http://www-106.ibm.com/developerworks/xml/library/x-osproj3/
   - This will require us to expand the Software Project schema (Package)
@@ -51,8 +40,6 @@ Misc
 
 - RSS feed for Latest Releases, ability to have an RSS feed for every project
   and category too.
-
-- i18n revision - first cut was added but there's some corners remaining.
 
 - Hard for regular members to find Package after it's been created, before
   it's been published 

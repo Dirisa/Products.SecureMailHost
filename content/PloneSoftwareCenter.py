@@ -1,5 +1,5 @@
 """
-$Id: PloneSoftwareCenter.py,v 1.5 2005/03/11 03:00:58 optilude Exp $
+$Id: PloneSoftwareCenter.py,v 1.6 2005/03/12 04:00:41 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -73,7 +73,8 @@ class PloneSoftwareCenter(OrderedBaseFolder):
             return None
             
     security.declarePrivate('_getContained')
-    def _getContained(self, states, category, portal_type, limit=None):
+    def _getContained(self, states, category, portal_type, limit=None, 
+                        sort_on='effective', sort_order='reverse'):
         """Get contained objects of type portal_type
         that are in states and have category."""
         
@@ -82,8 +83,6 @@ class PloneSoftwareCenter(OrderedBaseFolder):
         query = { 'path'         : my_path,
                   'portal_type'  : portal_type,
                   'review_state' : 'published',
-                  'sort_on'      : 'effective',
-                  'sort_order'   : 'reverse',
                 }
                 
         if states:
@@ -92,6 +91,10 @@ class PloneSoftwareCenter(OrderedBaseFolder):
             query['getCategories'] = category
         if limit:
             query['sort_limit'] = limit
+        if sort_on:
+            query['sort_on'] = sort_on
+        if sort_order:
+            query['sort_order'] = sort_order
             
         results = catalog.searchResults(query)
         
@@ -108,7 +111,8 @@ class PloneSoftwareCenter(OrderedBaseFolder):
     security.declareProtected(CMFCorePermissions.View, 'getPackagesByCategory')
     def getPackagesByCategory(self, category, states=[], limit=None):
         """Get catalog brains for packages in category."""
-        return self._getContained(states, category, 'PSCProject', limit)
+        return self._getContained(states, category, 'PSCProject', limit,
+                                    sort_on='sort_title')
 
     security.declareProtected(CMFCorePermissions.View, 'getReleases')
     def getReleases(self, states=[], limit=None):
@@ -136,6 +140,12 @@ class PloneSoftwareCenter(OrderedBaseFolder):
                 categories.add(cat, value)
                 
         return categories.sortedByValue()
+
+    security.declareProtected(CMFCorePermissions.View, 'getCategoryName')
+    def getCategoryName(self, category):
+        """Get the long name of a category.
+        """
+        return self.getAvailableCategoriesAsDisplayList().getValue(category)
 
     security.declareProtected(CMFCorePermissions.View,
                               'getAvailableCategoriesAsDisplayList')

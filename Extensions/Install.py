@@ -31,6 +31,16 @@ def addWorkflow(self, out, tool, workflowName, workflowId):
         tool.manage_addWorkflow(workflowName, workflowId)
         print >> out, 'Added workflow %s.' % workflowName
 
+def addCatalogIndex(self, out, catalog, index, type, extra = None):
+    """Add the given index name, of the given type, to the catalog."""
+    
+    if index not in catalog.indexes():
+        catalog.addIndex(index, type, extra)
+        catalog.reindexIndex(index, self.REQUEST)
+        print >> out, "Added index", index, "to catalog"
+    else:
+        print >> out, "Index", index, "already in catalog"
+
 def addCatalogMetadata(self, out, catalog, column):
     """Add the given column to the catalog's metadata schema"""
     if column not in catalog.schema():
@@ -130,11 +140,12 @@ def setupFolderTabs(self, out):
 def setupCatalog(self, out):
     catalog = getToolByName(self, 'portal_catalog')
     addCatalogMetadata(self, out, catalog, 'getCategoryTitles')
+    addCatalogIndex(self, out, catalog, 'sort_title', 'FieldIndex')
 
 def cleanCatalog(self, out):
     catalog = getToolByName(self, 'portal_catalog')
     removeCatalogMetadata(self, out, catalog, 'getCategoryTitles')
-
+    # Don't clean sort_title -> also used by PHC
 
 def install(self):
     out = StringIO()

@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.13 2005/03/12 03:03:02 optilude Exp $
+$Id: schemata.py,v 1.14 2005/03/12 04:00:41 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -780,32 +780,38 @@ PSCReleaseSchema = OrderedBaseFolderSchema.copy() + Schema((
         ),
     ),
 
-    DateTimeField('expectedReleaseDate',
-        required=0,
-        searchable=0,
-        widget=CalendarWidget(
-            label='Expected Release Date',
-            label_msgid='help_release_expected_date_label',
-            i18n_domain='plonesoftwarecenter',
-        ),
-    ),
-
-    DateTimeField('featureFreezeDate',
-        required=0,
-        searchable=0,
-        widget=CalendarWidget(
-            label='Date after which no new features can added to the release',
-            label_msgid='help_release_feature_freeze_date_label',
-            i18n_domain='plonesoftwarecenter',
-        ),
-    ),
-
     DateTimeField('improvementProposalFreezeDate',
         required=0,
         searchable=0,
         widget=CalendarWidget(
-            label='Date after which no more Improvement Proposals can be associated with the release',
-            label_msgid='help_release_improvement_proposal_freeze_date_label',
+            label='Proposals freeze date',
+            label_msgid='label_release_improvement_proposal_freeze_date',
+            description='Date after which no more Improvement Proposals will be associated with the release',
+            description_msgid='help_release_improvement_proposal_freeze_date',
+            i18n_domain='plonesoftwarecenter',
+        ),
+    ),
+    
+    DateTimeField('featureFreezeDate',
+        required=0,
+        searchable=0,
+        widget=CalendarWidget(
+            label='Feature freeze date',
+            label_msgid='label_release_feature_freeze_date',
+            description='Date after which no new features will added to the release',
+            description_msgid='help_release_feature_freeze_date',
+            i18n_domain='plonesoftwarecenter',
+        ),
+    ),
+
+    DateTimeField('expectedReleaseDate',
+        required=0,
+        searchable=0,
+        widget=CalendarWidget(
+            label='(Expected) Release Date',
+            label_msgid='label_release_expected_date',
+            description='Date on which a final release is expected to be made or was made',
+            description_msgid='help_release_expected_date',
             i18n_domain='plonesoftwarecenter',
         ),
     ),

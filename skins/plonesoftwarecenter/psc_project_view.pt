@@ -19,9 +19,17 @@
             Document actions (print, sendto etc)
         </div>
 
-        <div tal:condition="here/isRecommended">
-            This is a recommended project.
-        </div>
+        <tal:disabled replace="nothing">
+        
+            This is disabled until we have a consensus about what to do with
+            recommended projects (politically, practically). If this is re-
+            enabled, it must also be re-enabled in schemata.py and
+            psc_releasefolder_view.pt.
+            
+            <div tal:condition="here/isRecommended">
+                This is a recommended project.
+            </div>
+        </tal:disabled>
 
         <div class="discreet">
             Category: <span tal:replace="python: ', '.join(here.getCategoryTitles())" />
