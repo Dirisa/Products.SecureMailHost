@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main"
+         tal:define="have_reportlab here/haveReportlab">
+
+      <metal:block tal:define="action string: Open unassigned issues">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <ul tal:define="rows python: here.pcng_catalog(status={'query' : ('pending', 'accepted')}, sort_on='getId');
+                      rows python: [r for r in rows if len(r.assigned_to)==0]">
+        <li tal:repeat="row rows">
+          <div tal:define="issue row">
+            <div metal:use-macro="here/issue_macros/macros/issue_shortview" />
+           </div>
+        </li>
+        <li tal:condition="not: rows">
+          <span i18n:translate="no_issues_found">No issues found</span>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
