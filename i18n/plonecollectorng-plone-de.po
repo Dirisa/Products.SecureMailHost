@@ -58,6 +58,9 @@ msgstr "Jeder (auch anonyme Benutzer)"
 msgid "Disabled"
 msgstr "Ausgeschaltet"
 
+msgid "Enabled"
+msgstr "Eingeschaltet"
+
 msgid "Watchlist enabled for anyone"
 msgstr "Eingeschaltet für jeden"
 
@@ -112,8 +115,29 @@ msgstr "Holländisch"
 msgid "Portlet usage"
 msgstr "Verwendung von Portlets" 
 
-msgid "Inherit settings for left slots from Plone"
-msgstr "Einstellungen für Slots links von Plone verwenden" 
+msgid "Use left slot, keep plone settings"
+msgstr "Linken Slot verwenden, Plone Einstellungen beibehalten"
 
-msgid "Override Plones settings for left slots"
-msgstr "Einstellung für links Slots von Plone überschreiben"
+msgid "Use left slot, override plone settings"
+msgstr "Linken Slot verwenden, Plone Einstellungen überschreiben"
+
+msgid "Use right slot, keep plone settings"
+msgstr "Rechten Slot verwenden, Plone Einstellungen beibehalten"
+
+msgid "Use right slot, override plone settings"
+msgstr "Rechten Slot verwenden, Plone Einstellungen überschreiben"
+
+msgid "File/Image uploads"
+msgstr "Datei/Bilder hochladen"
+
+msgid "References between issues"
+msgstr "Referenzen zwischen Tickets"
+
+msgid "Issue submissions through email"
+msgstr "Tickets einstellen per Email"
+
+msgid "Verify incoming issue email submissions"
+msgstr "Überprüfung der Emailadressen eingehener Tickets via Email"
+
+msgid "Issues are private to the issue owner and staff"
+msgstr "Tickets sind sichtbar für den Ticket Einsteller und Mitarbeiter"
