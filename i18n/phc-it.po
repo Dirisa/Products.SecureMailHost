@@ -11,6 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Domain: plonehelpcenter\n"
 
 ## 1 more: ./howto_attachments.pt
 #. <a href="" i18n:attributes="title" tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$item_id" title="Move item down">
@@ -307,57 +308,113 @@ msgid "phc_nopublished"
 msgstr "Sono contenuti oggetti di questo tipo, ma nessuno è visibile a causa dei permessi di accesso."
 
 #: ./helpcenter_view.pt
-msgid "latest_FAQs"
+msgid "latest_faq"
 msgstr "Le ultime Domande Frequenti"
 
 #: ./helpcenter_view.pt
-msgid "latest_How-tos"
-msgstr "Gli ultimi manuali di istruzioni"
+msgid "latest_howto"
+msgstr "Le ultime ricette"
 
 #: ./helpcenter_view.pt
-msgid "latest_Tutorials"
-msgstr "Gli ultimi Vademecum"
+msgid "latest_tutorial"
+msgstr "Le ultime guide"
 
 #: ./helpcenter_view.pt
-msgid "latest_Links"
+msgid "latest_link"
 msgstr "Gli ultimi Collegamenti"
 
 #: ./helpcenter_view.pt
-msgid "latest_Error References"
+msgid "latest_error"
 msgstr "Le ultime decodifiche degli errori"
 
 #: ./helpcenter_view.pt
-msgid "latest_Glossary Definitions"
+msgid "latest_glossary"
 msgstr "Le ultime definizioni del glossario"
 
 
 #: ./helpcenter_view.pt
-msgid "All_FAQs"
+msgid "All_faq"
 msgstr "Tutte le Domande Frequenti"
 
 #: ./helpcenter_view.pt
-msgid "All_How-tos"
-msgstr "Tutti i manuali di istruzioni"
+msgid "All_howto"
+msgstr "Tutte le ricette"
 
 #: ./helpcenter_view.pt
-msgid "All_Tutorials"
-msgstr "Tutti i Vademecum"
+msgid "All_tutorial"
+msgstr "Tutte le guide"
 
 #: ./helpcenter_view.pt
-msgid "All_Links"
+msgid "All_link"
 msgstr "Tutti i Collegamenti"
 
 #: ./helpcenter_view.pt
-msgid "All_Error References"
+msgid "All_error"
 msgstr "Tutte le decodifiche degli errori"
 
 #: ./helpcenter_view.pt
-msgid "All_Glossary Definitions"
+msgid "All_glossary"
 msgstr "Tutte le definizioni del glossario"
 
 #: ./helpcenter_view.pt
 msgid "phc_help_doc"
 msgstr "helpcenter_help_it"
+
+
+#: faqfolder_view.pt
+#. <span i18n:translate="phc_any_version">
+#.             Any version.
+#. </span>
+msgid "phc_any_version"
+msgstr "Qualunque versione."
+
+
+#: faqfolder_view.pt
+#. <span i18n:translate="phc_view_entire_faq">
+#.  View entire FAQ in full
+#. </span>
+msgid "phc_view_entire_faq"
+msgstr "Visualizza l'intero testo delle domande frequenti"
+
+
+#: faqfolder_view.pt
+#. <span i18n:translate="phc_view_entire_section">
+#.             View section in full
+#. </span>
+msgid "phc_view_entire_section"
+msgstr "Visualizza l'intero testo della sezione"
+
+
+#: faqfolder_view.pt
+#. <span i18n:translate="phc_view_index_faq">
+#.  View FAQ table of contents
+#. </span>
+msgid "phc_view_index_faq"
+msgstr "Visualizza l'indice delle domande frequenti"
+
+
+#: faqsection_view.pt
+#. <span i18n:translate="phc_faq_applies_to">
+#.  This FAQ applies to:
+#. </span>
+msgid "phc_faq_applies_to"
+msgstr "Questa domanda si applica a:"
+
+
+#: faqsection_view.pt
+#. <span i18n:translate="phc_full_question">
+#.  Full Question
+#. </span>
+msgid "phc_full_question"
+msgstr "Testo completo della domanda"
+
+
+#: faqsection_view.pt
+#. <span i18n:translate="phc_up_to_toc">
+#.  Up to table of contents
+#. </span>
+msgid "phc_up_to_toc"
+msgstr "Ritorna all'indice"
 
 # MSB end mofification
 

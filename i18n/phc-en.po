@@ -367,28 +367,56 @@ msgstr "There are contained help center object types, but none are viewable beca
 
 
 #: ./helpcenter_view.pt
-msgid "All_FAQs"
+msgid "latest_faq"
+msgstr "latest FAQs"
+
+#: ./helpcenter_view.pt
+msgid "latest_howto"
+msgstr "latest How-tos"
+
+#: ./helpcenter_view.pt
+msgid "latest_tutorial"
+msgstr "latest Tutorials"
+
+#: ./helpcenter_view.pt
+msgid "latest_link"
+msgstr "latest Links"
+
+#: ./helpcenter_view.pt
+msgid "latest_error"
+msgstr "latest Error References"
+
+#: ./helpcenter_view.pt
+msgid "latest_glossary"
+msgstr "latest Glossary Definitions"
+
+#: ./helpcenter_view.pt
+msgid "All_faq"
 msgstr "All FAQs"
 
 #: ./helpcenter_view.pt
-msgid "All_How-tos"
+msgid "All_howto"
 msgstr "All How-tos"
 
 #: ./helpcenter_view.pt
-msgid "All_Tutorials"
+msgid "All_tutorial"
 msgstr "All Tutorials"
 
 #: ./helpcenter_view.pt
-msgid "All_Links"
+msgid "All_link"
 msgstr "All Links"
 
 #: ./helpcenter_view.pt
-msgid "All_Error References"
+msgid "All_error"
 msgstr "All Error References"
 
 #: ./helpcenter_view.pt
-msgid "All_Glossary Definitions"
+msgid "All_glossary"
 msgstr "All Glossary Definitions"
+
+#: ./helpcenter_view.pt
+msgid "phc_help_doc"
+msgstr "helpcenter_help"
 
 #: ./helpcenter_view.pt
 msgid "phc_help_doc"

@@ -28,12 +28,16 @@
 
       <tal:entirefaq>
         <a class="link-expand"
-          tal:attributes="href python:'%s?full=1' % here_url">View entire FAQ in full</a>
+          tal:attributes="href python:'%s?full=1' % here_url">
+	  <span i18n:translate="phc_view_entire_faq">View entire FAQ in full</span>
+	  </a>
       </tal:entirefaq>
 
       <tal:toc>
         <a class="link-parent"
-          tal:attributes="href here_url">Up to table of contents</a>
+          tal:attributes="href here_url">
+	  <span i18n:translate="phc_up_to_toc">Up to table of contents</span>
+	  </a>
       </tal:toc>
 
       <div class="documentDescription"
@@ -51,24 +55,28 @@
         </h3>
 
         <p tal:condition="faq/Description"
-        tal:content="structure faq/Description">
-        Full Question
+        tal:content="structure faq/Description"
+	class="portletContent even">
+	<span i18n:translate="phc_full_question">Full Question</span>
         </p>
 
-        <div tal:content="structure faq/getAnswer">
+        <div tal:content="structure faq/getAnswer"
+	class="portletContent odd">
           Answer
         </div>
 
         <p tal:condition="faq/versions" 
         class="discreet">
-        This FAQ applies to: 
+	<span i18n:translate="phc_faq_applies_to">This FAQ applies to:</span>         
         <span tal:condition="faq/versions"
           metal:use-macro="python:faq.widget('versions')">
           Versions
         </span>
 
         <span tal:condition="not: faq/versions">
+	  <span i18n:translate="phc_any_version">
           Any version.
+	  </span>
         </span>
         </p>
       </div>

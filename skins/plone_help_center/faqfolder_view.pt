@@ -27,12 +27,16 @@
 
       <tal:entirefaq condition="full">
         <a class="link-expand"
-          tal:attributes="href python:'%s' % here.absolute_url()">View FAQ table of contents</a>
+          tal:attributes="href python:'%s' % here.absolute_url()">
+	  <span i18n:translate="phc_view_index_faq">View FAQ table of contents</span>
+	  </a>
       </tal:entirefaq>
 
       <tal:entirefaq condition="not: full">
         <a class="link-expand"
-          tal:attributes="href python:'%s?full=1' % here.absolute_url()">View entire FAQ in full</a>
+          tal:attributes="href python:'%s?full=1' % here.absolute_url()">
+	  <span i18n:translate="phc_view_entire_faq">View entire FAQ in full</span>
+	  </a>
       </tal:entirefaq>
 
 
@@ -48,7 +52,10 @@
         <tal:section condition="not: full">
           <a class="link-expand"
             tal:attributes="href python:'%s/faqsection_view?section=%s' % (here.absolute_url(), pss.url_quote(section) )">
-            View section in full</a> 
+	    <span i18n:translate="phc_view_entire_section">
+            View section in full
+	    </span>
+	    </a> 
 
           <ol>
             <li tal:repeat="faq python:here.getItemsBySection(section=section)">
@@ -66,11 +73,13 @@
           </h3>
 
           <p tal:condition="faq/Description"
-            tal:content="structure faq/Description">
+            tal:content="structure faq/Description"
+	    class="portletContent even">
             Full Question
           </p>
 
-          <div tal:content="structure faq/getAnswer">
+          <div tal:content="structure faq/getAnswer"
+	  class="portletContent odd">
             Answer
           </div>
 
@@ -83,7 +92,9 @@
           </span>
 
           <span tal:condition="not: faq/versions">
+	    <span i18n:translate="phc_any_version">
             Any version.
+	    </span>
           </span>
           </p>
 

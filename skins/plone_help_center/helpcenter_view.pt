@@ -113,7 +113,7 @@
                                                                    sort_limit=5)[:5]">
 
                     <div class="portlet portletThirdWidth"
-		    	tal:define="mylatest string:latest_${help_type/Title}">
+		    	tal:define="mylatest string:latest_${help_type/id}">
                         <h6>
                         <a tal:attributes="href help_type/getURL;
                                            title help_type/Description|nothing;">
@@ -139,7 +139,7 @@
                             </tal:list>
                         
                             <div class="portletContent odd"
-			    	tal:define="myall string:All_${help_type/Title}">
+			    	tal:define="myall string:All_${help_type/id}">
 				<a class="portletMore"
 				   tal:attributes="href help_type/getURL;
                                            title help_type/Description|nothing;"> 

@@ -75,7 +75,7 @@
         </li>
             
         <li>
-	    Se qualcuno in seguito aggiungerà dei commenti, sarete informati via e-mail.
+	    Se qualcuno in seguito aggiungera' dei commenti, sarete informati via e-mail.
         </li>
     </ol>    
 
@@ -110,17 +110,17 @@
     </dl>
 
     <dl>
-        <dt>Manuali di istruzione</dt>
+        <dt>Ricette</dt>
 
         <dd>
             <p>
-	    Un manuale d'istruzione e' una descrizione di una pagina su come fare qualcosa,
+	    Una ricetta e' una descrizione di una pagina su come fare qualcosa,
 	    ma ha il formato di una cartella, quindi puo' avere come allegati file/immagini.
-	    In genere e' breve e focalizzato.
+	    In genere e' breve e focalizzata.
             </p>
 
             <fieldset>
-                <legend>Tilici Manual d'istruzione</legend>
+                <legend>Tipiche ricette</legend>
 
                 <ul>
                     <li>Come impostare Plone per lavorare con un server web Apache</li>
@@ -131,25 +131,25 @@
     </dl>
 
     <dl>
-        <dt>Vademecum</dt>
+        <dt>Guide</dt>
 
         <dd>
             <p>
-	    Un Vademecum e' un articolo su piu' pagine che contiene molti dettagli.
-	    Il Vademecum e' molto piu' approfondito del Manuale d'istruzione,
+	    Una guida e' un articolo su piu' pagine che contiene molti dettagli.
+	    La guida e' molto piu' approfondita del Manuale d'istruzione,
 	    e copre aspetti concettuali dell'attivita', oltre ai passi effettivi
 	    per completare il lavoro.
             </p>
             <p>
-	    Se non sei sicuro di aver compreso la differenza tra Manuali d'istruzione 
-	    e vademecum, pensa alla differenza tra una ricetta che ti indica soltanto
-	    gli ingredienti richiesti, e come fare (How-to) una torta,
+	    Se non sei sicuro di aver compreso la differenza tra Ricette 
+	    e Guide, pensa alla differenza tra una ricetta che ti indica soltanto
+	    gli ingredienti richiesti, e come fare (ricetta) una torta,
 	    ed un articolo che parla della storia delle torte in generale,
-	    che puo', o meno, insegnare come farne effettivamente una (Vademecum).
+	    che puo', o meno, insegnare come farne effettivamente una (guida).
             </p>
 
             <fieldset>
-                <legend>Tipici Vademecum</legend>
+                <legend>Tipiche guide</legend>
 
                 <ul>
                     <li>Come utilizzare il "workflow" nei vostri progetti</li>
