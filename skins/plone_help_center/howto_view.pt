@@ -21,9 +21,6 @@
              tal:content="here/Description">
             description
         </div>
-        <div class="documentDescription" i18n:translate="howto_versions_apply">
-          Versions this Howto applies to: <span i18n:name="versions" tal:content="here/Versions" />            
-        </div>
   
         <p tal:condition="not: len_text"
            i18n:translate="no_body_text">
@@ -34,6 +31,18 @@
             <div tal:replace="structure python:here.getBody()" />
         </div>
     
+                <p tal:condition="here/getVersions" 
+                   class="discreet">
+                    This How-To applies to: 
+                    <span tal:condition="here/versions"
+                      metal:use-macro="python:here.widget('versions')">
+                    Versions
+                    </span>
+    
+                    <span tal:condition="not: here/versions">
+                    Any version.
+                    </span>
+                </p>
         <div metal:use-macro="here/document_byline/macros/byline">
           Get the byline - contains details about author and modification date.
         </div>    
