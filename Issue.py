@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.216 2004/09/12 07:42:06 ajung Exp $
+$Id: Issue.py,v 1.217 2004/09/19 09:28:37 ajung Exp $
 """
 
 import os, time, random
@@ -13,27 +13,26 @@ from urllib import unquote, quote
 from types import StringType, UnicodeType
 
 from Globals import PersistentMapping
-from AccessControl import  ClassSecurityInfo, getSecurityManager
-from OFS.content_types import guess_content_type
+from zLOG import LOG, ERROR
 from Acquisition import aq_base
 from DateTime import DateTime
+from OFS.content_types import guess_content_type
+from AccessControl import  ClassSecurityInfo, getSecurityManager
 from ComputedAttribute import ComputedAttribute
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
 from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
-from zLOG import LOG, ERROR
 
 from Products.ATSchemaEditorNG.ParentManagedSchema import ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
-from group_assignment_policies import getUsersForGroups
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent
+from group_assignment_policies import getUsersForGroups
+import issue_schema, util, notifications
 from WatchList import WatchList
 from Translateable import Translateable
-import issue_schema 
-import util, notifications
 
 _marker = []
 
@@ -627,14 +626,6 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
         for wf in self.workflow_history.keys():
             d[wf] = self.workflow_history[wf]
         return d
-
-    def _migrate_workflow_history(self):
-        """ migrate a workflow history to a custom workflow """
-        old_id = 'pcng_issue_workflow'
-        if self.workflow_history.has_key(old_id):
-            d = self.workflow_history[old_id]
-            self.workflow_history[self.collector_workflow] = d
-            del self.workflow_history[old_id]
 
     security.declareProtected(View, 'send_notifications')
     def send_notifications(self):
