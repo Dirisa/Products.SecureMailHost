@@ -31,6 +31,7 @@ about feature requests and/or to volunteer to help!!!
 ----------------------------------
 
 1. bug # 971432: 'Adding a Local Folder ends up in a error'
+   (AT 1.3.0b2 incompatibility issue)
 
 2. bug # 988620: rejected upload of file with same name 
    as existing file results in deletion of existing file
@@ -39,6 +40,30 @@ about feature requests and/or to volunteer to help!!!
 
 4. bug # 988627: folder path specification is too fragile
    (path must have trailing slash for MacOS, but not Windows)
+   
+5. PLFNG objects appear twice in Nav tree (for admin user)
+
+6. directory creation succeeds but gives an error
+   message (not found 404) on Windows 
+   (not reproducable yet) 
+
+7. empty folders give 404 errors for anonymous
+
+8. it is unclear what the tuple after # files cataloged is
+   (its # not cataloged because of catalog skip filter)
+
+9. no trap to prevent upload of .metadata files
+   (potential security risk)
+
+10. the add new item menu should be disabled, since 
+    plone types cannot be added to a PLFNG
+
+11. when descending in folders, there's no way to go 
+    up/back one level (goto parent).
+
+12. i18n not complete.
+
+13. 
 
 
 ----------------------------------
@@ -110,6 +135,26 @@ image, the PloneLocalFolder content doesn't appear like other content.
 This may be too much trouble to consider implementing, but it 
 might be something to put as a "caveat" in the README file.
 
+- make path elements clickable (like breadcrumbs)
+
+- 'modified' column that also contains time
+
+- sort content across multiple page listings
+
+- filter contents lists by type, size, ???
+
+- comments for folders
+
+- ability to hide files (e.g. 'dot' files like .DS_Store on OSX)
+
+- move file and/or folder 
+
+- unpacking support for package types other than .zip (eg .tgz) file types
+
+- display all metadata
+
+- edit all metadata
+
 
 ----------------------------------
  MISC NOTES
@@ -125,7 +170,7 @@ on plfng_view.pt page:
 	
 	a) Show '/' and the contents of X
 	b) Show Home/..../P
-	
+		
 	the subfolder Y would then be shown as:
 	a) /Y
 	b) Home/..../P/Y
