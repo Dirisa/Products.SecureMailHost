@@ -1,0 +1,35 @@
+Overview
+
+  Plone Help Center is an application designed to aid the documentation of Plone, and is used on plone.org to categorize and keep documentation up to date.
+
+Installation
+
+  You install it the usual way - either using QuickInstaller
+product or make an External method with:
+
+  Id: faq_install  (can really be anything)
+  Module Name: Faq.Install
+  Function Name: install
+
+
+Requirements
+
+  Archetypes 1.0 or later.
+
+
+To do
+
+  - Create folderish containers for everything, adding templates.
+
+  - Add proper workflows with notifications
+
+  - Implement the ratings tool
+
+Credit
+
+  User Interface, Project Architecture -- Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
+
+  Project Architecture, How-to part -- "Joel Burton":mailto:joel@joelburton.com
+
+  FAQ part -- "Tim Terlegard"mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - enhanced by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
+

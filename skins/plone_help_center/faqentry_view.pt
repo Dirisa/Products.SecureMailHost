@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+    lang="en-US">
+ 
+<body>
+    <div metal:define-macro="body" tal:define="w python:here.widget;">
+        
+           <div style="font-weight: bold; font-style: italic;" tal:condition="python: here.getQuestion() != here.Title()" tal:content="structure here/getQuestion"></div>
+           <div tal:content="structure here/getAnswer"></div>
+
+           <p  tal:condition="here/getVersions" class="discreet">This FAQ entries applies to: <span metal:use-macro="python:here.widget('versions')"></span>.</p>
+           
+
+
+    </div>
+</body>
+</html>

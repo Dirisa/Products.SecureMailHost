@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+    <div metal:fill-slot="main">
+      <div metal:define-macro="main"
+	   tal:omit-tag="" tal:define="len_text python:len(here.body);">
+	       
+        <h1 tal:content="here/title_or_id" class="documentFirstHeading">
+          Title or id
+        </h1>
+    
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+            Document actions (print, sendto etc)
+        </div>
+    
+        <div class="documentDescription"
+             tal:content="here/Description">
+            description
+        </div>
+        <div class="documentDescription" i18n:translate="howto_versions_apply">
+          Versions this Howto applies to: <span i18n:name="versions" tal:content="here/Versions" />            
+        </div>
+ 
+        <p tal:condition="not: len_text"
+           i18n:translate="no_body_text">
+            This item does not have any body text, click the edit tab to change it.
+        </p>
+    
+        <div id="bodyContent">
+            <div tal:replace="structure python:here.getBody()" />
+        </div>
+    
+        <div metal:use-macro="here/document_byline/macros/byline">
+          Get the byline - contains details about author and modification date.
+        </div>    
+
+      </div>
+    </div>
+  </body>
+</html>
