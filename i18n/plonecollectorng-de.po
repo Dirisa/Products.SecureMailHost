@@ -1082,3 +1082,6 @@ msgstr "GRUF Gruppen"
 
 msgid "group_members"
 msgstr "Gruppen Teilnehmer"
+
+msgid "Waiting (confirmation)"
+msgstr "Warten auf Bestätigung"
