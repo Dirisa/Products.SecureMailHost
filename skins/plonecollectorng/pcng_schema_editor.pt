@@ -5,12 +5,17 @@
 
 <body>
   <div metal:fill-slot="main">
+
     <h1 i18n:translate="heading_edit_schema">Schema editor</h1>
 
     <table border="1"
-           td tal:define="default_fieldset python: here.schema_getNames()[0];
-                          fieldset request/fieldset|default_fieldset;
-                          fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];">
+           td tal:define="fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];
+                          default_fieldset python: fieldsets[0];
+                          fieldset request/fieldset|default_fieldset; ">
+      <metal:block tal:condition="not: request/fieldset|nothing">
+        <span tal:define="dummy python: request.set('fieldset', fieldsets[0])" /> 
+      </metal:block>
+
       <tr>
         <th>Schemata</th>
         <th>Field definition</th>
