@@ -3,10 +3,10 @@ system and framework.
 
 License:
 
-    PloneCollector is (C) by Andreas Jung and published as open-source
-    under den GNU Lesser General Public License V 2.1 (see LICENSE.txt).
-    If this license does not meet your requirements, contact me for 
-    releasing PloneCollectorNG under a suitable license.
+    PloneCollector is (C) by Andreas Jung and published as open-source under
+    the GNU Public License (see LICENSE.txt).  If this license does not meet your
+    requirements, contact me for releasing PloneCollectorNG under a suitable
+    license.
 
 Installation:
 
