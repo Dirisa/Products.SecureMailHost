@@ -179,12 +179,11 @@
         </form>
     </div>
 
-	<fieldset>
+	<fieldset tal:condition="python: member.has_permission('Modify portal content', here)">
 	<legend>Upload File:</legend>
 
     <div>
-         <form tal:condition="python: member.has_permission('Modify portal content', here)" 
-              tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
+         <form tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
         
         <table width="100%">
           <tr>
@@ -228,11 +227,10 @@
 
     <br/>
     
-    <fieldset>
+    <fieldset tal:condition="python: member.has_permission('Modify portal content', here)">
 	 <legend>Create Directory:</legend>
     <div>
-        <form tal:condition="python: member.has_permission('Modify portal content', here)" 
-              tal:attributes="action string:${request/URL1}/create_directory" method="post">
+        <form tal:attributes="action string:${request/URL1}/create_directory" method="post">
           Directory name:
           <input type="text" name="dirname" size="30">
           &nbsp;
