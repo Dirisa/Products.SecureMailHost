@@ -10,8 +10,8 @@
   <div metal:fill-slot="main">	  
     <h1 i18n:translate="legend_notifications">Notifications</h1>
     <form action="set_notification_emails" method="post">
-      <div class="group" tal:condition="python: here.notification_policy != 'NoneNotificationPolicy'">
-        <span class="legend" i18n:translate="collector_notifications">Collector notifications</span>
+      <fieldset tal:condition="python: here.notification_policy != 'NoneNotificationPolicy'">
+        <legend i18n:translate="collector_notifications">Collector notifications</legend>
 
     
         <div class="row" 
@@ -40,11 +40,11 @@
           </div>
         </div> <!-- End row -->
   
-      </div> <!-- End group -->
+      </fieldset> <!-- End group -->
     </form>
-   <div class="group" tal:condition="python: here.notification_policy == 'NoneNotificationPolicy'">
-   <span i18n:translate="notification_mode_disabled">Notification mode is disabled</span>.
-   </div>
+   <fieldset tal:condition="python: here.notification_policy == 'NoneNotificationPolicy'">
+     <span i18n:translate="notification_mode_disabled">Notification mode is disabled</span>.
+   </fieldset>
   </div>
 </body>
 </html>

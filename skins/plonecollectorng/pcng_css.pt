@@ -38,14 +38,12 @@ th.staff {
     font-size: 120%;
 }
 
-span.schemata_legend {
-    background: #ffffff;
-    font-size: 80%;
-    padding: 0.5em;
-    position : relative;
-    top: -0.8em;
-    left: 0em;
+legend {
     text-transform: capitalize;
+}
+
+fieldset {
+ padding: 0.5em;
 }
 
 span.schemata_label {

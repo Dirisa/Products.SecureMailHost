@@ -6,20 +6,20 @@
   </metal:block>
 </span>
 
-<div class="group" metal:define-macro="view_schemata">
-  <span class="schemata_legend" i18n:translate="" tal:content="schemata_name"></span>
+<fieldset metal:define-macro="view_schemata">
+  <legend class="schemata_legend" i18n:translate="" tal:content="schemata_name"></legend>
     <metal:block  tal:repeat="field python: schemata.fields()">
       <span metal:use-macro="here/issue_macros/macros/field_shortview" />
     </metal:block>
-</div>
+</fieldset>
 
 <!-- Issue related macros -->
 
 <div metal:define-macro="issue_references">
-  <div class="group"
+  <fieldset
        tal:define="references here/getRefs;
                    breferences here/getBRefs">
-    <span class="legend" i18n:translate="legend_references">References</span>
+    <legend i18n:translate="legend_references">References</legend>
 
       <ul>
         <li><span i18n:translate="references">References</span>
@@ -47,13 +47,12 @@
           <a href="pcng_references_tree?format=ps">[PS]</a>
         </li>
       </ul>
-  </div> 
+  </fieldset> 
 </div>  
 
 
-<div metal:define-macro="issue_uploads">
-  <div class="group">
-    <span class="legend" i18n:translate="legend_uploads">Uploads</span>
+<fieldset metal:define-macro="issue_uploads">
+    <legend i18n:translate="legend_uploads">Uploads</legend>
 
         <div class="row" tal:repeat="item here/objectValues">
           <div class="label">
@@ -86,15 +85,12 @@
         <span i18n:translate="issue_artifacts_table_no_uploads_available"
               tal:condition="not: here/objectValues">No uploads available</span>
 
-  </div> <!-- End group -->
-</div> <!-- End macro: issue_artifacts_table -->
+</fieldset> <!-- End group -->
 
 
-
-<div metal:define-macro="add_uploads">
-  <div class="group">
+<fieldset metal:define-macro="add_uploads">
+  <legend i18n:translate="legend_artifacts_upload">Upload files or images</legend>
     <form method="post" action="upload_file" enctype="multipart/form-data">
-      <span class="legend" i18n:translate="legend_artifacts_upload">Upload files or images</span>
 
       <div class="row">
           <div class="label">&nbsp;</div>
@@ -113,10 +109,9 @@
           <input type="submit" value=" Upload " class="standalone">
         </div>
        </div> <!-- End row -->
-    </form>
-  </div> <!-- End group -->
+  </form>
+</fieldset> <!-- End group -->
 
-</div>  <!-- End macro: add_artifacts_excerpt -->
 
 
 <div metal:define-macro="add_references">
@@ -137,9 +132,9 @@ function show_tickets() {
 
 </script>
 
-  <div class="group">
+  <fieldset>
 
-    <span class="legend" i18n:translate="legend_new_reference_to_issue">New reference to other issue</span>
+    <legend i18n:translate="legend_new_reference_to_issue">New reference to other issue</legend>
     <form method="post" action="add_reference" name="myform">
 
       <div class="row">
@@ -183,17 +178,16 @@ function show_tickets() {
         </div>
       </div> <!-- End row -->
     </form>
-  </div> <!-- End group -->
+  </fieldset> <!-- End group -->
 </div>  <!-- End macro: add_references_table -->
 
 
 <div metal:define-macro="watchlist">
-
-  <div class="group" tal:condition="python: here.wl_getMode()=='anyone' or 
+  <fieldset tal:condition="python: here.wl_getMode()=='anyone' or 
                                             (here.wl_getMode()=='authenticated' and member.getUserName() != 'Anonymous User') "
        tal:define="email python: member.getProperty('email')">
 
-    <span class="legend" i18n:translate="legend_watchlist">Watchlist</span>
+    <legend i18n:translate="legend_watchlist">Watchlist</legend>
 
 
     <metal:block tal:condition="email">
@@ -205,7 +199,6 @@ function show_tickets() {
       </div>      
     </metal:block>
 
-
     <metal:block tal:condition="not: email">
       <form tal:attributes="action string:${here/absolute_url}/wl_addWatcher">
         <span i18n:translate="email_address">E-Mail address</span>:        
@@ -213,9 +206,7 @@ function show_tickets() {
         <input type="submit" value=" Subscribe to this issue " class="standalone">
       </form>
     </metal:block>
-
-  </div>
-
+  </fieldset>
 </div>
 
 

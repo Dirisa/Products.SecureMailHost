@@ -10,8 +10,8 @@
   <div metal:fill-slot="main">
     <h1 i18n:translate="legend_member_preferences">Member preferences</h1>
     <form method="post" action="pcng_set_member_preferences">
-      <div class="group">   
-        <span class="legend" i18n:translate="preferences">Preferences</span>
+      <fieldset>
+        <legend i18n:translate="preferences">Preferences</legend>
         <metal:block tal:repeat="item python: ( 
                                          ('pcng_company','Company'), 
                                          ('pcng_position','Position'), 
@@ -44,7 +44,7 @@
         <input type="submit" value=" Save changes " i18n:attributes="value" class="standalone">
         &nbsp; &nbsp;
         <input type="reset"  value=" Reset "        i18n:attributes="value" class="standalone">
-      </div>
+      </fieldset>
     </form>			   
   </div>
 </body>

@@ -15,8 +15,8 @@
       <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="?mode=full">Full view</a>
       <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="?mode=simple">Simple view</a>
 
-      <div class="group" tal:repeat="fieldset python: ('issuedata',)">
-        <span class="legend" tal:content="fieldset" />
+      <fieldset tal:repeat="fieldset python: ('issuedata',)">
+        <legend tal:content="fieldset" />
         <metal:block tal:repeat="fieldname python: ('title', 'description', 'solution')" >
           <div class="row" tal:condition="python: getattr(here, fieldname)" >
 	        <span metal:use-macro="python: here.widget(fieldname, mode='view', use_label=1)"/>
@@ -31,7 +31,7 @@
 
         <span class="schemata_label" i18n:translate="status">Status: </span><span class="field" tal:content="python: here.pcng_format_status(here.status())" />&nbsp;&nbsp;
         <span class="schemata_label" i18n:translate="assigned_to">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
-      </div>
+      </fieldset>
 
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
@@ -45,20 +45,20 @@
         </metal:block>
 
         <div tal:define="uploads here/objectValues" >
-          <div class="group" tal:condition="uploads">
-            <span class="legend" i18n:translate="uploads">Uploads</span>
+          <fieldset tal:condition="uploads">
+            <legend i18n:translate="uploads">Uploads</legend>
               <metal:block tal:repeat="item uploads">
                 <a tal:attributes="href item/absolute_url" tal:content="item/getId"/>
               </metal:block>
-          </div>
+          </fieldset>
         </div>
 
       </metal:block>
 
 
-      <div class="group"><span class="legend" i18n:translate="transcript">Transcript</span>
+      <fieldset><legend i18n:translate="transcript">Transcript</legend>
         <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
-      </div>
+      </fieldset>
 
       <metal:block tal:condition="python: request.get('mode', 'simple') == 'full'" >
 
