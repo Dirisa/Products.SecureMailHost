@@ -27,7 +27,7 @@ from App.FindHomes import INSTANCE_HOME   # eg, windows INSTANCE_HOME = C:\Plone
 try:
     from Products.mxmCounter import mxmCounter
 except ImportError:
-    zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "ImportError :: mxmCounter")
+    zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "Warning: mxmCounter was not imported")
     mxmCounter = None
 
 schema = BaseSchema +  Schema((
@@ -438,6 +438,10 @@ class PloneLocalFolderNG(BaseContent):
         if not upload:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=no file was uploaded!')
             return 0        
+        
+        if upload.filename.endswith('.metadata'):
+            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=upload of .metadata files is not permitted.')
+            return 0
         
         if self.require_MD5_with_upload and not clientMD5:
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=you MUST provide the MD5 checksum for the file you want to upload!')
