@@ -44,8 +44,8 @@ msgstr "Kennung"
 msgid "Managers" 
 msgstr "Administrator"
 
-msgid "Email" 
-msgstr "EMail"
+msgid "EMail" 
+msgstr "Elektronische Post"
 
 msgid "Reporter" 
 msgstr "Reporter"
@@ -672,7 +672,7 @@ msgid "label_watchlist"
 msgstr "Watchlist"
 
 msgid "E-Mail"
-msgstr "EMail"
+msgstr "E-Mail"
 
 msgid "References and uploads"
 msgstr "Referenzen und hochgeladene Dateien"
@@ -1038,10 +1038,10 @@ msgstr "Eintrag bearbeiten"
 msgid "Edit transcript entry"
 msgstr "Eintrag bearbeiten"
 
-msgid "main"
+msgid "Main"
 msgstr "Metadaten"
 
-msgid "permissions"
+msgid "Permissions"
 msgstr "Berechtigungen"
 
 msgid "help_configuration"
