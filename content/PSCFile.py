@@ -1,11 +1,10 @@
 """
-$Id: PSCFile.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: PSCFile.py,v 1.2 2005/03/05 02:04:25 optilude Exp $
 """
 
 from Products.Archetypes.public import BaseContent
 from Products.Archetypes.public import registerType
 from Products.Archetypes.public import DisplayList
-
 
 from Products.PloneSoftwareCenter.utils import std_modify_fti
 from Products.PloneSoftwareCenter.config import PROJECTNAME
@@ -16,6 +15,7 @@ from AccessControl import ClassSecurityInfo
 
 from schemata import PSCFileSchema
 
+import re
 
 def modify_fti(fti):
     std_modify_fti(fti)
@@ -46,5 +46,15 @@ class PSCFile(BaseContent):
         """
         return DisplayList ([(item, item) for item in \
                                 self.getAvailablePlatforms ()])
+                
+    security.declareProtected(CMFCorePermissions.View, 'getDownloadIconName')                
+    def getDownloadIconName(self):
+        """Given the currently selected platform, return the name of the
+        name of the icon to use. This takes the form platform_${name}.gif,
+        where ${name} is the platform name, in lowercase, with all non-alpha-
+        numeric characters (including whitespace) converted to underscores.
+        """
+        return "platform_%s.gif" % \
+                    (re.sub(r'\W', '_', self.getPlatform()).lower(),)
 
 registerType(PSCFile, PROJECTNAME)
