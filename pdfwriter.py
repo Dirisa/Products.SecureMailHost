@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.8 2003/11/16 17:48:21 ajung Exp $
+$Id: pdfwriter.py,v 1.9 2003/11/17 16:46:08 ajung Exp $
 """
 
-import os, sys, cStringIO, tempfile
+import os, sys, cStringIO, tempfile, textwrap
 
 try:
     from PIL import Image as PIL_Image
@@ -117,6 +117,7 @@ def pdfwriter(collector, ids):
         for img in issue.objectValues('Portal Image'):
 
             if have_pil:
+                Elements.append(Spacer(100, 0.2*inch))
                 fname = tempfile.mktemp() + img.getId()
                 tempfiles.append(fname)
                 open(fname, 'w').write(str(img.data))
@@ -124,7 +125,7 @@ def pdfwriter(collector, ids):
                 width, height= image.size
                 ratio = width*1.0 / height
 
-                max = 4*inch
+                max = 5*inch
                 if ratio > 1.0:
                     width = max
                     height = max / ratio
@@ -133,10 +134,11 @@ def pdfwriter(collector, ids):
                     width = max / ratio
 
                 Elements.append(Image(fname, width, height))
-                Elements.append(Spacer(100, 0.2*inch))
 
             else:
                 p('Image: %s' % img.title_or_id())
+
+            Elements.append(Spacer(100, 0.2*inch))
 
         header('Transcript')
 
@@ -165,7 +167,11 @@ def pdfwriter(collector, ids):
                         s+= ' (%s)' % ev.comment
                     l.append(s)
 
-            definition('\n'.join(l))
+            l1 = []
+            for x in l:
+                l1.extend(textwrap.wrap(x)) 
+            
+            definition(textwrap.fill('\n'.join(l), 80))
 
             n+=1
         Elements.append(PageBreak())

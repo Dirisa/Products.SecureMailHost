@@ -5,8 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.6 2003/11/02 21:21:30 ajung Exp $
+$Id: __init__.py,v 1.7 2003/11/17 16:46:08 ajung Exp $
 """
+
+import os, sys
 
 from Globals import package_home
 from Products.Archetypes.public import process_types, listTypes
@@ -15,6 +17,10 @@ from Products.CMFCore.DirectoryView import registerDirectory
 
 from config import SKINS_DIR, GLOBALS, PROJECTNAME
 from config import ADD_CONTENT_PERMISSION
+
+d = os.path.dirname(__file__)
+if not d in sys.path:
+    sys.path.append(d)
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
@@ -35,3 +41,8 @@ def initialize(context):
         fti                = ftis,
         ).initialize(context)
 
+from Products.PythonScripts.Utility import allow_module
+allow_module('reportlab')
+allow_module('reportlab.lib.units')
+allow_module('reportlab.lib.pagesizes')
+allow_module('reportlab.pdfgen')
