@@ -294,6 +294,9 @@ class PloneLocalFolderNG(BaseContent):
             if REQUEST.get('action', '') == 'unpack':
                self.unpackFile(destpath, REQUEST, RESPONSE)
             
+            elif REQUEST.get('action', '') == 'delete':
+               self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)   
+            
             elif REQUEST.get('action', '') == 'catalog':
                catalogTool = getToolByName(self, 'portal_catalog')
                return self.catalogContents()
@@ -450,7 +453,7 @@ class PloneLocalFolderNG(BaseContent):
         
         return localfolder_props.get('size',0)
 
-    security.declareProtected(ModifyPortalContent, 'upload_file')
+    security.declareProtected(ModifyPortalContent, 'unpackFile')
     def unpackFile(self, packedFile, REQUEST, RESPONSE):
         """ unpack a file """
 
@@ -502,6 +505,13 @@ class PloneLocalFolderNG(BaseContent):
         else:
             RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=file could not be unpacked.')
             return 0
+
+    security.declareProtected('Delete objects', 'deleteFile')
+    def deleteFile(self, rel_dir, fileToDelete, REQUEST, RESPONSE):
+        """ delete the file """
+        os.remove(fileToDelete)
+        RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
+        return 1
 
     security.declareProtected('View', 'quota_aware')
     def quota_aware(self): 
