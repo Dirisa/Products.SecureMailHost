@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript.py,v 1.18 2003/12/04 14:51:52 ajung Exp $
+$Id: Transcript.py,v 1.19 2003/12/25 12:19:35 ajung Exp $
 """
 
 import time 
@@ -24,11 +24,8 @@ class TranscriptEvent(Persistent, Implicit):
     security.setDefaultAccess('allow')
 
     def __init__(self, type, **kw):
+        self.__dict__.update(kw)
         self.type = type
-
-        for k,v in kw.items():
-            setattr(self, k, v)
-        
         created = kw.get('created', None)
         if created is not None: self.created = created
         else: self.created = time.time()
@@ -95,7 +92,6 @@ class Transcript(Persistent, Implicit):
     security.declareProtected(View, 'addIncrementalChange')
     def addIncrementalChange(self, field, old, new, user=None, created=None):
 
-#        assert isinstance(old, (list, tuple)) and isinstance(new, (list, tuple))
         added = list(difference(OOSet(new), OOSet(old)))
         removed = list(difference(OOSet(old), OOSet(new)))
 
