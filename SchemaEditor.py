@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.37 2003/11/28 14:46:46 ajung Exp $
+$Id: SchemaEditor.py,v 1.38 2003/11/28 17:33:01 ajung Exp $
 """
 
 import copy
@@ -31,8 +31,9 @@ class SchemaEditor:
     security = ClassSecurityInfo()
 
     security.declareProtected(ManageCollector, 'atse_init')
-    def atse_init(self, schema):
+    def atse_init(self, schema, filtered_schemas=('default', 'metadata')):
         self._ms = schema.copy()     # ms=managed schema
+        self._filtered_schemas = filtered_schemas
 
     security.declareProtected(View, 'atse_getSchema')
     def atse_getSchema(self):
@@ -46,8 +47,8 @@ class SchemaEditor:
             for name in self._schemata_names:
                 for f in self._schemas[name].fields():
                     schema.addField(f)
-            schema.addField(StringField('language', schemata='default')
-            schema.addField(StringField('subject', schemata='default')
+            schema.addField(StringField('language', schemata='default'))
+            schema.addField(StringField('subject', schemata='default'))
             self._ms = schema.copy()
  
         for field in self._ms.fields():
@@ -62,7 +63,7 @@ class SchemaEditor:
     security.declareProtected(View, 'atse_getSchemataNames')
     def atse_getSchemataNames(self):
         """ return names of all schematas """
-        return self._ms.getSchemataNames()
+        return [n  for n in self._ms.getSchemataNames() if not n in self._filtered_schemas]
 
     security.declareProtected(View, 'atse_getSchemata')
     def atse_getSchemata(self, name):
