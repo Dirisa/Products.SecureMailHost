@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.16 2005/03/12 07:41:09 limi Exp $
+$Id: schemata.py,v 1.17 2005/03/12 08:06:04 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -1080,13 +1080,14 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
     SimpleDataGridField(
         name='availableCategories',
         default=[
-            'standalone|Stand-alone products', 
-            'add-on|Add-on components', 
-            'infrastructure|Infrastructure'],
+            'standalone|Stand-alone products|Projects that are self-contained.', 
+            'add-on|Add-on components|Projects that provide additional functionality.', 
+            'infrastructure|Infrastructure|Projects that provide services.',
+        ],
         widget=SimpleDataGridWidget(
             label='Categories',
             label_msgid='label_categories_vocab',
-            description='Define the available categories for classifying these packages. The format is Short Name | Long name. The id must be unique.',
+            description='Define the available categories for classifying the projects. The format is Short Name | Long name | Description. The id must be unique.',
             description_msgid='help_categories_vocab',
             i18n_domain='plonesoftwarecenter',
             rows=6,

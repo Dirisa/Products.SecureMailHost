@@ -69,11 +69,12 @@
     category, click "Show all".
     </p>
 
-    <div tal:repeat="categoryItems python:here.getCategoriesToList().items()">
+<span tal:content="python:here.getCategoriesToList().items()" />
 
+    <div tal:repeat="categoryItems python:here.getCategoriesToList().items()">
         <div class="portlet portletThirdWidth"
-                tal:define="category   python:categoryItems[1];
-                            categoryId python:categoryItems[0]">
+                tal:define="categoryId   python:categoryItems[0];
+                            category     python:categoryItems[1];">
             <h6>
                     <a href=""
                        tal:content="category"

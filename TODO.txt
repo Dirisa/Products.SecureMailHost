@@ -10,6 +10,12 @@ Pre-deployment count-down
   Module Python expression "', '.join(obj.getCategoryTitles)", line 1, in 
   <expression> TypeError: sequence expected, Missing found
   
+- We may want to add description on the categories, so it behaves like this:
+  shortname|Full Name|Description of the category, because not all categories
+                      are immediately sensible from a short title.
+  (Added this, but get list index out of range when I try using it on the
+   plonesoftwarecenter_view page ~limi)
+
 - by-category.pt needs a little UI love, esp. for the list presented when
     no category is entered.
   
@@ -25,11 +31,6 @@ Pre-deployment count-down
 
 - Now that we have data grids on licenses etc., we should probably clean it up
   a bit in the view templates for releases  (show links etc.)
-
-- We may want to add description on the categories, so it behaves like this:
-  shortname|Full Name|Description of the category, because not all categories
-                      are immediately sensible from a short title.
-
 
 ====
 Misc

@@ -219,21 +219,6 @@
 
           </tal:proposals>
 
-        <tal:comment replace="nothing">
-          XXX: FIXME
-          <h2 i18n:translate="heading_documentation">Documentation</h2>
-        </tal:comment>
-
-          <h2 i18n:translate="heading_contact_details">Contact details</h2>
-
-          <p>
-            <a href=""
-              tal:content="here/aq_parent/getHomepage"
-              tal:attributes="href here/aq_parent/getHomepage">
-              Project homepage
-            </a>
-          </p>
-
         <tal:changelog condition="here/getChangelog">
           <h2>Change log</h2>
 
