@@ -115,6 +115,12 @@
                tal:content="issue/getId" />
             <span tal:content="issue/Title" />
           </td>
+          <td>
+            <span tal:content="issue/Creator" />
+          </td>
+          <td>
+            <span tal:content="issue/status" />
+          </td>
         </tr>
       </table>
     </div>
