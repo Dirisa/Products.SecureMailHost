@@ -5,6 +5,9 @@ Requirements:
   - Python 2.3.3
 
   - Maildrop Host 1.8+ (www.dataflake.org/software/maildrophost)
+
+  - ATSchemaEditorNG 0.2+ 
+    (http://sourceforge.net/project/showfiles.php?group_id=55262&package_id=130214)
  
 
   Optional packages:
