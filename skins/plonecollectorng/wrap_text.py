@@ -4,6 +4,9 @@
 
 from textwrap import wrap
 
+if same_type(text, u''):
+    text = text.encode(context.getSiteEncoding())
+
 lst = []
 
 for line in text.split('\n'):
