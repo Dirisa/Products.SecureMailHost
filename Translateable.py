@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.16 2004/01/28 12:58:25 ajung Exp $
+$Id: Translateable.py,v 1.17 2004/01/29 16:37:32 ajung Exp $
 """
 
-from types import UnicodeType
+from types import UnicodeType, StringType
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -72,9 +72,14 @@ class Translateable:
                             target_language=target_language,
                             as_unicode=1)
 
-        assert isinstance(v, UnicodeType)
-        if as_unicode: return v
-        else: return v.encode(self._getPloneEncoding())
+        if not v: v = u''
+        if isinstance(v, StringType):
+            if as_unicode: return v.encode(self._getPloneEncoding())
+            else: return v
+        else:
+            if as_unicode: return v
+            else: return v.encode(self._getPloneEncoding())
+            
 
     security.declarePublic('getLanguages')
     def getLanguages(self):
