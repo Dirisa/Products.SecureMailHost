@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.83 2003/11/28 13:50:09 ajung Exp $
+$Id: Collector.py,v 1.84 2003/11/29 07:20:14 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -42,7 +42,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         },
         {'id': 'pcng_edit',
         'name': 'Edit',
-        'action': 'portal_form/pcng_base_edit',
+        'action': 'pcng_base_edit',
         'permissions': (ManageCollector,)
         },
         {'id': 'pcng_addissue',
@@ -89,7 +89,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def __init__(self, oid, **kwargs):
         Base.__init__(self, oid, **kwargs)
         self.initializeArchetype()
-        self.atse_init(issue_schema.schema)
+        self.atse_init(issue_schema.schema)   # initialize SchemaEditor 
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.91 2003/11/28 13:50:09 ajung Exp $
+$Id: Issue.py,v 1.92 2003/11/29 07:20:14 ajung Exp $
 """
 
 import sys, os, time
@@ -22,7 +22,7 @@ from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 
-from Base import Base
+from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
@@ -63,7 +63,7 @@ class IssueRelationship(Persistent):
 InitializeClass(IssueRelationship)
 
 
-class PloneIssueNG(Base, WatchList, Translateable):
+class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = ({
@@ -84,7 +84,7 @@ class PloneIssueNG(Base, WatchList, Translateable):
         },
         {'id': 'pcng_edit',
         'name': 'Edit',
-        'action': 'portal_form/pcng_base_edit',
+        'action': 'pcng_base_edit',
         'permissions': (ModifyPortalContent,)
         },
         {'id': 'issue_references',
@@ -153,42 +153,6 @@ class PloneIssueNG(Base, WatchList, Translateable):
         """ Hook for pre-deletion actions """
         self.unindexObject()
 
-    def Schema(self):
-        """ Return our schema (through acquisition....uuuuuh). We override
-            the Archetypes implementation because the schema for Issue is 
-            maintained as attribute of the parent collector instance.
-        """
-        
-        # Schema seems to be called during the construction phase when there is
-        # not acquisition context. So we return the schema itself.
-
-        if not hasattr(self, 'aq_parent'): return self.schema
-
-        # Otherwise get the schema from the parent collector through
-        # acquisition and assign it to a volatile attribute for performance
-        # reasons
-
-        schema = getattr(self, '_v_schema', None)
-        if schema is None:
-            self._v_schema = self.aq_parent.atse_getSchema()
-
-            # Check if we need to update our own properties
-            for field in self._v_schema.fields():
-                try:
-                    value = field.storage.get(field.getName(), self)  
-                except:
-                    field.storage.set(field.getName(), self, field.default)
-                
-        return self._v_schema
-
-    def SchemataNames(self):
-        """ return ordered list of schemata names """
-
-        names = []
-        for f in self.Schema().fields():
-            if not f.schemata in names and f.schemata != 'default':
-                names.append(f.schemata)
-        return names
 
     ######################################################################
     # Followups
@@ -531,22 +495,8 @@ class PloneIssueNG(Base, WatchList, Translateable):
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
 
-    ######################################################################
-    # We need this for base_edit
-    ######################################################################
+registerType(PloneIssueNG)
 
-    def Schemata(self):
-        """ return dict of Schematas """
-
-        d = {}
-        schema = self.Schema()
-        for name in schema.getSchemataNames():
-            s = Schema()
-            for f in schema.getSchemataFields(name):
-                s.addField(f)
-            d[name] = s
-        return d
-            
 
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
@@ -559,4 +509,3 @@ def modify_fti(fti):
     fti['allowed_content_types'] = ['File', 'Portal File', 'Image', 'Portal Image']
     return fti
 
-registerType(PloneIssueNG)
