@@ -102,7 +102,9 @@
         <tal:loop tal:repeat="a actions/pcng_collector|nothing">
           <li>
             <a tal:attributes="href a/url">
-              <span i18n:translate="" tal:content="a/name" />
+              <span i18n:translate="" 
+                    tal:attributes="id string:pcng_${a/id}"
+                    tal:content="a/name" />
             </a>
           </li>
         </tal:loop>
@@ -121,7 +123,9 @@
         <tal:loop tal:repeat="a actions/pcng_issue|nothing">
           <li>
             <a tal:attributes="href a/url">
-              <span i18n:translate="" tal:content="a/name" />
+              <span i18n:translate="" 
+                    tal:attributes="id string:pcng_${a/id}"
+                    tal:content="a/name" />
             </a>
           </li>
         </tal:loop>
