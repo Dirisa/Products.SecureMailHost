@@ -17,6 +17,8 @@
                  total_vis_folders python:folder_props.get('folders',0);
                  total_vis_files   python:folder_props.get('files',0);
                  filteredOutFolderContents python:here.getFilteredOutContents();
+                 filteredFolderContents python:here.getFilteredContents();
+                 legalFiles python:filteredFolderContents;
                  illegalFiles python:filteredOutFolderContents[0];
                  total_illegal_files python:len(illegalFiles);
                  illegalFolders python:filteredOutFolderContents[1];
@@ -105,7 +107,7 @@
         </metal:block>
         <metal:block tal:condition="illegalFiles">
          <br>
-         <table id="sortable"
+         <table id="sortable1"
              class="listing"
              summary="Content listing"
              cellpadding="0" cellspacing="0">
@@ -133,7 +135,7 @@
         </metal:block>
         <metal:block tal:condition="illegalFolders">
          <br>
-         <table id="sortable"
+         <table id="sortable2"
              class="listing"
              summary="Content listing"
              cellpadding="0" cellspacing="0">
@@ -218,7 +220,7 @@
 	        <p> none</p> 
 	        </metal:block>
 	        <metal:block tal:condition="hiddenFiles">
-	         <table id="sortable2"
+	         <table id="sortable4"
 	             class="listing"
 	             summary="Content listing"
 	             cellpadding="0" cellspacing="0">
@@ -240,6 +242,38 @@
 	           </metal:block>
 	        </fieldset>
 
+        </fieldset>
+        
+        <fieldset>
+        <legend>Legal Content:</legend>
+ 
+        <b>files with legal Plone ID's</b><br>
+        
+        <metal:block tal:condition="not: legalFiles">
+        <p> none</p> 
+        </metal:block>
+        <metal:block tal:condition="legalFiles">
+         <br>
+         <table id="sortable5"
+             class="listing"
+             summary="Content listing"
+             cellpadding="0" cellspacing="0">
+             <thead>
+                <tr>
+                   <th>Title</th>
+                </tr>
+             </thead>
+           <tbody>
+	           <metal:block tal:repeat="item legalFiles">
+                  <tr>
+                    <td i18n:translate="" tal:content="python:item">
+                      itemName
+                    </td>
+                  </tr>
+              </metal:block>
+             </tbody>
+           </table>
+        </metal:block>
         </fieldset>
      </div>
   </div>
