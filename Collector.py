@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.48 2003/10/19 15:07:47 ajung Exp $
+$Id: Collector.py,v 1.49 2003/10/19 15:31:45 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -268,7 +268,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
             for email in emails:
                 if not util.isValidEmailAddress(email):
                     raise ValueError(self.translate('invalid_email_address', 
-                                                    'Invalid email address: %(email)s', email=email))
+                                                    'Invalid email address: $email', email=email))
 
             self._transcript.addChange('notifications', self._notification_emails.get(state, []), emails)
             self._notification_emails[state] = emails

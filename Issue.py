@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.47 2003/10/19 15:07:47 ajung Exp $
+$Id: Issue.py,v 1.48 2003/10/19 15:31:44 ajung Exp $
 """
 
 import sys, os
@@ -270,10 +270,10 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         tracker_url = unquote(reference.tracker)
         tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
         if not tracker:
-            raise ValueError(self.translate('no_tracker', 'Tracker does not exist: %(tracker_url)s', tracker_url=tracker_url))
+            raise ValueError(self.translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
 
         if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
-            raise ValueError(self.translate('no_ticket', 'Ticket number does not exist: %(ticketnum)s', ticketnum=reference.ticketnumber))
+            raise ValueError(self.translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
         issue = tracker[reference.ticketnumber]
 
         if not reference.comment:
@@ -300,7 +300,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         elif format in ('cmap',):
             graphviz.viz2map(vizfile, format, RESPONSE)
         else:
-            raise RuntimeError(self.translate('unknown_format', 'unknown format "%(format)s"', format=format))
+            raise RuntimeError(self.translate('unknown_format', 'unknown format "$format"', format=format))
 
     ######################################################################
     # File uploads 
