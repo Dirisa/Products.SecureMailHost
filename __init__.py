@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.12 2003/12/03 20:15:07 ajung Exp $
+$Id: __init__.py,v 1.13 2003/12/08 08:04:53 ajung Exp $
 """
 
 import os, sys
@@ -25,9 +25,9 @@ if not d in sys.path:
 registerDirectory(SKINS_DIR, GLOBALS)
 
 def initialize(context):
+
     ##Import Types here to register them
-    import Collector
-    import Issue
+    import Collector, Issue
 
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),
@@ -40,4 +40,12 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
+
+
+    ###########################################################
+    # Check for installed Archetypes version (1.3+ required)
+    ###########################################################
+    from Products.Archetypes.Schema import Schema
+    if not hasattr(Schema(), 'replaceField'):
+        raise RuntimeError('Wrong Archetypes version detected. You need at least Archetype 1.3 or higher')
 
