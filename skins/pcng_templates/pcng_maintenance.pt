@@ -11,16 +11,9 @@
 
   <div metal:fill-slot="main">	  
 
-    <metal:block tal:define="action string: Maintenance">
+    <metal:block tal:define="action string: Maintenance; navig_configuration nothing">
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
-
-    <a href=""
-       class="link-parent"
-       tal:attributes="href string:pcng_configuration"
-       i18n:translate="label_up_to_configuration ">
-    Up to PloneCollectorNG configuration preferences
-    </a>
 
     <ul>
       <li>

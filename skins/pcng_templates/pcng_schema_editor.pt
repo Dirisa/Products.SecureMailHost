@@ -11,16 +11,9 @@
 
   <div metal:fill-slot="main">
 
-    <metal:block tal:define="action string: Schema Editor">
+    <metal:block tal:define="action string: Schema Editor; navig_configuration nothing">
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
-
-    <a href=""
-       class="link-parent"
-       tal:attributes="href string:pcng_configuration"
-       i18n:translate="label_up_to_configuration ">
-    Up to PloneCollectorNG configuration preferences
-    </a>
 
     <table border="0" cellspacing="4" cellpadding="2"
            td tal:define="fieldsets python:[key for key in here.atse_getSchemataNames() if not key in ['metadata', 'default']];

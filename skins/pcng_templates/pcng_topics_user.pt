@@ -10,16 +10,9 @@
 </metal:block>
 <div metal:fill-slot="main">	  
 
-  <metal:block tal:define="action string: Topic-Staff mapping">
+  <metal:block tal:define="action string: Topic-Staff mapping; navig_configuration nothing">
     <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
   </metal:block>
-
-  <a href=""
-     class="link-parent"
-     tal:attributes="href string:pcng_configuration"
-     i18n:translate="label_up_to_configuration ">
-  Up to PloneCollectorNG configuration preferences
-  </a>
 
   <form action="pcng_set_topics_user" method="post">
     <table class="listing" 

@@ -23,6 +23,13 @@
          tal:content="string:Up to the ${here/aq_parent/title_or_id} instance"
      />
     </div>
+    <div class="left" tal:condition="exists:navig_configuration" >
+      <a href="pcng_configuration"
+         class="link-parent"
+         i18n:translate="label_up_to_configuration"
+         tal:content="string:Up to the configuration"
+     />
+    </div>
     <div class="right" id="pcng_headline" tal:condition="action|nothing">  
       <b>
           <span i18n:translate="" tal:content="string:${action}" />
