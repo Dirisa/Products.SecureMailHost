@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.18 2004/01/29 19:57:00 ajung Exp $
+$Id: Translateable.py,v 1.19 2004/01/30 15:55:52 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -71,7 +71,7 @@ class Translateable:
                             default=text,
                             target_language=target_language,
                             as_unicode=1)
-        print msgid, text, as_unicode, repr(v), type(v)
+        
         if not v: v = u''
         if isinstance(v, StringType):
             if as_unicode: return unicode(v, self._getPloneEncoding())
