@@ -6,13 +6,40 @@
     <div metal:fill-slot="main">
       <h1 tal:content="here/title_or_id" />
 
-      <div class="group" tal:repeat="fieldset python: ('issuedata', 'progress', 'contact')">
+      <div class="group" tal:repeat="fieldset python: ('issuedata',)">
         <span class="legend" tal:content="fieldset" />
 
         <div class="row" tal:repeat="field python: here.schema_getSchema(fieldset).fields()">
 	        <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=1)"/>
         </div> 
 
+        <span class="label">Status: </span><span class="field" tal:content="here/status" />
+        <span class="label">Assigned to: </span><span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+      </div>
+
+
+      <!-- should be refactored as a macro !? -->
+      <div class="group">
+        <span class="legend">Progress</span>
+        <div class="row">
+          <metal:block tal:repeat="field python: here.schema_getSchema('progress').fields()">
+            <b class="label" tal:content="python: field.widget.Label(request)" />:
+            <span class="field"
+                  tal:replace="python: getattr(here, field.getName())"/>
+          </metal:block>
+        </div> 
+      </div>
+
+      <!-- should be refactored as a macro !? -->
+      <div class="group">
+        <span class="legend">Contact</span>
+        <div class="row">
+          <metal:block tal:repeat="field python: here.schema_getSchema('contact').fields()">
+            <b class="label" tal:content="python: field.widget.Label(request)" />:
+            <span class="field"
+                  tal:replace="python: getattr(here, field.getName())"/>
+          </metal:block>
+        </div> 
       </div>
 
       <div metal:use-macro="here/pcng_macros/macros/transcript_plain" /> 
