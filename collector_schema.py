@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.14 2003/10/13 17:55:26 ajung Exp $
+$Id: collector_schema.py,v 1.15 2003/10/13 17:59:23 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -127,7 +127,7 @@ schema = OrderedSchema((
     StringField('collector_abbreviation',
                 searchable=0,
                 default='',
-                widget=StringWidget(label='Abbreviation (used in the email subject to identify the collector',
+                widget=StringWidget(label='Abbreviation (used in the email subject to identify the collector)',
                                     label_msgid='label_collector_abbreviation',
                                     i18n_domain='plonecollectorng'),
                 schemata='E-Mail',
