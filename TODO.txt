@@ -10,6 +10,7 @@ FAQ/FAQFolder:
 
 - Included help templates that explain what the different parts do, how a FAQ differs from a howto, differs from a Tutorial etc.
 
+- Consider having an "Important" marker on entries, to mark the most common ones visually with a red (!) marker in the overview/listing.
 
 GENERAL:
 
