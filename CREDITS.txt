@@ -4,3 +4,5 @@ Credits:
 
   - Sidnei da Silva for answering lots of Archetypes related
     questions
+
+  - FI translation by Heimo Laukkanen
