@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.157 2004/04/19 09:51:39 ajung Exp $
+$Id: Issue.py,v 1.158 2004/04/21 17:23:52 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -60,11 +60,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         'name': 'Edit',
         'action': 'pcng_base_edit',
         'permissions': (EditCollectorIssue,)
-        },
-        {'id': 'issue_references',
-        'name': 'References & Uploads',
-        'action': 'pcng_issue_references',
-        'permissions': (AddCollectorIssueFollowup,)
         },
         {'id': 'issue_add_issue',
         'name': 'Add issue',
@@ -268,6 +263,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
             if not reference.comment:
                 raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
+            print issue.getId()
+            print issue.absolute_url()
+            print tracker.getId()
+            print reference.comment
             self.addReference(issue, "relates_to", issue_id=issue.getId(),
                                                    issue_url=issue.absolute_url(1), 
                                                    collector_title=tracker.getId(),
