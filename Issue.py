@@ -5,14 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.226 2004/09/29 05:35:16 ajung Exp $
+$Id: Issue.py,v 1.227 2004/10/02 10:12:09 ajung Exp $
 """
 
 import os, time, random
 from urllib import unquote, quote
 from types import StringType, UnicodeType
 
-from Globals import PersistentMapping
 from zLOG import LOG, ERROR
 from Acquisition import aq_base
 from DateTime import DateTime

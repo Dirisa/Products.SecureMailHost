@@ -5,20 +5,19 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Transcript2.py,v 1.6 2004/09/25 09:01:02 ajung Exp $
+$Id: Transcript2.py,v 1.7 2004/10/02 10:12:09 ajung Exp $
 """
 
 import time, random 
 
-from Globals import Persistent, InitializeClass
-from Acquisition import Implicit
+from Globals import InitializeClass
 from BTrees.OOBTree import OOBTree, difference, OOSet
 from OFS.SimpleItem import SimpleItem
 from AccessControl import ClassSecurityInfo, getSecurityManager
 
 from Products.CMFCore.CMFCorePermissions import *
 
-from config import ManageCollector, EditCollectorIssue
+from config import ManageCollector
 
 allowed_states = ('public', 'private', 'system', 'other')
 
