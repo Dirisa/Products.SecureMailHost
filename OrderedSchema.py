@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: OrderedSchema.py,v 1.6 2003/11/01 17:03:26 ajung Exp $
+$Id: OrderedSchema.py,v 1.7 2003/11/08 18:47:13 ajung Exp $
 """
 
 from Globals import InitializeClass
-from Products.Archetypes.public import Schema, BaseFolder
+from Products.Archetypes.public import Schema, BaseBTreeFolder
 from Products.Archetypes.utils import OrderedDict
 
 class OrderedSchema(Schema):
@@ -57,7 +57,7 @@ class OrderedSchema(Schema):
 InitializeClass(OrderedSchema)
 
 
-class OrderedBaseFolder(BaseFolder):
+class OrderedBaseFolder(BaseBTreeFolder):
     """ Base class for a folder using an OrderedSchema """
 
     def getSchemaNames(self):
