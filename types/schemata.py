@@ -12,7 +12,7 @@ except ImportError:
 #############################################################################################
 # Common components to Help Types schemas
 
-# how important is this item?
+# how important the item is
 ImportanceSchema = Schema((
     StringField('importance',
                required=1,
@@ -108,12 +108,13 @@ HCSchema = BaseSchema
 HCFolderSchema = BaseFolderSchema
 
 
-#############################################################################################
-# Actual types
+#################################################################
+# The type definitions
+#################################################################
 
-###
+#####
 # FAQ 
-###
+#####
 
 FAQSchema = HCSchema + Schema((
     TextField('description',
@@ -141,9 +142,9 @@ FAQSchema = HCSchema + Schema((
               ),
     )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+############
 # FAQ Folder
-###
+############
 
 FAQFolderSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -161,9 +162,9 @@ FAQFolderSchema = HCFolderSchema + Schema((
 
     )) + SectionsVocabSchema
 
-###
+#########################
 # Help Center base folder
-###
+#########################
 
 HCRootSchema = BaseFolderSchema + Schema((
     TextField('description',
@@ -187,9 +188,9 @@ HCRootSchema = BaseFolderSchema + Schema((
         ),
     ))
 
-###
+#######
 # Howto
-###
+#######
 
 HowToSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -219,9 +220,9 @@ HowToSchema = HCFolderSchema + Schema((
 
  ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+#############
 # HowToFolder
-###
+#############
 
 HowToFolderSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -236,9 +237,9 @@ HowToFolderSchema = HCFolderSchema + Schema((
                                     rows=6)),
     )) + SectionsVocabSchema
 
-###
+##########
 # Tutorial
-###
+##########
 
 TutorialSchema = HCSchema + Schema((
     TextField('description',
@@ -256,9 +257,9 @@ TutorialSchema = HCSchema + Schema((
               ),
     ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+################
 # TutorialFolder
-###
+################
 
 TutorialFolderSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -273,9 +274,9 @@ TutorialFolderSchema = HCFolderSchema + Schema((
                                     rows=6)),
     )) + SectionsVocabSchema
 
-###
+##############
 # TutorialPage
-###
+##############
 
 TutorialPageSchema = HCSchema + Schema((
     TextField('description',
@@ -307,9 +308,9 @@ TutorialPageSchema = HCSchema + Schema((
                   ))
               )
 
-###
+################
 # ErrorReference
-###
+################
 
 ErrorReferenceSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -339,9 +340,9 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
 
     ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+######################
 # ErrorReferenceFolder
-###
+######################
 
 ErrorReferenceFolderSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -356,9 +357,9 @@ ErrorReferenceFolderSchema = HCFolderSchema + Schema((
             rows=6)),
         )) + SectionsVocabSchema
 
-###
+######
 # Link
-###
+######
 
 LinkSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -385,9 +386,9 @@ LinkSchema = HCFolderSchema + Schema((
 
     ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+############
 # LinkFolder
-###
+############
 
 LinkFolderSchema = HCFolderSchema + Schema((
     TextField('description',
@@ -402,9 +403,9 @@ LinkFolderSchema = HCFolderSchema + Schema((
             rows=6)),
         )) + SectionsVocabSchema
 
-###
+############
 # Definition
-###
+############
 
 DefinitionSchema = HCSchema + Schema((
     TextField('description',
@@ -422,9 +423,9 @@ DefinitionSchema = HCSchema + Schema((
     ),
     )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema + ReferenceSchema
 
-###
+##########
 # Glossary
-###
+##########
 
 GlossarySchema = HCFolderSchema + Schema((
     TextField('description',

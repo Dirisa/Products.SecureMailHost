@@ -11,7 +11,7 @@ def registerNavigationTreeSettings(self, out):
     We don't want users to think of the HowTo as a folder, even though
     technically, it is."""
 
-    data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference']
+    data = ['HelpCenterHowTo','HelpCenterTutorial','HelpCenterErrorReference', 'HelpCenterFAQ']
     pp=getToolByName(self,'portal_properties')
     p = getattr(pp , 'navtree_properties', None)
     mdntl = list(p.getProperty('metaTypesNotToList', []))

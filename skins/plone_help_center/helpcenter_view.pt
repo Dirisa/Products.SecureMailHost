@@ -106,7 +106,13 @@
                 <div tal:define="help_types python: [c for c in help_types if c.portal_type==help_type_tuple[0]];
                                  help_type  python: help_types and help_types[0]" 
                      tal:condition="help_type">
-                  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:here.portal_catalog(portal_type=help_type_tuple[1], path=folder_path, sort_on='modified', sort_order='reverse', sort_limit=5)[:5]">
+                  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath());
+                                   objs python:here.portal_catalog(portal_type=help_type_tuple[1], 
+                                                                   path=folder_path,
+                                                                   review_state='published' 
+                                                                   sort_on='modified', 
+                                                                   sort_order='reverse', 
+                                                                   sort_limit=5)[:5]">
 
                     <div class="portlet portletThirdWidth">
                         <h6>
@@ -146,11 +152,16 @@
             </tal:listings>
             <tal:nolist tal:condition="python: not help_types and not here.contentValues(subtypes)">
               <!-- or at least none that this person has the rights to see -->
-              <p class="discreet">There are no contained help center object types.</p>
+              <p class="discreet">
+              There are no contained help center object types.
+              </p>
             </tal:nolist>
             <tal:nopublished tal:condition="python: not help_types and here.contentValues(subtypes)">
               <!--- this user has perms to see the contained types, except that particular state(s) are required -->
-              <p class="discreet">There are contained help center object types, but none will are viewable because of their state.</p>
+              <p class="discreet">
+              There are contained help center object types, but none are 
+              viewable because of their permission settings.
+              </p>
             </tal:nopublished>
             </tal:defs>
 
