@@ -267,6 +267,33 @@
       </div>
 
       <div>
+        <span class="label" i18n:translate="search_by_date">Search by date</span>
+        <br/>
+        <select name="datefield">
+          <option i18n:translate=""
+                  tal:repeat="item python: (
+                        ('last_action', 'Last change'),
+                        ('progress_deadline', 'Deadline'),
+                        ('created', 'Created'))"
+                  tal:attributes="value python: item[0];
+                                  selected python: request.get('datefield', 'created') == item[0]"
+                     tal:content="python: item[1]" />
+        </select>
+        <select name="datefield_direction">
+          <option i18n:translate=""
+                  tal:repeat="item python: (
+                        ('since', 'since'),
+                        ('until', 'until'))"
+                  tal:attributes="value python: item[0];
+                                  selected python: request.get('datefield_direction', 'since') == item[0]"
+                     tal:content="python: item[1]" />
+        </select>
+        <input type="text" name="datefield_value" size="12"
+               tal:attributes="value python: request.get('datefield_value', '')">
+        <span i18n:translate="days_or_date">Days or date</span>
+      </div>
+
+      <div>
         <span class="label" align="left" i18n:translate="sorting">Sorting</span>
 
         <div>
