@@ -106,8 +106,7 @@ nl()
 # metadata
 nl(TR('metadata changes', 'Changes'))    
 nl('-'*75 + '\n') 
-events = context.getTranscript().getEvents()
-events = [e for e in events  if e.getType() not in ('comment', 'upload', 'reference')]
+events = context.getTranscript().getEvents(types=('change', 'incrementalchange'))
 for event in events:
     date = event.getCreated()
     date = context.toLocalizedTime(DateTime.DateTime(date), long_format=1)

@@ -54,9 +54,12 @@
 
       <div id="issue_transcript">
         <span id="label_large" i18n:translate="transcript">Transcript</span>
+        <br/>
         <div metal:use-macro="here/pcng_macros/macros/transcript_comments" /> 
         <br/>
+        <br/>
         <span id="label_large" i18n:translate="changes">Changes</span>
+        <br/>
         <div metal:use-macro="here/pcng_macros/macros/transcript_changes" /> 
       </div>
 

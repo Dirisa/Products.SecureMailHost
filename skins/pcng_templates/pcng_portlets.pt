@@ -1,12 +1,7 @@
-<metal:div metal:define-macro="pcng_collector_portlets"
-           tal:define="portlets here/getUsed_portlets">
+<metal:div metal:define-macro="pcng_collector_portlets">
   <tal:if tal:condition="python: here.meta_type == 'PloneCollectorNG'" >
     <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_collector_portlet" />
-
-    <tal:if tal:condition="python: 'search' in portlets">
-      <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_search_portlet" />
-    </tal:if>
-
+    <div metal:use-macro="here/pcng_portlet_macros/macros/pcng_search_portlet" />
   </tal:if>
 </metal:div>
 
