@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.10 2003/11/06 16:01:55 ajung Exp $
+$Id: migrate.py,v 1.11 2003/11/08 09:14:37 ajung Exp $
 """
 
 
@@ -113,7 +113,7 @@ def migrate_memberdata(source, dest):
 
 def migrate_tracker(tracker, dest):
 
-    if tracker.getId() != 'CMFCollectorNG': return
+    if tracker.getId() != 'BugTracker': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -184,7 +184,11 @@ def migrate_schema(tracker, collector):
     for oldfield in mapping.keys():
         new_field, schemata = mapping[oldfield]
 
-        prop = PM.getPropertyById(oldfield)
+        try:
+            prop = PM.getPropertyById(oldfield)
+        except KeyError:
+            print 'No property "%s" found' % oldfield
+            continue
 
         new_id,schemata = mapping[prop.getId()]
 
