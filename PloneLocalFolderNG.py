@@ -5,6 +5,7 @@ from string import split,find
 from DateTime.DateTime import DateTime
 from Globals import InitializeClass, Persistent
 from AccessControl import ClassSecurityInfo
+from AccessControl.Permission import Permission
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.FSObject import FSObject
 from Products.Archetypes.public import BaseSchema, Schema
@@ -13,14 +14,13 @@ from Products.Archetypes.public import BooleanField, BooleanWidget
 from Products.Archetypes.public import BaseContent, registerType
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
+
 from config import *
 from util import *
 import zLOG
 from Products.CMFCore.utils import getToolByName
 
 from Acquisition import aq_chain
-
-from App.FindHomes import INSTANCE_HOME   # eg, windows INSTANCE_HOME = C:\Plone\Data
 
 try:
     from Products.mxmCounter import mxmCounter
@@ -32,7 +32,6 @@ schema = BaseSchema +  Schema((
     StringField('folder',
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=1,
-                default=INSTANCE_HOME,
                 widget=StringWidget(label='Local directory name')
                 ),
     BooleanField ('require_MD5_with_upload',
@@ -84,7 +83,6 @@ schema = BaseSchema +  Schema((
                 
     ))
 
-
 class TypeInfo(SimpleItem):
     """ fake TypeInfo class to make CMF happy """
 
@@ -117,6 +115,7 @@ class FileProxy(FSObject):
 
     security = ClassSecurityInfo()
     meta_type = 'PloneLocalFolderFileProxy'
+    
 
     def setMimeType(self, mt):
         self.mime_type = mt
@@ -288,10 +287,10 @@ class PloneLocalFolderNG(BaseContent):
         if not destfolder.startswith(self.folder):
             raise ValueError('illegal directory: %s' % show_dir)
         
-        #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path = %s" %destfolder )
+        zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path = %s" %destfolder )
         
         if os.path.exists(destfolder):
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path ok for: %s" %destfolder )
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: path ok for: %s" %destfolder )
             return 1
         else:
             zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "validFolder() :: !!! path bad for: %s" %destfolder )
@@ -360,44 +359,34 @@ class PloneLocalFolderNG(BaseContent):
             l.append( (d, '%s/%s/plfng_view' % (instance.absolute_url(), '/'.join(sofar))) )
         return l
 
-    def __call__(self, REQUEST=None, RESPONSE=None, *args, **kw):
-        if not hasattr(self, "folder"):
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: no folder attribute")
-            return self
-        elif not REQUEST:
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: no REQUEST")
-            raise NotImplementedError, "PLFNG objects can only be created and viewed through the Plone interface."
-        else:     
-           rel_dir = '/'.join(REQUEST.get('_e', []))
-           destpath = os.path.join(self.folder, rel_dir)
-   
-           if os.path.isfile(destpath):
-               
-               if REQUEST.get('action', '') == 'unpack':
-                  self.unpackFile(destpath, REQUEST, RESPONSE)
-               
-               elif REQUEST.get('action', '') == 'delete':
-                  self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)   
-               
-               elif REQUEST.get('action', '') == 'catalog':
-                  catalogTool = getToolByName(self, 'portal_catalog')
-                  return self.catalogContents()
-               else: 
-                  return self.showFile(destpath, REQUEST, RESPONSE)
-           else:
-   
-               #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
-               #  that os.path.join might produce
-               RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view')).replace('\\','/'))
+    def __call__(self, REQUEST, RESPONSE, *args, **kw):
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
+
+        if os.path.isfile(destpath):
+            
+            if REQUEST.get('action', '') == 'unpack':
+               self.unpackFile(destpath, REQUEST, RESPONSE)
+            
+            elif REQUEST.get('action', '') == 'delete':
+               self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)   
+            
+            elif REQUEST.get('action', '') == 'catalog':
+               catalogTool = getToolByName(self, 'portal_catalog')
+               return self.catalogContents()
+            else: 
+               return self.showFile(destpath, REQUEST, RESPONSE)
+        else:
+
+            #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
+            #  that os.path.join might produce
+            RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view')).replace('\\','/'))
           
             
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+
         if not REQUEST.has_key('_e'): 
             REQUEST['_e'] = []
-            
-        if not hasattr(self, "folder"):
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__bobo_traverse__() :: no folder attribute")
-            raise NotImplementedError, "This PLFNG object was not properly instantiated.  If it was created through the ZMI, you will have to delete it and add it through the regular Plone interface."
 
         destpath = os.path.join(self.folder, '/'.join(REQUEST['_e']), name)
         if os.path.exists(destpath): 
@@ -641,6 +630,10 @@ class PloneLocalFolderNG(BaseContent):
         
         dummyFileProxy = FileProxy("dummy", fullfoldername, "dummy")
         dummyFileProxy.meta_type = "FileProxy"
+        # set View permission for all files to that of the PLFNG object
+        perm = Permission(View,'',self)
+        view_roles = perm.getRoles()
+        dummyFileProxy._View_Permission = view_roles
 
         this_portal = getToolByName(self, 'portal_url')
         catalogTool = getToolByName(this_portal, 'portal_catalog')
@@ -690,7 +683,7 @@ class PloneLocalFolderNG(BaseContent):
                   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
                   #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
                       
-                  catalogTool.catalog_object( dummyFileProxy, uid )
+                  catalogTool.catalog_object( dummyFileProxy, uid)
                       
                   filesCataloged = filesCataloged + 1
         return filesCataloged, filesNotCataloged            
