@@ -36,6 +36,14 @@ else:
     new_context = context.portal_factory.doCreate(context, id)
     new_context.processForm()
 
+# Assign ticket to assignees ('assign_ticket' is a hidden var
+# set in pcng_base_edit.pt)
+if REQUEST.get('assign_ticket', None) == '1':
+    assignees = REQUEST.get('assignees', [])
+    if assignees:
+        new_context.issue_followup(action='accept', assignees=assignees)
+
+
 portal_status_message = REQUEST.get('portal_status_message', new_context.translate('changes_saved', 'Content changes saved'))
 return state.set(status='success',\
                  context=new_context,\
