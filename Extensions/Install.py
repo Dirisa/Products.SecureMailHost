@@ -25,10 +25,14 @@ def install(self):
     src_file.close(); dest_file.close()
 
     workflow_tool = getToolByName(self, 'portal_workflow')
-    workflow_tool.manage_importObject(filename)
+    try:
+        workflow_tool.manage_importObject(filename)
+    except: pass
 
     os.unlink(os.path.join(import_dir, filename))
-    workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
+    try:
+        workflow_tool.setChainForPortalTypes(('PloneIssueNG',), 'pcng_issue_workflow')    
+    except: pass
     print >> out, "Added 'pcng_issue_workflow' workflow"
 
 
@@ -45,7 +49,7 @@ def install(self):
             memberdata_tool.manage_addProperty(key, default, tpe)
             print >>out, 'Added "%s" to memberdata_tool' % key
         except: 
-            print >>out, 'Skipping "%s" - already in memberdata_tool' % keys
+            print >>out, 'Skipping "%s" - already in memberdata_tool' % key
 
     print >> out, "Successfully installed %s." % PROJECTNAME
     return out.getvalue()
