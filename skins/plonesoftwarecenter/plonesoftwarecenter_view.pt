@@ -70,26 +70,42 @@
                 tal:define="category   python:categoryItems[1];
                             categoryId python:categoryItems[0]">
             <h6>
-                <span i18n:translate="">
-                    <span tal:replace="category">
+                    <a href=""
+                       tal:content="category"
+                       tal:attributes="href string:${here/absolute_url}/by-category/${categoryId}"
+                       i18n:translate="">
                         Category heading
-                    </span>
-                </span>
+                    </a>
             </h6>
             <div class="portletBody">
                 <tal:list define="releases python:here.getReleasesByCategory(categoryId, limit = 5)"
+                          repeat="release releases"
                           condition="releases">
-                    <div class="portletContent" tal:repeat="release releases">
-                        <img tal:replace="structure here/product_icon.gif" />
-                        <a href="" tal:content="release/Title"
-                          tal:define="review_state release/review_state"
-                           tal:attributes="href release/getURL;
-                                           title release/Description;
-                                           class string:state-$review_state">Package</a>
-                    </div>
+                
+                <div class="portletContent" 
+                     tal:define="oddrow repeat/release/odd"
+                     tal:attributes="class python:test(oddrow, 'portletContent even', 'portletContent odd')">
+                    <img tal:replace="structure here/product_icon.gif" />
+                    <a href="" tal:content="release/Title"
+                      tal:define="review_state release/review_state"
+                       tal:attributes="href release/getURL;
+                                       title release/Description;
+                                       class string:state-$review_state">Package</a>
+                </div>
                 </tal:list>
+
+                <div class="portletContent odd">
+                    <a href=""
+                       class="portletMore"
+                       tal:attributes="href string:${here/absolute_url}/by-category/${categoryId}"
+                        >
+                    Show all&#8230;
+                    </a>
+                </div>
             </div>
         </div>
+    
+        <div class="visualClear" tal:condition="python: repeat['categoryItems'].number() % 3 == 0" />
     </div>
 
     <div metal:use-macro="here/document_byline/macros/byline">

@@ -6,6 +6,10 @@ Developer claiming item/comments is in [brackets].
 General
 =======
 
+- by-category.pt shows the category short name, should show full name (but
+  requires that you pass in short name and get back full name, since we pull
+  short name from last element in URL)
+
 - RSS feed for Latest Releases, ability to have an RSS feed for every project
   and category too.
 
