@@ -1,7 +1,7 @@
 from Products.validation.interfaces import ivalidator
 import os, os.path
 
-class ExistingFolderValidator:
+class ExistingFolderPathValidator:
     __implements__ = (ivalidator,)
     def __init__(self, name):
         self.name = name
