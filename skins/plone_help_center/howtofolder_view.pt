@@ -31,8 +31,22 @@
 
         <h2 tal:content="section">Section Heading</h2>
 
+       <!--
+        <h1 tal:content="python:test( user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             'YES the can see it!', 
+                                             'NO they cannot see it!' 
+                                           )">Section Heading</h1>
+       -->
+
         <dl>
-            <tal:howto tal:repeat="howto python:here.getItemsBySection(section=section)">
+            <tal:howto tal:repeat="howto python:here.getItemsBySection(
+                                           section=section, 
+                                           states = test(
+                                             user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             ['published', 'pending'], 
+                                             ['published']
+                                           )
+                                         )">
             <dt>
                 <img tal:replace="structure here/howto_icon.gif" />
                 <a href="" tal:content="howto/Title"

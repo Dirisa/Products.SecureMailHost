@@ -32,7 +32,14 @@
         <h2 tal:content="section">Section Heading</h2>
 
         <dl>
-            <tal:video tal:repeat="video python:here.getItemsBySection(section=section)">
+            <tal:video tal:repeat="video python:here.getItemsBySection(
+                                           section=section, 
+                                           states = test(
+                                             user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             ['published', 'pending'], 
+                                             ['published']
+                                           )
+                                         )">
             <dt>
                 <div style="float:right; text-align: center; margin: 1em 0 1em 1em;"
                      tal:condition="video/screenshot_thumb | nothing">

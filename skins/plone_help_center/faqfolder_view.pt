@@ -58,14 +58,28 @@
 	    </a> 
 
           <ol>
-            <li tal:repeat="faq python:here.getItemsBySection(section=section)">
+            <li tal:repeat="faq python:here.getItemsBySection(
+                                           section=section, 
+                                           states = test(
+                                             user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             ['published', 'pending'], 
+                                             ['published']
+                                           )
+                                         )">
             <a tal:attributes="href faq/absolute_url" tal:content="faq/Title"></a></li>
           </ol>
 
         </tal:section>
 
         <div tal:condition="full" 
-          tal:repeat="faq python:here.getItemsBySection(section=section)">
+          tal:repeat="faq python:here.getItemsBySection(
+                                           section=section, 
+                                           states = test(
+                                             user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             ['published', 'pending'], 
+                                             ['published']
+                                           )
+                                         )">
           
           <h3>
             <img tal:replace="structure here/faq_icon.gif" />

@@ -32,7 +32,14 @@
 
         <dl>
 
-            <tal:tutorial repeat="tutorial python:here.getItemsBySection(section=section)">
+            <tal:tutorial repeat="tutorial python:here.getItemsBySection(
+                                           section=section, 
+                                           states = test(
+                                             user.has_role(['Owner', 'Reviewer', 'Manager'], context), 
+                                             ['published', 'pending'], 
+                                             ['published']
+                                           )
+                                         )">
             
             <dt>
                 <img tal:replace="structure here/tutorial_icon.gif" />
