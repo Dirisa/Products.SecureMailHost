@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.25 2004/02/08 15:23:06 ajung Exp $
+$Id: Translateable.py,v 1.26 2004/02/09 20:32:53 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -19,8 +19,6 @@ try:
     have_pts = 1
 except ImportError:
     have_pts = 0
-
-
 
 from config import i18n_domain
 
@@ -101,5 +99,4 @@ class Translateable:
         return text
             
 InitializeClass(Translateable)
-
 
