@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.44 2003/10/15 16:23:10 ajung Exp $
+$Id: Collector.py,v 1.45 2003/10/18 12:59:05 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -314,7 +314,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     __len__ = getNumberIssues
 
     security.declareProtected(ManageCollector, 'update_schema_for_issues')
-    def update_schema_for_issues(self, RESPONSE=None):
+    def update_schema_for_issues(self, REQUEST=None, RESPONSE=None):
         """ update stored issue schema for all issues """
 
         schema = self.schema_getWholeSchema()
@@ -322,7 +322,7 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
 
-        util.redirect(RESPONSE, 'pcng_maintainance', 'Issues updated')
+        util.redirect(RESPONSE, REQUEST['HTTP_REFERER'], 'Issues updated')
 
     security.declareProtected(ManageCollector, 'reindex_issues')
     def reindex_issues(self, RESPONSE=None):
