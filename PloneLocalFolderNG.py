@@ -88,12 +88,18 @@ class FileProxy(FSObject):
     security.declarePublic('ModificationDate')
     def ModificationDate(self):
         """ None """
-        return DateTime(os.stat(self._filepath)[8])
+        try:
+            return DateTime(os.stat(self._filepath)[8])
+        except:
+            return DateTime()
 
     security.declarePublic('get_size')
     def get_size(self):
         """ None """
-        return os.stat(self._filepath)[6]
+        try:
+            return os.stat(self._filepath)[6]
+        except:
+            return ''
 
 InitializeClass(FileProxy)
 
@@ -112,17 +118,24 @@ class PloneLocalFolderNG(BaseFolder):
         'permissions': (View,)
         },)
 
+
     def viewfile(self, REQUEST):
         """ view file """
 
         fullname = os.path.join(self.folder, REQUEST['viewfile'])
         mi = self.mimetypes_registry.classify(data=None, filename=fullname)
-        
-        data = open(fullname).read()
-
         REQUEST.RESPONSE.setHeader('content-type', mi.normalized())
-        REQUEST.RESPONSE.setHeader('content-length', str(len(data)))
-        REQUEST.RESPONSE.write(data)
+        REQUEST.RESPONSE.setHeader('content-length', str(os.stat(fullname)[6]))
+#        REQUEST.RESPONSE.setHeader('content-disposition', 'attachment; filename=%s' % os.path.basename(REQUEST['viewfile']))
+        fp = open(fullname)
+                
+        while 1:
+            data = fp.read(32768)
+            if data:    
+                REQUEST.RESPONSE.write(data)
+            else:
+                break
+        fp.close()
 
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
@@ -137,7 +150,6 @@ class PloneLocalFolderNG(BaseFolder):
             destfolder = os.path.normpath(os.path.join(self.folder, show_dir))
             if not destfolder.startswith(self.folder):
                 raise ValueError('illegal directory: %s' % show_dir)
-            
         else:
             destfolder = self.folder
 

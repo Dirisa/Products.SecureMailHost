@@ -122,9 +122,6 @@
                                  tal:condition="python:(lockable and item.wl_isLocked()) or (lock_tool and lock_tool.isLockedOut(item))"
                                  tal:replace="structure python:locked.tag(title='Locked')" />
 
-                          <span class="state-expired"
-                                tal:condition="python:isExpired(item)"
-                                i18n:translate="time_expired">expired</span>
                         </td>
 
                         <td i18n:translate="" tal:content="python:item_typeinfo.Title()">
