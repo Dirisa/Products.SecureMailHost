@@ -2,10 +2,20 @@ Remaining to do:
 
 General:
 
-- IMPORTANT: Currently, Members cannot add entries out-of-the-box. At the
-  moment, it seems like this is due to a bug in portal_factory discovered
-  by Kapil. http://plone.org/collector/3570
+- PHC needs a Comment workflow! Priority #1, explained near the bottom of 
+  this document.
+
+- Bug: Howtos seem to not pick up the 'versions' defined in the Help Center.
   
+- HistoryAware mix-in - PHC types should have a history attached, so we can
+  mount a non-packable storage on plone.org that will keep all the change
+  history for documentation content types. ATContentTypes already has this.
+
+- "Manual" content type - for book-type manuals and product documentation.
+  Should be able to accommodate content like Andy's Plone Book, and 
+  Raphael's MySite tutorial - as well as product manuals like LinguaPlone,
+  Using Plone manual etc.
+
 - We should probably let the TutorialPages not have any workflow at all, 
   I assume if you don't have permission to access/search the containing
   folder, you won't have it for the items contained in the folder either?
@@ -19,9 +29,11 @@ General:
 - The view templates for listings (howto, tutorial, faq etc - all of them)
   should only display *published* items, even if you have the permissions
   to see the others. Either that, or color-code the ones that are pending.
+  ADDENDUM: It seems these are using object listings instead of catalog
+            searches - which is not optimal. If we make them catalog-
+            powered, they will be able to color-code themselves, and not
+            wake up all the content objects as a bonus. ;)
 
-- Include help templates that explain what the different parts do, how
-  a FAQ differs from a howto, differs from a Tutorial etc.
 
 - Search needs to be hooked up! It should allow searching on all the different
   types. Almost done, it doesn't search the Glossary at the moment, it seems.

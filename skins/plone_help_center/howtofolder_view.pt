@@ -35,7 +35,8 @@
             <dt>
                 <img tal:replace="structure here/howto_icon.gif" />
                 <a href="" tal:content="howto/Title"
-                   tal:attributes="href howto/absolute_url">HowTo</a>
+                   tal:attributes="href howto/absolute_url;
+                                   class string:state-${howto/review_state}">HowTo</a>
             </dt>
             
             <dd tal:content="howto/Description">Description</dd>
