@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.112 2004/01/29 18:05:21 ajung Exp $
+$Id: Collector.py,v 1.113 2004/02/01 14:56:28 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -47,7 +47,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         },
         {'id': 'pcng_addissue',
         'name': 'Add issue',
-        'action': 'add_issue',
+        'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,)
         },
         {'id': 'pcng_staff',
@@ -331,11 +331,21 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         states.sort()
         return states
 
-    security.declareProtected(AddCollectorIssue, 'add_issue')
-    def add_issue(self, REQUEST=None, RESPONSE=None):
-        """ create a new issue """
+    security.declareProtected(AddCollectorIssue, 'new_issue_number')
+    def new_issue_number(self):
+        """ return a new issue number"""
         self._num_issues += 1
-        id = str(self._num_issues)
+        return str(self._num_issues)
+
+    security.declareProtected(AddCollectorIssue, 'redirect_create_object')
+    def redirect_create_object(self, RESPONSE=None):
+        """ create a new issue """
+        RESPONSE.redirect(self.absolute_url() + "/createObject?type_name=PloneIssueNG")
+
+    security.declareProtected(AddCollectorIssue, 'add_issue')
+    def add_issue(self, RESPONSE=None):
+        """ create a new issue """
+        id = self.new_issue_number()
         self.invokeFactory('PloneIssueNG', id)
         issue =  self._getOb(id)
         issue.post_creation_actions()
@@ -344,8 +354,6 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                       fieldset='issuedata')
         if RESPONSE is None:
             return id
-
-    createObject = add_issue   # override Plone's default object creation method
 
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """

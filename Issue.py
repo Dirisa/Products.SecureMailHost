@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.120 2004/01/30 09:57:02 ajung Exp $
+$Id: Issue.py,v 1.121 2004/02/01 14:56:28 ajung Exp $
 """
 
 import sys, os, time
@@ -69,7 +69,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         },
         {'id': 'issue_add_issue',
         'name': 'Add issue',
-        'action': 'add_issue',
+        'action': 'redirect_create_object',
         'permissions': (AddCollectorIssue,)
         },
         {'id': 'issue_debug',
@@ -93,7 +93,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
-
         Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
         self.post_creation_actions()
@@ -452,10 +451,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # Callbacks for parent collector instance
     ######################################################################
 
-    security.declareProtected(AddCollectorIssue, 'add_issue')
-    def add_issue(self, RESPONSE):
+    security.declareProtected(AddCollectorIssue, 'redirect_create_object')
+    def redirect_create_object(self, RESPONSE):
         """ redirect to parent """
-        return self._getCollector().add_issue(RESPONSE=RESPONSE)
+        RESPONSE.redirect(self._getCollector().absolute_url() + '/createObject?type_name=PloneIssueNG')
 
     ######################################################################
     # Presentation related stuff
