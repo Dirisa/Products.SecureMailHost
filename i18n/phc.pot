@@ -1,0 +1,253 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-11-24 11:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: latin1 utf-8\n"
+"Domain: plone\n"
+
+#: ./errorreference_attachments.pt
+#. <a href="" i18n:attributes="title" tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$item_id" title="Move item down">
+## 1 more: ./howto_attachments.pt
+msgid "Move item down"
+msgstr ""
+
+
+#: ./errorreference_attachments.pt
+#. <a href="" i18n:attributes="title" tal:attributes="href string:$here_url/folder_position?position=up&amp;id=$item_id" title="Move item up">
+## 1 more: ./howto_attachments.pt
+msgid "Move item up"
+msgstr ""
+
+
+#: ./phc_search.pt
+#. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
+msgid "RSS Feed"
+msgstr ""
+
+
+#: ./phc_search.pt
+#. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
+msgid "RSS feed of these search results"
+msgstr ""
+
+
+#: ./phc_search.pt
+#. <span class="discreet" i18n:attributes="title" i18n:translate="label_relevance_percentage" tal:condition="result/data_record_normalized_score_" title="Relevance">
+msgid "Relevance"
+msgstr ""
+
+
+#: ./helpcenter_view.pt
+#. <input accesskey="accesskeys-search" alt="Search" i18n:attributes="alt accesskey title" name="SearchableText" size="20" style="margin-bottom: 0.5em;" tal:attributes="value request/SearchableText|nothing;                                            tabindex tabindex/next" title="Search" type="text" value=""/>
+#: ./helpcenter_view.pt
+#. <input accesskey="accesskeys-search" class="searchButton" i18n:attributes="value accesskey" tal:attributes="tabindex tabindex/next" type="submit" value="Search"/>
+## 1 more: ./helpcenter_view.pt
+msgid "Search"
+msgstr ""
+
+
+#: ./errorreference_attachments.pt
+#. <input alt="Select all items" class="noborder" i18n:attributes="title alt" name="selectButton" onClick="toggleSelect(this);" src="select_all_icon.gif" tal:attributes="src string:$portal_url/select_all_icon.gif" title="Select all items" type="checkbox"/>
+## 3 more: ./errorreference_attachments.pt, ./howto_attachments.pt, ./howto_attachments.pt
+msgid "Select all items"
+msgstr ""
+
+
+#: ./helpcenter_view.pt
+#. <input accesskey="accesskeys-search" alt="Search" i18n:attributes="alt accesskey title" name="SearchableText" size="20" style="margin-bottom: 0.5em;" tal:attributes="value request/SearchableText|nothing;                                            tabindex tabindex/next" title="Search" type="text" value=""/>
+#: ./helpcenter_view.pt
+#. <input accesskey="accesskeys-search" class="searchButton" i18n:attributes="value accesskey" tal:attributes="tabindex tabindex/next" type="submit" value="Search"/>
+msgid "accesskeys-search"
+msgstr ""
+
+
+#: ./phc_search.pt
+#. <span i18n:translate="batch_x_items_matching_your_criteria">
+#.  ${number}
+#.   items matching your criteria.
+#. </span>
+msgid "batch_x_items_matching_your_criteria"
+msgstr "${number} items matching your criteria."
+
+
+#: ./errorreference_attachments.pt
+#. <p i18n:translate="description_errorref_no_visible_items_add_paste" tal:condition="not: batch">
+#.         This errorref has no visible attached items. To add content, press the
+#.         add button, or paste content from another location. Only Images or Files are allowed.
+#. </p>
+msgid "description_errorref_no_visible_items_add_paste"
+msgstr "This errorref has no visible attached items. To add content, press the add button, or paste content from another location. Only Images or Files are allowed."
+
+
+#: ./howto_attachments.pt
+#. <p i18n:translate="description_howto_no_visible_items_add_paste" tal:condition="not: batch">
+#.         This howto has no visible attached items. To add content, press the
+#.         add button, or paste content from another location. Only Images or Files are allowed.
+#. </p>
+msgid "description_howto_no_visible_items_add_paste"
+msgstr "This howto has no visible attached items. To add content, press the add button, or paste content from another location. Only Images or Files are allowed."
+
+
+#: ./phc_search.pt
+#. <strong i18n:translate="description_no_results_found">
+#.  No results were found.
+#. </strong>
+msgid "description_no_results_found"
+msgstr "No results were found."
+
+
+#: ./phc_search.pt
+#. <h1 i18n:translate="heading_search_results">
+#.  Search results
+#. </h1>
+msgid "heading_search_results"
+msgstr "Search results"
+
+
+#: ./errorreference_attachments.pt
+#. <span class="hiddenLabel" i18n:translate="label_add_item">
+#.  Select an item to add
+#. </span>
+## 1 more: ./howto_attachments.pt
+msgid "label_add_item"
+msgstr "Select an item to add"
+
+
+#: ./phc_search.pt
+#. <span class="discreet" i18n:attributes="title" i18n:translate="label_relevance_percentage" tal:condition="result/data_record_normalized_score_" title="Relevance">
+#.                     [
+#.  ${percentage}
+#.  %]
+#. </span>
+msgid "label_relevance_percentage"
+msgstr "[ ${percentage} %]"
+
+
+#: ./errorreference_attachments.pt
+#. <option i18n:translate="label_select" value="Select">
+#.  Select
+#. </option>
+## 1 more: ./howto_attachments.pt
+msgid "label_select"
+msgstr "Select"
+
+
+#: ./errorreference_attachments.pt
+#. <tal:modified i18n:translate="listingheader_modified">
+#.  Modified
+#. </tal:modified>
+## 1 more: ./howto_attachments.pt
+msgid "listingheader_modified"
+msgstr "Modified"
+
+
+#: ./errorreference_attachments.pt
+#. <tal:order i18n:translate="listingheader_order">
+#.  Order
+#. </tal:order>
+## 1 more: ./howto_attachments.pt
+msgid "listingheader_order"
+msgstr "Order"
+
+
+#: ./errorreference_attachments.pt
+#. <tal:size i18n:translate="listingheader_size">
+#.  Size
+#. </tal:size>
+## 1 more: ./howto_attachments.pt
+msgid "listingheader_size"
+msgstr "Size"
+
+
+#: ./errorreference_attachments.pt
+#. <tal:state i18n:translate="listingheader_status">
+#.  State
+#. </tal:state>
+## 1 more: ./howto_attachments.pt
+msgid "listingheader_status"
+msgstr "State"
+
+
+#: ./errorreference_attachments.pt
+#. <tal:title i18n:translate="listingheader_title">
+#.  Title
+#. </tal:title>
+## 1 more: ./howto_attachments.pt
+msgid "listingheader_title"
+msgstr "Title"
+
+
+#: ./phc_search.pt
+#. <span class="discreet" i18n:translate="results_by_author">
+#.                 by
+#.  ${author}
+#.  ,
+#.  ${date}
+#. </span>
+msgid "results_by_author"
+msgstr "by ${author} , ${date}"
+
+
+#: ./phc_search.pt
+#. <p i18n:translate="search_results_advanced">
+#.     Did you not find what you were looking for? Try the
+#.  ${advanced_search}
+#.     for more precise search options.
+#. </p>
+msgid "search_results_advanced"
+msgstr "Did you not find what you were looking for? Try the ${advanced_search} for more precise search options."
+
+
+#: ./phc_search.pt
+#. <a href="" i18n:translate="search_results_advanced_link" tal:attributes="href string:$portal_url/search_form">
+#.  Advanced Search
+#. </a>
+msgid "search_results_advanced_link"
+msgstr "Advanced Search"
+
+
+#: ./helpcenter_view.pt
+#. <label class="hiddenStructure" for="searchGadget" i18n:translate="text_search">
+#.  Search
+#. </label>
+msgid "text_search"
+msgstr "Search"
+
+
+#: ./errorreference_attachments.pt
+#. <span class="state-expired" i18n:translate="time_expired" tal:condition="python:isExpired(item)">
+#.  expired
+#. </span>
+## 1 more: ./howto_attachments.pt
+msgid "time_expired"
+msgstr "expired"
+
+#- Removed msgids:
+# 
+
+#- Added msgids:
+#  description_errorref_no_visible_items_add_paste label_add_item
+# label_select "Select all items" listingheader_title listingheader_size
+# listingheader_modified listingheader_status listingheader_order
+# time_expired "Move item up" "Move item down" text_search Search
+# accesskeys-search description_howto_no_visible_items_add_paste
+# heading_search_results description_no_results_found
+# search_results_advanced search_results_advanced_link
+# batch_x_items_matching_your_criteria
+# "RSS feed of these search results" "RSS Feed"
+# label_relevance_percentage Relevance results_by_author
+
+#- Added msgids by merging file None:
+# 

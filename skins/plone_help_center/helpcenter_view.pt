@@ -82,8 +82,8 @@
         
             <p>
             <img tal:attributes="src string:$portal_url/rss.gif" />
-            <a tal:attributes="href python:portal_url + '/search_rss?sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes ]))" title="RSS feed for all documentation types">
-                RSS feed for all documentation types
+            <a tal:attributes="href python:here.getSyndicationURL(portal_url, my_path,
+            subtypes)" title="RSS feed for all documentation types"> RSS feed for all documentation types
             </a>
             </p>
 

@@ -19,8 +19,7 @@
     Document actions (print, sendto etc)
     </div>
 
-    <a href=""
-      class="link-parent visualNoPrint"
+    <a class="link-parent visualNoPrint"
       href=".">
       Back to the Help Center
     </a>
@@ -34,7 +33,7 @@
     Welcome to the Help Center! This way of doing documentation is a bit
     different from what you may be used to, so please read this document
     to understand how to contribute.
-    <p>
+    </p>
     
     <h2>Quick Start</h2>
     
