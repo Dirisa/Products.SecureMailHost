@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.13 2005/03/11 03:49:27 dtremea Exp $
+$Id: PSCProject.py,v 1.14 2005/03/11 17:43:31 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -16,7 +16,6 @@ from Products.PloneSoftwareCenter.factory import getFactory
 from Products.PloneSoftwareCenter.factory import factoryRegistry
 from Products.PloneSoftwareCenter.utils import folder_modify_fti
 from Products.PloneSoftwareCenter.content.schemata import PSCProjectSchema
-from Products.PloneSoftwareCenter.permissions import ADD_CONTENT_PERMISSION
 
 def modify_fti(fti):
     folder_modify_fti(fti, allowed=('PSCReleaseFolder',
@@ -192,7 +191,7 @@ class PSCProject(OrderedBaseFolder):
             ignored.append('PSCImprovementProposalFolder')
         return ignored
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'generateUniqueId')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'generateUniqueId')
     def generateUniqueId(self, type_name):
         """Override for the .py script in portal_scripts with the same name.
         Gives some default names for contained content types:

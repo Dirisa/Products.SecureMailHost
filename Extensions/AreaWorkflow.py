@@ -12,11 +12,17 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.4 $"[11:-2]
+__version__ = "$Revision: 1.5 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
-
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+
+from Products.CMFCore import CMFCorePermissions
+
+ACCESS = CMFCorePermissions.AccessContentsInformation
+VIEW   = CMFCorePermissions.View
+MODIFY = CMFCorePermissions.ModifyPortalContent
+ADD    = CMFCorePermissions.AddPortalContent
 
 def setupPSC_area_workflow(wf):
     "..."
@@ -30,7 +36,7 @@ def setupPSC_area_workflow(wf):
         wf.variables.addVariable(v)
     for l in ['reviewer_queue']:
         wf.worklists.addWorklist(l)
-    for p in ('Access contents information', 'Modify portal content', 'View', 'Add portal content', 'Add PloneSoftwareCenter Content'):
+    for p in (ACCESS, VIEW, MODIFY, ADD):
         wf.addManagedPermission(p)
         
 
@@ -41,20 +47,18 @@ def setupPSC_area_workflow(wf):
     sdef = wf.states['closed']
     sdef.setProperties(title="""Closed to the public""",
                        transitions=('publish',))
-    sdef.setPermission('Access contents information', 1, ['Member','Manager', 'Owner'])
-    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('View', 1, ['Member', 'Manager', 'Owner'])
-    sdef.setPermission('Add portal content', 1, ['Manager','Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 1, ['Manager', 'Owner'])
+    sdef.setPermission(ACCESS, 1, ['Member','Manager', 'Owner'])
+    sdef.setPermission(VIEW, 1, ['Member', 'Manager', 'Owner'])
+    sdef.setPermission(MODIFY, 0, ['Manager', 'Owner'])
+    sdef.setPermission(ADD, 1, ['Manager','Owner'])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""Open for submissions""",
                        transitions=('retract',))
-    sdef.setPermission('Access contents information', 1, ['Anonymous', 'Member', 'Manager', 'Owner'])
-    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('View', 1, ['Anonymous', 'Member', 'Manager', 'Owner'])
-    sdef.setPermission('Add portal content', 1, ['Member', 'Manager', 'Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 1, ['Member', 'Manager', 'Owner'])
+    sdef.setPermission(ACCESS, 1, ['Anonymous', 'Member', 'Manager', 'Owner'])
+    sdef.setPermission(VIEW, 1, ['Anonymous', 'Member', 'Manager', 'Owner'])
+    sdef.setPermission(MODIFY, 0, ['Manager', 'Owner'])
+    sdef.setPermission(ADD, 1, ['Member', 'Manager', 'Owner'])
 
 
     ## Transitions initialization
@@ -67,7 +71,7 @@ def setupPSC_area_workflow(wf):
                        actbox_name="""Retract""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['publish']
@@ -79,7 +83,7 @@ def setupPSC_area_workflow(wf):
                        actbox_name="""Publish""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     ## State Variable

@@ -8,9 +8,7 @@ from Products.PloneSoftwareCenter import config
 
 # Get the custom workflows
 
-# Area workflow disabled for now. Limi doesn't like it and says it's better
-# practice to use default workflow on top-level objects.
-# from Products.PloneSoftwareCenter.Extensions import AreaWorkflow
+from Products.PloneSoftwareCenter.Extensions import AreaWorkflow
 from Products.PloneSoftwareCenter.Extensions import ImprovementProposalWorkflow
 from Products.PloneSoftwareCenter.Extensions import PackageWorkflow
 from Products.PloneSoftwareCenter.Extensions import ReleaseWorkflow
@@ -54,14 +52,14 @@ def installWorkflows(self, out):
     print >> out, 'Installing custom workflows'
 
     # Register the workflows
-    # AreaWorkflow.install()
+    AreaWorkflow.install()
     ImprovementProposalWorkflow.install()
     PackageWorkflow.install()
     ReleaseWorkflow.install()
 
-    # addWorkflow(self, out, workflow,
-    #               'psc_area_workflow (PSC Area workflow)',
-    #               'psc_area_workflow')
+    addWorkflow(self, out, workflow,
+                   'psc_area_workflow (PSC Area workflow)',
+                   'psc_area_workflow')
     addWorkflow(self, out, workflow,
                    'psc_improvementproposal_workflow (PSC Improvement Proposal workflow)',
                    'psc_improvementproposal_workflow')
@@ -76,9 +74,9 @@ def installWorkflows(self, out):
     setWorkflowForType(self, out, workflow,
                            'PSCProject',
                            'psc_package_workflow')
-    # setWorkflowForType(self, out, workflow,
-    #                       'PloneSoftwareCenter',
-    #                       'psc_area_workflow')
+    setWorkflowForType(self, out, workflow,
+                           'PloneSoftwareCenter',
+                           'psc_area_workflow')
     setWorkflowForType(self, out, workflow,
                            'PSCFile',
                            '')

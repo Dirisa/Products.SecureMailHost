@@ -1,5 +1,5 @@
 """
-$Id: PSCImprovementProposalFolder.py,v 1.2 2005/03/09 18:04:43 dtremea Exp $
+$Id: PSCImprovementProposalFolder.py,v 1.3 2005/03/11 17:43:31 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -11,7 +11,6 @@ from Products.Archetypes.public import OrderedBaseFolder
 
 from Products.PloneSoftwareCenter.config import PROJECTNAME
 from Products.PloneSoftwareCenter.utils import folder_modify_fti
-from Products.PloneSoftwareCenter.permissions import ADD_CONTENT_PERMISSION
 from Products.PloneSoftwareCenter.content.schemata import PSCImprovementProposalFolderSchema
 
 def modify_fti(fti):
@@ -51,7 +50,7 @@ class PSCImprovementProposalFolder(OrderedBaseFolder):
         },
     )
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'generateUniqueId')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'generateUniqueId')
     def generateUniqueId(self, type_name):
         """Generate a unique id, by finding the smallest unused number
         among the object in the container.

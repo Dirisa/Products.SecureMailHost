@@ -12,11 +12,18 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+
+from Products.CMFCore import CMFCorePermissions
+
+ACCESS = CMFCorePermissions.AccessContentsInformation
+VIEW   = CMFCorePermissions.View
+MODIFY = CMFCorePermissions.ModifyPortalContent
+ADD    = CMFCorePermissions.AddPortalContent
 
 def setupPSC_improvementproposal_workflow(wf):
     "..."
@@ -30,7 +37,7 @@ def setupPSC_improvementproposal_workflow(wf):
         wf.variables.addVariable(v)
     for l in ['reviewer_queue']:
         wf.worklists.addWorklist(l)
-    for p in ('Access contents information', 'Modify portal content', 'View'):
+    for p in (ACCESS, VIEW, MODIFY):
         wf.addManagedPermission(p)
         
 
@@ -45,44 +52,44 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef = wf.states['in-progress']
     sdef.setProperties(title="""In progress""",
                        transitions=('complete', 'defer', 're-draft', 'reject'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
     sdef = wf.states['completed']
     sdef.setProperties(title="""Completed and merged""",
                        transitions=('re-merge',))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
     sdef = wf.states['rejected']
     sdef.setProperties(title="""Rejected""",
                        transitions=('re-draft',))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
     sdef = wf.states['deferred']
     sdef.setProperties(title="""Deferred""",
                        transitions=('begin', 're-draft', 'reject'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
     sdef = wf.states['ready-for-merge']
     sdef.setProperties(title="""Ready for merge""",
                        transitions=('defer', 'merge', 're-work', 'reject'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
     sdef = wf.states['being-discussed']
     sdef.setProperties(title="""Being discussed""",
                        transitions=('begin', 'defer', 'reject'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('View', 1, [])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
+    sdef.setPermission(VIEW, 1, [])
 
 
     ## Transitions initialization
@@ -95,7 +102,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Defer work""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['begin']
@@ -107,7 +114,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Begin work""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['re-work']
@@ -119,7 +126,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Re-work""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['complete']
@@ -131,7 +138,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Complete work""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['re-merge']
@@ -143,7 +150,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Un-merge""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['merge']
@@ -155,7 +162,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Merge changes""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['reject']
@@ -167,7 +174,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Reject proposal""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['re-draft']
@@ -179,7 +186,7 @@ def setupPSC_improvementproposal_workflow(wf):
                        actbox_name="""Re-draft""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     ## State Variable

@@ -1,5 +1,5 @@
 """
-$Id: PSCRelease.py,v 1.3 2005/03/09 18:04:43 dtremea Exp $
+$Id: PSCRelease.py,v 1.4 2005/03/11 17:43:31 optilude Exp $
 """
 
 import re
@@ -20,7 +20,6 @@ from Products.Archetypes.public import OrderedBaseFolder
 from Products.PloneSoftwareCenter.config import PROJECTNAME
 from Products.PloneSoftwareCenter.utils import folder_modify_fti
 from Products.PloneSoftwareCenter.content.schemata import PSCReleaseSchema
-from Products.PloneSoftwareCenter.permissions import ADD_CONTENT_PERMISSION
 
 def modify_fti(fti):
     folder_modify_fti(fti, allowed=('PSCFile','PSCFileLink'))
@@ -90,7 +89,7 @@ class PSCRelease(OrderedBaseFolder):
     #        return 0
     #    return 1
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'populateFrom')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'populateFrom')
     def populateFrom(self, release_id):
         container = aq_parent(aq_inner(self))
         other = container[release_id]
@@ -141,7 +140,7 @@ class PSCRelease(OrderedBaseFolder):
         items = self.aq_parent.aq_parent.roadmap.objectValues()
         return DisplayList([[i.UID(), i.Title()] for i in items])
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'generateUniqueId')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'generateUniqueId')
     def generateUniqueId(self, type_name):
         """We don't want the behavior of release folder, choosing on
         versions. So use the standard Plone behavior.

@@ -12,11 +12,18 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.3 $"[11:-2]
+__version__ = "$Revision: 1.4 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+
+from Products.CMFCore import CMFCorePermissions
+
+ACCESS = CMFCorePermissions.AccessContentsInformation
+VIEW   = CMFCorePermissions.View
+MODIFY = CMFCorePermissions.ModifyPortalContent
+ADD    = CMFCorePermissions.AddPortalContent
 
 def setupPSC_release_workflow(wf):
     "..."
@@ -30,7 +37,7 @@ def setupPSC_release_workflow(wf):
         wf.variables.addVariable(v)
     for l in ['reviewer_queue']:
         wf.worklists.addWorklist(l)
-    for p in ('Access contents information', 'Modify portal content', 'View', 'Add portal content', 'Add PloneSoftwareCenter Content'):
+    for p in (ACCESS, MODIFY, VIEW):
         wf.addManagedPermission(p)
         
 
@@ -41,29 +48,23 @@ def setupPSC_release_workflow(wf):
     sdef = wf.states['planning']
     sdef.setProperties(title="""The release is in the planning stages""",
                        transitions=('begin', 'release'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('View', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('Add portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(VIEW, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
     
     sdef = wf.states['in-progress']
     sdef.setProperties(title="""Work on the release is in progress""",
                        transitions=('re-plan', 'release'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('View', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('Add portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(VIEW, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""The release has been completed""",
                        transitions=('re-plan', 'retract'))
-    sdef.setPermission('Access contents information', 1, [])
-    sdef.setPermission('View', 1, [])
-    sdef.setPermission('Modify portal content', 1, [])
-    sdef.setPermission('Add portal content', 0, ['Manager', 'Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
+    sdef.setPermission(ACCESS, 1, [])
+    sdef.setPermission(VIEW, 1, [])
+    sdef.setPermission(MODIFY, 1, [])
 
 
     ## Transitions initialization
@@ -76,7 +77,7 @@ def setupPSC_release_workflow(wf):
                        actbox_name="""Make release""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['retract']
@@ -88,7 +89,7 @@ def setupPSC_release_workflow(wf):
                        actbox_name="""Retract release""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['begin']
@@ -100,7 +101,7 @@ def setupPSC_release_workflow(wf):
                        actbox_name="""Begin work""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     tdef = wf.transitions['re-plan']
@@ -112,7 +113,7 @@ def setupPSC_release_workflow(wf):
                        actbox_name="""Re-plan""",
                        actbox_url="""""",
                        actbox_category="""workflow""",
-                       props={'guard_permissions': 'Modify portal content'},
+                       props={'guard_permissions': MODIFY},
                        )
 
     ## State Variable

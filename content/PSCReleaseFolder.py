@@ -1,5 +1,5 @@
 """
-$Id: PSCReleaseFolder.py,v 1.4 2005/03/09 18:04:43 dtremea Exp $
+$Id: PSCReleaseFolder.py,v 1.5 2005/03/11 17:43:31 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -10,7 +10,6 @@ from Products.Archetypes.public import registerType
 from Products.Archetypes.public import OrderedBaseFolder
 
 from Products.PloneSoftwareCenter.config import PROJECTNAME
-from Products.PloneSoftwareCenter.permissions import ADD_CONTENT_PERMISSION
 from Products.PloneSoftwareCenter.content.schemata import PSCReleaseFolderSchema
 
 
@@ -51,7 +50,7 @@ class PSCReleaseFolder(OrderedBaseFolder):
                        'title to ensure that projects are consistent. '
                        'Please do not rename it.')
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'generateUniqueId')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'generateUniqueId')
     def generateUniqueId(self, type_name):
         """Override for the .py script in portal_scripts with the same name.
 
