@@ -1,0 +1,13 @@
+Requirements:
+
+  - Zope 2.7, Plone 1.1, Archetypes 1.0
+
+Installation:
+ 
+  - go the portal_quickinstaller tool of your Plone site
+
+  - select the checkboxes for PloneCollectorNG (and Archetypes)
+    and press 'Install'
+
+  - select "Plone Collector NG" from the add-list of the folder_contents
+    view of a folder and create a new instance
