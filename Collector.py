@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.109 2004/01/21 17:11:52 ajung Exp $
+$Id: Collector.py,v 1.110 2004/01/22 19:59:21 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -337,8 +337,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         self._num_issues += 1
         id = str(self._num_issues)
         self.invokeFactory('PloneIssueNG', id)
-        issue = aq_base(self._getOb(id))
-
+        issue =  self._getOb(id)
+        issue.post_creation_actions()
         util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/pcng_base_edit", 
                       portal_status_message=self.translate('new_issue_created', 'New issue created'),
                       fieldset='issuedata')

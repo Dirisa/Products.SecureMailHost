@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.118 2004/01/21 17:18:48 ajung Exp $
+$Id: Issue.py,v 1.119 2004/01/22 19:59:22 ajung Exp $
 """
 
 import sys, os, time
@@ -94,13 +94,19 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
 
+        Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
-        self._transcript.setEncoding(self.getSiteEncoding())
+        self.post_creation_actions()
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
             wf = getToolByName(self, 'portal_workflow')
             wf.notifyCreated(self)
+
+    def post_creation_actions(self):
+        """ perform post-creation actions """
+
+        self._transcript.setEncoding(self.getSiteEncoding())
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
@@ -121,8 +127,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
         # pre-allocate the deadline property
         self.progress_deadline = DateTime() + self.deadline_tickets        
-
-        Base.manage_afterAdd(self, item, container)
 
                                                 
     def manage_beforeDelete(self, item, container):
