@@ -4,8 +4,6 @@ FAQ/FAQFolder:
 
 - We should have a separate template for the Expanded Section view - the way it is now, it gets messy real quick. 'faq_section_view?SomeSection' or similar. This will also allow us to have the correct h2/h3 level.
 
-- We should use Description for the full Question attribute in FAQ.py, not a dedicated attribute.
-
 - RSS feed for Latest Documentation
 
 - Included help templates that explain what the different parts do, how a FAQ differs from a howto, differs from a Tutorial etc.
