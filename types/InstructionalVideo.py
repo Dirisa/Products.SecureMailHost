@@ -21,6 +21,10 @@ class HelpCenterInstructionalVideo(PHCContent,BaseContent):
     meta_type = 'HelpCenterInstructionalVideo'
     global_allow = 0
     allow_discussion = IS_DISCUSSABLE
+    
+    typeDescription= 'An Instructional Video can be used to upload Flash instructional videos.'
+    typeDescMsgId  = 'description_edit_instructionalvideo'
+
 
     actions = ({'id': 'view',
                 'name': 'View',

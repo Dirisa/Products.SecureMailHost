@@ -25,9 +25,6 @@ def addHelpCenterLinkFolder(self, id, **kwargs):
 class HelpCenterLinkFolder(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
-    typeDescription= 'This is a folder that holds Help Center Links, and it allows you to display individual sections.'
-    typeDescMsgId  = 'description_edit_linkfolder'
-
     content_icon = 'link_icon.gif'
 
     schema = FAQFolderSchema
@@ -36,6 +33,9 @@ class HelpCenterLinkFolder(PHCFolder,OrderedBaseFolder):
     global_allow = 0
     filter_content_types = 1
     allowed_content_types = ('HelpCenterLink', )
+    
+    typeDescription= 'A Link Section can contain links to other documentation.'
+    typeDescMsgId  = 'description_edit_linkfolder'
     
     security = ClassSecurityInfo()
 

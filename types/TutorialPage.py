@@ -11,12 +11,16 @@ class HelpCenterTutorialPage(PHCContent,BaseContent):
                       BaseContent.__implements__,)
 
     schema = TutorialPageSchema
-    archetype_name = 'Tutorial Page'
+    archetype_name = 'Page'
     meta_type='HelpCenterTutorialPage'
     content_icon = 'tutorial_icon.gif'
 
     global_allow = 0
     allow_discussion = 1
+
+    typeDescription= 'A Tutorial Page contains the text of a single page of the tutorial.'
+    typeDescMsgId  = 'description_edit_tutorialpage'
+
 
     actions = (
         {

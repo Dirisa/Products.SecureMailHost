@@ -35,6 +35,10 @@ class HelpCenterHowToFolder(PHCFolder,OrderedBaseFolder):
     filter_content_types = 1
     allowed_content_types = ('HelpCenterHowTo', )
     
+    typeDescription= 'A How-to Section can contain how-to documents.'
+    typeDescMsgId  = 'description_edit_howtofolder'
+
+    
     security = ClassSecurityInfo()
     
     actions = (

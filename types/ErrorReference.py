@@ -23,6 +23,10 @@ class HelpCenterErrorReference(PHCContent,OrderedBaseFolder):
     allow_discussion = IS_DISCUSSABLE
     allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
+    typeDescription= 'An Error Reference can be used to explain a particular error which may arise.'
+    typeDescMsgId  = 'description_edit_errorreference'
+
+
     actions = ({
             'id': 'view',
             'name': 'View',

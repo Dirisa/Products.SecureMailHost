@@ -18,6 +18,10 @@ class HelpCenterReferenceManualPage(PHCContent,BaseContent):
     global_allow = 0
     allow_discussion = 1
 
+    typeDescription= 'A Reference Manual Page contains the text of one of the pages of the the reference manual, usually confined to a single topic.'
+    typeDescMsgId  = 'description_edit_referencemanualpage'
+
+
     actions = (
         {
             'id'          : 'view',

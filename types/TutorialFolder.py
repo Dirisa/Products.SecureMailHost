@@ -35,6 +35,10 @@ class HelpCenterTutorialFolder(PHCFolder,OrderedBaseFolder):
     filter_content_types = 1
     allowed_content_types = ('HelpCenterTutorial', )
     
+    typeDescription= 'A Tutorial Section can contain tutorial-length, multi-page documentation.'
+    typeDescMsgId  = 'description_edit_tutorialfolder'
+
+    
     security = ClassSecurityInfo()
     
     actions = (

@@ -24,8 +24,7 @@ class HelpCenterReferenceManual(PHCContent,OrderedBaseFolder):
                             'HelpCenterReferenceManualSection', 'Image', 'File')
     allow_discussion = IS_DISCUSSABLE
 
-    # XXX - Why doesn't this show up in the edit form?
-    typeDescription= 'A Reference Manual can contain Reference Manual Pages and sections, Images and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content.'
+    typeDescription= 'A Reference Manual can contain Reference Manual Pages and Sections, Images and Files. Index order is decided by the folder order, use the normal up/down arrow in the folder content view to rearrange content.'
     typeDescMsgId  = 'description_edit_referencemanual'
 
     actions = (

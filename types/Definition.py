@@ -11,9 +11,6 @@ class HelpCenterDefinition(PHCContent,BaseContent):
     __implements__ = (PHCContent.__implements__,
                       BaseContent.__implements__,)
 
-    typeDescription= 'You can add a Definition to the Glossary, and it will be reviewed and approved by our documentation team.'
-    typeDescMsgId  = 'description_edit_definition'
-
     content_icon = 'glossary_icon.gif'
 
     schema = DefinitionSchema
@@ -21,6 +18,9 @@ class HelpCenterDefinition(PHCContent,BaseContent):
     meta_type = 'HelpCenterDefinition'
     global_allow = 0
     allow_discussion = IS_DISCUSSABLE
+
+    typeDescription= 'A Definition defines a special term, and will be listed in the glossary.'
+    typeDescMsgId  = 'description_edit_definition'
 
     actions = (
         {   

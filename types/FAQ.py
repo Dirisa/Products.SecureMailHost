@@ -11,9 +11,6 @@ class HelpCenterFAQ(PHCContent,BaseContent):
     __implements__ = (PHCContent.__implements__,
                       BaseContent.__implements__,)
 
-    typeDescription= 'You can add a Frequently Asked Question (with an answer - this is not a place to ask questions), and it will be reviewed and approved by our documentation team.'
-    typeDescMsgId  = 'description_edit_faq'
-
     content_icon = 'faq_icon.gif'
 
     schema = FAQSchema
@@ -21,6 +18,9 @@ class HelpCenterFAQ(PHCContent,BaseContent):
     meta_type = 'HelpCenterFAQ'
     global_allow = 0
     allow_discussion = IS_DISCUSSABLE
+
+    typeDescription= 'A Frequently Asked Question defines a common question with an answer - this is a place to document answers to common questions, not ask them.'
+    typeDescMsgId  = 'description_edit_faq'
 
     actions = (
         {'id': 'view',

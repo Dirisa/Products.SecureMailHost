@@ -24,9 +24,6 @@ def addHelpCenterGlossary(self, id, **kwargs):
 class HelpCenterGlossary(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
-    typeDescription= 'This is a folder that holds Definitions, and it lists them in a dictionary-like fashion, with anchor links.'
-    typeDescMsgId  = 'description_edit_glossary'
-
     content_icon = 'glossary_icon.gif'
 
     schema = GlossarySchema
@@ -35,6 +32,9 @@ class HelpCenterGlossary(PHCFolder,OrderedBaseFolder):
     global_allow = 0
     filter_content_types = 1
     allowed_content_types = ('HelpCenterDefinition', )
+    
+    typeDescription= 'A Glossary can be used to hold definitions of common terms, listing them in a dictionary-like manner.'
+    typeDescMsgId  = 'description_edit_glossary'
     
     security = ClassSecurityInfo()
 

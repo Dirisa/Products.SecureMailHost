@@ -21,8 +21,7 @@ class HelpCenterTutorial(PHCContent,OrderedBaseFolder):
     allowed_content_types = ('HelpCenterTutorialPage', 'Image', 'File')
     allow_discussion = IS_DISCUSSABLE
 
-    # XXX - Why doesn't this show up in the edit form?
-    typeDescription= 'A Tutorial can contain Tutorial Pages, Image and Files. Index order is decided by the folder order, use the normal up/down selectors to rearrange content.'
+    typeDescription= 'A Tutorial can contain Tutorial Pages, Images and Files. Index order is decided by the folder order, use the normal up/down arrow in the folder content view to rearrange content.'
     typeDescMsgId  = 'description_edit_tutorial'
 
     actions = (

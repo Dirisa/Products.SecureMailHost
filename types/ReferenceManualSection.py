@@ -1,4 +1,4 @@
-from Products.Archetypes.public import *
+sfrom Products.Archetypes.public import *
 from Products.PloneHelpCenter.config import *
 from Products.CMFCore import CMFCorePermissions
 from schemata import ReferenceManualSectionSchema
@@ -24,8 +24,7 @@ class HelpCenterReferenceManualSection(PHCContent,OrderedBaseFolder):
                                 'HelpCenterReferenceManualSection')
     allow_discussion = IS_DISCUSSABLE
 
-    # XXX - Why doesn't this show up in the edit form?
-    typeDescription= 'A Reference Manual Section can contain Reference Manual Pages, and other Reference Manual (Sub-)Sections. Index order is decided by the folder order, use the normal up/down selectors to rearrange content.'
+    typeDescription= 'A Reference Manual Section can contain Reference Manual Pages, and other Reference Manual (Sub-)Sections. Index order is decided by the folder order, use the normal up/down arrow in the folder content view to rearrange content.'
     typeDescMsgId  = 'description_edit_referencemanualsection'
 
     actions = (

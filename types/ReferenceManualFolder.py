@@ -35,6 +35,10 @@ class HelpCenterReferenceManualFolder(PHCFolder,OrderedBaseFolder):
     filter_content_types = 1
     allowed_content_types = ('HelpCenterReferenceManual', )
     
+    typeDescription= 'A Reference Manual Section can contain reference manuals for individual projects and larger documentation efforts.'
+    typeDescMsgId  = 'description_edit_referencemanualfolder'
+
+    
     security = ClassSecurityInfo()
     
     actions = (

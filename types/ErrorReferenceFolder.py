@@ -36,6 +36,10 @@ class HelpCenterErrorReferenceFolder(PHCFolder,BaseFolder):
     filter_content_types = 1
     allowed_content_types = ('HelpCenterErrorReference', )
     
+    typeDescription= 'An Error Reference Section can contain references to and explanations of common errors.'
+    typeDescMsgId  = 'description_edit_errorreferencefolder'
+
+    
     security = ClassSecurityInfo()
     
     actions = (

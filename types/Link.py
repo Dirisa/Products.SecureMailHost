@@ -11,10 +11,6 @@ class HelpCenterLink(PHCContent,BaseContent):
     __implements__ = (PHCContent.__implements__,
                       BaseContent.__implements__,)
 
-
-    typeDescription= 'Help Center links are links to other documentation, etc.'
-    typeDescMsgId  = 'description_edit_link'
-
     content_icon = 'helplink_icon.gif'
 
     schema = LinkSchema
@@ -22,6 +18,9 @@ class HelpCenterLink(PHCContent,BaseContent):
     meta_type = 'HelpCenterLink'
     global_allow = 0
     allow_discussion = IS_DISCUSSABLE
+
+    typeDescription= 'Links are links to other documentation and resources.'
+    typeDescMsgId  = 'description_edit_link'
 
     actions = (
         {

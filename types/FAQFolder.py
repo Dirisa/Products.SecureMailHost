@@ -25,9 +25,6 @@ def addHelpCenterFAQFolder(self, id, **kwargs):
 class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     """A simple folderish archetype"""
 
-    typeDescription= 'This is a folder that holds FAQs, and it allows you to display individual sections.'
-    typeDescMsgId  = 'description_edit_faqfolder'
-
     content_icon = 'faq_icon.gif'
 
     schema = FAQFolderSchema
@@ -38,6 +35,9 @@ class HelpCenterFAQFolder(PHCFolder,OrderedBaseFolder):
     allowed_content_types = ('HelpCenterFAQ', )
     
     security = ClassSecurityInfo()
+    
+        typeDescription= 'A FAQ Section can hold frequently asked questions with answers.'
+    typeDescMsgId  = 'description_edit_faqfolder'
 
     actions = (
         {

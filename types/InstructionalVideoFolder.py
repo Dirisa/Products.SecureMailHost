@@ -35,6 +35,10 @@ class HelpCenterInstructionalVideoFolder(PHCFolder,OrderedBaseFolder):
     filter_content_types = 1
     allowed_content_types = ('HelpCenterInstructionalVideo', )
     
+    typeDescription= 'A Video Section can contain instructional Flash videos.'
+    typeDescMsgId  = 'description_edit_instructionalvideofolder'
+
+    
     security = ClassSecurityInfo()
     
     actions = ({
