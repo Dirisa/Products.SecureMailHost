@@ -21,6 +21,10 @@ class PHCContent:
 
     security = ClassSecurityInfo()
 
+    def getImportanceVocab(self):
+        """Get version vocabulary"""
+        return IMPORTANCE_VOCAB
+
     def getVersionsVocab(self):
         """Get version vocabulary"""
         return self.aq_parent.getVersionsVocab()

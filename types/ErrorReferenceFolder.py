@@ -8,11 +8,20 @@
 
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
-from AccessControl import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import ErrorReferenceFolderSchema
 from PHCFolder import PHCFolder
 
+
+# generate the add method ourselves so we can set the add permission
+security = ModuleSecurityInfo('Products.PloneHelpCenter.ErrorReferenceFolder')
+security.declareProtected(ADD_HELP_AREA_PERMISSION, 'addHelpCenterErrorReferenceFolder')
+def addHelpCenterErrorReferenceFolder(self, id, **kwargs):
+    o = HelpCenterErrorReferenceFolder(id)
+    self._setObject(id, o)
+    o = getattr(self, id)
+    o.initializeArchetype(**kwargs)
 
 
 class HelpCenterErrorReferenceFolder(PHCFolder,BaseFolder):

@@ -12,11 +12,11 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
-
 from Products.DCWorkflow.DCWorkflow import DCWorkflowDefinition
+from Products.PloneHelpCenter.config import *
 
 def setupHelpcenter_workflow(wf):
     "..."
@@ -30,7 +30,7 @@ def setupHelpcenter_workflow(wf):
         wf.variables.addVariable(v)
     for l in ['reviewer_queue']:
         wf.worklists.addWorklist(l)
-    for p in ('Access contents information', 'Modify portal content', 'View', 'Change portal events'):
+    for p in ('Access contents information', 'Modify portal content', 'View', 'Change portal events', ADD_HELP_AREA_PERMISSION):
         wf.addManagedPermission(p)
         
 
@@ -45,6 +45,7 @@ def setupHelpcenter_workflow(wf):
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
     sdef.setPermission('View', 0, ['Manager', 'Owner'])
     sdef.setPermission('Change portal events', 0, ['Manager', 'Owner'])
+    sdef.setPermission(ADD_HELP_AREA_PERMISSION, 0, ['Manager', 'Owner'])
 
     sdef = wf.states['obsolete']
     sdef.setProperties(title="""""",
@@ -53,6 +54,7 @@ def setupHelpcenter_workflow(wf):
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner', 'Reviewer'])
     sdef.setPermission('View', 0, ['Manager', 'Owner', 'Reviewer'])
     sdef.setPermission('Change portal events', 0, ['Manager', 'Owner', 'Reviewer'])
+    sdef.setPermission(ADD_HELP_AREA_PERMISSION, 0, ['Manager', 'Owner'])
 
     sdef = wf.states['pending']
     sdef.setProperties(title="""Waiting for reviewer""",
@@ -61,6 +63,7 @@ def setupHelpcenter_workflow(wf):
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Reviewer'])
     sdef.setPermission('View', 1, ['Manager', 'Owner', 'Reviewer'])
     sdef.setPermission('Change portal events', 0, ['Manager', 'Reviewer'])
+    sdef.setPermission(ADD_HELP_AREA_PERMISSION, 0, ['Manager'])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""Public""",
@@ -69,6 +72,7 @@ def setupHelpcenter_workflow(wf):
     sdef.setPermission('Modify portal content', 0, ['Manager'])
     sdef.setPermission('View', 1, ['Anonymous', 'Manager'])
     sdef.setPermission('Change portal events', 0, ['Manager'])
+    sdef.setPermission(ADD_HELP_AREA_PERMISSION, 0, ['Manager'])
 
 
     ## Transitions initialization
@@ -200,6 +204,3 @@ def install():
     addWorkflowFactory(createHelpcenter_workflow,
                        id='helpcenter_workflow',
                        title='Workflow for Help Center.')
-
-    
-

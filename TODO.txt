@@ -13,10 +13,8 @@ General:
     add the red bang to the top-level ones. This gives us more
     flexibility for future importance ratings. [Joel]
 
-- Everything has to use portal_factory
-
-  - Add a "USE_PORTAL_FACTORY" in config.py and change Install.py to
-    install things into PF.
+  - I have added an importance field to all the content schema.  The vocabulary
+    is defined in config.py.  [Geoff]
 
 - We should have an extra attribute that has additional words that are
   indexed along with the content - for example in a howto about
@@ -29,6 +27,10 @@ General:
   - Debugging security problems
 
   - etc...
+
+  - I have added a related_keywords field to all the content schemata.  The
+    contents get indexed along with the rest of the item's searchable text. 
+    [Geoff]
 
 - Integrate with the ratings tool
 
@@ -63,15 +65,6 @@ General:
     (not realistic at this stage, just a fun thought :) - lots
     of academic institutions would like something like this, with
     proper integration in Kupu it could be killer functionality. :)
-
-Permissions:
-
-- Right now, both container-folders (ie FAQFolder) and contentishy
-  things (ie FAQ) both use AddPortalContent and the same workflow.
-  So users can both add FAQs and add FAQFolders, which is wrong.
-  We can either change them into two workflows or add a new permission
-  to separate out adding a help-content type. Joel votes for the 
-  latter. Alex too.
 
 I18n:
 

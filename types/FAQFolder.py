@@ -4,13 +4,23 @@
 #  versions.
 #
 
-
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
-from AccessControl import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import FAQFolderSchema
 from PHCFolder import PHCFolder
+
+
+# generate the add method ourselves so we can set the add permission
+security = ModuleSecurityInfo('Products.PloneHelpCenter.FAQFolder')
+security.declareProtected(ADD_HELP_AREA_PERMISSION, 'addHelpCenterFAQFolder')
+def addHelpCenterFAQFolder(self, id, **kwargs):
+    o = HelpCenterFAQFolder(id)
+    self._setObject(id, o)
+    o = getattr(self, id)
+    o.initializeArchetype(**kwargs)
+
 
 class HelpCenterFAQFolder(PHCFolder,BaseFolder):
     """A simple folderish archetype"""

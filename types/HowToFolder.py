@@ -5,14 +5,22 @@
 # provide a sensible default view out-of-the-box, like the FAQ view.
 #
 
-
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
-from AccessControl import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, ModuleSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HowToFolderSchema
 from PHCFolder import PHCFolder
 
+
+# generate the add method ourselves so we can set the add permission
+security = ModuleSecurityInfo('Products.PloneHelpCenter.HowToFolder')
+security.declareProtected(ADD_HELP_AREA_PERMISSION, 'addHelpCenterHowToFolder')
+def addHelpCenterHowToFolder(self, id, **kwargs):
+    o = HelpCenterHowToFolder(id)
+    self._setObject(id, o)
+    o = getattr(self, id)
+    o.initializeArchetype(**kwargs)
 
 
 class HelpCenterHowToFolder(PHCFolder,BaseFolder):

@@ -66,6 +66,16 @@ def install(self):
     fc_tool.addFormAction('content_edit', 'success', 'HelpCenterErrorReference', None, 'traverse_to', 'string:edit_reminder')
     print >> out, 'Set reminder to publish message hack on objects.'
 
+    # make new types use portal_factory
+    ft = getToolByName(self, 'portal_factory')    portal_factory_types = ft.getFactoryTypes().keys()    for t in ['HelpCenter'
+             ,'HelpCenterErrorReference', 'HelpCenterErrorReferenceFolder'
+             ,'HelpCenterFAQ', 'HelpCenterFAQFolder'
+             ,'HelpCenterHowTo', 'HelpCenterHowToFolder'
+             ,'HelpCenterLink', 'HelpCenterLinkFolder'
+             ,'HelpCenterTutorial', 'HelpCenterTutorialFolder'
+             ,'HelpCenterTutorialPage']:
+
+        if t not in portal_factory_types:            portal_factory_types.append(t)    ft.manage_setPortalFactoryTypes(listOfTypeIds=portal_factory_types)    print >> out, 'New types use portal_factory'
+
     print >> out, "Successfully installed %s." % PROJECTNAME
     return out.getvalue()
-

@@ -6,6 +6,33 @@ from Products.PloneHelpCenter.config import *
 #############################################################################################
 # Common components to Help Types schemas
 
+# how important is this item?
+ImportanceSchema = Schema((
+    StringField('importance',
+               required=1,
+               default=IMPORTANCE_DEFAULT,
+               index='KeywordIndex:schema',
+               vocabulary='getImportanceVocab',
+               widget=SelectionWidget(
+                       label='Importance',
+                       description='Importance of this item',
+                      ),
+               ),
+    ))
+
+# related keywords
+RelatedSchema = Schema((
+    LinesField('related_keywords',
+               searchable=1,
+               widget=LinesWidget(
+                   label='Related keywords',
+                   description='A list of keywords that should be indexed along with the content (e.g. for a how-to on VerboseSecurity, you might include Verbose Security, Insufficient Privileges, Debugging security problems)',
+                   i18n_domain="plonehelpcenter",
+                   rows=6)
+               ),
+    ))
+
+
 # what versions does this item support?
 VersionsSchema = Schema((
     LinesField('versions',
@@ -84,7 +111,7 @@ FAQSchema = HCSchema + Schema((
                   rows=10),
               **DEFAULT_CONTENT_TYPES
               ),
-    )) + VersionsSchema + SectionsSchema
+    )) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
 
 ###
 # FAQ Folder
@@ -162,7 +189,7 @@ HowToSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
- ) + VersionsSchema + SectionsSchema
+ ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
 
 ###
 # HowToFolder
@@ -199,7 +226,7 @@ TutorialSchema = HCSchema + Schema((
                  rows = 5,
                  i18n_domain = "plonehelpcenter")
               ),
-    ))  + VersionsSchema + SectionsSchema
+    ))  + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
 
 ###
 # TutorialFolder
@@ -282,7 +309,7 @@ ErrorReferenceSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
 
 ###
 # ErrorReferenceFolder
@@ -328,7 +355,7 @@ LinkSchema = HCFolderSchema + Schema((
 
     marshall=PrimaryFieldMarshaller(),
 
-    ) + VersionsSchema + SectionsSchema
+    ) + VersionsSchema + SectionsSchema + ImportanceSchema + RelatedSchema
 
 ###
 # LinkFolder
