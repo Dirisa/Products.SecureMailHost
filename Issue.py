@@ -52,7 +52,30 @@ class Issue(BaseFolder):
 
     def getReferences(self):
         """ return a sequences of references """
-        return list()
+        return self._references
+
+    def add_reference(self, reference, RESPONSE=None):
+        """ add a new reference (record object) """
+
+        if not reference.comment:
+            raise ValueError('References must have a comment')
+
+        tracker = getattr(self, reference.tracker, None)
+        if not tracker:
+            raise ValueError('Tracker does not exist: %s' % reference.tracker)
+
+        if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
+            raise ValueError('Ticket number does not exist: %s' % reference.ticketnumber)
+
+        ref = Reference(reference.tracker, reference.ticketnumber, reference.comment)
+        self._references.add(ref)
+ 
+        te = TranscriptEntry()
+        te.addReference(reference.tracker, reference.ticketnumber, reference.comment)
+        self.transcript.add(te)
+
+        if RESPONSE is not None:
+           RESPONSE.redirect('pcng_issue_references?portal_status_message=Reference%20has%20been%20stored')
 
     ######################################################################
     # File uploads 
