@@ -9,7 +9,7 @@
 <div metal:fill-slot="main"
        tal:define="wanted_types here/phc_search_types;
        		 results python:here.portal_catalog({'portal_type':wanted_types,'review_state':'published',
-		 'SearchableText':request.form.get('SearchableText')});
+		 'SearchableText':request.form.get('SearchableText'),'path':'/'.join(here.getPhysicalPath())});
                  Batch python:modules['Products.CMFPlone'].Batch;
                  DateTime python:modules['DateTime'].DateTime;
                  b_size python:30;b_start python:0;b_start request/b_start | b_start;
