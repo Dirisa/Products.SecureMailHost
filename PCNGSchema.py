@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.2 2004/01/29 17:14:51 ajung Exp $
+$Id: PCNGSchema.py,v 1.3 2004/01/29 18:05:22 ajung Exp $
 """
 
 
@@ -24,6 +24,8 @@ from Products.Archetypes.interfaces.field import IField
 # Some replacement classes for Archetypes
 
 class PCNGSchemata(Persistent):
+
+    __pcng__ = 1
 
     security = ClassSecurityInfo()
     security.setDefaultAccess('allow')
@@ -62,7 +64,6 @@ class PCNGSchemata(Persistent):
     security.declareProtected(View, 'getField')
     def getField(self, field_id, default=None):
         """ return a field """
-        print 'getting', field_id
         try:
             return self._fields[field_id]
         except KeyError:
@@ -76,8 +77,9 @@ class PCNGSchemata(Persistent):
         return [f.getName() for f in self._fields.values()  if f.searchable]
         
             
-    security.declareProtected(View, 'fields')
+#    security.declareProtected(View, 'fields')
     def fields(self):
+        """ return the fields """
         return [self._fields[k] for k in self._names]
 
     security.declareProtected(View, 'toString')
@@ -368,9 +370,7 @@ class PCNGSchema(PCNGSchemata, DefaultLayerContainer):
     security.declareProtected(ModifyPortalContent, 'delSchemata')
     def delSchemata(self, schemata_name):
         names = [f.getName() for f in self._fields.values()  if f.schemata==schemata_name]
-        print names
-        for name in names:
-            self.delField(name)
+        for name in names: self.delField(name)
 
     security.declareProtected(ModifyPortalContent, 'addSchemata')
     def addSchemata(self, name):

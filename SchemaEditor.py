@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.49 2004/01/22 09:04:37 ajung Exp $
+$Id: SchemaEditor.py,v 1.50 2004/01/29 18:05:22 ajung Exp $
 """
 
 import copy, re
@@ -14,10 +14,10 @@ from types import StringType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import *
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import DisplayList, Schema
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
-from Products.Archetypes.Schema import Schema
+from PCNGSchema import PCNGSchema 
 
 import util
 from config import ManageCollector
@@ -45,14 +45,13 @@ class SchemaEditor:
         from OrderedSchema import OrderedSchema
 
         if not hasattr(self, '_ms'):
-            schema = Schema()
+            schema = PCNGSchema()
             for name in self._schemata_names:
                 for f in self._schemas[name].fields():
                     schema.addField(f)
             schema.addField(StringField('language', schemata='default'))
             schema.addField(StringField('subject', schemata='default'))
             self._ms = schema.copy()
- 
         return self._ms
 
     security.declareProtected(View, 'atse_getSchemataNames')
@@ -65,7 +64,7 @@ class SchemaEditor:
     security.declareProtected(View, 'atse_getSchemata')
     def atse_getSchemata(self, name):
         """ return a schemata given by its name """
-        s = Schema()
+        s = PCNGSchema()
         for f in self._ms.getSchemataFields(name):
             s.addField(f)
         return s
@@ -97,6 +96,9 @@ class SchemaEditor:
     security.declareProtected(ManageCollector, 'atse_delSchemata')
     def atse_delSchemata(self, name, RESPONSE=None):
         """ delete a schemata """
+
+        if len(self._ms.getSchemataNames()) == 2: # default is hidden
+            raise RuntimeError(self.translate('atse_can_not_remove_last_schema', 'Can not remove the last schema'))
         self._ms.delSchemata(name)
         self._p_changed = 1
         util.redirect(RESPONSE, 'pcng_schema_editor', 
@@ -325,6 +327,17 @@ class SchemaEditor:
         """ only for debugging """
         for schemata in self._ms.getSchemataNames():
             print '%s: %s' % (schemata, ', '.join([f.getName() for f in  self._ms.getSchemataFields(schemata)]))
+
+    security.declareProtected(ManageCollector, 'migrate_schema')
+    def migrate_schema(self):
+        """ migrate to PCNGSchema """
+
+        old_schema = self._ms.copy()
+        self._ms = PCNGSchema()
+        for schemata_name in old_schema.getSchemataNames():
+            for field in old_schema.getSchemataFields(schemata_name):
+                self._ms.addField(field)
+        self._p_changed = 1
 
 
 InitializeClass(SchemaEditor)

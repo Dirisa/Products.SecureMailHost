@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.111 2004/01/27 14:27:28 ajung Exp $
+$Id: Collector.py,v 1.112 2004/01/29 18:05:21 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -427,6 +427,9 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 value = field.get(self)  
             except:
                 field.set(self, field.default)
+
+        # PCNGSchema migration
+        self.migrate_schema()
 
         self._transcript.setEncoding(self.getSiteEncoding())
         self._transcript.addComment(u'Collector schema updated')
