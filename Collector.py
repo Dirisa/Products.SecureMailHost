@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.45 2003/10/18 12:59:05 ajung Exp $
+$Id: Collector.py,v 1.46 2003/10/19 12:55:45 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -25,11 +25,12 @@ from config import IssueWorkflowName
 from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
+from Translateable import Translateable
 import collector_schema 
 import issue_schema
 import util
 
-class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
+class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
     """ PloneCollectorNG """
 
     schema = collector_schema.schema
@@ -346,6 +347,10 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
             sub.addField(f)
             schemata[f.schemata] = sub
         return schemata
+
+    def test(self):
+        """ some test """
+        return self.translate('label_description', 'this is a test')
 
 registerType(PloneCollectorNG)
 

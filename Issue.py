@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.45 2003/10/16 16:42:59 ajung Exp $
+$Id: Issue.py,v 1.46 2003/10/19 12:55:45 ajung Exp $
 """
 
 import sys, os
@@ -26,8 +26,8 @@ from config import IssueWorkflowName
 from Transcript import Transcript
 from WatchList import WatchList
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
+from Translateable import Translateable
 import util, notifications
-
 
 
 class IssueRelationship(Persistent):
@@ -62,7 +62,7 @@ class IssueRelationship(Persistent):
 InitializeClass(IssueRelationship)
 
 
-class PloneIssueNG(OrderedBaseFolder, WatchList):
+class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = ({
