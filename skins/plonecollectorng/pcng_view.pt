@@ -27,8 +27,6 @@
                           dummy python: request.set('Creator', [member.getUserName()])" />
       </metal:block>   
 
-      <div metal:use-macro="here/pcng_navigation/macros/collector_navigation" />
-
       <metal:block tal:define="action string: Browse issues">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
