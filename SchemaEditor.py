@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.47 2003/12/18 20:22:21 ajung Exp $
+$Id: SchemaEditor.py,v 1.48 2004/01/11 08:40:34 ajung Exp $
 """
 
 import copy, re
@@ -169,7 +169,7 @@ class SchemaEditor:
         D = {}    # dict to be passed to the field constructor
         D['default'] = FD.get('default', '')
         D['schemata'] = FD.schemata
-        D['createindex'] = FD.createindex
+        D['createindex'] = FD.get('createindex', 0)
          
         if FD.get('invisible', 0) == 0:
             visible = 1
