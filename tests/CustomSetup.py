@@ -40,6 +40,18 @@ def CreateTutorials( self, portal ):
                                            importance=content.Importance )
         newTutorial = getattr( helpCenter.tutorial, content.Id )
         portal.plone_utils.changeOwnershipOf( newTutorial, content.Owner.Id, 1 )
+        # Attach pages to the tutorial.
+        for page in content.Pages:
+            newTutorial.invokeFactory( 'HelpCenterTutorialPage',
+                                       id=page.Id,
+                                       title=page.Title,
+                                       description=page.Summary,
+                                       body=page.Body, )
+            newPage = getattr( newTutorial, page.Id )
+            portal.plone_utils.editMetadata( newPage, format=page.Format )
+            # Each page should be owned by the same owner as the tutorial owner
+            portal.plone_utils.changeOwnershipOf( newPage, content.Owner.Id, 1 )
+        # Update the tutorial's workflow state
         if content.Transition:
             portal.portal_workflow.doActionFor( newTutorial, content.Transition )
         i += 1

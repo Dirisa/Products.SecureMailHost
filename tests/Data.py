@@ -1565,6 +1565,128 @@ The most common ``global-options`` are listed here for later reference.
 '''
 Page1.Format = 'text/x-rst'
 
+# Sample Tutorial Page content ---------------------------------------
+Page2 = PropertyHolder()
+Page2.Id = 'page2'
+Page2.Title = 'Sampe Tutorial Page2'
+Page2.Summary = 'More sample content for the tutorial.'
+Page2.Body = '''
+Initial Checkout
+================
+
+The rest of the content below this point was basically stolen from
+the CVS tutorial on Plone.org just to give us a non-trivial document.
+It is one of the few reStructured Text documents for which I have the
+source format.
+
+The CVS command to get a local working copy of code from a central CVS 
+repository is ``checkout``.  This command is normally abbreviated as ``co``.
+This command will give you a copy of all of the files of a directory 
+tree on your machine.  This local copy is sometimes called your 
+sandbox (you get to play in your sandbox).  A checkout works on a module, 
+which will just be a top-level folder in the Collective for our purposes.
+
+
+You just want the latest version of a Product
+---------------------------------------------
+
+If you do not need to develop or modify code, you can use anonymous 
+check out from SourceForge.  An anonymous checkout permits you to 
+get and update a local copy of the code in CVS.  You do not need a 
+SourceForge account.  You can also make local changes and view the 
+diffs between your local code and the repository code.  You will be 
+unable to submit your changes.  See also the Collective CVS page.
+
+Enter the following line command exactly as written.  When prompted for a 
+password, just press enter:: 
+
+    cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/collective login
+
+Once you are logged into the pserver, you can checkout (co) the Product 
+you need.  For the next command, you will need to replace *modulename* 
+with the name of the module you want to checkcout.   The *modulename* is 
+generally the top level folder for a Plone Product.  See the list of 
+folders in the CVS web interfoce for the Collective.  For example, if you 
+wanted a copy of PloneHelpCenter, you would replace *modulename* with the 
+word ``PloneHelpCenter``::
+
+    cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/collective co -P modulename
+
+
+You want to do development work on a Product
+--------------------------------------------
+
+Anonymous checkout does not permit you to commit changes to a Product 
+in the Collective.  If you need to modify and submit code to the 
+Collective, you will need to get an account on SourceForge.  Once 
+you have that account, someone will need to add you to the list of 
+developers for the Plone Collective project on SourceForge.  You 
+will  be checking out code over a secure SSH tunnel.  SourceForge 
+provides decent documentation concerning configuration of client 
+software for accessing their CVS repositories over SSH.
+
+The command to checkout code for development follows.  Remember to replace 
+*developername* with your name and *modulename* with the folder of code 
+you want.  For example, if you wanted to check out a copy of 
+PloneHelpCenter, you would replace *modulename* with the word 
+``PloneHelpCenter``::
+ 
+    cvs -z3 -d:ext:developername@cvs.sourceforge.net:/cvsroot/collective co -P modulename
+'''
+Page2.Format = 'text/x-rst'
+
+# Sample Tutorial Page content ---------------------------------------
+Page3 = PropertyHolder()
+Page3.Id = 'page3'
+Page3.Title = 'Sampe Tutorial Page3'
+Page3.Summary = 'Yet more sample content.  Somebody move that developer to the QA team!'
+Page3.Body = '''
+Related links
+=============
+
+The rest of the content below this point was basically stolen from
+the CVS tutorial on Plone.org just to give us a non-trivial document.
+It is one of the few reStructured Text documents for which I have the
+source format.
+
+This cheatsheet used a command line interface to CVS since it is easy
+to explain and consistent across multiple platforms.  While some
+operations may continue to be easier from the command line, even some
+of us who generally prefer the command line like to use a graphical
+CVS client when browsing file histories and looking at diffs between
+revisions.  
+
+http://www.wincvs.org/
+    An excellent starting point for CVS and GUIs.  Links to multiple
+    CVS client and visual diff GUIs for various platforms.
+http://www.tortoisecvs.org/
+    Recommended by multiple Plone developers who develop on Windows.
+    This plugin enables CVS operations directly from Microsoft Windows
+    file explorer. 
+http://www.kde.org/apps/cervisia/
+    I generally use Cervisia when I want a CVS client other than the
+    command line or Emacs PCL-CVS mode under KDE on my Linux machines.
+
+Hey, all of this CVS stuff is fascinating, right?  If you were one
+of the two people who did not just fall out of your chair laughing,
+then here are some links to get you started learning more.  Until
+everyone stops using CVS in favor of some other revision control
+software, there will be a need for developers who have a thorough
+knowledge of CVS.  (Not everyone is content to be a faker!)
+
+http://cvsbook.red-bean.com/ 
+    My favorite CVS books.  Very practical.  Lots of "best practices"
+    advice.  Also available in print.
+https://www.cvshome.org/  
+    The official home for all things CVS.
+https://www.cvshome.org/docs/manual/ 
+    The official CVS Manual originally by Per Cederqvist.
+http://www.cmcrossroads.com/bradapp/acme/
+    A nice starting point for SCM information in general, including 
+    links to software other than CVS (Subversion, Perforce, ClearCase, etc.)
+'''
+Page3.Format = 'text/x-rst'
+
 # Sample Tutorial content 1 ------------------------------------------
 Tutorial1 = PropertyHolder()
 Tutorial1.Id = 'tutorial1'
@@ -1585,7 +1707,7 @@ Tutorial2.Summary = 'A sample Tutorial that is pending; only in one section; has
 Tutorial2.Versions = ( 'Version 2.0', )
 Tutorial2.Sections = ( 'Tutorial Section1', )
 Tutorial2.Importance = 'Medium'
-Tutorial2.Pages = ( Page1, )
+Tutorial2.Pages = ( Page1, Page2, Page3, )
 Tutorial2.Transition = Transition.submit
 Tutorial2.Owner = User1
 
@@ -1597,7 +1719,7 @@ Tutorial3.Summary = 'A sample Tutorial that is in-progress; only in one section;
 Tutorial3.Versions = ( 'Version 2.0', )
 Tutorial3.Sections = ( 'Tutorial Section1', )
 Tutorial3.Importance = 'Medium'
-Tutorial3.Pages = ( Page1, )
+Tutorial3.Pages = ()
 Tutorial3.Transition = None
 Tutorial3.Owner = User1
 
@@ -1609,11 +1731,11 @@ Tutorial4.Summary = 'A sample Tutorial that is published; only in (a different) 
 Tutorial4.Versions = ( 'Version 2.0', )
 Tutorial4.Sections = ( 'General', )
 Tutorial4.Importance = 'Medium'
-Tutorial4.Pages = ( Page1, )
+Tutorial4.Pages = ( Page1, Page2, )
 Tutorial4.Transition = Transition.publish
 Tutorial4.Owner = User1
 
 
 # Sample Tutorial content --------------------------------------------
 Tutorial = PropertyHolder()
-Tutorial.list = [ Tutorial1 , Tutorial2, Tutorial3, Tutorial4 ]
+Tutorial.list = [ Tutorial1 , Tutorial2, Tutorial3, Tutorial4, ]
