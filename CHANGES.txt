@@ -1,7 +1,8 @@
 0.4 (unreleased)
 
   - added support to create directories
-
+ 
+  - added methods to get various container size and properties info 
 
 0.3:
 
