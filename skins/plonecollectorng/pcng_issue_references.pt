@@ -26,12 +26,12 @@
           <div metal:use-macro="here/issue_macros/macros/add_uploads" />
         </td>
       </tr>
-      <tr>
+      <tr tal:condition="here/haveATReferences">
         <td valign="top">
           <div metal:use-macro="here/issue_macros/macros/issue_references" />
         </td>
       </tr>
-      <tr>
+      <tr tal:condition="here/haveATReferences">
         <td valign="top">
           <div metal:use-macro="here/issue_macros/macros/add_references" />
         </td>

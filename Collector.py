@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.145 2004/03/20 17:07:09 ajung Exp $
+$Id: Collector.py,v 1.146 2004/03/27 05:06:06 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -630,6 +630,15 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                 self._v_have_rl = 0
             have_rl = self._v_have_rl
         return have_rl 
+
+    security.declareProtected(View, 'haveATReferences')
+    def haveATReferences(self):
+        """ check for suitable references support in AT (1.3+)"""
+        try:
+            from Products.Archetypes.config import REFERENCE_CATALOG
+            return 1
+        except ImportError:
+            return 0
 
     def rename_objects(self, context, old_id, new_id):
         """ rename an object """

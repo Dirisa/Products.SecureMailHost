@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.145 2004/03/20 16:47:47 ajung Exp $
+$Id: Issue.py,v 1.146 2004/03/27 05:06:06 ajung Exp $
 """
 
 import sys, os, time, random
@@ -247,53 +247,63 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def delete_reference(self, issue_url, RESPONSE=None):
         """ delete a reference given by its position """
 
-        issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
-        self.deleteReference(issue)
-        util.redirect(RESPONSE, 'pcng_issue_references', 
-                      self.Translate('reference_deleted', 'Reference has been deleted'))
+        if self.haveATReferences():
+            issue = self.getPhysicalRoot().restrictedTraverse(issue_url)
+            self.deleteReference(issue)
+            util.redirect(RESPONSE, 'pcng_issue_references', 
+                          self.Translate('reference_deleted', 'Reference has been deleted'))
+        else:
+            raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
 
     security.declareProtected(AddCollectorIssueFollowup, 'add_reference')
     def add_reference(self, reference, RESPONSE=None):
         """ add a new reference (record object) """
 
-        tracker_url = unquote(reference.tracker)
-        tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
-        if not tracker:
-            raise ValueError(self.Translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
+        if self.haveATReferences():
+            tracker_url = unquote(reference.tracker)
+            tracker = self.getPhysicalRoot().restrictedTraverse(tracker_url)
+            if not tracker:
+                raise ValueError(self.Translate('no_tracker', 'Tracker does not exist: $tracker_url', tracker_url=tracker_url))
 
-        if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
-            raise ValueError(self.Translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
-        issue = tracker._getOb(reference.ticketnumber)
+            if getattr(tracker.aq_base, str(reference.ticketnumber), None) is None:
+                raise ValueError(self.Translate('no_ticket', 'Ticket number does not exist: $ticketnum', ticketnum=reference.ticketnumber))
+            issue = tracker._getOb(reference.ticketnumber)
 
-        if not reference.comment:
-            raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
+            if not reference.comment:
+                raise ValueError(self.Translate('reference_no_comment', 'References must have a comment'))
+            self.addReference(issue, "relates_to", issue_id=issue.getId(),
+                                                   issue_url=issue.absolute_url(1), 
+                                                   collector_title=tracker.getId(),
+                                                   comment=reference.comment)
 
-        self.addReference(issue, "relates_to", issue_id=issue.getId(),
-                                               issue_url=issue.absolute_url(1), 
-                                               collector_title=tracker.getId(),
-                                               comment=reference.comment)
-
-        util.redirect(RESPONSE, 'pcng_issue_references', 
-                      self.Translate('reference_stored', 'Reference has been stored'))
-
+            util.redirect(RESPONSE, 'pcng_issue_references', 
+                          self.Translate('reference_stored', 'Reference has been stored'))
+        else:
+            raise RuntimeError(self.Translate('no_at_references_support', 'No suitable AT reference engine found'))
 
     security.declareProtected(View, 'getForwardReferences')
     def getForwardReferences(self):
         """ AT forward references """
-        from Products.Archetypes.config import REFERENCE_CATALOG
-        tool = getToolByName(self, REFERENCE_CATALOG)
-        refs = tool.getReferences(self, None)
-        return refs
+        if self.haveATReferences():
+            from Products.Archetypes.config import REFERENCE_CATALOG
+            tool = getToolByName(self, REFERENCE_CATALOG)
+            refs = tool.getReferences(self, None)
+            return refs
+        else:
+            return ()
         
     security.declareProtected(View, 'getBackReferences')
     def getBackReferences(self):
         """ AT forward references """
-        from Products.Archetypes.config import REFERENCE_CATALOG
-        tool = getToolByName(self, REFERENCE_CATALOG)
-        sID, sobj = tool._uidFor(self)
-        brains = tool._queryFor(tid=sID, relationship=None)
-        refs = tool._resolveBrains(brains)
-        return refs
+        if self.haveATReferences():
+            from Products.Archetypes.config import REFERENCE_CATALOG
+            tool = getToolByName(self, REFERENCE_CATALOG)
+            sID, sobj = tool._uidFor(self)
+            brains = tool._queryFor(tid=sID, relationship=None)
+            refs = tool._resolveBrains(brains)
+            return refs
+        else:
+            return ()
         
     security.declareProtected(View, 'references_tree')
     def references_tree(self, format='gif', RESPONSE=None):
@@ -392,7 +402,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             to reindex the issue.
         """
         self.notifyModified() # notify DublinCore
-#        self.send_notifications()
 
     def __len__(self):
         """ return the number of transcript events """
@@ -515,20 +524,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             return users
         else:   
             return ()
-
-    security.declareProtected(View, 'is_assigned')
-    def is_assigned(self):
-        """ return if the current is user among the assignees """
-        username = util.getUserName()
-        return username in self.assigned_to()
-
-    security.declareProtected(View, 'is_confidential')
-    def is_confidential(self):
-        """ return if the issue is confidential according to the workflow """
-        wftool = getToolByName(self, CollectorWorkflow, None)
-        if wftool:
-            return wftool.getInfoFor(self, 'confidential', 0)
-        return 0
 
     security.declareProtected(View, 'status')
     def status(self):
