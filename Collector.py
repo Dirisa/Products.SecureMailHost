@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.37 2003/09/29 19:44:55 ajung Exp $
+$Id: Collector.py,v 1.38 2003/10/03 09:05:21 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -113,12 +113,6 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         ti.immediate_view = 'pcng_issue_view'
         ti = typestool.getTypeInfo('PloneCollectorNG')
         ti.immediate_view = 'pcng_view'
-
-        # create new permissions and pre-assign roles 
-        setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin'))
-        setDefaultRoles(AddCollectorIssue, ('Manager', 'TrackerAdmin'))
-        setDefaultRoles(AddCollectorIssueFollowup, ('Manager', 'TrackerAdmin'))
-        setDefaultRoles(ManageCollector, ('Manager', 'TrackerAdmin'))
         
     def _setup_collector_catalog(self):
         """Create and situate properly configured collector catalog."""
@@ -233,14 +227,12 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
 
         if self.participation_mode == 'authenticated':
-            target_roles = target_roles + ('Authenticated', )
+            target_roles += ('Authenticated', )
         elif self.participation_mode == 'anyone':
-            target_roles = target_roles + ('Authenticated', 'Anonymous')
+            target_roles += ('Authenticated', 'Anonymous')
 
         for p in (AddCollectorIssue, AddCollectorIssueFollowup, ModifyPortalContent):
-            self.manage_permission(p,
-                                   roles=target_roles,
-                                   acquire=0)
+            self.manage_permission(p, roles=target_roles, acquire=0)
 
 
     def _adjust_view_mode(self):
@@ -248,14 +240,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
 
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
 
-        print self.participation_mode
-
         if self.view_mode == 'authenticated':
-            target_roles = target_roles + ('Authenticated', )
+            target_roles += ('Authenticated', )
         elif self.view_mode == 'anyone':
-            target_roles = target_roles + ('Authenticated', 'Anonymous')
+            target_roles += ('Authenticated', 'Anonymous')
 
-        print 'adjusting', target_roles
         self.manage_permission(CMFCorePermissions.View, roles=target_roles, acquire=0)
 
     ######################################################################
@@ -370,6 +359,7 @@ class PloneCollectorNGCatalog(CatalogTool):
     def enumerateIndexes(self):
         standard = CatalogTool.enumerateIndexes(self)
         custom = (('status', 'FieldIndex'),
+                  ('importance', 'FieldIndex'),
                   ('topic', 'FieldIndex'),
                   ('assigned_to', 'KeywordIndex'),
                   ('progress_deadline', 'FieldIndex'),
