@@ -2,6 +2,10 @@
 
 # Modify the saved searches member properties
 
+# ATT: Plones fucked up translate.py script returns the translated
+# string in the encoding of the .po file instead of returning unicode
+# or at least string+encoding
+
 if query_id=='':
     msg = context.translate(msgid='no_search_for_deletion', default='No search for deletion selected', domain='plonecollectorng')
     context.REQUEST.RESPONSE.redirect('pcng_member_preferences?portal_status_message=%s' % msg)
@@ -10,7 +14,7 @@ if query_id=='':
 mstool = context.portal_membership
 
 if mstool.isAnonymousUser(): 
-    msg = context.Translate('unknown_user', 'Unknown user')
+    msg = context.translate(msgid='unknown_user', default='Unknown user', domain='plonecollectorng')
     context.REQUEST.RESPONSE.redirect('pcng_view?portal_status_message=%s' % msg)
     return
 
@@ -23,6 +27,6 @@ if context.REQUEST.has_key('delete'):
 
 member.setProperties({'pcng_saved_searches' : saved_searches})
 
-msg = context.Translate('changes_saved', 'Changes saved')
+msg = context.translate(msgid='changes_saved', default='Changes saved', domain="plonecollectorng")
 context.REQUEST.RESPONSE.redirect('pcng_member_preferences?portal_status_message=%s' % msg)
 
