@@ -1,67 +1,62 @@
 """
-$Id: test_basic.py,v 1.1 2005/02/28 05:10:39 limi Exp $
+$Id: test_basic.py,v 1.2 2005/03/09 18:00:43 dtremea Exp $
 """
 
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from common import *
-from DateTime.DateTime import DateTime
+from Testing import ZopeTestCase
+from Products.PloneSoftwareCenter.tests import PSCTestCase
 
-now = DateTime()
+from Products.PloneSoftwareCenter import config
 
-class TestBasic(ArcheSiteTestCase):
+
+class TestPortalTypes(PSCTestCase.PSCTestCase):
 
     def afterSetUp(self):
-        self.login('manager')
-        qi = getToolByName(self.portal, 'portal_quickinstaller')
-        qi.installProduct('PloneSoftwareCenter')
+        self.types = self.portal.portal_types.objectIds()
 
-    def test_populate(self):
-        fp, frf, fr, ff = populate(
-                self.folder, 'Formulator', '1.6', 'formulator.tgz')
-        self.assertEqual(ff.portal_type, 'PSCFile')
-        self.assertEqual(frf.portal_type, 'PSCReleaseFolder')
-        self.assertEqual(fr.portal_type, 'PSCRelease')
-        self.assertEqual(fp.portal_type,'PSCProject')
+    def testPortalTypesExists(self):
+        types = [
+            'PloneSoftwareCenter',
+            'PSCProject',
+            'PSCImprovementProposalFolder',
+            'PSCImprovementProposal',
+            'PSCReleaseFolder',
+            'PSCRelease',
+            'PSCFile',
+            'PSCFileLink',
+        ]
+        for t in types:
+            self.failUnless(t in self.types, 'Type not installed: %s' % t)
 
-    def test_release_folder(self):
-        fp, frf, fr, ff = populate(
-                self.folder, 'Formulator', '1.6', 'formulator.tgz')
-        self.assertEqual(fp.getReleaseFolder(), frf)
+    def testPSCAllowedTypes(self):
+        psc = self.portal.portal_types.getTypeInfo('PloneSoftwareCenter')
+        self.failUnless('PSCProject' in psc.allowed_content_types)
+        self.failUnlessEqual(len(psc.allowed_content_types), 1)
 
-    def test_latest_release(self):
-        fp, frf, fr, ff = populate(
-                self.folder, 'Formulator', '1.6', 'formulator.tgz')
-        fr2 = new_release(frf, '1.7')
-        self.assertEqual(fp.getLatestRelease(), fr2)
-        fr.setEffectiveDate(now)
-        self.assertEqual(fp.getLatestRelease(), fr)
 
-    def test_unique_id(self):
-        fp, frf, fr, ff = populate(
-                self.folder, 'Formulator', '1.0', 'formulator.tgz')
-        self.assertEqual(frf.generateUniqueId('PSCRelease'), "1.1")
-        fr2 = new_release(frf, '2.7')
-        self.assertEqual(frf.generateUniqueId('PSCRelease'), "2.8")
+class TestFolderContainment(PSCTestCase.PSCTestCase):
 
-        
-    def test_portalTypes(self):
-        types = self.portal.portal_types
-        self.failUnless('PloneSoftwareCenter' in types.objectIds())
-        #self.failUnless('PSCProjectDependency' in types.objectIds())
-        #self.failUnless('PSCProjectDependencyContainer' in types.objectIds())
-        self.failUnless('PSCFile' in types.objectIds())
-        self.failUnless('PSCRelease' in types.objectIds())
-        self.failUnless('PSCImprovementProposal' in types.objectIds())
-        self.failUnless('PSCImprovementProposalFolder' in types.objectIds())
+    def afterSetUp(self):
+        # XXX: Check with restricted permissions later
+        self.setRoles(['Manager'])
+        self.folder.invokeFactory('PloneSoftwareCenter', id='psc')
+
+    def testPSCContainment(self):
+        self.folder.psc.invokeFactory('PSCProject', id='p')
+        self.failUnless('p' in self.folder.psc.objectIds())
+        p_ids = self.folder.psc.p.objectIds()
+        self.failUnless(config.RELEASES_ID in p_ids)
+        self.failUnless(config.IMPROVEMENTS_ID in p_ids)
 
 
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestBasic))
+    suite.addTest(makeSuite(TestPortalTypes))
+    suite.addTest(makeSuite(TestFolderContainment))
     return suite
 
 if __name__ == '__main__':

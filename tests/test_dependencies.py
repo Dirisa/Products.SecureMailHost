@@ -1,23 +1,16 @@
 """
-$Id: test_dependencies.py,v 1.1 2005/02/28 05:10:39 limi Exp $
+$Id: test_dependencies.py,v 1.2 2005/03/09 18:00:43 dtremea Exp $
 """
 
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from common import *
+from Testing import ZopeTestCase
+from Products.PloneSoftwareCenter.tests import PSCTestCase
 
 
-class TestDependencies(ArcheSiteTestCase):
-
-    def afterSetUp(self):
-        ArcheSiteTestCase.afterSetUp(self)
-        user = self.getManagerUser()
-        newSecurityManager(None, user)
-        portal = self.getPortal()
-        qi = getToolByName(portal, 'portal_quickinstaller')
-        qi.installProduct('PloneSoftwareCenter')
+class TestDependencies(PSCTestCase.PSCTestCase):
 
     def test_dependencies(self):
         portal = self.getPortal()
@@ -49,10 +42,9 @@ class TestDependencies(ArcheSiteTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    # Seems like dependencies have been disabled.
+    # Dependencies have been disabled
     #suite.addTest(makeSuite(TestDependencies))
     return suite
 
 if __name__ == '__main__':
     framework()
-

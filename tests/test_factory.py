@@ -1,12 +1,14 @@
 """
-$Id: test_factory.py,v 1.1 2005/02/28 05:10:39 limi Exp $
+$Id: test_factory.py,v 1.2 2005/03/09 18:00:43 dtremea Exp $
 """
 
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from common import *
+from Testing import ZopeTestCase
+from Products.PloneSoftwareCenter.tests import PSCTestCase
+
 from Products.PloneSoftwareCenter.factory import Factory
 from Products.PloneSoftwareCenter.factory import registerFactory
 from Products.PloneSoftwareCenter.factory import getFactory
@@ -25,15 +27,7 @@ class BarFactory(Factory):
         if not 'bar' in context.objectIds():
             makeContent(context, portal_type='PSCRelease', id='bar')
 
-class TestFactory(ArcheSiteTestCase):
-
-    def afterSetUp(self):
-        ArcheSiteTestCase.afterSetUp(self)
-        user = self.getManagerUser()
-        newSecurityManager(None, user)
-        portal = self.getPortal()
-        qi = getToolByName(portal, 'portal_quickinstaller')
-        qi.installProduct('PloneSoftwareCenter')
+class TestFactory(PSCTestCase.PSCTestCase):
 
     def test_factory(self):
         registerFactory('foo', FooFactory())
@@ -61,7 +55,7 @@ class TestFactory(ArcheSiteTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    # Settings have been disabled too.
+    # Factory have been disabled.
     #suite.addTest(makeSuite(TestFactory))
     return suite
 
