@@ -755,8 +755,7 @@ msgstr "Hochladen"
 msgid "progress_percent_done"
 msgstr "Fertig (Prozent)"
 
-msgid "help_notifications"
-msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Email-Adressen eingetragen werden, die im Falle eines Workflow-Änderungen eines Tickets ebenfalls eine Benachrichtigung erhalten. Jede Email-Adresse muß in eine eigene Reihe innerhalb des Textarea Elementes eingetragen werden."
+
 
 msgid "help_reindex_issues"
 msgstr "Alle Tickets müssen nach der Umbenennung oder Verschieben der Collector Instanz reindexiert werden"
@@ -1031,3 +1030,21 @@ msgstr "Metadaten"
 
 msgid "permissions"
 msgstr "Berechtigungen"
+
+msgid "help_configuration"
+msgstr "Konfiguration der wichtigsten PloneCollectorNG Aspekte"
+
+msgid "help_staff_configuration"
+msgstr "Zuweisung von Personen zu dieser PloneCollectorNG Instanz"
+
+msgid "help_schema_editor"
+msgstr "Der SchemaEditor ändern das Schema der Tickets (Daten, die über ein Ticket erfaßt werden)"
+
+msgid "help_topic_groups"
+msgstr "Topic Gruppen erlauben die Zuweisung eines Tickets an eine Gruppe von Personen, die für ein gegebenes Ticket konfiguriert sind"
+
+msgid "help_notifications"
+msgstr "In diesem Formular können für jeden der Workflowzustände zusätzliche Email-Adressen eingetragen werden, die im Falle eines Workflow-Änderungen eines Tickets ebenfalls eine Benachrichtigung erhalten. Jede Email-Adresse muß in eine eigene Reihe innerhalb des Textarea Elementes eingetragen werden."
+
+msgid "help_maintenance"
+msgstr "Verschiedene weitere Optionen zur Wartung dieser PloneCollectorNG Instanz"
