@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.53 2003/10/26 10:43:06 ajung Exp $
+$Id: Issue.py,v 1.54 2003/10/26 13:17:28 ajung Exp $
 """
 
 import sys, os
@@ -13,6 +13,7 @@ from urllib import unquote
 
 from Globals import Persistent, InitializeClass
 from AccessControl import  ClassSecurityInfo, Unauthorized
+from OFS.content_types import guess_content_type
 from Acquisition import aq_base
 from DateTime import DateTime
 from Products.CMFCore import CMFCorePermissions
@@ -312,7 +313,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         if uploaded_file:
             file_id = uploaded_file.filename
             file_id = file_id.split('/')[-1].split('\\')[-1]
-            self.invokeFactory('File', file_id)
+
+            ct = guess_content_type(file_id, uploaded_file.read())
+            print ct
+            if ct[0].find('image') > -1:
+                self.invokeFactory('Image', file_id)
+            else:
+                self.invokeFactory('File', file_id)
+
             obj = self._getOb(file_id)
             obj.manage_permission(CMFCorePermissions.View, acquire=1)
             obj.manage_permission(CMFCorePermissions.AccessContentsInformation, acquire=1)
