@@ -380,3 +380,20 @@ class TransactionalMailQueue(MailQueue):
         Sort order isn't important. Returning 1 is fine
         """
         return 1
+
+def enqueueMail(mail):
+    """Adds a mail to the transactional queue
+    """
+    transaction = get_transaction()
+    queue = None
+    # try to find a mail queue in the list of data managers
+    for dm in transaction._objects:
+        if IMailQueue.isImplementedBy(dm):
+            queue = dm
+            break
+    # create and register a new one if no mail queue is registered
+    if queue is None:
+        queue = TransactionalMailQueue()
+        transaction.register(queue)
+    # add mail to queue
+    queue.queue(mail)

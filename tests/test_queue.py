@@ -13,6 +13,7 @@ from Products.SecureMailHost.mailqueue import MailQueue
 from Products.SecureMailHost.mailqueue import AnyDBMailStorage
 from Products.SecureMailHost.mailqueue import TransactionalMailQueue
 from Products.SecureMailHost.mailqueue import mailQueue
+from Products.SecureMailHost.mailqueue import enqueueMail
 from Products.SecureMailHost.mail import Mail
 from Products.SecureMailHost.interfaces import IMailQueue
 from Products.SecureMailHost.interfaces import IDataManager
@@ -92,8 +93,35 @@ class TestTransactionalMailQueue(TestMailQueue):
         self.failUnlessEqual(tq._queue, {})
         self.failUnless(mailQueue.has_key(mailId))
         self.failUnless(mailQueue.get(mailId) is mail)
-
         
+    def test_enqueueMail(self):
+        transaction = get_transaction()
+        msg = MIMEText('foo body')
+        mail = Mail('foo@example.com', 'bar@example.com', msg)
+        mail.setId('aTestMail')
+        mailId = mail.getId()
+
+        mail2 = Mail('foo@example.net', 'bar@example.net', msg)
+        mail2.setId('aTestMail2')
+        mailId2 = mail2.getId()
+        
+        enqueueMail(mail)
+        enqueueMail(mail2)
+        
+        queues = []
+        for dm in transaction._objects:
+            if IMailQueue.isImplementedBy(dm):
+                queues.append(dm)
+                
+        # there mustn't be more then one mail queue in transaction
+        self.failUnlessEqual(len(queues), 1)
+        
+        tq = queues[0]
+        self.failUnlessEqual(len(tq), 2)
+        self.failUnless(tq.has_key(mailId))
+        self.failUnless(tq.has_key(mailId2))
+
+
 tests.append(TestTransactionalMailQueue)
 
 

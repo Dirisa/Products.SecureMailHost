@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.19.2.3 2004/09/18 13:18:31 tiran Exp $
+$Id: SecureMailHost.py,v 1.19.2.4 2004/09/19 10:58:28 tiran Exp $
 """
 
 try:
@@ -53,7 +53,7 @@ from Products.SecureMailHost.mail import Mail
 # import mailQueue if we are using the async mailer
 if USE_ASNYC_MAILER:
     from Products.SecureMailHost.mailqueue import mailQueue
-    from Products.SecureMailHost.mailqueue import TransactionalMailQueue
+    from Products.SecureMailHost.mailqueue import enqueueMail
     # start async thread if the queue isn't empty
     if len(mailQueue):
         from Products.SecureMailHost.asyncmailer import initializeMailThread
@@ -274,8 +274,7 @@ class SecureMailBase(MailBase):
         if debug:
             return mail
         else:
-            queue = TransactionalMailQueue()
-            queue.queue(mail)
+            enqueueMail(mail)
 
     if USE_ASNYC_MAILER:
         _send = __A_SYNC_send
