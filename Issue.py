@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.151 2004/04/06 15:06:07 ajung Exp $
+$Id: Issue.py,v 1.152 2004/04/07 09:26:55 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -468,7 +468,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         l = []
         l.extend(self.objectIds())
         l.extend([o.title_or_id() for o in self.objectValues()])
-        l.append(self.format_transcript().encode(encoding))
+        try:  # suppress exceptions during creation phase
+            l.append(self.format_transcript().encode(encoding))
+        except:
+            pass
 
         for field in self.Schema().fields():
             v = getattr(self, field.getName())   # retrieve value directly as unicode
