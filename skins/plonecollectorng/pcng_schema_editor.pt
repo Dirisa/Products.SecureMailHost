@@ -1,0 +1,93 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plonecollectorng">
+
+<body>
+
+  <div metal:fill-slot="main">
+
+    <h1 i18n:translate="heading_edit_schema">Edit schema</h1>
+    <div 
+	   tal:define="default_fieldset python: 'default';
+                   fieldset request/fieldset|default_fieldset;
+                   fieldsets python:[key for key in here.getSchemaNames() if key != 'metadata'];"
+           tal:omit-tag="">
+       <div tal:condition="fieldsets">  <!-- Navigation -->
+         <tal:block repeat="set fieldsets">
+           <div tal:condition="python: set == fieldset and fieldsets != ['default']" tal:omit-tag="">
+             <b>[<span tal:content="set" />]</b>
+           </div>
+           <div tal:condition="python: set != fieldset" tal:omit-tag="">
+             <a href="#" tal:attributes="href string:${here/absolute_url}/portal_form/pcng_schema_editor?fieldset=${set}">
+                [<span tal:content="set" />]</a>
+           </div>
+         </tal:block>
+       </div>  <!-- EOF Navigation -->
+     <form action="schema_update" method="post">
+       <input type="hidden" name="fieldset" tal:attributes="value fieldset">
+       <table class="listing">
+         <tr>
+           <th>Fieldname</th>
+           <th>Type</th>
+           <th>Widget</th>
+           <th>Size</th>
+           <th>Vocabulary</th>
+           <th>Default</th>
+           <th>Required</th>
+           <th>Visible</th>
+         </tr>
+         <tr tal:repeat="field python: here.getSchema(fieldset).fields()" >
+          <th tal:content="field/getName" />
+          <td valign="top">
+            <select tal:attributes="name string:${field/getName}.field:record:string">
+              <span tal:repeat="item python: ('StringField', 'IntegerField')">
+                <option tal:attributes="value item"
+                        tal:content="item" />
+              </span>
+            </select>
+           </td>
+          <td valign="top">
+            <select tal:attributes="name string:${field/getName}.widget:record:string">
+              <span tal:repeat="item python: ('String', 'Select', 'Radio', 'Textarea')">
+                <option tal:attributes="value item"
+                        tal:content="item" />
+              </span>
+            </select>
+           </td>
+          <td valign="top">
+            <input type="text" value="20" size="2" 
+                   tal:attributes="name string:${field/getName}.widgetsize:record:int"/>
+           </td>
+          <td valign="top">
+            <textarea cols="40" rows="3"
+                   tal:attributes="name string:${field/getName}.vocabulary:record:lines"> </textarea>
+           </td>
+          <td valign="top">
+            <input type="text" value="" size="20" 
+                   tal:attributes="name string:${field/getName}.default:record:string"/>
+           </td>
+          <td valign="top">
+            <input type="checkbox" value="1" 
+                   tal:attributes="name string:${field/getName}.required:record:int"/>
+           </td>
+          <td valign="top">
+            <input type="checkbox" value="1" 
+                   tal:attributes="name string:${field/getName}.visible:record:int"/>
+            <input type="hidden" 
+                   tal:attributes="name string:${field/getName}.order:record:int;
+                                   value repeat/field/index"/>
+           </td>
+         </tr>
+ 
+         <tr> 
+           <td colspan="5">
+             <input type="submit">
+           </td>
+       </table>
+    </form>
+     </div>
+  </div>
+
+</body>
+</html>
