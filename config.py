@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.26 2004/10/10 14:26:09 ajung Exp $
+$Id: config.py,v 1.27 2004/10/17 14:22:54 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -40,7 +40,7 @@ setDefaultRoles(EmailSubmission, ('Manager', 'EmailSubmitter'))
 SEARCHFORM_IGNOREABLE_INDEXES = ('progress_deadline', 'created', 'numberFollowups', 'getId', 'SearchableText', 'last_action')
 
 # These fields can not be deleted through the SchemaEditor
-UNDELETEABLE_FIELDS = ('title', 'description', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
+UNDELETEABLE_FIELDS = ('title', 'description', 'solution', 'classification', 'topic', 'importance', 'contact_email', 'contact_name')
 
 # ATSchemaEditorNG
 SCHEMA_ID = 'PloneIssueNG'
