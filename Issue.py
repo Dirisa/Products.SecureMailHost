@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.41 2003/10/12 20:40:59 ajung Exp $
+$Id: Issue.py,v 1.42 2003/10/15 16:23:10 ajung Exp $
 """
 
 import sys, os
@@ -17,6 +17,7 @@ from Acquisition import aq_base
 from DateTime import DateTime
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
+from Products.Archetypes.Schema import Schemata
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 
@@ -90,6 +91,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self._last_action = None    # last action from the followup form
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
+
+    def Schema(self):
+        """ return our schema (through acquisition....uuuuuh """
+
+        schema = getattr(self, '_v_schema', None)
+        if schema is None:
+            self._v_schema = self.schema_getWholeSchema()
+        return self._v_schema
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
@@ -321,14 +330,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     ######################################################################
     # Callbacks for parent collector instance
     ######################################################################
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'updateSchema')
-    def updateSchema(self, schema):
-        """ Update the schema. Called from the PloneCollectorNG instance
-            to update all schemas of all childs since the schema is an
-            instance attribute and not a class attribute.
-        """
-        self.schema = schema
 
     def add_issue(self, RESPONSE):
         """ redirect to parent """
