@@ -17,9 +17,9 @@
 
 <body>
 
-  <div metal:fill-slot="css_slot">
-    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
-  </div>
+  <metal:block metal:fill-slot="head_slot">
+    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+  </metal:block>
 
   <div metal:fill-slot="main">
     <div metal:define-macro="main"

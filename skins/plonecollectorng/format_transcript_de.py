@@ -20,7 +20,7 @@ nl('-'*75 + '\n')
 n = 0
 groups = context.getTranscript().getEventsGrouped()
 for group in groups:
-    datestr = context.toPortalTime(DateTime.DateTime(group[0].created), long_format=1)
+    datestr = context.toLocalizedTime(DateTime.DateTime(group[0].created), long_format=1)
     uid = group[0].user
     nl('#%d %s %s (%s) ----------------------------' % (len(groups)-n, context.lastAction().capitalize(), datestr, uid)) 
     for ev in group:

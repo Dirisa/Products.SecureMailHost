@@ -35,7 +35,7 @@
     <span tal:repeat="events groups">
       <div class="transcriptheader">
         #<span tal:content="python: num_groups - repeat['events'].index" />:
-         <span tal:content="python: here.toPortalTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
+         <span tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> (<span tal:content="python: events[0].getUser()" />)
       </div>
 
       <metal:block tal:repeat="event events">
@@ -88,7 +88,7 @@
     </tr>
 
     <tr tal:repeat="events groups">
-      <td valign="top" tal:content="python: here.toPortalTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
+      <td valign="top" tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
       <td valign="top" tal:content="python: events[0].getUser()" />
 
       <td valign="top">           
@@ -163,8 +163,8 @@
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toPortalTime(issue.created)" /> &bull; 
-          <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toPortalTime(issue.modified)" />
+          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
+          <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toLocalizedTime(issue.modified)" />
           (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
           <span i18n:translate="days_ago">days ago</span>)
 

@@ -8,7 +8,11 @@ query = {}
 
 def toQuery(key):
     if R.has_key(key):
-        query[key]= R[key]
+        if key == 'SearchableText':
+            if R[key]:
+                query[key]= R[key] 
+        else:
+            query[key]= R[key]     
 
 def query_sort(a, b):
     """ helper method to sort the result list """
@@ -25,11 +29,8 @@ def query_sort(a, b):
 # here starts the show
 
 toQuery('SearchableText')
-toQuery('status')
-toQuery('Creator')
-toQuery('assigned_to')
-toQuery('importance')
-toQuery('topic')
+for idx_id, idx_type in context.getIndexes():
+    toQuery(idx_id)
 
 # Default query
 if len(query) == 0:

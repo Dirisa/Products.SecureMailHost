@@ -12,7 +12,7 @@ def quote_text(text):
 for ev in context.getTranscript().getEvents():
     if ev.getType() == 'comment' and str(ev.getTimestamp()) == str(timestamp):
         text = context.translate('folloup_heading', 'Created by $user on $date', 
-                                 date=context.toPortalTime(DateTime(ev.getTimestamp()), long_format=1), 
+                                 date=context.toLocalizedTime(DateTime(ev.getTimestamp()), long_format=1), 
                                  user=ev.getUser())
         text += '\n\n'
         text += quote_text(ev.getValue('comment'))

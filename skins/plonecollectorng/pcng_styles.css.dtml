@@ -1,5 +1,5 @@
-<metal:block metal:define-macro="stylesheet" >
-<style type="text/css">
+
+/* <dtml-with stylesheet_properties> (do not remove this :) */
 
 span.label {
     font-weight: bold;
@@ -89,5 +89,7 @@ h2.tracker_overview {
 div.portletBody {
     padding: 0.5em;
 }
-</style>
-</metal:block>
+
+
+
+/* </dtml-with> */

@@ -5,78 +5,51 @@
       i18n:domain="plonecollectorng">
 
 <body>
-  <div metal:fill-slot="css_slot">
-    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
-  </div>
+  <metal:block metal:fill-slot="head_slot">
+    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+  </metal:block>
+
   <div metal:fill-slot="main">
 
     <metal:block tal:define="action string: Search form editor">
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
 
-    <form action="pcng_view" method="GET"  name="search_form" 
-          tal:define="schema here/atse_getSchema">
-    <table tal:define="settings here/getSearchForm" >
-      <tr>
-        <tal:loop tal:repeat="item python: here.getSearchForm().keys()">
-          <th tal:condition="python: settings[item]['mode'] == 'selectwidget'">
-            <tal:if tal:condition="python: schema.has_key(item)">
-              <tal:def tal:define="field python: schema[item]" >
-                <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />
-              </tal:def>
-            </tal:if>
-            <tal:if tal:condition="not: python: schema.has_key(item)">
-              <span class="schemata_label" tal:content="item" i18n:translate=""/>
-            </tal:if>
-          </th>
-        </tal:loop>
-      </tr>
+    <form action="xx" method="GET" name="search_form">
 
-      <tr>
-        <tal:loop tal:repeat="item python: settings.keys()">
-          <td tal:condition="python: settings[item]['mode'] == 'selectwidget'" >
-            <select tal:attributes="name item" multiple size="5">
-              <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item)" >
-                <option tal:attributes="value entry" tal:content="entry" />
-              </tal:loop>
-            </select>
-          </td>
-        </tal:loop>
-      </tr>
-    </table>
+      <tal:loop tal:repeat="item here/getIndexes">
+        <div>
+          <span class="label" i18n:translate="" tal:content="python: item[0]" />
+          <div>
+            <tal:if tal:condition="python: item[1] in ('FieldIndex','KeywordIndex')">
+              <select multiple size="5"
+                      tal:attributes="name python: '%s:%s' % (item[0], here.pcng_type_indexed_values(item[0]))">
+                <tal:loop tal:repeat="entry python: here.pcng_uniquevalsFor(item[0])" >
+                  <option tal:attributes="value entry;
+                                          selected python: request.get(item[0],'')==entry" 
+                          tal:content="entry" />
+                </tal:loop>
+              </select>
+            </tal:if>
 
-    <table tal:define="settings here/getSearchForm">
-      <tal:loop tal:repeat="item python: settings.keys()">
-        <tr tal:condition="python: settings[item]['mode'] == 'stringwidget'" >
-          <th>
-            <tal:if tal:condition="python: schema.has_key(item)"
-                    tal:define="field python: schema[item]">
-              <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
+            <tal:if tal:condition="python: item[1].find('TextIndex') > -1">
+              <input type="text" tal:attributes="name python: item[0]" value="" size="30">
             </tal:if>
-            <tal:if tal:condition="not: python: schema.has_key(item)">
-              <span class="schemata_label" tal:content="item" i18n:translate=""/>
-            </tal:if>
-          </th>
-          <td colspan="3">
-            <input type="text" tal:attributes="name item" value="" size="30">
-            <span tal:content="python: here.pcng_getIndexTypeFor(item)" />
-          </td>
-        </tr>
+          <div>
+        </div>
       </tal:loop>
 
-      <tr>
-        <th>
-          <span i18n:translate="fulltextsearch">Fulltext search</span>
-        </th>
-        <td colspan="3">
+      <div>
+        <span class="label" i18n:translate="fulltextsearch">Fulltext search</span>
+        <div>
           <input type="text" name="SearchableText" value="" size="30" tal:attributes="value request/SearchableText|nothing">
-        </td>
-      </tr>
+        </div>
+      </div>
 
-      <tr>
-        <th align="left" i18n:translate="sorting">Sorting</th>
+      <div>
+        <span class="label" align="left" i18n:translate="sorting">Sorting</span>
 
-        <td align="center" valign="top" colspan="2">
+        <div>
           <select name="sort_on" size="1">
             <option i18n:translate=""
                     tal:repeat="item python: (
@@ -106,11 +79,11 @@
                                      selected python: request.get('sort_direction', 'desc') == item[0]"
                      tal:content="python: item[1]" />
           </select> 
-        </td>
+        </div>
             
-        <th i18n:translate="hits_per_page">Hits per page</th>
+        <span class="label" i18n:translate="hits_per_page">Hits per page</span>
 
-        <td align="center" valign="top">                      
+        <div>
           <select name="batchsize:int" size="1">
             <option i18n:translate=""
                     tal:repeat="item python: (
@@ -125,15 +98,13 @@
                                      selected python: request.get('batchsize', 10) == item[0]"
                      tal:content="python: item[1]" />
           </select> 
-        </td>
-      </tr>
+        </div>
 
-      <tr>
-        <td colspan="3">
-          <input type="submit" value="Search" i18n:attributes="value" class="standalone">
-        </td>
-      </tr>
-    </table>
+      <div>
+        <input type="submit" value="Search" i18n:attributes="value" class="standalone">
+      </div>
+      
+      </div>
     </form>
 
   </div>

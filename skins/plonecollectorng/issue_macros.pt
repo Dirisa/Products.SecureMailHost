@@ -89,7 +89,7 @@
                  tal:attributes="href item/absolute_url"
                  tal:content="item/id">ITEM ID</a>
 
-              <span tal:replace="python: '(%s, %s)' % (here.toPortalTime(item.created(),long_format=1), item.Creator())" />
+              <span tal:replace="python: '(%s, %s)' % (here.toLocalizedTime(item.created(),long_format=1), item.Creator())" />
               <a i18n:translate="issue_artifacts_table_info_link"
                  tal:attributes="href python:item.absolute_url() + '/view'">[Info]</a>
 
@@ -113,7 +113,7 @@
     <form method="post" action="upload_file" enctype="multipart/form-data">
 
       <div class="row">
-          <div class="label">&nbsp;</div>
+          <div class="label required" i18n:translate="file_for_upload">File for upload</div>
           <div class="field"><input type="file" name="uploaded_file" size="40"/></div>
       </div> <!-- End row -->
 
@@ -175,7 +175,7 @@ function show_tickets() {
       </div> <!-- End row -->
 
       <div class="row">
-        <div class="required_label" i18n:translate="add_references_table_issue_number">Issue #</div>
+        <div class="label required" i18n:translate="add_references_table_issue_number">Issue #</div>
         <div class="field">
           <input type="text" name="reference.ticketnumber:record:string"  value="" size="5" />
           <input class="context" type="button"  onClick="javascript:show_tickets()" value="Select"
@@ -184,7 +184,7 @@ function show_tickets() {
       </div> <!-- End row -->
 
       <div class="row">
-        <div class="required_label" i18n:translate="add_references_table_comment">
+        <div class="label required" i18n:translate="add_references_table_comment">
           Comment
         </div>
         <div class="field">

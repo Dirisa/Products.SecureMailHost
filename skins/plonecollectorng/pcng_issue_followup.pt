@@ -5,9 +5,9 @@
       i18n:domain="plonecollectorng">
 
 <body>
-<div metal:fill-slot="css_slot">
-  <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
-</div>
+<metal:block metal:fill-slot="head_slot">
+  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+</metal:block>
 <div metal:fill-slot="main">	  
 
   <metal:block tal:define="action string: Followup">
@@ -56,7 +56,8 @@
           <td width="200"> </td>
 
           <td valign="top" tal:define="actions here/validActions">
-            <input type="radio" name="action" value="comment" checked>Comment
+            <input class="required" type="radio" name="action" value="comment" checked>
+              <span i18n:translate="comment">Comment</span>
             <tal:loop tal:repeat="action actions">
               <br><input type="radio" name="action" 
                          tal:attributes="value action;

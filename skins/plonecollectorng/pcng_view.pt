@@ -4,9 +4,11 @@
       i18n:domain="plonecollectorng"
       metal:use-macro="here/main_template/macros/master">
   <body>
-    <div metal:fill-slot="css_slot">
-      <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
-    </div>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
     <div metal:fill-slot="main" 
          tal:define="search_form_position python: member.getProperty('pcng_position_searchform', 'bottom')">
 
@@ -24,6 +26,8 @@
         <span tal:define="dummy python: request.set('status', ['pending', 'accepted']);
                           dummy python: request.set('Creator', [member.getUserName()])" />
       </metal:block>   
+
+      <div metal:use-macro="here/pcng_navigation/macros/collector_navigation" />
 
       <metal:block tal:define="action string: Browse issues">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
