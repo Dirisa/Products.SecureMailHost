@@ -36,3 +36,7 @@ Installation:
 
   - select "Plone Collector NG" from the add-list of the folder_contents view
     of a folder and create a new instance
+
+  You can also use the Plone frontend. Go to "Plone setup". Choose
+  "Add/remove products" and select "PloneCollectorNG" to be installed. That's
+  it. 
