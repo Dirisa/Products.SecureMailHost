@@ -797,3 +797,12 @@ msgstr "Änderung"
 
 msgid "reject"
 msgstr "Zurueckgewiesen"
+
+msgid "page_number"
+msgstr "Seite $num"
+
+msgid "collector_id"
+msgstr "Bugtracker $id"
+
+msgid "date_on"
+msgstr "am"

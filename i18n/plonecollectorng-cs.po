@@ -434,9 +434,6 @@ msgstr "Políèka"
 msgid "maintenance"
 msgstr "Správa"
 
-msgid "Maintenance"
-msgstr "Správa"
-
 msgid "name"
 msgstr "Jméno"
 
