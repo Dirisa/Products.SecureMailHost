@@ -9,10 +9,32 @@
 
 REQUEST = context.REQUEST
 
-context.processForm()
+new_context = None
+if context.meta_type == 'PloneIssueNG':
+    if context.portal_factory.isTemporary(context):
+        id = context.new_issue_number()
+        new_context = context.portal_factory.doCreate(context, id)
+        new_context.processForm()
+    else:
+        try:        
+            id = int(context.getId())
+            context.processForm()
+            new_context = context
+        except:
+            id = context.new_issue_number()
+            parent = context.aq_parent
+            context.processForm()
+            parent.manage_renameObjects([context.getId()], [id])
+            new_context = getattr(parent, id)            
+            new_context.processForm()
 
-portal_status_message = REQUEST.get('portal_status_message', context.translate('changes_saved', 'Content changes saved'))
+        
+else:
+    new_context = context.portal_factory.doCreate(context, id)
+    new_context.processForm()
+
+portal_status_message = REQUEST.get('portal_status_message', new_context.translate('changes_saved', 'Content changes saved'))
 return state.set(status='success',\
-                 context=context,\
+                 context=new_context,\
                  portal_status_message=portal_status_message)
 
