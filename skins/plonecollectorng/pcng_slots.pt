@@ -1,0 +1,53 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plonecollectorng">
+
+<body>
+
+<!-- The news box -->
+
+<div metal:define-macro="navigation">
+
+    <tal:if tal:condition="python: here.meta_type=='PloneIssueNG'">
+      <div metal:use-macro="here/pcng_slots/macros/issue_metadata" />
+    </tal:if>
+
+    <tal:if tal:condition="python: here.meta_type=='PloneCollectorNG'">
+      <div metal:use-macro="here/pcng_slots/macros/collector_metadata" />
+    </tal:if>
+
+</div>
+
+<div metal:define-macro="collector_metadata">
+  <div class="portlet" id="pcng-collector-metadata">
+    <h5 i18n:translate="collector_metadata">Collector data</h5>
+    <div class="portletBody">
+      <ul>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Issue metadata -->
+<div metal:define-macro="issue_metadata">
+  <div class="portlet" id="pcng-issue-metadata">
+    <h5 i18n:translate="issue_metadata">Issue data</h5>
+    <div class="portletBody">
+      <ul>
+        <li>
+            <span i18n:translate="creator">Creator</span>:
+            <span tal:replace="here/Creator" />
+        </li>
+        <li>
+            <span i18n:translate="created">Created</span>:
+            <span tal:replace="python: here.toLocalizedTime(here.created())" />
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

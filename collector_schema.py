@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.37 2004/03/12 16:12:11 ajung Exp $
+$Id: collector_schema.py,v 1.38 2004/04/04 08:43:49 ajung Exp $
 """
 
 
@@ -43,6 +43,11 @@ VOC_SLOTS_MODE= DisplayList((
   ('left', 'Keep left Plone slot, clear right'),
   ('right', 'Clear left Plone slot, keep right'),
   ('clear', 'Clear all Plone slots'),
+))
+
+VOC_NAVIGATION_SLOT = DisplayList((
+  ('yes', 'Yes'),
+  ('no', 'No'),                                       
 ))
 
 
@@ -176,6 +181,15 @@ schema = Schema((
                                        label_msgid='label_slots_mode',
                                        i18n_domain='plonecollectorng'),
                 default='plone',
+                schemata='Look and Feel'
+                ),
+    StringField('navigation_slot',
+                vocabulary=VOC_NAVIGATION_SLOT,
+                widget=SelectionWidget(format='select', 
+                                       label='Navigation slot',
+                                       label_msgid='label_navigation_slot',
+                                       i18n_domain='plonecollectorng'),
+                default='no',
                 schemata='Look and Feel'
                 ),
     ))

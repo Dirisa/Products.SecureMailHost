@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.152 2004/04/04 05:09:11 ajung Exp $
+$Id: Collector.py,v 1.153 2004/04/04 08:43:49 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -221,22 +221,46 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         # Look&Feel slots handling
         if REQUEST.has_key('slots_mode'):
+
+            def del_slot(o, slot):
+                try: delattr(o, slot)
+                except: pass
+
+            orig_left = self.aq_parent.left_slots
+            orig_right = self.aq_parent.right_slots
+            pcng_slot = 'here/pcng_slots/macros/navigation'
+
             mode = REQUEST['slots_mode'] 
-            if mode == 'plone':
-                try: delattr(self, 'left_slots')
-                except: pass
-                try: delattr(self, 'right_slots')
-                except: pass
-            elif mode == 'left':
-                try: delattr(self, 'left_slots')
-                except: pass
-                self.right_slots = []
-            elif mode == 'right':
-                try: delattr(self, 'right_slots')
-                except: pass
-                self.left_slots = []
+            nav_slot = REQUEST['navigation_slot']
+
+            if nav_slot == 'no':
+
+                if mode == 'plone':
+                    del_slot(self, 'left_slots')
+                    del_slot(self, 'right_slots')
+                elif mode == 'left':
+                    del_slot(self, 'left_slots')
+                    self.right_slots = []
+                elif mode == 'right':
+                    self.left_slots = []
+                    del_slot(self, 'right_slots')
+                else:
+                    self.left_slots = self.right_slots = []
+
             else:
-                self.left_slots = self.right_slots = []
+                
+                if mode == 'plone':           
+                    slots = list(orig_left)
+                    slots.append(pcng_slot)
+                    self.left_slots =  slots
+                    del_slot(self, 'right_slots')
+                elif mode == 'left':
+                    self.left_slots = [pcng_slot]
+                    self.right_slots = []
+                elif mode == 'right':
+                    self.left_slots = []
+                    self.right_slots = [pcng_slot]
+                    
 
     ######################################################################
     # Transcript
@@ -454,8 +478,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
 
-        fieldset = REQUEST.get('fieldset', None)
-        if fieldset:
+        if REQUEST and REQUEST.get('fieldset', None):
+            fieldset = REQUEST.get('fieldset', None)
             util.redirect(REQUEST.RESPONSE, 'pcng_base_edit',
                           portal_status_message=REQUEST.get('portal_status_message', ''),
                           fieldset=fieldset)
