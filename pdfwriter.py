@@ -5,11 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.10 2003/11/17 18:32:51 ajung Exp $
+$Id: pdfwriter.py,v 1.11 2003/11/18 10:15:16 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
-from textwrap import wrap, fill
+from textwrap import fill
 
 try:
     from PIL import Image as PIL_Image
@@ -27,6 +27,9 @@ from reportlab.lib.units import inch
 styles = getSampleStyleSheet()
 
 PAGE_HEIGHT = defaultPageSize[1]
+
+def dowrap(text):
+    return fill(text, 100)
 
 def myLaterPages(canvas, doc):
     #canvas.drawImage("snkanim.gif", 36, 36)
@@ -47,7 +50,7 @@ myFirstPage = myLaterPages
 Elements = []
 
 HeaderStyle = styles["Heading3"] 
-HeaderStyle.fontName = 'Helvetica'
+HeaderStyle.fontName = 'Helvetica-Bold'
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
@@ -158,19 +161,19 @@ def pdfwriter(collector, ids):
 
             for ev in group:
                 if ev.type == 'comment':
-                    l.append(fill('<b>Comment:</b>\n%s' % html_quote(ev.comment)))
+                    l.append(dowrap('<b>Comment:</b>\n%s' % html_quote(ev.comment)))
                     pass
                 elif ev.type == 'change':
-                    l.append(fill('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new)))
+                    l.append(dowrap('<b>Changed:</b> %s: "%s" -> "%s"' % (ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
-                    l.append(fill('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed)))
+                    l.append(dowrap('<b>Changed:</b> %s: added: %s , removed: %s' % (ev.field, ev.added, ev.removed)))
                 elif ev.type == 'reference':
-                    l.append(fill('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment)))
+                    l.append(dowrap('<b>Reference:</b> %s: %s/%s (%s)' % (ev.tracker, ev.ticketnum, ev.comment)))
                 elif ev.type == 'upload':
                     s = '<b>Upload:</b> %s/%s ' % (issue.absolute_url(), ev.fileid)
                     if ev.comment:
                         s+= ' (%s)' % ev.comment
-                    l.append(fill(s))
+                    l.append(dowrap(s))
 
             definition('\n'.join(l))
 
