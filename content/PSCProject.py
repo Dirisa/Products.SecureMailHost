@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.2 2005/03/01 21:39:01 limi Exp $
+$Id: PSCProject.py,v 1.3 2005/03/04 00:40:02 optilude Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -129,14 +129,16 @@ class PSCProject(OrderedBaseFolder):
         
     def getLatestRelease(self):
         release_folder = self.getReleaseFolder()
-        releases = release_folder.contentValues('PSCRelease')
-
-        if not releases:
+        
+        catalog = getToolByName(self, 'portal_catalog')
+        res = catalog.searchResults(path = release_folder.getPhysicalPath(),
+                              review_state = 'published',
+                              sort_on = 'effective',
+                              sort_order = 'reverse')
+        if not res:
             return None
-        releases.sort(
-            lambda a,b:cmp(a.getEffectiveDate(), b.getEffectiveDate())
-            )
-        return releases[-1]
+        else:
+            return res[0].getObject()
         
     
     security.declareProtected (ADD_CONTENT_PERMISSION, 'generateUniqueId')
