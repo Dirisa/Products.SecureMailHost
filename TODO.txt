@@ -6,9 +6,6 @@ Developer claiming item/comments is in [brackets].
 Remaining features
 ==================
 
-- The Releases portlet needs to list the Category of the release, therefore it
-  needs to be in the catalog.
-
 - The PSCFileLink object should have a field where you can enter the size of the 
   download manually, since we would like to display this even if the file is
   hosted elsewhere (like with Plone).

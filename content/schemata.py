@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.4 2005/03/09 18:04:43 dtremea Exp $
+$Id: schemata.py,v 1.5 2005/03/09 21:45:42 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -980,6 +980,18 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
             label_msgid="label_file_ext_url",
             description="Please enter the URL where the file is hosted.",
             description_msgid="help_file_ext_url",
+            i18n_domain="archpackage",
+        ),
+    ),
+
+    StringField(
+        name='externalFileSize',
+        required=0,
+        widget=StringWidget(
+            label="File size",
+            label_msgid="label_file_ext_size",
+            description="Please enter the size of the externally hosted file, if known.",
+            description_msgid="help_file_ext_size",
             i18n_domain="archpackage",
         ),
     ),
