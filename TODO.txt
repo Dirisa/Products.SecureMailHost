@@ -18,7 +18,12 @@ Bugs
        instead, at least on plone.org. It should be possible to add a comment
        to a page.
 
-- BUG: RSS feed doesn't work.
+- BUG: RSS feed doesn't work (fix was committed, needs testing, especially with 
+       foreign character sets and UTF-8 chars)
+
+- BUG: From ML: "Error on howto_attachments "name 'translate' is not defined"
+       FYI: I get the above error when trying to view the 
+       attachements tab when writing a howto."
 
 =======
 General
