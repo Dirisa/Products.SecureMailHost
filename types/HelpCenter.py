@@ -32,6 +32,13 @@ class HelpCenter(BaseFolder):
     """A simple folderish archetype"""
     schema = schema
 
+
+    actions = ({
+        'id': 'view',
+        'name': 'View',
+        'action': 'string:${object_url}/helpcenter_view',
+        'permissions': (CMFCorePermissions.View,)
+        },)
     content_icon = 'book_icon.gif'
 
     archetype_name = 'Help Center'
