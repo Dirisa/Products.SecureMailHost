@@ -1,10 +1,11 @@
 """
-$Id: PloneSoftwareCenter.py,v 1.2 2005/03/09 18:04:43 dtremea Exp $
+$Id: PloneSoftwareCenter.py,v 1.3 2005/03/10 17:03:50 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
 
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
@@ -41,6 +42,36 @@ class PloneSoftwareCenter(OrderedBaseFolder):
         },
     )
 
+    security.declarePrivate('validate_availableCategories')
+    def validate_availableCategories(self, value):
+        """Ensure that when setting available categories, we don't accidentally
+        set the same category id as an existing project.
+        """
+        catalog = getToolByName(self, 'portal_catalog')
+        projects = catalog.searchResults(
+                            portal_type = 'PSCProject',
+                            path = '/'.join(self.getPhysicalPath()))
+        
+        categoryIds = [v.split('|')[0] for v in value]
+        projectIds = [p.getId for p in projects]
+
+        empty = []
+        invalid = []
+        for cat in categoryIds:
+            if not cat:
+                empty.append(cat)
+            elif cat in projectIds or categoryIds.count(cat) > 1:
+                invalid.append(cat)
+    
+        if empty:
+            return "Please enter categories as short-name|Long name."
+        if invalid:
+            return "The following short category names are in use, either " \
+                   "by another category, or by a project in the software " \
+                   "center: %s." % (','.join(invalid))
+        else:
+            return None
+            
     security.declarePrivate('_getContained')
     def _getContained(self, states, category, portal_type):
         """Get contained objects of type portal_type
@@ -80,7 +111,7 @@ class PloneSoftwareCenter(OrderedBaseFolder):
     def getCategoriesToList(self, states=[]):
         """Categories that have at least one listable package"""
         categories = {}
-        avail_categories = self.getAvailableCategories()
+        avail_categories = self.getAvailableCategoriesAsDisplayList().keys()
         maxCategories = len(avail_categories)
         for o in self.getPackages(states):
             for s in o.getCategories:
@@ -88,6 +119,12 @@ class PloneSoftwareCenter(OrderedBaseFolder):
             if len(categories) == maxCategories:
                 break
         return [s for s in avail_categories if categories.has_key(s)]
+
+    security.declareProtected(CMFCorePermissions.View,
+                              'getAvailableCategoriesAsDisplayList')
+    def getAvailableCategoriesAsDisplayList(self):
+        """Get categories in DisplayList form."""
+        return self.getField('availableCategories').getAsDisplayList(self)
 
     security.declareProtected(CMFCorePermissions.View,
                               'getAvailableLicensesAsDisplayList')

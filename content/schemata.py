@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.8 2005/03/10 06:13:11 limi Exp $
+$Id: schemata.py,v 1.9 2005/03/10 17:03:50 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -1022,13 +1022,16 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ),
     ),
 
-    LinesField(
+    SimpleDataGridField(
         name='availableCategories',
-        default=['Stand-alone products', 'Add-on components', 'Infrastructure'],
-        widget=LinesWidget(
+        default=[
+            'standalone|Stand-alone products', 
+            'addon|Add-on components', 
+            'intrastructure|Infrastructure'],
+        widget=SimpleDataGridWidget(
             label='Categories',
             label_msgid='label_categories_vocab',
-            description='Define the available categories for classifying these packages.',
+            description='Define the available categories for classifying these packages. The format is Short Name | Long name. The id must be unique.',
             description_msgid='help_categories_vocab',
             i18n_domain='archpackage',
             rows=6,
@@ -1049,7 +1052,9 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ],
         widget=SimpleDataGridWidget(
             label='Licenses',
+            label_msgid='label_licenses_vocab',
             description='Define the available licenses for software releases. The format is Short Name | Title | URL.',
+            description_msgid='help_licenses_vocab',
             i18n_domain='archpackage',
             rows=6,
         ),
@@ -1068,7 +1073,9 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ],
         widget=LinesWidget(
             label='Versions',
+            label_msgid='label_versions_vocab',
             description='Define the vocabulary for versions that software releases can be listed as being compatible with.',
+            description_msgid='help_versions_vocab',
             i18n_domain='archpackage',
             rows=6,
         ),
@@ -1085,7 +1092,9 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ],
         widget=SimpleDataGridWidget(
             label='Release maturities',
-            description='Define the available maturity states for software releases. Format is Name|Description',
+            label_msgid='label_maturities_vocab',
+            description='Define the available maturity states for software releases. Format is Short Name | Description',
+            description_msgid='help_maturities_vocab',
             i18n_domain='archpackage',
             rows=6,
         ),
@@ -1098,7 +1107,9 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         enforceVocabulary=1,
         widget=SelectionWidget(
             label='Preferred maturity',
+            label_msgid='label_preferred_maturity',
             description='When showing the latest release of a project, the software center will prefer releases with this maturity.',
+            description_msgid='help_preferred_maturity',
             i18n_domain='archpackage',
             rows=6,
         ),
@@ -1116,7 +1127,9 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ],
         widget=LinesWidget(
             label='Platforms',
+            label_msgid='label_platforms_vocab',
             description='Define the available platforms for software files.',
+            description_msgid='help_platforms_vocab',
             i18n_domain='archpackage',
             rows=6,
         ),

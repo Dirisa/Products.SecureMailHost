@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.8 2005/03/09 22:51:41 optilude Exp $
+$Id: PSCProject.py,v 1.9 2005/03/10 17:03:49 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -68,6 +68,18 @@ class PSCProject(OrderedBaseFolder):
                        'of meta-data about the project, as well as '
                        'releases and improvement proposals.')
 
+    security.declarePrivate('validate_id')
+    def validate_id(self, value):
+        """Ensure that we don't get a value that is the same as the id of a
+        category. This will break our nice acquisition-fuelled listing templates
+        and generally be bad.
+        """
+        if value in self.getAvailableCategoriesAsDisplayList().keys():
+            return "Short name %s is invalid - " \
+                   "it is the same as the name of a project category" % (value,)
+        else:
+            return None
+
     security.declarePrivate('initializeArchetype')
     def initializeArchetype(self, **kwargs):
         """Initialize package.
@@ -85,8 +97,7 @@ class PSCProject(OrderedBaseFolder):
     def getCategoriesVocab(self):
         """Get categories vocabulary from parent package area via acquisition.
         """
-        return DisplayList([(item, item) for item in \
-                           self.getAvailableCategories()])
+        return self.getAvailableCategoriesAsDisplayList()
 
     security.declareProtected(CMFCorePermissions.View, 'getReleaseFolder')
     def getReleaseFolder(self):
