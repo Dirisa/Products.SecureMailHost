@@ -1,7 +1,7 @@
-PloneLocalFolderNG V 0.2
+PloneLocalFolderNG
 
-    PloneLocalFolderNG is a Plone2-only to mount a local filesystem in
-    read-only mode as a folder into a Plone site.
+    PloneLocalFolderNG is a Plone2-only product to mount a local filesystem as
+    a folder into a Plone site.
 
 Requirements:
 
