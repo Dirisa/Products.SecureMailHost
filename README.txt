@@ -1,5 +1,8 @@
-PloneCollectorNG is (C) by Andreas Jung and
-published under the Zope Public License.
+PloneCollectorNG is (C) by Andreas Jung.
+
+License:
+    
+    see LICENSE.txt
 
 Contact:
 
