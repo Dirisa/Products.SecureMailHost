@@ -43,9 +43,11 @@ topics_user = context.get_topics_user()
 
 if REQUEST.get('assign_ticket', None) == '1':
     assignees = REQUEST.get('assignees', [])
+
     # added users from the assignes_group
-    for group in REQUEST.get('assignees_group', []):
-        assignees.extend(list(topics_user[group]))
+    import group_assignment_policies
+    groups = REQUEST.get('assignees_group', [])
+    assignees.extend(group_assignment_policies.getUsersForGroups(context, groups))
     if assignees:
         new_context.issue_followup(action='accept', assignees=assignees)
 
