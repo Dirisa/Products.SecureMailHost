@@ -1,5 +1,5 @@
-PloneCollectorNG is a Plone/Archetypes based bugtracking system and
-framework.
+PloneCollectorNG is a Plone/Archetypes based bugtracking 
+system and framework.
 
 License:
 

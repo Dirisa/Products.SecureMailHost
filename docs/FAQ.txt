@@ -21,3 +21,8 @@ A: Click on the 'Edit' tab of your PCNG instance and then click on "Schemata: E-
    below the headline. Then choose the corresponding option from the
    "Notifications".
 
+Q: I have hundreds of issues in my collector and they fill up the navigation
+   tree. How can avoid that issues show up in the navigation tree.
+A: Open the ZMI of your Plone site, go to portal_properties ->
+   navtree_properties and add 'PloneIssueNG' to 'metaTypesNotToList'.
+
