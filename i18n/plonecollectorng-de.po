@@ -162,6 +162,9 @@ msgstr "Akzeptieren"
 msgid "Resolve"
 msgstr "Lösen"
 
+msgid "resolve"
+msgstr "Lösen"
+
 msgid "Reject"
 msgstr "Zurückweisen"
 
@@ -914,3 +917,6 @@ msgstr "Sprache für Benachrichtigungen"
 
 msgid "tools_recreated"
 msgstr "Tools wurden neu angelegt"
+
+msgid "medium"
+msgstr "Mittel"
