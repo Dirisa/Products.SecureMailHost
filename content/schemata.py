@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.9 2005/03/10 17:03:50 optilude Exp $
+$Id: schemata.py,v 1.10 2005/03/11 03:13:40 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -1026,8 +1026,8 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         name='availableCategories',
         default=[
             'standalone|Stand-alone products', 
-            'addon|Add-on components', 
-            'intrastructure|Infrastructure'],
+            'add-on|Add-on components', 
+            'infrastructure|Infrastructure'],
         widget=SimpleDataGridWidget(
             label='Categories',
             label_msgid='label_categories_vocab',

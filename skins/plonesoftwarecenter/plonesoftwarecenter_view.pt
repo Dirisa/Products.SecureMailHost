@@ -33,11 +33,6 @@
       Document actions (print, sendto etc)
     </div>
 
-    <div class="documentDescription"
-         tal:content="here/Description">
-      Description.
-    </div>
-
     <form style="float: right"
           action="createObject"
           tal:condition="python: user.has_permission('Add portal content', context)">
@@ -65,7 +60,10 @@
                />
     </form>
 
-
+    <div class="documentDescription"
+         tal:content="here/Description">
+      Description.
+    </div>
 
     <div tal:repeat="categoryItems python:here.getCategoriesToList().items()">
 
