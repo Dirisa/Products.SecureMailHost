@@ -5,6 +5,9 @@
 
 <body>
 
+<!-- Macro used to show releases, since we need two near identical lists -->
+<!-- Call this with a variable 'releases' defined -->
+
 <metal:macro define-macro="release_listing">
     <tal:noreleases tal:condition="not:releases">
 

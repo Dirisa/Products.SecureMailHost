@@ -18,8 +18,8 @@
            states python: here.portal_catalog.uniqueValuesFor('review_state');
            ">
 
-    <h1>Roadmap</h1>
-    
+    <h1>Roadmap for <span tal:replace="here/aq_parent/Title" /></h1>
+
     <div metal:use-macro="here/document_actions/macros/document_actions">
         Document actions (print, sendto etc)
     </div>
