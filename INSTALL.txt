@@ -2,21 +2,20 @@ Requirements:
 
   - Zope 2.6+, Plone 1.1 (2.0), Archetypes 1.0 (tested)
  
-  - The 'email' package of Python *must* be available. Either
-    use Python 2.2.3 for running Zope or get the 'email' package
-    from Python 2.2.3 and install it in the PYTHONPATH of your
-    Python 2.1.3 installation.
+  - The 'email' package of Python *must* be available. Either use Python 2.2.3
+    for running Zope or get the 'email' package from Python 2.2.3 and install
+it in the PYTHONPATH of your Python 2.1.3 installation.
 
-  - Plone 1.0.X is for now officially not supported. So use it
-    at your own risk. A quick test showed at it seems to run
-    problems under Plone 1.0.5.
+  - Plone 1.0.X is for now officially not supported. So use it at your own
+    risk. A quick test showed that it seems to run without problems under
+    Plone 1.0.5.
 
 Installation:
  
   - go the portal_quickinstaller tool of your Plone site
 
-  - select the checkboxes for PloneCollectorNG (and Archetypes)
-    and press 'Install'
+  - select the checkboxes for PloneCollectorNG (and Archetypes) and press
+    'Install'
 
-  - select "Plone Collector NG" from the add-list of the folder_contents
-    view of a folder and create a new instance
+  - select "Plone Collector NG" from the add-list of the folder_contents view
+    of a folder and create a new instance
