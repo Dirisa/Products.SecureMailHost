@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main"
+         tal:define="days python:request.get('days', 14)">
+
+      <metal:block tal:define="action string: Recent activity">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <ul tal:define="rows python: here.pcng_catalog(bobobase_modification_time = {'query' : DateTime()-days, 'range': 'min'}, sort_on='last_action', sort_order='reverse')">
+        <tal:loop tal:repeat="row rows">
+
+          <li> <span tal:content="python: here.toLocalizedTime(DateTime(row.last_action), long_format=1)" />  
+               <a tal:attributes="href string:${row/getURL}/pcng_issue_view" 
+                  tal:content="python: row.getObject().title_or_id()"/>
+        </tal:loop>
+      </ul>
+    </div>
+  </body>
+</html>
