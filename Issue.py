@@ -7,10 +7,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.131 2004/02/29 07:27:02 ajung Exp $
+$Id: Issue.py,v 1.132 2004/02/29 18:25:24 ajung Exp $
 """
 
-import sys, os, time, random
+import sys, os, time
 from urllib import unquote
 from types import StringType, UnicodeType
 
@@ -97,7 +97,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         Base.manage_afterAdd(self, item, container)
         self.initializeArchetype()
         self.post_creation_actions()
-        self.createToken()
 
         # notify workflow and index issue
         if aq_base(container) is not aq_base(self):
@@ -564,20 +563,13 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
-    ######################################################################
-    # Securitytoken
-    ######################################################################
 
-    security.declareProtected(ManageCollector, 'getToken')
-    def getToken(self):
-        """ return security token"""
-        if not hasattr(self, '_token'): self.createToken()
-        return self._token
-
-    security.declareProtected(ManageCollector, 'createToken')
-    def createToken(self):
-        """ create a new token"""
-        self._token = str(time.time() * random.random())
+    security.declareProtected(View, 'getEncryptedInformations')
+    def getEncryptedInformations(self):
+        """ Return inportant informations encrypted """
+        from util import encrypt
+        s = '<?xml version="1.0" encoding="utf-8"?><issue collector="%s" id="%s"/>' % (self.aq_parent.absolute_url(), self.getId())
+        return encrypt(s, self.getToken()) 
 
 
 registerType(PloneIssueNG)
