@@ -13,7 +13,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.4 $"[11:-2]
+__version__ = "$Revision: 1.5 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -82,7 +82,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_name="""defer""",
                        actbox_url="""""",
                        actbox_category="""pcng_issue_workflow""",
-                       props={'guard_roles': 'TrackerAdmin; Supporter'},
+                       props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
 
     tdef = wf.transitions['resolve']
@@ -94,7 +94,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_name="""resolve""",
                        actbox_url="""""",
                        actbox_category="""pcng_issue_workflow""",
-                       props={'guard_roles': 'TrackerAdmin; Supporter'},
+                       props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
 
     tdef = wf.transitions['reject']
@@ -106,7 +106,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_name="""reject""",
                        actbox_url="""""",
                        actbox_category="""pcng_issue_workflow""",
-                       props={'guard_roles': 'TrackerAdmin; Supporter'},
+                       props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
 
     tdef = wf.transitions['resign']
@@ -118,7 +118,7 @@ def setupPcng_issue_workflow(wf):
                        actbox_name="""resign""",
                        actbox_url="""""",
                        actbox_category="""pcng_issue_workflow""",
-                       props={'guard_roles': 'TrackerAdmin; Supporter'},
+                       props={'guard_roles': 'TrackerAdmin; Supporter; Owner'},
                        )
 
     tdef = wf.transitions['accept']
