@@ -1094,3 +1094,9 @@ msgstr "Warten auf Bestätigung"
 
 msgid "references_to_other_issues"
 msgstr "Referenzen auf andere Tickets"
+
+msgid "label_maximum_size_for_uploads"
+msgstr "Maximale Größe einer Datei in Bytes, die hochgeladen werden darf"
+
+msgid "file_too_large"
+msgstr "Datei zu groß: die maximale Größe ist $bytes Bytes"
