@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.3 2004/02/28 10:22:05 ajung Exp $
+$Id: smtp2pcng.py,v 1.4 2004/02/28 16:15:26 ajung Exp $
 """
 
 import sys, os, logging, base64
@@ -95,10 +95,12 @@ if __name__ == '__main__':
 
     parser = OptionParser()
     parser.add_option('-u', '--url', dest='url', help='PloneCollectorNG URL to add issues')
-    parser.add_option('-X', '--username', dest='username', help='Plone user name')
-    parser.add_option('-P', '--password', dest='password', help='Plone user password')
+    parser.add_option('-X', '--username', dest='username', help='Plone user name', default='')
+    parser.add_option('-P', '--password', dest='password', help='Plone user password', default='')
 
     options, args = parser.parse_args()
+    if options.url is None:
+        raise ValueError('URL must be specified using the --url option')
 
     R = parse_mail()
     submit_request(R, options)
