@@ -92,7 +92,11 @@ for event in events:
     creator = event.getCreator()
     user = event.getUser()
 
-    nl('#%d %s %s (%s)' % (len(events)-n, TR(event.getType(), event.getType()), datestr, creator)) 
+    nl('#%d %s (%s) %s/%s' % (len(events)-n, 
+                             datestr, creator,
+                             TR(event.getType(), event.getType()),
+                             TR(event.getState(), event.getState()),
+                             )) 
     nl('-'*75)
     nl(context.pcng_format_event(event, 'plain'))
     n+=1; nl()
@@ -115,7 +119,7 @@ for event in events:
         field = ''
     text = context.pcng_format_event(event, 'plain')
 
-    s = '%s | %10s | %10s | %10s | %s' % (date, type, user, field, text)
+    s = '%s | %-10s | %-10s | %-10s | %s' % (date, type, user, field, text)
     nl(s)
 nl()
 
