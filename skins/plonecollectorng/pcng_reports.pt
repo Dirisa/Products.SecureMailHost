@@ -20,6 +20,11 @@
           <li><a href="pcng_report_by_user">
               <span i18n:translate="open_issues_grouped_by_user">Open issues grouped by user </span>
              </a>
+          </li>
+          <li><a href="pcng_report_open_unassigned_issues">
+              <span i18n:translate="open_unassigned_issues">Open unassigned issues </span>
+             </a>
+          </li>
         </ul>
       </div>
 
