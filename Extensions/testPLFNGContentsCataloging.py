@@ -101,20 +101,23 @@ def PLFNGCatalogTest(self):
 	results_length = len(results)
 	out.write("found %d results\n\n" % results_length)
 	
-	# the following isnt working yet....
+	out.write("------------------------------------------\nunit test result: ")
 	
 	# get Object of the first returned HTMLTEXT
-	#if results_length>=0: obj=results[0].getObject()
-	#else: obj=None
-	#if results_length==1 and obj and obj.id=='sample.html':
-	#   out.write("passed")
-	#else:
-	#   if results_length>1:
-	#      out.write("FAILED. Found %d results instead of 1" % results_length)
-	#   elif results_length==0:
-	#      out.write("FAILED. Not found any result.")
-	#   else:
-	#      out.write("FAILED. Expected is 'sample.html' but returned is: %s" % obj.id)
+	if results_length>0:
+		uid=results[0].getPath()
+		firstFoundFile = os.path.basename(uid)
+		#out.write("filename of 1st match = %s\n\n" % firstFoundFile)
+	
+	if results_length==1 and firstFoundFile=='sample.html':
+	   out.write("passed")
+	else:
+	   if results_length>1:
+	      out.write("FAILED. Found %d results instead of 1" % results_length)
+	   elif results_length==0:
+	      out.write("FAILED. No results found.")
+	   else:
+	      out.write("FAILED. \nExpected is 'sample.html' but returned is: %s" % firstFoundFile)
 
 	return out.getvalue()
 
