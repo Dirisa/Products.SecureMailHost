@@ -15,7 +15,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.4 2004/05/16 19:58:45 tiran Exp $
+$Id: SecureMailHost.py,v 1.5 2004/05/17 09:43:43 tiran Exp $
 """
 
 X_MAILER = 'Zope/SecureMailHost'
@@ -42,6 +42,8 @@ from DateTime import DateTime
 from Products.MailHost.MailHost import MailHostError, MailBase
 class SMTPError(Exception):
     pass
+
+from asyncmailer import Mail, mailQueue
 
 EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
@@ -109,9 +111,13 @@ class SecureMailBase(MailBase):
         if smtp_userid:
             self._smtp_userid = smtp_userid
             #self._smtp_userid64 = base64.encodestring(smtp_userid)
+        else:
+            self._smtp_userid = None
         if smtp_pass:
             self._smtp_pass = smtp_pass
             #self._smtp_pass64 = base64.encodestring(smtp_pass)
+        else:
+            self._smtp_pass = None
 
     security.declareProtected( use_mailhost_services, 'sendTemplate' )
     def sendTemplate(trueself, self, messageTemplate,
@@ -216,7 +222,7 @@ class SecureMailBase(MailBase):
         return msg
 
     security.declarePrivate( '_send' )
-    def _send( self, mfrom, mto, messageText, debug = False):
+    def __SYNC_send( self, mfrom, mto, messageText, debug = False):
         """Send the message
         """
         smtpserver = SMTP( self.smtp_host, int(self.smtp_port) )
@@ -234,6 +240,20 @@ class SecureMailBase(MailBase):
                 raise MailHostError,"Host does NOT support ESMTP, but username/password provided"
         smtpserver.sendmail( mfrom, mto, messageText )
         smtpserver.quit()
+
+    def __ASYNC_send( self, mfrom, mto, messageText, debug = False):
+        """Send the message
+        """
+        server = {
+            'host'     : self.smtp_host,
+            'port'     : self.smtp_port,
+            'userid'   : self._smtp_userid,
+            'password' : self._smtp_pass
+            }
+        mail = Mail(mfrom, mto, messageText, server)
+        mailQueue.send(mail)
+
+    _send = __ASYNC_send
 
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):
