@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.80 2003/11/14 19:36:59 ajung Exp $
+$Id: Issue.py,v 1.81 2003/11/15 07:38:49 ajung Exp $
 """
 
 import sys, os
@@ -158,22 +158,23 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
         OrderedBaseFolder.manage_afterAdd(self, item, container)
+        schema = self.Schema()
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
 
         if member:
-            fieldnames = [ f.getName() for f in self.Schema().fields() ]
+            fieldnames = [ f.getName() for f in schema.fields() ]
             for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
                                 ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
                                 ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
                                 ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
 
                 if name in fieldnames:                
-                    self.Schema()[name].storage.set(name, self, member.getProperty(name1))
+                    schema[name].storage.set(name, self, member.getProperty(name1))
         else:
             name = 'contact_name'
-            self.Schema()[name].storage.set(name, self, util.getUserName())
+            schema[name].storage.set(name, self, util.getUserName())
 
         # pre-allocate the deadline property
         self.progress_deadline = DateTime() + self.deadline_tickets        
