@@ -7,18 +7,20 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.8 2004/03/20 12:48:24 ajung Exp $
+$Id: smtp2pcng.py,v 1.9 2004/04/12 16:20:01 ajung Exp $
 """
 
 """ Gateway to submit issues through email to a PloneCollectorNG instance """
 
 import sys, os, logging, base64
 import httplib, urllib, urlparse
+from ConfigParser import ConfigParser
 from cStringIO import StringIO
-import email, email.Iterators
 from optparse import OptionParser
+import email
 from email.Header import decode_header 
-from email.MIMEText import MIMEText
+
+CFG_FILE = '.smtp2pcng.cfg'
 
 class Result:
 
@@ -49,9 +51,25 @@ class Result:
 
 def parse_mail(options):
 
+    # parse configuration
+    if options.configuration:
+        config = ConfigParser()
+        config.read([CFG_FILE, os.path.expanduser('~/%s' % CFG_FILE), options.configuration_file])
+        section = options.configuration
+        if not config.has_section(section):
+            raise ValueError("Section '%s' not found in configuration file" % section)
+        for op in ('url', 'username', 'password'):
+            if not config.has_option(section, op):
+                raise ValueError("Section '%s' has no option '%s'" % (section, op))
+
+        options.url = config.get(section, 'url')
+        options.username = config.get(section, 'username')
+        options.password = config.get(section, 'password')
+
     if options.filename is not None:
         text = open(options.filename).read()
     else:
+        print >>sys.stderr, 'Reading mail from stdin'
         text = sys.stdin.read()
     msg = email.message_from_string(text)
 
@@ -78,6 +96,7 @@ def parse_mail(options):
 
     return R
 
+
 def submit_request(R, options):
     params = urllib.urlencode({'xml': R.toXML()})
     headers = {"Content-type": "application/x-www-form-urlencoded", 
@@ -94,17 +113,23 @@ def submit_request(R, options):
     conn.close()
     return (response.status, response.reason, data)
 
+
 if __name__ == '__main__':
 
     parser = OptionParser()
-    parser.add_option('-f', '--file', dest='filename', help='File to read from email from', default=None)
-    parser.add_option('-u', '--url', dest='url', help='PloneCollectorNG URL to add issues', default=None)
-    parser.add_option('-X', '--username', dest='username', help='Plone user name', default='')
-    parser.add_option('-P', '--password', dest='password', help='Plone user password', default='')
+    parser.add_option('-f', '--file', dest='filename', 
+                      help='File to read from email from', default=None)
+    parser.add_option('-U', '--url', dest='url', 
+                      help='PloneCollectorNG URL to add issues', default=None)
+    parser.add_option('-u', '--username', dest='username', 
+                      help='Plone user name', default='')
+    parser.add_option('-p', '--password', dest='password', 
+                      help='Plone user password', default='')
+    parser.add_option('-c', '--configuration-file', dest='configuration_file', 
+                      help='Path to configuration file (~/%s)' % CFG_FILE, default='~/%s' % CFG_FILE)
+    parser.add_option('-C', '--configuration', dest='configuration', 
+                      help='Section from configuration file to be used', default=None)
 
     options, args = parser.parse_args()
-    if options.url is None:
-        raise ValueError('URL must be specified using the --url option')
-
     R = parse_mail(options)
     print submit_request(R, options)
