@@ -35,7 +35,7 @@
 
 
       <div style="clear: both"  id="issue_description_solution"
-           tal:define="schema python: here.atse_getSchemata('issuedata')">
+           tal:define="schema python: here.atse_getSchemata('PloneCollectorNG', 'issuedata')">
         <tal:def tal:define="field python: schema['description']" >
           <div class="row" tal:condition="python: field and getattr(here, field.getName())" >
             <span id="label_large" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:

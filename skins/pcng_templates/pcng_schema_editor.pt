@@ -11,7 +11,9 @@
 	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/atse_styles.css" />
     </metal:block>
 
-    <div metal:fill-slot="main" >
+    <div metal:fill-slot="main" 
+         tal:define="SCHEMA_ID string:PloneCollectorNG;
+                     SCHEMA_TEMPLATE string:pcng_schema_editor">
       <div id="pcng_schema_editor">
         <div metal:use-macro="here/atse_main_macro/macros/schema_editor" />
       </div>

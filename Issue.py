@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.219 2004/09/22 07:08:18 ajung Exp $
+$Id: Issue.py,v 1.220 2004/09/23 15:34:10 ajung Exp $
 """
 
 import os, time, random
@@ -27,7 +27,7 @@ from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 
 from Products.ATSchemaEditorNG.ParentManagedSchema import ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
-from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue
+from config import CollectorCatalog, CollectorWorkflow, EditCollectorIssue, SCHEMA_ID
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, UploadEvent, ReferenceEvent, ActionEvent
 from group_assignment_policies import getUsersForGroups
 import issue_schema, util, notifications
@@ -145,6 +145,11 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
             wf = getToolByName(self, CollectorWorkflow, None)
             if wf:
                 wf.notifyCreated(self)
+
+    security.declareProtected(View, 'Schema')
+    def Schema(self):
+        """ Schema hook """
+        return ParentManagedSchema.Schema(self, SCHEMA_ID)
 
     security.declareProtected(View, 'setDefaults')
     def setDefaults(self):

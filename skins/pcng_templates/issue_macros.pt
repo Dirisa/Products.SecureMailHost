@@ -351,7 +351,7 @@ function show_tickets() {
     <b i18n:translate="status">Status</b>: <span i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" /> &bull; 
     <b i18n:translate="topic">Topic</b>: <span tal:replace="issue/topic" /> &bull;
     <b i18n:translate="importance">Importance</b>:
-    <metal:block tal:define="field python: here.atse_getSchema()['importance'];
+    <metal:block tal:define="field python: here.atse_getSchemaById('PloneCollectorNG')['importance'];
                              vocab python: field.Vocabulary(here);
                              display python: here.displayValue(vocab, issue.importance)">
         <span tal:content="structure display" />

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.213 2004/09/21 14:02:49 ajung Exp $
+$Id: Collector.py,v 1.214 2004/09/23 15:34:08 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -25,7 +25,7 @@ from Products.PythonScripts.PythonScript import PythonScript
 from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
 from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
-from config import UNDELETEABLE_FIELDS
+from config import UNDELETEABLE_FIELDS, SCHEMA_ID
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 from Transcript2 import Transcript2, CommentEvent, ChangeEvent, IncrementalChangeEvent
@@ -94,11 +94,13 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """ post creation (or post renaming) actions """
         BaseBTreeFolder.manage_afterAdd(self, item, container)
 
-        # Initialization
-        self.atse_init(issue_schema.schema,
-                       filtered_schemas=('default', 'metadata'),
-                       undeleteable_fields = UNDELETEABLE_FIELDS,
-                       domain='plonecollectorng')   
+        # ATSchemaEditorNG
+        self.atse_init()
+        self.atse_registerSchema(SCHEMA_ID,
+                                 issue_schema.schema,
+                                 filtered_schemas=('default', 'metadata'),
+                                 undeleteable_fields = UNDELETEABLE_FIELDS,
+                                 domain='plonecollectorng')   
         self._num_issues = 0
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
@@ -555,7 +557,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     def update_all_schemas(self, return_to=None, REQUEST=None, RESPONSE=None):
         """ update stored issue schema for all issues """
 
-        schema = self.atse_getSchema()
         for issue in self.objectValues(('PloneIssueNG',)):
             if hasattr(issue, '_v_schema'):
                 issue._v_schema = None
@@ -932,7 +933,7 @@ class PloneCollectorNGCatalog(CatalogTool):
         # add custom indexes for fields
         custom_keys = [f[0] for f in custom]
 
-        for f in self.aq_parent.atse_getSchema().fields():
+        for f in self.aq_parent.atse_getSchemaById(SCHEMA_ID).fields():
             klass = f.__class__.__name__
             widget = f.widget.__class__.__name__
             if getattr(f, 'createindex', 0) == 1 and f.getName() not in custom_keys:
