@@ -8,7 +8,7 @@ from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.FSObject import FSObject
 from Products.Archetypes.public import BaseSchema, Schema
 from Products.Archetypes.public import StringField, StringWidget
-from Products.Archetypes.public import BaseFolder, registerType
+from Products.Archetypes.public import BaseContent, registerType
 from Products.CMFCore.CMFCorePermissions import *
 from config import PROJECTNAME
 
@@ -26,7 +26,6 @@ class TypeInfo(SimpleItem):
     security = ClassSecurityInfo()
     security.declareObjectPublic()
     security.setDefaultAccess('allow')
-
     
     immediate_view = 'view'
 
@@ -105,7 +104,7 @@ class FileProxy(FSObject):
 InitializeClass(FileProxy)
 
 
-class PloneLocalFolderNG(BaseFolder):
+class PloneLocalFolderNG(BaseContent):
     """This is a sample article, it has an overridden view for show,
     but this is purely optional
     """
@@ -153,6 +152,7 @@ class PloneLocalFolderNG(BaseFolder):
         else:
             destfolder = self.folder
 
+    
         rel_dir = destfolder.replace(self.folder, '')
         if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
 
@@ -190,5 +190,14 @@ class PloneLocalFolderNG(BaseFolder):
             l.append((d,'%s?showdir=%s' % (instance.absolute_url(), '/'.join(sofar))))
         return l
 
+
+def modify_fti(fti):
+    # hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ('references',):
+            a['visible'] = 0
+    fti['filter_content_types'] = 1
+    fti['allowed_content_types'] = ()
+    return fti
 
 registerType(PloneLocalFolderNG, PROJECTNAME)
