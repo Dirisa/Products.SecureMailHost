@@ -34,7 +34,7 @@
                     </a>
 
                     <div class="discreet"
-                         tal:content="python: ', '.join(obj.getCategoryTitles())">
+                         tal:content="python: ', '.join(obj.getCategoryTitles)">
                         Category
                     </div>
 

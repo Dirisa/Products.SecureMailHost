@@ -8,7 +8,8 @@
 
     <div metal:fill-slot="main">
 
-      <div metal:define-macro="main">
+      <div metal:define-macro="main"
+            tal:define="released python:wtool.getInfoFor(here, 'review_state')=='published'">
 
         <h1 class="documentFirstHeading">
           <img tal:replace="structure here/product_icon.gif" />
@@ -37,11 +38,11 @@
         </div>
 
         <p class="portalMessage"
-           tal:condition="python: is_editable and wtool.getInfoFor(here, 'review_state')!='published'">
-        This release needs to be published before it will show up in the download
-        listings of the software center. When the files have been added, you
-        should publish this release. There is no approval required to make a
-        release.
+           tal:condition="python: is_editable and not released">
+        A release needs to be published before it will show up in the download
+        listings of the software center. You should make a release using the 
+        'state' drop-down when work on the release is completed and downloadable
+        files have been added. There is no approval required to make a release.
         </p>
 
         <h2 i18n:translate="heading_available_downloads">
@@ -143,10 +144,27 @@
                     GPL
                 </td>
             </tr>
-            <tr tal:condition="here/getExpectedReleaseDate">
+            <tr tal:condition="here/getImprovementProposalFreezeDate">
                 <th class="vertical"
+                    i18n:translate="heading_improvementproposalfreezedate">
+                    Proposal freeze</th>
+                <td class="vertical" i18n:translate=""
+                    tal:content="here/getImprovementProposalFreezeDate">Date</td>
+            </tr>
+            <tr tal:condition="here/getFeatureFreezeDate">
+                <th class="vertical"
+                    i18n:translate="heading_featurefreezedate">
+                    Feature freeze</th>
+                <td class="vertical" i18n:translate=""
+                    tal:content="here/getFeatureFreezeDate">Date</td>
+            </tr>
+            <tr tal:condition="here/getExpectedReleaseDate">
+                <th class="vertical" tal:condition="not:released"
                     i18n:translate="heading_expecteddate">
                     Expected Release</th>
+                <th class="vertical" tal:condition="released"
+                    i18n:translate="heading_released">
+                    Released</th>
                 <td class="vertical" i18n:translate=""
                     tal:content="here/getExpectedReleaseDate">Date</td>
             </tr>

@@ -9,19 +9,6 @@
 <!-- Call this with a variable 'releases' defined -->
 
 <metal:macro define-macro="release_listing">
-    <tal:noreleases tal:condition="not:releases">
-
-        <div class="discreet">
-            <span i18n:translate="description_no_available_releases">
-                No releases found.
-            </span>
-            <span tal:condition="is_editable"
-                  i18n:translate="description_use_add_menu_to_add_releases">
-                Use the Add menu to add releases.
-            </span>
-        </div>
-
-    </tal:noreleases>
 
     <tal:releases repeat="release releases">
 

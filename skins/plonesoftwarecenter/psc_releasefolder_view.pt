@@ -39,17 +39,32 @@
         the relevant project information has been entered.
         </p>        
 
-        <h2 i18n:translate="heading_upcoming_releases">Upcoming Releases</h2>
+        <tal:releases define="upcoming here/getUpcomingReleases;
+                             previous here/getPreviousReleases">
 
-        <tal:block define="global releases here/getUpcomingReleases">
-            <metal:macro use-macro="here/psc_release_listing/macros/release_listing"/>
-        </tal:block>
+            <tal:noreleases condition="python:not(upcoming or previous)">
+                <div class="discreet">
+                    <span i18n:translate="description_no_available_releases">
+                        No releases found.
+                    </span>
+                    <span tal:condition="is_editable"
+                          i18n:translate="description_use_add_menu_to_add_releases">
+                        Use the Add menu to add releases.
+                    </span>
+                </div>
+            </tal:noreleases>
 
-        <h2 i18n:translate="heading_downloadable_releases">Downloadable Releases</h2>
+            <tal:block define="global releases upcoming" condition="nocall:upcoming">
+                <h2 i18n:translate="heading_upcoming_releases">Upcoming Releases</h2>
+                <metal:macro use-macro="here/psc_release_listing/macros/release_listing"/>
+            </tal:block>
 
-        <tal:block define="global releases here/getPreviousReleases">
-            <metal:macro use-macro="here/psc_release_listing/macros/release_listing"/>
-        </tal:block>
+            <tal:block define="global releases previous" condition="nocall:previous">
+                <h2 i18n:translate="heading_downloadable_releases">Downloadable Releases</h2>
+                <metal:macro use-macro="here/psc_release_listing/macros/release_listing"/>
+            </tal:block>
+            
+        </tal:releases>
 
         <div metal:use-macro="here/document_byline/macros/byline">
             Get the byline - contains details about author and modification date.

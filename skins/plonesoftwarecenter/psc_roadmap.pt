@@ -75,8 +75,9 @@
             </tal:codename>
         </a>
     </h2>
+    
     <div class="discreet">
-    Expected release date: <span tal:replace="release/getExpectedReleaseDate" />
+        Expected release date: <span tal:replace="release/getExpectedReleaseDate" />
     </div>
 
     <p><strong>Features included in this release:</strong></p>

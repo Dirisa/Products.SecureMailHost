@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.12 2005/03/11 18:44:17 limi Exp $
+$Id: schemata.py,v 1.13 2005/03/12 03:03:02 optilude Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -445,21 +445,24 @@ PSCProjectSchema = OrderedBaseFolderSchema.copy() + Schema((
 
     # recommended is intended for reviewers to select those products
     # that represent "best of breed"
+    
+    # Disabled for now until we have community processes around it and a UI
+    # for highlighting them ~optilude
 
-    BooleanField(
-        name='recommended',
-        accessor="isRecommended",
-        searchable=1,
-        default=0,
-        write_permission=CMFCorePermissions.ReviewPortalContent,
-        widget=BooleanWidget(
-            label="Recommended Project",
-            label_msgid="label_package_recommended",
-            description="",
-            description_msgid="help_package_recommended",
-            i18n_domain="plonesoftwarecenter",
-        ),
-    ),
+    # BooleanField(
+    #    name='recommended',
+    #    accessor="isRecommended",
+    #    searchable=1,
+    #    default=0,
+    #    write_permission=CMFCorePermissions.ReviewPortalContent,
+    #    widget=BooleanWidget(
+    #        label="Recommended Project",
+    #        label_msgid="label_package_recommended",
+    #        description="",
+    #        description_msgid="help_package_recommended",
+    #        i18n_domain="plonesoftwarecenter",
+    #    ),
+    # ),
 
     LinesField(
         name='categories',
