@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: references.py,v 1.4 2003/09/30 12:37:35 ajung Exp $
+$Id: graphviz.py,v 1.1 2003/09/30 14:02:06 ajung Exp $
 """
 
 ##########################################################################
@@ -39,6 +39,7 @@ class Node:
         self.id = issue2id(issue)
         self.url = issue.absolute_url(1)
         self.collector_url = issue.aq_parent.absolute_url(1)
+        self.text = '%s: %s' % (issue.getId(), issue.Title())
 
     def __str__(self):
         return self.id
@@ -95,7 +96,7 @@ def build_graphviz(graphs, nodes, edges):
 
         for e in edges:
             if e.src.id.startswith(graph[0]) and e.dest.id.startswith(graph[0]):
-                print >>fp, '\t\t%s -> %s;' % (e.src.id, e.dest.id)
+                print >>fp, '\t\t"%s" -> "%s";' % (e.src.text, e.dest.text)
             elif e.src.id.startswith(graph[0]):
                     external_edges.append( e )
 
@@ -103,7 +104,7 @@ def build_graphviz(graphs, nodes, edges):
         print >>fp, '\t}\n'
 
     for e in external_edges:
-        print >>fp, '\t%s -> %s;' % (e.src.id, e.dest.id)
+        print >>fp, '\t"%s" -> "%s";' % (e.src.text, e.dest.text)
 
     print >>fp, '}'
     fp.close()
@@ -112,7 +113,7 @@ def build_graphviz(graphs, nodes, edges):
 def viz2image(fname, format='gif', RESPONSE=None):
 
     outputname = tempfile.mktemp()
-    st = os.system('dot -T %s  %s > %s' % (format, fname, outputname))
+    st = os.system('dot -Gpack -T %s  %s > %s' % (format, fname, outputname))
     if st != 0: raise RuntimeError('graphviz execution failed')     
     data = open(outputname).read()
 
