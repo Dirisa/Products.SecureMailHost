@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+Published under the Zope Public License
+
+$Id: util.py,v 1.4 2003/09/07 07:12:27 ajung Exp $
+"""
+
 def getUserName():
     """ return user name """
     from AccessControl import getSecurityManager

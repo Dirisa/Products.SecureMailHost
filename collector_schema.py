@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+Published under the Zope Public License
+
+$Id: collector_schema.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+"""
+
 from Products.Archetypes.public import BaseSchema, Schema, DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget
@@ -30,11 +40,7 @@ schema = BaseSchema +  Schema((
                 widget=SelectionWidget(format='select'),
                 default=0,
                 ),
-    StringField('email_notifications',
-                vocabulary=VOC_EMAIL_NOTIFICATIONS,
-                widget=SelectionWidget(format='select'),
-                default='none',
-                ),
+
     StringField('canonical_hostname',
                 default='http://localhost/',
                 ),
@@ -49,5 +55,12 @@ schema = BaseSchema +  Schema((
     StringField('collector_email',
                 searchable=0,
                 default='root@localhost',
+                schemata='E-Mail',
+                ),
+    StringField('email_notifications',
+                vocabulary=VOC_EMAIL_NOTIFICATIONS,
+                widget=SelectionWidget(format='select'),
+                default='none',
+                schemata='E-Mail'
                 ),
     ))

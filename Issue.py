@@ -1,3 +1,12 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+Published under the Zope Public License
+
+$Id: Issue.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+"""
 
 from AccessControl import getSecurityManager, ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions

@@ -1,3 +1,12 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+Published under the Zope Public License
+
+$Id: Collector.py,v 1.14 2003/09/07 07:12:27 ajung Exp $
+"""
 
 from Globals import InitializeClass
 from AccessControl import getSecurityManager, ClassSecurityInfo
@@ -11,10 +20,11 @@ from Transcript import Transcript, TranscriptEntry
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Issue import Issue
+from SchemaEditor import SchemaEditor
 import collector_schema, issue_schema
 import util
 
-class Collector(BaseFolder):
+class Collector(BaseFolder, SchemaEditor):
     """ PloneCollectorNG """
 
     schema = collector_schema.schema
@@ -25,22 +35,27 @@ class Collector(BaseFolder):
         'action': 'pcng_view',
         'permissions': (CMFCorePermissions.View,)
         },
-        {'id': 'addissue',
+        {'id': 'pcng_addissue',
         'name': 'Add issue',
         'action': 'add_issue',
         'permissions': (AddCollectorIssue,)
         },
-        {'id': 'staff',
+        {'id': 'pcng_staff',
         'name': 'Staff',
         'action': 'pcng_staff',
         'permissions': (ManageCollector,)
         },
-        {'id': 'issueproperties',
-        'name': 'Issue properties',
-        'action': 'pcng_issue_properties',
+        {'id': 'pcng_history',
+        'name': 'History',
+        'action': 'pcng_history',
         'permissions': (ManageCollector,)
         },
-        {'id': 'notifications',
+        {'id': 'pcng_schema_editor',
+        'name': 'Issue schema',
+        'action': 'pcng_schema_editor',
+        'permissions': (ManageCollector,)
+        },
+        {'id': 'pcng_notifications',
         'name': 'Notifications',
         'action': 'pcng_notifications',
         'permissions': (ManageCollector,)
@@ -52,8 +67,8 @@ class Collector(BaseFolder):
 
     def __init__(self, oid, **kwargs):
         BaseFolder.__init__(self, oid, **kwargs)
+        self.schema_init()
         self._num_issues = 0
-        self._issue_schema = issue_schema.schema
         self._supporters = self._managers = self._reporters = []
         self._notification_emails = OOBTree()
         self._setup_collector_catalog()
@@ -213,9 +228,9 @@ class Collector(BaseFolder):
         """ create a new issue """
         self._num_issues += 1
         id = str(self._num_issues)
-        issue = Issue(id, id, schema = self._issue_schema)
-        self._setObject(id, issue)
+        issue = Issue(id, id, schema=self.getWholeSchema())
         issue = issue.__of__(self)
+        self._setObject(id, issue)
 
         if RESPONSE is not None: 
             RESPONSE.redirect(self.absolute_url() + "/" + id + "/base_edit")

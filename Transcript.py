@@ -1,11 +1,11 @@
 """
 PloneCollectorNG - A Plone-based bugtracking system
 
-(C) by Andreas Jung, andreas@andreas-jung.com
+(C) by Andreas Jung, andreas@andreas-jung.com & others
 
-Published under the MIT Public License
+Published under the Zope Public License
 
-$Id: Transcript.py,v 1.3 2003/09/06 11:50:08 ajung Exp $
+$Id: Transcript.py,v 1.4 2003/09/07 07:12:27 ajung Exp $
 """
 
 from types import StringType, ListType, TupleType

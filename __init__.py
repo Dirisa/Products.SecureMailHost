@@ -1,3 +1,13 @@
+"""
+PloneCollectorNG - A Plone-based bugtracking system
+
+(C) by Andreas Jung, andreas@andreas-jung.com & others
+
+Published under the Zope Public License
+
+$Id: __init__.py,v 1.4 2003/09/07 07:12:27 ajung Exp $
+"""
+
 from Globals import package_home
 from Products.Archetypes.public import process_types, listTypes
 from Products.CMFCore import utils
