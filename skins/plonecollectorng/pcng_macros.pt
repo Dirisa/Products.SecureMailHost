@@ -181,7 +181,7 @@
              tal:content="python: here.shorten_string(issue.Description, maxlength=180)" />
 
         <div class="pcng_issueview_legend">
-          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> on <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
+          <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> <span i18n:translate="date_on">on</span> <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
           <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toLocalizedTime(issue.modified)" />
           (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
           <span i18n:translate="days_ago">days ago</span>)
@@ -258,7 +258,7 @@
       <input type="hidden" name="advanced_search" value="1">
 
       <div>
-        <tal:loop tal:repeat="item here/getIndexes">
+        <tal:loop tal:repeat="item here/getIndexes" >
           <div style="float: left; margin: 5pt">
             <span class="label" i18n:translate="" tal:content="python: item[0]" />
             <br>
@@ -371,7 +371,9 @@
         <span i18n:translate="statistics">Statistics</span>:
       </li>
       <li tal:repeat="state here/issue_states" style="display: inline">
-        <span i18n:translate="" tal:content="state/capitalize" />:
+        <a tal:attributes="href string:pcng_view?advanced_search:int=1&status=${state}">
+          <span i18n:translate="" tal:content="state/capitalize" />
+        </a>:
         <span tal:content="python: len(here.pcng_catalog.searchResults(status={'query' : state}))" />
         <span tal:condition="not: repeat/state/end" tal:omit-tag="">&bull;</span>
       </li>
