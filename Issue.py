@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.27 2003/09/23 13:35:09 ajung Exp $
+$Id: Issue.py,v 1.28 2003/09/27 09:14:08 ajung Exp $
 """
 
 import sys
@@ -25,6 +25,7 @@ from References import Reference, ReferencesManager
 from WatchList import WatchList
 from OrderedSchema import OrderedBaseFolder, OrderedSchema
 import util
+
 
 class PloneIssueNG(OrderedBaseFolder, WatchList):
     """ PloneCollectorNG """
@@ -107,7 +108,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         if aq_base(container) is not aq_base(self):
             wf = getToolByName(self, 'portal_workflow')
             wf.notifyCreated(self)
-            self.indexObject()
                                                 
     ######################################################################
     # Followups
@@ -141,7 +141,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             self._transcript.addChange('status', old_status, new_status)
 
         self.notifyModified() # notify DublinCore
-        self.indexObject()
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
 
     ######################################################################
@@ -264,15 +263,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         # readonly (only through a followup we can switch back from
         # confidential to non-confidential.
 
-        if self.status() == 'Pending' and self.security_related:
-            wf = getToolByName(self, 'portal_workflow')
-            wf.doActionFor(self, 'restrict_pending_automatic')
+#        if self.status() == 'Pending' and self.security_related:
+#            wf = getToolByName(self, 'portal_workflow')
+#            wf.doActionFor(self, 'restrict_pending_automatic')
             
-            if len(self.getWorkflowHistory()) > 2:
-                self.getField('security_related').mode = 'r'
+#            if len(self.getWorkflowHistory()) > 2:
+#                self.getField('security_related').mode = 'r'
 
         self.notifyModified() # notify DublinCore
-        self.indexObject()
 
     def __len__(self):
         """ return the number of transcript events """
@@ -283,7 +281,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     ######################################################################
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
-    def indexObject(self):
+    def reindexObject(self, idxs=None):
+        """ reindex issue """
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
@@ -292,11 +291,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
         l = []
         for field in self.Schema().fields():
+        
             v = getattr(self, field.getName(), None)
             if v:
                 if callable(v): v = v()
                 l.append( str(v) )
-
         return ' '.join(l)
 
     ######################################################################
@@ -330,6 +329,14 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             sub.addField(f)
             schemata[f.schemata] = sub
         return schemata
+
+    ######################################################################
+    # Presentation related stuff
+    ######################################################################
+
+    def title_or_id(self):
+        """ return the id + title (override for navigation tree) """
+        return '%s %s' %  (self.getId(), self.Title())
 
     ######################################################################
     # Callbacks for pcng_issue_workflow
