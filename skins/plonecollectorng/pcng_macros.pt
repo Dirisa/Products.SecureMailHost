@@ -128,7 +128,7 @@
               <span tal:replace="issue/getId" />.
               <span tal:replace="issue/Title" />
             </a>
-          (<a tal:attributes="href string:${issue/getURL}/asPDF">PDF</a>)
+          (<a tal:attributes="href string:${issue/getURL}/asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>)
           </h2>
         </metal:block>
         <div class="pcng_issueview_metadata">

@@ -23,7 +23,7 @@
 
       <a tal:condition="python: request.get('mode', 'simple') == 'simple'" href="pcng_issue_view?mode=full">Full view</a> &nbsp;
       <a tal:condition="python: request.get('mode', 'simple') != 'simple'"  href="pcng_issue_view?mode=simple">Simple view</a>   &nbsp;
-      <a href="asPDF">PDF</a>
+      <a href="asPDF"><img src="pdflogo.gif" border="0" title="PDF"></a>
 
       <fieldset tal:repeat="fieldset python: ('issuedata',)">
         <legend><a class="schemata_legend"  
