@@ -37,22 +37,29 @@
     <legend i18n:translate="legend_references">References</legend>
 
       <ul>
+
         <li><span i18n:translate="references">References</span>
           <ul>
             <li tal:repeat="ref references">
-              <a tal:attributes="href string:/${ref/issue_url}" tal:content="string: ${ref/collector_title|nothing}: ${ref/issue_id} (${ref/comment})" />
-              [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
+              <tal:def tal:define="target python: ref.getTargetObject()">
+                <a tal:attributes="href target/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${target/title_or_id}"/>
+                [<a tal:attributes="href string: delete_reference?issue_url=${ref/issue_url}">del</a>]
+                <div tal:content="ref/comment" />
+              </tal:def>
             </li>
+             <li tal:condition="not: references" i18n:translate="no_references">No references found</li>
           </ul>
         </li>
+
         <li><span i18n:translate="referenced_by">Referenced by</span>
           <ul>
             <li tal:repeat="ref breferences">
-              <tal:if tal:define="url python: ref.issue_url">
-                <a tal:attributes="href url"
-                  tal:content="string: ${ref/collector_title|nothing}: ${ref/issue_id} (${ref/comment|nothing})" />
-              </tal:if>
+              <tal:def tal:define="source python: ref.getSourceObject()">
+                <a tal:attributes="href source/absolute_url" tal:content="string: ${ref/collector_title|nothing}: ${source/title_or_id}"/>
+                <div tal:content="ref/comment" />
+              </tal:def>
             </li>
+            <li tal:condition="not: breferences" i18n:translate="no_references">No references found</li>
           </ul>
         </li>
         <li><span i18n:translate="dependency_graph">Dependency graph</span>: 
