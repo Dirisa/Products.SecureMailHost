@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.66 2004/09/27 17:42:35 ajung Exp $
+$Id: collector_schema.py,v 1.67 2004/09/27 17:48:23 ajung Exp $
 """
 
 
@@ -268,7 +268,7 @@ schema = BaseSchema + Schema((
     LinesField('collector_portlets_left',
                 vocabulary=VOC_COLLECTOR_PORTLETS,
                 widget=InAndOutWidget(size=5,
-                                      label='Collector portlets left',
+                                      label='Collector portlets left side',
                                       label_msgid='label_collector_portlets_left',
                                       i18n_domain='plonecollectorng'),
                 default=['Plone', 'here/pcng_portlet_macros/macros/pcng_collector_portlet'],
@@ -278,7 +278,7 @@ schema = BaseSchema + Schema((
     LinesField('collector_portlets_right',
                 vocabulary=VOC_COLLECTOR_PORTLETS,
                 widget=InAndOutWidget(size=5,
-                                      label='Collector portlets right',
+                                      label='Collector portlets right side',
                                       label_msgid='label_collector_portlets right',
                                       i18n_domain='plonecollectorng'),
                 default=['Plone', 'here/pcng_portlet_macros/macros/pcng_collector_portlet'],
