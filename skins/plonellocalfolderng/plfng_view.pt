@@ -140,9 +140,14 @@
                             folder
                             </td>
 
-                            <td tal:define="size python:getObjSize(item)"
+                            <td tal:define="size python:getObjSize(item)">
+                              <div tal:condition="python:item_typeinfo.Title()!='directory'"
                                 tal:content="structure python:test(size, size, '&nbsp;')">
-                            size
+                                size
+                              </div>
+                              <div tal:condition="python:item_typeinfo.Title()=='directory'">
+                                &nbsp;
+                              </div>  
                             </td>
 
                             <td tal:content="python:toPortalTime(item.ModificationDate())">
@@ -152,8 +157,9 @@
                             <td tal:content="item/getComment" />
 
                             <td> 
-                              <div tal:condition="python: getObjSize(item)">
-	                              <a tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
+                              <div>
+	                              <a tal:condition="python:item_typeinfo.Title()!='directory'"
+	                                  tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
 	                              <a tal:condition="python:item_typeinfo.Title() == 'application/zip' and member.has_permission('Modify portal content', here) and fileUnpackingAllowed"
 	                                  tal:attributes="href string:${item/absolute_url}?action=unpack">Unzip</a>
 	                              <a tal:condition="python:member.has_permission('Delete objects', here)"
