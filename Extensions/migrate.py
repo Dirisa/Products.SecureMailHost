@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.18 2003/11/10 17:08:21 ajung Exp $
+$Id: migrate.py,v 1.19 2003/11/24 06:51:52 ajung Exp $
 """
 
 
@@ -252,7 +252,7 @@ def migrate_issue(issue, collector):
 
     collector.invokeFactory('PloneIssueNG', issue.getId())
     new_issue = collector._getOb(issue.getId())
-    new_issue.setSchema(collector.schema_getWholeSchema())
+#    new_issue.setSchema(collector.schema_getWholeSchema())
 
     P = record()
     P.set('title', issue.title)
