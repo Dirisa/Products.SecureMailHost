@@ -40,17 +40,21 @@
     </metal:block>
 
     <!-- navigation -->
-    <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
-    <tal:block repeat="set schemata_names">
-      <div tal:condition="python: set == fieldset" tal:omit-tag="">
-        <b i18n:translate="" tal:content="set" />
-      </div>
-      <div tal:condition="python: set != fieldset" tal:omit-tag="">
-        <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
-           <span i18n:translate="" tal:content="set" /></a>
-      </div>
-     <span tal:condition="not: repeat/set/end"> &bull;</span>
-    </tal:block>
+
+    <div>
+      <span i18n:translate="edit_fieldsets">Edit fieldsets</span>: 
+      <tal:block repeat="set schemata_names">
+        <div tal:condition="python: set == fieldset" tal:omit-tag="">
+          <b i18n:translate="" tal:content="set" />
+        </div>
+        <div tal:condition="python: set != fieldset" tal:omit-tag="">
+          <a href="#" tal:attributes="href string:${here/absolute_url}/pcng_base_edit?fieldset=${set}">
+             <span i18n:translate="" tal:content="set" /></a>
+        </div>
+       <span tal:condition="not: repeat/set/end"> &bull;</span>
+      </tal:block>                                         i
+    </div>
+    <br>
 
     <form name="edit_form" method="post" enctype="multipart/form-data"
           tal:attributes="action python:here.absolute_url()+'/'+template.id" >
