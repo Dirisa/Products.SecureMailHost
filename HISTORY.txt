@@ -6,7 +6,7 @@ PloneHelpCenter 0.2
 
     - Added Help Center portlet, this will aggregate published entries
       from all the available Help Centers, and display links to the published 
-      help centers.
+      help centers. [limi]
 
     - Added Glossary types, updated Help Center view [limi]
 
