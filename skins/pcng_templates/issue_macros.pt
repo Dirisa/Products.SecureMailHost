@@ -303,7 +303,7 @@ function show_tickets() {
           <br><input type="radio" name="action" 
                      tal:attributes="value action;
                                      CHECKED python: request.get('state','') == action"/>
-          <span i18n:translate="" tal:content="action/capitalize" />
+          <span i18n:translate="" tal:content="python: here.pcng_format_status(action)" />
         </tal:loop>
       </td>
     </tr>
