@@ -6,9 +6,19 @@ Developer claiming item/comments is in [brackets].
 General
 =======
 
+- IMPORTANT: "Additional resources" doesn't currently show the available PHC
+             folder types. It should. :)
+
 - by-category.pt shows the category short name, should show full name (but
   requires that you pass in short name and get back full name, since we pull
   short name from last element in URL)
+  
+- by-category.pt fails miserably when no category is specified, it should
+  redirect to parent URL in that case - not show index out of range error.
+
+- by-category.pt results should be sorted by latest release first, right now
+  it's listing latest project added first, I believe - which is not what we
+  want. The projects doing frequest releases should come first.
 
 - RSS feed for Latest Releases, ability to have an RSS feed for every project
   and category too.
@@ -20,13 +30,11 @@ General
 Design/UI
 =========
 
-- Page that lists all the downloads in a category, with batching. (needs template work)
-
-- Portlet listing the latest published Releases should have Category listed. This
-  requires the attribute metadata in the Catalog.
+- Portlet listing the latest published Releases should have Category listed. 
+  This requires the attribute metadata in the Catalog.
 
 - Now that we have data grids on licenses etc., we should probably clean it up
-a bit in the view templates for releases  (show links etc.)
+  a bit in the view templates for releases  (show links etc.)
 
 
 ====

@@ -63,6 +63,11 @@
          tal:content="here/Description">
       Description.
     </div>
+    
+    <p class="discreet">
+    The latest releases in each category. To see all projects in a specific 
+    category, click "Show all".
+    </p>
 
     <div tal:repeat="categoryItems python:here.getCategoriesToList().items()">
 
@@ -94,7 +99,7 @@
                 </div>
                 </tal:list>
 
-                <div class="portletContent odd">
+                <div class="portletContent even">
                     <a href=""
                        class="portletMore"
                        tal:attributes="href string:${here/absolute_url}/by-category/${categoryId}"
