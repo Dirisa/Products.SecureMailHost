@@ -5,14 +5,12 @@
 # Author:       Daniel Nouri <daniel.nouri@con-fuse.org>
 #
 # Created:      2004-01-28
-# RCS-ID:       $Id: validators.py,v 1.1 2004/05/22 15:50:58 yenzenz Exp $
+# RCS-ID:       $Id: validators.py,v 1.2 2004/08/12 11:23:43 yenzenz Exp $
 # Copyright:    (c) 2004 by Daniel Nouri, Austria
 # Licence:      GNU General Public Licence (GPL) Version 2 or later
 #------------------------------------------------------------------------------
-try:
-    from validation import validation, interfaces
-except ImportError:
-    from Products.validation import validation, interfaces
+
+from Products.validation import validation, interfaces
 
 import Products.CMFCore.Expression as Expression
 import Products.PageTemplates.TALES as TALES
