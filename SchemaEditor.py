@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.43 2003/12/03 19:15:42 ajung Exp $
+$Id: SchemaEditor.py,v 1.44 2003/12/04 13:39:34 ajung Exp $
 """
 
 import copy, re
@@ -189,16 +189,17 @@ class SchemaEditor:
         elif FD.widget == 'Visual':      widget = VisualWidget()
         else: raise ValueError(self.translate('atse_unknown_widget', 'unknown widget type: $widget', widget=d.widget))
 
-        if hasattr(widget, 'size'):
+        if FD.has_key('widgetsize'):
             widget.size = FD.widgetsize
-        elif hasattr(widget, 'rows'):
-            if FD.widgetsize.find('x') == -1:
-                rows = FD.widgetsize
-                cols = 80
-            else:
-                rows, cols = FD.widgetsize.split('x')
-                widget.rows = int(rows)
-                widget.cols = int(cols)
+            widget.rows = 5
+            widget.cols = 60
+        
+        elif FD.has_key('widgetcols') and FD.has_key('widgetrows'):
+            widget.rows = FD['widgetrows']
+            widget.cols = FD['widgetcols']
+            widget.size = 60
+        else:
+            raise RuntimeError
 
         widget.visible = visible
         widget.label = FD.label
@@ -236,19 +237,7 @@ class SchemaEditor:
         D['required'] = FD.get('required', 0)
 
         newfield = field(FD.name, **D)
-
-        # ATT: The following lines stink like dead fish.
-        # Here we are trying to replace a field in place. This code
-        # should better go into Archetypes core.
-
-        oldfields = self._ms.fields()
-        for i in range(len(oldfields)):
-            if oldfields[i].getName() == newfield.getName():
-                oldfields[i] = newfield
-
-        for f in oldfields: self._ms.delField(f.getName())
-        for f in oldfields: self._ms.addField(f)
-        
+        self._ms.replaceField(FD.name, newfield)
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Field changed', 
