@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: group_assignment_policies.py,v 1.2 2004/02/23 17:49:05 ajung Exp $
+$Id: group_assignment_policies.py,v 1.3 2004/02/24 12:08:35 ajung Exp $
 """
 
 """ 
@@ -22,8 +22,7 @@ def usersForTopicGroup(context, group):
 def usersForGrufGroup(context, group):
     try:
         group = context.portal_groups.getGroupById(group)
-        ## FIX THIS !!!!
-        return group.getUserNames()
+        return [m.getUserName() for m in group.getGroupMembers()]
     except:
         return ()
 
