@@ -24,7 +24,7 @@
         </div>
 
         <div class="discreet">
-            Category: <span tal:replace="python: ', '.join(here.getCategories())" />
+            Category: <span tal:replace="python: ', '.join(here.Categories())" />
         </div>
 
         <div class="documentDescription"

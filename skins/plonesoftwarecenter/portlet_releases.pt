@@ -15,7 +15,7 @@
 
     <div class="portlet" id="portlet-releases">
 
-        <h5 i18n:translate="box_latest_products">Latest Products</h5>
+        <h5 i18n:translate="box_latest_releases">Latest releases</h5>
 
         <div class="portletBody">
 

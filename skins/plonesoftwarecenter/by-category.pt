@@ -13,33 +13,32 @@
 </head>
 
 <body>
+    <div metal:fill-slot="main"
+         tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
+                     category python:request.traverse_subpath[0]">
 
-  <div metal:fill-slot="main"
-       tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
-                   category python:request.traverse_subpath[0]">
+        <h1 class="documentFirstHeading">
+          Projects in category <span tal:replace="category" />
+        </h1>
 
-    <h1 class="documentFirstHeading">
-      Projects in category <span tal:replace="category" />
-    </h1>
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+          Document actions (print, sendto etc)
+        </div>
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-      Document actions (print, sendto etc)
+        <dl>
+          <tal:package tal:repeat="package python:here.getPackagesByCategory(category)">
+            <dt>
+              <img tal:replace="structure here/product_icon.gif" />
+              <a tal:attributes="href package/getURL" tal:content="package/Title">Title</a>
+              </dt>
+            <dd tal:content="package/Description">Description</dd>
+          </tal:package>
+        </dl>
+
+        <div metal:use-macro="here/document_byline/macros/byline">
+          Get the byline - contains details about author and modification date.
+        </div>
     </div>
-
-    <dl>
-      <tal:package tal:repeat="package python:here.getPackagesByCategory(category)">
-        <dt>
-          <img tal:replace="structure here/product_icon.gif" />
-          <a tal:attributes="href package/getURL" tal:content="package/Title">Title</a>
-          </dt>
-        <dd tal:content="package/Description">Description</dd>
-      </tal:package>
-    </dl>
-
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
-  </div>
 
 </body>
 
