@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.40 2004/06/24 06:49:14 ajung Exp $
+$Id: notifications.py,v 1.41 2004/07/12 05:14:48 ajung Exp $
 """
 
 import sys
@@ -25,7 +25,7 @@ def notify(issue):
     """ notification handling """
 
     collector = issue._getCollector()
-    NP = eval('notification_policies.%s(issue)' % collector.notification_policy)
+    NP = eval('notification_policies.%s(issue)' % collector.getNotification_policy())
     recipients = NP.getRecipients()
     recipients = enrich_recipients(issue, recipients)
     send_notifications(recipients, issue)
@@ -100,14 +100,14 @@ def _send_notifications(recipients, issue, send_attachments=0):
     if not dest_emails or not issue.isPersistent(): return  
 
     outer = MIMEMultipart()
-    outer['From'] = collector.collector_email 
+    outer['From'] = collector.getCollector_email()
     outer['To'] = ','.join(dest_emails)
-    subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.collector_abbreviation), issue.getId(), 
+    subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.getCollector_abbreviation()), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue.lastAction(),issue.lastAction()))
     outer['Subject'] = Header(subject, encoding)
     outer['Message-ID'] = email.Utils.make_msgid()
-    outer['Reply-To'] = collector.collector_email
-    body = issue.format_transcript(collector.notification_language)
+    outer['Reply-To'] = collector.getCollector_email()
+    body = issue.format_transcript(collector.getNotification_language())
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
             
