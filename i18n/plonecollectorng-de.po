@@ -897,3 +897,14 @@ msgstr "Verschoben nach unten"
 msgid "atse_field_moved"
 msgstr "Feld wurde verschoben"
 
+msgid "topic"
+msgstr "Topic"
+
+msgid "help_topics_users"
+msgstr "Topics werden aus dem Archetypes Feld 'topic' genommen und können einer Gruppe von Tracker-Teilnehmern zugewiesen werden. Beim Neuanlage eines Tickets oder bei einer Antwort auf ein Ticket kann das Ticket einer Topic-Gruppe zugewiesen werden, d.h. alle dieser Gruppe zugeteilten Teilnehmer bekommt das betreffende Ticket zugewiesen."
+
+msgid "assign_to_users"
+msgstr "Zuweisung an Benutzer"
+
+msgid "assign_to_group"
+msgstr "Zuweisung an Gruppe"
