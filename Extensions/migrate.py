@@ -5,13 +5,25 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.3 2003/11/04 19:35:27 ajung Exp $
+$Id: migrate.py,v 1.4 2003/11/05 09:00:46 ajung Exp $
 """
 
-"""Migration script for CMFCollectorNG to PloneCollectorNG"""
+
+"""
+Migration script for CMFCollectorNG to PloneCollectorNG
+
+ATTENTION:
+
+RUNNING THIS SCRIPT MIGHT DAMAGE YOUR PLONE SITE OR OVERRIDE SETTINGS OF YOUR
+PLONE IF NOT APPLIED AND CONFIGURED PROPERLY. RUN THIS SCRIPT AT YOUR OWN RISK.
+PERFORM A BACKUP OF YOUR DATA.FS **BEFORE** RUNNING THIS SCRIPT.  DO NOT
+COMPLAIN IN CASE OF A FAILURE OR DATA LOSS. YOU HAVE BEEN WARNED!!!!!!!!!!!
+"""
+
 
 from Products.PloneCollectorNG.Collector import PloneCollectorNG
 from Products.PloneCollectorNG.Issue import PloneIssueNG
+from zLOG import LOG,INFO,ERROR,WARNING
 
 DEST_ID = 'trackers'
 
@@ -29,19 +41,74 @@ class record:
         return self._k
 
 
-def migrate_trackers(self, url_from='/trackers', url_to='/plone1')):
+def migrate_trackers(self, url_from='/trackers', url_to='/plone1'):
     tracker_root = self.restrictedTraverse(url_from)
     plone_root = self.restrictedTraverse(url_to)
 
+    # Remove the comment below to migrate the users as well
+    # ATT: using migrate_acl_users() might *OVERRIDE* exisiting
+    # user accounts on the destation site. BE WARNED !!!!!!
+
+    # migrate_acl_users(tracker_root, plone_root)
+
+    # Remove the comment below to migrate the portal_memberdata.
+    # ATT: using migrate_memberdata() might *OVERRIDE* exisiting
+    # settings on the destation site. BE WARNED !!!!!!
+
+    #  migrate_memberdata(tracker_root, plone_root)
+
     trackers = tracker_root.objectValues('CMF CollectorNG')
     for tracker in trackers:
-        migrate_tracker(tracker, dest)
+        migrate_tracker(tracker, plone_root)
 
     return 'done'
 
+
+def migrate_acl_users(source, dest):
+    """ migrate all users """
+
+    acl_users = source.acl_users
+    dest_acl_users = dest.acl_users
+
+    for u in acl_users.getUsers():
+        dest_acl_users._addUser(u.getUserName(),
+                                u._getPassword(),
+                                u._getPassword(),
+                                u.getRoles(),
+                                u.getDomains())
+
+def migrate_memberdata(source, dest):
+
+    source_ms = source.portal_membership
+    dest_ms = dest.portal_membership
+
+    for id in source_ms.listMemberIds():
+        member = source_ms.getMemberById(id)
+            
+        dest_member = dest_ms.getMemberById(id)
+        if dest_member is None:
+            LOG('pcngmigration', ERROR, 'memberdata for "%s" not migrated' % id)
+            continue
+
+        email = member.getProperty('email')
+        if not email:
+            LOG('pcngmigration', WARNING, 'no email for "%s" found...faking it' % id)
+            email = 'dummy@nospam.com'
+        
+        dest_member.setProperties(properties=None,
+                pcng_company=member.getProperty('submitter_company'),
+                fullname=member.getProperty('submitter_name'),
+                email=email,
+                pcng_position=member.getProperty('submitter_position'),
+                pcng_city=member.getProperty('submitter_city'),
+                pcng_address=member.getProperty('submitter_address'),
+                pcng_fax=member.getProperty('submitter_fax'),
+                pcng_phone=member.getProperty('submitter_phone'),
+                pcng_send_attachments=member.getProperty('submitter_send_attachments'))
+
 def migrate_tracker(tracker, dest):
 
-#    if tracker.getId() != 'HaufeReader': return
+    if tracker.getId() != 'HaufeReader': return
     print '-'*75
     print 'Migrating collector:', tracker.getId()
 
@@ -57,6 +124,7 @@ def migrate_tracker(tracker, dest):
         migrate_issue(issue, collector)
 
     collector._num_issues = len(issues)
+
 
 def migrate_issue(issue, collector):
     print 'Migrating issue:', issue
