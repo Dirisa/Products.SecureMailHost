@@ -8,7 +8,7 @@ from Globals import InitializeClass, Persistent
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permission import Permission
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.FSObject import FSObject
+from OFS.ObjectManager import checkValidId, BadRequestException
 from Products.Archetypes.public import BaseSchema, Schema
 from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import StringField, StringWidget
@@ -17,12 +17,17 @@ from Products.Archetypes.public import BaseContent, registerType
 from Products.Archetypes.ExtensibleMetadata import FLOOR_DATE,CEILING_DATE
 from Products.Archetypes.Referenceable import Referenceable
 
+from Products.CMFCore.FSObject import FSObject
 from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
+
 from config import *
 from util import *
 import zLOG
-from Products.CMFCore.utils import getToolByName
+
+
+
 #from Products.validation.chain import V_SUFFICIENT, V_REQUIRED
 
 from Acquisition import aq_chain
@@ -85,6 +90,42 @@ schema = BaseSchema +  Schema((
                         description='Allow users to extract the contents of archive files (eg, .zip, .tar) on to server local filesystem.',
                         ),
                 ),
+    StringField('hidden_file_prefixes',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='.',
+                widget=StringWidget(label='hide files with these prefixes',
+                                    description='this field contains the comma-separated list of filename prefixes used to determine which files to hide',)
+                ),
+    StringField('hidden_file_suffixes',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='.metadata,.plfngtmp',
+                widget=StringWidget(label='hide files with these suffixes',
+                                    description='this field contains the comma-separated list of filename suffixes used to determine which files to hide',)
+                ),
+    StringField('hidden_file_names',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='',
+                widget=StringWidget(label='hide files with these exact names',
+                                    description='this field contains the comma-separated list of filenames to hide',)
+                ),            
+    StringField('hidden_folder_prefixes',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='.',
+                widget=StringWidget(label='hide folders with these prefixes',
+                                    description='this field contains the comma-separated list of folder prefixes used to determine which files to hide',)
+                ),
+    StringField('hidden_folder_suffixes',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='.metadata,.plfngtmp',
+                widget=StringWidget(label='hide folders with these suffixes',
+                                    description='this field contains the comma-separated list of folder suffixes used to determine which files to hide',)
+                ),
+    StringField('hidden_folder_names',
+                write_permission=CMFCorePermissions.ManagePortal,
+                default='CVS',
+                widget=StringWidget(label='hide folders with these exact names',
+                                    description='this field contains the comma-separated list of folders to hide',)
+                ),                        
     BooleanField ('cataloging_enabled',
                 write_permission=CMFCorePermissions.ManagePortal,
                 default=1,
@@ -449,6 +490,37 @@ class PloneLocalFolderNG(BaseContent):
         else:
            this_portal = getToolByName(self, 'portal_url')
            mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
+ 
+           if hasattr(self, "hidden_file_prefixes") and self.hidden_file_prefixes:
+              filePrefixesSkipList = split(self.hidden_file_prefixes,',')
+           else:
+              filePrefixesSkipList = []
+           
+           if hasattr(self, "hidden_file_suffixes") and self.hidden_file_suffixes:
+              fileSuffixesSkipList = split(self.hidden_file_suffixes,',')
+           else:
+              fileSuffixesSkipList = []
+           
+           if hasattr(self, "hidden_file_names") and self.hidden_file_names:
+              fileNamesSkipList = split(self.hidden_file_names,',')
+           else:
+              fileNamesSkipList = []
+           
+           if hasattr(self, "hidden_folder_prefixes") and self.hidden_folder_prefixes:
+              folderPrefixesSkipList = split(self.hidden_folder_prefixes,',')
+           else:
+              folderPrefixesSkipList = []
+           
+           if hasattr(self, "hidden_folder_suffixes") and self.hidden_folder_suffixes:
+              folderSuffixesSkipList = split(self.hidden_folder_suffixes,',')
+           else:
+              folderSuffixesSkipList = []
+           
+           if hasattr(self, "hidden_folder_names") and self.hidden_folder_names:
+              folderNamesSkipList = split(self.hidden_folder_names,',')
+           else:
+              folderNamesSkipList = []
+              
            
            trimmedFolderBasePath = os.path.normpath(self.folder)
            
@@ -467,33 +539,101 @@ class PloneLocalFolderNG(BaseContent):
            l = []
            if os.path.exists(destfolder):
               try:
-                 for f in os.listdir(destfolder):
-                     if f.endswith('.metadata'): continue
-         
-                     fullname = os.path.join(destfolder, f)
-                     P = FileProxy(f, fullname, f)
-                     mi = self.mimetypes_registry.classify(data=None, filename=f)
-      
-                     if os.path.isdir(fullname):
-                         P.setIconPath('folder_icon.gif')
-                         P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                         P.setMimeType('folder')
-                     else:
-                         P.setIconPath(mi.icon_path)
-                         P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-                         P.setMimeType(mi.normalized())
-         
-                     if os.path.exists(fullname + '.metadata'):
-                         try:
-                           P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
-                         except:
-                           P.setComment('')
-                     else:
-                         P.setComment('')
-                     l.append(P)
+                 rawItemList = os.listdir(destfolder)
               except:
-                 zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: error reading folder (%s) contents" % destfolder )        
-   
+                 zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: error reading folder (%s) contents" % destfolder )
+                 return [] 
+
+              filteredFileList = []
+              filteredFolderList = []
+              for item in rawItemList:
+                  checkValidIdResult = checkValidId(item)
+                  if checkValidIdResult != 1: 
+                     #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+                     continue
+               
+                  fullname = os.path.join(destfolder, item)
+                  skipThisItem = 0
+                  if os.path.isdir(fullname):
+                      
+                      for prefix in folderPrefixesSkipList:
+                         if item.startswith(prefix): 
+                            skipThisItem = 1
+                            break
+                      
+                      for suffix in folderSuffixesSkipList:
+                         if item.endswith(suffix): 
+                            skipThisItem = 1
+                            break
+                      
+                      for completeName in folderNamesSkipList:
+                         if item == completeName: 
+                            skipThisItem = 1
+                            break
+                      
+                      if not skipThisItem: 
+                         filteredFolderList.append(item)
+                  
+                  else:
+                      
+                      for prefix in filePrefixesSkipList:
+                         if item.startswith(prefix): 
+                            skipThisItem = 1
+                            break
+                      
+                      for suffix in fileSuffixesSkipList:
+                         if item.endswith(suffix): 
+                            skipThisItem = 1
+                            break
+                      
+                      for completeName in fileNamesSkipList:
+                         if item == completeName: 
+                            skipThisItem = 1
+                            break
+                      
+                      if not skipThisItem: 
+                         filteredFileList.append(item)
+              
+              #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFolderList= %s" % filteredFolderList)
+              #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "filteredFileList= %s" % filteredFileList)
+              
+              for f in filteredFolderList:
+                     
+                  fullname = os.path.join(destfolder, f)
+                  P = FileProxy(f, fullname, f)
+                  mi = self.mimetypes_registry.classify(data=None, filename=f)
+      
+                  P.setIconPath('folder_icon.gif')
+                  P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+                  P.setMimeType('folder')
+                  if os.path.exists(fullname + '.metadata'):
+                      try:
+                        P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+                      except:
+                        P.setComment('')
+                  else:
+                      P.setComment('')
+                  l.append(P)
+              
+              for f in filteredFileList:
+                  
+                  fullname = os.path.join(destfolder, f)
+                  P = FileProxy(f, fullname, f)
+                  mi = self.mimetypes_registry.classify(data=None, filename=f)
+              
+                  P.setIconPath(mi.icon_path)
+                  P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+                  P.setMimeType(mi.normalized())
+         
+                  if os.path.exists(fullname + '.metadata'):
+                      try:
+                        P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+                      except:
+                        P.setComment('')
+                  else:
+                      P.setComment('')
+                  l.append(P)
+
            else:
                zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "listFolderContents() :: destfolder not found (%s)" % destfolder )
            return l
@@ -590,6 +730,7 @@ class PloneLocalFolderNG(BaseContent):
 
         rel_dir = '/'.join(REQUEST.get('_e', []))
         destpath = os.path.join(self.folder, rel_dir)
+        uploadFileBaseName = os.path.basename(upload.filename)
         if self.backup_folder:
             backupdestpath = os.path.join(self.backup_folder, rel_dir)
         else:
@@ -598,7 +739,12 @@ class PloneLocalFolderNG(BaseContent):
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=no file was uploaded!')
             return 0        
         
-        if upload.filename.endswith('.metadata'):
+        checkValidIdResult = checkValidId(uploadFileBaseName)
+        if checkValidIdResult != 1:
+            REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=upload of this file (%s) is not permitted: %s' % (uploadFileBaseName,checkValidIdResult))
+            return 0
+        
+        if uploadFileBaseName.endswith('.metadata'):
             REQUEST.RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=upload of .metadata files is not permitted.')
             return 0
         

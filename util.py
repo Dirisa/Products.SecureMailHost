@@ -1,6 +1,8 @@
 import os
 import shutil
 import string
+import re
+from types import StringType, UnicodeType
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.CMFCorePermissions import ModifyPortalContent
 from ConfigParser import ConfigParser
@@ -17,6 +19,8 @@ MD5_LENGTH = 32
 #   * md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
 
 security = ClassSecurityInfo()
+
+bad_id=re.compile(r'[^a-zA-Z0-9-_~,.$\(\)# ]').search
 
 # --------------------------------------------------------------------
 security.declareProtected(ModifyPortalContent, 'setMetadata')
@@ -137,36 +141,40 @@ def upzipFile(FSfilename, FSBackupFolderBase=None):
 
       # extract the files from the zipfile
       for zitem in z.namelist():
-         if not zitem.endswith('/'):
-            tofile = os.path.join(todir, zitem)
-            oldRevisionNumber = 0
-            newRevisionNumber = 1
-            # if file already exists, back it up to FSBackupFolderBase if specified
-            if os.path.exists(tofile) and FSBackupFolderBase:
-               # get revision of existing file (or 1 if revision metadata missing)
-               oldRevisionNumberText = getMetadataElement(tofile, section="GENERAL", option="revision")
-               if oldRevisionNumberText:
-                   oldRevisionNumber = int(oldRevisionNumberText)
-               else:
-                   oldRevisionNumber = 1
-
-               # move existing file to backup location renamed with trailing rev.#
-               backupdestpath = os.path.dirname(os.path.join(FSBackupFolderBase,zitem))
-               backupFileSuffix = '.' + str(oldRevisionNumber)
-               backupfilename = os.path.join(backupdestpath, os.path.basename(zitem)) + backupFileSuffix
-               # create skeleton directory structure under backupFolder if necessary 
-               if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
-               shutil.move(tofile, backupfilename)
-               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() move(%s, %s)" % (tofile,backupfilename))
-            
-            # extract the file
-            f = open(tofile, 'wb')
-            f.write(z.read(zitem))
-            f.close()
-
-            # set/update metadata 
-            newRevisionNumber = oldRevisionNumber + 1
-            setMetadata(tofile, section="GENERAL", option="revision", value=newRevisionNumber)
+         checkValidIdResult = checkValidId(zitem)
+         if checkValidIdResult != 1:
+            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() :: checkValidId(%s) failed:: %s" % (zitem,checkValidIdResult) ) 
+         else:
+            if not zitem.endswith('/'):
+               tofile = os.path.join(todir, zitem)
+               oldRevisionNumber = 0
+               newRevisionNumber = 1
+               # if file already exists, back it up to FSBackupFolderBase if specified
+               if os.path.exists(tofile) and FSBackupFolderBase:
+                  # get revision of existing file (or 1 if revision metadata missing)
+                  oldRevisionNumberText = getMetadataElement(tofile, section="GENERAL", option="revision")
+                  if oldRevisionNumberText:
+                      oldRevisionNumber = int(oldRevisionNumberText)
+                  else:
+                      oldRevisionNumber = 1
+   
+                  # move existing file to backup location renamed with trailing rev.#
+                  backupdestpath = os.path.dirname(os.path.join(FSBackupFolderBase,zitem))
+                  backupFileSuffix = '.' + str(oldRevisionNumber)
+                  backupfilename = os.path.join(backupdestpath, os.path.basename(zitem)) + backupFileSuffix
+                  # create skeleton directory structure under backupFolder if necessary 
+                  if not os.path.exists(backupdestpath): os.makedirs(backupdestpath)
+                  shutil.move(tofile, backupfilename)
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() move(%s, %s)" % (tofile,backupfilename))
+               
+               # extract the file
+               f = open(tofile, 'wb')
+               f.write(z.read(zitem))
+               f.close()
+   
+               # set/update metadata 
+               newRevisionNumber = oldRevisionNumber + 1
+               setMetadata(tofile, section="GENERAL", option="revision", value=newRevisionNumber)
 
       #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "upzipFile() finished unzip'ing %s" % FSfilename)
       return 1
@@ -230,3 +238,26 @@ def fixDOSPathName(srcFileName):
     fixedName=string.join(string.split(fixedName,'\t'),'\\\\t')
     fixedName=string.join(string.split(fixedName,'\n'),'\\\\n')
     return fixedName
+
+# --------------------------------------------------------------------
+def checkValidId(id):
+    # this is essentially checkValidId() from OFS/OBjectManager.py
+
+    if not id:
+        return 'The id is invalid because it is empty or not specified'
+    if bad_id(id) is not None:
+        return 'The id is invalid because it contains characters illegal in URLs.'
+    if id in ('.', '..'):
+        return 'The id is invalid because it is not traversable.'
+    if id.startswith('_'):
+        return 'The id is invalid because it begins with an underscore.'
+    if id.startswith('aq_'):
+        return 'The id is invalid because it begins with "aq_".'
+    if id.endswith('__'):
+        return 'The id is invalid because it ends with two underscores.'
+    if id == 'REQUEST':
+        return 'The id is invalid because REQUEST is a reserved name.'
+    if '/' in id:
+        return 'The id is invalid because it contains "/" characters illegal in URLs.'
+    return 1
+
