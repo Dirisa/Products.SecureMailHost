@@ -18,6 +18,7 @@ def CreateRootPHC( self, portal ):
     portal.portal_workflow.doActionFor( helpCenter.tutorial, Data.Transition.publish )
     helpCenter.howto.sections_vocab = Data.HowtoFolder.Sections
     helpCenter.tutorial.sections_vocab = Data.TutorialFolder.Sections
+    helpCenter.faq.sections_vocab = Data.FAQFolder.Sections
     return "Created a PHC instance in the root of your Plone site."
 
 def CreateUsers( self, portal ):
@@ -78,14 +79,60 @@ def CreateHowtos( self, portal ):
         i += 1
     return "Created %d PHC Howtos." % i
 
+def CreateFaqs( self, portal ):
+    i = 0
+    helpCenter = getattr( portal, Data.Hc.Id )
+    for content in Data.FAQ.list:
+        helpCenter.faq.invokeFactory( 'HelpCenterFAQ',
+                                      id=content.Id,
+                                      title=content.Title,
+                                      description=content.Question,
+                                      answer=content.Answer,
+                                      versions=content.Versions,
+                                      sections=content.Sections,
+                                      importance=content.Importance )
+        newFaq = getattr( helpCenter.faq, content.Id )
+        portal.plone_utils.editMetadata( newFaq, format=content.Format )
+        portal.plone_utils.changeOwnershipOf( newFaq, content.Owner.Id, 1 )
+        if content.Transition:
+            portal.portal_workflow.doActionFor( newFaq, content.Transition )
+        i += 1
+    return "Created %d PHC FAQs." % i
+
+
+def CreateErrorRefs( self, portal ):
+    i = 0
+    return "Created %d PHC Error References." % i
+
+def CreateDefinitions( self, portal ):
+    i = 0
+    return "Created %d PHC Definitions." % i
+
+def CreateLinks( self, portal ):
+    i = 0
+    return "Created %d PHC Links." % i
+
+def CreateReferenceManuals( self, portal ):
+    i = 0
+    return "Created %d PHC ReferenceManuals." % i
+
+def CreateVideos( self, portal ):
+    i = 0
+    return "Created %d PHC Videos." % i
+
 def CreateTestData( self, portal ):
     out = []
     out.append( CreateRootPHC( self, portal ) )
     out.append( CreateUsers( self, portal ) ) 
     out.append( CreateHowtos( self, portal ) )
     out.append( CreateTutorials( self, portal ) )
-    return '\n'.join( out )
-
+    out.append( CreateFaqs( self, portal ) )
+    out.append( CreateErrorRefs( self, portal ) )
+    out.append( CreateDefinitions( self, portal ) )
+    out.append( CreateLinks( self, portal ) )
+    out.append( CreateReferenceManuals( self, portal ) )
+    out.append( CreateVideos( self, portal ) )
+    return '  \n'.join( out )
 
 functions = OrderedDict()
 functions['Create Test Data'] = CreateTestData
@@ -93,6 +140,12 @@ functions['Create Test Users'] = CreateUsers
 functions['Create Test PloneHelpCenter'] = CreateRootPHC
 functions['Create Test Tutorials'] = CreateTutorials
 functions['Create Test Howtos'] = CreateHowtos
+functions['Create Test FAQs'] = CreateFaqs
+functions['Create Test Error References'] = CreateReferenceManuals
+functions['Create Test Definitions'] = CreateDefinitions
+functions['Create Test Links'] = CreateLinks
+functions['Create Test Reference Manuals'] = CreateReferenceManuals
+functions['Create Test Videos'] = CreateVideos
 
 class CustomSetup(SetupWidget):
     type = 'PloneHelpCenter Test Data'
