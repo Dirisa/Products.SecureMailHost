@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.105 2003/12/18 20:19:31 ajung Exp $
+$Id: Issue.py,v 1.106 2003/12/28 18:28:50 ajung Exp $
 """
 
 import sys, os, time
@@ -288,7 +288,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             ct = guess_content_type(file_id, uploaded_file.read())
             if file_id in self.objectIds():
                 name,ext = os.path.splitext(file_id)
-                file_id = '%s_%s.%s' % (name, time.strftime('%Y%m%d_%H%M%S', time.localtime()), ext)
+                file_id = '%s_%s%s' % (name, time.strftime('%Y%m%d_%H%M%S', time.localtime()), ext)
 
             if ct[0].find('image') > -1:
                 self.invokeFactory('Image', file_id)
