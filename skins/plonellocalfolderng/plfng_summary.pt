@@ -7,7 +7,8 @@
 
 
   <div metal:fill-slot="main"
-     tal:define="folderfilter python:request.get('folderfilter', '');
+     tal:define="show python:request.get('show','none');
+                 folderfilter python:request.get('folderfilter', '');
                  global decodedFilter python:here.decodeFolderFilter(folderfilter);
                  global filterValues decodedFilter;
                  global filter decodedFilter;
@@ -18,14 +19,17 @@
                  total_vis_files   python:folder_props.get('files',0);
                  filteredOutFolderContents python:here.getFilteredOutContents();
                  filteredFolderContents python:here.getFilteredContents();
-                 legalFiles python:filteredFolderContents;
+                 legalFiles python:test(show.find('LegalContent') >= 0,
+                                        filteredFolderContents,[]);
                  illegalFiles python:filteredOutFolderContents[0];
                  total_illegal_files python:len(illegalFiles);
                  illegalFolders python:filteredOutFolderContents[1];
                  total_illegal_folders python:len(illegalFolders);
-                 hiddenFiles python:filteredOutFolderContents[2];
+                 hiddenFiles python:test(show.find('HiddenContent') >= 0,
+                                         filteredOutFolderContents[2],[]);
                  total_hidden_files python:len(hiddenFiles);
-                 hiddenFolders python:filteredOutFolderContents[3];
+                 hiddenFolders python:test(show.find('HiddenContent') >= 0,
+                                           filteredOutFolderContents[3],[]);
                  total_hidden_folders python:len(hiddenFolders);
                  mtool mtool|here/portal_membership;
                  myfolder python:here.absolute_url()==mtool.getHomeUrl();
@@ -157,7 +161,7 @@
         </metal:block>
         </fieldset>
 
-        <fieldset>
+        <fieldset tal:condition="python:show.find('HiddenContent') >= 0">
         <legend>Hidden Content:</legend>
         
 	         <fieldset>
@@ -244,7 +248,7 @@
 
         </fieldset>
         
-        <fieldset>
+        <fieldset tal:condition="python:show.find('LegalContent') >= 0">
         <legend>Legal Content:</legend>
  
         <b>files with legal Plone ID's</b><br>
