@@ -197,7 +197,7 @@
 
 <tal:macro metal:define-macro="search_issues_form" i18n:domain="plonecollectorng"
 
- tal:define="advanced python: request.has_key('advanced_search') or member.getProperty('pcng_default_searchform') == 'advanced'">
+ tal:define="advanced python: int(int(request.get('advanced_search', 0)) == 1 or member.getProperty('pcng_default_searchform') == 'advanced')">
 
   <div style="float: left">
 
@@ -239,8 +239,8 @@
       </div>
 
       <div tal:condition="python: member.getUserName() != 'Anonymous User'" style="text-align: right">
-        <a href="pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> &bull; 
-        <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+        <a tal:attributes="href string:pcng_view?filter=assigned&advanced_search=${advanced}"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> &bull; 
+        <a tal:attributes="href string:pcng_view?filter=submitted&advanced_search=${advanced}"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
       </div>
 
     </div>

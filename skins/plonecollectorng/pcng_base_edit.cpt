@@ -89,8 +89,8 @@
                tal:attributes="tabindex tabindex/next;" />
       </div>
 
-  </form>
-</div>
+    </form>
+  </div>
 </div>
 
 </body>
