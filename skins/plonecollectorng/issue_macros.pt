@@ -18,15 +18,18 @@
 <metal:block metal:define-macro="field_shortview" i18n:domain="plonecollectorng">
  <metal:block tal:define="value python: here.getParameter(field.getName())">
     <metal:block tal:condition="value">
-     <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
-     <span tal:omit-tag="" tal:condition="not: field/vocabulary|nothing" 
-           metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)" />
-     <metal:block tal:condition="field/vocabulary|nothing" 
-                  tal:define="vocab python: field.Vocabulary(here);
-                              display python: here.displayValue(vocab, value)">
-        <span tal:replace="structure display" />
+      <span class="schemata_label" i18n:translate="" tal:content="python: field.widget.Label(here).strip()" />:
 
-     </metal:block>  
+      <tal:if tal:condition="not: field/vocabulary|nothing" >
+        <span metal:use-macro="python: here.widget(field.getName(), mode='view', use_label=0)" />
+      </tal:if>
+
+      <tal:if tal:condition="field/vocabulary|nothing" >
+        <span tal:define="vocab python: field.Vocabulary(here);
+                          display python: here.displayValue(vocab, value)"
+              tal:replace="structure display" />
+      </tal:if> 
+
     </metal:block>
   </metal:block>
 </metal:block>
