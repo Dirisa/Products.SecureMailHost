@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.33 2004/01/21 09:35:56 ajung Exp $
+$Id: pdfwriter.py,v 1.34 2004/01/21 09:44:08 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -51,7 +51,7 @@ def utf8(text):
     assert isinstance(text, UnicodeType)
     return text.encode('utf-8')
 
-def dowrap(text, limit=80):
+def dowrap(text, limit=100):
     return fill(text, limit)
 
 def break_longlines(text, limit=80):
@@ -151,7 +151,7 @@ def pdfwriter(collector, ids):
 
     for issue_id in ids:
         issue = getattr(collector, str(issue_id))
-        header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 50))
+        header(break_longlines(translate('issue_number', 'Issue #$id', id='%s: %s' % (issue.getId(), issue.title), as_unicode=1), 70))
 
         header(translate('label_description', 'Description', as_unicode=1))
         definition(html_quote(getFieldValue(issue, 'description')), PreStyle)
