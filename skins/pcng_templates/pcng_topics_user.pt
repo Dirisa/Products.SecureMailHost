@@ -16,7 +16,7 @@
 
 
   <table class="listing" 
-         tal:define="users python: here.getTrackerUsers(staff_only=1)">
+         tal:define="users python: here.pcng_tool.getTrackerUsers(staff_only=1)">
     <tr>
       <th i18n:translate="topic">Topic</th>
       <th i18n:translate="staff_members">Staff members</th>

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.221 2004/10/10 11:03:09 ajung Exp $
+$Id: Collector.py,v 1.222 2004/10/10 14:26:09 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -22,7 +22,7 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.PythonScripts.PythonScript import PythonScript
 
 from Products.ATSchemaEditorNG.SchemaEditor import SchemaEditor
-from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow
+from config import CollectorCatalog, SEARCHFORM_IGNOREABLE_INDEXES, CollectorWorkflow, CollectorTool
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue, EmailSubmission
 from config import UNDELETEABLE_FIELDS, SCHEMA_ID
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
@@ -32,6 +32,7 @@ import notifications, collector_schema, issue_schema, util
 from Issue import PloneIssueNG
 from Translateable import Translateable
 from Catalog import PloneCollectorNGCatalog
+from CollectorTool import CollectorTool
 from Topics import Topics
 from Users import Users
 from workflows import VOC_WORKFLOWS
@@ -44,6 +45,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     archetype_name = 'PCNG Tracker'
     default_view = 'pcng_view'
     immediate_view = 'pcng_view'
+    content_icon = 'collector_icon.gif'
 
     actions = ({
         'id': 'pcng_browse',
@@ -137,6 +139,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
 
         self._setup_catalog()
         self._setup_workflow()
+        self._setup_util_tool()
         self.getTranscript().add(CommentEvent(u'Tool setup', state='system'))
 
         if RESPONSE:
@@ -153,6 +156,17 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         catalog = PloneCollectorNGCatalog()
         self._setObject(catalog.getId(), catalog)
         catalog = catalog.__of__(self)
+
+    def _setup_util_tool(self):
+        """ setup util tooltool """
+
+        try: self.manage_delObjects(CollectorTool)
+        except ConflictError: raise
+        except: pass
+
+        tool = CollectorTool()
+        self._setObject(tool.getId(), tool)
+        tool = tool.__of__(self)
 
     def _setup_workflow(self):
         """ setup workflow tool """
@@ -225,72 +239,6 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
             self._users = Users()
             self._migrate_users()
         return ImplicitAcquisitionWrapper(self._users, self)
-
-    security.declareProtected(View, 'getTrackerUsers')
-    def getTrackerUsers(self, staff_only=0, unassigned_only=0, with_groups=0):
-        """ return a list of dicts where every item of the list
-            represents a user and the dict contain the necessary
-            informations for the presentation.
-        """
-
-        membership_tool = getToolByName(self, 'portal_membership', None)
-
-        staff = []
-        users = self.getUsers()
-        for role in ('manager', 'supporter', 'reporter'):
-            staff.extend(users.getUsersForRole(role))
-
-        all_names = []
-        folder = self
-        running = 1
-        while running:     # search for acl_users folders
-            if hasattr(folder, 'acl_users'):
-                usernames = folder.acl_users.getUserNames()
-                for name in usernames:
-                    if not name in all_names:
-                        all_names.append(name)
-
-            if len(folder.getPhysicalPath()) == 1:
-                running = 0
-            folder = folder.aq_parent
-
-        # Filter out non-existing users
-        staff = [s for s in staff if s in all_names]
-
-        if staff_only:
-            names = staff
-        else:
-            names = all_names + staff
-
-        l = []
-        groups = self.pcng_get_groups()  # get group IDs from GRUF
-
-        reporters = users.getUsersForRole('reporter')
-        managers = users.getUsersForRole('manager')
-        supporters = users.getUsersForRole('supporter')
-
-        for name in util.remove_dupes(names):
-            if name.replace('group_', '') in groups and not with_groups: continue  # no group names !!!
-            member = membership_tool.getMemberById(name)
-            d = { 'username':name, 'role':'', 'fullname':'', 'email':''}
-
-            if member:
-                d['fullname'] = member.getProperty('fullname')
-                d['email'] = member.getProperty('email')
-
-            if name in reporters: d['role'] = 'Reporter'
-            if name in supporters: d['role'] = 'Supporter'
-            if name in managers: d['role'] = 'TrackerAdmin'
-            l.append(d)
-
-        l.sort(lambda a,b: cmp(a['username'].lower(), b['username'].lower()))
-
-        if staff_only:
-            return [item for item in l if item['username'] in staff]
-        elif unassigned_only:
-            return [item for item in l if item['username'] not in staff]
-        else:
-            return l
 
     security.declareProtected(ManageCollector, 'set_staff')
     def set_staff(self, reporters=[], managers=[], supporters=[], RESPONSE=None):
@@ -767,14 +715,15 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """
 
         mode = self.getIssue_email_submission()
+        tool = getToolByName(self, CollectorTool)
 
         if mode == 'disabled':
             return 0
         elif mode == 'staff':
-            user_ids= [u['username'] for u in self.getTrackerUsers(staff_only=1)]
+            user_ids= [u['username'] for u in tool.getTrackerUsers(staff_only=1)]
             return userid in user_ids
         elif mode == 'authenticated':
-            user_ids= [u['username'] for u in self.getTrackerUsers()]
+            user_ids= [u['username'] for u in tool.getTrackerUsers()]
             return userid in user_ids
         elif mode == 'anyone':
             return 1

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: group_assignment_policies.py,v 1.5 2004/10/10 11:03:10 ajung Exp $
+$Id: group_assignment_policies.py,v 1.6 2004/10/10 14:26:09 ajung Exp $
 """
 
 """ 
@@ -16,12 +16,18 @@ or PloneCollectorNG topic group. Currently we implement only a simple
 assignment policy where all members of a group are assigned to an issue.
 """
 
+
+from Products.CMFCore.utils import getToolByName
+from config import CollectorTool
+
 def usersForTopicGroup(context, topic):
     return context.getTopics().getUsersForTopic(topic)
 
 def usersForGrufGroup(context, group):
 
-    tracker_staff = [u['username'] for u in context.getTrackerUsers(staff_only=1)]
+    tool = getToolByName(context, CollectorTool)
+
+    tracker_staff = [u['username'] for u in tool.getTrackerUsers(staff_only=1)]
     try:
         group = context.portal_groups.getGroupById(group)
         return [m.getUserName() for m in group.getGroupMembers() if m.getUserName() in tracker_staff]

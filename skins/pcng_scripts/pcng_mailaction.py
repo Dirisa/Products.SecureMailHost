@@ -6,7 +6,7 @@ user = getSecurityManager().getUser()
 if not 'TrackerAdmin' in user.getRolesInContext(context):
     raise RuntimeError('No permission')
 
-staff = context.getTrackerUsers(staff_only=1)
+staff = context.pcng_tool.getTrackerUsers(staff_only=1)
 emails = [u.get('email') for u in staff]
 dest_emails = [e for e in emails if e]
 MH = getattr(context, 'MailHost') 

@@ -267,7 +267,7 @@ function show_tickets() {
             i18n:translate="assign_to_users"> Assign to users</span>
       <br/>
       <select tal:condition="allow_assign" name="assignees:list" size="7" multiple>
-        <option tal:repeat="u python: here.getTrackerUsers(staff_only=1)"
+        <option tal:repeat="u python: here.pcng_tool.getTrackerUsers(staff_only=1)"
                 tal:content="string: ${u/fullname} (${u/username}, ${u/role})"
                 tal:attributes="value u/username;
                                 selected python: u['username'] in assignees" />

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.227 2004/10/02 10:12:09 ajung Exp $
+$Id: Issue.py,v 1.228 2004/10/10 14:26:09 ajung Exp $
 """
 
 import os, time, random
@@ -124,6 +124,7 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     archetype_name = 'PCNG Issue'
     default_view = 'pcng_issue_view'
     immediate_view = 'pcng_issue_view'
+    content_icon = 'issue_icon.gif'
 
     schema = issue_schema.schema
 
