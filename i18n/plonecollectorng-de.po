@@ -939,3 +939,5 @@ msgstr "seit"
 msgid "days_or_date"
 msgstr "Tage oder Datum"
 
+msgid "followup_heading"
+msgstr "Angelegt von $user am $date"
