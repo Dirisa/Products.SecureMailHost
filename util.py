@@ -12,6 +12,9 @@ import zipfile
 import zLOG
 
 import md5
+
+from FileProxy import FileProxy
+
 MD5_LENGTH = 32
 
 # Note: Optional support for an external md5 generation system utility 
@@ -260,4 +263,81 @@ def checkValidId(id):
     if '/' in id:
         return 'The id is invalid because it contains "/" characters illegal in URLs.'
     return 1
+
+# --------------------------------------------------------------------
+def catalogFSContent(FSfullPath, filetypePhrasesSkipList, catalogTool, mimetypesTool, 
+                     uidBase, view_roles, effective, expires, meta_type):
+                     
+   # uidBase = str('/' + portalId + '/'+ this_portal.getRelativeContentURL(self) + '/')
+   
+   filesCataloged = 0
+   filesNotCataloged = 0
+   
+   # instantiate a barebones FileProxy instance
+   dummyFileProxy = FileProxy(id="dummy", filepath=FSfullPath, fullname="dummy", properties=None)
+   dummyFileProxy.meta_type = meta_type
+   dummyFileProxy.effective = effective
+   dummyFileProxy.expires = expires 
+   
+   if os.path.isdir(FSfullPath):
+      FSfullPathFolderName = FSfullPath
+      try:
+         folderItems = os.listdir(FSfullPathFolderName)
+      except:
+         zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSObjects() :: error reading folder (%s) contents" % FSfullPathFolderName )
+         folderItems = [] 
+
+      for item in folderItems:
+         itemFSfullPathName = os.path.join(FSfullPathFolderName, item)
+         
+         if os.path.isdir(itemFSfullPathName):
+            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: subdir=%s" % itemFSfullPathName )
+            newUidBase = uidBase + item + '/'
+            subfolderfilesCataloged,subfolderfilesNotCataloged = \
+               catalogFSContent(itemFSfullPathName, filetypePhrasesSkipList,catalogTool, \
+                                mimetypesTool, newUidBase, view_roles, effective, expires, meta_type)
+            filesCataloged = filesCataloged + subfolderfilesCataloged
+            filesNotCataloged = filesNotCataloged + subfolderfilesNotCataloged
+         
+         else:
+
+            checkValidIdResult = checkValidId(item)
+            if checkValidIdResult != 1: 
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogFSContent() :: checkValidId(%s) failed:: %s" % (item,checkValidIdResult) )
+               continue
+            # don't include the PloneLocalFolderNG special metadata files  
+            if item.endswith('.metadata'): 
+               continue
+
+            FSfullPathFileName = itemFSfullPathName
+            uid = str(uidBase +  os.path.basename(FSfullPathFileName))
+            dummyFileProxy.id = str(item)
+            dummyFileProxy.url = FSfullPathFileName
+            dummyFileProxy.encoding = None
+            mi = mimetypesTool.classify(data=None, filename=item)
+            dummyFileProxy.setIconPath(mi.icon_path)
+            dummyFileProxy.mime_type = mi.normalized()
+            
+            # check to see if the mimetype for this file is on the skip list. 
+            # The main reason for this is to avoid having TextIndexNG2 process 
+            # files that we know it doesnt handle, but this could also be useful
+            # for other scenarios.
+
+            skipFile = 0
+            for filetypePhrase in filetypePhrasesSkipList:
+               if dummyFileProxy.mime_type.find(filetypePhrase) >= 0: skipFile=1
+               
+               if skipFile:
+                  filesNotCataloged = filesNotCataloged + 1
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: not cataloging file=%s" % dummyFileProxy.url )
+               else:
+                  zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: file=%s" % FSfullPathFileName )
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: mimetype=%s" % dummyFileProxy.mime_type )
+                  #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "catalogContents() :: catalog uid=%s" % uid )
+                         
+                  catalogTool.catalog_object( dummyFileProxy, uid )
+                         
+                  filesCataloged = filesCataloged + 1
+
+   return filesCataloged, filesNotCataloged 
 
