@@ -41,6 +41,8 @@
           <dt>
             <img tal:replace="structure here/glossary_icon.gif" />
             <a tal:attributes="href definition/absolute_url" tal:content="definition/Title"></a>
+            <a class="link-anchor" tal:attributes="name definition/id;
+                                                   href string:${current_page_url}#${definition/id};">#</a>
           </dt>
 
           <dd tal:content="structure definition/Description">
