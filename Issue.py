@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.103 2003/12/12 10:02:27 ajung Exp $
+$Id: Issue.py,v 1.104 2003/12/18 18:17:25 ajung Exp $
 """
 
 import sys, os, time
@@ -21,6 +21,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
+from Products.Archetypes.config import TOOL_NAME as ARCHETOOL_NAME
 
 from Base import Base, ParentManagedSchema
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
@@ -375,31 +376,33 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     # might be reverted
     ######################################################################
 
+
+    def _get_catalog(self):
+        """ return collector catalog """
+        return getattr(self, CollectorCatalog)
+
+    def _get_archetypes_catalogs(self):
+        """ return catalogs that are maintainted by Archetypes """
+
+        at = getToolByName(self, ARCHETOOL_NAME , None)
+        catalogs = at.getCatalogsByType(self.meta_type) or []
+        return [c for c in catalogs if c.getId() not in ('portal_catalog', )]
+
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
 
-        getattr(self, CollectorCatalog).indexObject(self)  # reindex with collector catalog
+        self._get_catalog().indexObject(self)  # reindex with collector catalog
 
-        from Products.Archetypes.config import TOOL_NAME
-        at = getToolByName(self, TOOL_NAME , None)
-
-        for c in at.getCatalogsByType(self.meta_type):
-            if c.getId() in 'portal_catalog': continue
+        for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
 
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
 
-        getattr(self, CollectorCatalog).unindexObject(self)  # reindex with collector catalog
+        self._get_catalog().unindexObject(self)  # reindex with collector catalog
 
-        catalogs = [getattr(self, CollectorCatalog)]
-
-        from Products.Archetypes.config import TOOL_NAME
-        at = getToolByName(self, TOOL_NAME , None)
-        
-        for c in at.getCatalogsByType(self.meta_type):
-            if c.getId() in 'portal_catalog': continue
+        for c in self._get_archetypes_catalogs():
             c.uncatalog_object('/'.join(self.getPhysicalPath()))
                 
     security.declareProtected(View, 'SearchableText')
