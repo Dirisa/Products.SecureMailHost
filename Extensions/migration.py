@@ -49,11 +49,12 @@ class Wiki2PHCMigrator(CMFItemMigrator):
     def __init__(self, obj, **kwargs):
         BaseMigrator.__init__(self, obj, **kwargs)
         self.new_id = mkNiceId(self.new_id)
-        self.wftool = getToolByName(self.parent, 'portal_workflow')
 
     def custom(self):
-        data = self.old.render()
-        self.new.setBody(data, encoding='utf-8')
+        print '%s -> %s' % (self.old.absolute_url(1), self.new.absolute_url(1))
+        data = self.old.read()
+        self.new.setBody(data, encoding='utf-8', mimetype='text/structured')
+        self.new.setRelated_keywords((self.orig_id,))
     
     def renameOld(self):
         """Renames the old object
@@ -71,16 +72,16 @@ class Wiki2PHCMigrator(CMFItemMigrator):
         ttool = getToolByName(self.parent, 'portal_types')
         typeInfo = ttool.getTypeInfo(self.toType)
         typeInfo.constructInstance(destination, self.new_id)
-
         self.new = getattr(destination, self.new_id)
-        self.wftool.doActionFor(self.new, 'submit')
 
     def remove(self):
         """Removes the old item
         
         abused to change the workflow state
         """
-        #if self.wftool.getInfoFor(self.old, 'review_state') in ('published', 'pending'):
+        wftool = getToolByName(self.parent, 'portal_workflow')
+        wftool.doActionFor(self.new, 'submit')
+        #if wftool.getInfoFor(self.old, 'review_state') in ('published', 'pending'):
         #    wftool.doActionFor(self.old, 'retract')
 
 

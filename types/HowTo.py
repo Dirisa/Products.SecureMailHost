@@ -4,7 +4,10 @@ from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
 from schemata import HowToSchema
 from PHCContent import PHCContent
+from AccessControl import ClassSecurityInfo
+#from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 
+MAPPING = {'text_html' : 'text/html'}
 
 class HelpCenterHowTo(PHCContent,BaseFolder):
     """This is a howto document content object, to which you can attach images and
@@ -21,12 +24,11 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
     allow_discussion = IS_DISCUSSABLE
     allowed_content_types = ('Image', 'File', 'PloneImage', 'PloneFile', )
 
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/howto_view',
-        'permissions': (CMFCorePermissions.View,)
-        },
+    actions = ({'id': 'view',
+                'name': 'View',
+                'action': 'string:${object_url}/faq_view',
+                'permissions': (CMFCorePermissions.View,)
+                },
         {
         'id': 'attachments',
         'name': 'Attachments',
@@ -35,5 +37,13 @@ class HelpCenterHowTo(PHCContent,BaseFolder):
         },
         
         )
+        
+    security = ClassSecurityInfo()
+        
+   
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setFormat')
+    def setFormat(self, value):
+        value = MAPPING.get(value, value)
+        BaseFolder.setFormat(self, value)
 
 registerType(HelpCenterHowTo, PROJECTNAME)
