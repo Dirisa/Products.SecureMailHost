@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.64 2003/11/03 17:49:38 ajung Exp $
+$Id: Issue.py,v 1.65 2003/11/03 20:17:22 ajung Exp $
 """
 
 import sys, os
@@ -95,7 +95,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         {'id': 'issue_debug',
         'name': 'Debug',
         'action': 'pcng_issue_debug',
-        'permissions': (AddCollectorIssue,)
+        'permissions': (ManageCollector,)
         },
         )
 
