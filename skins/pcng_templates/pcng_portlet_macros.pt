@@ -160,7 +160,6 @@
 <div metal:define-macro="pcng_issue_portlet" i18n:domain="plonecollectorng">
   <div class="portlet" id="pcng_issue_portlet">
     <h5 i18n:translate="issue_actions">Issue actions</h5>
-     <span tal:content="python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here)"/>
     <div class="portletBody" id="pcng_portlet_issue">
       <div class="pcng_action" loop tal:repeat="a actions/object_pcng_issue|nothing">
         <a tal:attributes="href a/url">
