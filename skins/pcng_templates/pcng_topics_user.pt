@@ -14,40 +14,35 @@
     <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
   </metal:block>
 
-  <form action="pcng_set_topics_user" method="post">
-    <table class="listing" 
-           tal:define="users python: here.getTrackerUsers(staff_only=1);
-                       topic_user here/get_topics_user">
-      <tr>
-        <th i18n:translate="topic">Topic</th>
-        <th i18n:translate="staff_members">Staff members</th>
-        <th i18n:translate="action">Action</th>
+
+  <table class="listing" 
+         tal:define="users python: here.getTrackerUsers(staff_only=1);
+                     topic_user here/get_topics_user">
+    <tr>
+      <th i18n:translate="topic">Topic</th>
+      <th i18n:translate="staff_members">Staff members</th>
+      <th i18n:translate="action">Action</th>
+    </tr>
+
+    <tal:loop tal:repeat="topic here/pcng_get_topics">
+      <tr class="odd" tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')"
+                      tal:define="topic_users python: topic_user.get(topic, [])">
+  
+        <td valign="top"> 
+          <span tal:content="topic" />
+        </td>
+        <td>
+          <span tal:replace="python: ', '.join(topic_users)" />
+        </td>
+        <td>
+          <a tal:attributes="href string:pcng_topic_user_form?topic=$topic">
+            <img src="edit.gif" title="Edit assignment" i18n:attributes="title"/>
+          </a>
+        </td>
       </tr>
+    </tal:loop>
+  </table>
 
-      <tal:loop tal:repeat="topic here/pcng_get_topics">
-        <tr class="odd" tal:attributes="class python:test(repeat['topic'].even(), 'even', 'odd')"
-                        tal:define="topic_users python: topic_user.get(topic, [])">
-    
-          <td valign="top"> 
-            <span tal:content="topic" />
-          </td>
-          <td>
-            <span tal:replace="python: ', '.join(topic_users)" />
-          </td>
-          <td>
-            <a tal:attributes="href string:pcng_topic_user_form?topic=$topic">
-              <img src="edit.gif" title="Edit assignment" i18n:attributes="title"/>
-            </a>
-          </td>
-        </tr>
-      </tal:loop>
-    </table>
-
-    <div>
-      <input class="context" type="submit" value="Save" i18n:attributes="value" class="standalone"/>
-      <input class="context" type="reset" value="Reset" i18n:attributes="value" class="standalone"/>
-    </div>
-  </form>
     
   <hr>
   <div class="formHelp" i18n:translate="help_topics_users">
