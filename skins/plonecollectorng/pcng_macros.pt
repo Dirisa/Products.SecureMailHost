@@ -190,19 +190,19 @@
     <input type="submit" value=" Jump " i18n:attributes="value" class="standalone"/>
   </form>
 
-  <div>
-    <a href="pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> - 
-    <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
-  </div>
+  <tal:if tal:condition="python: member.getUserName() != 'Anonymous User'">
+    <div>
+      <a href="pcng_view?filter=assigned"><span i18n:translate="issues_assigned_to_me">Issues assigned to me</span></a> - 
+      <a href="pcng_view?filter=submitted"><span i18n:translate="issues_submitted_by_me">Issues submitted by me</span></a>
+    </div>
 
-  <div tal:condition="member">
     <form method="post" action="pcng_do_search">
       <span i18n:translate="my_saved_searches">My saved searches</span>:
 
       <!-- saved searches are stored as a list of string 'RELATIVE_URL::query_id::QUERY_STRING' -->
 
       <select name="query">
-        <tal:loop tal:repeat="saved_search python: [s for s in member.getProperty('pcng_saved_searches') if s.startswith(here.absolute_url(1))]" >
+        <tal:loop tal:repeat="saved_search python: [s for s in member.getProperty('pcng_saved_searches', []) if s.startswith(here.absolute_url(1))]" >
           <option tal:content="python: saved_search.split('::', 2)[1]" 
                   tal:attributes="value python: saved_search.split('::', 2)[2]"
               />
@@ -211,16 +211,18 @@
       </select>
       <input type="submit" value="Search" i18n:attributes="value" class="standalone"/>
     </form>    
-  </div>
 
-  <div tal:condition="advanced" >
+    <div tal:condition="advanced" >
       <form method="post" action="pcng_save_search">
         <input type="hidden" name="query" tal:attributes="value request/QUERY_STRING">
         <span i18n:translate="save_this_search_as">Save search as</span>:
         <input type="text" name="query_id" value="" size="20" maxlength="20">
         <input type="submit" value=" Save " />
-      </form>    
-  </div>
+        </form>    
+    </div>
+  </tal:if>
+
+
 
   <form action="pcng_view" method="GET"  name="search_form" tal:condition="advanced">
     <br> <br>
