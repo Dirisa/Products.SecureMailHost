@@ -88,13 +88,17 @@
       </div>
 
 
-      <fieldset tal:condition="python: mode == 'full'" >
+      <fieldset tal:condition="python: mode == 'full'" 
+                tal:define="images python: here.objectValues(('Portal Image',))">
         <legend i18n:translate="images">Images</legend>
-        <div tal:repeat="image python: here.objectValues(('Portal Image',))">
+        <div tal:repeat="image images">
           <span tal:content="image/getId" />:<br/>
           <img tal:attributes="src image/absolute_url">
           <br/>
         </div>
+        <div tal:condition="not: images">
+          <span i18n:translate="no_images_available">No images available</span>
+        </div> 
       </fieldset>
 
       <metal:block tal:condition="python: mode=='full'" >
