@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.61 2003/11/02 20:02:57 ajung Exp $
+$Id: Issue.py,v 1.62 2003/11/02 20:17:09 ajung Exp $
 """
 
 import sys, os
@@ -108,7 +108,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         self.wl_init()
         self.id = id
         self.title = title 
-        self._last_action = None    # last action from the followup form
+        self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
         self._transcript.addComment('Issue created')
 
