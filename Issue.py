@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.138 2004/03/16 18:29:11 ajung Exp $
+$Id: Issue.py,v 1.139 2004/03/17 12:08:32 ajung Exp $
 """
 
 import sys, os, time
@@ -107,6 +107,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ perform post-creation actions """
 
         self._transcript.setEncoding(self.getSiteEncoding())
+        self._transcript.addComment(self.Translate('Created', 'Created', as_unicode=1))
 
         # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
