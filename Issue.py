@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.100 2003/12/08 11:32:20 ajung Exp $
+$Id: Issue.py,v 1.101 2003/12/08 18:17:40 ajung Exp $
 """
 
 import sys, os, time
@@ -33,7 +33,7 @@ import util, notifications
 
 _marker = []
 
-class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
+class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     """ PloneCollectorNG """
 
     actions = ({
@@ -229,7 +229,7 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
             raise ValueError(self.translate('reference_no_comment', 'References must have a comment'))
 
         self.addReference(issue, "relates_to", issue_id=issue.getId(),
-                                               issue_url=issue.absolute_url(), 
+                                               issue_url=issue.absolute_url(1), 
                                                collector_title=tracker.getId(),
                                                comment=reference.comment)
 
@@ -363,18 +363,41 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
 
     ######################################################################
     # Catalog stuff
+    # 
+    # In V 1.0 and below we used to reindex the issue with the collector
+    # catalog and the portal catalog. Starting V 1.0.1 we use only the
+    # portal catalog until we have ifixedthe problem with the migration code
+    # in Field.set() of AT that does not work with DublicCore fields that
+    # not defined on the issue schema. Maybe in the future this change
+    # might be reverted
     ######################################################################
 
     security.declareProtected(ModifyPortalContent, 'reindexObject')
     def reindexObject(self, idxs=None):
         """ reindex issue """
-        catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
-        for c in catalogs: c.indexObject(self)
+
+        self.pcng_catalog.indexObject(self)  # reindex with collector catalog
+
+        from Products.Archetypes.config import TOOL_NAME
+        at = getToolByName(self, TOOL_NAME , None)
+
+        for c in at.getCatalogsByType(self.meta_type):
+            if c.getId() in 'portal_catalog': continue
+            c.catalog_object(self, '/'.join(self.getPhysicalPath()))
 
     security.declareProtected(ModifyPortalContent, 'unindexObject')
     def unindexObject(self):
-        catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
-        for c in catalogs: c.unindexObject(self)
+
+        self.pcng_catalog.unindexObject(self)  # reindex with collector catalog
+
+        catalogs = [getattr(self, 'pcng_catalog')]
+
+        from Products.Archetypes.config import TOOL_NAME
+        at = getToolByName(self, TOOL_NAME , None)
+        
+        for c in at.getCatalogsByType(self.meta_type):
+            if c.getId() in 'portal_catalog': continue
+            c.uncatalog_object('/'.join(self.getPhysicalPath()))
                 
     def SearchableText(self):
         """ return all indexable texts """
