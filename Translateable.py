@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Translateable.py,v 1.5 2003/10/19 16:17:23 ajung Exp $
+$Id: Translateable.py,v 1.6 2003/10/26 13:40:22 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -20,7 +20,7 @@ class Translateable:
     security = ClassSecurityInfo()
 
     security.declarePublic('translate')
-    def translate(self, msg_id, text, **kw):
+    def translate(self, msgid, text, **kw):
         """ ATT: this code is subject to change """
 
         pts = getattr(self, '_v_have_pts', None)
@@ -33,12 +33,12 @@ class Translateable:
                 self._v_have_pts = None
                 return self._interpolate(text, kw)
 
-            if pts .meta_type.find('Broken') > -1: 
+            if pts.meta_type.find('Broken') > -1: 
                 self._v_have_pts = None
                 return self._interpolate(text, kw)
 
         ret = pts.translate(domain=i18n_domain, 
-                            msgid=msg_id, 
+                            msgid=msgid, 
                             context=self,
                             mapping=kw,  
                             default=text)
