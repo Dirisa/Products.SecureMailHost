@@ -13,12 +13,6 @@ Template changes:
     of what the user is permitted to see. Managers and reviewers should also
     see pending (but not in-progress or obsolete) items, styled in a different
     colour (this styling already exists)
-    
- - Reference manual front page should show TOC with all sections, sub-sections,
-    pages nested (need recursive script - see referencemanual_getSections.py).
-    
- - Reference manual drop-down selector should show full chapter numbering, 
-    e.g. "1.1.3 Installing Plone", and should show entire TOC
 
 ====================
 Versions management:
@@ -86,7 +80,7 @@ Schema/class changes:
     
  - Instructional video should use ExternalStorage for video files
  
-  - glossary_view template should use a catalogue search to show definitions.
+ - glossary_view template should use a catalogue search to show definitions.
     This is in getItemsBySection(), overridden from PHCFolder. Both should use a
     search, but the latter requires ExtendedPathIndex. Since the Glossary is
     sorted anyway, it does not. In either case, we need a catalogue index on
