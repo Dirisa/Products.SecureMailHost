@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.32 2004/03/08 20:03:02 ajung Exp $
+$Id: Translateable.py,v 1.33 2004/03/17 11:43:47 ajung Exp $
 """
 
 from types import UnicodeType, StringType
@@ -13,11 +13,14 @@ from types import UnicodeType, StringType
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.utils import getToolByName
+from Products.PlacelessTranslationService import getTranslationService
 
 try:
     from Products.PlacelessTranslationService import getTranslationService
     have_pts = 1
 except ImportError:
+    from zLOG import LOG, WARNING
+    LOG('plonecollectorng', WARNING, 'PlacelessTranslationService not found..using EN as default language')
     have_pts = 0
 
 from config import i18n_domain
