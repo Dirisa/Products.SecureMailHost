@@ -67,10 +67,6 @@ fieldset {
     margin: 0.25em;
 }
 
-span #label {
-    font-weight: bold;
-}
-
 span #label_large {
     font-weight: bold;
     font-size: 140%;
