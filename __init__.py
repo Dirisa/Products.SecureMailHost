@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.7 2003/11/17 16:46:08 ajung Exp $
+$Id: __init__.py,v 1.8 2003/11/18 18:05:05 ajung Exp $
 """
 
 import os, sys
@@ -46,3 +46,4 @@ allow_module('reportlab')
 allow_module('reportlab.lib.units')
 allow_module('reportlab.lib.pagesizes')
 allow_module('reportlab.pdfgen')
+

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.12 2003/11/18 14:35:22 ajung Exp $
+$Id: pdfwriter.py,v 1.13 2003/11/18 18:05:05 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -141,7 +141,9 @@ def pdfwriter(collector, ids):
                     height = max
                     width = height * ratio
 
-                Elements.append(Image(fname, width, height))
+                Elements.append(KeepTogether([XPreformatted('Image: %s' % img.title_or_id(), HeaderStyle),
+                                              Image(fname, width, height)
+                                             ]))
 
             else:
                 p('Image: %s' % img.title_or_id())
