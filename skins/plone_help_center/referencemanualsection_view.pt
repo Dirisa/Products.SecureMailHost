@@ -22,7 +22,7 @@
 		              prevIdx         tocInfo/previousIndex;
 		              parentIdx       tocInfo/parentIndex;
 		              sectionNumber   python:toc[tocIdx]['number'];
-		              sections        python:[c for c in toc if c['parentIndex'] == tocIdx]">
+		              localToc        python:[c for c in toc if c['parentIndex'] == tocIdx]">
 
     <h1 class="documentFirstHeading">
         <img tal:replace="structure here/referencemanual_icon.gif" />
@@ -102,18 +102,20 @@
     </div>
 
 
-    <dl condition="nocall:sections">
-        <tal:block repeat="section sections">
-            <dt>
-                <span tal:replace="section/number"/>
-                <a tal:attributes="href section/url" 
-                    tal:content="section/title">Title</a>
-            </dt>
-            <dd tal:content="section/description"/>
-        </tal:block>
-    </dl>
+    <ol id="referencemanual-toc" tal:condition="nocall:localToc">
+        <li tal:repeat="item localToc"
+            tal:attributes="class string:toc-depth-${item/depth}">
+            <div class="toc-item-title">
+                  <span class="toc-item-numbering" tal:content="item/number"/>
+                  <a tal:attributes="href item/url" tal:content="item/title"/>
+            </div>
+            <div class="toc-item-description" tal:content="item/description">
+                Description
+            </div>
+        </li>
+    </ol>
     
-    <p tal:condition="not:nocall:sections" class="discreet">
+    <p tal:condition="not:nocall:localToc" class="discreet">
       There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.
     </p>
 

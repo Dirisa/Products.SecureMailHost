@@ -32,15 +32,20 @@
     </div>
 
     <tal:block define="toc here/getTOC" condition="nocall:toc">
-        <tal:block repeat="item toc/toc">
-          <div tal:attributes="class string:toc-depth-${item/depth}">
-              <span class="item-numbering" tal:content="item/number"/>
-              <a tal:attributes="href item/url" tal:content="item/title"/>
-              <blockquote tal:content="item/description">
-                Description
-              </blockquote>
-          </div>
-        </tal:block>
+    
+        <ol id="referencemanual-toc">
+            <li tal:repeat="item toc/toc"
+                tal:attributes="class string:toc-depth-${item/depth}">
+                <div class="toc-item-title">
+                  <span class="toc-item-numbering" tal:content="item/number"/>
+                  <a tal:attributes="href item/url" tal:content="item/title"/>
+                </div>
+                <div class="toc-item-description" 
+                        tal:content="item/description">
+                    Description
+                </div>
+            </li>
+        </ol>
         
         <p tal:condition="not:nocall:toc" class="discreet">
           There are no pages or sections in this Reference Manual. Use the 'add new item' menu to add Sections, Pages, Files, or Images.

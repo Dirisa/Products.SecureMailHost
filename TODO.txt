@@ -10,8 +10,6 @@ Template changes:
     proper human sorting, not UNIX-sorting (ie. not uppercase letters before 
     lowercase).
     
- - Tutorial Page pulldown needs to show the existing page as selected
-
  - The help center template should list any other normal folders put into it, 
     so you can add stuff that is just plain folders, like on plone.org.
 

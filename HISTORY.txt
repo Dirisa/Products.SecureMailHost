@@ -2,6 +2,10 @@ History of significant changes for PloneHelpCenter:
 
    (name of developer listed in brackets)
 
+
+    - Made reference manual and todo navigation drop-downs select current page
+        (optilude)
+
 Post-sprint cleanup of ToDo.txt:
 
      - BUG: Howtos seem to not pick up the 'versions' defined in the Help Center.
