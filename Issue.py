@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.54 2003/10/26 13:17:28 ajung Exp $
+$Id: Issue.py,v 1.55 2003/10/26 14:48:57 ajung Exp $
 """
 
 import sys, os
@@ -198,9 +198,9 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             new_status = self.status()
             self._transcript.addChange('status', old_status, new_status)
 
-        self._last_action = action
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
+        self._last_action = action
         notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 
                       self.translate('followup_submitted', 'Followup submitted'))
@@ -311,11 +311,8 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         """ Upload a file """
 
         if uploaded_file:
-            file_id = uploaded_file.filename
-            file_id = file_id.split('/')[-1].split('\\')[-1]
-
+            file_id = uploaded_file.filename.split('/')[-1].split('\\')[-1]
             ct = guess_content_type(file_id, uploaded_file.read())
-            print ct
             if ct[0].find('image') > -1:
                 self.invokeFactory('Image', file_id)
             else:
@@ -389,7 +386,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
 
         l = []
         for field in self.Schema().fields():
-        
             v = getattr(self, field.getName(), None)
             if v:
                 if callable(v): v = v()

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.12 2003/10/26 13:44:07 ajung Exp $
+$Id: notifications.py,v 1.13 2003/10/26 14:48:57 ajung Exp $
 """
 
 import sys
@@ -100,12 +100,9 @@ def _send_notifications(recipients, issue, send_attachments=0):
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body, _charset=encoding))
 
-#    if send_attachments and  issue.lastAction() == 'Upload':
-    if 1:
+    if send_attachments and  issue.lastAction() == 'Upload':
         # we need to attach the latest Upload to the email
-        
         obj = latest_upload(issue)
-        print obj.getId(), obj.meta_type
         if obj.meta_type in('Portal Image',):
             outer.attach(MIMEImage(str(obj.data))) 
         
