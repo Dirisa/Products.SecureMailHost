@@ -8,7 +8,14 @@ General
 
 - IMPORTANT: "Additional resources" doesn't currently show the available PHC
              folder types. It should. :)
-             
+
+- IMPORTANT: We need the ability to add Description to the Release and Roadmap
+             folders. Right now, if you click edit, you get a blank form with
+             only save/cancel buttons.
+
+- Important: It seems like PSC still uses the AreaWorkflow - should use the
+             default workflow of the site. May be plone.org issue, investigate.
+
 - I think the releasefolder_view has been generalized a bit too
   much, it says "There are no available releases in this project
   yet" when there are - they are just not in that section (Upcoming). 
@@ -32,6 +39,8 @@ General
 =========
 Design/UI
 =========
+
+- Company logo isn't shown at the moment.
 
 - "Expected release date" should become "Released" when the product is actually
   released. :)
