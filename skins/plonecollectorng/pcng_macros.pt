@@ -37,8 +37,10 @@
 
   <div tal:condition="action|nothing"
         class="headline_action">  
+    <h3>
     <span i18n:translate="" tal:content="string:${action}" />
     (<span i18n:translate="" tal:content="python: here.pcng_user_role()" />)
+    </h3>
   </div>
 
 </metal:block>
