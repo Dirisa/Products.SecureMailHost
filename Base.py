@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Base.py,v 1.3 2003/11/29 07:20:14 ajung Exp $
+$Id: Base.py,v 1.4 2003/12/02 08:52:09 ajung Exp $
 """
 
 from Globals import InitializeClass
+from AccessControl import ClassSecurityInfo
 from Products.Archetypes.BaseBTreeFolder import BaseBTreeFolder
 
 class Base(BaseBTreeFolder):
@@ -29,7 +30,9 @@ class ParentManagedSchema:
     """ mix-in class for AT content-types whose schema is managed by
         the parent container and retrieved through acquisition.
     """
-    
+
+    security = ClassSecurityInfo()    
+
     def Schemata(self):
         """ return dict of Schematas """
 
@@ -68,7 +71,7 @@ class ParentManagedSchema:
                     value = field.storage.get(field.getName(), self)  
                 except:
                     field.storage.set(field.getName(), self, field.default)
-                
+                        
         return self._v_schema
 
 InitializeClass(ParentManagedSchema)

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.38 2003/11/28 17:33:01 ajung Exp $
+$Id: SchemaEditor.py,v 1.39 2003/12/02 08:52:09 ajung Exp $
 """
 
 import copy
@@ -58,6 +58,7 @@ class SchemaEditor:
                 field.edit_accessor = 'archetypes_accessor'
             if field.accessor is None:
                 field.accessor = 'archetypes_accessor'
+
         return self._ms
 
     security.declareProtected(View, 'atse_getSchemataNames')

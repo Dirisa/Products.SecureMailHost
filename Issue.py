@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.94 2003/11/29 13:12:36 ajung Exp $
+$Id: Issue.py,v 1.95 2003/12/02 08:52:09 ajung Exp $
 """
 
 import sys, os, time
@@ -62,6 +62,7 @@ class IssueRelationship(Persistent):
 
 InitializeClass(IssueRelationship)
 
+_marker = []
 
 class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
     """ PloneCollectorNG """
@@ -496,8 +497,33 @@ class PloneIssueNG(Base, ParentManagedSchema, WatchList, Translateable):
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
 
-registerType(PloneIssueNG)
 
+    ######################################################################
+    # Override processForm() from Archetype.BaseObject
+    ######################################################################
+
+    security.declarePrivate('_processForm')
+    def _processForm(self, data=1, metadata=None, REQUEST=None):
+
+        request = REQUEST or self.REQUEST
+        schema = self.Schema()
+
+        for k in request.form.keys():
+            if not schema.has_key(k): continue
+            field = schema[k]
+
+            widget = field.widget
+            result = widget.process_form(self, field, request.form, empty_marker=_marker)
+            if result is _marker or result is None: continue
+
+            # Set things by calling the mutator
+            mutator = field.getMutator(self)
+            __traceback_info__ = (self, field, mutator)
+            mutator(result[0], **result[1])
+
+        self.reindexObject()
+
+registerType(PloneIssueNG)
 
 def modify_fti(fti):
     # hide unnecessary tabs (usability enhancement)
