@@ -66,6 +66,8 @@ Workflow - specification (by limi, trying to capture the most important things :
                           
   Not workflowed -- TutorialPage, Attachments
 
+  Comments - SEE BELOW
+
 - Permissions:
 
   - Members can add FAQ, Howto, Tutorial, ErrorRef, HelpLink, Definition
@@ -93,6 +95,18 @@ Workflow - specification (by limi, trying to capture the most important things :
 - Notify! People need to be notified when somebody adds a comment to their item,
   so they can maintain and refine. The PloneHelpCenter concept will not work 
   without this, IMHO. (limi)
+
+  - Overview:
+
+  Author incorporates comment in documentation, if relevant and useful. Author can edit owned content in-place after initial publication, no need for another submit/publish cycle.
+
+ Author removes the comment
+ so, we need a workflow called CommentNotifyWorkflow
+ that does the following:
+ 1. if comment is added to content, sends mail to author of document
+ 2. if somebody adds reply to a comment, it notifies the first comment 
+ poster (I assume this can be done the same way (sending mail to owner of parent), just want to make sure)
+
 
 
 I18n:
