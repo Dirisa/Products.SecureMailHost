@@ -1,0 +1,142 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="collectorng">
+  <body>
+    
+    <div metal:define-macro="transcript">
+     <table class="listing">
+      <tr>
+        <th i18n:translate="transcript_time">Time</th>
+        <th i18n:translate="transcript_user">User</th>
+        <th i18n:translate="transcript_changes">Changes</th>
+      </tr>
+      
+      <metal:block tal:repeat="entry here/transcript">
+      <tr> 
+        <td tal:content="structure python: here.toPortalTime(entry.getTimestamp(), long_format=1)">DATE</td>
+        <td tal:content="entry/getUser">USER</td>
+        
+        <td>
+          
+          <div tal:condition="entry/getComments" tal:omit-tag="">
+            <em i18n:translate="transcript_comments">Comments:</em>
+            <span tal:repeat="comment entry/getComments">
+              <pre width="100" class="comment" tal:content="comment" width="100"/>
+            </span>
+          </div>
+          
+          <div tal:condition="entry/getChanges" tal:omit-tag="">
+            <em i18n:translate="transcript_changes">Changes</em>
+            <ul>
+              <span tal:repeat="change entry/getChanges">
+                <li>
+                  <em tal:content="change/getField" />: 
+                  <span tal:replace="string: '${change/getOld}' -> '${change/getNew}' " 
+                        tal:condition="python: change.getType()=='ChangeEvent'" />
+                  <metal:block tal:condition="python: change.getType()=='IncrementalChangeEvent'">
+                    <b i18n:translate="transcript_added">added:</b>
+                    <span tal:replace="change/getAddedAsString" />
+                    <b i18n:translate="transcript_removed">, removed: </b>
+                    <span tal:replace="change/getRemovedAsString" />
+                  </metal:block>
+                </li>
+              </span>
+            </ul>
+          </div>
+          
+          <div tal:condition="entry/getUploads" tal:omit-tag="">
+            <em i18n:translate="transcript_uploads">Uploads"</em>
+            <ul>
+              <li tal:repeat="upload entry/getUploads">
+                <a tal:attributes="href string: ${here/absolute_url}/${upload/getFileId}"
+                   tal:content="upload/getFileId" />
+                (<span tal:content="upload/getComment" />)
+              </li>
+            </ul>
+          </div>
+          
+          <div tal:condition="entry/getReferences" tal:omit-tag="">
+            <em i18n:translate="transcript_references">References</em>
+            <ul>
+              <li tal:repeat="ref entry/getReferences">
+                <a tal:attributes="href python: getattr(here,ref.getTracker()).absolute_url() + '/' + ref.getTicketNumber()" tal:content="string: ${ref/getTracker} #${ref/getTicketNumber} "/> 
+                (<span tal:replace="ref/getComment"/>)
+              </li>
+            </ul>
+          </div>
+          
+        </td>
+      </tr>
+
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      </metal:block>
+     </table>
+    </div>
+    
+    
+    <span metal:define-macro="transcript_plain">
+      <div tal:repeat="entry here/transcript"> 
+        
+        <div class="transcriptheader">
+          <a tal:attributes="name entry/getNumber"> </a>
+          # <span tal:content="entry/getNumber"/>:
+          <span tal:content="structure python: here.toPortalTime(entry.getTimestamp(), long_format=1)">DATE</span>
+          <em tal:content="entry/getUser">USER</em>
+        </div>
+        <br/>
+        
+        <div tal:condition="entry/getComments" tal:omit-tag="">
+          <em i18n:translate="transcript_comments"
+              tal:condition="entry/getComments">Comments:</em> 
+          <metal:block tal:repeat="comment entry/getComments">
+            <pre width="140" class="comment" tal:content="comment/getComment" />             
+          </metal:block>
+        </div>
+        
+        <div tal:condition="entry/getChanges" tal:omit-tag="">
+          <em i18n:translate="transcript_changes">Changes</em>
+          <ul>
+            <li tal:repeat="change entry/getChanges" >
+              <em tal:content="change/getField" />: 
+              <span tal:replace="string: '${change/getOld}' -> '${change/getNew}' " 
+                    tal:condition="python: change.getType()=='ChangeEvent'" />
+              <metal:block tal:condition="python: change.getType()=='IncrementalChangeEvent'">
+                <b i18n:translate="transcript_added">added:</b>
+                <span tal:replace="change/getAddedAsString" />
+                <b i18n:translate="transcript_removed">, removed: </b>
+                <span tal:replace="change/getRemovedAsString" />
+              </metal:block>
+            </li>                       
+          </ul>
+        </div>
+        
+        <div tal:condition="entry/getReferences" tal:omit-tag="">
+          <em i18n:translate="transcript_references">References</em>
+          <ul>
+            <li tal:repeat="ref entry/getReferences">
+              <a tal:attributes="href python: getattr(here,ref.getTracker()).absolute_url() + '/' + ref.getTicketNumber()" 
+                 tal:content="string: ${ref/getTracker} #${ref/getTicketNumber} "/> 
+              (<span tal:replace="ref/getComment"/>)
+            </li>
+          </ul>
+        </div>
+        
+        <div tal:condition="entry/getUploads" tal:omit-tag="">
+          <em i18n:translate="transcript_uploads">Uploads</em>
+          <ul>
+            <li tal:repeat="upload entry/getUploads">
+              <a tal:attributes="href string: ${here/absolute_url}/${upload/getFileId}"
+                 tal:content="upload/getFileId" />
+              (<span tal:replace="upload/getComment"/>)
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+    </span>
+    
+    
+  </body>
+</html>
