@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.136 2004/03/11 17:19:20 ajung Exp $
+$Id: Collector.py,v 1.137 2004/03/12 15:07:58 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -21,6 +21,7 @@ from Products.Archetypes.utils import OrderedDict
 from Base import Base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
+from Products.PythonScripts.PythonScript import PythonScript
 
 from Transcript import Transcript
 from Products.PloneCollectorNG.WorkflowTool import WorkflowTool
@@ -182,6 +183,17 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         wf_id = self.Schema()['collector_workflow'].get(self)
         wf_type = VOC_WORKFLOWS.getValue(wf_id) 
         wf_tool.manage_addWorkflow(id=wf_id, workflow_type=wf_id)
+
+        # Assign PythonScript for workflows
+        for id in ('addAssignees', 'send_notifications'):
+            script = PythonScript(id)
+            script.write(open(os.path.join(os.path.dirname(__file__), 'workflows', id +'.py')).read())
+            try:
+                self.manage_delObjects(id)
+            except: pass
+            self._setObject(id, script)
+            getattr(self, id)._proxy_roles = ('Manager', )
+            
         wf_tool.setChainForPortalTypes(('PloneIssueNG',), wf_id)
 
     def pre_validate(self, REQUEST, errors):
