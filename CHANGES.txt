@@ -20,9 +20,14 @@
 
   - fixed URL backslash bug in __call__() causing grief for Mozilla browsers
   
-  - added file delete capability
+  - added file and folder delete capability
   
   - added optional support for file 'hit counting' via mxmCounter product
+  
+  - added primitive unit testing of PLFNG instance with catalog action
+  
+  - various fixes to plfng_view.pt: (eg, removed download action for folders;
+    Modified column now displays date AND time) 
 
 
 0.4

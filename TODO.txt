@@ -36,8 +36,6 @@ about feature requests and/or to volunteer to help!!!
 - bug # 988620: rejected upload of file with same name 
    as existing file results in deletion of existing file
    
-- bug # 988615: 'delete' action doesnt work for folders
-
 - PLFNG objects appear twice in Nav tree (for admin user)
 
 - directory creation succeeds but gives an error
@@ -60,14 +58,16 @@ about feature requests and/or to volunteer to help!!!
 Significant enhancements have been put into the 0.50 baseline,
 and we really need to get them officially released!
 
-The only remaining item that is in the critical path is 
-resolving bug # 971432: 'Adding a Local Folder ends up in a error'
-http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&atid=476390
-
+- de-confuse presentation of PLFNG path on plfng_view.pt page
+  (current implementation of folder icon + '/' confuses users
+   into thinking that they are at the site root when they 
+   view a PLFNG object.)
 
 ----------------------------------
   BEFORE RELEASE 0.60
 ----------------------------------
+- bug #971432: 'Adding a Local Folder ends up in a error'
+  http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&atid=476390
 
 - better docs! (specifics tbd)
 
@@ -78,13 +78,6 @@ http://sourceforge.net/tracker/index.php?func=detail&aid=971432&group_id=55262&a
 
 - make file 'comments' metadata editable
   (to include adding 'comments' to existing files)
-
-- add ability to delete folders
-
-- de-confuse presentation of PLFNG path on plfng_view.pt page
-  (current implementation of folder icon + '/' confuses users
-   into thinking that they are at the site root when they 
-   view a PLFNG object.)
    
 - rework file uploads so that they are temporarily stored
   with a temporary filename to facilitate checking 
@@ -124,8 +117,6 @@ This may be too much trouble to consider implementing, but it
 might be something to put as a "caveat" in the README file.
 
 - make path elements clickable (like breadcrumbs)
-
-- 'modified' column that also contains time
 
 - sort content across multiple page listings
 
