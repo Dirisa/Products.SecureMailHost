@@ -109,6 +109,7 @@ class PloneLocalFolderNG(BaseContent):
     """ PloneLocalFolderNG """
 
     schema = schema
+    security = ClassSecurityInfo()
 
     actions = ({
         'id': 'view',
@@ -117,7 +118,7 @@ class PloneLocalFolderNG(BaseContent):
         'permissions': (View,)
         },)
 
-
+    security.declareProtected('View', 'showFile')
     def showFile(self, destpath, REQUEST, RESPONSE):
         """ view file """
 
@@ -135,6 +136,7 @@ class PloneLocalFolderNG(BaseContent):
                 break
         fp.close()
 
+    security.declareProtected('View', 'getContents')
     def getContents(self,  REQUEST=None):
         """ list content of local filesystem """
 
@@ -169,7 +171,7 @@ class PloneLocalFolderNG(BaseContent):
 
         return l
 
-
+    security.declareProtected('View', 'breadcrumbs')
     def breadcrumbs(self, instance): 
         """ breadcrumbs """
 
