@@ -19,6 +19,8 @@ Requirements:
 
   Optional packages:
 
+   - PlacelessTranslationService - PTS (sf.net/projects/collective)
+
    - Reportlab (www.reportlab.org) - required for PDF output
   
    - PIL (Python Imaging Library) required to include uploaded images
@@ -56,3 +58,38 @@ Installation:
   You can also use the Plone frontend. Go to "Plone setup". Choose
   "Add/remove products" and select "PloneCollectorNG" to be installed. That's
   it. 
+
+Internationalization support:
+
+  - Requires the installation of PlacelessTranslationService (Localizer
+    /TranslationService might work too, no support)
+
+  - included language catalogs: DE 
+
+  - to translate the catalog to another language:
+
+    - copy i18n/plonecollectorng-de.po to i18n/plonecollectorng-XX.po
+      (where XX is the shortcut for the destination language)
+
+    - translate all msgstr "..." in the copied file
+
+    - create a 
+
+  - to translate the catalog to another language:
+
+    - copy i18n/plonecollectorng-de.po to i18n/plonecollectorng-XX.po
+      (where XX is the shortcut for the destination language)
+
+    - translate all msgstr "..." in the copied file
+
+    - create a .mo file for your language:
+
+       msgfmt -o plonecollectorng-XX.mo plonecollectorng-XX.po
+
+    - send me a copy of your translated .po file for inclusion with
+      the next PloneCollectorNG release
+
+    - restart Zope and enjoy :-) 
+   
+
+
