@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: smtp2pcng.py,v 1.4 2004/02/28 16:15:26 ajung Exp $
+$Id: smtp2pcng.py,v 1.5 2004/02/29 05:46:11 ajung Exp $
 """
 
 import sys, os, logging, base64
@@ -33,11 +33,8 @@ class Result:
         IO = StringIO()
         IO.write('<?xml version="1.0" encoding="utf-8"?>\n')
         IO.write('<issue>\n')
-        IO.write('<sendername>%s</sendername>\n' % self.sendername)
-        IO.write('<senderaddress>%s</senderaddress>\n' % self.senderaddress)
-        IO.write('<replyto>%s</replyto>\n' % self.reply_to)
-        IO.write('<subject>%s</subject>\n' % self.subject)
-        IO.write('<body>%s</body>\n' % self.body)
+        for a in ('sendername', 'senderaddress', 'reply_to', 'subject', 'body'):
+            IO.write('<%s>%s</%s>\n' % (a, getattr(self, a), a)
 
         for a in self.getAttachments():
             IO.write('<attachment mimetype="%s" filename="%s">\n' % a[1:])
