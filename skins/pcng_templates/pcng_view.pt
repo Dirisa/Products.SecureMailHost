@@ -29,6 +29,14 @@
 
       <metal:block tal:define="action string: Browse issues">
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+        <div>
+          <div class="right">
+            <a tal:attributes="href string:pcng_rss?${request/QUERY_STRING}">
+            <img src="rss.gif" title="This search result as RSS feed">
+          </a>
+          </div>
+          <div class="clear"> </div>
+        </div>
       </metal:block>
 
       <metal:block tal:condition="python: search_form_position == 'top'">
