@@ -19,7 +19,9 @@ Requirements:
 
   Optional packages:
 
-   - PlacelessTranslationService - PTS (sf.net/projects/collective)
+   - PlacelessTranslationService - PTS
+     (http://savannah.nongnu.org/projects/opental -- 
+      you need a late version from the CVS)
 
    - Reportlab (www.reportlab.org) - required for PDF output
   
