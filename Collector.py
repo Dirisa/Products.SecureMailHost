@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.121 2004/02/23 16:26:18 ajung Exp $
+$Id: Collector.py,v 1.122 2004/02/25 20:01:23 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -604,10 +604,15 @@ class PloneCollectorNGCatalog(CatalogTool):
         custom_keys = [f[0] for f in custom]
 
         for f in self.aq_parent.atse_getSchema().fields():
+            klass = f.__class__.__name__
+            widget = f.widget.__class__.__name__
             if getattr(f, 'createindex', 0) == 1 and f.getName() not in custom_keys:
-                if f.__class__.__name__ in ('StringField', 'TextField'):
-                    custom.append( [f.getName(), 'TextIndex'] )
-                elif f.__class__.__name__ in ('DateTimeField', 'IntField', 'FloatField', 'FixedPointField'):
+                if klass in ('StringField', 'TextField'):
+                    if widget in ('MultiSelectionWidget',):
+                        custom.append( [f.getName(), 'FieldIndex'] )
+                    else:
+                        custom.append( [f.getName(), 'TextIndex'] )
+                elif klass in ('DateTimeField', 'IntField', 'FloatField', 'FixedPointField'):
                     custom.append( [f.getName(), 'FieldIndex'] )
                 else:
                     pass
