@@ -45,7 +45,7 @@
 </metal:block>
 
 <div metal:define-macro="transcript" i18n:domain="plonecollectorng">
-  <table class="listing"
+  <table class="listing" id="listingChanges"
          tal:define="groups python: here.getTranscript().getEventsGrouped();
                      num_groups python: len(groups)">
     <tr>
@@ -54,15 +54,17 @@
       <th i18n:translate="transcript_changes">Changes</th>
     </tr>
 
-    <tr tal:repeat="events groups">
-      <td valign="top" tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
-      <td valign="top" tal:content="python: events[0].getUser()" />
-      <td valign="top">           
-        <tal:loop tal:repeat="event events">
-          <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
-        </tal:loop>
-      </td>
-    </tr>
+    <tal:loop tal:repeat="events groups">
+      <tr tal:attributes="class python: test(repeat['events'].even(), 'evenRow', 'oddRow')">
+        <td valign="top" tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
+        <td valign="top" tal:content="python: events[0].getUser()" />
+        <td valign="top">           
+          <tal:loop tal:repeat="event events">
+            <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
+          </tal:loop>
+        </td>
+      </tr>
+    </tal:loop>
   </table>
  </div>
     
@@ -126,21 +128,23 @@
         <th i18n:translate="changes">Changes</th>
       </tr>
 
-      <tr tal:repeat="event events">
-        <td>
-         <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> 
+      <tal:loop tal:repeat="event events">
+        <tr tal:attributes="class python: test(repeat['event'].even(), 'evenRow', 'oddRow')">
+        <td class="pcng_top">
+         <span tal:content="structure python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1).replace(' ', '&nbsp;')" /> 
         </td>
-        <td>
+        <td class="pcng_top">
           <span i18n:translate="" tal:content="event/getUser" />
         </td>
-        <td>
+        <td class="pcng_top">
           <span i18n:translate="" tal:content="event/getType" />
         </td>
-        <td tal:content="event/getField|nothing"/>
-        <td>
+        <td class="pcng_top" tal:content="event/getField|nothing"/>
+        <td class="pcng_top">
           <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
         </td>
       </tr>
+      </tal:loop>
     </table>
   </tal:def>
 

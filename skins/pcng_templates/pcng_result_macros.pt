@@ -43,42 +43,11 @@
         <th>Created</th>
       </tr>
 
-      <tr tal:repeat="issue batch">
-        <td>
-          <a tal:attributes="href issue/getId"
-             tal:content="issue/getId" />
-        </td>
-        <td>
-          <a tal:attributes="href issue/getId"
-             tal:content="issue/Title" />
-        </td>
-        <td> 
-          <span tal:attributes="id string:state_${issue/status}" 
-                i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" />
-          <tal:if tal:condition="issue/assigned_to|nothing">
-             <br/>-><span tal:replace="python: ', '.join(issue.assigned_to)" /> 
-          </tal:if>
-        </td>
-        <td>
-          <tal:def tal:define="field python: here.atse_getSchemaById('PloneIssueNG')['importance'];
-                               vocab python: field.Vocabulary(here);
-                               display python: here.displayValue(vocab, issue.importance)">
-              <span tal:content="structure display" />
-          </tal:def> 
-        </td>
-        <td>
-          <span tal:replace="issue/topic" /> 
-        </td>
-        <td>
-          <span tal:replace="issue/numberFollowups|nothing" /> /
-          <span tal:replace="issue/numberUploads|nothing" /> /
-          <span tal:replace="issue/numberReferences|nothing" />
-        </td>
-        <td>
-          <span tal:content="issue/Creator" />
-        </td>
+      <tal:loop tal:repeat="issue batch">
+        <tal:tr metal:use-macro="context/pcng_result_macros/macros/results_tr" />        
 
-      </tr>
+      </tal:loop>
+
     </table>
     <div tal:condition="not: results">
       <span class="label" i18n:translate="no_issues_found">No issues found</span>
@@ -87,8 +56,40 @@
 </metal:div>    
 
 
-  <div id="pcng_issueview_legend">
-    <span i18n:translate="submitted_by">Submitted by</span> <span tal:replace="issue/Creator" /> <span i18n:translate="date_on">on</span> <span tal:replace="python: here.toLocalizedTime(issue.created)" /> &bull; 
-    <span i18n:translate="last_modified">Last modified:</span> <span tal:replace="python: here.toLocalizedTime(issue.modified)" />
-    (<span tal:replace="python: '%.1f' % (DateTime() - issue.modified)" />
-    <span i18n:translate="days_ago">days ago</span>)
+<metal:div metal:define-macro="results_tr">
+  <tr>
+    <td>
+      <a tal:attributes="href issue/getURL"
+         tal:content="issue/getId" />
+    </td>
+    <td>
+      <a tal:attributes="href issue/getURL"
+         tal:content="issue/Title" />
+    </td>
+    <td> 
+      <span tal:attributes="id string:state_${issue/status}" 
+            i18n:translate="" tal:content="python: here.pcng_format_status(issue.status)" />
+      <tal:if tal:condition="issue/assigned_to|nothing">
+         <br/>-><span tal:replace="python: ', '.join(issue.assigned_to)" /> 
+      </tal:if>
+    </td>
+    <td>
+      <tal:def tal:define="field python: here.atse_getSchemaById('PloneIssueNG')['importance'];
+                           vocab python: field.Vocabulary(here);
+                           display python: here.displayValue(vocab, issue.importance)">
+          <span tal:content="structure display" />
+      </tal:def> 
+    </td>
+    <td>
+      <span tal:replace="issue/topic" /> 
+    </td>
+    <td>
+      <span tal:content="string:${issue/numberFollowups}/${issue/numberUploads}/${issue/numberReferences}"/>
+    </td>
+    <td>
+      <span tal:content="issue/Creator" />
+      <br/>
+      <span tal:replace="python: here.toLocalizedTime(issue.created)" /> 
+    </td>
+  </tr>
+</metal:div>

@@ -234,4 +234,19 @@ div.public pre{
     background: #55ffdd;
 }
 
+
+/* PCNG tables */
+
+td.pcng_top {
+    vertical-align: top;
+}
+
+tr.evenRow {
+    background: #bbbbbb;
+}
+
+tr.oddRow {
+    background: #888888;
+}
+
 /* </dtml-with> */
