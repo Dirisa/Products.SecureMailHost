@@ -222,11 +222,8 @@
       </form>    
   </div>
 
-
-  <br>
-  <br>
-        
   <form action="pcng_view" method="GET"  name="search_form" tal:condition="advanced">
+    <br> <br>
     <input type="hidden" name="advanced_search" value="1">
     <table>
       <tr>
@@ -378,6 +375,29 @@
     
     </table>
   </form>
+
+  <tal:if tal:condition="advanced">
+    <hr>
+    <div metal:use-macro="here/pcng_macros/macros/issue_statistics" />  
+  </tal:if>
+  
   </metal:block>
 </div>
+
+<!-- display some issue statistics -->
+
+<tal:macro metal:define-macro="issue_statistics">
+  <div class="issue_statistics" style="list-style: none">
+    <ul>
+      <li style="display: inline">
+        <span i18n:translate="statistics">Statistics:</span>
+      </li>
+      <li tal:repeat="state here/issue_states" style="display: inline">
+        <span i18n:translate="" tal:content="state/capitalize" />:
+        <span tal:content="python: len(here.pcng_catalog.searchResults(status={'query' : state}))" />
+        <span tal:condition="not: repeat/state/end" tal:omit-tag="">&bull;</span>
+      </li>
+    <ul>
+  </div>
+</tal:macro>
 
