@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.29 2004/04/14 19:15:36 ajung Exp $
+$Id: notifications.py,v 1.30 2004/04/16 06:30:19 ajung Exp $
 """
 
 import sys, time
@@ -99,19 +99,27 @@ def _send_notifications(recipients, issue, send_attachments=0):
     subject = '[%s/%s]  %s (#%s/%s)' %  (str(collector.collector_abbreviation), issue.getId(), 
               issue.Title(), len(issue), issue.Translate(issue._last_action,issue._last_action))
     outer['Subject'] = Header(subject, encoding)
-    encoded_text = issue.encode_information(issue.absolute_url(1))
-    msg_id = '<%s::%s@pcng.org>' % (encoded_text, time.time())
-    outer['Message-ID'] = msg_id
+    outer['Message-ID'] = email.Utils.make_msgid()
     outer['Reply-To'] = collector.collector_email
     body = issue.format_transcript(collector.notification_language)
     outer['Content-Type'] = 'text/plain; charset=%s' % encoding
     outer.attach(MIMEText(body.encode('utf-8'), _charset='utf-8'))
-
+            
     if send_attachments and  issue.lastAction() == 'Upload':
         # we need to attach the latest Upload to the email
         obj = latest_upload(issue)
         if obj.meta_type in('Portal Image',):
-            outer.attach(MIMEImage(str(obj.data))) 
+            att = MIMEImage(str(obj.data))
+            att.add_header('content-disposition', "attachment; filename='%s'" % obj.getId())
+            outer.attach(att)
+
+    # Keyfile
+    encoded_text = issue.encode_information(issue.absolute_url(1))
+    keyfile = MIMEText(encoded_text)
+    keyfile.add_header('content-type', 'text/plain')
+    keyfile.add_header('content-disposition', "attachment; filename='pcng.key'")
+    outer.attach(keyfile)
+
 
     MH = getattr(collector, 'MailHost') 
     
