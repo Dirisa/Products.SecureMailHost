@@ -18,6 +18,7 @@ $Id:
 import SecureMailHost
 import asyncmailer
 import mail
+import mailqueue
 
 def initialize(context):
     context.registerClass(

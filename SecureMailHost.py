@@ -15,7 +15,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.7 2004/05/17 13:30:39 tiran Exp $
+$Id: SecureMailHost.py,v 1.8 2004/05/18 22:03:31 tiran Exp $
 """
 
 from config import BAD_HEADERS
@@ -39,7 +39,7 @@ class SMTPError(Exception):
     pass
 
 from Products.SecureMailHost.mail import Mail
-from Products.SecureMailHost.asyncmailer import mailQueue
+from Products.SecureMailHost.mailqueue import mailQueue
 
 EMAIL_RE = re.compile(r"^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$")
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)

@@ -1,191 +1,112 @@
 """
 """
-from config import WAIT_TIME, MAX_ERRORS, TEMP_ERRORS, DB_FILE
+from config import WAIT_TIME, MAX_ERRORS, TEMP_ERRORS
 
-import os, sys
+import sys
 import threading
-import time
-import anydbm
-import socket
-import cPickle as pickle
-from types import IntType
 import traceback
+from mailqueue import mailQueue
 
 from zLOG import LOG, INFO, PROBLEM
 
 
-class MailStorage:
-    """Stores Email objects in a queue.
+class WorkerThread(threading.Thread):
+    """Common Worker Thread
     
-    For safty reasons the emails are pickled on the file system in a seperate db
-    to recover them after a zope crash or shutdown.
-    
-    queue(email)        - adds an email to the queue
-    get(id)             - gets an email from the queue by id
-    remove(email_or_id) - removes an email from the queue
-    
-    To increase the performance the unpickled emails are cached in a pickle
-    cache.
-    """
-
-    def __init__(self):
-        if not os.path.isfile(DB_FILE):
-            db = anydbm.open(DB_FILE, 'c')
-            db.close()
-        self._queue = anydbm.open(DB_FILE, 'w') # write
-        self._lock = threading.Lock()
-        self._pickle_cache = {}
-    
-    def queue(self, mail):
-        """Sends an email to the queue
-        """
-        id = self.mkID()
-        mail.setId(id)
-        try:
-            self._lock.acquire()
-            # store mail in pickle cache
-            self._pickle_cache[id] = mail
-            # store mail in queue
-            dump = pickle.dumps(mail)
-            self._queue[id] = dump
-            self.sync()
-        finally:
-            self._lock.release()
-        
-    def get(self, id):
-        """Get a mail by id
-        """
-        try:
-            self._lock.acquire()
-            if id not in self._queue:
-                raise KeyError, id
-            mail = self._pickle_cache.get(id, None)
-            if not mail:
-                dump = self._queue[id]
-                mail = pickle.loads(dump)
-                self._pickle_cache[id] = mail
-            return mail
-        finally:
-            self._lock.release()
-
-    def remove(self, mail_or_id):
-        """Removes an email from the queue
-        """
-        if type(mail_or_id) is IntType:
-            id = mail_or_id
-        else:
-            id = mail_or_id.getId()
-        try:
-            self._lock.acquire()
-            del self._queue[id]
-            try:
-                del self._pickle_cache[id]
-            except KeyError:
-                pass
-            self.sync()
-        finally:
-            self._lock.release()
-   
-    def sync(self):
-        """syncs the DB in the fs
-        
-        MUST be called within an acquired lock!
-        """
-        sync = getattr(self._queue, 'sync', None)
-        if sync:
-            sync()
-    
-    def mkID(self):
-        """Generates a id
-        """
-        host = socket.gethostname()
-        count = 0
-        while True:
-            ts = time.time()
-            id = '%s-%s-%i' % (ts, host, count)
-            if id not in self._queue:
-                break
-            else:
-                count+=1
-        return id
-    
-    def list(self):
-        """
-        """
-        return self._queue.keys()
-    
-
-mailQueue = MailStorage()
-
-class MailerThread(threading.Thread):
-    """The worker thread
+    worker = WorkerThread(name='name', wait=float(10))
+    worker.setDaemon(True)
+    worker.start()
+    # calling main() method every 10 seconds until stopped
+    worker.stop() # stopped
+    worker.start() # started again
     """
     
-    def __init__(self):
-        threading.Thread.__init__(self, name='asyncmail')
-        self._event = threading.Event()
+    def __init__(self, name='WorkerThread', wait=10.0):
+        threading.Thread.__init__(self, name=name)
+        self._event = threading.Event() # event handler to time the loop
+        self._running = False           # thread is stop until calling start
+        self._wait = float(wait)
+        
+    def start(self):
+        """Start the thread
+        """
         self._running = True
+        self._event.clear() # enable event timer
+        threading.Thread.start(self)
         
+    def run(self):
+        """Infinitive loop
+        """
+        while True:
+            if not self._running:
+                return
+            self.main()
+            self._event.wait(self._wait)
+
+    def main(self):
+        """Worker method
+        """
+        print 'Does nothing'
+
     def stop(self):
         """Stop the thread
         
         Required for unit tests
         """
-        LOG('SecureMailHost', INFO, 'Stopping mailer thread')
         if not self._running:
             self._running = False
             self._event.set()
-        
+
+class MailerThread(WorkerThread):
+    """Mailer thread
+    """
+    
     def run(self):
-        """Main runner
+        """Infinitive loop
         """
         # XXX
         # Wrapped because of some strange problems with threading and zope
         # After SIGTERM or SIGINT the thread can terminated without throwing
         # a nasty error message
         try:
-            self.run2()
+            WorkerThread.run(self)
         except:
             pass
     
-    def run2(self):
-        """
+    def main(self):
+        """Worker method
         """
         global mailQueue
-        while True:
-            if not self._running:
-                return
+        LOG('SecureMailHost', INFO, 'threading')
 
-            #LOG('SecureMailHost', INFO, 'threading')
-
-            for id in mailQueue.list():
-                mail = mailQueue.get(id)
-                # checking for max errors
-                if mail.getErrors() > MAX_ERRORS:
-                    LOG('SecureMailHost', PROBLEM, 'Max errors')
-                    mailQueue.remove(mail)
-                    continue
-                # trying to send
-                try:
-                    mail.send()
-                except TEMP_ERRORS, msg:
-                    # XXX log
-                    LOG('SecureMailHost', PROBLEM, 'Temp error %s\n%s' %
-                        (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
-                    )
-                except Exception, msg:
-                    LOG('SecureMailHost', PROBLEM, 'Fatal error %s\n%s' %
-                        (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
-                    )
-                    mail.incError()
-                else:
-                    mailQueue.remove(mail)
+        for id in mailQueue.list():
+            mail = mailQueue.get(id)
+            # checking for max errors
+            if mail.getErrors() > MAX_ERRORS:
+                LOG('SecureMailHost', PROBLEM, 'Max errors')
+                mailQueue.remove(mail)
+                continue
+            # trying to send
+            try:
+                mail.send()
+            except TEMP_ERRORS, msg:
+                # XXX log
+                LOG('SecureMailHost', PROBLEM, 'Temp error %s\n%s' %
+                    (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
+                )
+            except Exception, msg:
+                LOG('SecureMailHost', PROBLEM, 'Fatal error %s\n%s' %
+                    (msg, ''.join(traceback.format_tb(sys.exc_traceback)))
+                )
+                mail.incError()
             else:
-                # queue currently empty - waiting
-                self._event.wait(WAIT_TIME)
+                mailQueue.remove(mail)
 
+    def stop(self):
+        LOG('SecureMailHost', INFO, 'Stopping mailer thread')
+        WorkerThread.stop(self)
 
-mailThread = MailerThread()
+mailThread = MailerThread(name='asyncmail', wait=WAIT_TIME)
 mailThread.setDaemon(True)
 
 # start thread
