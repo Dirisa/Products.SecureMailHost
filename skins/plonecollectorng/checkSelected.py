@@ -25,11 +25,9 @@ if same_type(value , ''):
         value = unicode(value, 'latin1')
 
 
-#LOG('test', INFO, '%s %s %d' % (item, value, repr(value) == repr(item)))
 
 if value is not None and \
     unicode(repr(value)) == unicode(repr(item)):
-#    LOG('test', INFO, 'returning 1')
     return 1
 
 try:
@@ -40,11 +38,8 @@ except AttributeError:
     try:
         for v in value:
             if unicode(repr(item)) == unicode(repr(v)):
-                LOG('test', INFO, 'vocab')
                 return 1
     except TypeError:
         pass
-#LOG('test', INFO, '%s %s ' % (repr(value), repr(item))) 
-#LOG('test', INFO, 'returning %s' % (not not unicode(repr(value)) == unicode(repr(item))))
 return not not unicode(repr(value)) == unicode(repr(item))
 
