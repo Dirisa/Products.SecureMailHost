@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.173 2004/05/20 12:08:29 ajung Exp $
+$Id: Issue.py,v 1.174 2004/05/20 15:12:42 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -680,16 +680,33 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
 
     def left_slots(self):
         pu = self.getPortlet_usage() 
-        if not hasattr(self, '_v_left_slots') or getattr(self, '_v_porlet_usage', '') != pu:
-            if pu == 'keep': 
-                self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
-            else:
+        if not hasattr(self, '_v_left_slots'):
+            if pu == 'left': 
                 self._v_left_slots = []
-            self._v_portlet_usage = pu
-            self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
-            self._v_left_slots = tuple(self._v_left_slots)
+            else:
+                self._v_left_slots = list(self._getCollector().aq_parent.left_slots)
+            if pu.endswith('left'):
+                self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
+            self._v_left_slots = tuple(self._v_left_slots)                               
+            try: del self._v_right_slots
+            except: pass
         return self._v_left_slots
     left_slots = ComputedAttribute(left_slots, 1)
+
+    def right_slots(self):
+        pu = self.getPortlet_usage() 
+        if not hasattr(self, '_v_right_slots'):
+            if pu == 'right': 
+                self._v_right_slots = []
+            else:
+                self._v_righ_slots = list(self._getCollector().aq_parent.right_slots)
+            if pu.endswith('right'):
+                self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
+            self._v_right_slots = tuple(self._v_right_slots)                               
+            try: del self._v_left_slots
+            except: pass
+        return self._v_right_slots
+    right_slots = ComputedAttribute(right_slots, 1)
 
 registerType(PloneIssueNG)
 
