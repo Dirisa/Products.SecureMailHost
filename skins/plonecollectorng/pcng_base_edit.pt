@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plonecollectorng">
+      i18n:domain="plone">
 
 <metal:block fill-slot="javascript_head_slot">
 <tal:block define="macro here/archetypes_custom_js/macros/javascript_head | nothing" tal:condition="macro">
@@ -18,7 +18,7 @@
                    Iterator python:modules['Products.CMFPlone'].IndexIterator;
                    tabindex python:Iterator();
                    schematas here/Schemata;
-                   default_fieldset python:(not schematas or schematas.has_key('default')) and schematas.keys()[1];
+                   default_fieldset python:  schematas.keys()[1];
                    fieldset request/fieldset|options/fieldset|default_fieldset;
                    fieldsets python:[key for key in schematas.keys() if key != 'metadata' and key != 'default'];"
            tal:omit-tag="">
