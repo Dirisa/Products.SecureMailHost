@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: notifications.py,v 1.10 2003/10/14 15:20:32 ajung Exp $
+$Id: notifications.py,v 1.11 2003/10/22 19:21:32 ajung Exp $
 """
 
 import sys
@@ -69,8 +69,8 @@ def send_notifications(recipients, issue):
     mh = getattr(collector, 'MailHost') 
     
     try:
-        LOG('plongcollector', TRACE, 'recipients: %s' % dest_emails)
+        LOG('plongcollectorng', TRACE, 'recipients: %s' % dest_emails)
         mh._send(collector.collector_email, dest_emails, outer.as_string())
     except: 
-        LOG('PloneCollectorNG', ERROR, 'MailHost.send() failed', error=sys.exc_info())
+        LOG('plonecollectorng', ERROR, 'MailHost.send() failed', error=sys.exc_info())
 
