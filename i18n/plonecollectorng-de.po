@@ -250,8 +250,8 @@ msgstr "Änderungen speichern"
 msgid " Reset "
 msgstr "Zurücksetzen"
 
-msgid "Member preferences"
-msgstr "Teilnehmer Voreinstellungen"
+msgid "My collectorpreferences"
+msgstr "Meine Bugtracker Voreinstellungen"
 
 msgid "No"
 msgstr "Nein"

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.76 2003/11/21 09:21:59 ajung Exp $
+$Id: Collector.py,v 1.77 2003/11/26 10:11:24 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -77,8 +77,9 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor, Translateable):
         'permissions': (ManageCollector,)
         },
         {'id': 'pcng_member_preferences',
-        'name': 'Member preferences',
+        'name': 'My collector preferences',
         'action': 'pcng_member_preferences',
+        'category' : 'user',
         'permissions': (SetOwnProperties,)
         },
         )
