@@ -325,5 +325,49 @@
   </div> 
 </div>  
 
+
+<!-- Show all schematas as portlets -->
+<metal:macro metal:define-macro="issuedata">
+  <div style="clear: both"
+       tal:define="canEdit python: member.has_permission('PloneCollectorNG: Edit PloneCollectorNG issue', here);
+                   canFollowup python: member.has_permission('PloneCollectorNG: Add PloneCollectorNG issue followup' , here) ">
+
+        
+    <tal:loop tal:repeat="schemata_name python: here.atse_getSchemataNames()">
+      <tal:if  tal:condition="python: schemata_name not in ('default',) "> 
+        <div class="portlet" id="pcng_metadata"
+                 tal:define="schemata python:here.atse_getSchemata(schemata_name);
+                             fields python: test(schemata_name=='issuedata', 
+                                            [f for f in schemata.fields() if not f.getName() in ('title', 'description', 'solution')], 
+                                            schemata.fields())">
+          <h5>
+            <span i18n:translate="" tal:content="schemata_name" />
+            <a tal:condition="canEdit" tal:attributes="href string:pcng_base_edit?fieldset=${schemata_name}"><img src="edit.gif" title="Edit" i18n:attributes="title"/></a>
+          </h5>
+          <div class="portletBody" id="pcng_metadata_body">
+            <div metal:use-macro="here/issue_macros/macros/view_schemata_as_div" />
+
+              <tal:if tal:condition="python: schemata_name == 'issuedata'" >
+                <span id="label" i18n:translate="status">Status</span>: 
+                <span class="field" i18n:translate="" tal:content="python: here.pcng_format_status(here.status())" />
+                <br>
+                <span id="label" i18n:translate="assigned_to">Assigned to</span>: 
+                <span class="field" tal:content="python: ', '.join(here.assigned_to(sorted=1))" />
+                <br>
+                <span id="label" i18n:translate="creator">Created by</span>: 
+                <span class="field" tal:content="here/Creator" />
+                <br>
+                <span id="label" i18n:translate="created_at">Created at</span>: 
+                <span class="field" tal:content="python: here.toLocalizedTime(here.CreationDate())" />
+              </tal:if>
+          </div>
+        </div>
+      </tal:if>
+    </tal:loop>
+
+   </div>
+</metal:macro>
+
+
 </body>
 </html>
