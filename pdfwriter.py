@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.29 2004/01/18 12:08:55 ajung Exp $
+$Id: pdfwriter.py,v 1.30 2004/01/20 06:59:42 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -74,7 +74,7 @@ def myLaterPages(canvas, doc):
     canvas.setFont(NORMAL_FONT,15)
     canvas.drawString(inch, PAGE_HEIGHT-62, utf8(doc.collector_title))
     canvas.setFont(NORMAL_FONT,11)
-    canvas.drawString(inch, 0.75 * inch, "Page %d" % doc.page)
+    canvas.drawString(inch, 0.75 * inch, doc.collector.translate('page_number', "Page $num", num=doc.page))
     canvas.drawString(450, 0.75 * inch, doc.collector.toLocalizedTime(DateTime(), long_format=1))
     canvas.restoreState()
 
@@ -175,7 +175,8 @@ def pdfwriter(collector, ids):
                     v = value
 
                 if v:
-                    l.append('<b>%s</b>: %s ' % (translate(field.widget.label_msgid, field.widget.Label(issue), as_unicode=1), v))
+                    label = translate(field.widget.label_msgid, field.widget.Label(issue), as_unicode=1)
+                    l.append(u'<b>%s</b>: %s ' % (toUnicode(label), toUnicode(v)))
 
             s = (', '.join(l)).strip()
             if s:
@@ -228,7 +229,7 @@ def pdfwriter(collector, ids):
 
             for ev in group:
                 if ev.type == 'comment':
-                    comment = html_quote(ev.comment)
+                    comment = ev.comment
                 elif ev.type == 'change':
                     l.append(dowrap('<b>%s:</b> %s: "%s" -> "%s"' % (translate('changed', 'Changed', as_unicode=1), ev.field, ev.old, ev.new)))
                 elif ev.type == 'incrementalchange':
