@@ -27,8 +27,12 @@
     
         <div class="documentDescription"
              tal:content="here/Description">
-            description
+	     description
         </div>
+
+	<p><a tal:attributes="href python:context.portal_url.absolute_url() + '/search_rss?review_state=published&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))">
+	  
+	  <img src="rss.gif"></a></p>
     
 	<div tal:repeat="help_type python: context.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
 	  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:context.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
