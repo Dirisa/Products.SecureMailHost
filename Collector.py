@@ -5,10 +5,10 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.125 2004/02/29 07:27:02 ajung Exp $
+$Id: Collector.py,v 1.126 2004/02/29 10:19:43 ajung Exp $
 """
 
-import base64
+import base64, time, random, md5
 
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -140,6 +140,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         ti.immediate_view = 'pcng_view'
 
         self._transcript.setEncoding(self.getSiteEncoding())
+        self.createToken()
         
     security.declareProtected(ManageCollector, 'setup_collector_catalog')
     def setup_collector_catalog(self, RESPONSE=None):
@@ -554,6 +555,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ hook for 'folder_contents' view """
         return 0 
 
+    ######################################################################
+    # Issue submission through email
+    ######################################################################
+
     security.declareProtected(EmailSubmission, 'issue_from_xml')
     def issue_from_xml(self, xml, RESPONSE=None):
         """ add issue through xml """
@@ -632,6 +637,21 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
                     else:
                         return None
         return None  
+
+    ######################################################################
+    # Securitytoken
+    ######################################################################
+
+    security.declareProtected(ManageCollector, 'getToken')
+    def getToken(self):
+        """ return security token"""
+        if not hasattr(self, '_token'): self.createToken()
+        return self._token
+
+    security.declareProtected(ManageCollector, 'createToken')
+    def createToken(self):
+        """ create a new token"""
+        self._token = md5.new(str(time.time() * random.random())).hexdigest()
 
 registerType(PloneCollectorNG)
 
