@@ -4,12 +4,7 @@ Overview
 
 Installation
 
-  You install it the usual way - either using QuickInstaller
-product or make an External method with:
-
-  Id: faq_install  (can really be anything)
-  Module Name: Faq.Install
-  Function Name: install
+  You install it the usual way - either using Plone Setup or make an External method the CMF way. No external dependencies.
 
 
 Requirements
@@ -25,11 +20,11 @@ To do
 
   - Implement the ratings tool
 
-Credit
+Credits
 
   User Interface, Project Architecture -- Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
 
   Project Architecture, How-to part -- "Joel Burton":mailto:joel@joelburton.com
 
-  FAQ part -- "Tim Terlegard"mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - enhanced by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
+  FAQ part -- "Tim Terlegard":mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - further enhancements by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
 
