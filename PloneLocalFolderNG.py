@@ -1,4 +1,5 @@
 import os
+import shutil
 from urllib import quote
 from string import split,find
 
@@ -219,6 +220,11 @@ class PloneLocalFolderNG(BaseContent):
         'action': 'string:${object_url}/plfng_view',
         'permissions': (View,),
         },
+      { 'id': 'folderlisting',
+        'name': 'Folder Listing',
+        'action': 'string:${object_url}/plfng_view',
+        'permissions': (View,),
+        },  
       { 'id': 'edit',
         'name': 'Edit',
         'action': 'string:$object_url/base_edit',
@@ -308,57 +314,69 @@ class PloneLocalFolderNG(BaseContent):
 
         
     security.declareProtected('View', 'getContents')
-    def getContents(self,  REQUEST=None):
+    def getContents(self,  REQUEST=None, RESPONSE=None):
         """ list content of local filesystem """
         
-        this_portal = getToolByName(self, 'portal_url')
-        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
-
-        trimmedFolderBasePath = os.path.normpath(self.folder)
-        show_dir = '/'.join(REQUEST['_e'])
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
         
-        if show_dir.startswith('/') or show_dir.find('..') > -1:
-            raise ValueError('illegal directory: %s' % show_dir)
-
-        destfolder = os.path.join(trimmedFolderBasePath, show_dir)
+        #zLOG.LOG('PLFNG', zLOG.INFO , "getContents() :: REQUEST = %s" % REQUEST)
+        if REQUEST.get('action', '') == 'deleteFolder':
+            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: calling deleteFolder(%s)" % destpath)
+            self.deleteFolder(rel_dir, destpath, REQUEST)
+            return []
+      
         
-        if not destfolder.startswith(trimmedFolderBasePath):
-            raise ValueError('illegal directory: %s' % show_dir)
-
-    
-        rel_dir = destfolder.replace(self.folder, '')
-        if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
-
-        l = []
-        if os.path.exists(destfolder):
-           for f in os.listdir(destfolder):
-               if f.endswith('.metadata'): continue
-   
-               fullname = os.path.join(destfolder, f)
-               P = FileProxy(f, fullname, f)
-               mi = self.mimetypes_registry.classify(data=None, filename=f)
-
-               if os.path.isdir(fullname):
-                   P.setIconPath('folder_icon.gif')
-                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
-                   P.setMimeType('directory')
-               else:
-                   P.setIconPath(mi.icon_path)
-                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
-                   P.setMimeType(mi.normalized())
-   
-               if os.path.exists(fullname + '.metadata'):
-                   try:
-                     P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
-                   except:
-                     P.setComment('')
-               else:
-                   P.setComment('')
-               l.append(P) 
-
         else:
-            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
-        return l
+        
+	        this_portal = getToolByName(self, 'portal_url')
+	        mimetypesTool = getToolByName(this_portal, 'mimetypes_registry')
+	
+	        trimmedFolderBasePath = os.path.normpath(self.folder)
+	        show_dir = '/'.join(REQUEST['_e'])
+	        
+	        if show_dir.startswith('/') or show_dir.find('..') > -1:
+	            raise ValueError('illegal directory: %s' % show_dir)
+	
+	        destfolder = os.path.join(trimmedFolderBasePath, show_dir)
+	        
+	        if not destfolder.startswith(trimmedFolderBasePath):
+	            raise ValueError('illegal directory: %s' % show_dir)
+	
+	    
+	        rel_dir = destfolder.replace(self.folder, '')
+	        if rel_dir.startswith('/'): rel_dir = rel_dir[1:]
+	
+	        l = []
+	        if os.path.exists(destfolder):
+	           for f in os.listdir(destfolder):
+	               if f.endswith('.metadata'): continue
+	   
+	               fullname = os.path.join(destfolder, f)
+	               P = FileProxy(f, fullname, f)
+	               mi = self.mimetypes_registry.classify(data=None, filename=f)
+	
+	               if os.path.isdir(fullname):
+	                   P.setIconPath('folder_icon.gif')
+	                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f) + '/plfng_view')
+	                   P.setMimeType('directory')
+	               else:
+	                   P.setIconPath(mi.icon_path)
+	                   P.setAbsoluteURL(self.absolute_url() + '/' +  os.path.join(rel_dir, f))
+	                   P.setMimeType(mi.normalized())
+	   
+	               if os.path.exists(fullname + '.metadata'):
+	                   try:
+	                     P.setComment(getMetadataElement(fullname, section="GENERAL", option="comment"))
+	                   except:
+	                     P.setComment('')
+	               else:
+	                   P.setComment('')
+	               l.append(P) 
+	
+	        else:
+	            zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "getContents() :: destfolder not found (%s)" % destfolder )
+	        return l
 
     security.declareProtected('View', 'breadcrumbs')
     def breadcrumbs(self, instance): 
@@ -377,6 +395,7 @@ class PloneLocalFolderNG(BaseContent):
         return l
 
     def __call__(self, REQUEST=None, RESPONSE=None, *args, **kw):
+        #zLOG.LOG('PLFNG', zLOG.INFO , "__call__() :: REQUEST = %s" % REQUEST)
         if not hasattr(self, "folder"):
             #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: no folder attribute")
             return self
@@ -388,20 +407,19 @@ class PloneLocalFolderNG(BaseContent):
            destpath = os.path.join(self.folder, rel_dir)
    
            if os.path.isfile(destpath):
-               
+               #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "__call__() :: %s :: isfile()" % destpath)
                if REQUEST.get('action', '') == 'unpack':
                   self.unpackFile(destpath, REQUEST, RESPONSE)
                
-               elif REQUEST.get('action', '') == 'delete':
-                  self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)   
-               
+               elif REQUEST.get('action', '') == 'deleteFile':
+                  self.deleteFile(rel_dir, destpath, REQUEST, RESPONSE)
+                  
                elif REQUEST.get('action', '') == 'catalog':
                   #catalogTool = getToolByName(self, 'portal_catalog')
                   return self.catalogContents()
                else: 
                   return self.showFile(destpath, REQUEST, RESPONSE)
            else:
-   
                #  Mozilla browsers don't like backslashes in URLs, so replace any '\' with '/'
                #  that os.path.join might produce
                RESPONSE.redirect(('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view')).replace('\\','/'))
@@ -623,6 +641,13 @@ class PloneLocalFolderNG(BaseContent):
         """ delete the file """
         os.remove(fileToDelete)
         RESPONSE.redirect(REQUEST['URL1']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
+        return 1
+
+    security.declareProtected('Delete objects', 'deleteFolder')
+    def deleteFolder(self, rel_dir, folderToDelete, REQUEST):
+        """ delete the folder """
+        shutil.rmtree(folderToDelete)
+        REQUEST.RESPONSE.redirect(REQUEST['URL2']+'/plfng_view?portal_status_message=' + rel_dir + ' deleted.')
         return 1
 
     security.declareProtected('View', 'quota_aware')
