@@ -5,9 +5,8 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: PCNGSchema.py,v 1.3 2004/01/29 18:05:22 ajung Exp $
+$Id: PCNGSchema.py,v 1.4 2004/01/29 19:06:32 ajung Exp $
 """
-
 
 from types import FileType
 
