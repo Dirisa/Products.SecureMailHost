@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.7 2003/09/07 15:16:57 ajung Exp $
+$Id: SchemaEditor.py,v 1.8 2003/09/07 17:51:29 ajung Exp $
 """
 
 import operator
@@ -13,7 +13,8 @@ import operator
 from BTrees.OOBTree import OOBTree
 from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import DisplayList
-from Products.Archetypes.public import StringField, TextField, IntegerField
+from Products.Archetypes.public import StringField, TextField, IntegerField, FloatField
+from Products.Archetypes.public import DateTimeField, FixedPointField, LinesField, BooleanField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, StringWidget
 
 class SchemaEditor:
@@ -99,6 +100,11 @@ class SchemaEditor:
 
             if d.field == 'StringField': field = StringField
             elif d.field == 'IntegerField': field = IntegerField
+            elif d.field == 'FloatField': field = FloatField
+            elif d.field == 'FixedPointField': field = FixedPointField
+            elif d.field == 'BooleanField': field = BooleanField
+            elif d.field == 'LinesField': field = LinesField
+            elif d.field == 'DateTimeField': field = DateTimeField
             else: raise TypeError('unknown field type: %s' % d.field)
 
             print d
