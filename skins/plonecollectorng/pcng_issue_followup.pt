@@ -22,7 +22,8 @@
       <div class="row">
         <div class="label" i18n:translate="comment">Comment</div>
         <div class="field">
-          <textarea name="comment" cols="80" rows="10"></textarea>
+          <textarea name="comment" cols="80" rows="10" 
+                    tal:content="request/comment|nothing"></textarea>
         </div>
       </div>
 
@@ -63,7 +64,10 @@
                                     ">
                                                                    
               <span tal:condition="python: item[0] in actions">
-                <br><input type="radio" name="action" tal:attributes="value python: item[0]"/><span i18n:translate="" tal:content="python: item[1]" />
+                <br><input type="radio" name="action" 
+                           tal:attributes="value python: item[0];
+                                           CHECKED python: request.get('state','')==item[0]"/>
+                        <span i18n:translate="" tal:content="python: item[1]" />
               </span>
             </metal:block>
           </td>
