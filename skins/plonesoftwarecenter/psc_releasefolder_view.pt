@@ -8,10 +8,7 @@
 
 <div metal:fill-slot="main">
 
-  <div metal:define-macro="main"
-    tal:define="releases python:here.contentValues('PSCRelease');
-                python_is_so_annoying_sometimes python:releases.reverse();
-                ">
+  <div metal:define-macro="main">
 
         <h1 class="documentFirstHeading">
             <img tal:replace="structure here/product_icon.gif" />
@@ -35,8 +32,32 @@
             description
         </div>
 
-        <h2 i18n:translate="heading_all_releases">All Releases</h2>
+        <h2 i18n:translate="heading_upcoming_releases">Upcoming Releases</h2>
+        
+        <tal:block define="global releases here/getUpcomingReleases">
+            <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
+        </tal:block>
+        
+        <h2 i18n:translate="heading_previous_releases">Previous Releases</h2>
+        
+        <tal:block define="global releases here/getPreviousReleases">
+            <metal:macro use-macro="here/psc_releasefolder_view/macros/release_listing"/>
+        </tal:block>
 
+        <div metal:use-macro="here/document_byline/macros/byline">
+            Get the byline - contains details about author and modification date.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+<!-- Macro used to show releases, since we need two near identical lists -->
+<!-- Call this with a variable 'releases' defined -->
+<metal:macro define-macro="release_listing">
         <tal:noreleases tal:condition="not:releases">
 
             <div class="discreet">
@@ -117,14 +138,4 @@
             <div class="visualClear"></div>
 
         </tal:releases>
-
-        <div metal:use-macro="here/document_byline/macros/byline">
-            Get the byline - contains details about author and modification date.
-        </div>
-
-    </div>
-
-</div>
-
-</body>
-</html>
+</metal:macro>

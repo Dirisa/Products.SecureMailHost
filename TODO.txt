@@ -1,6 +1,6 @@
-ArchPackage - Remaining issues
+PloneSoftwareCenter - Remaining issues
 
-Developer claiming item is in [brackets].
+Developer claiming item/comments is in [brackets].
 
 ====================================
 Bugs found when testing on plone.org
@@ -19,14 +19,22 @@ Bugs found when testing on plone.org
      doesn't apply when we use external storage. please test with latest
      version of ES though, since I'm not sure if I have that ~optilude]
     
+    
+    
 - Deleting file in release doesn't seem possible
 
 - primary=1 on downloadable file does not seem to work - going straight to path
   still shows view, and does not download file. Workaround with explicit link
-  in psc_download_view.pt.
+  in psc_download_view.pt and psc_release_view.pt
   
-- psc_releasefolder_view should show upcoming releases first, with header - then 
-  published releases - mixing released and unrelased items is not good.
+  
+  
+- Right now, anonymous users can't see the following folders in navtree:
+
+    - Release Folder
+    - Roadmap folder
+    
+    [this is due to NavTreeSuck(tm) - they have no workflow ~optilude]
 
 ===========================================
 PloneHelpCenter integration considerations:
@@ -46,20 +54,7 @@ PloneHelpCenter integration considerations:
             method getVersions_vocab () in PSCProject.
             
         - Active versions set in field on PSCProject.
-
-====
-Bugs
-====
-
-- AttributeError: getFilename when viewing software file. Does this have to do
-    with ExternalStorage?
-    
-- Right now, anonymous users can't see the following folders in navtree:
-
-  - Release Folder
-  
-  - Roadmap folder
-
+        
 =======
 General
 =======

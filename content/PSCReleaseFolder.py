@@ -1,5 +1,5 @@
 """
-$Id: PSCReleaseFolder.py,v 1.1 2005/02/28 05:10:36 limi Exp $
+$Id: PSCReleaseFolder.py,v 1.2 2005/03/04 01:56:27 optilude Exp $
 """
 
 from Products.Archetypes.public import OrderedBaseFolder
@@ -10,6 +10,7 @@ from Products.PloneSoftwareCenter.config import *
 from Products.PloneSoftwareCenter.utils import folder_modify_fti
 
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 
 from schemata import PSCReleaseFolderSchema
 
@@ -90,5 +91,30 @@ class PSCReleaseFolder(OrderedBaseFolder):
         while "%s.%s" % (major, minor,) in self.objectIds ():
             minor += 1
         return "%s.%s" % (major, minor,)
+        
+    security.declareProtected(CMFCorePermissions.View, 'getUpcomingReleases')
+    def getUpcomingReleases(self):
+        """Get a list of upcoming releases, in reverse order of effective date.
+        """
+        catalog = getToolByName(self, 'portal_catalog')
+        res = catalog.searchResults(portal_type = 'PSCRelease',
+                                    review_state = ['planning', 'in-progress'],
+                                    path = self.getPhysicalPath(),
+                                    sort_on = 'effective',
+                                    sort_order = 'reverse')
+        return [r.getObject() for r in res]
+        
+    security.declareProtected(CMFCorePermissions.View, 'getPreviousReleases')
+    def getPreviousReleases(self):
+        """Get a list of previously published releases, in reverse order of
+        effective date.
+        """
+        catalog = getToolByName(self, 'portal_catalog')
+        res = catalog.searchResults(portal_type = 'PSCRelease',
+                                    review_state = ['published'],
+                                    path = self.getPhysicalPath(),
+                                    sort_on = 'effective',
+                                    sort_order = 'reverse')
+        return [r.getObject() for r in res]
 
 registerType(PSCReleaseFolder, PROJECTNAME)
