@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.11 2003/10/11 19:28:30 ajung Exp $
+$Id: collector_schema.py,v 1.12 2003/10/12 09:38:27 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -15,6 +15,7 @@ from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerW
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
 
 from config import VOC_ISSUE_FORMATTERS
+from notification_policies import VOC_NOTIFICATION_POLICIES
 
 VOC_LIMIT_FOLLOWUPS = DisplayList((
   (1, 'Yes'),
@@ -31,6 +32,12 @@ VOC_EMAIL_NOTIFICATIONS = DisplayList((
   ('all', 'Trackeradmins + Supporters + Reporters'),
   ('assigned', 'Trackeradmins + assigned Supporters + Reporters'),                                       
   ('none', 'no notifications'),                                       
+))
+
+VOC_WATCHLIST = DisplayList((
+  ('disabled', 'Disabled'),
+  ('anonymous', 'Watchlist enabled for anyone'),
+  ('authenticated', 'Watchlist enabled for authenticated users'),
 ))
 
 
@@ -100,18 +107,24 @@ schema = OrderedSchema((
     StringField('collector_email',
                 searchable=0,
                 default='root@localhost',
-                widget=StringWidget(label='E-Mail address (FROM: header)'),
+                widget=StringWidget(label='E-Mail address (FROM: + REPLY-TO: header)'),
                 schemata='E-Mail',
                 ),
-    StringField('email_notifications',
-                vocabulary=VOC_EMAIL_NOTIFICATIONS,
-                widget=SelectionWidget(format='select', label='E-Mail notifications'),
+    StringField('notification_policy',
+                vocabulary=VOC_NOTIFICATION_POLICIES(),
+                widget=SelectionWidget(format='select', label='E-Mail notification policy'),
                 default='none',
                 schemata='E-Mail'
                 ),
     StringField('issue_formatter',
                 vocabulary=VOC_ISSUE_FORMATTERS,
-                widget=SelectionWidget(format='select', label='Issue formatter'),
+                widget=SelectionWidget(format='select', label='E-Mail issue formatter'),
+                schemata='E-Mail'
+                ),
+    StringField('watchlist_mode',
+                vocabulary=VOC_WATCHLIST,
+                widget=SelectionWidget(format='select', label='Watchlist'),
+                default='disabled',
                 schemata='E-Mail'
                 ),
     ))
