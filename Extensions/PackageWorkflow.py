@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.2 $"[11:-2]
+__version__ = "$Revision: 1.3 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -38,21 +38,24 @@ def setupPSC_package_workflow(wf):
     wf.states.setInitialState('unapproved')
 
     ## States initialization
-    sdef = wf.states['pending']
-    sdef.setProperties(title="""Waiting for reviewer""",
-                       transitions=('publish', 'reject', 'retract'))
-    sdef.setPermission('Access contents information', 0, ['Manager', 'Owner', 'Reviewer'])
-    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner', 'Reviewer'])
-    sdef.setPermission('View', 0, ['Manager', 'Owner', 'Reviewer'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner', 'Reviewer'])
-
     sdef = wf.states['unapproved']
     sdef.setProperties(title="""Unapproved package, awaiting release""",
                        transitions=('publish', 'submit'))
     sdef.setPermission('Access contents information', 0, ['Manager', 'Owner'])
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
     sdef.setPermission('View', 0, ['Manager', 'Owner'])
-    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
+    sdef.setPermission('Add portal content', 0, ['Manager'])
+    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager'])
+    
+    
+    sdef = wf.states['pending']
+    sdef.setProperties(title="""Waiting for reviewer""",
+                       transitions=('publish', 'reject', 'retract'))
+    sdef.setPermission('Access contents information', 0, ['Manager', 'Owner', 'Reviewer'])
+    sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner', 'Reviewer'])
+    sdef.setPermission('View', 0, ['Manager', 'Owner', 'Reviewer'])
+    sdef.setPermission('Add portal content', 0, ['Manager'])
+    sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager'])
 
     sdef = wf.states['published']
     sdef.setProperties(title="""Public""",
@@ -60,6 +63,7 @@ def setupPSC_package_workflow(wf):
     sdef.setPermission('Access contents information', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
     sdef.setPermission('Modify portal content', 0, ['Manager', 'Owner'])
     sdef.setPermission('View', 1, ['Anonymous', 'Manager', 'Member', 'Owner'])
+    sdef.setPermission('Add portal content', 0, ['Manager', 'Owner'])
     sdef.setPermission('Add PloneSoftwareCenter Content', 0, ['Manager', 'Owner'])
 
 

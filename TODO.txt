@@ -2,16 +2,6 @@ PloneSoftwareCenter - Remaining issues
 
 Developer claiming item/comments is in [brackets].
 
-====
-Bugs
-====
-
-- No permissions on ImprovementProposal workflow
-
-- If an unapproved package makes a published release, it shows up in searches,
-    but cannot be viewed.
-
-
 =======
 General
 =======

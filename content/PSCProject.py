@@ -1,5 +1,5 @@
 """
-$Id: PSCProject.py,v 1.9 2005/03/10 17:03:49 optilude Exp $
+$Id: PSCProject.py,v 1.10 2005/03/10 22:42:29 optilude Exp $
 """
 
 from AccessControl import ClassSecurityInfo
@@ -153,7 +153,7 @@ class PSCProject(OrderedBaseFolder):
         else:
             return res[0].getObject()
 
-    security.declareProtected(ADD_CONTENT_PERMISSION, 'getNotAddableTypes')
+    security.declareProtected(CMFCorePermissions.View, 'getNotAddableTypes')
     def getNotAddableTypes(self):
         """Hide the release container types if it already exists.
         """

@@ -12,7 +12,7 @@
 """
 Programmatically creates a workflow type
 """
-__version__ = "$Revision: 1.1 $"[11:-2]
+__version__ = "$Revision: 1.2 $"[11:-2]
 
 from Products.CMFCore.WorkflowTool import addWorkflowFactory
 
@@ -30,7 +30,7 @@ def setupPSC_improvementproposal_workflow(wf):
         wf.variables.addVariable(v)
     for l in ['reviewer_queue']:
         wf.worklists.addWorklist(l)
-    for p in ('Access contents information', 'Modify portal content', 'View', 'Change portal events'):
+    for p in ('Access contents information', 'Modify portal content', 'View'):
         wf.addManagedPermission(p)
         
 
@@ -38,13 +38,16 @@ def setupPSC_improvementproposal_workflow(wf):
     wf.states.setInitialState('being-discussed')
 
     ## States initialization
+
+    # All roles are acquired from parent, since we are not controlling
+    # access with these states, only the state of the proposal. The same
+    # users who can view the project can view the proposals   
     sdef = wf.states['in-progress']
     sdef.setProperties(title="""In progress""",
                        transitions=('complete', 'defer', 're-draft', 'reject'))
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
     sdef = wf.states['completed']
     sdef.setProperties(title="""Completed and merged""",
@@ -52,7 +55,6 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
     sdef = wf.states['rejected']
     sdef.setProperties(title="""Rejected""",
@@ -60,7 +62,6 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
     sdef = wf.states['deferred']
     sdef.setProperties(title="""Deferred""",
@@ -68,7 +69,6 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
     sdef = wf.states['ready-for-merge']
     sdef.setProperties(title="""Ready for merge""",
@@ -76,7 +76,6 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
     sdef = wf.states['being-discussed']
     sdef.setProperties(title="""Being discussed""",
@@ -84,7 +83,6 @@ def setupPSC_improvementproposal_workflow(wf):
     sdef.setPermission('Access contents information', 1, [])
     sdef.setPermission('Modify portal content', 1, [])
     sdef.setPermission('View', 1, [])
-    sdef.setPermission('Change portal events', 1, [])
 
 
     ## Transitions initialization
