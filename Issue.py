@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.230 2004/11/14 15:59:53 ajung Exp $
+$Id: Issue.py,v 1.231 2004/11/15 19:47:39 ajung Exp $
 """
 
 import os, time, random
@@ -241,8 +241,10 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
         self.getTranscript().add(ActionEvent(action))
         self.notifyModified() # notify DublinCore
         self.reindexObject()
+
         # Notification is triggered by the workflow. Since comments do not trigger
         # a workflow action we must trigger the notification on our own.
+
         if action in ('comment',): notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view',
                       self.Translate('followup_submitted', 'Followup submitted'))

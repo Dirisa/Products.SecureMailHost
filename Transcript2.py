@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Transcript2.py,v 1.8 2004/11/12 15:37:52 ajung Exp $
+$Id: Transcript2.py,v 1.9 2004/11/15 19:47:39 ajung Exp $
 """
 
 import time, random 
@@ -42,6 +42,7 @@ class BaseEvent(SimpleItem):
         else:
             self._user = self._creator
         self._state = state
+        self._last_status = None
         self._newTimestamp()
 
     def _newTimestamp(self):
@@ -49,6 +50,9 @@ class BaseEvent(SimpleItem):
 
     def getState(self):
         return self._state
+
+    def setCreated(self, timestamp):
+        self._created = timestamp
 
     def getCreated(self):
         return self._created
@@ -63,6 +67,11 @@ class BaseEvent(SimpleItem):
     def getType(self):
         return self.meta_type
 
+    def setLastStatus(self, status):
+        self._last_status = status
+
+    def getLastStatus(self):
+        return getattr(self, '_last_status', '')
 
 InitializeClass(BaseEvent) 
 
@@ -185,6 +194,10 @@ class Transcript2(SimpleItem):
 
     security.declareProtected(View, 'add')
     def add(self, event):
+#        try:
+#            event.setLastStatus(self.status())  # self.status() -> Transcript is wrapped
+#        except:
+#            pass
         while self._items.has_key(event.getCreated()):
             event._newTimestamp()
         self._items[event.getCreated()] = event

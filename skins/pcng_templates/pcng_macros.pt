@@ -44,30 +44,6 @@
   </div>
 </metal:block>
 
-<div metal:define-macro="transcript" i18n:domain="plonecollectorng">
-  <table class="listing" id="listingChanges"
-         tal:define="groups python: here.getTranscript().getEventsGrouped();
-                     num_groups python: len(groups)">
-    <tr>
-      <th i18n:translate="transcript_time">Time</th>
-      <th i18n:translate="transcript_user">User</th>
-      <th i18n:translate="transcript_changes">Changes</th>
-    </tr>
-
-    <tal:loop tal:repeat="events groups">
-      <tr tal:attributes="class python: test(repeat['events'].even(), 'evenRow', 'oddRow')">
-        <td valign="top" tal:content="python: here.toLocalizedTime(DateTime(events[0].getTimestamp()), long_format=1)" /> 
-        <td valign="top" tal:content="python: events[0].getUser()" />
-        <td valign="top">           
-          <tal:loop tal:repeat="event events">
-            <div tal:content="structure python: here.pcng_format_event(event, 'html').encode(context.getSiteEncoding())" />
-          </tal:loop>
-        </td>
-      </tr>
-    </tal:loop>
-  </table>
- </div>
-    
     
 <metal:macro metal:define-macro="transcript_comments" i18n:domain="plonecollectorng">
 
@@ -81,7 +57,8 @@
         #<span tal:content="python: num_events - repeat['event'].index" />:
          <span tal:content="python: here.toLocalizedTime(DateTime(event.getTimestamp()), long_format=1)" /> (<span tal:content="python: event.getUser()" />) 
          <span i18:translate="" tal:content="event/getType"/>/
-         <span i18:translate="" tal:content="event/getState"/>
+         <span i18:translate="" tal:content="event/getState"/>/
+         <span i18:translate="" tal:content="event/getLastStatus|nothing"/>
       </div>
 
       <div id="transcriptevent">
@@ -119,7 +96,7 @@
 
     <div tal:condition="not: events" i18n:translate="no_entries">No entries</div>
 
-    <table class="listing">
+    <table class="listing" id="table_transcript_changes">
       <tr tal:condition="events">
         <th i18n:translate="date">Date</th>
         <th i18n:translate="user">User</th>

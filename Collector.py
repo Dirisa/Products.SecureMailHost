@@ -11,7 +11,7 @@ Email: info@zopyx.com
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.229 2004/11/14 15:59:53 ajung Exp $
+$Id: Collector.py,v 1.230 2004/11/15 19:47:39 ajung Exp $
 """
 
 
@@ -22,7 +22,7 @@ from BTrees.OOBTree import OOBTree
 from ZODB.POSException import ConflictError
 from AccessControl import  ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
-from Acquisition import ImplicitAcquisitionWrapper
+from Acquisition import ImplicitAcquisitionWrapper, aq_base
 from Products.Archetypes.public import registerType
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
@@ -234,6 +234,11 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
     security.declareProtected(View, 'getTranscript')
     def getTranscript(self):
         """ return the Transcript instance """
+        
+        if not  hasattr(aq_base(self), '_transcript2'):
+            self._transcript2 = Transcript2().__of__(self)
+            from convert_transcript import convert2
+            convert2(self._transcript, self._transcript2)
         return self._transcript2
 
     ######################################################################
@@ -795,6 +800,19 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         for u in self._supporters: self._users.addUser(u, 'supporter')
         for u in self._reporters: self._users.addUser(u, 'reporters')
         for u in self._managers: self._users.addUser(u, 'managers')
+
+    security.declareProtected(ManageCollector, 'migrate_130')
+    def migrate_130(self):
+        """ perform PCNG 1.3 migration """
+        self._clear()   # ATSchemaEditorNG.SchemaEditor._clear()
+        self.atse_registerSchema(SCHEMA_ID,
+                                 self._ms,
+                                 filtered_schemas=('default', 'metadata'),
+                                 undeleteable_fields = UNDELETEABLE_FIELDS,
+                                 domain='plonecollectorng')   
+        self.setup_tools()
+        self.reindex_issues()
+        return 'Migrated to PCNG 1.3.0'
 
 registerType(PloneCollectorNG)
 

@@ -15,7 +15,7 @@
       <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
     </metal:block>
 
-    <div metal:use-macro="here/pcng_macros/macros/transcript"/>
+    <div metal:use-macro="here/pcng_macros/macros/transcript_changes"/>
   </div>
 
 </body>
