@@ -40,7 +40,7 @@
        
                 <div> 
                   <input type="text" name="fieldset" value="" >
-                  <input type="submit" value=" Add "  class="standalone" valign="top">
+                  <input type="submit" value="Add"  class="standalone" valign="top" i18n:attributes="value">
                 </div>
               </form>
             </div>
@@ -64,7 +64,7 @@
                   <input type="hidden" name="fielddata.schemata:record:string"    
                        tal:attributes="value request/fieldset|nothing" />
                     <input type="text" name="name" value=""> 
-                    <input type="submit" name="schema_add_field" value=" Add " class="standalone">
+                    <input type="submit" name="schema_add_field" value="Add" class="standalone" i18n:attributes="value">
                 </form>
               </div>
             </div>
@@ -74,7 +74,7 @@
             <h5 i18n:translate="maintainance">Maintainance</h5>
             <div class="body">
               <div>
-                <a href="update_schema_for_issues?return_to=pcng_schema_editor">Update schema for all issues</a>
+                <a href="update_schema_for_issues?return_to=pcng_schema_editor" i18n:translate="update_schema_for_all_issues">Update schema for all issues</a>
               </div>
             </div>
           </div>
@@ -96,14 +96,14 @@
 
 
             <div class="row">
-              <div class="label">Name</div>
+              <div class="label" i18n:translate="name">Name</div>
               <div class="field">
                 <span tal:content="field/getName" />
               </div>
             </div>
 
             <div class="row">
-              <div class="label">Type</div>
+              <div class="label" i18n:translate="type">Type</div>
               <div class="field">
                 <select name="fielddata.type:record:string">
                   <span tal:repeat="item python: ('StringField', 'IntegerField', 'FloatField', 'FixedPointField', 'LinesField', 'DateTimeField', 'BooleanField')">
@@ -116,7 +116,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Widget</div>
+              <div class="label" i18n:translate="widget">Widget</div>
               <div class="field">
                 <select name="fielddata.widget:record:string">
                   <option value="String" 
@@ -163,7 +163,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Size (Use "ROWSxCOLS" for Textarea or Line widgets)</div>
+              <div class="label" i18n:translate="size_schema_editor">Size (Use "ROWSxCOLS" for Textarea or Line widgets)</div>
                 
               <div class="field">
                 <input type="text" value="20" size="10" name="fielddata.widgetsize:record:string"/>
@@ -171,7 +171,7 @@
             </div>
 
             <div class="row" tal:condition="python: field.getWidgetName() in ('MultiSelectionWidget', 'SelectionWidget')">
-              <div class="label">Vocabulary (Use "key|value" for passing key-value pairs or 'method:&lt;methodname&gt;')</div>
+              <div class="label" i18n:translate="vocabulary">Vocabulary (Use "key|value" for passing key-value pairs or 'method:&lt;methodname&gt;')</div>
               <div class="field">
                 <textarea cols="60" rows="6"
                        name="fielddata.vocabulary:record:lines"
@@ -181,7 +181,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Default</div>
+              <div class="label" i18n:translate="default">Default</div>
               <div class="field">
                 <input type="text" value="" size="40" 
                        name="fielddata.default:record:string"
@@ -190,7 +190,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Label</div>
+              <div class="label" i18n:translate="label">Label</div>
               <div class="field">
                 <input type="text" value="" size="40" 
                        name="fielddata.label:record:string"
@@ -199,7 +199,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Required</div>
+              <div class="label" i18n:translate="required">Required</div>
               <div class="field">
                 <input type="checkbox" value="1" 
                        name="fielddata.required:record:int"
@@ -208,7 +208,7 @@
             </div>
 
             <div class="row">
-              <div class="label">Invisible</div>
+              <div class="label" i18n:translate="invisible">Invisible</div>
               <div class="field">
                 <input type="checkbox" value="1" 
                        name="fielddata.invisible:record:int" 
@@ -218,7 +218,7 @@
 
             <div class="row">
               <div class="field">
-                <input type="submit" value=" Save changes" class="standalone">
+                <input type="submit" value="Save changes" class="standalone" i18n:attributes="value">
               </div> 
             </div>
           </form>

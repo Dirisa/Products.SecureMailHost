@@ -405,3 +405,44 @@ msgstr "Mir zugewiesene Tickets"
 msgid "Search"
 msgstr  "Suchen"
 
+msgid "schematas"
+msgstr "Schematas"
+
+msgid "fields"
+msgstr "Felder"
+
+msgid "maintainance"
+msgstr "Wartung"
+
+msgid "name"
+msgstr "Name"
+
+msgid "type"
+msgstr "Typ"
+
+msgid "widget"
+msgstr "Widget"
+
+msgid "invisible"
+msgstr "Unsichtbar"
+
+msgid "required"
+msgstr "Notwendig"
+
+msgid "size_schema_editor"
+msgstr "Größe (benutzen Sie 'ZEILENxSPALTEN' für Textarea oder Line Widgets)"
+
+msgid "default"
+msgstr "Default"
+
+msgid "label"
+msgstr "Label"
+
+msgid "add"
+msgstr "Neu"
+
+msgid "field_definition"
+msgstr "Feld Definition"
+
+msgid "Save changes"
+msgstr "Änderungen speichern"
