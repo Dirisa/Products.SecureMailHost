@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.153 2004/04/08 15:57:07 ajung Exp $
+$Id: Issue.py,v 1.154 2004/04/13 17:53:31 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -324,7 +324,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     ######################################################################
 
     security.declareProtected(AddCollectorIssueFollowup, 'upload_file')
-    def upload_file(self, uploaded_file=None, comment='', srcname='', mimetype='', RESPONSE=None):
+    def upload_file(self, uploaded_file=None, comment='', srcname='', mimetype='', notify=1, RESPONSE=None):
         """ Upload a file """
 
         if uploaded_file:
@@ -352,7 +352,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             self._transcript.addUpload(file_id, comment)
 
             self._last_action = 'Upload'
-            notifications.notify(self)
+            if notify: 
+                notifications.notify(self)
 
             util.redirect(RESPONSE, 'pcng_issue_references', 
                           self.Translate('file_uploaded', 'File base been uploaded'))

@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.160 2004/04/13 14:25:12 ajung Exp $
+$Id: Collector.py,v 1.161 2004/04/13 17:53:31 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -32,6 +32,7 @@ from Issue import PloneIssueNG
 from SchemaEditor import SchemaEditor
 from Translateable import Translateable
 from workflows import VOC_WORKFLOWS
+import notifications
 import collector_schema 
 import issue_schema
 import util
@@ -729,11 +730,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             imgdata = base64.decodestring(xmldata)
             issue.upload_file(imgdata, 
                               srcname=node.getAttribute('filename'), 
-                              mimetype=node.getAttribute('mimetype'))
+                              mimetype=node.getAttribute('mimetype'),
+                              notify=0)
 
         if R.description:
             transcript.addComment(R.description)
         issue.reindexObject()
+
+        notifications.notify(issue)
 
         RESPONSE.write(issue.absolute_url())
 
