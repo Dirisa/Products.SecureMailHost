@@ -57,23 +57,12 @@
 
           <td valign="top" tal:define="actions here/validActions">
             <input type="radio" name="action" value="comment" checked>Comment
-            <metal:block tal:repeat="item python: (('accept', 'Accept'),
-                                                   ('assign', 'Assign'),
-                                                   ('resolve', 'Resolve'),
-                                                   ('reject', 'Reject'),
-                                                   ('reaccept', 'Re-Accept'),
-                                                   ('resign', 'Resign'),
-                                                   ('defer', 'Defer'),
-                                                  )
-                                    ">
-                                                                   
-              <span tal:condition="python: item[0] in actions">
-                <br><input type="radio" name="action" 
-                           tal:attributes="value python: item[0];
-                                           CHECKED python: request.get('state','')==item[0]"/>
-                        <span i18n:translate="" tal:content="python: item[1]" />
-              </span>
-            </metal:block>
+            <tal:loop tal:repeat="action actions">
+              <br><input type="radio" name="action" 
+                         tal:attributes="value action;
+                                         CHECKED python: request.get('state','') == action"/>
+              <span i18n:translate="" tal:content="action/capitalize" />
+            </tal:loop>
           </td>
         </tr>
       </table>
