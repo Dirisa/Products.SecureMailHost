@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.36 2003/11/28 14:36:24 ajung Exp $
+$Id: SchemaEditor.py,v 1.37 2003/11/28 14:46:46 ajung Exp $
 """
 
 import copy
@@ -32,7 +32,7 @@ class SchemaEditor:
 
     security.declareProtected(ManageCollector, 'atse_init')
     def atse_init(self, schema):
-        self._ms = copy.copy(schema)     # ms=managed schema
+        self._ms = schema.copy()     # ms=managed schema
 
     security.declareProtected(View, 'atse_getSchema')
     def atse_getSchema(self):
@@ -46,7 +46,9 @@ class SchemaEditor:
             for name in self._schemata_names:
                 for f in self._schemas[name].fields():
                     schema.addField(f)
-            self._ms = copy.copy(schema)
+            schema.addField(StringField('language', schemata='default')
+            schema.addField(StringField('subject', schemata='default')
+            self._ms = schema.copy()
  
         for field in self._ms.fields():
             if field.mutator is None:
