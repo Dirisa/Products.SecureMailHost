@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: graphviz.py,v 1.4 2003/10/05 12:08:03 ajung Exp $
+$Id: graphviz.py,v 1.5 2003/10/08 16:19:35 ajung Exp $
 """
 
 ##########################################################################
@@ -50,9 +50,6 @@ class Edge:
         self.src = src
         self.dest = dest
 
-#    def __cmp__(self, o):
-#        return self.src==o.src and self.dest==o.dest
-
     def __str__(self):
         return '%s -> %s' % (self.src, self.dest)
 
@@ -74,10 +71,7 @@ def build_tree(issue, graphs={}, nodes=[], edges=[]):
     for ref in issue.getRefs():
         ref_issue = issue.getPhysicalRoot().restrictedTraverse(unquote(ref.absolute_url(1)))
         e = Edge(node, Node(ref_issue)) 
-        
-        if not e in edges:
-            edges.append(e)
-
+        if not e in edges: edges.append(e)
         build_tree(ref_issue, graphs, nodes, edges)
 
     return graphs, nodes, edges
