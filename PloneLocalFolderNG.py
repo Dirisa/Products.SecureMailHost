@@ -18,6 +18,12 @@ from Products.CMFCore.CMFCorePermissions import *
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
+try:
+    from ZPublisher.Iterators import filestream_iterator
+    STREAM_SUPPORT=1
+except ImportError:
+    STREAM_SUPPORT=0
+
 from config import *
 from util import *
 from FileProxy import FileProxy
@@ -401,27 +407,8 @@ class PloneLocalFolderNG(BaseContent):
            REQUEST.RESPONSE.redirect(REQUEST['URL1']+\
            '/plfng_editMetadata?portal_status_message=' + msg)
 
-    security.declareProtected('View', 'showFile')
-    def showFile(self, destpath, REQUEST, RESPONSE):
-        """ view file """
-
-        mi = self.mimetypes_registry.classify(data=None,
-                                              filename=destpath.lower())
-        RESPONSE.setHeader('content-type', mi.normalized())
-        RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
-        if REQUEST.get('action', '') == 'download':
-            REQUEST.RESPONSE.setHeader('content-disposition',
-                                       'attachment; filename=%s'
-                                        % os.path.basename(destpath))
-        fp = open(destpath, 'rb')
-        while 1:
-            data = fp.read(32768)
-            if data:
-                RESPONSE.write(data)
-            else:
-                break
-        fp.close()
-
+    def _increment_mxmcount(self):
+        """ backwards compatibility """
         # mxmCounter (v1.1.0, http://www.mxm.dk/products/public/mxmCounter)
         # is a nice little hit counter, but to get it to count hits on PLFNG
         # files, I opted to call it here since PLFNG files don't show with the
@@ -436,18 +423,46 @@ class PloneLocalFolderNG(BaseContent):
         #
         #   I have contacted the mxmCounter author to ask that this type of
         #   functionality be added to the baseline of mxmCounter.
+        REQUEST = self.REQUEST
+        url_path = REQUEST['URLPATH0']
+        this_portal = getToolByName(self, 'portal_url')
+        try:
+           mxmCounter_obj = getattr(this_portal, 'mxm_counter')
+           mxmCounter_obj.proxyObject_increase_count(url_path)
+        except:
+           zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: \
+           there was a problem with mxmCounter" )
+
+    security.declareProtected('View', 'showFile')
+    def showFile(self, destpath, REQUEST, RESPONSE):
+        """ view file """
+
+        mi = self.mimetypes_registry.classify(data=None,
+                                              filename=destpath.lower())
+        RESPONSE.setHeader('content-type', mi.normalized())
+        RESPONSE.setHeader('content-length', str(os.stat(destpath)[6]))
+        if REQUEST.get('action', '') == 'download':
+            REQUEST.RESPONSE.setHeader('content-disposition',
+                                       'attachment; filename=%s'
+                                        % os.path.basename(destpath))
+
+        fiter = None
+	if STREAM_SUPPORT:
+	    fiter = filestream_iterator(destpath, 'rb')
+        else:
+	    fp = open(destpath, 'rb')
+            while 1:
+                data = fp.read(32768)
+                if data:
+                    RESPONSE.write(data)
+                else:
+                    break
+            fp.close()
 
         if mxmCounter:
-            url_path = REQUEST['URLPATH0']
-            #zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: \
-            #mxmCounter file=%s" % url_path )
-            this_portal = getToolByName(self, 'portal_url')
-            try:
-               mxmCounter_obj = getattr( this_portal,'mxm_counter' )
-               mxmCounter_obj.proxyObject_increase_count(url_path)
-            except:
-               zLOG.LOG('PloneLocalFolderNG', zLOG.INFO , "showFile() :: \
-               there was a problem with mxmCounter" )
+            self._increment_mxmcount()
+
+        return fiter
 
     security.declareProtected('View', 'validFolder')
     def validFolder(self,  REQUEST=None):
