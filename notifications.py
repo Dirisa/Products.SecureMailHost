@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: notifications.py,v 1.41 2004/07/12 05:14:48 ajung Exp $
+$Id: notifications.py,v 1.42 2004/07/13 18:28:27 ajung Exp $
 """
 
 import sys
@@ -90,7 +90,7 @@ def send_notifications(recipients, issue):
 def _send_notifications(recipients, issue, send_attachments=0):
     """ create the notification emails """
 
-    encoding = issue.getSiteEncoding()
+    encoding = 'utf8'
     collector = issue._getCollector()
     dest_emails = [ v['email'] for v in recipients.values()     
                                if util.isValidEmailAddress(v.get('email','')) and
