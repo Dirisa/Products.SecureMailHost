@@ -5,6 +5,11 @@ span.label {
     font-weight: bold;
 }
 
+div.transcriptheader {
+background: #dddddd;
+font-size: 120%;
 }
+
+
 </style>
 </metal:block>
