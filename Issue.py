@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.218 2004/09/21 14:02:50 ajung Exp $
+$Id: Issue.py,v 1.219 2004/09/22 07:08:18 ajung Exp $
 """
 
 import os, time, random
@@ -155,9 +155,6 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
             side effects since the setDefaults() of AT was called after the objects
             manage_afterAdd() method.
         """
-
-        if not hasattr(self, '_md'):
-            self._md = PersistentMapping()
 
         if not hasattr(self, '_defaults_initialized'):
 
@@ -519,8 +516,6 @@ class PloneIssueNG(BaseBTreeFolder, ParentManagedSchema, WatchList, Translateabl
     def reindexObject(self, idxs=None):
         """ reindex issue """
         if not self.isPersistent(): return
-        if not hasattr(self, '_md'):
-            self._md = PersistentMapping()
         self._get_catalog().indexObject(self)  # reindex with collector catalog
         for c in self._get_archetypes_catalogs():
             c.catalog_object(self, '/'.join(self.getPhysicalPath()))
