@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: SchemaEditor.py,v 1.31 2003/11/24 11:03:05 ajung Exp $
+$Id: SchemaEditor.py,v 1.32 2003/11/24 13:30:15 ajung Exp $
 """
 
 import operator
@@ -95,7 +95,7 @@ class SchemaEditor:
         """ remove a field from a fieldset """
 
         if name in UNDELETEABLE_FIELDS:
-            raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted', name=name))
+            raise ValueError(self.translate('schema_feld_not_deleteable','field "$name" can not be deleted because it is protected from deletion', name=name))
             
         schema = self._schemas[fieldset]
         new_schema = OrderedSchema()
