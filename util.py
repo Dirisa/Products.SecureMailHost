@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: util.py,v 1.19 2004/04/14 19:20:10 ajung Exp $
+$Id: util.py,v 1.20 2004/09/21 13:50:49 ajung Exp $
 """
 
 import urllib
@@ -54,6 +54,9 @@ def adjustLocalRoles(obj, userids, role):
 
 def isValidEmailAddress(email):
     """ validate an email address """
+
+    #XXX: Replace this with a better implementation
+    #XXX: and log invalid addresses
 
     at = email.find('@')
     pt = email.find('.')
