@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.8 2004/01/15 17:05:21 ajung Exp $
+$Id: Translateable.py,v 1.9 2004/01/15 18:03:24 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -19,23 +19,30 @@ class Translateable:
 
     security = ClassSecurityInfo()
 
-    security.declarePublic('translate')
-    def translate(self, msgid, text, target_language=None,**kw):
-        """ ATT: this code is subject to change """
+    def _getPTS(self):
+        """ return PTS instance """
 
         pts = getattr(self, '_v_have_pts', None)
         if pts is None:
-
             try:
                 pts = self.Control_Panel.TranslationService
                 self._v_have_pts = pts
             except:
                 self._v_have_pts = None
-                return self._interpolate(text, kw)
 
-            if pts.meta_type.find('Broken') > -1: 
-                self._v_have_pts = None
-                return self._interpolate(text, kw)
+        elif pts.meta_type.find('Broken') > -1: 
+            self._v_have_pts = None
+
+        return self._v_have_pts
+
+
+    security.declarePublic('translate')
+    def translate(self, msgid, text, target_language=None,**kw):
+        """ ATT: this code is subject to change """
+
+        pts = self._getPTS()
+        if pts is None:
+            return self._interpolate(text, kw)
 
         ret = pts.translate(domain=i18n_domain, 
                             msgid=msgid, 
@@ -44,6 +51,16 @@ class Translateable:
                             default=text,
                             target_language=target_language)
         return ret
+
+
+    security.declarePublic('getLanguages')
+    def getLanguages(self):
+        """ return the languages """
+        pts = self._getPTS()
+        if pts:
+            return pts.getLanguages(i18n_domain)
+        else:
+            return 'nix'
 
     def _interpolate(self, text, mapping):
         """ convert a string containing vars for interpolation ('$var')
