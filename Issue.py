@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.122 2004/02/09 18:38:54 ajung Exp $
+$Id: Issue.py,v 1.123 2004/02/11 14:43:37 ajung Exp $
 """
 
 import sys, os, time
@@ -464,10 +464,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def title_or_id(self):
         """ return the id + title (override for navigation tree) """
         return '%s: %s' % (self.getId(), self.Title())
-        s =  '%s: %s' % (self.getId(), self.Title())
-        # Kick characters > 127 to avoid problems with Plone's navigation tree
-        # This workaround really sucks but I have no better solution until now
-        return ''.join([c for c in s if ord(c) < 128])
 
     security.declareProtected(View, 'asPDF')
     def asPDF(self, RESPONSE):
