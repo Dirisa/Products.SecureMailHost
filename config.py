@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.21 2004/04/06 15:06:07 ajung Exp $
+$Id: config.py,v 1.22 2004/04/15 18:22:58 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -33,7 +33,7 @@ setDefaultRoles(EditCollectorIssue, ('Manager', 'TrackerAdmin', 'Supporter'))
 setDefaultRoles(AddCollectorIssue, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(AddCollectorIssueFollowup, ('Manager', 'TrackerAdmin'))
 setDefaultRoles(ManageCollector, ('Manager', 'TrackerAdmin'))
-setDefaultRoles(EmailSubmission, ('Manager', 'TrackerAdmin', 'Supporter'))
+setDefaultRoles(EmailSubmission, ('Manager', 'EmailSubmitter'))
 
 
 # Don't show the following indexes in the auto-generated searchform
