@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.10 2003/09/21 12:55:02 ajung Exp $
+$Id: issue_schema.py,v 1.11 2003/09/22 07:01:51 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -138,11 +138,34 @@ schema = OrderedSchema((
                                     label_msgid='label_contact_email',
                                     i18n_domain='plonecollectorng'),
                 ),
+    StringField('contact_company',
+                searchable=1,
+                required=1,
+                schemata='contact',
+                widget=StringWidget(label='Company',
+                                    label_msgid='label_contact_company',
+                                    i18n_domain='plonecollectorng'),
+                ),
+    StringField('contact_position',
+                searchable=1,
+                required=1,
+                schemata='contact',
+                widget=StringWidget(label='Position',
+                                    label_msgid='label_contact_position',
+                                    i18n_domain='plonecollectorng'),
+                ),
     StringField('contact_address',
                 searchable=1,
                 schemata='contact',
                 widget=StringWidget(label='Address',
                                     label_msgid='label_contact_address',
+                                    i18n_domain='plonecollectorng'),
+                ),
+    StringField('contact_city',
+                searchable=1,
+                schemata='contact',
+                widget=StringWidget(label='City',
+                                    label_msgid='label_contact_city',
                                     i18n_domain='plonecollectorng'),
                 ),
     StringField('contact_phone',

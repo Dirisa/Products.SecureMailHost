@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.24 2003/09/21 18:46:24 ajung Exp $
+$Id: Issue.py,v 1.25 2003/09/22 07:01:51 ajung Exp $
 """
 
 import sys
@@ -83,13 +83,18 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ perform post-creation actions """
         OrderedBaseFolder.manage_afterAdd(self, item, container)
 
-        # add email/fullname to the contact properties of the issue
+        # added member preferences as defaults to the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
+
         if member:
-            name = 'contact_name'
-            self.Schema()[name].storage.set(name, self, member.getProperty('fullname'))
-            name = 'contact_email'
-            self.Schema()[name].storage.set(name, self, member.getProperty('email'))
+            fieldnames = [ f.getName() for f in self.Schema().fields() ]
+            for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
+                                ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
+                                ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
+                                ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
+
+                if name in fieldnames:                
+                    self.Schema()[name].storage.set(name, self, member.getProperty(name1))
         else:
             name = 'contact_name'
             self.Schema()[name].storage.set(name, self, util.getUserName())
