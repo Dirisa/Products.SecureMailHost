@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.9 2003/09/28 14:06:25 ajung Exp $
+$Id: collector_schema.py,v 1.10 2003/10/11 14:54:56 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -72,8 +72,8 @@ schema = OrderedSchema((
                 ),
 
     StringField('canonical_hostname',
-                default='http://localhost/',
-                widget=StringWidget(label='Canonical hostname'),
+                default='localhost',
+                widget=StringWidget(label='Hostname or IP address'),
                 schemata='collectordata',
                 ),
     StringField('participation_mode',
