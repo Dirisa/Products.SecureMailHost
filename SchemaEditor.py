@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.18 2003/09/27 11:55:40 ajung Exp $
+$Id: SchemaEditor.py,v 1.19 2003/09/28 14:05:35 ajung Exp $
 """
 
 import operator
@@ -57,7 +57,7 @@ class SchemaEditor:
         """ return names of all schematas """
         return self._schemata_names
 
-    security.declareProtected(ManageCollector, 'schema_getSchema')
+    security.declareProtected(CMFCorePermissions.View, 'schema_getSchema')
     def schema_getSchema(self, name):
         """ return a schema given by its name """
         return self._schemas[name]
