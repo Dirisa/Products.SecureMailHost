@@ -31,7 +31,7 @@
 
             <h1 tal:condition="not:myfolder">
               <img tal:replace="structure here/folder.gif" />
-              <span tal:content="python: '/%s/%s' % (here.absolute_url(1), request.get('showdir',''))" />
+              <span tal:content="python: request['PATH_TRANSLATED'].replace('plfng_view', '')" />
             </h1>
 
             <metal:block tal:condition="not: folder_contents">
@@ -142,7 +142,6 @@
                           <a tal:condition="python: getObjSize(item)"
                               tal:attributes="href string:${item/absolute_url}?action=download">Download</a>
                         </td>
-
                     </tr>
 
                 </metal:block>
@@ -154,17 +153,6 @@
             <table>
               <tr>
                 <td>
-                  <form tal:attributes="action string:${here/absolute_url}/upload_file" type="post" enctype="multipart/form-data">
-                    <input type="hidden" value="directory" tal:attributes="value request/PATH_TRANSLATED" >
-                    File:
-                    <input type="file" name="upload">
-                    <br>
-                    Comment:
-                    <textarea name="comment" cols="60" rows="3"></textarea>
-                    <br>
-                    <input type="submit" value="Upload file" >
-                  </form>
-
                 </td>
               </tr>
             </table>
@@ -172,10 +160,17 @@
 
             <!-- Navigation -->
             <div metal:use-macro="here/batch_macros/macros/navigation" />
-
-<pre tal:content="structure request" />
     </form>
-
+    <form tal:condition="python: member.has_permission('Modify Portal Content', here)" 
+          tal:attributes="action string:${request/URL1}/upload_file" method="post" enctype="multipart/form-data">
+      File:
+      <input type="file" name="upload">
+      <br>
+      Comment:
+      <textarea name="comment" cols="60" rows="3"></textarea>
+      <br>
+      <input type="submit" value="Upload file" >
+    </form>
 </div>
 
 </body>

@@ -197,6 +197,7 @@ class PloneLocalFolderNG(BaseContent):
             RESPONSE.redirect('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view'))
             
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+
         if not REQUEST.has_key('_e'): 
             REQUEST['_e'] = []
 
@@ -208,6 +209,19 @@ class PloneLocalFolderNG(BaseContent):
             try: return getattr(self, name)
             except AttributeError: pass
             REQUEST.RESPONSE.notFoundError(name)
+
+    security.declareProtected(ModifyPortalContent, 'upload_file')
+    def upload_file(self, upload, comment, REQUEST):
+        """ upload a file """
+
+        rel_dir = '/'.join(REQUEST.get('_e', []))
+        destpath = os.path.join(self.folder, rel_dir)
+        
+        filename = os.path.join(destpath, upload.filename)
+        open(filename, 'w').write(upload.read())
+        if comment:
+            open(filename + '.metadata', 'w').write(comment)
+        REQUEST.RESPONSE.redirect('/' + os.path.join(self.absolute_url(1), rel_dir, 'plfng_view'))
 
 
 def modify_fti(fti):
