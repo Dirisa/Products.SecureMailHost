@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: __init__.py,v 1.16 2004/03/02 07:31:31 ajung Exp $
+$Id: __init__.py,v 1.17 2004/03/05 18:20:00 ajung Exp $
 """
 
 import os, sys
@@ -50,9 +50,39 @@ def initialize(context):
         raise RuntimeError('Wrong Archetypes version detected. You need at least Archetype 1.3 or higher')
 
     # Install workflow factories
-
     from Products.PloneCollectorNG.workflows import pcng_issue_workflow
+    from Products.PloneCollectorNG.workflows import pcng_simple_workflow
 
 from Products.PythonScripts.Utility import allow_module
 allow_module('textwrap')
 allow_module('group_assignment_policies')
+
+##########################################################################
+# Monkeypatch CMFCore.FSMetadata to ensure that security settings in
+# ,metadata files are treated correct
+##########################################################################
+
+def _securityParser(self, data):
+    """ A specific parser for security lines
+
+    Security lines must be of the format
+
+    (0|1):Role[,Role...]
+
+    Where 0|1 is the acquire permission setting
+    and Role is the roles for this permission
+    eg: 1:Manager or 0:Manager,Anonymous
+    """
+    if data.find(':') < 1:
+        raise ValueError, "The security declaration of file " + \
+              "%r is in the wrong format" % self._filename
+
+    acquire, roles = data.split(':')
+    roles = [r.strip() for r in roles.split(',') if r.strip()]
+    return (int(acquire), roles)
+
+from Products.CMFCore.FSMetadata import FSMetadata
+FSMetadata._securityParser = _securityParser
+from zLOG import LOG, INFO
+LOG('plonecollectorng', INFO, 'FSMetadata._securityParser() has been patched for security reasons')
+
