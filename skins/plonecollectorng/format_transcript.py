@@ -44,7 +44,7 @@ for group in groups:
     for ev in group:
        if ev.type == 'action': action = ev.action
         
-    nl('#%d %s %s (%s) ----------------------------' % (len(groups)-n, action, datestr, uid)) 
+    nl('#%d %s %s (%s) ----------------------------' % (len(groups)-n, TR(action, action), datestr, uid)) 
 
     for ev in group:
 
@@ -53,7 +53,7 @@ for group in groups:
             nl(indent_block(ev.comment))
 
         elif ev.type == 'change':
-            nl('%s: %s: "%s" -> "%s"' % (TR('change', 'Change'), ev.field, ev.old, ev.new))
+            nl('%s: %s: "%s" -> "%s"' % (TR('Change', 'Change'), ev.field, ev.old, ev.new))
 
         elif ev.type == 'incrementalchange':
             nl('%s: %s: %s: %s , %s: %s' % (TR('changed', 'Changed'), ev.field, 
