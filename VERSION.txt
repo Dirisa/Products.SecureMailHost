@@ -1,1 +1,1 @@
-1.2.0 final (unreleased)
+1.2.0 final (released)
