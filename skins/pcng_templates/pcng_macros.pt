@@ -1,6 +1,7 @@
 <metal:block metal:define-macro="collector_headline" i18n:domain="plonecollectorng">
 
   <h1 class="contentHeader"
+      tal:condition="python: here.meta_type=='PloneCollectorNG'"
       tal:define="collector python: test(here.meta_type=='PloneIssueNG', here.aq_parent, here)">
     <img src="collector_icon.gif">
     <a tal:attributes="href collector/absolute_url" tal:content="collector/title_or_id" />
