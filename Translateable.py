@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Translateable.py,v 1.14 2004/01/28 12:44:06 ajung Exp $
+$Id: Translateable.py,v 1.15 2004/01/28 12:45:07 ajung Exp $
 """
 
 from types import UnicodeType
@@ -71,7 +71,7 @@ class Translateable:
                             target_language=target_language,
                             as_unicode=1)
 
-        assert(v, UnicodeType)
+        assert isinstance(v, UnicodeType)
         if as_unicode: return v
         else: return v.encode(self._getPloneEncoding())
 
