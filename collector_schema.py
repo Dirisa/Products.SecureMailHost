@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.7 2003/09/18 19:25:59 ajung Exp $
+$Id: collector_schema.py,v 1.8 2003/09/19 10:31:44 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema
@@ -54,44 +54,49 @@ schema = OrderedSchema((
                 schemata='collectordata',
                 widget=StringWidget(label_msgid="label_title",
                                     description_msgid="help_title",
+                                    label='Title',
                                     i18n_domain="plone"),
                 ),
 
     StringField('description',
                 searchable=1,
                 schemata='collectordata',
-                widget=TextAreaWidget,
+                widget=TextAreaWidget(label='Description'),
                 ),
     IntegerField('limit_followups',
                 vocabulary=VOC_LIMIT_FOLLOWUPS,
-                widget=SelectionWidget(format='select'),
+                widget=SelectionWidget(format='select',
+                                       label='Limit followups'),
                 default=0,
                 schemata='collectordata',
                 ),
 
     StringField('canonical_hostname',
                 default='http://localhost/',
+                widget=StringWidget(label='Canonical hostname'),
                 schemata='collectordata',
                 ),
     StringField('participation_mode',
                 vocabulary=VOC_PARTICIPATION_MODE,
-                widget=SelectionWidget(format='select'),
+                widget=SelectionWidget(format='select', 
+                                       label='Participation mode'),
                 default='staff',
                 schemata='collectordata',
                 ),
     IntegerField('deadline_tickets',
                 default=14,
-                widget=IntegerWidget,
+                widget=StringWidget(label='Deadline for new tickets'),
                 schemata='collectordata',
                 ),
     StringField('collector_email',
                 searchable=0,
                 default='root@localhost',
+                widget=StringWidget(label='E-Mail address (FROM: header)'),
                 schemata='E-Mail',
                 ),
     StringField('email_notifications',
                 vocabulary=VOC_EMAIL_NOTIFICATIONS,
-                widget=SelectionWidget(format='select'),
+                widget=SelectionWidget(format='select', label='E-Mail notifications'),
                 default='none',
                 schemata='E-Mail'
                 ),
