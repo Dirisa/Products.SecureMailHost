@@ -4,6 +4,8 @@
 
   - some adjustments for virtual hosting
 
+  - support for http upload
+
 0.1
     
   - initial release 
