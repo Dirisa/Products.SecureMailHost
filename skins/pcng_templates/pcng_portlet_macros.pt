@@ -253,7 +253,7 @@
               <img i18n:attributes="title" title="Info" src="pcng_info.gif"/></a>
 
             <tal:if tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)">
-               <a tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">
+               <a tal:attributes="href string:${here/absolute_url}/remove_upload?id=${item/getId}">
                  <img i18n:attributes="title" title="Delete file" src="delete.gif"/></a>
             </tal:if>
         </div>

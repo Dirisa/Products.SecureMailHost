@@ -125,7 +125,7 @@
 
           <a tal:condition="python: 'TrackerAdmin' in member.getRolesInContext(here)"
              i18n:translate="issue_artifacts_table_deletion_link"
-             tal:attributes="href string:${here/absolute_url}/upload_remove?id=${item/getId}">[Del]</a>
+             tal:attributes="href string:${here/absolute_url}/remove_upload?id=${item/getId}">[Del]</a>
           </div>
         <div class="clear"> </div>
         </div>
