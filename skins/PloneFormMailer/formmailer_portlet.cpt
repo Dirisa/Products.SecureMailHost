@@ -8,7 +8,7 @@
     <div class="portlet" 
          id="portlet-formmailer"
          tal:define="pfm python:here.pfmbox;
-	             translatable python:portal.portal_languages.isTranslatable(pfm);
+	             translatable python:hasattr(portal,'portal_languages') and portal.portal_languages.isTranslatable(pfm);
                      pfm python:translatable and pfm.getTranslation() or pfm;
                      form python:pfm.form">
         <div class="padding">
