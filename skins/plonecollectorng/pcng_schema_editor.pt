@@ -150,7 +150,7 @@
             </div>
 
             <div class="row" tal:condition="python: field.getWidgetName() in ('MultiSelectionWidget', 'SelectionWidget')">
-              <div class="label">Vocabulary (Use "key|value" for passing key-value pairs)</div>
+              <div class="label">Vocabulary (Use "key|value" for passing key-value pairs or 'method:&lt;methodname&gt;')</div>
               <div class="field">
                 <textarea cols="60" rows="6"
                        name="fielddata.vocabulary:record:lines"
