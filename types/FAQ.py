@@ -39,7 +39,7 @@ schema = BaseSchema + Schema((
     '(leave blank if not version-specific)',),
                ),
                
-    LinesField('subject',
+    LinesField('sections',
                multiValued=1,
                required=1,
                accessor="Subject",
