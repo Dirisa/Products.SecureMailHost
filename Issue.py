@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.176 2004/05/23 11:08:53 ajung Exp $
+$Id: Issue.py,v 1.177 2004/05/29 13:10:00 ajung Exp $
 """
 
 import sys, os, time, random, base64
@@ -158,7 +158,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ perform post-creation actions """
         self._transcript.setEncoding(self.getSiteEncoding())
 
-    security.declareProtected(AddCollectorIssue, 'setDefaults')
+    security.declareProtected(View, 'setDefaults')
     def setDefaults(self):
         """ Set some default value based on the member data. This method
             is called from pcng_issue_view *each*. We are using this rude 
@@ -190,7 +190,6 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             # pre-allocate the deadline property
             self.progress_deadline = DateTime() + self.deadline_tickets        
             self._defaults_initialized = 1
-
 
                                                 
     def manage_beforeDelete(self, item, container):
