@@ -2,7 +2,7 @@
 # The Plone Help Center container.
 #
 # A Help Center is pre-populated with the following folders:
-# 
+#
 # /faq - contains the FAQ objects
 # /howto - contains the How-tos
 # /tutorial - contains the tutorials
@@ -11,19 +11,15 @@
 # provide a sensible default view out-of-the-box, like the FAQ view.
 #
 
-
 from Products.Archetypes.public import *
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Products.PloneHelpCenter.config import *
-from schemata import HelpCenterSchema
-
-
+from schemata import HCRootSchema
 
 class HelpCenter(BaseFolder):
     """A simple folderish archetype"""
-    schema = HelpCenterSchema
-
+    schema = HCRootSchema
 
     actions = ({
         'id': 'view',
@@ -37,9 +33,9 @@ class HelpCenter(BaseFolder):
     meta_type = 'HelpCenter'
     filter_content_types = 1
     allowed_content_types = ('HelpCenterFAQFolder', 'HelpCenterHowToFolder', 'HelpCenterTutorialFolder')
-    
+
     security = ClassSecurityInfo()
-    
+
     actions = ({
         'id'          : 'view',
         'name'        : 'View',
@@ -66,5 +62,5 @@ class HelpCenter(BaseFolder):
         self.invokeFactory('HelpCenterTutorialFolder','tutorial')
         self['tutorial'].setTitle('Tutorials')
         self['tutorial'].setDescription('Detailed tutorials.')
-    
+
 registerType(HelpCenter, PROJECTNAME)
