@@ -6,6 +6,8 @@ class HelpCenterTutorial(OrderedBaseFolder):
 
     archetype_name = 'Tutorial'
     meta_type='HelpCenterTutorial'
+    content_icon = 'tutorial_icon.gif'
+
     global_allow = 0
     filter_content_types = 1
     allowed_content_types = ('HelpCenterTutorialPage', 'Image', 'File')

@@ -8,53 +8,78 @@
     <style type="text/css" media="all"
            tal:content="string: @import url($portal_url/helpcenter.css);"></style>
     </metal:css>
+
+    <metal:override fill-slot="column_two_slot" />
+
 </head>
 <body>
 
 <metal:main fill-slot="main">
-  <tal:main-macro metal:define-macro="main"
-    tal:define="my_path python: '/'.join(context.getPhysicalPath());
-    subtypes python:{'HelpCenterFAQFolder':'HelpCenterFAQ',
-                     'HelpCenterTutorialFolder':'HelpCenterTutorial',
-		     'HelpCenterHowToFolder':'HelpCenterHowTo'}">
-        <h1 tal:content="here/title_or_id" class="documentFirstHeading">
-          Title or id
-        </h1>
-    
-        <div metal:use-macro="here/document_actions/macros/document_actions">
-            Document actions (print, sendto etc)
-        </div>
-    
-        <div class="documentDescription"
-             tal:content="here/Description">
-	     description
-        </div>
+    <tal:main-macro metal:define-macro="main"
+                    tal:define="my_path python: '/'.join(context.getPhysicalPath());
+                                subtypes python:{'HelpCenterFAQFolder':'HelpCenterFAQ',
+                                       'HelpCenterTutorialFolder':'HelpCenterTutorial',
+                                       'HelpCenterHowToFolder':'HelpCenterHowTo'}">
+            <h1 tal:content="here/title_or_id" class="documentFirstHeading">
+              Title or id
+            </h1>
+        
+            <div metal:use-macro="here/document_actions/macros/document_actions">
+                Document actions (print, sendto etc)
+            </div>
+        
+            <div class="documentDescription"
+                 tal:content="here/Description">
+                description
+            </div>
+        
+            <p>
+            RSS feed for all documentation types: 
+            <a tal:attributes="href python:portal_url + '/search_rss?review_state=published&sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
+            <img tal:attributes="src string:$portal_url/rss.gif"></a>
+            </p>
 
-	<p>RSS feed for all documentation types: <a tal:attributes="href python:portal_url + '/search_rss?review_state=published&sort_on=modified&sort_order=descending&path=' + my_path + '&' + ('&'.join(['portal_type=%s' % s for s in subtypes.keys() ]))" title="RSS feed for all documentation types">
-	  
-	  <img tal:attributes="src string:$portal_url/rss.gif"></a></p>
-    
-	<div tal:repeat="help_type python: context.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
-	  <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); inner_type python: subtypes[help_type.portal_type]; objs python:context.portal_catalog(portal_type=inner_type, review_state='published', path=folder_path)">
-	    <h2><a tal:attributes="href help_type/getURL" tal:content="help_type/Title">[type]</a> 
-	      <a tal:attributes="href string: $portal_url/search_rss?review_state=published&path=$folder_path&portal_type=$inner_type&sort_on=modified&sort_order=descending; title string:RSS feed for ${help_type/Title}"><img tal:attributes="src string:$portal_url/rss.gif"></a></h2>
-	    <a class="link-expand" tal:attributes="href help_type/getURL" tal:content="string: view ${help_type/Title}"> View  FAQ</a>
-	    <p tal:condition="help_type/Description"><i tal:content="help_type/Description"></i></p>
+            <tal:listings repeat="help_type python: context.portal_catalog(portal_type=subtypes.keys(), review_state='published', path=my_path)">
+                <div tal:define="folder_path python: '/'.join(help_type.getObject().getPhysicalPath()); objs python:context.portal_catalog(portal_type=subtypes[help_type.portal_type], review_state='published', path=folder_path)">
 
-	    <tal:list condition="objs">
-	      <p>Most recent:</p>
-	    <ul>
-	      <li tal:repeat="obj objs"><a href="xxx" tal:attributes="href obj/getURL" tal:content="obj/Title">title</a></li>
-	    </ul>
-	  </tal:list>
-	    <p tal:condition="not: objs"><i>Sorry, there are none at this time.</i></p>
-	  </div>
-	</div>
+                    <div class="portlet portletThirdWidth">
+                        <h6>
+                        <a tal:attributes="href help_type/getURL;
+                                           title help_type/Description|nothing;">
+                        Latest <span tal:replace="help_type/Title">[type]</span>
+                        </a>
+                        </h6>
 
-	<div metal:use-macro="here/document_byline/macros/byline">
-	  Get the byline - contains details about author and modification date.
-	</div>
-      </tal:main-macro>
+                        <div class="portletBody">
+                            
+                            <tal:list condition="objs">
+                            <div class="portletContent"
+                                 tal:repeat="obj objs">
+                                 
+                                <img src="" alt="" 
+                                     tal:attributes="src obj/icon"
+                                      />
+                                <a href="#" 
+                                   tal:attributes="href obj/getURL" 
+                                   tal:content="obj/Title">title</a>
+                            </div>
+                            </tal:list>
+                        
+                            <div class="portletContent odd">
+                                <a class="portletMore"
+                                   tal:attributes="href help_type/getURL" 
+                                   tal:content="structure string: More ${help_type/Title}&#8230;"
+                                   >More FAQs</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </tal:listings>
+
+        <div class="visualClear"></div>
+      
+        </tal:main-macro>
     </metal:main>
 
   </body>

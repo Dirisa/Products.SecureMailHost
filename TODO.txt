@@ -18,6 +18,8 @@ TUTORIAL TYPE
 
 GENERAL:
 
+- Everything has to use portal_factory
+
 - We should have an extra attribute that has additional words that are indexed along with the content - for example in a howto about VerboseSecurity, it would make sense to have:
 
   - Verbose Security
@@ -31,6 +33,16 @@ GENERAL:
 - **DONE** All content types should be Discussable 
 
 - i18n support
+
+- Allow HelpLinks (do we need a special type?), and have a listing with them.
+
+To do
+
+  - Create folderish containers for everything, adding templates.
+
+  - Add proper workflows with notifications
+
+  - Implement the ratings tool
 
 - Maybe create an "ErrorReference" content object? I got an error like: checkSelected() got an unexpected keyword argument 'contenttypes' - which was a known bug with PCNG. Would be nice to have a location to collect common ones, and have them searchable - and a place to refer newbies to when they figure something out. :)
 

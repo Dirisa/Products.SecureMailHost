@@ -23,5 +23,17 @@
     list-style-image: url(&dtml-portal_url;/faq_icon.gif);
 }
 
+.portletHalfWidth {
+    width: 45%; 
+    float: left; 
+    padding: 0 1em 1em 0;
+}
+
+.portletThirdWidth {
+    width: 30%; 
+    float: left; 
+    padding: 0 1em 1em 0;
+}
+
 
 /* </dtml-with> */

@@ -37,6 +37,8 @@ class HelpCenterTutorialPage(BaseContent):
     schema = schema
     archetype_name = 'Tutorial Page'
     meta_type='HelpCenterTutorialPage'
+    content_icon = 'tutorial_icon.gif'
+
     global_allow = 0
     allow_discussion = 1
 

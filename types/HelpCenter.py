@@ -19,6 +19,17 @@ from Products.PloneHelpCenter.config import *
 
 schema = BaseFolderSchema + Schema((
 
+    TextField('description',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget=TextAreaWidget(description_msgid="desc_helpcenter",
+                                    description="Description for the Help Center.",
+                                    label_msgid="label_description",
+                                    label="Description",
+                                    i18n_domain = "plonehelpcenter",
+                                    rows=6)),
+
     LinesField('versions',
                 widget=LinesWidget(description="The available versions of the product, one version on each line.",
                                             label="Versions",
@@ -48,6 +59,14 @@ class HelpCenter(BaseFolder):
     
     security = ClassSecurityInfo()
     
+    actions = ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/helpcenter_view',
+        'permissions' : (CMFCorePermissions.View,)
+         },
+         )
+
     def initializeArchetype(self, **kwargs):
         # prepopulate folder
         BaseFolder.initializeArchetype(self,**kwargs)

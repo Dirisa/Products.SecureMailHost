@@ -11,15 +11,6 @@ Requirements
 
   Archetypes 1.0 or later.
 
-
-To do
-
-  - Create folderish containers for everything, adding templates.
-
-  - Add proper workflows with notifications
-
-  - Implement the ratings tool
-
 Credits
 
   Development, User Interface, Project Architecture, Quality Assurance -- 
@@ -30,4 +21,47 @@ Credits
 
   Original FAQ code -- 
   "Tim Terlegard":mailto:tim@se.linux.org, "Edward Muller":mailto:edwardam@interlix.com - further enhancements by "Jean-Paul Ladage":mailto:jladage@zopeworks.nl and "Ahmad Hadi":mailto:ahadi@zopeworks.nl
+
+Usage
+
+  Several types of help documentation are available in a Help Center: 
+  
+  - FAQ
+  
+  - HowTo
+  
+  - Tutorial
+  
+  Below is a description, usage and example for each type.
+  
+  Frequently Asked Question (FAQ)
+  
+   An FAQ is a short question with a 1-2 paragraph answer. You can add several questions to a FAQ area and group the questions into sections.
+   
+  **Example:**
+    
+  *Question*: What is Plone?
+    
+  *Answer*: Plone is an open source Enterprise Content Management System (CMS) that runs on top of Zope and CMF.
+  
+  HowTo
+  
+   A HowTo is a one-page description on how to accomplish something, but is folderish, so Files/Images can be attached.
+  
+  **Examples:** 
+  
+  - How to run Plone with Apache
+   
+  - How to change the tabs that appear at the top of the portal
+  
+  Tutorial 
+  
+   A tutorial is a multi-paged article with lots of detail. The tutorial is more in depth and may cover the conceptual aspects of the task, in addition to the practical steps to get the job done.
+   
+  **Examples:**
+  
+  - How to utilize workflows in your projects
+   
+  - Explaining the separation of content, logic and presentation
+
 
