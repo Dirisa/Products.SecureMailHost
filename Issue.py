@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.192 2004/06/26 20:05:07 ajung Exp $
+$Id: Issue.py,v 1.193 2004/06/27 06:48:13 ajung Exp $
 """
 
 import os, time, random 
@@ -694,8 +694,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
                 self._v_left_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_right_slots
             except: pass
-        if self.getPortlet_issuedata() == 'left':
-            self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
+            if self.getPortlet_issuedata() == 'left' and self.isPersistent():
+                self._v_left_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_left_slots)
     left_slots = ComputedAttribute(left_slots, 1)
 
@@ -711,8 +711,8 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             try: del self._v_left_slots
             except: pass
 
-        if self.getPortlet_issuedata() == 'right':
-            self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
+            if self.getPortlet_issuedata() == 'right' and self.isPersistent():
+                self._v_right_slots.append('here/pcng_portlet_macros/macros/issuedata')
         return tuple(self._v_right_slots)
     right_slots = ComputedAttribute(right_slots, 1)
 
