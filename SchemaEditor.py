@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.16 2003/09/19 14:53:52 ajung Exp $
+$Id: SchemaEditor.py,v 1.17 2003/09/25 09:55:32 ajung Exp $
 """
 
 import operator
@@ -160,7 +160,7 @@ class SchemaEditor:
         D['widget'] = widget
 
         # build DisplayList instance for SelectionWidgets
-        if FD.widget in ('Radio', 'Select'):
+        if FD.widget in ('Radio', 'Select', 'MultiSelect'):
             vocab = FD.get('vocabulary', [])
             l = []
             for line in vocab:
@@ -212,6 +212,44 @@ class SchemaEditor:
             self._schemata_names.remove(fieldset)
             self._schemata_names.insert(pos+1, fieldset)
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Schemata moved to right ', fieldset=fieldset)
+
+    security.declareProtected(ManageCollector, 'schema_field_up')
+    def schema_field_up(self, fieldset, name, RESPONSE=None):
+        """ move a field of schemata up """
+
+        fields = self._schemas[fieldset].fields()
+        for i in range(len(fields)):
+            field = fields[i]
+            if field.getName() == name and i>0:
+                del fields[i]
+                fields.insert(i-1,field)
+                break
+
+        schema = OrderedSchema()
+        for field in fields:
+            schema.addField(field)
+
+        self._schemas[fieldset] = schema
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved up', fieldset=fieldset, field=name)
+
+    security.declareProtected(ManageCollector, 'schema_field_down')
+    def schema_field_down(self, fieldset, name, RESPONSE=None):
+        """ move a field of schemata down """
+
+        fields = self._schemas[fieldset].fields()
+        for i in range(len(fields)):
+            field = fields[i]
+            if field.getName() == name and i < len(fields):
+                del fields[i]
+                fields.insert(i+1,field)
+                break
+
+        schema = OrderedSchema()
+        for field in fields:
+            schema.addField(field)
+
+        self._schemas[fieldset] = schema
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Field moved down', fieldset=fieldset, field=name)
 
     security.declareProtected(ManageCollector, 'schema_get_fieldtype')
     def schema_get_fieldtype(self, field):
