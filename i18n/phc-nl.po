@@ -41,7 +41,7 @@ msgstr "RSS berichtformaat"
 #. <img alt="RSS Feed" i18n:attributes="title alt" src="rss.gif" tal:attributes="src string:$portal_url/rss.gif" title="RSS feed of these search results"/>
 #: ./phc_search.pt
 msgid "RSS feed of these search results"
-msgstr "RSS feed van deze zoekresultaten"
+msgstr "RSS berichtformaat van deze zoekresultaten"
 
 #. <span class="discreet" i18n:attributes="title" i18n:translate="label_relevance_percentage" tal:condition="result/data_record_normalized_score_" title="Relevance">
 #: ./phc_search.pt
