@@ -256,7 +256,7 @@ function show_tickets() {
 <tal:macro metal:define-macro="followup_table" i18n:domain="plonecollectorng">
 
   <div tal:define="allow_assign python: here.pcng_user_role() in ('TrackerAdmin', 'Supporter', 'Reporter');
-                     topics python: here.get_topics_user().keys();
+                     topics context/pcng_get_topics;
                      gruf_groups here/get_gruf_groups" >
 
     <div class="left">
