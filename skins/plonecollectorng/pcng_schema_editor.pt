@@ -147,9 +147,8 @@
                       <option value="MultiSelect" 
                               tal:content="string:MultiSelect"
                               tal:attributes="selected python: widget_name=='MultiSelectionWidget' "/>
-                      <option value="Keywords" 
-                              tal:content="string:Keywords"
-                              tal:attributes="selected python: widget_name=='KeywordWidget' "/>
+
+
                       <option value="Richtext" 
                               tal:content="string:Richtext"
                               tal:attributes="selected python: widget_name=='RichWidget' "/>
@@ -162,18 +161,25 @@
                       <option value="Epoz" 
                               tal:content="string:Epoz"
                               tal:attributes="selected python: widget_name=='EpozWidget' "/>
-                      <option value="Image" 
-                              tal:content="string:Image"
-                              tal:attributes="selected python: widget_name=='ImageWidget' "/>
-                      <option value="Integer" 
-                              tal:content="string:Integer"
-                              tal:attributes="selected python: widget_name=='IntegerWidget' "/>
-                      <option value="Decimal" 
-                              tal:content="string:Decimal"
-                              tal:attributes="selected python: widget_name=='DecimalWidget' "/>
-                      <option value="Reference" 
-                              tal:content="string:Reference"
-                              tal:attributes="selected python: widget_name=='ReferenceWidget' "/>
+
+                      <tal:comment tal:replace="nothing">
+                          <option value="Image" 
+                                  tal:content="string:Image"
+                                  tal:attributes="selected python: widget_name=='ImageWidget' "/>
+                          <option value="Integer" 
+                                  tal:content="string:Integer"
+                                  tal:attributes="selected python: widget_name=='IntegerWidget' "/>
+                          <option value="Decimal" 
+                                  tal:content="string:Decimal"
+                                  tal:attributes="selected python: widget_name=='DecimalWidget' "/>
+                          <option value="Reference" 
+                                  tal:content="string:Reference"
+                                  tal:attributes="selected python: widget_name=='ReferenceWidget' "/>
+                          <option value="Keywords" 
+                                  tal:content="string:Keywords"
+                                  tal:attributes="selected python: widget_name=='KeywordWidget' "/>
+                      </tal:comment>
+
                     </select>
                   </div>
                 </div>
