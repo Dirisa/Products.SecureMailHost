@@ -32,7 +32,7 @@ except ImportError:
 
 schema = BaseSchema +  Schema((
     StringField('folder',
-                validators=("isExistingFolder",),
+                validators=("isValidExistingFolderPath",),
                 write_permission=CMFCorePermissions.ManagePortal,
                 required=1,
                 default=INSTANCE_HOME,

@@ -9,6 +9,10 @@ from config import ADD_CONTENT_PERMISSION
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
+from Products.validation import validation
+from validators import ExistingFolderPathValidator
+validation.register(ExistingFolderPathValidator('isValidExistingFolderPath'))
+
 def initialize(context):
     ##Import Types here to register them
     import PloneLocalFolderNG
@@ -24,4 +28,5 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
+
 
