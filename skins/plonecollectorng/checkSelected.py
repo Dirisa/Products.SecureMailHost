@@ -7,8 +7,6 @@
 ##bind subpath=traverse_subpath
 ##parameters=item, value
 
-#from zLOG import LOG, INFO
-
 if same_type(item, 0): item = str(item)
 if same_type(value, 0): value = str(value)
 
