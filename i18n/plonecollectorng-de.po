@@ -1058,3 +1058,15 @@ msgstr "Teilnehmer Details"
 
 msgid "description_my_preferences"
 msgstr "Ihre persönlichen Bugtracker Einstellungen"
+
+msgid "send_email_to_staff"
+msgstr "EMail Benachrichtung an alle Teilnehmer schicken"
+
+msgid "help_send_email_to_staff"
+msgstr "Hier haben Sie die Möglichkeit über ein einfaches Formular eine Nachricht an alle Trackerteilnehmer zu senden"
+
+msgid "migrate_issue_workflow_histories"
+msgstr "Workflow Gesichte alle Issues migrieren"
+
+msgid "help_migrate_issue_workflow_histories"
+msgstr "Benutzen Sie diese Funktion beim Upgrade von PloneCollectorNG 1.1 nach 1.2 nur in Ausnahmefällen. Normalerweise benötigen Sie diese Methode <b>niemals</b>."
