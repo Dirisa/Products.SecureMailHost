@@ -15,14 +15,14 @@
         <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
       </metal:block>
 
+      <h3>Misc.</h3>
       <ul>
-        <li>Status:<span tal:content="here/status" />
-        <li>User: <span tal:content="member"/>
+        <li>Status: <span tal:content="here/status" />
+        <li>Current user: <span tal:content="member"/>
         <li>Roles: <span tal:content="python: member.getRolesInContext(here)" />
       </ul>
         
       <h3>Workflow history</h3>
-
       <ul>
       <li tal:repeat="item here/getWorkflowHistory" 
           tal:content="item" />
@@ -35,6 +35,19 @@
         <span tal:condition="not: repeat/lang/end">&bull;</span>
       </tal:loop>
       <pre tal:content="python: here.format_transcript(request.get('pcng_language', 'en')).encode(here.getSiteEncoding())" />
+
+      <h3>Archetypes</h3>
+      <table>
+        <tr tal:repeat="field python: here.Schema().fields()">
+          <td> 
+            <span tal:content="field/getName" />
+          </td>
+          <td>
+            <span tal:content="python: here.getField(field.getName()).get(here)" />
+          </td>
+        </tr>
+
+      </table>
     </div>
   </body>
 </html>
