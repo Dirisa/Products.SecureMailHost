@@ -15,3 +15,5 @@ Credits:
     (see ttffonts/COPYRIGHT.txt)
 
   - Parts of the WorkflowTool code was taken from the Plone sources
+
+  - JA translation by Tamakoshi Hiroki
