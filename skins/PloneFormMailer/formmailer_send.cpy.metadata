@@ -1,0 +1,2 @@
+[actions]
+action.success = redirect_to:string:formmailer_sent
