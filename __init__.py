@@ -12,6 +12,10 @@ from config import ADD_CONTENT_PERMISSION
 
 registerDirectory(SKINS_DIR, GLOBALS)
 
+# MonkeyPatch CMFDefault.DiscussionItemContainer
+import Patch
+
+
 def initialize(context):
 
     content_types, constructors, ftis = process_types(
