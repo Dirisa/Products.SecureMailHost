@@ -794,7 +794,7 @@ msgstr "Keine Benutzer gefunden"
 msgid "image"
 msgstr "Bild"
 
-msgid "reaccept"
+msgid "Reaccept"
 msgstr "Wiedereinstellen"
 
 msgid "Change"
