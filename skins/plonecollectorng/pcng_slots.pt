@@ -16,8 +16,28 @@
       <div metal:use-macro="here/pcng_slots/macros/collector_metadata" />
     </tal:if>
 
+    <div metal:use-macro="here/pcng_slots/macros/searchresults" />
 </div>
 
+<!-- searchresults -->
+<div metal:define-macro="searchresults">
+  <div class="portlet" id="pcng-collector-metadata"
+       tal:condition="python: request.SESSION.has_key('pcng_searchresults')">
+    <h5 i18n:translate="last_search_results">Last search results</h5>
+    <div class="portletBody">
+      <ul>
+        <li tal:repeat="item python: request.SESSION.get('pcng_searchresults', [])">
+           <a tal:attributes="href python: item[0]">
+             <span tal:replace="python: '%s - %s' % (item[1],item[2])" />
+           </a>
+        </li>        
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Collector metadata -->
 <div metal:define-macro="collector_metadata">
   <div class="portlet" id="pcng-collector-metadata">
     <h5 i18n:translate="collector_metadata">Collector data</h5>
@@ -42,7 +62,6 @@
             <span i18n:translate="created">Created</span>:
             <span tal:replace="python: here.toLocalizedTime(here.created())" />
         </li>
-
       </ul>
     </div>
   </div>
