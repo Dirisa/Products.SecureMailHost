@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plonecollectorng"
+      metal:use-macro="here/main_template/macros/master">
+  <body>
+
+    <metal:block metal:fill-slot="head_slot">
+	  <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
+    </metal:block>
+
+    <div metal:fill-slot="main">
+
+      <metal:block tal:define="action string: Open issues per assignee">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <dl tal:repeat="user python: here.getTrackerUsers(staff_only=1)" >
+        <dt tal:content="string: ${user/fullname} (${user/username})" />
+        <dd>
+          <ul>
+            <li tal:repeat="row python: here.pcng_catalog(assigned_to={'query' : [user['username']]}, sort_on='getId')">
+              <a tal:attributes="href row/getURL" tal:content="string: ${row/getId}: ${row/Title}" />
+                
+            </li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+  </body>
+</html>
