@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: collector_schema.py,v 1.42 2004/04/21 12:45:05 ajung Exp $
+$Id: collector_schema.py,v 1.43 2004/04/25 12:48:44 ajung Exp $
 """
 
 
@@ -52,16 +52,9 @@ VOC_WATCHLIST = DisplayList((
   ('authenticated', 'Watchlist enabled for authenticated users'),
 ))
 
-VOC_SLOTS_MODE= DisplayList((
-  ('plone', 'Use Plone settings'),
-  ('left', 'Keep left Plone slot, clear right'),
-  ('right', 'Clear left Plone slot, keep right'),
-  ('clear', 'Clear all Plone slots'),
-))
-
-VOC_NAVIGATION_SLOT = DisplayList((
-  ('yes', 'Yes'),
-  ('no', 'No'),                                       
+VOC_PORTLET_USAGE = DisplayList((
+  ('keep', 'Inherit settings for left slots'),
+  ('override', 'Override left slots'),
 ))
 
 
@@ -206,22 +199,13 @@ schema = Schema((
                 schemata='collectordata'
                 ),
 
-    StringField('slots_mode',
-                vocabulary=VOC_SLOTS_MODE,
+    StringField('portlet_usage',
+                vocabulary=VOC_PORTLET_USAGE,
                 widget=SelectionWidget(format='select', 
-                                       label='Plone slots',
-                                       label_msgid='label_slots_mode',
+                                       label='Porlet usage',
+                                       label_msgid='label_portlet_usage',
                                        i18n_domain='plonecollectorng'),
-                default='plone',
-                schemata='Look and Feel'
-                ),
-    StringField('navigation_slot',
-                vocabulary=VOC_NAVIGATION_SLOT,
-                widget=SelectionWidget(format='select', 
-                                       label='Show additional informations as portlet',
-                                       label_msgid='label_navigation_slot',
-                                       i18n_domain='plonecollectorng'),
-                default='no',
+                default='keep',
                 schemata='Look and Feel'
                 ),
     ))
