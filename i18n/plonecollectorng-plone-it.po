@@ -1,0 +1,163 @@
+# Gettext Message File for PloneCollectorNG.
+# Andreas Jung <andreas@andreas-jung.com>, 2003
+# This file keeps some translation under the domain 'plone'
+# and is needed to translate several action strings
+msgid ""
+msgstr ""
+"Project-Id-Version: PloneCollectorNG 1.0\n"
+"POT-Creation-Date: 2003-11-21 00:00+0300\n"
+"PO-Revision-Date: 2004-06-10 10:42+0100\n"
+"Last-Translator: Cesare<cesama@tiscali.it>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-code: it\n"
+"Language-name: Italian\n"
+"Preferred-encodings: utf-8 latin1\n"
+"X-Is-Fallback-For: \n"
+"Domain: plone\n"
+
+msgid "Add issue"
+msgstr "Aggiungi Nuovo Quesito"
+
+msgid "Issue schema"
+msgstr "Schema Quesito"
+
+msgid "Followup"
+msgstr "Replica"
+
+msgid "Notifications"
+msgstr "Notificazioni"
+
+msgid "Maintenance"
+msgstr "Manutenzione"
+
+msgid "Staff"
+msgstr "Staff"
+
+msgid "Member preferences"
+msgstr "Preferenze Membro"
+
+msgid "References &amp; Uploads"
+msgstr "Riferimenti &amp; Allegati"
+
+msgid "My collector preferences"
+msgstr "Preferenze Raccoglitore"
+
+msgid "Only staff members"
+msgstr "Soltanto membri dello Staff"
+
+msgid "Any authenticated user"
+msgstr "Qualsiasi utente autenticato"
+
+msgid "Anyone"
+msgstr "Chiunque (utenti anche anonimi)"
+
+msgid "Disabled"
+msgstr "Disattiva"
+
+msgid "Enabled"
+msgstr "Attiva"
+
+msgid "Watchlist enabled for anyone"
+msgstr "Watchlist abilita per chiunque"
+
+msgid "Watchlist enabled for authenticated users"
+msgstr "Watchlist abilita per gli utenti autenticati"
+
+msgid "no notifications"
+msgstr "Nessuna Notifica"
+
+msgid "Submitter, all supporters and tracker administrators"
+msgstr "Regolatore, all supporters and tracker administrators"
+
+msgid "Submitter, assigned supporters and tracker administrators"
+msgstr "Regolatore, assigned supporters and tracker administrators"
+
+msgid "Standard formatter (EN)"
+msgstr "Procedura di formattazione standard (Inglese)"
+
+msgid "Standard formatter (DE)"
+msgstr "Procedura di formattazione standard (Tedesca)"
+
+msgid "Your changes have been saved."
+msgstr "Le tue modifiche sono state salvate"
+
+msgid "Clear all Plone slots"
+msgstr "Pulire tutti gli slot di Plone"
+
+msgid "Use Plone settings"
+msgstr "Usa i settaggi di Plone"
+
+msgid "Keep left Plone slot, clear right"
+msgstr "Keep left Plone slot, clear right"
+
+msgid "Clear left Plone slot, keep right"
+msgstr "Clear left Plone slot, keep right"
+
+msgid "Plone slots"
+msgstr "Plone Slots"
+
+msgid "German"
+msgstr "Tedesco"
+
+msgid "English"
+msgstr "Inglese"
+
+msgid "Finish"
+msgstr "Finlandese"
+
+msgid "Dutch"
+msgstr "Olandese"
+
+msgid "Portlet usage"
+msgstr "" 
+
+msgid "Use left slot, keep plone settings"
+msgstr ""
+
+msgid "Use left slot, override plone settings"
+msgstr ""
+
+msgid "Use right slot, keep plone settings"
+msgstr ""
+
+msgid "Use right slot, override plone settings"
+msgstr ""
+
+msgid "File/Image uploads"
+msgstr "File/Immagini allegati"
+
+msgid "References between issues"
+msgstr "Riferimenti fra i quesiti"
+
+msgid "Issue submissions through email"
+msgstr "Presentazione di quesiti attraverso e-mail"
+
+msgid "Verify incoming issue email submissions"
+msgstr "Verifica delle presentazioni di quesiti ricevuti per e-mail"
+
+msgid "Issues are private to the issue owner and staff"
+msgstr "I quesiti sono privati (solo il proprietario e lo staff)"
+
+msgid "recreate_collector_catalog"
+msgstr "Ricrea il catalogo del Raccoglitore"
+
+msgid "Low"
+msgstr "bassa"
+
+msgid "Medium"
+msgstr "media"
+
+msgid "High"
+msgstr "alta"
+
+msgid "Critical"
+msgstr "critica"
+
+msgid "description_name"
+msgstr "inserisci il nome senza spazi"
+
+msgid "help_title"
+msgstr "inserisci il titolo"
