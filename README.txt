@@ -38,10 +38,3 @@ Contact:
     Germany
 
 
-Credits:
-
-  - Simon Pamies for some very useful UI hints
-
-  - Sidnei da Silva for answering lots of Archetypes related
-    questions
-                      
