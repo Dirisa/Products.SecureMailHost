@@ -9,7 +9,11 @@
   <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
 </div>
 <div metal:fill-slot="main">	  
-  <h1 i18n:translate="legend_followup">Followup</h1>
+
+  <metal:block tal:define="action string: Followup">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+  </metal:block>
+
   <form method="post" action="issue_followup">
     <fieldset
          tal:define="assignees here/assigned_to">

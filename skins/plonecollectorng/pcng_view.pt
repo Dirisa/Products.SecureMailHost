@@ -10,13 +10,14 @@
     <div metal:fill-slot="main" 
          tal:define="search_form_position python: 'bottom'">
 
-    <!-- defaults for status: Pending+Accepted -->    
-    <metal:block tal:condition="python: request.has_key('status') == 0">
-      <span tal:define="dummy python: request.set('status', ['pending', 'accepted'])" />
-    </metal:block>   
+      <!-- defaults for status: Pending+Accepted -->    
+      <metal:block tal:condition="python: request.has_key('status') == 0">
+        <span tal:define="dummy python: request.set('status', ['pending', 'accepted'])" />
+      </metal:block>   
 
-	<h1 tal:content="here/title_or_id" />
-      <pre tal:condition="here/description" class="collector_description" tal:content="here/description" />
+      <metal:block tal:define="action string: View">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
 
       <metal:block tal:condition="python: search_form_position == 'top'">
         <fieldset><legend i18n:translate="legend_search_form">Search form</legend>

@@ -5,13 +5,26 @@ span.label {
     font-weight: bold;
 }
 
+div.collector_headline {
+    background:  #aaaaff;
+    font-size: 120%;
+    font-weight: bold;
+    margin: 5px;
+    padding: 0.5em;
+}
+
+span.collector_headline_right {
+    text-align: right;
+    width: 100%;
+}
+
 div.transcriptheader {
     background: #dddddd;
     font-size: 120%;
 }
 
 div.transcriptevent {
-    margin-top: 1px;
+    margin-top: 1px;                                                    e
     margin-left: 15px;
 }
 

@@ -9,7 +9,9 @@
   </div>
   <div metal:fill-slot="main">
 
-    <h1 i18n:translate="heading_edit_schema">Schema editor</h1>
+    <metal:block tal:define="action string: Schema Editor">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
 
     <table border="1" cellspacing="4" cellpadding="2"
            td tal:define="fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];

@@ -11,7 +11,10 @@
 
 
     <div metal:fill-slot="main">
-      <h1 tal:content="string: ${here/title_or_id} (${here/status})" />
+
+      <metal:block tal:define="action string: View">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
 
       <!-- set the view mode based on the collector preferences -->
       <metal:block tal:condition="not: python: request.has_key('mode')">

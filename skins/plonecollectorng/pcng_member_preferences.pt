@@ -8,7 +8,11 @@
   </div>
 
   <div metal:fill-slot="main">
-    <h1 i18n:translate="legend_member_preferences">Member preferences</h1>
+
+    <metal:block tal:define="action string: Member preferences">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
     <form method="post" action="pcng_set_member_preferences">
       <fieldset>
         <legend i18n:translate="preferences">Preferences</legend>

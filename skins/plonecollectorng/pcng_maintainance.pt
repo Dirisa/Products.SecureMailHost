@@ -8,7 +8,11 @@
     <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
   </div>
   <div metal:fill-slot="main">	  
-    <h1 i18n:translate="legend_maintainance">Maintainance</h1>
+
+    <metal:block tal:define="action string: Maintainance">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
     <ul>
       <li><span i18n:translate="number_issues">Number issues</span>: <span tal:replace="here/getNumberIssues" /> </li>
       <li><a href="reindex_issues"><span i18n:translate="reindex_all_issues">Reindex all issues</span></a> </li>

@@ -8,7 +8,11 @@
     <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
   </div>
   <div metal:fill-slot="main">	  
-    <h1 i18n:translate="legend_history">History</h1>
+
+    <metal:block tal:define="action string: History">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
     <div metal:use-macro="here/pcng_macros/macros/transcript"/>
   </div>
 

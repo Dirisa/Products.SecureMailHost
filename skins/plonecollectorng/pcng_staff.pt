@@ -8,7 +8,11 @@
   <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
 </div>
 <div metal:fill-slot="main">	  
-  <h1 i18n:translate="legend_staff">Staff</h1>
+
+  <metal:block tal:define="action string: Staff">
+    <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+  </metal:block>
+
   <form action="set_staff" method="post">
       <table class="listing" 
              tal:define="managers here/getManagers;

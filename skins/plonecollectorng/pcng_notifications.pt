@@ -8,7 +8,11 @@
    <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
   </div>
   <div metal:fill-slot="main">	  
-    <h1 i18n:translate="legend_notifications">Notifications</h1>
+
+    <metal:block tal:define="action string: Notifications">
+      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+    </metal:block>
+
     <form action="set_notification_emails" method="post">
       <fieldset tal:condition="python: here.notification_policy != 'NoneNotificationPolicy'">
         <legend i18n:translate="collector_notifications">Collector notifications</legend>

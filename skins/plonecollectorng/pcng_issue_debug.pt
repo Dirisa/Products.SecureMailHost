@@ -8,22 +8,26 @@
       <metal:define metal:use-macro="here/pcng_css/macros/stylesheet" />
     </div>
     <div metal:fill-slot="main">
-      <h1>Debug</h1> 
-        <ul>
-          <li>Status:<span tal:content="here/status" />
-          <li>User: <span tal:content="member"/>
-          <li>Roles: <span tal:content="python: member.getRolesInContext(here)" />
-        </ul>
+
+      <metal:block tal:define="action string: Debug">
+        <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
+      </metal:block>
+
+      <ul>
+        <li>Status:<span tal:content="here/status" />
+        <li>User: <span tal:content="member"/>
+        <li>Roles: <span tal:content="python: member.getRolesInContext(here)" />
+      </ul>
         
-        <h3>Workflow history</h3>
+      <h3>Workflow history</h3>
 
-        <ul>
-        <li tal:repeat="item here/getWorkflowHistory" 
-            tal:content="item" />
-        </ul>
+      <ul>
+      <li tal:repeat="item here/getWorkflowHistory" 
+          tal:content="item" />
+      </ul>
 
-        <h3>Email</h3>
-        <pre tal:content="python: here.format_transcript()[0]" />
+      <h3>Email</h3>
+      <pre tal:content="python: here.format_transcript()[0]" />
       
     </div>
   </body>
