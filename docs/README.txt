@@ -12,6 +12,11 @@ Installation:
 
     See INSTALL.txt
 
+Documentation:
+
+    Basic documentation and other informations can be found at
+    http://www.zope.org/Members/ajung/PloneCollectorNG
+
 Migration:
 
     Migration to PloneCollectorNG is supported for CMFCollectorNG.  see
