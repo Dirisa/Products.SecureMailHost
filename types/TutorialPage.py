@@ -2,6 +2,19 @@ from Products.Archetypes.public import *
 from Products.PloneHelpCenter.config import *
 
 schema = BaseSchema + Schema((
+    TextField('description',
+              default='',
+              searchable=1,
+              accessor="Description",
+              storage=MetadataStorage(),
+              widget = TextAreaWidget(
+    description = "Enter a brief description", 
+    description_msgid = "help_description",
+    label = "Description",
+    label_msgid = "label_description",
+    rows = 5,
+    i18n_domain = "plone")),
+    
     TextField('text',
               required = 1,
               searchable = 1,
