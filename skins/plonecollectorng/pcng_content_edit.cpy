@@ -10,11 +10,15 @@
 REQUEST = context.REQUEST
 
 new_context = None
+
+# Support for portal_factory
 if context.meta_type == 'PloneIssueNG':
+
     if context.portal_factory.isTemporary(context):
         id = context.new_issue_number()
         new_context = context.portal_factory.doCreate(context, id)
         new_context.processForm()
+
     else:
         try:        
             id = int(context.getId())
@@ -27,7 +31,6 @@ if context.meta_type == 'PloneIssueNG':
             parent.manage_renameObjects([context.getId()], [id])
             new_context = getattr(parent, id)            
             new_context.processForm()
-
         
 else:
     new_context = context.portal_factory.doCreate(context, id)
