@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+$Id: issue_schema.py,v 1.4 2003/09/09 12:01:48 ajung Exp $
 """
 
 from Products.Archetypes.public import BaseSchema, Schema, DisplayList
@@ -15,28 +15,33 @@ from Products.Archetypes.public import SelectionWidget, TextAreaWidget
 schema = BaseSchema +  Schema((
     StringField('description',
                 searchable=1,
+                schemata='issuedata'
+                ),
+    StringField('solution',
+                searchable=1,
+                schemata='issuedata'
                 ),
     StringField('progress_hours_estimated',
-                searchable=1,
                 schemata='progress'
                 ),
     StringField('progress_hours_needed',
-                searchable=1,
                 schemata='progress'
                 ),
     StringField('progress_percent_done',
-                searchable=1,
                 schemata='progress'
                 ),
     StringField('contact_name',
                 searchable=1,
-                schemata='contact'
-                ),
-    StringField('contact_address',
-                searchable=1,
+                required=1,
                 schemata='contact'
                 ),
     StringField('contact_email',
+                searchable=1,
+                required=1,
+                schemata='contact',
+                validators=('isEmail',)
+                ),
+    StringField('contact_address',
                 searchable=1,
                 schemata='contact'
                 ),
