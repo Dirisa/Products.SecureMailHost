@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: util.py,v 1.4 2003/09/07 07:12:27 ajung Exp $
+$Id: util.py,v 1.5 2003/09/08 05:05:13 ajung Exp $
 """
 
 def getUserName():
@@ -89,3 +89,12 @@ def remove_dupes(lst):
             ret.append(l)
     return ret 
 
+
+def redirect(RESPONSE, dest, msg=None,**kw):
+    from urllib import quote
+    
+    if RESPONSE is not None:    
+        url = dest + "?"
+        if msg:
+            url += "portal_status_message=%s" % quote(msg)
+        RESPONSE.redirect(url) 
