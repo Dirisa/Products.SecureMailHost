@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.187 2004/05/29 14:28:41 ajung Exp $
+$Id: Collector.py,v 1.188 2004/06/01 19:10:16 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -236,26 +236,33 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             informations for the presentation.
         """
 
-        l = []
         membership_tool = getToolByName(self, 'portal_membership', None)
         
         staff = self._managers + self._supporters + self._reporters
-        names = staff[:]
+      
+        all_names = []
+        folder = self
+        running = 1
+        while running:     # search for acl_users folders
+            if hasattr(folder, 'acl_users'):
+                usernames = folder.acl_users.getUserNames()
+                for name in usernames:
+                    if not name in all_names:
+                        all_names.append(name)
 
-        if not staff_only:
-            folder = self
-            running = 1
-            while running:     # search for acl_users folders
-                if hasattr(folder, 'acl_users'):
-                    usernames = folder.acl_users.getUserNames()
-                    for name in usernames:
-                        if not name in names:
-                            names.append(name)
+            if len(folder.getPhysicalPath()) == 1:
+                running = 0
+            folder = folder.aq_parent
 
-                if len(folder.getPhysicalPath()) == 1:
-                    running = 0
-                folder = folder.aq_parent
+        # Filter out non-existing users
+        staff = [s for s in staff if s in all_names]
 
+        if staff_only:
+            names = staff
+        else:
+            names = all_names + staff
+
+        l = []
         groups = self.pcng_get_groups()  # get group IDs from GRUF
         for name in util.remove_dupes(names):
             if name.replace('group_', '') in groups and not with_groups: continue  # no group names !!!
@@ -272,7 +279,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
             l.append(d)
 
         l.sort(lambda a,b: cmp(a['username'].lower(), b['username'].lower()))
-        
+
         if staff_only:
             return [item for item in l if item['username'] in staff]
         elif unassigned_only:
