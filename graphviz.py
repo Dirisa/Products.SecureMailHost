@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: graphviz.py,v 1.3 2003/10/03 11:09:56 ajung Exp $
+$Id: graphviz.py,v 1.4 2003/10/05 12:08:03 ajung Exp $
 """
 
 ##########################################################################
@@ -17,32 +17,31 @@ $Id: graphviz.py,v 1.3 2003/10/03 11:09:56 ajung Exp $
 import os, tempfile
 from urllib import unquote
 
-def issue2id(issue):
+def obj2id(obj):
     """ convert an issue to an ID """
-    url = unquote(issue.absolute_url(1))
-    url = url.replace('/', '_')
-    url = url.replace(' ', '_')
-    return url
-
-def collector2id(collector):
-    """ convert an collector to an ID """
-    id = unquote(collector.absolute_url(1))
+    id = unquote(obj.absolute_url(1))
+    id = id.replace('-', '_')
     id = id.replace('/', '_')
-    id = id.replace(' ', '_')
-    return (id, collector.title_or_id()) 
+    id=  id.replace(' ', '_')
+    id=  id.replace('.', '_')
+    return id
 
 
 class Node:
     """ simple node class """
 
     def __init__(self, issue):
-        self.id = issue2id(issue)
+        self.id = obj2id(issue)
         self.url = issue.absolute_url(1)
+        self.title = issue.title_or_id()
         self.collector_url = issue.aq_parent.absolute_url(1)
+        self.collector_id = obj2id(issue.aq_parent)
         self.text = '%s: %s' % (issue.getId(), issue.Title())
 
     def __str__(self):
         return self.id
+
+    __repr__ = __str__
 
 class Edge:
     """ simple edge class """
@@ -51,8 +50,8 @@ class Edge:
         self.src = src
         self.dest = dest
 
-    def __cmp__(self, o):
-        return self.src==o.src and self.dest==o.dest
+#    def __cmp__(self, o):
+#        return self.src==o.src and self.dest==o.dest
 
     def __str__(self):
         return '%s -> %s' % (self.src, self.dest)
@@ -67,18 +66,18 @@ def build_tree(issue, graphs={}, nodes=[], edges=[]):
     else:
         return   # stop recursion
 
-    collector_id = collector2id(issue.aq_parent)
-    if not graphs.has_key(collector_id):
-        graphs[collector_id] = []
+    collector_id = obj2id(issue.aq_parent)
+    if not collector_id in graphs.keys():
+        graphs[collector_id] = {'title': issue.aq_parent.title_or_id(),         
+                                'url': issue.aq_parent.absolute_url(1)}
 
-    if not node.id in graphs[collector_id]:
-        graphs[collector_id].append(node)
-    
     for ref in issue.getRefs():
-        from urllib import unquote
         ref_issue = issue.getPhysicalRoot().restrictedTraverse(unquote(ref.absolute_url(1)))
         e = Edge(node, Node(ref_issue)) 
-        edges.append(e) 
+        
+        if not e in edges:
+            edges.append(e)
+
         build_tree(ref_issue, graphs, nodes, edges)
 
     return graphs, nodes, edges
@@ -88,20 +87,34 @@ def build_graphviz(graphs, nodes, edges):
     """ Graphviz generation """
 
     external_edges = []
-
     fname = tempfile.mktemp()
+
     fp = open(fname, 'w')
     print >>fp, 'digraph G {'
-    for graph in graphs.keys():
-        print >>fp, '\tsubgraph cluster_%s {' % graph[0]
 
+    for graph in graphs:
+        print >>fp, '\tsubgraph cluster_%s {' % graph
+        print >>fp, '\t\tlabel="%s";' % graphs[graph]['title']
+
+        printed = []
         for e in edges:
-            if e.src.id.startswith(graph[0]) and e.dest.id.startswith(graph[0]):
-                print >>fp, '\t\t"%s" -> "%s";' % (e.src.text, e.dest.text)
-            elif e.src.id.startswith(graph[0]):
+            if e.src.id.startswith(graph) and not e.src.id in printed: 
+                print >>fp, '\t\t%s[label="%s"]' % (e.src.id, e.src.title)
+                printed.append(e.src.id)
+            if e.dest.id.startswith(graph) and not e.dest.id in printed: 
+                print >>fp, '\t\t%s[label="%s"]' % (e.dest.id, e.dest.title)
+                printed.append(e.dest.id)
+
+        printed = []
+        for e in edges:
+            if not e.src.id.startswith(graph): continue
+            if e.src.id.startswith(graph) and e.dest.id.startswith(graph):
+                if  not ( (e.src.id, e.dest.id)) in printed:
+                    print >>fp, '\t\t"%s" -> "%s";' % (e.src.id, e.dest.id)
+                    printed.append( (e.src.id, e.dest.id) )
+            elif e.src.id.startswith(graph):
                     external_edges.append( e )
 
-        print >>fp, '\t\tlabel="%s";' % graph[1]
         print >>fp, '\t}\n'
 
     for e in external_edges:
@@ -109,6 +122,7 @@ def build_graphviz(graphs, nodes, edges):
 
     print >>fp, '}'
     fp.close()
+#    print open(fname).read()
     return fname
 
 def viz2image(fname, format='gif', RESPONSE=None):
