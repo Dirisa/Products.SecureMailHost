@@ -17,3 +17,8 @@ A: Navigate to the collector instance and you should see a link to
    to *all* collector instances (means they are *global* and *not specific*
    to a particular collector instance).
 
+Q: How do I turn on the email notifications?
+A: Click on the 'Edit' tab of your PCNG instance and then click on "Schemata: E-Email"
+   below the headline. Then choose the corresponding option from the
+   "Notifications".
+
