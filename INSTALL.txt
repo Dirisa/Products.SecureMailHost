@@ -12,7 +12,8 @@ it in the PYTHONPATH of your Python 2.1.3 installation.
 
 Installation:
  
-  - go the portal_quickinstaller tool of your Plone site
+  - visit the ZMI screeen of Plone site and go to the portal_quickinstaller
+    tool 
 
   - select the checkboxes for PloneCollectorNG (and Archetypes) and press
     'Install'
