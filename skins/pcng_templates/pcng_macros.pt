@@ -16,7 +16,7 @@
   </tal:if>
 
   <div>
-    <div class="left" tal:condition="python: here.meta_type=='PloneIssueNG'" >
+    <div class="left" tal:condition="python: here.meta_type=='PloneIssueNG' and here.isPersistent()" >
       <a href=""
          class="link-parent"
          tal:attributes="href python: here.aq_parent.absolute_url()"
