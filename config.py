@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: config.py,v 1.14 2003/12/30 13:18:45 ajung Exp $
+$Id: config.py,v 1.15 2004/01/04 09:09:51 ajung Exp $
 """
 
 from Products.CMFCore.CMFCorePermissions import AddPortalContent, setDefaultRoles
@@ -43,4 +43,5 @@ VOC_ISSUE_FORMATTERS = DisplayList((
 ))
 
 
+# Don't show the following indexes in the auto-generated searchform
 SEARCHFORM_IGNOREABLE_INDEXES = ('progress_deadline', 'created', 'numberFollowups', 'getId', 'SearchableText')
