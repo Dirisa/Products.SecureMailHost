@@ -1,22 +1,36 @@
-<html xmlns:tal="http://xml.zope.org/namespaces/tal"
-	xmlns:metal="http://xml.zope.org/namespaces/metal"
-    i18n:domain="plonecollectorng"
-	metal:use-macro="here/main_template/macros/master">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/prefs_main_template/macros/master"
+      i18n:domain="plone">
+
+<metal:block fill-slot="top_slot"
+             tal:define="dummy python:request.set('disable_border',1)" />
+
 <body>
 
-  <metal:block metal:fill-slot="head_slot">
-    <link rel="Stylesheet" type="text/css" tal:attributes="href string:$portal_url/pcng_styles.css" />
-  </metal:block>
+<div metal:fill-slot="prefs_configlet_main">
 
-  <div metal:fill-slot="main">
+    <span tal:define="dummy python:request.response.setHeader('pragma','no-cache')" />
 
-    <metal:block tal:define="action string: Member preferences">
-      <span metal:use-macro="here/pcng_macros/macros/collector_headline" />
-    </metal:block>
+    <h1 i18n:translate="heading_my_preferences">PloneCollectorNG Member Preferences</h1>
 
-    <fieldset>
-      <legend i18n:translate="preferences">Preferences</legend>
+    <a href=""
+       class="link-parent"
+       tal:attributes="href string: $portal_url/plone_memberprefs_panel"
+       i18n:translate="label_up_to_preferences">
+    Up to My Preferences
+    </a>
+
+    <p i18n:translate="description_my_preferences">
+    Your personal PloneCollector settings.
+    </p>
       <form method="post" action="pcng_set_member_preferences">
+
+        <fieldset>
+
+            <legend i18n:translate="legend_member_details">Member Details</legend>
+
+
         <metal:block tal:repeat="item python: ( 
                                          ('fullname','Name'), 
                                          ('pcng_company','Company'), 
@@ -26,16 +40,16 @@
                                          ('pcng_phone','Phone'),
                                          ('pcng_fax','Fax'),
                                          )">   
-          <div class="row">
-            <div class="label" i18n:translate="" tal:content="python: item[1]" />
-            <div class="field">
+          <div class="field">
+            <label i18n:translate="" tal:content="python: item[1]" />
+            <div class="row">
               <input type="text" tal:attributes="value python: member.getProperty(item[0]); name python: item[0]">
             </div>
           </div>
         </metal:block>
 
-        <div class="row">
-          <div class="label" i18n:translate="send_emails" >Send notification emails</div>
+        <div class="field">
+          <label i18n:translate="send_emails" >Send notification emails</label>
           <div class="field">
             <select name="pcng_send_emails">
               <option tal:repeat="item python: (('no', 'No'), ('yes', 'Yes'))"
@@ -48,9 +62,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="send_attachments" >Send attachments within notification emails</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="send_attachments" >Send attachments within notification emails</label>
+          <div class="row">
             <select name="pcng_send_attachments">
               <option tal:repeat="item python: (('no', 'No'), ('yes', 'Yes'))"
                       tal:content="python: item[1]"
@@ -62,9 +76,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="position_searchform" >Position of search form</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="position_searchform" >Position of search form</label>
+          <div class="row">
             <select name="pcng_position_searchform">
               <option tal:repeat="item python: (('bottom', 'Bottom'), ('top', 'Top'))"
                       tal:content="python: item[1]"
@@ -76,9 +90,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="open_issue_in_new_window" >Open issues in a new window</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="open_issue_in_new_window" >Open issues in a new window</label>
+          <div class="row">
             <select name="pcng_issue_in_new_window:int">
               <option tal:repeat="item python: ((0, 'No'), (1, 'Yes'))"
                       tal:content="python: item[1]"
@@ -90,9 +104,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="default_searchform" >Default search form</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="default_searchform" >Default search form</label>
+          <div class="row">
             <select name="pcng_default_searchform">
               <option tal:repeat="item python: (('simple', 'Simple search form'), ('advanced', 'Advanced search form'))"
                       tal:content="python: item[1]"
@@ -104,9 +118,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="default_issue_view" >Default issue view</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="default_issue_view" >Default issue view</label>
+          <div class="row">
             <select name="pcng_default_view">
               <option tal:repeat="item python: (('simple', 'Simple view'), ('full', 'Full view'), ('fullimages', 'Full view with images'))"
                       tal:content="python: item[1]"
@@ -118,9 +132,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="label" i18n:translate="hits_per_page" >Number of issues per page</div>
-          <div class="field">
+        <div class="field">
+          <label i18n:translate="hits_per_page" >Number of issues per page</label>
+          <div class="row">
             <select name="pcng_hits_per_page:int">
               <option tal:repeat="item python: ((10,10), (20,20), (50,50), (100,100), (200,200))"
                       tal:content="python: item[1]"
@@ -135,12 +149,14 @@
         <input type="submit" value=" Save changes " i18n:attributes="value" class="standalone">
         &nbsp; &nbsp;
         <input type="reset"  value=" Reset "        i18n:attributes="value" class="standalone">
-      </form>			   
-    </fieldset>
 
+        </fieldset>
+  </form>	
+
+
+  <form method="post" action="pcng_edit_saved_searches">
     <fieldset>
       <legend i18n:translate="saved_searches">Saved searches</legend>
-      <form method="post" action="pcng_edit_saved_searches">
         <select name="query_id" size="3">
           <tal:loop tal:repeat="saved_search python: member.getProperty('pcng_saved_searches') " >
             <option tal:content="python: '::'.join(saved_search.split('::', 2)[:2])" 
@@ -151,9 +167,12 @@
         </select>
         <br> <br>
         <input type="submit" value="Delete" name="delete" class="standalone" i18n:attributes="value">
-      </form>			   
     </fieldset>
-  </div>
+  </form>			   
+
+</div>
+
 </body>
 </html>
 
+                    
