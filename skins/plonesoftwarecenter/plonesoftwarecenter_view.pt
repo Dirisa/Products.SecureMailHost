@@ -88,18 +88,6 @@
                                            class string:state-$review_state">Package</a>
                     </div>
                 </tal:list>
-<!--
-                <div class="portletContent odd" tal:define="myall string:All_${help_type/id}">
-                    <a class="portletMore" tal:attributes="href help_type/getURL;
-                                                   title help_type/Description|nothing;">
-                        <span i18n:translate="">
-                            <span tal:replace="myall">
-                                ALL DOCS
-                            </span>
-                        </span>
-                    </a>
-                </div>
--->
             </div>
         </div>
     </div>

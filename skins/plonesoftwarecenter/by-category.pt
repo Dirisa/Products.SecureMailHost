@@ -17,22 +17,15 @@
   <body>
     <div metal:fill-slot="main"
          tal:define="global getInfoFor nocall:here/portal_workflow/getInfoFor;
-         category python:request.traverse_subpath[0]">
+                     category python:request.traverse_subpath[0]">
 
-    <h1 tal:content="here/Title" class="documentFirstHeading">
-      Folder Title
+    <h1 class="documentFirstHeading">
+      Projects in category <span tal:replace="category" />
     </h1>
 
     <div metal:use-macro="here/document_actions/macros/document_actions">
       Document actions (print, sendto etc)
     </div>
-
-    <div class="documentDescription"
-         tal:content="here/Description">
-      Description.
-    </div>
-
-    <h2 tal:content="category"></h2>
 
     <dl>
       <tal:package tal:repeat="package python:here.getPackagesByCategory(category)">

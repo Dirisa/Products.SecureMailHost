@@ -50,6 +50,9 @@
 
             <p class="discreet" i18n:translate="description_no_available_releases">
                     There are no published releases in this project yet.
+                    This listing will prioritize releases with maturity 'Final',
+                    but will list the latest published release of any other type
+                    if no final release exists.
             </p>
             <p class="discreet" tal:condition="is_editable">
                 <a i18n:translate=""
@@ -94,13 +97,19 @@
                         <img src="" alt="" tal:attributes="src string:${here/portal_url}/${file/getDownloadIconName}" />
 
                       <a class="link-plain"
-                        tal:attributes="href file/getDirectURL">
+                         tal:define="fileSize file/getFileSize"
+                         tal:attributes="href file/getDirectURL">
                         <span i18n:translate="label_download">Download</span>
                         <span tal:replace="here/Title">Ploneboard 1.0</span>
                         for
                         <span tal:replace="file/getPlatform" />
-                        <tal:size define="fileSize file/getFileSize" condition="fileSize">
+                        <tal:size condition="fileSize">
                              (<span tal:replace="fileSize">256KB</span>)
+                        </tal:size>
+                        <tal:size condition="not: fileSize">
+                            <tal:extfile condition="file/getExternalFileSize">
+                            (<span tal:replace="file/getExternalFileSize">256KB</span>)
+                            </tal:extfile>
                         </tal:size>
                       </a>
 

@@ -1,5 +1,5 @@
 """
-$Id: schemata.py,v 1.7 2005/03/10 02:58:15 dtremea Exp $
+$Id: schemata.py,v 1.8 2005/03/10 06:13:11 limi Exp $
 """
 
 from Products.CMFCore import CMFCorePermissions
@@ -993,7 +993,7 @@ PSCFileLinkSchema = BaseSchema.copy() + Schema((
         widget=StringWidget(
             label="File size",
             label_msgid="label_file_ext_size",
-            description="Please enter the size of the externally hosted file, if known.",
+            description="Please enter the size of the externally hosted file, if known. Include the notation kB or MB.",
             description_msgid="help_file_ext_size",
             i18n_domain="archpackage",
         ),
@@ -1049,7 +1049,7 @@ PloneSoftwareCenterSchema = OrderedBaseFolderSchema.copy() + Schema((
         ],
         widget=SimpleDataGridWidget(
             label='Licenses',
-            description='Define the available licenses for software releases. The format is Name|URL.',
+            description='Define the available licenses for software releases. The format is Short Name | Title | URL.',
             i18n_domain='archpackage',
             rows=6,
         ),
