@@ -5,12 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.18 2003/09/20 12:42:10 ajung Exp $
+$Id: Issue.py,v 1.19 2003/09/20 15:14:38 ajung Exp $
 """
 
 import sys
 
 from AccessControl import  ClassSecurityInfo
+from Acquisition import aq_base
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import registerType
@@ -58,6 +59,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         'action': 'add_issue',
         'permissions': (AddCollectorIssue,)
         },
+        {'id': 'issue_debug',
+        'name': 'Debug',
+        'action': 'pcng_issue_debug',
+        'permissions': (AddCollectorIssue,)
+        },
         )
 
     security = ClassSecurityInfo()
@@ -69,6 +75,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self.wl_init()
         self.id = id
         self.title = title 
+        self.security_related = 0
         self._assignees = []
         self._references = ReferencesManager()
         self._transcript = Transcript()
@@ -88,6 +95,12 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         else:
             name = 'contact_name'
             self.Schema()[name].storage.set(name, self, util.getUserName())
+
+        # notify workflow and index issue
+        if aq_base(container) is not aq_base(self):
+            wf = getToolByName(self, 'portal_workflow')
+            wf.notifyCreated(self)
+            self.indexObject()
                                                 
     ######################################################################
     # Followups
@@ -98,6 +111,11 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         self._transcript.addChange('assignees', self._assignees, assignees)
         self._assignees = assignees 
         if comment: self._transcript.addComment(comment)
+        wf = getToolByName(self, 'portal_workflow')
+        wf.doActionFor(self, 'assign',
+                       comment=comment,
+                       username=util.getUserName(),
+                       assignees = assignees)
         util.redirect(RESPONSE, 'pcng_issue_view', 'Followup submitted')
 
     ######################################################################
@@ -217,7 +235,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
         """ Hook to perform post-validation actions. We use this
             to reindex the issue.
         """
-        self.reindexObject()
+        self.indexObject()
 
     def __len__(self):
         """ return the number of transcript events """
@@ -228,7 +246,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
     ######################################################################
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'reindexObject')
-    def reindexObject(self):
+    def indexObject(self):
         catalogs = [getattr(self, 'pcng_catalog'), getToolByName(self, 'portal_catalog', None)]
         for c in catalogs: c.indexObject(self)
 
@@ -279,5 +297,38 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
             sub.addField(f)
             schemata[f.schemata] = sub
         return schemata
+
+    ######################################################################
+    # Callbacks for pcng_issue_workflow
+    ######################################################################
+
+    security.declareProtected(CMFCorePermissions.View, 'assigned_to')
+    def assigned_to(self):
+        """ return assigned users according to the workflow """
+        wftool = getToolByName(self, 'portal_workflow')
+        return wftool.getInfoFor(self, 'assigned_to', ()) or ()
+
+    security.declareProtected(CMFCorePermissions.View, 'is_assigned')
+    def is_assigned(self):
+        """ return if the current is user among the assignees """
+        username = util.getUserName()
+        return username in self._assignees
+
+    def status(self):
+        """ return workflow state """
+        wftool = getToolByName(self, 'portal_workflow')
+        return wftool.getInfoFor(self, 'state', 'Pending')
+
+    security.declareProtected(CMFCorePermissions.View, 'validActions')
+    def validActions(self):
+        """ return valid transitions for issue 'pcng_issue_workflow' """
+        pa = getToolByName(self, 'portal_actions', None)
+        allactions = pa.listFilteredActionsFor(self)
+        return [entry['name'] for entry in allactions.get(IssueWorkflowName, [])]
+
+    security.declareProtected(CMFCorePermissions.View, 'getWorkflow')
+    def getWorkflow(self):
+        """ return the workflow history. ATT: DEBUG ONLY """
+        return self.workflow_history['pcng_issue_workflow']
 
 registerType(PloneIssueNG)
