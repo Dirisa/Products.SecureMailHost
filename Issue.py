@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.15 2003/09/13 11:37:39 ajung Exp $
+$Id: Issue.py,v 1.16 2003/09/13 13:08:21 ajung Exp $
 """
 
 import sys
@@ -70,7 +70,7 @@ class PloneIssueNG(OrderedBaseFolder, WatchList):
 
     def manage_afterAdd(self, item, container):
         """ perform post-creation actions """
-        BaseFolder.manage_afterAdd(self, item, container)
+        OrderedBaseFolder.manage_afterAdd(self, item, container)
 
         # add email/fullname to the contact properties of the issue
         member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())

@@ -85,7 +85,25 @@
 
 
 <div metal:define-macro="add_references">
+
+<script language="javascript">
+function show_tickets() {
+    el = document.myform["reference.tracker:record:string"];
+    selected = el.selectedIndex;
+
+    if (selected == 0) {
+        return 0;
+    }
+
+    tracker = el.options[selected].value;
+    url = tracker + "/tickets_selection"; 
+    win = open(url, "tickets", "width=600, height=800, scrollbars=yes");
+}
+
+</script>
+
   <div class="group">
+
     <span class="legend" i18n:translate="legend_new_reference_to_issue">New reference to other issue</span>
     <form method="post" action="add_reference">
 

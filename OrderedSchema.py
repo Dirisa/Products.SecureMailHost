@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: OrderedSchema.py,v 1.1 2003/09/13 11:36:08 ajung Exp $
+$Id: OrderedSchema.py,v 1.2 2003/09/13 13:08:21 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -39,7 +39,8 @@ class OrderedBaseFolder(BaseFolder):
         for k in self.schema._ordered_keys:
             field = self.Schema()[k]
             if not field.schemata in lst:
-                lst.append(field.schemata)
+                if not field in ('default', 'metadata'):
+                    lst.append(field.schemata)
         return lst
 
 InitializeClass(OrderedBaseFolder)

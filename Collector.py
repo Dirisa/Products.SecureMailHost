@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.26 2003/09/13 11:37:39 ajung Exp $
+$Id: Collector.py,v 1.27 2003/09/13 13:08:20 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -262,7 +262,9 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         issue = issue.__of__(self)
         self._setObject(id, issue)
 
-        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/base_edit", fieldset='issuedata')
+        util.redirect(RESPONSE, self.absolute_url() + "/" + id + "/base_edit", 
+                      portal_status_message='New issue created',
+                      fieldset='issuedata')
 
     ######################################################################
     # Maintainance

@@ -9,9 +9,9 @@
 
     <h1 i18n:translate="heading_edit_schema">Edit schema</h1>
     <div 
-	   tal:define="default_fieldset python: 'default';
+	   tal:define="default_fieldset python: here.schema_getNames()[0];
                    fieldset request/fieldset|default_fieldset;
-                   fieldsets python:[key for key in here.getSchemaNames() if key != 'metadata'];"
+                   fieldsets python:[key for key in here.schema_getNames() if not key in ['metadata', 'default']];"
            tal:omit-tag="">
        <div tal:condition="fieldsets">  <!-- Navigation -->
          <form action="newSchema" method="post">

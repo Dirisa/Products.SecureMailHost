@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: SchemaEditor.py,v 1.11 2003/09/09 19:07:51 ajung Exp $
+$Id: SchemaEditor.py,v 1.12 2003/09/13 13:08:21 ajung Exp $
 """
 
 import operator
@@ -14,13 +14,13 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from BTrees.OOBTree import OOBTree
-from Products.Archetypes.Schema import Schema
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.Field import *
 from Products.Archetypes.Widget import *
 
 import util
 from config import ManageCollector
+from OrderedSchema import OrderedSchema
 
 class SchemaEditor:
     """ a simple TTW editor for Archetypes schemas """
@@ -35,7 +35,7 @@ class SchemaEditor:
         for field in schema.fields():
             if not field.schemata in self._schema_names:
                 self._schema_names.append(field.schemata)
-                self._schemas[field.schemata] = Schema(field.schemata)
+                self._schemas[field.schemata] = OrderedSchema()
             self._schemas[field.schemata].addField(field)
 
     security.declareProtected(ManageCollector, 'getWholeSchema')
@@ -53,7 +53,7 @@ class SchemaEditor:
         return s
 
     security.declareProtected(ManageCollector, 'getSchemaNames')
-    def getSchemaNames(self):
+    def schema_getNames(self):
         """ return names of all schematas """
         return self._schema_names
 
@@ -68,7 +68,7 @@ class SchemaEditor:
         if fieldset in self._schema_names:
             raise ValueError('Schemata "%s" already exists' % fieldset)
         self._schema_names.append(fieldset)
-        self._schemas[fieldset] = Schema(fieldset)
+        self._schemas[fieldset] = OrderedSchema()
         self._p_changed = 1
 
         util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema added', fieldset=fieldset)
@@ -78,7 +78,7 @@ class SchemaEditor:
         """ delete a schema """
         self._schema_names.remove(fieldset)
         del self._schemas[fieldset]
-        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted', fieldset=fieldset)
+        util.redirect(RESPONSE, 'pcng_schema_editor', 'Schema deleted')
 
     security.declareProtected(ManageCollector, 'schema_del_field')
     def schema_del_field(self, fieldset, name, RESPONSE=None):
@@ -96,8 +96,7 @@ class SchemaEditor:
         if R.has_key('schema_add_field'):
             fields = self._schemas[fieldset].fields()
             fields.append(StringField(R['name'], schemata=fieldset, widget=StringWidget))
-            print fields
-            schema = Schema(fieldset)
+            schema = OrderedSchema()
             for f in fields:
                 schema.addField(f)
             self._schemas[fieldset] = schema
@@ -105,14 +104,12 @@ class SchemaEditor:
             util.redirect(RESPONSE, 'pcng_schema_editor', 'Field added', fieldset=fieldset)
             return            
 
-        schema = Schema(fieldset)
+        schema = OrderedSchema()
 
         fieldnames = [name for name in R.keys()  if not isinstance(R[name], str) ]
         fieldnames.sort(lambda a,b,R=R: cmp(R[a].order, R[b].order))
-        print fieldnames
 
         for name in fieldnames:
-            print name
             d =  R[name]
 
             if d.field == 'StringField': field = StringField
@@ -128,17 +125,18 @@ class SchemaEditor:
             D['default'] = d.get('default', '')
             D['schemata'] = fieldset
          
+            visible = d.get('visible', 1)
             if d.widget == 'String': pass
-            elif d.widget == 'Select':      widget = SelectionWidget(format='select', visible=d.visible)
-            elif d.widget == 'Radio':       widget = SelectionWidget(visible=d.visible)
-            elif d.widget == 'Textarea':    widget = TextAreaWidget(visible=d.visible)
-            elif d.widget == 'Calendar':    widget = CalendarWidget(visible=d.visible)
-            elif d.widget == 'Boolean':     widget = BooleanWidget(visible=d.visible)
-            elif d.widget == 'MultiSelect': widget = MultiSelectionWidget(visible=d.visible)
-            elif d.widget == 'Keywords':    widget = KeywordWidget(visible=d.visible)
-            elif d.widget == 'Richtext':    widget = RichWidget(visible=d.visible)
-            elif d.widget == 'Password':    widget = PasswordWidget(visible=d.visible)
-            elif d.widget == 'Visual':      widget = VisualWidget(visible=d.visible)
+            elif d.widget == 'Select':      widget = SelectionWidget(format='select', visible=visible)
+            elif d.widget == 'Radio':       widget = SelectionWidget(visible=visible)
+            elif d.widget == 'Textarea':    widget = TextAreaWidget(visible=visible)
+            elif d.widget == 'Calendar':    widget = CalendarWidget(visible=visible)
+            elif d.widget == 'Boolean':     widget = BooleanWidget(visible=visible)
+            elif d.widget == 'MultiSelect': widget = MultiSelectionWidget(visible=visible)
+            elif d.widget == 'Keywords':    widget = KeywordWidget(visible=visible)
+            elif d.widget == 'Richtext':    widget = RichWidget(visible=visible)
+            elif d.widget == 'Password':    widget = PasswordWidget(visible=visible)
+            elif d.widget == 'Visual':      widget = VisualWidget(visible=visible)
             else:
                 raise ValueError('unknown widget type: %s' % d.widget)
 
