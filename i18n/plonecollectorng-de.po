@@ -830,3 +830,70 @@ msgstr "$schemata ist eine ungültige ID für ein Schemata"
 
 msgid "open_issue_in_new_window"
 msgstr "Tickets aus Trefferliste in neuem Fenster öffnen"
+
+msgid "staff_members"
+msgstr "Bugtracker Teilnehmer"
+
+msgid "Topic-Staff mapping"
+msgstr "Zuordnung Topics zu Bugtracker Teilnehmern"
+
+msgid "topic_user_mapping_saved"
+msgstr "Zuordnung gespeichert"
+
+msgid "atse_empty_name"
+msgstr "Leerer Name"
+
+msgid "atse_exists"
+msgstr "Schemata $schemata existiert bereits"
+
+msgid "atse_invalid_id_for_schemata"
+msgstr "Ungültige ID für ein Schemata"
+
+msgid "atse_added"
+msgstr "Schemata wurde hinzugefügt"
+
+msgid "atse_can_not_remove_last_schema"
+msgstr "Das letzte Schemata kann nicht entfernt werden"
+
+msgid "atse_deleted"
+msgstr "Schemata gelöscht"
+
+msgid "atse_feld_not_deleteable"
+msgstr "Feld kann nicht entfernt werden"
+
+msgid "atse_field_deleted"
+msgstr "Feld wurde entfernt"
+
+msgid "atse_empty_field_name"
+msgstr "Leer Feldname"
+
+msgid "atse_not_a_valid_id"
+msgstr "Ungültige ID"
+
+msgid "atse_field_already_exists"
+msgstr "Feld existiert bereits"
+
+msgid "atse_field_added"
+msgstr "Feld wurde hinzugefügt"
+
+msgid "atse_unknown_field"
+msgstr "Unbekanntes Feld"
+
+msgid "atse_unknown_widget"
+msgstr "Unbekanntes Widget"
+
+msgid "atse_moved_left"
+msgstr "Verschoben nach links"
+
+msgid "atse_moved_right"
+msgstr "Verschoben nach rechts"
+
+msgid "atse_field_moved_up"
+msgstr "Verschoben nach oben"
+
+msgid "atse_field_moved_down"
+msgstr "Verschoben nach unten"
+
+msgid "atse_field_moved"
+msgstr "Feld wurde verschoben"
+
