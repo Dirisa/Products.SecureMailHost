@@ -5,12 +5,13 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: References.py,v 1.3 2003/09/07 07:12:27 ajung Exp $
+$Id: References.py,v 1.4 2003/09/10 05:20:05 ajung Exp $
 """
 
 from Globals import InitializeClass
 from Globals import Persistent
 from AccessControl import ClassSecurityInfo, getSecurityManager
+from Products.CMFCore import CMFCorePermissions
 from types import StringType, ListType, TupleType
 
 
@@ -18,12 +19,11 @@ class ReferencesManager(Persistent):
     """ container class for all references """
 
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self):
         self._references = []
 
-    security.declarePublic('add')
+    security.declareProtected(CMFCorePermissions.View, 'add')
     def add(self, ref):
         self._references.insert(0, ref)
         self._p_changed = 1
@@ -42,7 +42,6 @@ InitializeClass(ReferencesManager)
 class Reference(Persistent):
 
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, tracker, ticketnumber, comment):
         self._tracker = tracker
@@ -52,19 +51,19 @@ class Reference(Persistent):
         if not (tracker and ticketnumber):
             raise ValueError, 'References requires URL *and* Comment as parameters'
                             
-    security.declarePublic('getTracker')
+    security.declareProtected(CMFCorePermissions.View, 'getTracker')
     def getTracker(self):
         return self._tracker
 
-    security.declarePublic('getTicketNumber')
+    security.declareProtected(CMFCorePermissions.View, 'getTicketNumber')
     def getTicketNumber(self):
         return self._ticketnumber
 
-    security.declarePublic('getURL')
+    security.declareProtected(CMFCorePermissions.View, 'getURL')
     def getURL(self):
         return self._tracker + '/' + self._ticketnumber 
 
-    security.declarePublic('getComment')
+    security.declareProtected(CMFCorePermissions.View, 'getComment')
     def getComment(self):
         return self._comment
 

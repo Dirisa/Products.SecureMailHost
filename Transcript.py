@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Transcript.py,v 1.4 2003/09/07 07:12:27 ajung Exp $
+$Id: Transcript.py,v 1.5 2003/09/10 05:20:05 ajung Exp $
 """
 
 from types import StringType, ListType, TupleType
@@ -13,18 +13,18 @@ import os
 
 from Globals import Persistent, InitializeClass
 from AccessControl import ClassSecurityInfo, getSecurityManager
+from Products.CMFCore import CMFCorePermissions
 from DateTime.DateTime import DateTime
 
 class Transcript(Persistent):
     """ container class for all TranscriptEntry objects """
 
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self):
         self._items = []
 
-    security.declarePublic('add')
+    security.declareProtected(CMFCorePermissions.View, 'add')
     def add(self, entry):
 
         assert isinstance(entry, TranscriptEntry)
@@ -33,18 +33,19 @@ class Transcript(Persistent):
             self._items.insert(0, entry)
             self._p_changed = 1
 
-    security.declarePublic('addTranscriptChangeEvent')
+    security.declareProtected(CMFCorePermissions.View, 'addTranscriptChangeEvent')
     def addTranscriptChangeEvent(self, field, old, new):
         entry = TranscriptEntry('system')
         entry.addChange(field, old, new)
         self.add(entry)
 
-
+    security.declareProtected(CMFCorePermissions.View, 'addComment')
     def addComment(self, comment):
         te = TranscriptEntry(getSecurityManager().getUser().getUserName())  
         te.addComment(comment)
         self.add(te)
 
+    security.declareProtected(CMFCorePermissions.View, 'addChange')
     def addChange(self, field, old, new):
         te = TranscriptEntry(getSecurityManager().getUser().getUserName())  
         te.addChange(field, old, new)
@@ -55,6 +56,7 @@ class Transcript(Persistent):
     def __getitem__(self, n): 
         return self._items[n]
 
+InitializeClass(Transcript)
 
 ##################################################################
 # Transcript changes
@@ -67,20 +69,19 @@ class CommentEvent(Persistent):
     """ transcript comments """
 
     meta_type = "CommentEvent"
-
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, comment):
         self._comment = comment
 
-    security.declarePublic('getComment')
+    security.declareProtected(CMFCorePermissions.View, 'getComment')
     def getComment(self):
         return self._comment
 
     def __str__(self):
         return self._comment
 
+    security.declareProtected(CMFCorePermissions.View, 'asXML')
     def asXML(self):
         return '<comment>%s</comment>' % self._comment
 
@@ -91,24 +92,22 @@ class ReferenceEvent(Persistent):
     """ transcript references """
 
     meta_type = "ReferenceEvent"
-
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, tracker, ticketnumber, comment):
         self._tracker = tracker
         self._ticketnumber = ticketnumber
         self._comment = comment
 
-    security.declarePublic('getTracker')
+    security.declareProtected(CMFCorePermissions.View, 'getTracker')
     def getTracker(self):
         return self._tracker
 
-    security.declarePublic('getTicketNumber')
+    security.declareProtected(CMFCorePermissions.View, 'getTicketNumber')
     def getTicketNumber(self):
         return self._ticketnumber
 
-    security.declarePublic('getComment')
+    security.declareProtected(CMFCorePermissions.View, 'getComment')
     def getComment(self):
         return self._comment
 
@@ -116,6 +115,7 @@ class ReferenceEvent(Persistent):
         return '%s #%s (%s)' % \
              (self._tracker, self._ticketnumber, self._comment)
 
+    security.declareProtected(CMFCorePermissions.View, 'asXML')
     def asXML(self):
         return '<reference><tracker>%s<tracker><ticketnumber>%s</ticketnumber><comment>%s</comment></reference>' % \
              (self._tracker, self._ticketnumber, self._comment)
@@ -127,58 +127,54 @@ class UploadEvent(Persistent):
     """ transcript references """
 
     meta_type = "UploadEvent"
-
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, fileid, comment):
         self._fileid = fileid
         self._comment = comment
 
-    security.declarePublic('getFileId')
+    security.declareProtected(CMFCorePermissions.View, 'getFileId')
     def getFileId(self):
         return os.path.split(self._fileid.replace('\\','/'))[1]
 
-    security.declarePublic('getComment')
+    security.declareProtected(CMFCorePermissions.View, 'getComment')
     def getComment(self):
         return self._comment
 
     def __str__(self):
         return '%s (%s)' % (self._fileid, self._comment)
 
+    security.declareProtected(CMFCorePermissions.View, 'asXML')
     def asXML(self):
         return '<upload><file>%s</file><comment>%s</comment></upload>' % (self._fileid, self._comment)
 
 InitializeClass(UploadEvent)
         
-     
 
 class ChangeEvent(Persistent):
     """ simple event class for changes of StringType properties """
 
     meta_type = 'ChangeEvent'
-
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, field, old , new):
         self._field = field
         self._old = old
         self._new = new
 
-    security.declarePublic('getField')
+    security.declareProtected(CMFCorePermissions.View, 'getField')
     def getField(self): 
         return self._field
 
-    security.declarePublic('getOld')
+    security.declareProtected(CMFCorePermissions.View, 'getOld')
     def getOld(self):
         return self._old
 
-    security.declarePublic('getNew')
+    security.declareProtected(CMFCorePermissions.View, 'getNew')
     def getNew(self):
         return self._new
 
-    security.declarePublic('getType')
+    security.declareProtected(CMFCorePermissions.View, 'getType')
     def getType(self):
         return self.meta_type
 
@@ -186,6 +182,7 @@ class ChangeEvent(Persistent):
         return "%s: '%s' ->  '%s'" % \
             (self._field, self._old, self._new)
 
+    security.declareProtected(CMFCorePermissions.View, 'asXML')
     def asXML(self):
         return "<change field=\"%s\"><old>%s</old><new>%s</new></change>'" % \
             (self._field, self._old, self._new)
@@ -197,9 +194,7 @@ class IncrementalChangeEvent(ChangeEvent):
     """ simple event class for changes of ListType properties """
 
     meta_type = 'IncrementalChangeEvent'
-
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, field, old, new):
         self._field = field
@@ -214,19 +209,19 @@ class IncrementalChangeEvent(ChangeEvent):
             if not item in old:
                 self._added.append(item)
 
-    security.declarePublic('getAdded')
+    security.declareProtected(CMFCorePermissions.View, 'getAdded')
     def getAdded(self):
         return self._added
 
-    security.declarePublic('getAddedAsString')
+    security.declareProtected(CMFCorePermissions.View, 'getAddedAsString')
     def getAddedAsString(self):
         return ', '.join(self._added)
 
-    security.declarePublic('getRemoved')
+    security.declareProtected(CMFCorePermissions.View, 'getRemoved')
     def getRemoved(self):
         return self._removed
 
-    security.declarePublic('getRemovedAsString')
+    security.declareProtected(CMFCorePermissions.View, 'getRemovedAsString')
     def getRemovedAsString(self):
         return ', '.join(self._removed)
 
@@ -237,6 +232,7 @@ class IncrementalChangeEvent(ChangeEvent):
         return '%s: added: %s, removed: %s' % \
             (self._field, self._added, self._removed)
 
+    security.declareProtected(CMFCorePermissions.View, 'asXML')
     def asXML(self):
         return "<incrementalchange field=\"%s\"><removed>%s</removed><added>%s</added></incrementalchange>'" % \
             (self._field, ','.join(self._removed), ','.join(self._added))
@@ -248,7 +244,6 @@ class TranscriptEntry(Persistent):
     """ container class for multiple changes and comments """
 
     security = ClassSecurityInfo()
-    security.declareObjectPublic()
 
     def __init__(self, user=None):
         if user is None:
