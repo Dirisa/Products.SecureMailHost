@@ -81,7 +81,14 @@
                                 Validation error output
                             </div>
                                 
-                            <div tal:define="input python:field.render(REQUEST=request)"
+                            <div tal:condition="python: field.id in ['email',  'fullname']"
+                                 tal:define="initvalue python:test(field.id in ['email',  'fullname'],member.getProperty(field.id, ''),'');
+                                             input python:field.render(REQUEST=request, value = initvalue )"
+                                 tal:replace="structure input"
+                                 tal:attributes="tabindex tabindex/next;">
+                            </div>
+                            <div tal:condition="python: not field.id in ['email',  'fullname']"
+                                 tal:define="input python:field.render(REQUEST=request)"
                                  tal:replace="structure input"
                                  tal:attributes="tabindex tabindex/next;">
                             </div>
