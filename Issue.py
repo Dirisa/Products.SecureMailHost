@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.201 2004/07/02 10:01:03 ajung Exp $
+$Id: Issue.py,v 1.202 2004/07/02 17:05:14 ajung Exp $
 """
 
 import os, time, random 
@@ -693,7 +693,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def left_slots(self):
         pu = self.getPortlet_usage() 
         pa = self.getPortlet_actions() 
-        if not hasattr(self, '_v_left_slots'):
+        if not hasattr(aq_base(self), '_v_left_slots'):
             if pu == 'override': 
                 self._v_left_slots = []
             else:
@@ -710,12 +710,12 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
     def right_slots(self):
         pu = self.getPortlet_usage() 
         pa = self.getPortlet_actions() 
-        if not hasattr(self, '_v_right_slots'):
+        if not hasattr(aq_base(self), '_v_right_slots'):
             if pu == 'override': 
                 self._v_right_slots = []
             else:
                 self._v_right_slots = list(self._getCollector().aq_parent.right_slots)
-            if pu == 'right':
+            if pa == 'right':
                 self._v_right_slots.append('here/pcng_portlets/macros/pcng_issue_portlets')
             try: del self._v_left_slots
             except: pass
