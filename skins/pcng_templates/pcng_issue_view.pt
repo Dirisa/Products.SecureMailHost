@@ -101,13 +101,6 @@
         <div metal:use-macro="here/issue_macros/macros/watchlist" /> 
       </metal:block>
 
-<div tal:define="actions python: here.portal_actions.listFilteredActionsFor(here)" 
-     tal:repeat="key python: actions.keys()" >
-  <h1 tal:content="key"/>
-  <div tal:content="actions/?key" />
-</div>
-
-
       <div class="documentByLine">
       PloneCollectorNG by <a class="link-plain" href="http://www.zopyx.com/">ZOPYX - Andreas Jung</a>
       </div>
