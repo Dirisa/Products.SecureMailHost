@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.81 2003/11/15 07:38:49 ajung Exp $
+$Id: Issue.py,v 1.82 2003/11/15 07:50:25 ajung Exp $
 """
 
 import sys, os
@@ -114,9 +114,41 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
         self._last_action = 'Created'          # last action from the followup form
         self._transcript = Transcript()
 
-    def setSchema(self, schema):
-        self.schema = schema
+    def manage_afterAdd(self, item, container):
+        """ perform post-creation actions """
+        OrderedBaseFolder.manage_afterAdd(self, item, container)
+        schema = self.Schema()
+
+        # added member preferences as defaults to the issue
+        member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
+
+        if member:
+            fieldnames = [ f.getName() for f in schema.fields() ]
+            for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
+                                ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
+                                ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
+                                ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
+
+                if name in fieldnames:                
+                    schema[name].storage.set(name, self, member.getProperty(name1))
+        else:
+            name = 'contact_name'
+            schema[name].storage.set(name, self, util.getUserName())
+
+        # pre-allocate the deadline property
+        self.progress_deadline = DateTime() + self.deadline_tickets        
+
+        # notify workflow and index issue
+        if aq_base(container) is not aq_base(self):
+            wf = getToolByName(self, 'portal_workflow')
+            wf.notifyCreated(self)
+
         self.initializeArchetype()
+    
+                                                
+    def manage_beforeDelete(self, item, container):
+        """ Hook for pre-deletion actions """
+        self.unindexObject()
 
     def Schema(self):
         """ Return our schema (through acquisition....uuuuuh). We override
@@ -154,39 +186,6 @@ class PloneIssueNG(OrderedBaseFolder, WatchList, Translateable):
             if not f.schemata in names and f.schemata != 'default':
                 names.append(f.schemata)
         return names
-
-    def manage_afterAdd(self, item, container):
-        """ perform post-creation actions """
-        OrderedBaseFolder.manage_afterAdd(self, item, container)
-        schema = self.Schema()
-
-        # added member preferences as defaults to the issue
-        member = getToolByName(self, 'portal_membership', None).getMemberById(util.getUserName())
-
-        if member:
-            fieldnames = [ f.getName() for f in schema.fields() ]
-            for name, name1 in ( ('contact_name', 'fullname'), ('contact_email', 'email'), \
-                                ('contact_company', 'pcng_company'), ('contact_position', 'pcng_position'),
-                                ('contact_address', 'pcng_address'), ('contact_fax', 'pcng_fax'), \
-                                ('contact_phone', 'pcng_phone'), ('contact_city', 'pcng_city')):
-
-                if name in fieldnames:                
-                    schema[name].storage.set(name, self, member.getProperty(name1))
-        else:
-            name = 'contact_name'
-            schema[name].storage.set(name, self, util.getUserName())
-
-        # pre-allocate the deadline property
-        self.progress_deadline = DateTime() + self.deadline_tickets        
-
-        # notify workflow and index issue
-        if aq_base(container) is not aq_base(self):
-            wf = getToolByName(self, 'portal_workflow')
-            wf.notifyCreated(self)
-                                                
-    def manage_beforeDelete(self, item, container):
-        """ Hook for pre-deletion actions """
-        self.unindexObject()
 
     ######################################################################
     # Followups
