@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.11 2003/09/22 07:01:51 ajung Exp $
+$Id: issue_schema.py,v 1.12 2003/09/22 07:04:16 ajung Exp $
 """
 
 from OrderedSchema import OrderedSchema 
@@ -140,7 +140,6 @@ schema = OrderedSchema((
                 ),
     StringField('contact_company',
                 searchable=1,
-                required=1,
                 schemata='contact',
                 widget=StringWidget(label='Company',
                                     label_msgid='label_contact_company',
@@ -148,7 +147,6 @@ schema = OrderedSchema((
                 ),
     StringField('contact_position',
                 searchable=1,
-                required=1,
                 schemata='contact',
                 widget=StringWidget(label='Position',
                                     label_msgid='label_contact_position',
