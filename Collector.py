@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.151 2004/04/01 16:45:20 ajung Exp $
+$Id: Collector.py,v 1.152 2004/04/04 05:09:11 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -453,7 +453,14 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
     def view(self, REQUEST=None, RESPONSE=None):
         """ override 'view' """
-        return self.pcng_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
+
+        fieldset = REQUEST.get('fieldset', None)
+        if fieldset:
+            util.redirect(REQUEST.RESPONSE, 'pcng_base_edit',
+                          portal_status_message=REQUEST.get('portal_status_message', ''),
+                          fieldset=fieldset)
+        else:
+            return self.pcng_view(REQUEST=REQUEST, RESPONSE=RESPONSE)
 
     base_view = view
 
@@ -530,6 +537,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         """ return the number of issues """
         return len(self.objectIds(('PloneIssueNG',)))
     __len__ = getNumberIssues
+
+    def __nonzero__(self): return 1
 
     security.declareProtected(ManageCollector, 'resetNumberIssues')
     def resetNumberIssues(self, RESPONSE=None):
