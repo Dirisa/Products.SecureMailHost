@@ -1,0 +1,11 @@
+Q: Which Archetypes version is necessary to run PCNG?
+A: Archetypes 1.3 is mandatory. Lower version will not run
+
+Q: Which Plone version do I need to run PCNG?
+A: Plone 2.X is recommended. The skins of PCNG are designed to be used
+   with Plone 2.0. Future versions of PCNG will depend on PCNG V2 functionality
+   that is not available with Plone 1.X installations. Plone 1.0 compatiblity
+   was never a goal for PCNG and will never be a goal (means no support for
+   PCNG/Plone 1.X issues).
+
+
