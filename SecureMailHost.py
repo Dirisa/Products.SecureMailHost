@@ -1,6 +1,7 @@
 ##############################################################################
 #
-# Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
+# Copyright (c) 2001-2004 Zope Corporation and Contributors. All Rights Reserved.
+# Copyright (c) 2004 Christian Heimes and Contributors
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -15,7 +16,7 @@
 # 
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.8 2004/05/18 22:03:31 tiran Exp $
+$Id: SecureMailHost.py,v 1.9 2004/05/18 22:20:18 tiran Exp $
 """
 
 from config import BAD_HEADERS
