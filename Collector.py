@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Collector.py,v 1.35 2003/09/28 14:05:08 ajung Exp $
+$Id: Collector.py,v 1.36 2003/09/28 17:47:58 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -17,7 +17,7 @@ from Products.BTreeFolder2 import CMFBTreeFolder
 from Products.Archetypes.public import registerType
 from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+from Products.CMFCore.CMFCorePermissions import setDefaultRoles, ModifyPortalContent
 
 from Transcript import Transcript
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup, EditCollectorIssue
@@ -151,16 +151,16 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
     # Staff handling
     ######################################################################
 
-    security.declareProtected(ManageCollector, 'getSupporters')
+    security.declareProtected(CMFCorePermissions.View, 'getSupporters')
     def getSupporters(self): return self._supporters
 
-    security.declareProtected(ManageCollector, 'getManagers')
+    security.declareProtected(CMFCorePermissions.View, 'getManagers')
     def getManagers(self): return self._managers
 
-    security.declareProtected(ManageCollector, 'getReporters')
+    security.declareProtected(CMFCorePermissions.View, 'getReporters')
     def getReporters(self): return self._reporters
 
-    security.declareProtected(ManageCollector, 'getTrackerUsers')
+    security.declareProtected(CMFCorePermissions.View, 'getTrackerUsers')
     def getTrackerUsers(self, staff_only=0):   
         """ return a list of dicts where every item of the list
             represents a user and the dict contain the necessary
@@ -237,14 +237,11 @@ class PloneCollectorNG(OrderedBaseFolder, SchemaEditor):
         elif self.participation_mode == 'anyone':
             target_roles = target_roles + ('Authenticated', 'Anonymous')
 
-        # ATT: we need to fix the View permission as well!!!
-        self.manage_permission(AddCollectorIssue,
-                               roles=target_roles,
-                               acquire=0)
+        for p in (AddCollectorIssue, AddCollectorIssueFollowup, ModifyPortalContent):
+            self.manage_permission(p,
+                                   roles=target_roles,
+                                   acquire=0)
 
-        self.manage_permission(AddCollectorIssueFollowup,
-                               roles=target_roles,
-                               acquire=0)
 
     def _adjust_view_mode(self):
         """Set role privileges according to view mode."""
