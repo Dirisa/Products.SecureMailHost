@@ -5,10 +5,11 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: collector_schema.py,v 1.5 2003/09/12 16:12:57 ajung Exp $
+$Id: collector_schema.py,v 1.6 2003/09/13 11:37:39 ajung Exp $
 """
 
-from Products.Archetypes.public import Schema, DisplayList
+from OrderedSchema import OrderedSchema
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IntegerWidget
 from Products.Archetypes.public import RichWidget, IdWidget, StringWidget
@@ -31,7 +32,7 @@ VOC_EMAIL_NOTIFICATIONS = DisplayList((
 ))
 
 
-schema = Schema((
+schema = OrderedSchema((
 
     StringField('id',
                 required=1,

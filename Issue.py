@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: Issue.py,v 1.14 2003/09/11 10:43:22 ajung Exp $
+$Id: Issue.py,v 1.15 2003/09/13 11:37:39 ajung Exp $
 """
 
 import sys
@@ -13,16 +13,17 @@ import sys
 from AccessControl import  ClassSecurityInfo
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
-from Products.Archetypes.public import BaseFolder, registerType
+from Products.Archetypes.public import registerType
 
 from config import ManageCollector, AddCollectorIssue, AddCollectorIssueFollowup
 from config import IssueWorkflowName
 from Transcript import Transcript
 from References import Reference, ReferencesManager
 from WatchList import WatchList
+from OrderedSchema import OrderedBaseFolder
 import util
 
-class PloneIssueNG(BaseFolder, WatchList):
+class PloneIssueNG(OrderedBaseFolder, WatchList):
     """ PloneCollectorNG """
 
     actions = ({
@@ -57,7 +58,7 @@ class PloneIssueNG(BaseFolder, WatchList):
 
     def __init__(self, id, title, schema, **kw):
         self.schema = schema
-        BaseFolder.__init__(self, id, **kw)
+        OrderedBaseFolder.__init__(self, id, **kw)
         self.initializeArchetype()
         self.wl_init()
         self.id = id

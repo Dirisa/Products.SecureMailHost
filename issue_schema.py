@@ -5,14 +5,15 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 Published under the Zope Public License
 
-$Id: issue_schema.py,v 1.6 2003/09/12 16:12:57 ajung Exp $
+$Id: issue_schema.py,v 1.7 2003/09/13 11:37:39 ajung Exp $
 """
 
-from Products.Archetypes.public import Schema, DisplayList
+from OrderedSchema import OrderedSchema 
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField, TextField, IntegerField
 from Products.Archetypes.public import SelectionWidget, TextAreaWidget, IdWidget, StringWidget
 
-schema = Schema((
+schema = OrderedSchema((
     StringField('id',
                 required=1,
                 mode="rw",
