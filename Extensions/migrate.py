@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: migrate.py,v 1.7 2003/11/06 09:17:37 ajung Exp $
+$Id: migrate.py,v 1.8 2003/11/06 10:02:57 ajung Exp $
 """
 
 
@@ -262,6 +262,10 @@ def migrate_issue(issue, collector):
     P.set('progress_percent_done', issue.progress)
 
     new_issue.setParameters(P)
+
+    # Owner
+    new_owner = collector.acl_users.getUser(issue.getOwner().getUserName())
+    new_issue.changeOwnership(new_owner)
     
     # Migrate uploads
     ids = issue.objectIds()
