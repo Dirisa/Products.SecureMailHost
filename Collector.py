@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.87 2003/12/08 18:01:43 ajung Exp $
+$Id: Collector.py,v 1.88 2003/12/08 18:39:48 ajung Exp $
 """
 
 from Globals import InitializeClass
@@ -410,7 +410,8 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         RC = getToolByName(self, REFERENCE_CATALOG)
 
         for issue in self.objectValues('PloneIssueNG'):
-            RC.registerObject(issue)
+            if issue.UID() is None:
+                RC.registerObject(issue)
       
         util.redirect(RESPONSE, 'pcng_maintainance',
                           self.translate('uids_recreated', 'UIDs recreated'))
