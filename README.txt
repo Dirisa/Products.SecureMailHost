@@ -20,6 +20,18 @@ Requirements:
         - unzip/zipinfo: UnZip v5.50 by Info-ZIP (http://www.info-zip.org/) 
         - md5: md5deep v1.2 (http://md5deep.sourceforge.net/)
       See DEPENDENCIES.txt for more information.
+      
+    (optional) mxmCounter (http://www.mxm.dk/products/public/mxmCounter)
+     mxmCounter is a nice little hit counter, and I put hooks into PLFNG's 
+     showFile() to use mxmCounter if its installed.  Note: for this to 
+     work with mxmCounter (v1.1.0), you will need to modify/extend the 
+     mxmCounter class by adding the following method (I have contacted the
+     mxmCounter author to ask that this type of functionality be added to 
+     the baseline of mxmCounter):
+
+		def proxyObject_increase_count(self,url_path): 
+			return increase_count(url_path, self.save_interval)
+   
 
 Install:
 

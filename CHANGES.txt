@@ -1,6 +1,7 @@
 0.5 (unreleased)
 
   - added TextIndexNG2-based portal catalog indexing of PLFNG contents
+     - including configurable ability to specify file types NOT to index
 
   - added integrity checking for uploaded zip'd files
 
@@ -20,6 +21,9 @@
   - fixed URL backslash bug in __call__() causing grief for Mozilla browsers
   
   - added file delete capability
+  
+  - added optional support for file 'hit counting' via mxmCounter product
+
 
 0.4
 
