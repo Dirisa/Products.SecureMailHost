@@ -1,4 +1,17 @@
 PloneLocalFolderNG V 0.1
-(C) by Andreas Jung, D-72070 Tübingen
-Published under the Zope Public License ZPL
+
+    PloneLocalFolderNG is a Plone2-only to mount a local filesystem in
+    read-only mode as a folder into a Plone site.
+
+Requirements:
+
+    Archetypes 1.2
+
+Author:
+
+    (C) by Andreas Jung, D-72070 Tübingen, Germany
+
+License:
+
+    Published under the Zope Public License ZPL
 

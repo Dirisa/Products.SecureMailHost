@@ -29,6 +29,9 @@ class TypeInfo(SimpleItem):
     
     immediate_view = 'view'
 
+    def setMimeType(self, mt):
+        self.mime_type = mt
+
     security.declarePublic('getActionById')
     def getActionById(self, id, default=None):
         """ None """
@@ -37,7 +40,7 @@ class TypeInfo(SimpleItem):
     security.declarePublic('Title')
     def Title(self):
         """ None """
-        return 'blabla'
+        return self.mime_type
 
 
 
@@ -48,6 +51,13 @@ class FileProxy(FSObject):
     security = ClassSecurityInfo()
     meta_type = 'PloneLocalFolderFileProxy'
 
+    def setMimeType(self, mt):
+        self.mime_type = mt
+
+    def setIconPath(self, icon_path):
+        self.icon_path = icon_path
+
+
     security.declarePublic('title_or_id')
     def title_or_id(self):
         """ return title or id """
@@ -56,7 +66,9 @@ class FileProxy(FSObject):
     security.declarePublic('getTypeInfo')
     def getTypeInfo(self):
         """ return type info """
-        return TypeInfo(self.id)
+        TI = TypeInfo(self.id, self.mime_type)
+        TI.setMimeType(self.mime_type)
+        return TI
 
     def _readFile(self, *args, **kw):
         """ read the file """
@@ -64,7 +76,7 @@ class FileProxy(FSObject):
     security.declarePublic('getIcon')
     def getIcon(self, arg):
         """ icon """
-        return 'file_icon.gif'
+        return self.icon_path
 
 
     security.declarePublic('ModificationDate')
@@ -88,9 +100,9 @@ class PloneLocalFolderNG(BaseFolder):
     schema = schema
 
     actions = ({
-        'id': 'contents',
-        'name': 'Contents',
-        'action': 'string:${object_url}/folder_contents',
+        'id': 'view',
+        'name': 'View',
+        'action': 'string:${object_url}/plfng_view',
         'permissions': (View,)
         },)
 
@@ -99,11 +111,12 @@ class PloneLocalFolderNG(BaseFolder):
 
         l = []
         for f in os.listdir(self.folder):
-            print f
             P = FileProxy(f, os.path.join(self.folder, f), f)
+            mi = self.mimetypes_registry.classify(data=None, filename=f)
+            P.setMimeType(mi.normalized())
+            P.setIconPath(mi.icon_path)
             l.append(P) 
 
         return l
-        
 
 registerType(PloneLocalFolderNG, PROJECTNAME)
