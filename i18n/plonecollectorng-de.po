@@ -389,7 +389,7 @@ msgid "assigned"
 msgstr "zugewiesen an"
 
 msgid "submitted_by"
-msgstr "eingestellt von"
+msgstr "Eingestellt von"
 
 msgid "last_modified"
 msgstr "Letzte Änderung"
