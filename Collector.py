@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.188 2004/06/01 19:10:16 ajung Exp $
+$Id: Collector.py,v 1.189 2004/06/04 17:57:22 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -429,6 +429,7 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
         temp.manage_delObjects(pending)
         RESPONSE.redirect(issue.absolute_url() + '/pcng_base_edit')
 
+    createObject = redirect_create_object
 
     def move_temporary_issue(self, issue, new_id):
         """ Move a temporay issue from the temp folder """
