@@ -12,7 +12,9 @@ Bugs found when testing on plone.org
 - psc_releasefolder_view should only show published releases, you use the Roadmap
   to navigate to future releases. Or list upcoming releases in a separate section
   of the template - mixing released and unrelased items like it does now is not
-  optimal.
+  optimal. [The folder listing should *definitely* list the future releases;
+  it's completely unexpected behavior to not see them here. A separate section
+  is fine. - Joel]
 
 - psc_improvements_listing only shows completed items, it has to show items
   in all states, that's its job :)
@@ -84,7 +86,9 @@ Design/UI
 
 - Display of "recommended" in psc_project_view.pt and psc_releasefolder_view.pt.
     How does "recommended" work anyway? (Reviewers can flag something as a best-
-    of-breed product, but we need some guidelines for this first. ~limi)
+    of-breed product, but we need some guidelines for this first. ~limi. Absolutely
+    we need some guidelines here, or it's going to be a bloody political mess.
+    - Joel)
 
 - Correct platform icons for the download links.
 
