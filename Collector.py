@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.219 2004/10/09 16:08:50 ajung Exp $
+$Id: Collector.py,v 1.220 2004/10/09 16:33:44 ajung Exp $
 """
 
 import base64, time, random, md5, os, urllib
@@ -15,6 +15,7 @@ from BTrees.OOBTree import OOBTree
 from ZODB.POSException import ConflictError
 from AccessControl import  ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
+from Acquisition import ImplicitAcquisitionWrapper
 from Products.Archetypes.public import registerType
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.CMFCorePermissions import *
@@ -490,7 +491,7 @@ class PloneCollectorNG(BaseBTreeFolder, SchemaEditor, Translateable):
         """ return Topics instance """
         if not hasattr(self, '_topics'):
             self._topics = Topics()
-        return self._topics
+        return ImplicitAcquisitionWrapper(self._topics, self)
         
     ######################################################################
     # GroupUserFolder
