@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Collector.py,v 1.199 2004/07/22 19:55:05 ajung Exp $
+$Id: Collector.py,v 1.200 2004/07/25 17:11:11 ajung Exp $
 """
 
 import base64, time, random, md5, os
@@ -350,9 +350,10 @@ class PloneCollectorNG(Base, SchemaEditor, Translateable):
 
         target_roles = ('Supporter','TrackerAdmin','Reporter', 'Manager', 'Owner')
 
-        if self.view_mode == 'authenticated':
+        view_mode = self.getView_mode()
+        if view_mode == 'authenticated':
             target_roles += ('Authenticated', )
-        elif self.view_mode == 'anyone':
+        elif view_mode == 'anyone':
             target_roles += ('Authenticated', 'Anonymous')
 
         self.manage_permission(View, roles=target_roles, acquire=0)
