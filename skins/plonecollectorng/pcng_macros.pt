@@ -220,8 +220,8 @@
                     tal:repeat="item python: (
                           ('getId','Issue'),
                           ('creation_date','Date'),
-                          ('deadline','Deadline'),
-                          ('submitter_id','Submitter'),
+                          ('progress_deadline','Deadline'),
+                          ('Creator','Submitter'),
                           ('progress','Progress'),
                           ('classification','Classification'),
                           ('status','Status'),
