@@ -7,7 +7,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: Issue.py,v 1.115 2004/01/20 09:53:49 ajung Exp $
+$Id: Issue.py,v 1.116 2004/01/20 12:43:43 ajung Exp $
 """
 
 import sys, os, time
@@ -164,7 +164,9 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         self._transcript.addAction(action)
         self.notifyModified() # notify DublinCore
         self._last_action = action
-        notifications.notify(self)
+        # Notification is triggered by the workflow. Since comments do not trigger
+        # a workflow action we must trigger the notification on our own.
+        if action in ('comment',): notifications.notify(self)
         util.redirect(RESPONSE, 'pcng_issue_view', 
                       self.translate('followup_submitted', 'Followup submitted'))
 
@@ -355,6 +357,7 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
             to reindex the issue.
         """
         self.notifyModified() # notify DublinCore
+        self.send_notifications()
 
     def __len__(self):
         """ return the number of transcript events """
@@ -508,6 +511,10 @@ class PloneIssueNG(ParentManagedSchema, Base, WatchList, Translateable):
         """ return the workflow history """
         return self.workflow_history[IssueWorkflowName]
 
+    security.declareProtected(View, 'send_notifications')
+    def send_notifications(self):
+        """ send notifications (triggered by workflow) """
+        notifications.notify(self)
 
     ######################################################################
     # Override processForm() from Archetype.BaseObject
