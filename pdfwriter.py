@@ -5,7 +5,7 @@ PloneCollectorNG - A Plone-based bugtracking system
 
 License: see LICENSE.txt
 
-$Id: pdfwriter.py,v 1.23 2004/01/15 12:50:47 ajung Exp $
+$Id: pdfwriter.py,v 1.24 2004/01/15 12:57:29 ajung Exp $
 """
 
 import os, sys, cStringIO, tempfile
@@ -47,6 +47,8 @@ pdfmetrics.registerFont(TTFont('NFont', 'rina.ttf'))
 #addMapping('NFont', 1, 0, 'NFont')
 #addMapping('NFont', 1, 1, 'NFont')
 
+NORMAL_FONT = 'NFont'
+
 SITE_ENCODING = 'n/a'
 
 def utf8(text):
@@ -75,9 +77,9 @@ def myLaterPages(canvas, doc):
     canvas.setLineWidth(5)
     canvas.line(50,45,50,PAGE_HEIGHT-45)
     canvas.line(50,PAGE_HEIGHT-70, 555, PAGE_HEIGHT-70)
-    canvas.setFont('NFont',15)
+    canvas.setFont(NORMAL_FONT,15)
     canvas.drawString(inch, PAGE_HEIGHT-62, utf8(doc.collector_title))
-    canvas.setFont('NFont',11)
+    canvas.setFont(NORMAL_FONT,11)
     canvas.drawString(inch, 0.75 * inch, "Page %d" % doc.page)
     canvas.drawString(450, 0.75 * inch, doc.collector.toLocalizedTime(DateTime(), long_format=1))
     canvas.restoreState()
@@ -87,7 +89,7 @@ myFirstPage = myLaterPages
 Elements = []
 
 HeaderStyle = styles["Heading3"] 
-HeaderStyle.fontName = 'NFont'
+HeaderStyle.fontName = NORMAL_FONT
 HeaderStyle.spaceBefore = 3
 HeaderStyle.spaceAfter = 1
 
@@ -96,14 +98,14 @@ def header(txt, style=HeaderStyle, klass=Paragraph, sep=0.05):
     Elements.append(p)
 
 ParaStyle = styles["Normal"]
-ParaStyle.fontName = 'NFont'
+ParaStyle.fontName = NORMAL_FONT
 ParaStyle.leftIndent = 18
 
 def p(txt):
     return header(txt, style=ParaStyle, sep=0.0)
 
 PreStyle = styles["Code"]
-PreStyle.fontName = 'NFont'
+PreStyle.fontName = NORMAL_FONT
 
 def pre(txt):
     p = Preformatted(utf8(txt), PreStyle)
@@ -111,7 +113,7 @@ def pre(txt):
 
 DefStyle = styles["Definition"]
 DefStyle.leftIndent = 18
-DefStyle.fontName = 'NFont'
+DefStyle.fontName = NORMAL_FONT
 DefStyle.spaceBefore = 3
 DefStyle.spaceAfter = 1
 
