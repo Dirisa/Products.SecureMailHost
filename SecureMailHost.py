@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.22.2.1 2005/03/28 16:50:28 panjunyong Exp $
+$Id$
 """
 
 try:
@@ -234,8 +234,8 @@ class SecureMailBase(MailBase):
             # change the message
             msg = deepcopy(message)
             # XXX what about subtype and charset?
-            if subtype != 'plain' or charset != 'us-ascii':
-                raise MailHostError
+            # if subtype != 'plain' or charset != 'us-ascii':
+            #     raise MailHostError
         else:
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
@@ -279,7 +279,7 @@ class SecureMailBase(MailBase):
     def __SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isinstance(messageText, email.MIMEText.MIMEText):
+        if not isinstance(messageText, email.Message.Message):
             message = email.message_from_string(messageText)
         else:
             message = messageText
@@ -295,7 +295,7 @@ class SecureMailBase(MailBase):
     def __A_SYNC_send( self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isinstance(messageText, email.MIMEText.MIMEText):
+        if not isinstance(messageText, email.Message.Message):
             message = email.message_from_string(messageText)
         else:
             message = messageText

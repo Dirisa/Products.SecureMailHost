@@ -1,6 +1,12 @@
 SecureMailHost
 ==============
 
+2005-05-20
+-----------------
+  * Now secureSend can send any email.Message.Message based message.
+    This means we can send email with attachments.
+    [panjunyong]
+
 2005-03-28
 ----------------
 
