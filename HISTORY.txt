@@ -1,6 +1,13 @@
 SecureMailHost
 ==============
 
+2005-07-08
+----------------
+
+ * Fixed http://plone.org/collector/4173 and 4201 email adresses are
+   RFC 2822 compliant now.
+   [hannosch]
+
 1.0-rc1 - 2005-03-02
 --------------------
 

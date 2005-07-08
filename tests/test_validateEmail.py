@@ -17,11 +17,12 @@ class TestValidateEmail(ZopeTestCase.ZopeTestCase):
         # Any RFC 822 email address allowed, but address list must fail
         val = self.mailhost.validateSingleEmailAddress
         validInputs = (
-            #'user',
-            #'user@foo',
             'user@example.org',
             'user@host.example.org',
             'm@t.nu',
+            'm+m@example.biz',
+            'm.+m@example.info',
+            'foo&.%#$&\'*+-/=?^_`{}|~bar@baz.org'
 
             ## Some trickier ones, from RFC 822
             #'"A Name" user @ example',
@@ -29,6 +30,7 @@ class TestValidateEmail(ZopeTestCase.ZopeTestCase):
             #'nn@[1.2.3.4]'
         )
         invalidInputs = (
+            'user@foo', # rfc 822 requires the domain part
             'user@example.org, user2@example.org',   # only single address allowed
             'user@example.org,user2@example.org',
             #'user@example.org;user2@example.org',
@@ -59,11 +61,8 @@ class TestValidateEmail(ZopeTestCase.ZopeTestCase):
         val = self.mailhost.validateEmailAddresses
 
         validInputs = (
-            # 'user',
-            # 'user@example',
             'user@example.org',
-            #'user@example.org\n user2',
-            #'user@example.org\r user2',
+            'foo&.%#$&\'*+-/=?^_`{}|~bar@baz.org,\n foo&.%#$&\'*+-/=?^_`{}|~bar@baz.org',
             'user@example.org,\n user2@example.org',
             'user@example.org\n user2@example.org' # omitting comma is ok
         )

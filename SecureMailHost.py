@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """SMTP mail objects
-$Id: SecureMailHost.py,v 1.23 2005/03/02 21:26:45 tiran Exp $
+$Id$
 """
 
 from config import BAD_HEADERS
@@ -41,7 +41,7 @@ class SMTPError(Exception):
 
 from Products.SecureMailHost.mail import Mail
 
-EMAIL_RE = re.compile(r"^(\w&.+-]+!)*[\w&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
+EMAIL_RE = re.compile(r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
 
 # We need to encode usernames in email addresses.
