@@ -1,8 +1,11 @@
 SecureMailHost
 ==============
 
-2005-07-08
+1.0-rc2
 ----------------
+
+ * Made unit tests bin/zopectl test compatible
+   [tiran]
 
  * Fixed http://plone.org/collector/4173 and 4201 email adresses are
    RFC 2822 compliant now.

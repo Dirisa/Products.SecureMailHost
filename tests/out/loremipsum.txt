@@ -2,8 +2,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: to@example.org
-Subject: Lorem Ipsum
 From: from@example.org
+Subject: Lorem Ipsum
 Date: Thu, 01 Jan 1970 01:00:00 +0100
 Message-Id: <1>
 X-Mailer: Zope/SecureMailHost

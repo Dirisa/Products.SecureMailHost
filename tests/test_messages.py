@@ -13,17 +13,18 @@ from email.MIMEText import MIMEText
 import email.Message
 from Products.SecureMailHost import mail
 
+HERE = os.path.dirname(__file__)
 
-buergschaft_latin1_in = open('in/buergschaft.txt', 'rb').read()
+buergschaft_latin1_in = open(os.path.join(HERE, 'in', 'buergschaft.txt'), 'rb').read()
 buergschaft_utf8_in = unicode(buergschaft_latin1_in, 'latin-1').encode('utf-8')
-loremipsum_in = open('in/loremipsum.txt', 'rb').read()
+loremipsum_in = open(os.path.join(HERE, 'in', 'loremipsum.txt'), 'rb').read()
 buergschaft_latin1_msg = MIMEText(buergschaft_latin1_in, 'plain', 'latin-1')
 
 
-buergschaft_latin1_out = open('out/buergschaft_latin1.txt', 'rb').read()
-buergschaft_out = open('out/buergschaft.txt', 'rb').read()
-buergschaft_utf8_out = open('out/buergschaft_utf8.txt', 'rb').read()
-loremipsum_out = open('out/loremipsum.txt', 'rb').read()
+buergschaft_latin1_out = open(os.path.join(HERE, 'out', 'buergschaft_latin1.txt'), 'rb').read()
+buergschaft_out = open(os.path.join(HERE, 'out', 'buergschaft.txt'), 'rb').read()
+buergschaft_utf8_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8.txt'), 'rb').read()
+loremipsum_out = open(os.path.join(HERE, 'out', 'loremipsum.txt'), 'rb').read()
 
 
 class TestMessage(ZopeTestCase.ZopeTestCase):

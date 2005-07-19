@@ -2,8 +2,8 @@ Content-Type: text/plain; charset="utf8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
 To: to@example.org
-Subject: =?utf8?q?Die_Buergschaft?=
 From: from@example.org
+Subject: =?utf8?q?Die_Buergschaft?=
 Date: Thu, 01 Jan 1970 01:00:00 +0100
 Message-Id: <1>
 X-Mailer: Zope/SecureMailHost
