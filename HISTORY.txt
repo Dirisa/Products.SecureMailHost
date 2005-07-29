@@ -1,8 +1,12 @@
 SecureMailHost
 ==============
 
-1.0-rc2
+1.0.0 2005-07-29
 ----------------
+
+ * Fixed [ 1156733 ] Mails aren't sent to CC and BCC. Addresses in mcc and 
+   mbcc weren't added to the recipient list.
+   [tiran]
 
  * Made unit tests bin/zopectl test compatible
    [tiran]

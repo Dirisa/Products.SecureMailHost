@@ -17,6 +17,5 @@
 # X-Mailer header of email
 X_MAILER = 'Zope/SecureMailHost'
 
-# unallowed headers
+# headers not allowed in kwargs
 BAD_HEADERS = ()
-

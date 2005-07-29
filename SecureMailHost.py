@@ -25,6 +25,8 @@ import email.Message
 import email.Header
 import email.MIMEText
 import email
+from email.Utils import getaddresses
+from email.Utils import formataddr
 
 import re
 
@@ -66,14 +68,11 @@ def encodeHeaderAddress(address, charset):
     return address and \
       EMAIL_ADDRESSES_RE.sub(MailAddressTransformer(charset), address)
 
-#XXX Remove this when we don't depend on python2.1 any longer, use email.Utils.getaddresses instead
-from rfc822 import AddressList
-def _getaddresses(fieldvalues):
-    """Return a list of (REALNAME, EMAIL) for each fieldvalue."""
-    all = ', '.join(fieldvalues)
-    a = AddressList(all)
-    return a.addresslist
-
+def formataddresses(fieldvalues):
+    """Takes a list of (REALNAME, EMAIL) and returns one string
+    suitable for To or CC
+    """
+    return ', '.join([formataddr(pair) for pair in fieldvalues])
 
 manage_addMailHostForm=DTMLFile('www/addMailHost_form', globals())
 def manage_addMailHost( self, id, title='', smtp_host='localhost'
@@ -209,7 +208,7 @@ class SecureMailBase(MailBase):
         result = self.validateSingleEmailAddress(mfrom)
         if not result:
             raise MailHostError, 'Invalid email address: %s' % addr
-
+        
         # create message
         if isinstance(message, email.Message.Message):
             # got an email message. Make a deepcopy because we don't want to
@@ -235,9 +234,20 @@ class SecureMailBase(MailBase):
             if bad in kwargs:
                 raise MailHostError, 'Header %s is forbidden' % bad
         self.setHeaderOf(msg, **kwargs)
+        
+        # we have to pass *all* recipient email addresses to the
+        # send method because the smtp server doesn't add CC and BCC to
+        # the list of recipients
+        to = msg.get_all('to', [])
+        cc = msg.get_all('cc', [])
+        bcc = msg.get_all('bcc', [])
+        #resent_tos = msg.get_all('resent-to', [])
+        #resent_ccs = msg.get_all('resent-cc', [])
+        recipient_list = getaddresses(to + cc + bcc)
+        all_recipients = formataddresses(recipient_list)
 
         # finally send email
-        return self._send(mfrom, mto, msg, debug=debug)
+        return self._send(mfrom, all_recipients, msg, debug=debug)
 
     security.declarePrivate('setHeaderOf')
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
@@ -328,12 +338,12 @@ class SecureMailBase(MailBase):
             # Address contains two newlines (spammer attack using "address\n\nSpam message")
             return False
         
-        if len(_getaddresses([address])) != 1:
+        if len(getaddresses([address])) != 1:
             # none or more than one address
             return False
         
         # Validate the address
-        for name,addr in _getaddresses([address]):
+        for name,addr in getaddresses([address]):
             if not self.validateSingleNormalizedEmailAddress(addr):
                 return False
         return True
@@ -351,7 +361,7 @@ class SecureMailBase(MailBase):
             return False
         
         # Validate each address
-        for name,addr in _getaddresses([addresses]):
+        for name,addr in getaddresses([addresses]):
             if not self.validateSingleNormalizedEmailAddress(addr):
                 return False
         return True
