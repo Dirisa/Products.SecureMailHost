@@ -26,6 +26,10 @@ from random import randint
 from zLOG import LOG, INFO, PROBLEM
 from Products.MailHost.MailHost import MailHostError
 
+ssl_support = False
+if hasattr(socket, 'ssl'):
+    ssl_support = True
+
 class Mail:
     """A email object which knows how to send itself
     
@@ -97,7 +101,7 @@ class Mail:
             smtpserver.set_debuglevel(1)
         smtpserver.ehlo()
         # check for ssl encryption
-        if smtpserver.has_extn('starttls'):
+        if smtpserver.has_extn('starttls') and ssl_support:
             smtpserver.starttls()
             smtpserver.ehlo()
         elif forceTLS:
