@@ -31,6 +31,7 @@ import email.Message
 import email.Header
 import email.MIMEText
 import email
+from email.Utils import formataddr
 
 import re
 
@@ -62,27 +63,17 @@ if USE_ASNYC_MAILER:
 EMAIL_RE = re.compile(r"^(\w&.+-]+!)*[\w&.+-]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
 EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
 
-# We need to encode usernames in email addresses.
-# This is especially important for Chinese and other languanges.
-# Sample email addresses:
-# 
-# aaa<a@b.c>, "a,db"<a@b.c>, apn@zopechina.com, "ff s" <a@b.c>, asdf<a@zopechina.com>
-EMAIL_ADDRESSES_RE = re.compile(r'(".*?" *|[^,^"^>]+?)(<.*?>)')
-
-class MailAddressTransformer:
-    """ a transformer for substitution """
-    def __init__(self, charset):
-        self.charset = charset
-
-    def __call__(self, matchobj):
-        name = matchobj.group(1)
-        address = matchobj.group(2)
-        return str(email.Header.Header(name, self.charset)) + address
-
+# XXX rfc822 package seems to be deprecated
+from rfc822 import AddressList
 def encodeHeaderAddress(address, charset):
-    """ address ecoder """
-    return address and \
-      EMAIL_ADDRESSES_RE.sub(MailAddressTransformer(charset), address)
+    """ encode email address in header
+    
+    This is especially important for Chinese and other languanges that don't use ascii encodings.
+    """
+    addressList = AddressList(address)
+    addresses = [formataddr( (str(email.Header.Header(addr[0], charset)), addr[1])) 
+                     for addr in addressList]
+    return ', '.join(addresses)
 
 #XXX Remove this when we don't depend on python2.1 any longer, use email.Utils.getaddresses instead
 from rfc822 import AddressList
