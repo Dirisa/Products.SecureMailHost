@@ -1,6 +1,17 @@
 SecureMailHost
 ==============
 
+1.0.0 2005-07-29
+----------------
+
+ * Fixed [ 1156733 ] Mails aren't sent to CC and BCC. Addresses in mcc and
+   mbcc weren't added to the recipient list.
+   [tiran]
+
+ * Fixed http://plone.org/collector/4173 and 4201 email adresses are
+   RFC 2822 compliant now.
+   [hannosch]
+
 2005-05-20
 -----------------
   * Now secureSend can send any email.Message.Message based message.
