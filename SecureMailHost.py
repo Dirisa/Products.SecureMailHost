@@ -98,7 +98,7 @@ class SecureMailBase(MailBase):
     index_html=None
     security = ClassSecurityInfo()
 
-    def __init__( self, id, title='', smtp_host='localhost', smtp_port=25, smtp_userid='', smtp_pass='' ):
+    def __init__( self, id='', title='', smtp_host='localhost', smtp_port=25, smtp_userid='', smtp_pass='' ):
         """Initialize a new MailHost instance
         """
         self.id = id
