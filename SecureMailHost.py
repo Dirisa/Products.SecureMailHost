@@ -207,7 +207,7 @@ class SecureMailBase(MailBase):
                     raise MailHostError, 'Invalid email address: %s' % addr
         result = self.validateSingleEmailAddress(mfrom)
         if not result:
-            raise MailHostError, 'Invalid email address: %s' % addr
+            raise MailHostError, 'Invalid email address: %s' % mfrom
         
         # create message
         if isinstance(message, email.Message.Message):
