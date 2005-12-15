@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001-2004 Zope Corporation and Contributors. 
+# Copyright (c) 2001-2004 Zope Corporation and Contributors.
 # Copyright (c) 2004 Christian Heimes and Contributors.
 # All Rights Reserved.
 #
@@ -44,12 +44,13 @@ class SMTPError(Exception):
 from Products.SecureMailHost.mail import Mail
 
 EMAIL_RE = re.compile(r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
-EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]") # used to find double new line (in any variant)
+# used to find double new line (in any variant)
+EMAIL_CUTOFF_RE = re.compile(r".*[\n\r][\n\r]")
 
 # We need to encode usernames in email addresses.
 # This is especially important for Chinese and other languanges.
 # Sample email addresses:
-# 
+#
 # aaa<a@b.c>, "a,db"<a@b.c>, apn@zopechina.com, "ff s" <a@b.c>, asdf<a@zopechina.com>
 EMAIL_ADDRESSES_RE = re.compile(r'(".*?" *|[^,^"^>]+?)(<.*?>)')
 
@@ -64,7 +65,7 @@ class MailAddressTransformer:
         return str(email.Header.Header(name, self.charset)) + address
 
 def encodeHeaderAddress(address, charset):
-    """ address ecoder """
+    """ address encoder """
     return address and \
       EMAIL_ADDRESSES_RE.sub(MailAddressTransformer(charset), address)
 
@@ -74,14 +75,15 @@ def formataddresses(fieldvalues):
     """
     return ', '.join([formataddr(pair) for pair in fieldvalues])
 
-manage_addMailHostForm=DTMLFile('www/addMailHost_form', globals())
-def manage_addMailHost( self, id, title='', smtp_host='localhost'
-                      , smtp_port=25
-                      , smtp_userid=None, smtp_pass=None
-                      , REQUEST=None ):
-    ' add a MailHost into the system '
-    ob = SecureMailHost( id, title, smtp_host, smtp_port, smtp_userid, smtp_pass )
-    self._setObject( id, ob )
+manage_addMailHostForm = DTMLFile('www/addMailHost_form', globals())
+def manage_addMailHost(self, id, title='', smtp_host='localhost',
+                       smtp_port=25, smtp_userid=None,
+                       smtp_pass=None, REQUEST=None):
+    """Add a MailHost
+    """
+    ob = SecureMailHost(id, title, smtp_host, smtp_port,
+                        smtp_userid, smtp_pass)
+    self._setObject(id, ob)
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(self.absolute_url()+'/manage_main')
@@ -91,33 +93,34 @@ add = manage_addMailHost
 class SecureMailBase(MailBase):
     """A more secure mailhost with ESMTP features and header checking
     """
-
-    meta_type='Secure Mail Host'
-    manage=manage_main=DTMLFile('www/manageMailHost', globals())
+    meta_type = 'Secure Mail Host'
+    manage=manage_main = DTMLFile('www/manageMailHost', globals())
     manage_main._setName('manage_main')
-    index_html=None
+    index_html = None
     security = ClassSecurityInfo()
 
-    def __init__( self, id='', title='', smtp_host='localhost', smtp_port=25, smtp_userid='', smtp_pass='' ):
+    def __init__(self, id='', title='', smtp_host='localhost',
+                  smtp_port=25, smtp_userid='', smtp_pass=''):
         """Initialize a new MailHost instance
         """
         self.id = id
-        self.setConfiguration( title, smtp_host, smtp_port, smtp_userid, smtp_pass)
+        self.setConfiguration(title, smtp_host, smtp_port,
+                              smtp_userid, smtp_pass)
 
-    security.declareProtected( 'Change configuration', 'manage_makeChanges' )
-    def manage_makeChanges(self, title, smtp_host, smtp_port, smtp_userid, smtp_pass, REQUEST=None):
-        """make the changes
+    security.declareProtected('Change configuration', 'manage_makeChanges')
+    def manage_makeChanges(self, title, smtp_host, smtp_port,
+                           smtp_userid, smtp_pass, REQUEST=None):
+        """Make the changes
         """
-        self.setConfiguration(title, smtp_host, smtp_port, smtp_userid, smtp_pass)
+        self.setConfiguration(title, smtp_host, smtp_port,
+                              smtp_userid, smtp_pass)
         if REQUEST is not None:
             msg = 'MailHost %s updated' % self.id
-            return self.manage_main( self
-                                   , REQUEST
-                                   , manage_tabs_message=msg
-                                   )
+            return self.manage_main(self, REQUEST, manage_tabs_message=msg)
 
     security.declarePrivate('setConfiguration')
-    def setConfiguration(self, title, smtp_host, smtp_port, smtp_userid, smtp_pass):
+    def setConfiguration(self, title, smtp_host, smtp_port,
+                         smtp_userid, smtp_pass):
         """Set configuration
         """
         self.title = title
@@ -140,11 +143,11 @@ class SecureMailBase(MailBase):
     def sendTemplate(trueself, self, messageTemplate,
                      statusTemplate=None, mto=None, mfrom=None,
                      encode=None, REQUEST=None):
-        """render a mail template, then send it...
+        """Render a mail template, then send it...
         """
         #raise MailHostError, 'sendTemplate is disabled'
         if not hasattr(self,'_v_sendtemplate'):
-            LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
+            LOG('SecureMailHost', WARNING, 'Deprecation warning: '
                 'The usage of sendTemplate() in %s is deprecated. '
                 'Use secureSend instead!' % self.absolute_url(0))
             self._v_sendtemplate = 1
@@ -155,13 +158,13 @@ class SecureMailBase(MailBase):
                                      REQUEST=REQUEST)
 
     security.declareProtected( use_mailhost_services, 'send' )
-    def send(self, message, mto=None, mfrom=None, subject=None, 
+    def send(self, message, mto=None, mfrom=None, subject=None,
              encode=None):
         """Send email
         """
         #raise MailHostError, 'send is disabled'
         if not hasattr(self,'_v_send'):
-            LOG('SecureMailHost', WARNING, 'Deprecation warning: ' 
+            LOG('SecureMailHost', WARNING, 'Deprecation warning: '
                 'The usage of send() in %s is deprecated. '
                 'Use secureSend instead!' % self.absolute_url(0))
             self._v_send = 1
@@ -174,7 +177,7 @@ class SecureMailBase(MailBase):
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
                    debug=False, **kwargs):
         """A more secure way to send a message
-            
+
         message:
             The plain message text without any headers or an
             email.Message.Message based instance
@@ -208,7 +211,7 @@ class SecureMailBase(MailBase):
         result = self.validateSingleEmailAddress(mfrom)
         if not result:
             raise MailHostError, 'Invalid email address: %s' % mfrom
-        
+
         # create message
         if isinstance(message, email.Message.Message):
             # got an email message. Make a deepcopy because we don't want to
@@ -227,14 +230,14 @@ class SecureMailBase(MailBase):
 
         # set important headers
         self.setHeaderOf(msg, skipEmpty=True, From=mfrom, To=mto,
-                 Subject=str(email.Header.Header(subject, charset)), 
+                 Subject=str(email.Header.Header(subject, charset)),
                  Cc=mcc, Bcc=mbcc)
 
         for bad in BAD_HEADERS:
             if bad in kwargs:
                 raise MailHostError, 'Header %s is forbidden' % bad
         self.setHeaderOf(msg, **kwargs)
-        
+
         # we have to pass *all* recipient email addresses to the
         # send method because the smtp server doesn't add CC and BCC to
         # the list of recipients
@@ -252,7 +255,7 @@ class SecureMailBase(MailBase):
     security.declarePrivate('setHeaderOf')
     def setHeaderOf(self, msg, skipEmpty=False, **kwargs):
         """Set the headers of the email.Message based instance
-        
+
         All occurences of the key are deleted first!
         """
         for key, val in kwargs.items():
@@ -262,7 +265,7 @@ class SecureMailBase(MailBase):
             msg[key] = val
         return msg
 
-    def _send( self, mfrom, mto, messageText, debug=False):
+    def _send(self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
         if not isinstance(messageText, email.MIMEText.MIMEText):
@@ -281,7 +284,7 @@ class SecureMailBase(MailBase):
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):
         """Converts a list of emails to rfc822 conform data
-        
+
         Input:
             ('email', 'email', ...)
             or
@@ -300,7 +303,8 @@ class SecureMailBase(MailBase):
                 addresses.append(email.Utils.formataddr(('', addr)))
             else:
                 if size(addr) != 2:
-                    raise ValueError, "Wrong format: ('name', 'email') is required"
+                    raise ValueError(
+                        "Wrong format: ('name', 'email') is required")
                 addresses.append(email.Utils.formataddr(addr))
         # stage 3: return the addresses as comma seperated string
         return ', '.join(addresses)
@@ -310,7 +314,8 @@ class SecureMailBase(MailBase):
 
     security.declarePublic('validateSingleNormalizedEmailAddress')
     def validateSingleNormalizedEmailAddress(self, address):
-        """Lower-level function to validate a single normalized email address, see validateEmailAddress
+        """Lower-level function to validate a single normalized email
+        address, see validateEmailAddress
         """
         if type(address) is not StringType:
             return False
@@ -332,16 +337,17 @@ class SecureMailBase(MailBase):
         """
         if type(address) is not StringType:
             return False
-        
+
         sub = EMAIL_CUTOFF_RE.match(address);
         if sub != None:
-            # Address contains two newlines (spammer attack using "address\n\nSpam message")
+            # Address contains two newlines (spammer attack using
+            # "address\n\nSpam message")
             return False
-        
+
         if len(getaddresses([address])) != 1:
             # none or more than one address
             return False
-        
+
         # Validate the address
         for name,addr in getaddresses([address]):
             if not self.validateSingleNormalizedEmailAddress(addr):
@@ -350,16 +356,18 @@ class SecureMailBase(MailBase):
 
     security.declarePublic('validateEmailAddresses')
     def validateEmailAddresses(self, addresses):
-        """Validate a list of possibly several email addresses, see also validateSingleEmailAddress
+        """Validate a list of possibly several email addresses, see
+        also validateSingleEmailAddress
         """
         if type(addresses) is not StringType:
             return False
-        
+
         sub = EMAIL_CUTOFF_RE.match(addresses);
         if sub != None:
-            # Addresses contains two newlines (spammer attack using "To: list\n\nSpam message")
+            # Addresses contains two newlines (spammer attack using
+            # "To: list\n\nSpam message")
             return False
-        
+
         # Validate each address
         for name,addr in getaddresses([addresses]):
             if not self.validateSingleNormalizedEmailAddress(addr):

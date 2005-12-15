@@ -32,7 +32,7 @@ if hasattr(socket, 'ssl'):
 
 class Mail:
     """A email object which knows how to send itself
-    
+
     mfrom     - mail from tag (only for SMTP server)
     mto       - mail to tag (only for SMTP server)
     message   - The message email.Message.Message based object
@@ -41,7 +41,7 @@ class Mail:
     **kwargs  - additional keywords like userid, password and forceTLS
     """
 
-    def __init__(self, mfrom, mto, message, 
+    def __init__(self, mfrom, mto, message,
                  smtp_host='localhost', smtp_port=25,
                  **kwargs):
         self.mfrom = mfrom
@@ -58,24 +58,24 @@ class Mail:
             message['Message-Id'] = email.Utils.make_msgid(fqdn)
 
         self.message = message
-        
+
         self.host = smtp_host
         self.port = int(smtp_port)
 
         self.kwargs = kwargs
         self.errors = 0
         self.id = None
-        
+
     def setId(self, id):
         """Set the unique id of the email
         """
         self.id = id
-        
+
     def getId(self):
         """Get unique id
         """
         return self.id
-    
+
     def incError(self):
         """Increase the error counter
         """
@@ -92,9 +92,9 @@ class Mail:
         kw = self.kwargs
         userid   = kw.get('userid', None)
         password = kw.get('password', None)
-        forceTLS = kw.get('forctls', False)
+        forceTLS = kw.get('forcetls', False)
         message  = self.message.as_string()
-        
+
         # connect
         smtpserver = smtplib.SMTP(self.host, self.port)
         if debug:
@@ -105,32 +105,34 @@ class Mail:
             smtpserver.starttls()
             smtpserver.ehlo()
         elif forceTLS:
-            raise MailHostError, 'Host does NOT support StartTLS but it is required'
+            raise MailHostError('Host does NOT support StartTLS '
+                                'but it is required')
         # login
         if smtpserver.does_esmtp:
             if userid:
                 smtpserver.login(userid, password)
         elif userid:
             #indicate error here to prevent inadvertent use of spam relay
-            raise MailHostError, 'Host does NOT support ESMTP, but username/password provided'
-        # send and quiet
+            raise MailHostError('Host does NOT support ESMTP '
+                                'but username/password provided')
+        # send and quit
         smtpserver.sendmail(self.mfrom, self.mto, message)
         smtpserver.quit()
-        
+
     def __str__(self):
         return self.message.as_string()
-    
+
     def __repr__(self):
         return '<%s (%s) at %s>' % (
             self.__class__.__name__, self.info(),
             id(self))
-            
+
     def info(self):
         """Return status informations about the email
         """
-        return 'From: %(from)s, To: %(to)s, Subject: %(subject)s ' \
-             '(s:%(size)d, e:%(errors)d)' % {
-                'id' : self.getId(), 'errors' : self.errors,
-                'from' : self.message['From'], 'to' : self.message['To'],
-                'subject' : self.message['Subject'], 'size' : len(self.message)
-                }
+        return ('From: %(from)s, To: %(to)s, Subject: %(subject)s '
+                '(s:%(size)d, e:%(errors)d)' % {
+            'id' : self.getId(), 'errors' : self.errors,
+            'from' : self.message['From'], 'to' : self.message['To'],
+            'subject' : self.message['Subject'], 'size' : len(self.message)
+            })
