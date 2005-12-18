@@ -29,7 +29,8 @@ License:
     ZPL 2.1
 
 Downloads:
-    http://plone.org/products/smh
+    http://plone.org/products/securemailhost
 
 Bug collector:
-    http://sf.net/projects/collective/
+    https://trac.plone.org/plone under component Mail
+

@@ -3,7 +3,7 @@ Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 To: to@example.org
 From: from@example.org
-Subject: =?iso-8859-1?q?Die_B=FCrgschaft?=
+Subject: =?iso-8859-1?q?Die_Buergschaft?=
 Date: Thu, 01 Jan 1970 01:00:00 +0100
 Message-Id: <1>
 X-Mailer: Zope/SecureMailHost
