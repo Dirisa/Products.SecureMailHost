@@ -15,16 +15,15 @@ from Products.SecureMailHost import mail
 
 HERE = os.path.dirname(__file__)
 
-buergschaft_latin1_in = open(os.path.join(HERE, 'in', 'buergschaft.txt'), 'rb').read()
+buergschaft_latin1_in = open(os.path.join(HERE, 'in', 'buergschaft.txt'), 'r').read()
 buergschaft_utf8_in = unicode(buergschaft_latin1_in, 'latin-1').encode('utf-8')
-loremipsum_in = open(os.path.join(HERE, 'in', 'loremipsum.txt'), 'rb').read()
+loremipsum_in = open(os.path.join(HERE, 'in', 'loremipsum.txt'), 'r').read()
 buergschaft_latin1_msg = MIMEText(buergschaft_latin1_in, 'plain', 'latin-1')
 
-
-buergschaft_latin1_out = open(os.path.join(HERE, 'out', 'buergschaft_latin1.txt'), 'rb').read()
-buergschaft_out = open(os.path.join(HERE, 'out', 'buergschaft.txt'), 'rb').read()
-buergschaft_utf8_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8.txt'), 'rb').read()
-loremipsum_out = open(os.path.join(HERE, 'out', 'loremipsum.txt'), 'rb').read()
+buergschaft_latin1_out = open(os.path.join(HERE, 'out', 'buergschaft_latin1.txt'), 'r').read()
+buergschaft_out = open(os.path.join(HERE, 'out', 'buergschaft.txt'), 'r').read()
+buergschaft_utf8_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8.txt'), 'r').read()
+loremipsum_out = open(os.path.join(HERE, 'out', 'loremipsum.txt'), 'r').read()
 
 
 class TestMessage(ZopeTestCase.ZopeTestCase):
@@ -67,17 +66,6 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
 
         msgstr = msg.as_string()
 
-##        # compare each char
-##        for i, m in enumerate(msgstr):
-##            if len(self.out) < i:
-##                self.fail('output has less chars')
-##            o = self.out[i]
-##            self.failUnlessEqual(m, o, "%s != %s at %s (%s/%s)" % (m, o, i,
-##                                 msgstr[i-10:i+10], self.out[i-10:i+10]))
-##        
-##        # test for amount of chars
-##        self.failUnlessEqual(len(msgstr), len(self.out))
-
         # compare line by line
         outlines = self.out.split('\n')
         for i, m in enumerate(msgstr.split('\n')):
@@ -96,7 +84,7 @@ class TestBuergschaftLatin1(TestMessage):
     message = buergschaft_latin1_in
     out     = buergschaft_latin1_out
 
-    subject = 'Die Bürgschaft'
+    subject = 'Die Buergschaft'
     charset = 'latin-1'
     subtype = 'plain'
 
