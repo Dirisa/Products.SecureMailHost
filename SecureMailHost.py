@@ -247,7 +247,7 @@ class SecureMailBase(MailBase):
         #resent_tos = msg.get_all('resent-to', [])
         #resent_ccs = msg.get_all('resent-cc', [])
         recipient_list = getaddresses(to + cc + bcc)
-        all_recipients = formataddresses(recipient_list)
+        all_recipients = [formataddr(pair) for pair in recipient_list]
 
         # finally send email
         return self._send(mfrom, all_recipients, msg, debug=debug)
