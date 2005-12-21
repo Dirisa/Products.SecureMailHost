@@ -4,7 +4,10 @@ Changelog for SecureMailHost
 
 SecureMailHost 1.0.3 - Unreleased
 
-    -
+    - Fixed list->string conversion for recipients list,
+      it's now possible to have multiple addressees in
+      to, cc and bcc headers
+      [jenner]
 
 SecureMailHost 1.0.2 - Released December 18, 2005
 
