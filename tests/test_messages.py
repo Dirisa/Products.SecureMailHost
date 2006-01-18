@@ -60,7 +60,7 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
         self.failUnless(isinstance(result, mail.Mail), 'Result is not a mail.Mail instance')
 
         mfrom, mto, msg = result.mfrom, result.mto, result.message
-        self.failUnlessEqual(self.mto, mto)
+        self.failUnlessEqual([self.mto], mto)
         self.failUnlessEqual(self.mfrom, mfrom)
         self.failUnless(isinstance(msg, email.Message.Message), 'message is not a email.Message.Message instance')
 

@@ -36,7 +36,7 @@ class TestHeaderParsing(ZopeTestCase.ZopeTestCase):
         self.failUnless(isinstance(result, mail.Mail),
                         'Result is not a mail.Mail instance')
         
-        eto = result.mto
+        eto = ",".join(result.mto)
         msg = result.message
         
         for addr in mto, mbcc, mcc:
