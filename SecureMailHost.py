@@ -34,7 +34,6 @@ from Globals import Persistent, DTMLFile, InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, \
                                       use_mailhost_services
-from DateTime import DateTime
 from zLOG import LOG, WARNING
 
 from Products.MailHost.MailHost import MailHostError, MailBase
