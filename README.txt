@@ -23,7 +23,7 @@ and usability enhancements:
     Spam Assassin.
 
 Author:
-    Christian Heimes <ch@comlounge.net>
+    Christian Heimes <tiran@cheimes.de>
 
 License:
     ZPL 2.1
