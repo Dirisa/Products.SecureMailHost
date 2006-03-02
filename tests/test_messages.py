@@ -23,6 +23,7 @@ buergschaft_latin1_msg = MIMEText(buergschaft_latin1_in, 'plain', 'latin-1')
 buergschaft_latin1_out = open(os.path.join(HERE, 'out', 'buergschaft_latin1.txt'), 'r').read()
 buergschaft_out = open(os.path.join(HERE, 'out', 'buergschaft.txt'), 'r').read()
 buergschaft_utf8_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8.txt'), 'r').read()
+buergschaft_utf8_to_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8_to.txt'), 'r').read()
 loremipsum_out = open(os.path.join(HERE, 'out', 'loremipsum.txt'), 'r').read()
 
 
@@ -38,6 +39,7 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
     out     = ''
     mfrom   = 'from@example.org'
     mto     = 'to@example.org'
+    mto_out = 'to@example.org'
     mcc     = None
     mbcc    = None
     addHeaders = {'Message-Id' : '<1>' }
@@ -60,7 +62,7 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
         self.failUnless(isinstance(result, mail.Mail), 'Result is not a mail.Mail instance')
 
         mfrom, mto, msg = result.mfrom, result.mto, result.message
-        self.failUnlessEqual([self.mto], mto)
+        self.failUnlessEqual([self.mto_out], mto)
         self.failUnlessEqual(self.mfrom, mfrom)
         self.failUnless(isinstance(msg, email.Message.Message), 'message is not a email.Message.Message instance')
 
@@ -123,6 +125,17 @@ class TestLoremIpsum(TestMessage):
 
 tests.append(TestLoremIpsum)
 
+class TestMimeTextAndNonAsciiHeaders(TestMessage):
+    name    = 'mimetext_and_nonascii_headers'
+    message = buergschaft_latin1_msg
+    out     = buergschaft_utf8_to_out
+
+    subject = u'Die B\u00fcrgschaft' 
+    mto     = u'G\u00fcnter Schiller <gunter@example.org>'.encode('utf-8')
+    mto_out = '=?utf-8?q?G=C3=BCnter_Schiller_?= <gunter@example.org>'
+    charset = 'utf-8'
+
+tests.append(TestMimeTextAndNonAsciiHeaders)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
