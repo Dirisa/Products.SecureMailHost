@@ -9,6 +9,11 @@ SecureMailHost 1.0.3 - Unreleased
       to, cc and bcc headers
       [jenner]
 
+    - Fixed handling of non-ascii recipients when a email.Message.Message class
+      is handed to secureSend; charset can now be set to the correct encoding
+      without raising an error.
+      [mj]
+
 SecureMailHost 1.0.2 - Released December 18, 2005
 
     - Fixed tests and update documentation.
