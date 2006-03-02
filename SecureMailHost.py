@@ -299,7 +299,7 @@ class SecureMailBase(MailBase):
             if type(addr) is StringType:
                 addresses.append(email.Utils.formataddr(('', addr)))
             else:
-                if size(addr) != 2:
+                if len(addr) != 2:
                     raise ValueError(
                         "Wrong format: ('name', 'email') is required")
                 addresses.append(email.Utils.formataddr(addr))
