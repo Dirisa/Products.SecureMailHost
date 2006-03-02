@@ -191,9 +191,10 @@ class SecureMailBase(MailBase):
         mbcc:
             Bcc: (blind carbon copy) field (string or list)
         subtype:
-            Content subtype of the email e.g. 'plain' for text/plain
+            Content subtype of the email e.g. 'plain' for text/plain (ignored
+            if message is a email.Message.Message instance)
         charset:
-            Charset used for the email
+            Charset used for the email, subject and email addresses
         kwargs:
             Additional headers
         """
@@ -216,9 +217,6 @@ class SecureMailBase(MailBase):
             # got an email message. Make a deepcopy because we don't want to
             # change the message
             msg = deepcopy(message)
-            # XXX what about subtype and charset?
-            if subtype != 'plain' or charset != 'us-ascii':
-                raise MailHostError
         else:
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
