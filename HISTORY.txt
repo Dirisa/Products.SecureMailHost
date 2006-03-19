@@ -2,6 +2,10 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost 1.0.4 - Unreleased
+
+    -
+
 SecureMailHost 1.0.3 - Released March 19, 2006
 
     - Fixed list->string conversion for recipients list, it's now possible to
