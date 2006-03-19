@@ -32,5 +32,5 @@ Downloads:
     http://plone.org/products/securemailhost
 
 Bug collector:
-    https://trac.plone.org/plone under component Mail
+    https://dev.plone.org/plone under component Mail
 
