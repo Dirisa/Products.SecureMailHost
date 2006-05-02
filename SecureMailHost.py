@@ -17,8 +17,6 @@ $Id$
 """
 
 from config import BAD_HEADERS
-
-from types import StringType, TupleType, ListType
 from copy import deepcopy
 
 import email.Message
@@ -29,18 +27,17 @@ from email.Utils import getaddresses
 from email.Utils import formataddr
 
 import re
+from types import StringType, TupleType, ListType
 
-from Globals import Persistent, DTMLFile, InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, \
                                       use_mailhost_services
-from zLOG import LOG, WARNING
-
+from Globals import Persistent, DTMLFile, InitializeClass
 from Products.MailHost.MailHost import MailHostError, MailBase
+from Products.SecureMailHost.mail import Mail
+
 class SMTPError(Exception):
     pass
-
-from Products.SecureMailHost.mail import Mail
 
 EMAIL_RE = re.compile(r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$", re.IGNORECASE)
 # used to find double new line (in any variant)
@@ -138,36 +135,22 @@ class SecureMailBase(MailBase):
             self._smtp_pass = None
             self.smtp_pass = None
 
-    security.declareProtected( use_mailhost_services, 'sendTemplate' )
+    security.declareProtected(use_mailhost_services, 'sendTemplate')
     def sendTemplate(trueself, self, messageTemplate,
                      statusTemplate=None, mto=None, mfrom=None,
                      encode=None, REQUEST=None):
         """Render a mail template, then send it...
         """
-        #raise MailHostError, 'sendTemplate is disabled'
-        if not hasattr(self,'_v_sendtemplate'):
-            LOG('SecureMailHost', WARNING, 'Deprecation warning: '
-                'The usage of sendTemplate() in %s is deprecated. '
-                'Use secureSend instead!' % self.absolute_url(0))
-            self._v_sendtemplate = 1
-
         return MailBase.sendTemplate(trueself, self, messageTemplate,
                                      statusTemplate=statusTemplate, mto=mto,
                                      mfrom=mfrom,  encode=encode,
                                      REQUEST=REQUEST)
 
-    security.declareProtected( use_mailhost_services, 'send' )
+    security.declareProtected(use_mailhost_services, 'send')
     def send(self, message, mto=None, mfrom=None, subject=None,
              encode=None):
         """Send email
         """
-        #raise MailHostError, 'send is disabled'
-        if not hasattr(self,'_v_send'):
-            LOG('SecureMailHost', WARNING, 'Deprecation warning: '
-                'The usage of send() in %s is deprecated. '
-                'Use secureSend instead!' % self.absolute_url(0))
-            self._v_send = 1
-
         return MailBase.send(self, message, mto=mto, mfrom=mfrom,
                              subject=subject, encode=encode)
 
