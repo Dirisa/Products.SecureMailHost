@@ -4,6 +4,10 @@ Changelog for SecureMailHost
 
 SecureMailHost 1.0.4 - Unreleased
 
+    - For mail servers that refuse the EHLO command we try HELO instead now.
+      This closes http://dev.plone.org/plone/ticket/4924.
+      [hannosch]
+
     - Undeprecated the send and sendTemplate methods. These are part of the
       generic MailHost API and you are allowed to use them. Note that they do
       not provide all the features of SecureMailHost right now.
