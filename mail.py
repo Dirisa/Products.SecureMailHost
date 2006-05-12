@@ -103,8 +103,8 @@ class Mail:
         # Try EHLO first, then HELO.
         if not (200 <= smtpserver.ehlo()[0] <= 299):
             (code, resp) = smtpserver.helo()
-        if not (200 <= code <= 299):
-            raise MailHostError('Host refused to talk to us: %s' % resp)
+            if not (200 <= code <= 299):
+                raise MailHostError('Host refused to talk to us: %s' % resp)
 
         # check for ssl encryption
         if smtpserver.has_extn('starttls') and ssl_support:
