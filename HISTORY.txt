@@ -2,7 +2,7 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
-SecureMailHost 1.0.4 - Unreleased
+SecureMailHost 1.0.4 - Released May 15, 2006
 
     - For mail servers that refuse the EHLO command we try HELO instead now.
       This closes http://dev.plone.org/plone/ticket/4924.
