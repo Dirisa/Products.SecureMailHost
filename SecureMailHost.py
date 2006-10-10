@@ -248,7 +248,7 @@ class SecureMailBase(MailBase):
     def _send(self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isinstance(messageText, email.MIMEText.MIMEText):
+        if not isinstance(messageText, email.Message.Message):
             message = email.message_from_string(messageText)
         else:
             message = messageText
