@@ -23,7 +23,6 @@ import socket
 from DateTime import DateTime
 from random import randint
 
-from zLOG import LOG, INFO, PROBLEM
 from Products.MailHost.MailHost import MailHostError
 
 ssl_support = False
