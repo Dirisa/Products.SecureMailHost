@@ -2,6 +2,12 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost - Unreleased
+
+    - Added a property noTLS to disable SSL. This closes
+      http://dev.plone.org/plone/ticket/5342.
+      [fenestro, hannosch]
+
 SecureMailHost 1.0.4 - Released May 15, 2006
 
     - For mail servers that refuse the EHLO command we try HELO instead now.

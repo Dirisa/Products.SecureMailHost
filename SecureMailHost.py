@@ -74,11 +74,11 @@ def formataddresses(fieldvalues):
 manage_addMailHostForm = DTMLFile('www/addMailHost_form', globals())
 def manage_addMailHost(self, id, title='', smtp_host='localhost',
                        smtp_port=25, smtp_userid=None,
-                       smtp_pass=None, REQUEST=None):
+                       smtp_pass=None, smtp_notls=None, REQUEST=None):
     """Add a MailHost
     """
     ob = SecureMailHost(id, title, smtp_host, smtp_port,
-                        smtp_userid, smtp_pass)
+                        smtp_userid, smtp_pass, smtp_notls)
     self._setObject(id, ob)
 
     if REQUEST is not None:
@@ -96,27 +96,28 @@ class SecureMailBase(MailBase):
     security = ClassSecurityInfo()
 
     def __init__(self, id='', title='', smtp_host='localhost',
-                  smtp_port=25, smtp_userid='', smtp_pass=''):
+                  smtp_port=25, smtp_userid='', smtp_pass='', smtp_notls=False):
         """Initialize a new MailHost instance
         """
         self.id = id
         self.setConfiguration(title, smtp_host, smtp_port,
-                              smtp_userid, smtp_pass)
+                              smtp_userid, smtp_pass, smtp_notls)
 
     security.declareProtected('Change configuration', 'manage_makeChanges')
     def manage_makeChanges(self, title, smtp_host, smtp_port,
-                           smtp_userid, smtp_pass, REQUEST=None):
+                           smtp_userid, smtp_pass, smtp_notls=None,
+                           REQUEST=None):
         """Make the changes
         """
         self.setConfiguration(title, smtp_host, smtp_port,
-                              smtp_userid, smtp_pass)
+                              smtp_userid, smtp_pass, smtp_notls)
         if REQUEST is not None:
             msg = 'MailHost %s updated' % self.id
             return self.manage_main(self, REQUEST, manage_tabs_message=msg)
 
     security.declarePrivate('setConfiguration')
     def setConfiguration(self, title, smtp_host, smtp_port,
-                         smtp_userid, smtp_pass):
+                         smtp_userid, smtp_pass, smtp_notls):
         """Set configuration
         """
         self.title = title
@@ -134,6 +135,10 @@ class SecureMailBase(MailBase):
         else:
             self._smtp_pass = None
             self.smtp_pass = None
+        if smtp_notls is not None:
+            self.smtp_notls = smtp_notls
+        else:
+            self.smtp_notls = False
 
     security.declareProtected(use_mailhost_services, 'sendTemplate')
     def sendTemplate(trueself, self, messageTemplate,
@@ -252,9 +257,10 @@ class SecureMailBase(MailBase):
             message = email.message_from_string(messageText)
         else:
             message = messageText
+        smtp_notls = getattr(self, 'smtp_notls', False)
         mail = Mail(mfrom, mto, message, smtp_host=self.smtp_host,
                     smtp_port=self.smtp_port, userid=self._smtp_userid,
-                    password=self._smtp_pass
+                    password=self._smtp_pass, notls=smtp_notls
                    )
         if debug:
             return mail

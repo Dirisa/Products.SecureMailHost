@@ -80,6 +80,20 @@
   </tr>
   <tr>
     <td align="left" valign="top">
+    <div class="form-optional">
+    Disable TLS
+    </div>
+    </td>
+    <td align="left" valign="top">
+    <dtml-if smtp_notls>
+     <input type="checkbox" name="smtp_notls" checked="checked"/>
+    <dtml-else>
+     <input type="checkbox" name="smtp_notls"/>
+    </dtml-if>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">
     </td>
     <td align="left" valign="top">
     <div class="form-element">

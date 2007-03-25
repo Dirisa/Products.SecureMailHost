@@ -92,6 +92,7 @@ class Mail:
         userid   = kw.get('userid', None)
         password = kw.get('password', None)
         forceTLS = kw.get('forcetls', False)
+        noTLS    = kw.get('notls', False)
         message  = self.message.as_string()
 
         # connect
@@ -106,12 +107,16 @@ class Mail:
                 raise MailHostError('Host refused to talk to us: %s' % resp)
 
         # check for ssl encryption
-        if smtpserver.has_extn('starttls') and ssl_support:
+        if smtpserver.has_extn('starttls') and ssl_support and not(noTLS):
             smtpserver.starttls()
             smtpserver.ehlo()
         elif forceTLS:
-            raise MailHostError('Host does NOT support StartTLS '
-                                'but it is required')
+            if noTLS:
+                raise MailHostError('Configured not to try TLS '
+                    'but it is required')
+            else:
+                raise MailHostError('Host does NOT support StartTLS '
+                    'but it is required')
         # login
         if smtpserver.does_esmtp:
             if userid:
