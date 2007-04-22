@@ -2,7 +2,7 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
-SecureMailHost - Unreleased
+SecureMailHost 1.0.5 - Released April 22, 2007
 
     - Added a property noTLS to disable SSL. This closes
       http://dev.plone.org/plone/ticket/5342.

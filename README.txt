@@ -33,4 +33,3 @@ Downloads:
 
 Bug collector:
     https://dev.plone.org/plone under component Mail
-
