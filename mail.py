@@ -96,6 +96,9 @@ class Mail:
         message  = self.message.as_string()
 
         # connect
+        if not self.host:
+            raise MailHostError('No mailserver has been configured')
+
         smtpserver = smtplib.SMTP(self.host, self.port)
         if debug:
             smtpserver.set_debuglevel(1)

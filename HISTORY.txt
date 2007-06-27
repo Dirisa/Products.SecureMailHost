@@ -2,6 +2,12 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost 1.0.6 - Unreleased
+
+    - Raise an exception if someone tries to send mail without specifying a
+      proper SMTP server.
+      [wichert]
+
 SecureMailHost 1.0.5 - Released April 22, 2007
 
     - Added a property noTLS to disable SSL. This closes
