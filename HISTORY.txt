@@ -4,6 +4,10 @@ Changelog for SecureMailHost
 
 SecureMailHost 1.0.6 - Unreleased
 
+    - Made secureSend method handle message text passed in as Unicode. We
+      encode it in the given charset now.
+      [hannosch]
+
     - Raise an exception if someone tries to send mail without specifying a
       proper SMTP server.
       [wichert]

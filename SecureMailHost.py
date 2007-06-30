@@ -27,11 +27,10 @@ from email.Utils import getaddresses
 from email.Utils import formataddr
 
 import re
-from types import StringType, TupleType, ListType
+from types import StringType, TupleType, ListType, UnicodeType
 
 from AccessControl import ClassSecurityInfo
-from AccessControl.Permissions import view_management_screens, \
-                                      use_mailhost_services
+from AccessControl.Permissions import use_mailhost_services
 from Globals import Persistent, DTMLFile, InitializeClass
 from Products.MailHost.MailHost import MailHostError, MailBase
 from Products.SecureMailHost.mail import Mail
@@ -206,6 +205,8 @@ class SecureMailBase(MailBase):
             # change the message
             msg = deepcopy(message)
         else:
+            if type(message) is UnicodeType:
+                message = message.encode(charset)
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
         mfrom = encodeHeaderAddress(mfrom, charset)
