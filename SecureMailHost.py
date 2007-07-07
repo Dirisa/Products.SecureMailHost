@@ -278,7 +278,7 @@ class SecureMailBase(MailBase):
             or mixed
         """
         # stage 1: test for type
-        if isinstance(addr_list, tuple) or isinstance(addr_list, list):
+        if isinstance(addr_list, (list, tuple)):
             # a string is supposed to be a valid list of email addresses
             # or None
             return addr_list
