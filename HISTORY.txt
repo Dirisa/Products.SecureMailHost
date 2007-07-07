@@ -2,7 +2,7 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
-SecureMailHost 1.0.6 - Unreleased
+SecureMailHost 1.1 - Unreleased
 
     - Use isinstance to check for types and update code to handle unicode
       email addresses.
