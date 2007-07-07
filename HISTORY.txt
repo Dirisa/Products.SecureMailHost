@@ -4,6 +4,10 @@ Changelog for SecureMailHost
 
 SecureMailHost 1.0.6 - Unreleased
 
+    - Use isinstance to check for types and update code to handle unicode
+      email addresses.
+      [wichert]
+
     - Made secureSend method handle message text passed in as Unicode. We
       encode it in the given charset now.
       [hannosch]

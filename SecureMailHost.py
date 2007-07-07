@@ -27,7 +27,6 @@ from email.Utils import getaddresses
 from email.Utils import formataddr
 
 import re
-from types import StringType, TupleType, ListType, UnicodeType
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import use_mailhost_services
@@ -205,7 +204,7 @@ class SecureMailBase(MailBase):
             # change the message
             msg = deepcopy(message)
         else:
-            if type(message) is UnicodeType:
+            if isinstance(message, unicode):
                 message = message.encode(charset)
             msg = email.MIMEText.MIMEText(message, subtype, charset)
 
@@ -279,14 +278,14 @@ class SecureMailBase(MailBase):
             or mixed
         """
         # stage 1: test for type
-        if type(addr_list) not in (TupleType, ListType):
+        if isinstance(addr_list, tuple) or isinstance(addr_list, list):
             # a string is supposed to be a valid list of email addresses
             # or None
             return addr_list
         # stage 2: get a list of address strings using email.formataddr
         addresses = []
         for addr in addr_list:
-            if type(addr) is StringType:
+            if isinstance(addr, basestring):
                 addresses.append(email.Utils.formataddr(('', addr)))
             else:
                 if len(addr) != 2:
@@ -304,7 +303,7 @@ class SecureMailBase(MailBase):
         """Lower-level function to validate a single normalized email
         address, see validateEmailAddress
         """
-        if type(address) is not StringType:
+        if not isinstance(address, basestring):
             return False
 
         sub = EMAIL_CUTOFF_RE.match(address);
@@ -322,7 +321,7 @@ class SecureMailBase(MailBase):
     def validateSingleEmailAddress(self, address):
         """Validate a single email address, see also validateEmailAddresses
         """
-        if type(address) is not StringType:
+        if not isinstance(address, basestring):
             return False
 
         sub = EMAIL_CUTOFF_RE.match(address);
@@ -346,7 +345,7 @@ class SecureMailBase(MailBase):
         """Validate a list of possibly several email addresses, see
         also validateSingleEmailAddress
         """
-        if type(addresses) is not StringType:
+        if isinstance(addresses, basestring):
             return False
 
         sub = EMAIL_CUTOFF_RE.match(addresses);
