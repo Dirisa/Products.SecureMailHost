@@ -278,7 +278,7 @@ class SecureMailBase(MailBase):
             or mixed
         """
         # stage 1: test for type
-        if isinstance(addr_list, (list, tuple)):
+        if not isinstance(addr_list, (list, tuple)):
             # a string is supposed to be a valid list of email addresses
             # or None
             return addr_list
@@ -345,7 +345,7 @@ class SecureMailBase(MailBase):
         """Validate a list of possibly several email addresses, see
         also validateSingleEmailAddress
         """
-        if isinstance(addresses, basestring):
+        if not isinstance(addresses, basestring):
             return False
 
         sub = EMAIL_CUTOFF_RE.match(addresses);
