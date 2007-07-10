@@ -2,11 +2,11 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
-SecureMailHost 1.1 - Unreleased
+SecureMailHost 1.1 - Released July 10, 2007
 
     - Use isinstance to check for types and update code to handle unicode
       email addresses.
-      [wichert]
+      [wichert, optilude, hannosch]
 
     - Made secureSend method handle message text passed in as Unicode. We
       encode it in the given charset now.
