@@ -2,6 +2,11 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost 1.1.1 - Released August 23, 2007
+
+    - First release as a package.
+      [hannosch]
+
 SecureMailHost 1.1 - Released July 10, 2007
 
     - Use isinstance to check for types and update code to handle unicode
