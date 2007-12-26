@@ -71,9 +71,6 @@ class SecureMailBase(MailBase):
     """A more secure mailhost with ESMTP features and header checking
     """
     meta_type = 'Secure Mail Host'
-    manage=manage_main = DTMLFile('www/manageMailHost', globals())
-    manage_main._setName('manage_main')
-    index_html = None
     security = ClassSecurityInfo()
 
     # BBB for old names, prefer the names from MailHost
@@ -101,58 +98,6 @@ class SecureMailBase(MailBase):
         self.force_tls = not value
 
     smtp_notls = property(get_smtp_notls, set_smtp_notls)
-
-    def __init__(self, id='', title='', smtp_host='localhost', smtp_port=25,
-                 force_tls=None, smtp_uid=None, smtp_pwd=None,
-                 smtp_queue=False, smtp_queue_directory='/tmp',
-                 smtp_userid='', smtp_pass='', smtp_notls=False):
-        """Initialize a new MailHost instance """
-        # BBB for old names, prefer the names from MailHost
-        smtp_uid = smtp_uid is not None and smtp_uid or smtp_userid
-        smtp_pwd = smtp_pwd is not None and smtp_pwd or smtp_pass
-        force_tls = force_tls is not None and force_tls or not smtp_notls
-        MailBase.__init__(self, id=id, title=title, smtp_host=smtp_host,
-                          smtp_port=smtp_port, force_tls=force_tls, 
-                          smtp_uid=smtp_uid, smtp_pwd=smtp_pwd,
-                          smtp_queue=smtp_queue,
-                          smtp_queue_directory=smtp_queue_directory)
-
-    security.declareProtected('Change configuration', 'manage_makeChanges')
-    def manage_makeChanges(self, title, smtp_host, smtp_port,
-                           smtp_uid=None, smtp_pwd=None,
-                           smtp_queue=False, smtp_queue_directory='/tmp',
-                           force_tls=False,
-                           smtp_userid='', smtp_pass='', smtp_notls=None,
-                           REQUEST=None):
-        """Make the changes
-        """
-        # BBB for old names, prefer the names from MailHost
-        smtp_uid = smtp_uid is not None and smtp_uid or smtp_userid
-        smtp_pwd = smtp_pwd is not None and smtp_pwd or smtp_pass
-        force_tls = force_tls is not None and force_tls or not smtp_notls
-        return MailBase.manage_makeChanges(
-            self, title, smtp_host, smtp_port, smtp_uid=smtp_uid,
-            smtp_pwd=smtp_pwd, smtp_queue=smtp_queue,
-            smtp_queue_directory=smtp_queue_directory, force_tls=force_tls,
-            REQUEST=REQUEST)
-
-    def sendTemplate(trueself, self, messageTemplate,
-                     statusTemplate=None, mto=None, mfrom=None,
-                     encode=None, REQUEST=None):
-        """Render a mail template, then send it...
-        """
-        return MailBase.sendTemplate(trueself, self, messageTemplate,
-                                     statusTemplate=statusTemplate, mto=mto,
-                                     mfrom=mfrom,  encode=encode,
-                                     REQUEST=REQUEST)
-
-    security.declareProtected(use_mailhost_services, 'send')
-    def send(self, messageText, mto=None, mfrom=None, subject=None,
-             encode=None):
-        """Send email
-        """
-        return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
-                             subject=subject, encode=encode)
 
     security.declareProtected(use_mailhost_services, 'secureSend')
     def secureSend(self, message, mto, mfrom, subject='[No Subject]',
@@ -245,21 +190,23 @@ class SecureMailBase(MailBase):
             msg[key] = val
         return msg
 
+    security.declarePrivate('_send')
     def _send(self, mfrom, mto, messageText, debug=False):
         """Send the message
         """
-        if not isinstance(messageText, email.Message.Message):
-            message = email.message_from_string(messageText)
-        else:
-            message = messageText
-        mail = Mail(mfrom, mto, message, smtp_host=self.smtp_host,
-                    smtp_port=self.smtp_port, userid=self.smtp_uid,
-                    password=self.smtp_pwd, notls=(not self.force_tls)
-                   )
         if debug:
-            return mail
-        else:
-            mail.send()
+            if not isinstance(messageText, email.Message.Message):
+                message = email.message_from_string(messageText)
+            else:
+                message = messageText
+            return Mail(mfrom, mto, message, smtp_host=self.smtp_host,
+                        smtp_port=self.smtp_port, userid=self.smtp_uid,
+                        password=self.smtp_pwd, notls=self.smtp_notls
+                       )
+
+        if isinstance(messageText, email.Message.Message):
+            messageText = messageText.as_string()
+        MailBase._send(self, mfrom, mto, messageText)
 
     security.declarePublic('emailListToString')
     def emailListToString(self, addr_list):

@@ -4,7 +4,16 @@ Changelog for SecureMailHost
 
 SecureMailHost 2.0 - Unreleased
 
-    - Removed custom code and reused the base classes functionality at some
+    - Our internal attributes for storing the user and password have changed.
+      smtp_userid is now smtp_uid, smtp_pass is smtp_pwd and force_tls has
+      been renamned smtp_notls and has an inverted boolean meaning.
+      [hannosch]
+
+    - Our own mail.py and connection handling is only used for debugging at
+      this point.
+      [hannosch]
+
+    - Removed custom code and reused the base classes functionality at most
       places. This requires the MailHost from Zope 2.11.
       [hannosch]
 
