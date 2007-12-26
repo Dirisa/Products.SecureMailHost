@@ -1,24 +1,15 @@
-# -*- coding: iso-8859-1 -*-
 #
 # Tests the email validation
 #
 
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+from common import SMHTestCase
 
-from common import *
-from DateTime import DateTime
-from email.MIMEText import MIMEText
 import email.Message
 from Products.SecureMailHost import mail
 
 tests = []
 
-class TestHeaderParsing(ZopeTestCase.ZopeTestCase):
-
-    def afterSetUp(self):
-        self.mailhost = SecureMailBase('securemailhost', '')
+class TestHeaderParsing(SMHTestCase):
 
     def test_header_cc_bcc(self):
         # test if cc and bcc addresses are added to the server To
@@ -57,6 +48,3 @@ def test_suite():
     for test in tests:
         suite.addTest(makeSuite(test))
     return suite
-
-if __name__ == '__main__':
-    framework()

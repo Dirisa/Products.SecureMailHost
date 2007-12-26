@@ -2,16 +2,10 @@
 # Tests the email validation
 #
 
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+from common import SMHTestCase
 
-from common import *
 
-class TestValidateEmail(ZopeTestCase.ZopeTestCase):
-
-    def afterSetUp(self):
-        self.mailhost = SecureMailBase('securemailhost', '')
+class TestValidateEmail(SMHTestCase):
 
     def testvalidateSingleEmailAddress(self):
         # Any RFC 822 email address allowed, but address list must fail
@@ -83,6 +77,3 @@ def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestValidateEmail))
     return suite
-
-if __name__ == '__main__':
-    framework()

@@ -1,13 +1,11 @@
-# -*- coding: iso-8859-1 -*-
 #
 # Tests the email validation
 #
 
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+from common import SMHTestCase
 
-from common import *
+import os
+
 from DateTime import DateTime
 from email.MIMEText import MIMEText
 import email.Message
@@ -27,7 +25,7 @@ buergschaft_utf8_to_out = open(os.path.join(HERE, 'out', 'buergschaft_utf8_to.tx
 loremipsum_out = open(os.path.join(HERE, 'out', 'loremipsum.txt'), 'r').read()
 
 
-class TestMessage(ZopeTestCase.ZopeTestCase):
+class TestMessage(SMHTestCase):
     """base message test
     """
     name    = 'no test'
@@ -43,9 +41,6 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
     mcc     = None
     mbcc    = None
     addHeaders = {'Message-Id' : '<1>' }
-
-    def afterSetUp(self):
-        self.mailhost = SecureMailBase('securemailhost', '')
 
     def testMessage(self):
         """
@@ -143,6 +138,3 @@ def test_suite():
     for test in tests:
         suite.addTest(makeSuite(test))
     return suite
-
-if __name__ == '__main__':
-    framework()

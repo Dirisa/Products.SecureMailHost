@@ -1,8 +1,8 @@
 SecureMailHost
 ==============
 
-SecureMailHost is a reimplementation of the standard MailHost with some security
-and usability enhancements:
+SecureMailHost is a reimplementation of the standard MailHost with some
+security and usability enhancements:
 
   * ESMTP login on the mail server based on the MailHost from 
     http://www.zope.org/Members/bowerymarc
@@ -29,7 +29,7 @@ License:
     ZPL 2.1
 
 Downloads:
-    http://plone.org/products/securemailhost
+    http://pypi.python.org/pypi/Products.SecureMailHost
 
 Bug collector:
     https://dev.plone.org/plone under component Mail

@@ -2,6 +2,11 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost 2.0 - Unreleased
+
+    - Modernized code base and tests.
+      [hannosch]
+
 SecureMailHost 1.1.1 - Released August 23, 2007
 
     - First release as a package.
@@ -144,4 +149,3 @@ SecureMailHost 0.2-beta1 - Released May 24, 2004
 
     - Implemented all the new stuff like async thread, mailer class, starttls ...
       [tiran]
-

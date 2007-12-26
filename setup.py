@@ -1,13 +1,21 @@
+import os
 from setuptools import setup, find_packages
 
-version = '1.1.2'
+name = 'Products.SecureMailHost'
+version = '2.0'
 
-setup(name='Products.SecureMailHost',
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+long_description=(
+        read('README.txt')
+    )
+
+setup(name=name,
       version=version,
       description="SecureMailHost is a reimplementation of the standard Zope2 "
                   "MailHost with some security and usability enhancements.",
-      long_description="""\
-      """,
+      long_description=long_description,
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
@@ -22,7 +30,6 @@ setup(name='Products.SecureMailHost',
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
-      download_url='http://plone.org/products/securemailhost/releases',
       install_requires=[
         'setuptools',
       ],
