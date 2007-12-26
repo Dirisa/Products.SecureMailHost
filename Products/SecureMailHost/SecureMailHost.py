@@ -58,7 +58,8 @@ def manage_addMailHost(self, id, title='', smtp_host='localhost',
     """Add a MailHost
     """
     ob = SecureMailHost(id, title, smtp_host, smtp_port,
-                        smtp_userid, smtp_pass, smtp_notls)
+                        smtp_uid=smtp_userid, smtp_pwd=smtp_pass,
+                        smtp_notls=smtp_notls)
     self._setObject(id, ob)
 
     if REQUEST is not None:
@@ -75,52 +76,66 @@ class SecureMailBase(MailBase):
     index_html = None
     security = ClassSecurityInfo()
 
-    def __init__(self, id='', title='', smtp_host='localhost',
-                  smtp_port=25, smtp_userid='', smtp_pass='', smtp_notls=False):
-        """Initialize a new MailHost instance
-        """
-        self.id = id
-        self.setConfiguration(title, smtp_host, smtp_port,
-                              smtp_userid, smtp_pass, smtp_notls)
+    # BBB for old names, prefer the names from MailHost
+
+    def get_smtp_userid(self):
+        return self.smtp_uid
+
+    def set_smtp_userid(self, value):
+        self.smtp_uid = value
+
+    smtp_userid = property(get_smtp_userid, set_smtp_userid)
+
+    def get_smtp_pass(self):
+        return self.smtp_pwd
+
+    def set_smtp_pass(self, value):
+        self.smtp_pwd = value
+
+    smtp_pass = property(get_smtp_pass, set_smtp_pass)
+
+    def get_smtp_notls(self):
+        return not self.force_tls
+
+    def set_smtp_notls(self, value):
+        self.force_tls = not value
+
+    smtp_notls = property(get_smtp_notls, set_smtp_notls)
+
+    def __init__(self, id='', title='', smtp_host='localhost', smtp_port=25,
+                 force_tls=None, smtp_uid=None, smtp_pwd=None,
+                 smtp_queue=False, smtp_queue_directory='/tmp',
+                 smtp_userid='', smtp_pass='', smtp_notls=False):
+        """Initialize a new MailHost instance """
+        # BBB for old names, prefer the names from MailHost
+        smtp_uid = smtp_uid is not None and smtp_uid or smtp_userid
+        smtp_pwd = smtp_pwd is not None and smtp_pwd or smtp_pass
+        force_tls = force_tls is not None and force_tls or not smtp_notls
+        MailBase.__init__(self, id=id, title=title, smtp_host=smtp_host,
+                          smtp_port=smtp_port, force_tls=force_tls, 
+                          smtp_uid=smtp_uid, smtp_pwd=smtp_pwd,
+                          smtp_queue=smtp_queue,
+                          smtp_queue_directory=smtp_queue_directory)
 
     security.declareProtected('Change configuration', 'manage_makeChanges')
     def manage_makeChanges(self, title, smtp_host, smtp_port,
-                           smtp_userid, smtp_pass, smtp_notls=None,
+                           smtp_uid=None, smtp_pwd=None,
+                           smtp_queue=False, smtp_queue_directory='/tmp',
+                           force_tls=False,
+                           smtp_userid='', smtp_pass='', smtp_notls=None,
                            REQUEST=None):
         """Make the changes
         """
-        self.setConfiguration(title, smtp_host, smtp_port,
-                              smtp_userid, smtp_pass, smtp_notls)
-        if REQUEST is not None:
-            msg = 'MailHost %s updated' % self.id
-            return self.manage_main(self, REQUEST, manage_tabs_message=msg)
+        # BBB for old names, prefer the names from MailHost
+        smtp_uid = smtp_uid is not None and smtp_uid or smtp_userid
+        smtp_pwd = smtp_pwd is not None and smtp_pwd or smtp_pass
+        force_tls = force_tls is not None and force_tls or not smtp_notls
+        return MailBase.manage_makeChanges(
+            self, title, smtp_host, smtp_port, smtp_uid=smtp_uid,
+            smtp_pwd=smtp_pwd, smtp_queue=smtp_queue,
+            smtp_queue_directory=smtp_queue_directory, force_tls=force_tls,
+            REQUEST=REQUEST)
 
-    security.declarePrivate('setConfiguration')
-    def setConfiguration(self, title, smtp_host, smtp_port,
-                         smtp_userid, smtp_pass, smtp_notls):
-        """Set configuration
-        """
-        self.title = title
-        self.smtp_host = str(smtp_host)
-        self.smtp_port = int(smtp_port)
-        if smtp_userid:
-            self._smtp_userid = smtp_userid
-            self.smtp_userid = smtp_userid
-        else:
-            self._smtp_userid = None
-            self.smtp_userid = None
-        if smtp_pass:
-            self._smtp_pass = smtp_pass
-            self.smtp_pass = smtp_pass
-        else:
-            self._smtp_pass = None
-            self.smtp_pass = None
-        if smtp_notls is not None:
-            self.smtp_notls = smtp_notls
-        else:
-            self.smtp_notls = False
-
-    security.declareProtected(use_mailhost_services, 'sendTemplate')
     def sendTemplate(trueself, self, messageTemplate,
                      statusTemplate=None, mto=None, mfrom=None,
                      encode=None, REQUEST=None):
@@ -132,11 +147,11 @@ class SecureMailBase(MailBase):
                                      REQUEST=REQUEST)
 
     security.declareProtected(use_mailhost_services, 'send')
-    def send(self, message, mto=None, mfrom=None, subject=None,
+    def send(self, messageText, mto=None, mfrom=None, subject=None,
              encode=None):
         """Send email
         """
-        return MailBase.send(self, message, mto=mto, mfrom=mfrom,
+        return MailBase.send(self, messageText, mto=mto, mfrom=mfrom,
                              subject=subject, encode=encode)
 
     security.declareProtected(use_mailhost_services, 'secureSend')
@@ -211,8 +226,6 @@ class SecureMailBase(MailBase):
         to = msg.get_all('to', [])
         cc = msg.get_all('cc', [])
         bcc = msg.get_all('bcc', [])
-        #resent_tos = msg.get_all('resent-to', [])
-        #resent_ccs = msg.get_all('resent-cc', [])
         recipient_list = getaddresses(to + cc + bcc)
         all_recipients = [formataddr(pair) for pair in recipient_list]
 
@@ -239,10 +252,9 @@ class SecureMailBase(MailBase):
             message = email.message_from_string(messageText)
         else:
             message = messageText
-        smtp_notls = getattr(self, 'smtp_notls', False)
         mail = Mail(mfrom, mto, message, smtp_host=self.smtp_host,
-                    smtp_port=self.smtp_port, userid=self._smtp_userid,
-                    password=self._smtp_pass, notls=smtp_notls
+                    smtp_port=self.smtp_port, userid=self.smtp_uid,
+                    password=self.smtp_pwd, notls=(not self.force_tls)
                    )
         if debug:
             return mail

@@ -56,10 +56,10 @@
     </td>
     <td align="left" valign="top">
     <dtml-if smtp_userid>
-    <input type="text" name="smtp_userid" size="20"
-     value="<dtml-var smtp_userid html_quote>"/>
+    <input type="text" name="smtp_uid" size="20"
+     value="<dtml-var smtp_uid html_quote>"/>
     <dtml-else>
-     <input type="text" name="smtp_userid" size="20"/>
+     <input type="text" name="smtp_uid" size="20"/>
     </dtml-if>
     </td>
   </tr>
@@ -71,24 +71,24 @@
     </td>
     <td align="left" valign="top">
     <dtml-if smtp_pass>
-    <input type="password" name="smtp_pass" size="20"
-     value="<dtml-var smtp_pass html_quote>"/>
+    <input type="password" name="smtp_pwd" size="20"
+     value="<dtml-var smtp_pwd html_quote>"/>
     <dtml-else>
-     <input type="password" name="smtp_pass" size="20"/>
+     <input type="password" name="smtp_pwd" size="20"/>
     </dtml-if>
     </td>
   </tr>
   <tr>
     <td align="left" valign="top">
     <div class="form-optional">
-    Disable TLS
+    Force TLS
     </div>
     </td>
     <td align="left" valign="top">
     <dtml-if smtp_notls>
-     <input type="checkbox" name="smtp_notls" checked="checked"/>
+     <input type="checkbox" name="force_tls" checked="checked"/>
     <dtml-else>
-     <input type="checkbox" name="smtp_notls"/>
+     <input type="checkbox" name="force_tls"/>
     </dtml-if>
     </td>
   </tr>

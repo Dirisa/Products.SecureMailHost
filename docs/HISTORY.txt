@@ -4,6 +4,10 @@ Changelog for SecureMailHost
 
 SecureMailHost 2.0 - Unreleased
 
+    - Removed custom code and reused the base classes functionality at some
+      places. This requires the MailHost from Zope 2.11.
+      [hannosch]
+
     - Modernized code base and tests.
       [hannosch]
 
