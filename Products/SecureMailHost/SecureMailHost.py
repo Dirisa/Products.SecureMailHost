@@ -99,6 +99,23 @@ class SecureMailBase(MailBase):
 
     smtp_notls = property(get_smtp_notls, set_smtp_notls)
 
+    def __init__(self, id='', title='', smtp_host='localhost', smtp_port=25, 
+                 force_tls=False, smtp_uid='', smtp_pwd='', smtp_queue=False,
+                 smtp_queue_directory='/tmp',
+                 smtp_notls=None, smtp_userid=None, smtp_pass=None):
+        # BBB for old init arguments
+        if smtp_userid is not None:
+            smtp_uid = smtp_userid
+        if smtp_pass is not None:
+            smtp_pwd = smtp_pass
+        if smtp_notls is not None:
+            force_tls = not smtp_notls
+        MailBase.__init__(self, id=id, title=title, smtp_host=smtp_host,
+                          smtp_port=smtp_port, force_tls=force_tls,
+                          smtp_uid=smtp_uid, smtp_pwd=smtp_pwd,
+                          smtp_queue=smtp_queue,
+                          smtp_queue_directory=smtp_queue_directory)
+
     security.declareProtected(use_mailhost_services, 'secureSend')
     def secureSend(self, message, mto, mfrom, subject='[No Subject]',
                    mcc=None, mbcc=None, subtype='plain', charset='us-ascii',
