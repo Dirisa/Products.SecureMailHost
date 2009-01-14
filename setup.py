@@ -32,5 +32,8 @@ setup(name=name,
       zip_safe=False,
       install_requires=[
         'setuptools',
+        # 'DateTime',
+        # 'ZODB3',
+        # 'Zope2',
       ],
 )
