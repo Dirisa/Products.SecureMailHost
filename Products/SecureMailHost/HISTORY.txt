@@ -2,6 +2,11 @@ Changelog for SecureMailHost
 
    (name of developer listed in brackets)
 
+SecureMailHost 1.1.2 - Released September 9, 2009
+
+    - Avoid deprecation warnings for the use of Globals.
+      [hannosch]
+
 SecureMailHost 1.1.1 - Released August 23, 2007
 
     - First release as a package.

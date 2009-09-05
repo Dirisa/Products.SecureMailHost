@@ -30,7 +30,15 @@ import re
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import use_mailhost_services
-from Globals import Persistent, DTMLFile, InitializeClass
+
+# BBB Zope before 2.12
+try:
+    from App.class_init import InitializeClass 
+except ImportError:
+    from Globals import InitializeClass
+
+from App.special_dtml import DTMLFile
+from Persistence import Persistent
 from Products.MailHost.MailHost import MailHostError, MailBase
 from Products.SecureMailHost.mail import Mail
 
