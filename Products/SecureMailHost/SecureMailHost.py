@@ -101,7 +101,7 @@ class SecureMailBase(MailBase):
 
     smtp_notls = property(get_smtp_notls, set_smtp_notls)
 
-    def __init__(self, id='', title='', smtp_host='localhost', smtp_port=25, 
+    def __init__(self, id='', title='', smtp_host='localhost', smtp_port=25,
                  force_tls=False, smtp_uid='', smtp_pwd='', smtp_queue=False,
                  smtp_queue_directory='/tmp',
                  smtp_notls=None, smtp_userid=None, smtp_pass=None):
