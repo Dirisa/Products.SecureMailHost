@@ -76,7 +76,7 @@ class TestMessage(ZopeTestCase.ZopeTestCase):
             o = outlines[i]
             self.failUnlessEqual(m, o)
 
-        # compare the complete string 
+        # compare the complete string
         self.failUnlessEqual(msgstr, self.out)
 
 tests = []
@@ -130,7 +130,7 @@ class TestMimeTextAndNonAsciiHeaders(TestMessage):
     message = buergschaft_latin1_msg
     out     = buergschaft_utf8_to_out
 
-    subject = u'Die B\u00fcrgschaft' 
+    subject = u'Die B\u00fcrgschaft'
     mto     = u'G\u00fcnter Schiller <gunter@example.org>'.encode('utf-8')
     mto_out = '=?utf-8?q?G=C3=BCnter_Schiller_?= <gunter@example.org>'
     charset = 'utf-8'

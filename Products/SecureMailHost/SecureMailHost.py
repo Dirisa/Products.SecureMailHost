@@ -33,7 +33,7 @@ from AccessControl.Permissions import use_mailhost_services
 
 # BBB Zope before 2.12
 try:
-    from App.class_init import InitializeClass 
+    from App.class_init import InitializeClass
 except ImportError:
     from Globals import InitializeClass
 

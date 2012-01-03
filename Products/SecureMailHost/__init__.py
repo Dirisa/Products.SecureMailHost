@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001-2004 Zope Corporation and Contributors. 
+# Copyright (c) 2001-2004 Zope Corporation and Contributors.
 # Copyright (c) 2004 Christian Heimes and Contributors.
 # All Rights Reserved.
 #
@@ -13,7 +13,7 @@
 #
 ##############################################################################
 """MailHost Product Initialization
-$Id: 
+$Id:
 """
 import SecureMailHost
 import mail

@@ -49,13 +49,13 @@ class TestValidateEmail(ZopeTestCase.ZopeTestCase):
             'Subject: Spam me plenty\n'
             'Spam Spam Spam\n'
             'I hate spam',
-            
+
         )
         for address in validInputs:
             self.failUnless(val(address), '%s should validate' % address)
         for address in invalidInputs:
             self.failIf(val(address), '%s should fail' % address)
-    
+
     def testvalidateEmailAddresses(self):
         # Any RFC 822 email address allowed and address list allowed
         val = self.mailhost.validateEmailAddresses
