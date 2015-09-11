@@ -29,7 +29,7 @@ License:
     ZPL 2.1
 
 Downloads:
-    http://plone.org/products/securemailhost
+    https://pypi.python.org/pypi/Products.SecureMailHost
 
 Bug collector:
-    https://dev.plone.org/plone under component Mail
+    https://github.com/collective/Products.SecureMailHost/issues
