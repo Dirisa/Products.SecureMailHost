@@ -4,6 +4,9 @@ Changelog
 2.0 - Unreleased
 ----------------
 
+- Moved code to https://github.com/collective/Products.SecureMailHost
+  [maurits]
+
 - Cleaned up package metadata.
   [hannosch]
 

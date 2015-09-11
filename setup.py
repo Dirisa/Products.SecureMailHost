@@ -1,32 +1,41 @@
 from setuptools import setup, find_packages
 
 name = 'Products.SecureMailHost'
-version = '2.0'
+version = '2.0.dev0'
 
 setup(name=name,
       version=version,
       description="SecureMailHost is a reimplementation of the standard Zope2 "
                   "MailHost with some security and usability enhancements.",
-      long_description=open("README.txt").read() + "\n" + \
-                       open("CHANGES.txt").read(),
+      long_description=(open("README.txt").read() + "\n" +
+                        open("CHANGES.txt").read()),
       classifiers=[
-        "Framework :: Plone",
-        "Framework :: Zope2",
-        "Programming Language :: Python",
+          "Framework :: Plone",
+          "Framework :: Plone :: 3.3",
+          "Framework :: Plone :: 4.0",
+          "Framework :: Plone :: 4.1",
+          "Framework :: Plone :: 4.2",
+          "Framework :: Plone :: 4.3",
+          "Framework :: Plone :: 5.0",
+          "Framework :: Zope2",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.4",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7",
       ],
       keywords='Zope Plone Secure Mail Host',
       author='Christian Heimes',
       author_email='plone-developers@lists.sourceforge.net',
-      url='http://pypi.python.org/pypi/Products.SecureMailHost',
+      url='https://pypi.python.org/pypi/Products.SecureMailHost',
       license='ZPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'setuptools',
-        'DateTime',
-        'ZODB3',
-        'Zope2',
+          'setuptools',
+          'DateTime',
+          'ZODB3',
+          'Zope2',
       ],
-)
+      )
