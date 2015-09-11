@@ -7,8 +7,8 @@ setup(name=name,
       version=version,
       description="SecureMailHost is a reimplementation of the standard Zope2 "
                   "MailHost with some security and usability enhancements.",
-      long_description=(open("README.txt").read() + "\n" +
-                        open("CHANGES.txt").read()),
+      long_description=(open("README.rst").read() + "\n" +
+                        open("CHANGES.rst").read()),
       classifiers=[
           "Framework :: Plone",
           "Framework :: Plone :: 3.3",
