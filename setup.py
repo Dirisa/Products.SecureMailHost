@@ -1,9 +1,8 @@
 from setuptools import setup, find_packages
 
-name = 'Products.SecureMailHost'
 version = '2.0.dev0'
 
-setup(name=name,
+setup(name='Products.SecureMailHost',
       version=version,
       description="SecureMailHost is a reimplementation of the standard Zope2 "
                   "MailHost with some security and usability enhancements.",
